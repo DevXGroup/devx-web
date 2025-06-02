@@ -6,7 +6,6 @@ export default function ParticleAnimation({ color = "#4CD787", density = 50, spe
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const particlesRef = useRef<any[]>([])
   const requestRef = useRef<number | null>(null)
-  const previousTimeRef = useRef(0)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -31,8 +30,12 @@ export default function ParticleAnimation({ color = "#4CD787", density = 50, spe
       speedY: number
       baseColor: string
       opacity: number
+      private canvas: HTMLCanvasElement
+      private ctx: CanvasRenderingContext2D
 
-      constructor() {
+      constructor(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
+        this.canvas = canvas
+        this.ctx = ctx
         this.x = Math.random() * canvas.width
         this.y = Math.random() * canvas.height
         this.size = Math.random() * 1.5 + 0.5
@@ -47,38 +50,38 @@ export default function ParticleAnimation({ color = "#4CD787", density = 50, spe
         this.y += this.speedY
 
         // Wrap around edges
-        if (this.x < 0) this.x = canvas.width
-        if (this.x > canvas.width) this.x = 0
-        if (this.y < 0) this.y = canvas.height
-        if (this.y > canvas.height) this.y = 0
+        if (this.x < 0) this.x = this.canvas.width
+        if (this.x > this.canvas.width) this.x = 0
+        if (this.y < 0) this.y = this.canvas.height
+        if (this.y > this.canvas.height) this.y = 0
       }
 
       draw() {
         if (isNaN(this.x) || isNaN(this.y)) return
 
-        ctx.beginPath()
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2)
-        ctx.fillStyle = this.baseColor
-        ctx.globalAlpha = this.opacity
-        ctx.fill()
+        this.ctx.beginPath()
+        this.ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2)
+        this.ctx.fillStyle = this.baseColor
+        this.ctx.globalAlpha = this.opacity
+        this.ctx.fill()
       }
     }
 
     // Initialize particles
-    const particles = []
+    const particles: Particle[] = []
     for (let i = 0; i < actualDensity; i++) {
-      particles.push(new Particle())
+      particles.push(new Particle(canvas, ctx))
     }
     particlesRef.current = particles
 
+    let previousTime = 0;
     // Animation loop with throttling
     const animate = (timestamp: DOMHighResTimeStamp) => {
-      if (!previousTimeRef.current) previousTimeRef.current = timestamp
-      const deltaTime = timestamp - previousTimeRef.current
+      const deltaTime = timestamp - previousTime
 
       // Limit to ~30fps for better performance
       if (deltaTime > 33) {
-        previousTimeRef.current = timestamp
+        previousTime = timestamp
 
         ctx.clearRect(0, 0, canvas.width, canvas.height)
 
