@@ -22,23 +22,29 @@ export default function PlanetDivider() {
     }
   }, [])
 
-  // Calculate how much of the planet should be revealed based on scroll
-  const calculateReveal = () => {
-    const scrollProgress = Math.max(0, Math.min(1, scrollY / 500))
-    return scrollProgress * 0.5 // Controls how much the planet rises
+  // Simple calculation for planet visibility and position
+  const calculateVisibility = () => {
+    const maxScroll = 300 // Adjust this value to control how quickly it disappears
+    const progress = Math.min(1, scrollY / maxScroll)
+    
+    return {
+      position: -0.8 + progress * 0.5, // Move down slightly as it fades
+      opacity: 1 - progress // Fade out completely
+    }
   }
 
-  const revealAmount = calculateReveal()
-  const planetPosition = -0.8 + revealAmount
+  const { position, opacity } = calculateVisibility()
 
   return (
     <div className="relative w-full h-[40vh] overflow-hidden pointer-events-none z-10">
       <div
-        className="absolute w-full h-[200%] bg-black rounded-[50%] left-0 planet-glow-effect"
+        className="absolute w-full h-[200%] bg-black rounded-[50%] left-0 planet-glow-effect transition-all duration-200"
         style={{
-          bottom: `${planetPosition * 20 - 30}%`,
+          bottom: `${position * 20 - 30}%`,
           transform: "translateY(50%)",
-          background: "#000000",
+          background: "radial-gradient(circle at center, #1a1a1a 0%, #000000 70%)",
+          boxShadow: "0 0 100px rgba(0, 0, 0, 0.5)",
+          opacity: opacity,
         }}
       />
     </div>

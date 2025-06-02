@@ -1,9 +1,10 @@
 "use client"
 
 import { LayoutGroup, motion, AnimatePresence } from "framer-motion"
-import { useEffect, useState, useCallback, useRef } from "react"
+import { useEffect, useState, useCallback, useRef, useMemo } from "react"
 import Image from "next/image"
 import { AnimatedGradientText } from "./AnimatedGradientText"
+import seedrandom from "seedrandom"
 
 const tools = [
   {
@@ -99,6 +100,24 @@ export default function DevelopmentTools() {
   const cycleRef = useRef<NodeJS.Timeout | null>(null)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
 
+  // Memoize star positions and styles to ensure hydration consistency
+  const stars = useMemo(() => {
+    const rng = seedrandom("devx-stars")
+    return Array.from({ length: 60 }).map(() => {
+      const size = Math.round((rng() * 2 + 1) * 1000) / 1000
+      return {
+        width: size,
+        height: size,
+        left: rng() * 100,
+        top: rng() * 100,
+        boxShadowSize: Math.round((rng() * 3 + 2) * 1000) / 1000,
+        opacity: Math.round((rng() * 0.3 + 0.2) * 1000) / 1000,
+        delay: Math.round((rng() * 2) * 1000) / 1000,
+        duration: Math.round((3 + rng() * 4) * 1000) / 1000,
+      }
+    })
+  }, [])
+
   // Initialize safariReady to false
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -143,25 +162,25 @@ export default function DevelopmentTools() {
         {" "}
         {/* Changed h-[150vh] to min-h-screen and removed pb-48 */}
         {/* Reduced number of stars and added glow effect */}
-        {Array.from({ length: 60 }).map((_, i) => (
+        {stars.map((star, i) => (
           <motion.div
             key={i}
             className="absolute rounded-full"
             style={{
-              width: `${Math.random() * 2 + 1}px`, // Slightly smaller stars
-              height: `${Math.random() * 2 + 1}px`,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              boxShadow: `0 0 ${Math.random() * 3 + 2}px rgba(255, 255, 255, ${Math.random() * 0.3 + 0.2})`,
+              width: `${star.width}px`,
+              height: `${star.height}px`,
+              left: `${star.left}%`,
+              top: `${star.top}%`,
+              boxShadow: `0 0 ${star.boxShadowSize}px rgba(255, 255, 255, ${star.opacity})`,
               backgroundColor: "rgba(255, 255, 255, 0.8)",
             }}
             initial={{ opacity: 0.2 }}
             animate={{ opacity: [0.2, 0.6, 0.2] }}
             transition={{
-              duration: 3 + Math.random() * 4,
+              duration: star.duration,
               repeat: Number.POSITIVE_INFINITY,
               repeatType: "reverse",
-              delay: Math.random() * 2,
+              delay: star.delay,
             }}
           />
         ))}
