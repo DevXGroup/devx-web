@@ -1,8 +1,9 @@
-"use client"
+ "use client"
 
 import { LayoutGroup, motion, AnimatePresence } from "framer-motion"
-import { useEffect, useState, useCallback, useRef } from "react"
+import { useEffect, useState, useCallback, useRef, useMemo } from "react"
 import Image from "next/image"
+import seedrandom from "seedrandom"
 
 const tools = [
   {
@@ -154,28 +155,44 @@ export default function DevelopmentTools() {
         {" "}
         {/* Increased height and padding */}
         {/* Reduced number of stars and added glow effect */}
-        {Array.from({ length: 60 }).map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-full"
-            style={{
-              width: `${Math.random() * 2 + 1}px`, // Slightly smaller stars
-              height: `${Math.random() * 2 + 1}px`,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              boxShadow: `0 0 ${Math.random() * 3 + 2}px rgba(255, 255, 255, ${Math.random() * 0.3 + 0.2})`,
-              backgroundColor: "rgba(255, 255, 255, 0.8)",
-            }}
-            initial={{ opacity: 0.2 }}
-            animate={{ opacity: [0.2, 0.6, 0.2] }}
-            transition={{
-              duration: 3 + Math.random() * 4,
-              repeat: Number.POSITIVE_INFINITY,
-              repeatType: "reverse",
-              delay: Math.random() * 2,
-            }}
-          />
-        ))}
+        {(() => {
+          const stars = useMemo(() => {
+            const rng = seedrandom("devx-stars") // seed to ensure deterministic output
+            return Array.from({ length: 60 }).map((_, i) => ({
+              id: i,
+              width: rng() * 2 + 1,
+              height: rng() * 2 + 1,
+              left: rng() * 100,
+              top: rng() * 100,
+              boxShadow: `0 0 ${rng() * 3 + 2}px rgba(255, 255, 255, ${rng() * 0.3 + 0.2})`,
+              duration: 3 + rng() * 4,
+              delay: rng() * 2,
+            }))
+          }, []);
+          // Render stars
+          return stars.map((star) => (
+            <motion.div
+              key={star.id}
+              className="absolute rounded-full"
+              style={{
+                width: `${star.width}px`,
+                height: `${star.height}px`,
+                left: `${star.left}%`,
+                top: `${star.top}%`,
+                boxShadow: star.boxShadow,
+                backgroundColor: "rgba(255, 255, 255, 0.8)",
+              }}
+              initial={{ opacity: 0.2 }}
+              animate={{ opacity: [0.2, 0.6, 0.2] }}
+              transition={{
+                duration: star.duration,
+                repeat: Number.POSITIVE_INFINITY,
+                repeatType: "reverse",
+                delay: star.delay,
+              }}
+            />
+          ));
+        })()}
         {/* Increased top padding and bottom margin for better spacing */}
         <div className="pt-6 pb-8">
           <motion.h3

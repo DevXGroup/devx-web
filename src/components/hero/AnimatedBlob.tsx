@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef } from "react"
+import { useRef, Suspense } from "react"
 import { useFrame } from "@react-three/fiber"
 import { Sphere, Sparkles } from "@react-three/drei"
 import { AdditiveBlending, Color, Vector3 } from "three"
@@ -9,40 +9,54 @@ import { AdditiveBlending, Color, Vector3 } from "three"
 function RefinedBlobMaterial({ scrollY }: { scrollY: number }) {
   const uniforms = useRef({
     uTime: { value: 0 },
-    uColor: { value: new Color(0x4cd787).multiplyScalar(0.1) }, // Dimmer color
+    uColor: { value: new Color(0x4cd787).multiplyScalar(0.35) }, // Increased base brightness
     uScrollY: { value: 0 },
-    uNoiseFreq: { value: 0.6 },
-    uNoiseAmp: { value: 0.2 }, // Slightly increased amplitude for subtle detail
+    uNoiseFreq: { value: 0.2 },
+    uNoiseAmp: { value: 0.08 },
     uHueShift: { value: 0.0 },
-    uBrightness: { value: 0.08 }, // Dimmer brightness
-    uOpacityFactor: { value: 0.15 }, // Dimmer opacity
+    uBrightness: { value: 0.25 }, // Increased brightness
+    uOpacityFactor: { value: 0.35 }, // Increased opacity
     uScrollFactor: { value: 0.0 },
-    uEdgeGlow: { value: 0.2 }, // Dimmer edge glow
-    uEdgeThickness: { value: 0.1 }, // Thinner edge
-    uPulseFrequency: { value: 0.1 },
-    uCosmicColor1: { value: new Color(0x9d4edd) }, // Purple
-    uCosmicColor2: { value: new Color(0xff006e) }, // Pink
+    uEdgeGlow: { value: 0.45 }, // Increased edge glow
+    uEdgeThickness: { value: 0.3 }, // Increased edge thickness
+    uPulseFrequency: { value: 0.02 },
+    // Adjusted cosmic colors with more white/gray tones
+    uCosmicColor1: { value: new Color(0xffffff) }, // White
+    uCosmicColor2: { value: new Color(0x9d4edd) }, // Deep purple
+    uCosmicColor3: { value: new Color(0x00b4d8) }, // Cosmic blue
     uCosmicMix: { value: 0.0 },
+    uCosmicMix2: { value: 0.0 },
+    uBreathingFactor: { value: 0.0 },
   }).current
 
   useFrame((state) => {
-    uniforms.uTime.value = state.clock.elapsedTime
-    uniforms.uScrollY.value = scrollY * 0.001
-    uniforms.uScrollFactor.value = Math.min(1.0, scrollY * 0.001)
+    const time = state.clock.elapsedTime
+    uniforms.uTime.value = time
+    uniforms.uScrollY.value = scrollY * 0.0008
+    uniforms.uScrollFactor.value = Math.min(1.0, scrollY * 0.0008)
 
-    uniforms.uNoiseFreq.value = 0.6 + Math.sin(state.clock.elapsedTime * 0.1) * 0.08 // Dynamic noise freq
-    uniforms.uNoiseAmp.value = 0.2 + Math.sin(state.clock.elapsedTime * 0.07) * 0.03 // Dynamic noise amp
+    // Very slow breathing effect
+    uniforms.uBreathingFactor.value = Math.sin(time * 0.15) * 0.5 + 0.5
 
-    uniforms.uHueShift.value = (Math.sin(state.clock.elapsedTime * 0.03) * 0.5 + 0.5) * 0.1 // Dynamic hue shift
+    // Extremely smooth noise variation
+    uniforms.uNoiseFreq.value = 0.2 + Math.sin(time * 0.01) * 0.02
+    uniforms.uNoiseAmp.value = 0.08 + Math.sin(time * 0.015) * 0.005
 
-    uniforms.uBrightness.value = 0.2 + Math.sin(state.clock.elapsedTime * 0.05) * 0.025 // Dynamic brightness pulsing
+    // Very slow hue shift
+    uniforms.uHueShift.value = (Math.sin(time * 0.008) * 0.5 + 0.5) * 0.04
 
-    uniforms.uEdgeGlow.value = 0.5 + Math.sin(state.clock.elapsedTime * uniforms.uPulseFrequency.value) * 0.25 // Dynamic edge glow pulsing
+    // Very slow brightness pulsing
+    uniforms.uBrightness.value = 0.25 + Math.sin(time * 0.01) * 0.01
 
-    uniforms.uEdgeThickness.value = 0.2 + Math.sin(state.clock.elapsedTime * 0.08) * 0.03 // Dynamic edge thickness variation
+    // Very slow edge glow
+    uniforms.uEdgeGlow.value = 0.45 + Math.sin(time * uniforms.uPulseFrequency.value) * 0.05
 
-    // Add cosmic color cycling
-    uniforms.uCosmicMix.value = (Math.sin(state.clock.elapsedTime * 0.02) * 0.5 + 0.5) * 0.3
+    // Very slow edge thickness
+    uniforms.uEdgeThickness.value = 0.3 + Math.sin(time * 0.015) * 0.005
+
+    // Enhanced cosmic color cycling with multiple phases
+    uniforms.uCosmicMix.value = (Math.sin(time * 0.005) * 0.5 + 0.5) * 0.2 // Increased mix intensity
+    uniforms.uCosmicMix2.value = (Math.sin(time * 0.003) * 0.5 + 0.5) * 0.15 // Increased mix intensity
   })
 
   const vertexShader = `
@@ -54,6 +68,7 @@ function RefinedBlobMaterial({ scrollY }: { scrollY: number }) {
     uniform float uScrollY;
     uniform float uNoiseFreq;
     uniform float uNoiseAmp;
+    uniform float uBreathingFactor;
     
     // Improved Perlin noise function
     vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
@@ -132,35 +147,35 @@ function RefinedBlobMaterial({ scrollY }: { scrollY: number }) {
       vNormal = normal;
       vPosition = position;
       
-      // Create distortion based on position and time
-      float scrollFactor = uScrollY * 1.5;
-      float timeFactor = uTime * 0.3;
+      // Create very smooth distortion
+      float scrollFactor = uScrollY * 0.8;
+      float timeFactor = uTime * 0.1;
       
-      // Create multiple layers of noise for more organic movement
+      // Create multiple layers of noise for organic movement
       float noise1 = snoise(vec3(position.x * uNoiseFreq + timeFactor, 
                                 position.y * uNoiseFreq + timeFactor, 
                                 position.z * uNoiseFreq + timeFactor)) * uNoiseAmp;
                                 
-      float noise2 = snoise(vec3(position.x * uNoiseFreq * 2.0 + timeFactor * 1.2,
-                                position.y * uNoiseFreq * 2.0 - timeFactor * 1.0,
-                                position.z * uNoiseFreq * 2.0 + timeFactor)) * uNoiseAmp * 0.2;
+      float noise2 = snoise(vec3(position.x * uNoiseFreq * 1.2 + timeFactor * 0.5,
+                                position.y * uNoiseFreq * 1.2 - timeFactor * 0.4,
+                                position.z * uNoiseFreq * 1.2 + timeFactor * 0.5)) * uNoiseAmp * 0.1;
                                 
-      // Add scroll-based distortion
-      float scrollNoise = snoise(vec3(position.x * 0.2, position.y * 0.2, scrollFactor)) * 0.05;
+      // Add very subtle scroll-based distortion
+      float scrollNoise = snoise(vec3(position.x * 0.1, position.y * 0.1, scrollFactor)) * 0.02;
       
       // Combine noise layers for final displacement
-      vec3 newPosition = position + normal * (noise1 + noise2 + scrollNoise) * 0.7;
+      vec3 newPosition = position + normal * (noise1 + noise2 + scrollNoise) * 0.5;
       
-      // Add pulsing effect
-      newPosition += normal * sin(uTime * 1.0) * 0.008;
-      
-      // Add scroll-reactive scaling
-      float scrollScale = 1.0 + sin(scrollFactor * 0.5) * 0.02;
-      newPosition *= scrollScale;
-      
-      // Add breathing effect - expand and contract
-      float breathingEffect = sin(uTime * 0.3) * 0.02 + 1.0;
+      // Add very gentle breathing effect
+      float breathingEffect = sin(uTime * 0.15) * 0.01 + 1.0;
       newPosition *= breathingEffect;
+      
+      // Add very subtle pulsing
+      newPosition += normal * sin(uTime * 0.2) * 0.003;
+      
+      // Add very subtle scroll-reactive scaling
+      float scrollScale = 1.0 + sin(scrollFactor * 0.3) * 0.01;
+      newPosition *= scrollScale;
       
       vWorldPosition = (modelMatrix * vec4(newPosition, 1.0)).xyz;
       gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
@@ -183,7 +198,10 @@ function RefinedBlobMaterial({ scrollY }: { scrollY: number }) {
     uniform float uEdgeThickness;
     uniform vec3 uCosmicColor1;
     uniform vec3 uCosmicColor2;
+    uniform vec3 uCosmicColor3;
     uniform float uCosmicMix;
+    uniform float uCosmicMix2;
+    uniform float uBreathingFactor;
     
     // HSL to RGB conversion
     vec3 hsl2rgb(vec3 c) {
@@ -220,62 +238,78 @@ function RefinedBlobMaterial({ scrollY }: { scrollY: number }) {
     }
     
     void main() {
-      // Enhanced lighting model
+      // Enhanced lighting model with very smooth transitions
       vec3 light1 = normalize(vec3(0.5, 0.8, 0.3));
       vec3 light2 = normalize(vec3(-0.3, 0.4, 0.7));
       
-      // Calculate diffuse lighting from multiple light sources
       float dProd1 = max(0.0, dot(vNormal, light1));
       float dProd2 = max(0.0, dot(vNormal, light2));
       float dProdCombined = dProd1 * 0.7 + dProd2 * 0.3;
       
-      // Apply color with hue shift and cosmic mixing
+      // Very smooth color transitions
       vec3 hslColor = rgb2hsl(uColor);
       hslColor.x = mod(hslColor.x + uHueShift, 1.0);
       vec3 baseColor = hsl2rgb(hslColor) * uBrightness;
 
-      // Add cosmic colors
-      vec3 cosmicColor = mix(uCosmicColor1, uCosmicColor2, sin(uTime * 0.05) * 0.5 + 0.5);
-      baseColor = mix(baseColor, cosmicColor * 0.4, uCosmicMix);
+      // Enhanced cosmic color mixing with white/gray base
+      vec3 cosmicColor1 = mix(uCosmicColor1, uCosmicColor2, sin(uTime * 0.008) * 0.5 + 0.5);
+      vec3 cosmicColor2 = mix(cosmicColor1, uCosmicColor3, sin(uTime * 0.006) * 0.5 + 0.5);
       
-      vec3 highlightColor = vec3(1.0, 1.0, 1.0) * 0.3;  // Subtler white highlight
+      // Start with white/gray base and transition to cosmic colors
+      vec3 whiteBase = vec3(0.95, 0.95, 0.95); // Slightly off-white
+      baseColor = mix(whiteBase, baseColor, 0.3); // Blend with white base
+      baseColor = mix(baseColor, cosmicColor2 * 0.35, uCosmicMix);
+      baseColor = mix(baseColor, cosmicColor1 * 0.25, uCosmicMix2);
       
-      // Create dynamic color blending
-      vec3 color = mix(baseColor, highlightColor, dProdCombined * 0.25);
+      vec3 highlightColor = vec3(1.0, 1.0, 1.0) * 0.2; // Increased highlight
       
-      // Add time-based color variation
-      color += 0.02 * sin(uTime * 0.8 + vUv.x * 10.0) * vec3(0.08, 0.12, 0.15);
+      // Very smooth color blending
+      vec3 color = mix(baseColor, highlightColor, dProdCombined * 0.15);
       
-      // Enhanced fresnel effect for edge highlighting
+      // Enhanced cosmic glow effect
+      float cosmicGlow = sin(uTime * 0.15 + vUv.x * 4.0) * 0.5 + 0.5;
+      vec3 cosmicGlowColor = mix(
+        vec3(0.95, 0.95, 0.95), // White
+        vec3(0.4, 0.6, 1.0), // Cosmic blue
+        cosmicGlow
+      );
+      color += cosmicGlowColor * 0.03; // Increased glow intensity
+      
+      // Enhanced fresnel effect with very smooth transitions
       vec3 viewDirection = normalize(cameraPosition - vWorldPosition);
-      float fresnel = pow(1.0 - max(0.0, dot(vNormal, viewDirection)), 4.0);
+      float fresnel = pow(1.0 - max(0.0, dot(vNormal, viewDirection)), 2.0);
       
-      // Enhanced edge glow with pulsing effect
-      float enhancedFresnel = pow(1.0 - max(0.0, dot(vNormal, viewDirection)), 2.0);
+      float enhancedFresnel = pow(1.0 - max(0.0, dot(vNormal, viewDirection)), 1.0);
       float edgeMask = smoothstep(1.0 - uEdgeThickness, 1.0, enhancedFresnel);
-      vec3 edgeColor = vec3(0.7, 1.0, 0.9) * uEdgeGlow; // Green-blue edge
+      vec3 edgeColor = mix(
+        vec3(0.95, 0.95, 0.95), // White
+        vec3(0.4, 0.6, 1.0), // Cosmic blue
+        sin(uTime * 0.1) * 0.5 + 0.5
+      ) * uEdgeGlow;
       
-      // Apply enhanced edge glow
-      color = mix(color, edgeColor, edgeMask * 0.2); // Less intense edge mix
+      // Very smooth edge glow
+      color = mix(color, edgeColor, edgeMask * 0.15); // Increased edge blend
       
-      // Add iridescence
-      float iridescence = sin(fresnel * 10.0 + uTime * 0.5) * 0.5 + 0.5;
-      vec3 iridescenceColor = vec3(0.9, 1.0, 1.0) * iridescence * 0.05; // Dimmer iridescence
+      // Enhanced cosmic iridescence
+      float iridescence = sin(fresnel * 4.0 + uTime * 0.1) * 0.5 + 0.5;
+      vec3 iridescenceColor = mix(
+        vec3(0.95, 0.95, 0.95), // White
+        vec3(0.4, 0.6, 1.0), // Cosmic blue
+        iridescence
+      ) * 0.03; // Increased iridescence
       color += iridescenceColor;
       
-      // Add scroll-reactive glow
-      float scrollGlow = sin(uScrollY * 2.0 + uTime * 0.8) * 0.5 + 0.5;
-      color += baseColor * scrollGlow * 0.05; // Dimmer scroll glow
+      // Very smooth scroll-reactive glow
+      float scrollGlow = sin(uScrollY * 0.8 + uTime * 0.15) * 0.5 + 0.5;
+      color += baseColor * scrollGlow * 0.03; // Increased scroll glow
       
-      // Add pulsing glow
-      float glow = sin(uTime * 0.8) * 0.5 + 0.5;
-      color += glow * 0.04 * baseColor;
+      // Very smooth pulsing glow
+      float glow = sin(uTime * 0.15) * 0.5 + 0.5;
+      color += glow * 0.02 * baseColor; // Increased pulse glow
       
-      // Adjust opacity based on fresnel and scroll
-      float opacity = (0.005 + fresnel * 0.01 + scrollGlow * 0.005) * uOpacityFactor * (1.0 - uScrollFactor * 0.15); // Reduced base opacity
-      
-      // Enhance edge opacity
-      opacity = mix(opacity, opacity * 1.15, edgeMask);
+      // Very smooth opacity transitions
+      float opacity = (0.02 + fresnel * 0.025 + scrollGlow * 0.003) * uOpacityFactor * (1.0 - uScrollFactor * 0.08);
+      opacity = mix(opacity, opacity * 1.08, edgeMask); // Increased edge opacity
       
       gl_FragColor = vec4(color, opacity);
     }
@@ -314,13 +348,13 @@ function RefinedBlob({
   const particlesRef = useRef<any>(null)
   const groupRef = useRef<any>(null)
 
-  // Create unique movement patterns for each blob (more distinct 3D circular movement)
+  // Restored original movement parameters
   const speedFactor = useRef(0.7 + Math.random() * 0.3).current // Faster for more dynamic effect
   const amplitudeFactor = useRef(0.7 + Math.random() * 0.4).current // More individual movement
   const rotationFactor = useRef(0.5 + Math.random() * 0.25).current // Faster rotation
   const phaseOffset = useRef(Math.random() * Math.PI * 2).current
 
-  // Circular movement parameters - all on the left side
+  // Restored circular movement parameters
   const circleCenter = useRef(new Vector3(position[0], position[1], position[2])).current
   const circleRadius = useRef(1.0 + Math.random() * 1.0).current // Increased radius for wider circular movement
   const originalPositionVector = useRef(
@@ -328,11 +362,11 @@ function RefinedBlob({
   ).current
   const circleSpeed = useRef(0.3 + Math.random() * 0.2).current // Increased speed of circular movement
 
-  // Particle system for blob aura
-  const particleCount = 100 // Reduced particle count
+  // Keep reduced particle count for performance
+  const particleCount = 50
   const particlePositions = useRef(() => {
     const positions = new Float32Array(particleCount * 3)
-    const radius = 0.8 // Smaller aura radius
+    const radius = 0.8 // Restored aura radius
 
     for (let i = 0; i < particleCount; i++) {
       const theta = Math.random() * Math.PI * 2
@@ -350,65 +384,64 @@ function RefinedBlob({
   useFrame((state) => {
     if (mesh.current && groupRef.current) {
       const time = state.clock.elapsedTime * speedFactor + phaseOffset
-      const scrollFactor = scrollY * 0.001
+      const scrollFactor = scrollY * 0.001 // Restored scroll influence
       const normalizedScrollFactor = Math.min(1.0, scrollY * 0.001)
 
-      // Convergence/separation animation
+      // Restored convergence animation
       const convergenceTime = state.clock.elapsedTime * 0.15 + index * 0.5
       const convergenceStrength = Math.sin(convergenceTime) * 0.5 + 0.5
       const separationDistance = 3.0 * (1 - convergenceStrength)
 
-      // Calculate separation direction based on index
+      // Restored separation calculation
       const separationAngle = (index / 12) * Math.PI * 2
       const separationX = Math.cos(separationAngle) * separationDistance
       const separationY = Math.sin(separationAngle) * separationDistance
 
-      // 3D circular movement with convergence
+      // Restored circular movement
       const angle = time * circleSpeed
       const baseXOffset = Math.sin(angle) * circleRadius
       const baseYOffset = Math.cos(angle * 0.7) * circleRadius * 0.7
       const baseZOffset = Math.sin(angle * 1.3) * circleRadius * 0.5
 
-      // Apply convergence/separation
-      // Responsive X offset: shift right on smaller screens
+      // Restored position calculation
       const responsiveXOffset = viewport.width < 768 ? viewport.width * 0.1 : 0
       groupRef.current.position.x = circleCenter.x + baseXOffset + separationX + responsiveXOffset
       groupRef.current.position.y = circleCenter.y + baseYOffset + separationY
       groupRef.current.position.z = circleCenter.z + baseZOffset
 
-      // Add vertical movement with scroll influence
-      const verticalMovement = ((Math.sin(time * 0.25) * 1.5 * viewport.height) / 10) * amplitudeFactor // More vertical movement
-      const scrollInfluence = -scrollY * 0.006 * (1 + index * 0.15) // More scroll influence
+      // Restored vertical movement
+      const verticalMovement = ((Math.sin(time * 0.25) * 1.5 * viewport.height) / 10) * amplitudeFactor
+      const scrollInfluence = -scrollY * 0.006 * (1 + index * 0.15)
 
       groupRef.current.position.y += verticalMovement + scrollInfluence
 
-      // Enhanced rotation (more noticeable)
+      // Restored rotation
       mesh.current.rotation.x = time * 0.15 * rotationFactor
       mesh.current.rotation.y = time * 0.1 * rotationFactor
       mesh.current.rotation.z = time * 0.05 * rotationFactor
 
-      // Scale pulsing with convergence effect
+      // Restored scale calculation
       const scalePulse = 1 + Math.sin(time * 0.4) * 0.05
-      const convergenceScale = 0.8 + convergenceStrength * 0.4 // Blobs get larger when converged
+      const convergenceScale = 0.8 + convergenceStrength * 0.4
       const scrollZoom = 1 + normalizedScrollFactor * 1.0
       const combinedScale = scalePulse * scrollZoom * size * convergenceScale
 
       mesh.current.scale.set(combinedScale, combinedScale, combinedScale)
 
-      // Scroll-reactive scale
-      const scrollScale = 1 + Math.sin(scrollFactor * 1.2) * 0.03 // More scroll scale reaction
+      // Restored scroll-reactive scale
+      const scrollScale = 1 + Math.sin(scrollFactor * 1.2) * 0.03
       groupRef.current.scale.set(scrollScale, scrollScale, scrollScale)
 
-      // Update particle system
+      // Restored particle system update
       if (particlesRef.current) {
-        particlesRef.current.rotation.x = -time * 0.035 // Slightly faster rotation
+        particlesRef.current.rotation.x = -time * 0.035
         particlesRef.current.rotation.y = -time * 0.045
 
         const opacityAttribute = particlesRef.current.geometry.getAttribute("opacity")
         for (let i = 0; i < particleCount; i++) {
           const noise = Math.sin(time + i * 0.1) * 0.5 + 0.5
-          const opacityFactor = 1 + Math.sin(time * 0.15) * 0.2 // More opacity variation
-          opacityAttribute.setX(i, noise * 0.15 * opacityFactor * (1 - normalizedScrollFactor * 0.1)) // Increased base opacity
+          const opacityFactor = 1 + Math.sin(time * 0.15) * 0.2
+          opacityAttribute.setX(i, noise * 0.15 * opacityFactor * (1 - normalizedScrollFactor * 0.1))
         }
         opacityAttribute.needsUpdate = true
       }
@@ -417,18 +450,24 @@ function RefinedBlob({
 
   return (
     <group ref={groupRef} position={position}>
-      <Sphere ref={mesh} args={[1, 64, 64]} scale={size}>
+      <Sphere ref={mesh} args={[1, 32, 32]} scale={size}>
         <RefinedBlobMaterial scrollY={scrollY} />
       </Sphere>
-      {/* Particle aura around the blob */}
       <points ref={particlesRef} scale={size * 1.2}>
         <bufferGeometry>
-          <bufferAttribute attach="attributes-position" count={particleCount} array={particlePositions} itemSize={3} />
+          <bufferAttribute 
+            attach="attributes-position" 
+            count={particleCount} 
+            array={particlePositions} 
+            itemSize={3}
+            args={[particlePositions, 3]} 
+          />
           <bufferAttribute
             attach="attributes-opacity"
             count={particleCount}
-            array={new Float32Array(particleCount).fill(0.08)} // Dimmer initial particle opacity
+            array={new Float32Array(particleCount).fill(0.08)}
             itemSize={1}
+            args={[new Float32Array(particleCount).fill(0.08), 1]}
           />
         </bufferGeometry>
         <shaderMaterial
@@ -442,15 +481,13 @@ function RefinedBlob({
             
             void main() {
               vOpacity = opacity;
-              
-              // Add subtle movement to particles
               vec3 pos = position;
-              pos.x += sin(uTime * 0.12 + position.z * 1.2) * 0.03; // More movement
+              pos.x += sin(uTime * 0.12 + position.z * 1.2) * 0.03;
               pos.y += cos(uTime * 0.09 + position.x * 1.2) * 0.03;
               pos.z += sin(uTime * 0.07 + position.y * 1.2) * 0.03;
               
               vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-              gl_PointSize = 1.5 * (300.0 / -mvPosition.z); // Smaller point size
+              gl_PointSize = 1.5 * (300.0 / -mvPosition.z);
               gl_Position = projectionMatrix * mvPosition;
             }
           `}
@@ -459,28 +496,16 @@ function RefinedBlob({
             uniform float uTime;
             
             void main() {
-              // Create a soft, circular particle with enhanced glow
               float distanceFromCenter = length(gl_PointCoord - vec2(0.5));
               float strength = 1.0 - smoothstep(0.0, 0.5, distanceFromCenter);
               
-              // Add subtle pulsing glow effect
-              float pulse = sin(uTime * 0.3) * 0.5 + 0.5;
-              
-              // Gradient from center to edge with enhanced brightness
               vec3 color = mix(
-                vec3(0.6, 0.8, 0.7), // Green center
-                mix(vec3(0.6, 0.4, 0.8), vec3(0.8, 0.4, 0.6), sin(uTime * 0.03) * 0.5 + 0.5), // Purple-pink edge
+                vec3(0.6, 0.8, 0.7),
+                mix(vec3(0.6, 0.4, 0.8), vec3(0.8, 0.4, 0.6), sin(uTime * 0.03) * 0.5 + 0.5),
                 distanceFromCenter
               );
               
-              // Add subtle color variation
-              color += vec3(sin(uTime * 0.06) * 0.06, cos(uTime * 0.09) * 0.06, sin(uTime * 0.11) * 0.06);
-              
-              // Enhance edge glow (subtle)
-              float edgeGlow = smoothstep(0.4, 0.5, distanceFromCenter) * pulse * 0.25; // More edge glow
-              color = mix(color, vec3(0.7, 1.0, 0.9), edgeGlow);
-              
-              gl_FragColor = vec4(color, vOpacity * strength * (0.5 + pulse * 0.2)); // Dimmer overall particle opacity
+              gl_FragColor = vec4(color, vOpacity * strength * 0.8);
             }
           `}
           uniforms={{
@@ -488,14 +513,12 @@ function RefinedBlob({
           }}
         />
       </points>
-      {/* Enhanced sparkles around the blob (subtle) */}
-      <Sparkles count={10} scale={size * 1.0} size={4} speed={0.15} opacity={0.08} color="#4cd787" /> // Fewer, smaller,
-      dimmer sparkles
+      <Sparkles count={10} scale={size * 1.0} size={4} speed={0.15} opacity={0.08} color="#4cd787" />
     </group>
   )
 }
 
-// Main AnimatedBlob component that generates and renders multiple RefinedBlobs
+// Main AnimatedBlob component
 export default function AnimatedBlob({
   scrollY,
   viewport,
@@ -503,29 +526,26 @@ export default function AnimatedBlob({
   scrollY: number
   viewport: { width: number; height: number }
 }) {
-  const blobCount = 40 // Increased number of blobs for a "broken down" effect
+  const blobCount = 30
   const blobData = useRef(
     Array.from({ length: blobCount }, (_, index) => {
-      const size = 0.5 + Math.random() * 1.5 // Smaller size range for individual blobs
-
-      // Position blobs primarily on the left side
-      // Adjust the range to be more negative for x-axis to keep them left
-      const xPos = -15 + Math.random() * 10 // Range from -15 to -5
-      const yPos = -10 + Math.random() * 20 // Wider vertical spread
-      const zPos = -5 + Math.random() * 10 // Deeper Z spread
+      const size = 0.5 + Math.random() * 1.5
+      const xPos = -15 + Math.random() * 10
+      const yPos = -10 + Math.random() * 20
+      const zPos = -5 + Math.random() * 10
 
       return {
         position: [xPos, yPos, zPos] as [number, number, number],
         originalPosition: [xPos, yPos, zPos] as [number, number, number],
         size,
         index,
-        convergencePhase: Math.random() * Math.PI * 2, // Random phase for convergence
+        convergencePhase: Math.random() * Math.PI * 2,
       }
     }),
   ).current
 
   return (
-    <>
+    <Suspense fallback={null}>
       {blobData.map((blob) => (
         <RefinedBlob
           key={blob.index}
@@ -538,6 +558,6 @@ export default function AnimatedBlob({
           convergencePhase={blob.convergencePhase}
         />
       ))}
-    </>
+    </Suspense>
   )
 }

@@ -241,4 +241,4 @@ function TestimonialCard({ testimonial, index, containerRef, isHovered, onHover,
   )
 }
 
-export default ParallaxTestimonials;
+
