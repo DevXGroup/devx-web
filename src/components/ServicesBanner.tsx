@@ -290,8 +290,7 @@ const ShinyApple = ({ service, onClick }) => {
 
 export default function ServicesBanner() {
   const [selectedService, setSelectedService] = useState(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [clickPosition, setClickPosition] = useState({ x: 0, y: 0 })
+  const [clickPosition, setClickPosition] = useState(null)
 
   // Function to open modal with service details
   const handleServiceClick = (service, event) => {
@@ -303,15 +302,13 @@ export default function ServicesBanner() {
       setClickPosition({ x: window.innerWidth / 2, y: window.innerHeight / 2 })
     }
     setSelectedService(service)
-    setIsModalOpen(true)
   }
 
   // Handle modal close
   const handleCloseModal = () => {
-    setIsModalOpen(false)
     setSelectedService(null)
     setTimeout(() => {
-      setClickPosition({ x: 0, y: 0 })
+      setClickPosition(null)
     }, 100)
   }
 
@@ -365,130 +362,33 @@ export default function ServicesBanner() {
     }
   }, [])
 
-  // Prepare service elements for ScrollVelocity with tight spacing
-  const firstRowElements = useMemo(
-    () => (
-      <div className="inline-flex items-center gap-0 whitespace-nowrap">
-        {services.map((service, index) => (
-          <React.Fragment key={service.title}>
-            <div
-              className="w-1.5 h-1.5 rounded-full mx-2 opacity-60 flex-shrink-0"
-              style={{ backgroundColor: service.color }}
-            />
-            <motion.span
-              className="text-4xl md:text-6xl lg:text-7xl font-extrabold transition-all duration-500 pointer-events-none select-none"
-              style={{
-                color: service.color,
-                textShadow: `0 0 20px ${service.color}40, 0 2px 4px rgba(0,0,0,0.8)`,
-                letterSpacing: "0.02em",
-              }}
-            >
-              {service.title.replace(/&/g, "+")}
-            </motion.span>
-          </React.Fragment>
-        ))}
-      </div>
-    ),
-    [services],
-  )
-
-  const secondRowElements = useMemo(
-    () => (
-      <div className="inline-flex items-center gap-0 whitespace-nowrap">
-        {services
-          .slice()
-          .reverse()
-          .map((service, index) => (
-            <React.Fragment key={service.title}>
-              <div
-                className="w-1.5 h-1.5 rounded-full mx-2 opacity-60 flex-shrink-0"
-                style={{ backgroundColor: service.color }}
-              />
-              <motion.span
-                className="text-3xl md:text-5xl lg:text-6xl font-normal transition-all duration-500 pointer-events-none select-none" // Thinner font
-                style={{
-                  color: service.color,
-                  textShadow: `0 0 20px ${service.color}40, 0 2px 4px rgba(0,0,0,0.8)`,
-                  letterSpacing: "0.02em",
-                }}
-              >
-                {service.title.replace(/&/g, "+")}
-              </motion.span>
-            </React.Fragment>
-          ))}
-      </div>
-    ),
-    [services],
-  )
-
   return (
-    <section className="py-12 relative bg-black/40">
-      <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-purple-900/5 to-black/80" />
-      {/* Light beams */}
-      <div className="absolute inset-0">
-        <motion.div
-          initial={{ opacity: 0, rotate: -30, x: "-30%", y: "100%" }}
-          animate={{
-            opacity: [0, 0.1, 0],
-            y: ["100%", "-100%"],
-          }}
-          transition={{
-            duration: 12,
-            repeat: Number.POSITIVE_INFINITY,
-            repeatType: "loop",
-            ease: "linear",
-          }}
-          className="absolute left-1/3 w-[30px] h-[800px] bg-gradient-to-t from-[#CFB53B]/0 via-[#CFB53B]/15 to-[#CFB53B]/0"
-          style={{ transform: "rotate(-30deg)" }}
-        />
-
-        <motion.div
-          initial={{ opacity: 0, rotate: 30, x: "30%", y: "100%" }}
-          animate={{
-            opacity: [0, 0.12, 0],
-            y: ["100%", "-100%"],
-          }}
-          transition={{
-            duration: 9,
-            repeat: Number.POSITIVE_INFINITY,
-            repeatType: "loop",
-            ease: "linear",
-            delay: 3,
-          }}
-          className="absolute right-1/3 w-[35px] h-[700px] bg-gradient-to-t from-[#9d4edd]/0 via-[#9d4edd]/18 to-[#9d4edd]/0"
-          style={{ transform: "rotate(30deg)" }}
-        />
+    <section className="relative h-[200px] overflow-hidden bg-black/30">
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-transparent" />
       </div>
-      <div className="relative">
-        <h2 className="sr-only">Explore Our Services</h2>
 
-        {/* ScrollVelocity component for both rows with tight spacing */}
-        <ScrollVelocity
-          texts={[firstRowElements, secondRowElements]}
-          velocity={110}
-          damping={50}
-          stiffness={400}
-          numCopies={9}
-          velocityMapping={{ input: [0, 1000], output: [0, 5] }} // Matches your reference
-          parallaxClassName="py-1" // Reduced vertical spacing
-          scrollerClassName="items-center"
-        />
+      <ScrollVelocity
+        texts={[
+          "Custom Software Development • AI & Machine Learning • Cloud Solutions • ",
+          "Mobile Apps • Database Solutions • Web Development • DevOps • ",
+        ]}
+        velocity={40}
+        className="text-white/30 px-4"
+        damping={50}
+        stiffness={400}
+        numCopies={4}
+        velocityMapping={{ input: [-1000, 1000], output: [-2, 2] }}
+      />
 
-        {/* Shiny Apples service menu */}
-        <div className="mt-20 flex flex-wrap justify-center gap-6 md:gap-10">
-          {services.map((service) => (
-            <ShinyApple key={service.title} service={service} onClick={(e) => handleServiceClick(service, e)} />
-          ))}
-        </div>
-
-        {/* Service Modal */}
+      {selectedService && (
         <ServiceModal
           service={selectedService}
-          isOpen={isModalOpen}
+          isOpen={!!selectedService}
           onClose={handleCloseModal}
           clickPosition={clickPosition}
         />
-      </div>
+      )}
     </section>
   )
 }

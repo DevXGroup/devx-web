@@ -601,7 +601,7 @@ html.no-backdrop-filter .glass-effect {
 }
 
 /* 3D Transform Styles */
-.perspective-[1000px] {
+.perspective-1000 {
   perspective: 1000px;
 }
 
@@ -617,7 +617,7 @@ html.no-backdrop-filter .glass-effect {
     -webkit-transform-style: preserve-3d;
   }
 
-  .perspective-[1000px] {
+  .perspective-1000 {
     perspective: 1000px;
     -webkit-perspective: 1000px;
   }
@@ -942,12 +942,14 @@ html.is-touching .animation-heavy {
   filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.2)) drop-shadow(0 0 50px rgba(255, 255, 255, 0.1));
   -webkit-filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.2)) drop-shadow(0 0 50px rgba(255, 255, 255, 0.1));
   animation: planet-edge-glow 4s infinite ease-in-out;
-  transform: translateZ(0); /* Force GPU acceleration */
+  -webkit-animation: planet-edge-glow 4s infinite ease-in-out;
+  /* transform: translateZ(0);  */
+  /* Force GPU acceleration */
+  /* -webkit-transform: translateZ(0); */
 }
 
-@keyframes planet-edge-glow {
-  0%,
-  100% {
+@-webkit-keyframes planet-edge-glow {
+  0%, 100% {
     filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.2)) drop-shadow(0 0 50px rgba(255, 255, 255, 0.1));
     -webkit-filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.2)) drop-shadow(0 0 50px rgba(255, 255, 255, 0.1));
   }
@@ -957,16 +959,28 @@ html.is-touching .animation-heavy {
   }
 }
 
+
 /* Slow animations for the hero section */
-@keyframes pulse-slow {
-  0%,
-  100% {
+@-webkit-keyframes pulse-slow {
+  0%, 100% {
+    -webkit-transform: scale(1);
     transform: scale(1);
-    opacity: 0.2;
+    opacity: 0.5;
+  }
+  50% {
+    -webkit-transform: scale(1.05);
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
+@keyframes pulse-slow {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.5;
   }
   50% {
     transform: scale(1.05);
-    opacity: 0.3;
+    opacity: 0.9;
   }
 }
 

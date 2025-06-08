@@ -11,7 +11,7 @@ interface EnhancedInfinityLoaderProps {
 
 export default function EnhancedInfinityLoader({
   scrollThreshold = 0.3,
-  baseScale = 1,
+  baseScale = 9.5,
   maxScale = 2,
 }: EnhancedInfinityLoaderProps) {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -29,12 +29,13 @@ export default function EnhancedInfinityLoader({
       [0, scrollThreshold, 1 - scrollThreshold, 1],
       [baseScale, maxScale, maxScale, baseScale],
     ),
-    { stiffness: 100, damping: 30, mass: 0.8 },
+    { stiffness: 250, damping: 25, mass: 0.5 },
   )
 
-  const opacity = useSpring(useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0.3, 1, 1, 0.3]), {
-    stiffness: 100,
-    damping: 30,
+  const opacity = useSpring(useTransform(scrollYProgress, [0, 0.3, 0.8, 1], [0.3, 1, 1, 0.3]), {
+    stiffness: 250,
+    damping: 55,
+    mass: 0.5
   })
 
   useEffect(() => {

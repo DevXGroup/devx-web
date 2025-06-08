@@ -58,7 +58,7 @@ export default function Hero() {
   return (
     <section className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-black">
       {/* Animated Background */}
-      <div className="absolute inset-0 tech-flow"></div>
+      <div className="absolute inset-0"></div>
 
       {/* 3D Background - Only rendered on client */}
       <ClientOnly>

@@ -44,7 +44,7 @@ function Scene() {
       {isClient && (
         <>
           <EnhancedStarfield viewport={viewport} />
-          <AnimatedBlob scrollY={scrollY} viewport={viewport} />
+          <AnimatedBlob viewport={viewport} />
         </>
       )}
     </>

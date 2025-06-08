@@ -5,6 +5,24 @@ import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
 import Image from "next/image"
 import { Quote } from "lucide-react"
 
+interface Testimonial {
+  quote: string;
+  author: string;
+  position: string;
+  image: string;
+  logo: string;
+}
+
+interface TestimonialCardProps {
+  testimonial: Testimonial;
+  index: number;
+  containerRef: React.RefObject<HTMLDivElement>;
+  isHovered: boolean;
+  onHover: () => void;
+  onLeave: () => void;
+  allHovered: boolean;
+}
+
 const testimonials = [
   {
     quote:
@@ -33,8 +51,8 @@ const testimonials = [
 ]
 
 export default function ParallaxTestimonials() {
-  const containerRef = useRef(null)
-  const [hoveredIndex, setHoveredIndex] = useState(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
 
   return (
     <section className="relative py-24 overflow-hidden bg-gradient-to-b from-black via-purple-900/10 to-black">
@@ -43,11 +61,11 @@ export default function ParallaxTestimonials() {
         <motion.div
           className="absolute top-0 left-1/4 w-64 h-64 rounded-full bg-[#4CD787]/10 blur-3xl"
           animate={{
-            y: [0, 30, 0],
-            opacity: [0.3, 0.5, 0.3],
+            y: [0, 15, 0],
+            opacity: [0.2, 0.3, 0.2],
           }}
           transition={{
-            duration: 8,
+            duration: 6,
             repeat: Number.POSITIVE_INFINITY,
             repeatType: "reverse",
           }}
@@ -55,14 +73,14 @@ export default function ParallaxTestimonials() {
         <motion.div
           className="absolute bottom-0 right-1/4 w-64 h-64 rounded-full bg-[#CFB53B]/10 blur-3xl"
           animate={{
-            y: [0, -30, 0],
-            opacity: [0.3, 0.5, 0.3],
+            y: [0, -15, 0],
+            opacity: [0.2, 0.3, 0.2],
           }}
           transition={{
-            duration: 8,
+            duration: 6,
             repeat: Number.POSITIVE_INFINITY,
             repeatType: "reverse",
-            delay: 2,
+            delay: 1,
           }}
         />
       </div>
@@ -100,16 +118,17 @@ export default function ParallaxTestimonials() {
   )
 }
 
-function TestimonialCard({ testimonial, index, containerRef, isHovered, onHover, onLeave, allHovered }) {
-  const cardRef = useRef(null)
+function TestimonialCard({ testimonial, index, containerRef, isHovered, onHover, onLeave, allHovered }: TestimonialCardProps) {
+  const cardRef = useRef<HTMLDivElement>(null)
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"],
+    layoutEffect: false
   })
 
-  // Create parallax effect based on index
-  const y = useTransform(scrollYProgress, [0, 1], [0, index % 2 === 0 ? -50 : 50])
+  // Limit the parallax effect range
+  const y = useTransform(scrollYProgress, [0, 1], [0, index % 2 === 0 ? -25 : 25])
 
   // Calculate the position adjustments for non-hovered cards
   const getPositionStyles = () => {
@@ -141,23 +160,22 @@ function TestimonialCard({ testimonial, index, containerRef, isHovered, onHover,
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: false, amount: 0.1 }}
-      transition={{ duration: 0.8, delay: index * 0.2 }} // For initial/whileInView
       className="bg-black/50 backdrop-blur-sm p-8 rounded-xl border border-white/10 flex flex-col h-full relative group shadow-lg"
       onMouseEnter={onHover}
       onMouseLeave={onLeave}
       animate={getPositionStyles()}
       transition={{
-        // This transition applies to the 'animate' prop for all state changes
+        // This transition applies to all properties
         type: "spring",
         stiffness: 200,
         damping: 20,
         mass: 0.5,
-        // Specific transitions for properties that might change
-        x: { type: "spring", stiffness: 200, damping: 20, mass: 0.5 },
-        y: { type: "spring", stiffness: 200, damping: 20, mass: 0.5 },
-        scale: { type: "spring", stiffness: 200, damping: 20, mass: 0.5 },
+        // Specific overrides for certain properties
         opacity: { duration: 0.2, ease: "easeOut" },
         boxShadow: { duration: 0.2, ease: "easeOut" },
+        // Initial animation duration
+        duration: 0.8,
+        delay: index * 0.2
       }}
     >
       {/* Quote icon - reduced opacity */}
@@ -171,6 +189,7 @@ function TestimonialCard({ testimonial, index, containerRef, isHovered, onHover,
           width={120}
           height={40}
           className="object-contain h-full"
+          style={{ width: "auto" }}
         />
       </div>
 
@@ -189,7 +208,8 @@ function TestimonialCard({ testimonial, index, containerRef, isHovered, onHover,
             alt={testimonial.author}
             width={48}
             height={48}
-            className="object-cover"
+            className="object-cover w-full h-full"
+            style={{ width: "auto" }}
           />
         </div>
         <div>

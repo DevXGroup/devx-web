@@ -48,10 +48,11 @@ export default function Navbar() {
             <Link href="/" className="flex items-center">
               <Image
                 src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/devx-logo-main-light-qTrRkjnHwbdPvqPRaKWQzeV7Emn14i.png"
-                alt="DevX Logo"
-                width={180}
-                height={48}
-                className="h-10 w-auto"
+                alt="DevX Group Logo"
+                width={120}
+                height={40}
+                className="h-8 w-auto"
+                priority
               />
             </Link>
           </div>

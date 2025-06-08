@@ -33,7 +33,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${ibmPlexMono.variable} ${ibmPlexSans.variable} dark`}>
-      <body className="bg-black text-white font-sans">
+      <body suppressHydrationWarning className="bg-black text-white font-sans">
         <BrowserCompatibilityDetector />
         <Navbar />
         <main className="min-h-screen">{children}</main>

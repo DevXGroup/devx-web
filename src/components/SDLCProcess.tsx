@@ -13,7 +13,23 @@ const sdlcSteps = [
   { name: "Maintenance", icon: Settings },
 ]
 
-const AnimatedIcon = ({ Icon, isActive, isComplete, progress }) => {
+interface AnimatedIconProps {
+  Icon: React.ElementType;
+  isActive: boolean;
+  isComplete: boolean;
+  progress: number;
+}
+
+
+interface ConnectingLineProps {
+  currentStep: number;
+  progress: number;
+  totalSteps: number;
+}
+
+const AnimatedIcon = ({ Icon, isActive, isComplete, progress }: AnimatedIconProps) => {
+  const roundedProgress = Math.round(progress * 1000) / 1000;
+
   return (
     <div className="relative">
       <svg className="w-16 h-16 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -24,15 +40,15 @@ const AnimatedIcon = ({ Icon, isActive, isComplete, progress }) => {
           stroke="#4CD787"
           strokeWidth="4"
           fill="none"
-          initial={{ pathLength: isComplete || progress === 1 ? 1 : 0 }}
-          animate={{ pathLength: isComplete || progress === 1 ? 1 : progress }}
+          initial={{ pathLength: isComplete || roundedProgress === 1 ? 1 : 0 }}
+          animate={{ pathLength: isComplete || roundedProgress === 1 ? 1 : roundedProgress }}
           transition={{ duration: 0.5, ease: "easeInOut" }}
           style={{ visibility: "visible" }}
         />
       </svg>
       <motion.div
         className={`w-12 h-12 rounded-full flex items-center justify-center ${
-          isComplete || progress === 1 ? "bg-[#4CD787]" : "bg-yellow-400"
+          isComplete || roundedProgress === 1 ? "bg-[#4CD787]" : "bg-yellow-400"
         }`}
         animate={{
           scale: isActive ? [1, 1.05, 1] : 1,
@@ -45,14 +61,15 @@ const AnimatedIcon = ({ Icon, isActive, isComplete, progress }) => {
         }}
         style={{ visibility: "visible" }}
       >
-        <Icon className={`w-6 h-6 ${isComplete || progress === 1 ? "text-white" : "text-black"}`} />
+        <Icon className={`w-6 h-6 ${isComplete || roundedProgress === 1 ? "text-white" : "text-black"}`} />
       </motion.div>
     </div>
   )
 }
 
-const ConnectingLine = ({ currentStep, progress, totalSteps }) => {
-  const lineProgress = (currentStep + progress) / (totalSteps - 1)
+const ConnectingLine = ({ currentStep, progress, totalSteps }: ConnectingLineProps) => {
+  const lineProgress = Math.round(((currentStep + progress) / (totalSteps - 1)) * 1000) / 1000;
+
   return (
     <div className="absolute top-1/2 left-0 right-0 h-0.5 transform -translate-y-[14px] overflow-hidden">
       <motion.div
@@ -91,24 +108,19 @@ export default function SDLCProcess() {
   const controls = useAnimation()
 
   useEffect(() => {
-    const animateProcess = async () => {
-      while (true) {
-        for (let i = 0; i < sdlcSteps.length; i++) {
-          setCurrentStep(i)
-          for (let p = 0; p <= 1; p += 0.01) {
-            setProgress(p)
-            await new Promise((resolve) => setTimeout(resolve, 30))
-          }
-          await new Promise((resolve) => setTimeout(resolve, 1000))
+    const interval = setInterval(() => {
+      setProgress((prev) => {
+        const newProgress = Math.round((prev + 0.01) * 1000) / 1000;
+        if (newProgress >= 1) {
+          setCurrentStep((prevStep) => (prevStep + 1) % sdlcSteps.length);
+          return 0;
         }
-        await new Promise((resolve) => setTimeout(resolve, 2000))
-        setCurrentStep(0)
-        setProgress(0)
-      }
-    }
+        return newProgress;
+      });
+    }, 50);
 
-    animateProcess()
-  }, [])
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <>

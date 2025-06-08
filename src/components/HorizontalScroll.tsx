@@ -125,8 +125,8 @@ export default function HorizontalScroll() {
   }
 
   return (
-    <section className="py-20 relative w-full overflow-hidden">
-      <div className="w-full">
+    <section className="relative w-full overflow-hidden h-[480px]">
+      <div className="w-full h-full flex items-center">
         <div ref={containerRef} className="relative w-full overflow-x-hidden">
           <motion.div
             style={{ x }}
@@ -143,16 +143,16 @@ export default function HorizontalScroll() {
               min: 0,
               max: 2000,
             }}
-            className="flex flex-nowrap gap-8 py-8 cursor-grab active:cursor-grabbing"
+            className="flex flex-nowrap gap-8 cursor-grab active:cursor-grabbing"
           >
             {caseStudies.map((study, index) => (
               <motion.div
                 key={index}
-                className="flex-shrink-0 w-[240px] md:w-[320px] h-[480px] bg-black/30 backdrop-blur-sm rounded-xl border border-gray-600 flex flex-col"
-                initial={{ opacity: 0, y: 50 }}
+                className="flex-shrink-0 w-[240px] md:w-[320px] h-[420px] bg-black/30 backdrop-blur-sm rounded-xl border border-gray-600 flex flex-col"
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.1 }}
-                transition={{ duration: 0.5, delay: (index % originalCaseStudies.length) * 0.05 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.4, delay: (index % originalCaseStudies.length) * 0.05 }}
               >
                 <div className="p-3 h-full flex flex-col">
                   <Image
@@ -160,7 +160,8 @@ export default function HorizontalScroll() {
                     alt={study.title}
                     width={320}
                     height={140}
-                    className="rounded-lg mb-3 object-cover w-full h-[140px]"
+                    className="rounded-lg mb-3 object-cover w-full h-[140px] aspect-[16/7]"
+                    style={{ width: "auto" }}
                   />
                   <h3 className="text-lg font-semibold text-white mb-2 leading-tight">{study.title}</h3>
                   <p className="text-foreground/70 text-sm mb-3 leading-snug">{study.description}</p>

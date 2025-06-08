@@ -72,7 +72,7 @@ export const ScrollVelocity: React.FC<ScrollVelocityProps> = ({
   damping = 50,
   stiffness = 400,
   numCopies = 6,
-  velocityMapping = { input: [0, 1000], output: [0, 5] },
+  velocityMapping = { input: [-1000, 1000], output: [-2, 2] },
   parallaxClassName,
   scrollerClassName,
   parallaxStyle,
@@ -99,12 +99,13 @@ export const ScrollVelocity: React.FC<ScrollVelocityProps> = ({
     const smoothVelocity = useSpring(scrollVelocity, {
       damping: damping ?? 50,
       stiffness: stiffness ?? 400,
+      mass: 0.5,
     })
     const velocityFactor = useTransform(
       smoothVelocity,
-      velocityMapping?.input || [0, 1000],
-      velocityMapping?.output || [0, 5],
-      { clamp: false },
+      velocityMapping?.input || [-1000, 1000],
+      velocityMapping?.output || [-2, 2],
+      { clamp: true }
     )
 
     const copyRef = useRef<HTMLSpanElement>(null)
@@ -124,14 +125,11 @@ export const ScrollVelocity: React.FC<ScrollVelocityProps> = ({
     const directionFactor = useRef<number>(1)
     useAnimationFrame((t, delta) => {
       let moveBy = directionFactor.current * baseVelocity * (delta / 1000)
-
-      if (velocityFactor.get() < 0) {
-        directionFactor.current = -1
-      } else if (velocityFactor.get() > 0) {
-        directionFactor.current = 1
-      }
-
-      moveBy += directionFactor.current * moveBy * velocityFactor.get()
+      
+      const currentVelocity = velocityFactor.get()
+      const clampedVelocity = Math.max(-2, Math.min(2, currentVelocity))
+      
+      moveBy += directionFactor.current * moveBy * clampedVelocity
       baseX.set(baseX.get() + moveBy)
     })
 
@@ -162,7 +160,7 @@ export const ScrollVelocity: React.FC<ScrollVelocityProps> = ({
   }
 
   return (
-    <section className="py-0 -space-y-4">
+    <section className="py-0 -space-y-4 h-[200px] overflow-hidden">
       {texts.map((text: string, index: number) => (
         <VelocityText
           key={index}

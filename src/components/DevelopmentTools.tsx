@@ -1,11 +1,18 @@
- "use client"
+"use client"
 
 import { LayoutGroup, motion, AnimatePresence } from "framer-motion"
 import { useEffect, useState, useCallback, useRef, useMemo } from "react"
 import Image from "next/image"
 import seedrandom from "seedrandom"
 
-const tools = [
+// Define the tool type
+interface Tool {
+  name: string;
+  description?: string;
+  icon: string;
+}
+
+const tools: Tool[] = [
   {
     name: "Laravel",
     description: "Quickly build secure web apps with Laravel's powerful features",
@@ -49,7 +56,7 @@ const tools = [
 ]
 
 // Updated AI tools with proper placeholder SVGs for missing icons
-const aiTools = [
+const aiTools: Tool[] = [
   {
     name: "TensorFlow",
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg",
@@ -99,7 +106,24 @@ export default function DevelopmentTools() {
   const cycleRef = useRef<NodeJS.Timeout | null>(null)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
 
-  // Removed useEffect for safariReady
+  // Memoize star positions and styles to ensure hydration consistency
+  const stars = useMemo(() => {
+    const rng = seedrandom("devx-stars")
+    return Array.from({ length: 60 }).map((_, index) => {
+      const size = Math.round((rng() * 2 + 1) * 1000) / 1000
+      return {
+        id: index,
+        width: size,
+        height: size,
+        left: rng() * 100,
+        top: rng() * 100,
+        boxShadowSize: Math.round((rng() * 3 + 2) * 1000) / 1000,
+        opacity: Math.round((rng() * 0.3 + 0.2) * 1000) / 1000,
+        delay: Math.round((rng() * 2) * 1000) / 1000,
+        duration: Math.round((3 + rng() * 4) * 1000) / 1000,
+      }
+    })
+  }, [])
 
   // Automatic cycle
   useEffect(() => {
@@ -150,26 +174,11 @@ export default function DevelopmentTools() {
 
   return (
     <LayoutGroup>
-      {/* Increased height and added padding for cleaner spacing */}
-      <div className="relative w-full h-[200vh] bg-black overflow-hidden pb-96 md:pb-[400px] lg:pb-[500px] z-[150]">
+      {/* Adjusted height and padding for better spacing */}
+      <div className="relative w-full min-h-screen bg-black overflow-hidden pb-20 md:pb-32 lg:pb-40 z-[150]">
         {" "}
-        {/* Increased height and padding */}
         {/* Reduced number of stars and added glow effect */}
         {(() => {
-          const stars = useMemo(() => {
-            const rng = seedrandom("devx-stars") // seed to ensure deterministic output
-            return Array.from({ length: 60 }).map((_, i) => ({
-              id: i,
-              width: rng() * 2 + 1,
-              height: rng() * 2 + 1,
-              left: rng() * 100,
-              top: rng() * 100,
-              boxShadow: `0 0 ${rng() * 3 + 2}px rgba(255, 255, 255, ${rng() * 0.3 + 0.2})`,
-              duration: 3 + rng() * 4,
-              delay: rng() * 2,
-            }))
-          }, []);
-          // Render stars
           return stars.map((star) => (
             <motion.div
               key={star.id}
@@ -179,7 +188,7 @@ export default function DevelopmentTools() {
                 height: `${star.height}px`,
                 left: `${star.left}%`,
                 top: `${star.top}%`,
-                boxShadow: star.boxShadow,
+                boxShadow: `0 0 ${star.boxShadowSize}px rgba(255, 255, 255, ${star.opacity})`,
                 backgroundColor: "rgba(255, 255, 255, 0.8)",
               }}
               initial={{ opacity: 0.2 }}
@@ -191,7 +200,7 @@ export default function DevelopmentTools() {
                 delay: star.delay,
               }}
             />
-          ));
+          ))
         })()}
         {/* Increased top padding and bottom margin for better spacing */}
         <div className="pt-6 pb-8">
@@ -348,22 +357,22 @@ function StaticIconsOrbit({
   activeIndex,
   onIconClick,
 }: {
-  tools: typeof tools
-  activeIndex: number
-  onIconClick: (index: number) => void
+  tools: Tool[];
+  activeIndex: number;
+  onIconClick: (index: number) => void;
 }) {
-  const radius = 230
+  const radius = 230;
 
   return (
     <div className="absolute z-[90] top-[65%] left-1/2 -translate-x-1/2 -translate-y-1/2">
-      {tools.map((tool, i) => {
-        if (i === activeIndex) return null
-        const angle = (i * 360) / tools.length
-        const radian = (angle * Math.PI) / 180
+      {tools.map((tool: Tool, i: number) => {
+        if (i === activeIndex) return null;
+        const angle = (i * 360) / tools.length;
+        const radian = (angle * Math.PI) / 180;
 
-        // Calculate position using trigonometry for precise placement
-        const x = Math.cos(radian) * radius
-        const y = Math.sin(radian) * radius
+        // Calculate position using trigonometry and round to 3 decimal places for consistency
+        const x = Math.round(Math.cos(radian) * radius * 1000) / 1000;
+        const y = Math.round(Math.sin(radian) * radius * 1000) / 1000;
 
         return (
           <motion.div
@@ -392,10 +401,10 @@ function StaticIconsOrbit({
               </div>
             </motion.div>
           </motion.div>
-        )
+        );
       })}
     </div>
-  )
+  );
 }
 
 /**
@@ -404,63 +413,48 @@ function StaticIconsOrbit({
  */
 function AIToolsOrbit() {
   // Larger radius for the outer orbit
-  const radius = 380 // Increased from 230 for the inner orbit
-  const [rotation, setRotation] = useState(0)
-  const orbitRef = useRef<HTMLDivElement>(null)
+  const radius = 380; // Increased from 230 for the inner orbit
+  const [rotation, setRotation] = useState(0);
+  const orbitRef = useRef<HTMLDivElement>(null);
 
   // Use useEffect to animate the rotation with a fixed time step
   useEffect(() => {
-    let lastTime = performance.now()
-    const rotationSpeed = 0.005 // degrees per millisecond (slower than inner orbit)
+    let lastTime = performance.now();
+    const rotationSpeed = 0.005; // degrees per millisecond (slower than inner orbit)
 
     const animate = (time: number) => {
-      const deltaTime = time - lastTime
-      lastTime = time
+      const deltaTime = time - lastTime;
+      lastTime = time;
 
-      // Use a fixed rotation increment for stability
-      setRotation((prev) => (prev + rotationSpeed * deltaTime) % 360)
-      requestAnimationFrame(animate)
-    }
+      // Round rotation to 3 decimal places for consistency
+      setRotation((prev) => Math.round(((prev + rotationSpeed * deltaTime) % 360) * 1000) / 1000);
+      requestAnimationFrame(animate);
+    };
 
-    const animationFrame = requestAnimationFrame(animate)
-    return () => cancelAnimationFrame(animationFrame)
-  }, [])
+    const animationFrame = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationFrame);
+  }, []);
 
   return (
-    <div
-      ref={orbitRef}
-      className="absolute z-[80] top-[65%] left-1/2 -translate-x-1/2 -translate-y-1/2"
-      style={{
-        width: 0,
-        height: 0,
-        transform: `rotate(${rotation}deg)`,
-        willChange: "transform", // Optimize for animation performance
-      }}
-    >
+    <div ref={orbitRef} className="absolute z-10 top-[65%] left-1/2 -translate-x-1/2 -translate-y-1/2">
       {aiTools.map((tool, i) => {
-        const angle = (i * 360) / aiTools.length
+        const angle = ((i * 360) / aiTools.length + rotation) % 360;
+        const radian = (angle * Math.PI) / 180;
+
+        // Calculate position using trigonometry and round to 3 decimal places for consistency
+        const x = Math.round(Math.cos(radian) * radius * 1000) / 1000;
+        const y = Math.round(Math.sin(radian) * radius * 1000) / 1000;
+
         return (
-          <div
-            className="absolute"
-            key={tool.name} // Added key for consistent rendering
-            style={{
-              top: 0,
-              left: 0,
-              width: 0,
-              height: 0,
-              transform: `rotate(${angle}deg) translateX(${radius}px)`,
-            }}
-          >
-            {/* Container that counter-rotates to keep both icon and label upright */}
+          <div key={tool.name} className="absolute">
             <div
-              className="absolute"
               style={{
-                transform: `rotate(-${angle + rotation}deg)`,
-                width: 0,
-                height: 0,
+                left: `${x}px`,
+                top: `${y}px`,
+                transform: "translate(-50%, -50%)",
               }}
+              className="absolute"
             >
-              {/* Main icon container */}
               <motion.div
                 className="absolute w-12 h-12 -ml-6 -mt-6 rounded-full bg-gray-900/80 backdrop-blur-sm shadow border border-[#4CD787]/30 flex items-center justify-center"
                 whileHover={{ scale: 1.1 }}
@@ -496,8 +490,8 @@ function AIToolsOrbit() {
               </div>
             </div>
           </div>
-        )
+        );
       })}
     </div>
-  )
+  );
 }
