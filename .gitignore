@@ -35,3 +35,6 @@ next-env.d.ts
 # AI MDs
 CLAUDE.md
 
+# IDEs setting files
+.vscode/
+
