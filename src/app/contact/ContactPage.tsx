@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { motion } from "framer-motion"
+import { useState, useEffect, useRef } from "react"
+import { motion, useReducedMotion, useInView } from "framer-motion"
 import {
   Phone,
   Mail,
@@ -13,7 +13,44 @@ import {
   ArrowRight,
   CheckCircle,
   Calendar,
+  Send,
+  User,
+  MessageCircle
 } from "lucide-react"
+import BlurText from "@/components/BlurText"
+
+// Enhanced animation variants
+const fadeInUpVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: [0.22, 1, 0.36, 1]
+    }
+  }
+}
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2
+    }
+  }
+}
+
+const buttonVariants = {
+  rest: { scale: 1 },
+  hover: { 
+    scale: 1.02,
+    transition: { duration: 0.2 }
+  },
+  tap: { scale: 0.98 }
+}
 
 // Enhanced AnimatedGradientText component with better animation
 const AnimatedGradientText = ({ children, className = "" }) => (
@@ -39,6 +76,10 @@ export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [calendarLoaded, setCalendarLoaded] = useState(false)
+  const [formErrors, setFormErrors] = useState({})
+  const shouldReduceMotion = useReducedMotion()
+  const formRef = useRef(null)
+  const isFormInView = useInView(formRef, { once: true })
 
   // Initialize Calendly widget when component mounts
   useEffect(() => {
@@ -67,26 +108,76 @@ export default function ContactPage() {
 
   useEffect(() => {
     // Add Calendly script if it doesn't exist
-    const script = document.createElement("script")
-    script.src = "https://assets.calendly.com/assets/external/widget.js"
-    script.async = true
-    script.onload = () => setCalendarLoaded(true)
-    document.body.appendChild(script)
+    if (!document.querySelector('script[src*="calendly.com"]')) {
+      const script = document.createElement("script")
+      script.src = "https://assets.calendly.com/assets/external/widget.js"
+      script.async = true
+      script.onload = () => {
+        setCalendarLoaded(true)
 
-    return () => {
-      // Clean up script when component unmounts
-      document.body.removeChild(script)
+        // Initialize Calendly with dark mode
+        setTimeout(() => {
+          if (window.Calendly) {
+            const widget = document.querySelector('.calendly-inline-widget')
+            if (widget) {
+              // Clear any existing content
+              widget.innerHTML = ''
+
+              // Initialize with dark mode settings using proper URL parameters
+              window.Calendly.initInlineWidget({
+                url: 'https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?background_color=000000&text_color=ffffff&primary_color=4CD787&hide_gdpr_banner=1',
+                parentElement: widget,
+                prefill: {},
+                utm: {},
+                styles: {
+                  height: '1000px'
+                }
+              })
+            }
+          }
+        }, 1000)
+      }
+      document.body.appendChild(script)
+
+      return () => {
+        // Clean up script when component unmounts
+        const existingScript = document.querySelector('script[src*="calendly.com"]')
+        if (existingScript) {
+          document.body.removeChild(existingScript)
+        }
+      }
     }
   }, [])
 
   const handleChange = (e) => {
     const { name, value } = e.target
     setFormState((prev) => ({ ...prev, [name]: value }))
+    // Clear errors when user starts typing
+    if (formErrors[name]) {
+      setFormErrors((prev) => ({ ...prev, [name]: null }))
+    }
+  }
+
+  const validateForm = () => {
+    const errors = {}
+    if (!formState.name.trim()) errors.name = "Name is required"
+    if (!formState.email.trim()) errors.email = "Email is required"
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formState.email)) errors.email = "Invalid email format"
+    if (!formState.message.trim()) errors.message = "Message is required"
+    return errors
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    
+    const errors = validateForm()
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors)
+      return
+    }
+    
     setIsSubmitting(true)
+    setFormErrors({})
 
     // Simulate form submission
     setTimeout(() => {
@@ -134,14 +225,20 @@ export default function ContactPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-center max-w-3xl mx-auto"
+            className="text-center max-w-4xl mx-auto"
           >
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6">
-              <AnimatedGradientText>Get in Touch</AnimatedGradientText>
-            </h1>
-            <p className="text-xl text-foreground/80 font-light max-w-2xl mx-auto">
-              Have a project in mind or questions about our services? We're here to help turn your vision into reality.
-            </p>
+            <div className="flex flex-col items-center">
+              <BlurText 
+                text="Get in Touch"
+                className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-center text-[#4CD787]"
+                delay={120}
+                animateBy="words"
+                direction="top"
+              />
+              <p className="text-xl text-foreground/80 font-light max-w-2xl text-center">
+                Have a project in mind or questions about our services? We&apos;re here to help turn your vision into reality.
+              </p>
+            </div>
           </motion.div>
         </div>
       </section>
@@ -152,9 +249,9 @@ export default function ContactPage() {
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
             {/* Contact Information Card */}
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
+              variants={fadeInUpVariants}
+              initial="hidden"
+              animate="visible"
               className="lg:col-span-2 bg-black/40 backdrop-blur-sm p-8 rounded-2xl border border-white/10 h-fit"
             >
               <div className="space-y-8">
@@ -183,7 +280,7 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-semibold text-foreground text-lg">Email</h3>
                     <p className="text-foreground/70">devxgroupllc@gmail.com</p>
-                    <p className="text-foreground/50 text-sm mt-1">We'll respond as quickly as possible</p>
+                    <p className="text-foreground/50 text-sm mt-1">We&apos;ll respond as quickly as possible</p>
                   </div>
                 </div>
 
@@ -251,9 +348,10 @@ export default function ContactPage() {
 
             {/* Contact Form Card */}
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
+              ref={formRef}
+              variants={fadeInUpVariants}
+              initial="hidden"
+              animate={isFormInView ? "visible" : "hidden"}
               className="lg:col-span-3 bg-black/40 backdrop-blur-sm p-8 md:p-10 rounded-2xl border border-white/10 relative overflow-hidden"
             >
               {/* Background gradient */}
@@ -271,13 +369,14 @@ export default function ContactPage() {
                   >
                     <CheckCircle className="w-16 h-16 text-[#4CD787] mx-auto mb-4" />
                     <h3 className="text-xl font-semibold text-white mb-2">Message Sent!</h3>
-                    <p className="text-foreground/70">Thank you for reaching out. We'll get back to you shortly.</p>
+                    <p className="text-foreground/70">Thank you for reaching out. We&apos;ll get back to you shortly.</p>
                   </motion.div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <label htmlFor="name" className="block text-sm font-medium text-foreground/80 mb-2">
+                        <label htmlFor="name" className="block text-sm font-medium text-foreground/80 mb-2 flex items-center gap-2">
+                          <User className="w-4 h-4" />
                           Your Name
                         </label>
                         <input
@@ -286,12 +385,23 @@ export default function ContactPage() {
                           name="name"
                           value={formState.name}
                           onChange={handleChange}
-                          className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#4CD787] text-foreground shadow-inner transition-colors duration-300"
+                          className={`w-full px-4 py-3 bg-white/5 border ${formErrors.name ? 'border-red-500' : 'border-white/10'} rounded-lg focus:outline-none focus:border-[#4CD787] text-foreground shadow-inner transition-colors duration-300`}
+                          placeholder="Enter your full name"
                           required
                         />
+                        {formErrors.name && (
+                          <motion.p
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="text-red-400 text-sm mt-1"
+                          >
+                            {formErrors.name}
+                          </motion.p>
+                        )}
                       </div>
                       <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-foreground/80 mb-2">
+                        <label htmlFor="email" className="block text-sm font-medium text-foreground/80 mb-2 flex items-center gap-2">
+                          <Mail className="w-4 h-4" />
                           Email Address
                         </label>
                         <input
@@ -300,14 +410,25 @@ export default function ContactPage() {
                           name="email"
                           value={formState.email}
                           onChange={handleChange}
-                          className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#4CD787] text-foreground shadow-inner transition-colors duration-300"
+                          className={`w-full px-4 py-3 bg-white/5 border ${formErrors.email ? 'border-red-500' : 'border-white/10'} rounded-lg focus:outline-none focus:border-[#4CD787] text-foreground shadow-inner transition-colors duration-300`}
+                          placeholder="your@email.com"
                           required
                         />
+                        {formErrors.email && (
+                          <motion.p
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="text-red-400 text-sm mt-1"
+                          >
+                            {formErrors.email}
+                          </motion.p>
+                        )}
                       </div>
                     </div>
 
                     <div>
-                      <label htmlFor="message" className="block text-sm font-medium text-foreground/80 mb-2">
+                      <label htmlFor="message" className="block text-sm font-medium text-foreground/80 mb-2 flex items-center gap-2">
+                        <MessageCircle className="w-4 h-4" />
                         Your Message
                       </label>
                       <textarea
@@ -316,24 +437,49 @@ export default function ContactPage() {
                         value={formState.message}
                         onChange={handleChange}
                         rows={6}
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#4CD787] text-foreground shadow-inner transition-colors duration-300 resize-none"
+                        className={`w-full px-4 py-3 bg-white/5 border ${formErrors.message ? 'border-red-500' : 'border-white/10'} rounded-lg focus:outline-none focus:border-[#4CD787] text-foreground shadow-inner transition-colors duration-300 resize-none`}
+                        placeholder="Tell us about your project, timeline, and requirements..."
                         required
                       ></textarea>
+                      {formErrors.message && (
+                        <motion.p
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="text-red-400 text-sm mt-1"
+                        >
+                          {formErrors.message}
+                        </motion.p>
+                      )}
                     </div>
 
                     <div className="flex justify-end">
-                      <button
+                      <motion.button
                         type="submit"
                         disabled={isSubmitting}
-                        className="group relative overflow-hidden bg-gradient-to-r from-[#4CD787] to-[#3CC76D] hover:from-[#3CC76D] hover:to-[#4CD787] text-black px-8 py-3 rounded-lg font-medium transition-all duration-300 flex items-center"
+                        variants={buttonVariants}
+                        initial="rest"
+                        whileHover={shouldReduceMotion ? {} : "hover"}
+                        whileTap={shouldReduceMotion ? {} : "tap"}
+                        className="group relative overflow-hidden bg-gradient-to-r from-[#4CD787] to-[#3CC76D] hover:from-[#3CC76D] hover:to-[#4CD787] text-black px-8 py-3 rounded-lg font-medium transition-all duration-300 flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         <span className="relative z-10 flex items-center">
-                          {isSubmitting ? "Sending..." : "Send Message"}
-                          <ArrowRight
-                            className={`ml-2 w-5 h-5 transition-transform duration-300 ${isSubmitting ? "" : "group-hover:translate-x-1"}`}
-                          />
+                          {isSubmitting ? (
+                            <>
+                              <motion.div
+                                animate={{ rotate: 360 }}
+                                transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                                className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full mr-2"
+                              />
+                              Sending...
+                            </>
+                          ) : (
+                            <>
+                              Send Message
+                              <Send className={`ml-2 w-5 h-5 transition-transform duration-300 ${isSubmitting ? "" : "group-hover:translate-x-1"}`} />
+                            </>
+                          )}
                         </span>
-                      </button>
+                      </motion.button>
                     </div>
                   </form>
                 )}
@@ -362,9 +508,67 @@ export default function ContactPage() {
           <div className="bg-black/40 backdrop-blur-sm p-4 md:p-6 rounded-2xl border border-white/10 overflow-hidden">
             <div
               className="calendly-inline-widget"
-              data-url="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05&background_color=0a0a0a&text_color=ffffff&primary_color=4CD787"
-              style={{ minWidth: "320px", height: "700px" }}
+              data-calendly-theme="dark"
+              data-url="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?background_color=000000&text_color=ffffff&primary_color=4CD787&hide_gdpr_banner=1"
+              style={{ 
+                minWidth: "320px", 
+                height: "1000px",
+                backgroundColor: "#000000",
+                border: "none",
+                borderRadius: "12px",
+                overflow: "hidden"
+              }}
             ></div>
+            
+            {/* Enhanced dark mode enforcement */}
+            <style jsx global>{`
+              /* Force dark theme for entire Calendly widget */
+              .calendly-inline-widget {
+                background-color: #000000 !important;
+                color: #ffffff !important;
+                border-radius: 12px;
+                overflow: hidden;
+              }
+              
+              .calendly-inline-widget iframe {
+                background-color: #000000 !important;
+                border-radius: 12px;
+                filter: none !important;
+              }
+              
+              /* Override Calendly's default white theme */
+              .calendly-inline-widget * {
+                background-color: transparent !important;
+                color: inherit !important;
+              }
+              
+              /* Specific overrides for common Calendly elements */
+              .calendly-popup-content,
+              .calendly-overlay,
+              [data-calendly-theme],
+              .calendly-badge-content,
+              .calendly-badge-widget {
+                background-color: #000000 !important;
+                color: #ffffff !important;
+              }
+              
+              /* Try to force dark mode through data attributes */
+              .calendly-inline-widget[data-calendly-theme="dark"] {
+                background-color: #000000 !important;
+              }
+              
+              /* Additional fallback for stubborn elements */
+              .calendly-inline-widget > div,
+              .calendly-inline-widget iframe body {
+                background-color: #000000 !important;
+                color: #ffffff !important;
+              }
+
+              /* Hide cookie settings text from Calendly */
+              .calendly-cookie-settings {
+                display: none !important;
+              }
+            `}</style>
           </div>
         </div>
       </section>
@@ -383,65 +587,63 @@ export default function ContactPage() {
             <p className="text-foreground/70">Find quick answers to common questions about our services and process.</p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          <motion.div 
+            className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="bg-black/30 p-6 rounded-xl border border-white/10"
+              variants={fadeInUpVariants}
+              className="bg-black/30 p-6 rounded-xl border border-white/10 hover:border-[#4CD787]/30 transition-colors duration-300 group"
+              whileHover={shouldReduceMotion ? {} : { y: -4 }}
             >
-              <h3 className="text-xl font-semibold mb-3 text-[#4CD787]">What is your typical response time?</h3>
-              <p className="text-foreground/70">
+              <h3 className="text-xl font-semibold mb-3 text-[#4CD787] group-hover:text-white transition-colors duration-300">What is your typical response time?</h3>
+              <p className="text-foreground/70 group-hover:text-white/80 transition-colors duration-300">
                 We typically respond to all inquiries within 24 hours during business days. For urgent matters, we
                 prioritize faster response times.
               </p>
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="bg-black/30 p-6 rounded-xl border border-white/10"
+              variants={fadeInUpVariants}
+              className="bg-black/30 p-6 rounded-xl border border-white/10 hover:border-[#4CD787]/30 transition-colors duration-300 group"
+              whileHover={shouldReduceMotion ? {} : { y: -4 }}
             >
-              <h3 className="text-xl font-semibold mb-3 text-[#4CD787]">Do you work with international clients?</h3>
-              <p className="text-foreground/70">
+              <h3 className="text-xl font-semibold mb-3 text-[#4CD787] group-hover:text-white transition-colors duration-300">Do you work with international clients?</h3>
+              <p className="text-foreground/70 group-hover:text-white/80 transition-colors duration-300">
                 Yes, we work with clients worldwide. Our team is experienced in remote collaboration and can accommodate
                 different time zones.
               </p>
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="bg-black/30 p-6 rounded-xl border border-white/10"
+              variants={fadeInUpVariants}
+              className="bg-black/30 p-6 rounded-xl border border-white/10 hover:border-[#4CD787]/30 transition-colors duration-300 group"
+              whileHover={shouldReduceMotion ? {} : { y: -4 }}
             >
-              <h3 className="text-xl font-semibold mb-3 text-[#4CD787]">
+              <h3 className="text-xl font-semibold mb-3 text-[#4CD787] group-hover:text-white transition-colors duration-300">
                 What information should I provide for a quote?
               </h3>
-              <p className="text-foreground/70">
+              <p className="text-foreground/70 group-hover:text-white/80 transition-colors duration-300">
                 To provide an accurate quote, we need details about your project scope, timeline, technical
                 requirements, and any specific features you need.
               </p>
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              className="bg-black/30 p-6 rounded-xl border border-white/10"
+              variants={fadeInUpVariants}
+              className="bg-black/30 p-6 rounded-xl border border-white/10 hover:border-[#4CD787]/30 transition-colors duration-300 group"
+              whileHover={shouldReduceMotion ? {} : { y: -4 }}
             >
-              <h3 className="text-xl font-semibold mb-3 text-[#4CD787]">How do you handle project revisions?</h3>
-              <p className="text-foreground/70">
+              <h3 className="text-xl font-semibold mb-3 text-[#4CD787] group-hover:text-white transition-colors duration-300">How do you handle project revisions?</h3>
+              <p className="text-foreground/70 group-hover:text-white/80 transition-colors duration-300">
                 We include revision rounds in our project plans. The number of revisions depends on your package, but
-                we're always flexible to ensure your satisfaction.
+                we&apos;re always flexible to ensure your satisfaction.
               </p>
             </motion.div>
-          </div>
+          </motion.div>
         </div>
       </section>
     </div>

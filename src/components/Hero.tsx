@@ -1,15 +1,24 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { motion } from "framer-motion"
+import { useEffect, useState, useCallback, useMemo } from "react"
+import { motion, useReducedMotion, useAnimation } from "framer-motion"
 import { useRouter } from "next/navigation"
 import ClientOnly from "./ClientOnly"
 import dynamic from "next/dynamic"
 
-// Dynamically import components that use browser APIs
-const DynamicHeroBackground = dynamic(() => import("./hero/HeroBackground"), { ssr: false })
-const DynamicPlanetDivider = dynamic(() => import("./planet/PlanetDivider"), { ssr: false })
-const DynamicShootingStars = dynamic(() => import("./hero/ShootingStars"), { ssr: false })
+// Dynamically import components that use browser APIs with better loading states
+const DynamicHeroBackground = dynamic(() => import("./hero/HeroBackground"), { 
+  ssr: false,
+  loading: () => <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 to-purple-900/20" />
+})
+const DynamicPlanetDivider = dynamic(() => import("./planet/PlanetDivider"), { 
+  ssr: false,
+  loading: () => <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/50 to-transparent" />
+})
+const DynamicShootingStars = dynamic(() => import("./hero/ShootingStars"), { 
+  ssr: false,
+  loading: () => <div className="absolute inset-0 opacity-50" />
+})
 
 const subheaders = [
   "rapid delivery",
@@ -19,41 +28,89 @@ const subheaders = [
   "IoT hardware development",
 ]
 
+// Enhanced animation variants for better performance
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+      delayChildren: 0.1
+    }
+  }
+}
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: [0.22, 1, 0.36, 1] // Custom easing for smoother animation
+    }
+  }
+}
+
+const buttonVariants = {
+  rest: { scale: 1, boxShadow: "0 0 0px rgba(76,215,135,0)" },
+  hover: { 
+    scale: 1.05,
+    boxShadow: "0 0 20px rgba(76,215,135,0.4)",
+    transition: { duration: 0.3, ease: "easeInOut" }
+  },
+  tap: { scale: 0.95 }
+}
+
 export default function Hero() {
   const [currentSubheader, setCurrentSubheader] = useState(0)
   const [displayText, setDisplayText] = useState("")
   const [isTyping, setIsTyping] = useState(true)
   const router = useRouter()
+  const shouldReduceMotion = useReducedMotion()
+  const controls = useAnimation()
+  
+  // Memoize typewriter effect for better performance
+  const typewriterSpeed = useMemo(() => ({
+    typing: shouldReduceMotion ? 50 : 150,
+    erasing: shouldReduceMotion ? 30 : 100,
+    pause: shouldReduceMotion ? 1000 : 3000
+  }), [shouldReduceMotion])
 
-  // Handle typewriter effect
+  // Enhanced typewriter effect with better performance
   useEffect(() => {
     let timer: NodeJS.Timeout
     if (isTyping) {
       if (displayText.length < subheaders[currentSubheader].length) {
         timer = setTimeout(() => {
           setDisplayText(subheaders[currentSubheader].slice(0, displayText.length + 1))
-        }, 150)
+        }, typewriterSpeed.typing)
       } else {
         setIsTyping(false)
-        timer = setTimeout(() => setIsTyping(true), 3000)
+        timer = setTimeout(() => setIsTyping(true), typewriterSpeed.pause)
       }
     } else {
       if (displayText.length > 0) {
         timer = setTimeout(() => {
           setDisplayText(displayText.slice(0, -1))
-        }, 100)
+        }, typewriterSpeed.erasing)
       } else {
         setCurrentSubheader((prev) => (prev + 1) % subheaders.length)
         setIsTyping(true)
       }
     }
     return () => clearTimeout(timer)
-  }, [displayText, currentSubheader, isTyping])
+  }, [displayText, currentSubheader, isTyping, typewriterSpeed])
 
   // Function to navigate to the "Our Values" section in the About page
-  const navigateToOurValues = () => {
+  const navigateToOurValues = useCallback(() => {
     router.push("/about#our-values")
-  }
+  }, [router])
+  
+  // Trigger entrance animation
+  useEffect(() => {
+    controls.start('visible')
+  }, [controls])
 
   return (
     <section className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-black">
@@ -73,65 +130,69 @@ export default function Hero() {
       </ClientOnly>
 
       {/* Content */}
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-30 pt-20 w-full">
+      <motion.div 
+        className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-30 pt-20 w-full"
+        variants={containerVariants}
+        initial="hidden"
+        animate={controls}
+      >
         <div className="text-center mx-auto max-w-4xl">
           {/* Hero content wrapper - this div prevents movement on button hover */}
           <div className="mb-12">
             <motion.h1
-              key="hero-heading"
+              variants={itemVariants}
               className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-mono font-extralight tracking-wide text-white mb-6 leading-tight whitespace-nowrap text-glow-hero drop-shadow-[0_0_25px_rgba(255,255,255,0.8)]"
-              initial={{ opacity: 1, y: 0 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
             >
               Hire <span className="crossed-a">a</span> Software Team
             </motion.h1>
 
             <motion.p
-              key="hero-description"
+              variants={itemVariants}
               className="text-xl md:text-2xl text-white font-mono font-light mb-8"
-              initial={{ opacity: 1, y: 0 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
             >
               accelerate your software projects with our expert team.
             </motion.p>
 
             <motion.div
-              key="hero-typewriter"
+              variants={itemVariants}
               className="h-16"
-              initial={{ opacity: 1, y: 0 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.2, delay: 0.6 }}
             >
-              <p className="text-2xl md:text-3xl font-mono text-robinhood typewriter-text">{displayText}</p>
+              <p className="text-2xl md:text-3xl font-mono text-robinhood typewriter-text">
+                {displayText}
+                <span className="animate-pulse">|</span>
+              </p>
             </motion.div>
           </div>
 
           <motion.div
-            key="hero-buttons"
+            variants={itemVariants}
             className="flex flex-wrap justify-center gap-4 relative z-30"
-            initial={{ opacity: 1, y: 0 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
           >
-            <button
+            <motion.button
               onClick={navigateToOurValues}
-              className="hero-button bg-blue-500 text-white hover:bg-blue-600 px-8 py-3 rounded-lg font-mono transition-all duration-300 font-medium border border-white/30 hover:border-white hover:shadow-[0_0_15px_rgba(76,215,135,0.5)]"
+              variants={buttonVariants}
+              initial="rest"
+              whileHover="hover"
+              whileTap="tap"
+              className="hero-button bg-blue-500 text-white hover:bg-blue-600 px-8 py-3 rounded-lg font-mono font-medium border border-white/30 hover:border-white transition-colors duration-300"
             >
               learn more
-            </button>
-            <a
+            </motion.button>
+            <motion.a
               href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
               target="_blank"
               rel="noopener noreferrer"
-              className="hero-button bg-robinhood text-black hover:bg-robinhood-90 px-8 py-3 rounded-lg font-mono transition-all duration-300 font-medium border border-black/30 hover:border-black hover:shadow-[0_0_15px_rgba(207,181,59,0.5)]"
+              variants={buttonVariants}
+              initial="rest"
+              whileHover="hover"
+              whileTap="tap"
+              className="hero-button bg-robinhood text-black hover:bg-robinhood-90 px-8 py-3 rounded-lg font-mono font-medium border border-black/30 hover:border-black transition-colors duration-300"
             >
               quick start
-            </a>
+            </motion.a>
           </motion.div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Planet Divider at the bottom of hero - Only rendered on client */}
       <ClientOnly>

@@ -4,13 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "bun run next dev",
-    "build": "bun run next build",
-    "start": "bun run next start",
-    "lint": "bun run next lint",
-    "test": "bun run jest",
-    "test:watch": "bun run jest --watch",
-    "test:coverage": "bun run jest --coverage"
+    "dev": "pnpm next dev",
+    "build": "pnpm next build",
+    "start": "pnpm next start",
+    "lint": "pnpm next lint",
+    "test": "pnpm jest",
+    "test:watch": "pnpm jest --watch",
+    "test:coverage": "pnpm jest --coverage"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "^1.2.2",
@@ -80,6 +80,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^9.28.0",
+    "eslint-config-next": "^15.4.2",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^30.0.0-beta.3",
     "postcss": "^8.5.4",

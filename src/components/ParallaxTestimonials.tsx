@@ -77,7 +77,7 @@ export default function ParallaxTestimonials() {
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#CFB53B]">What Our Clients Say</h2>
           <p className="text-lg text-foreground/80 font-light">
-            Don't just take our word for it. Here's what our clients have to say about working with us.
+            Don&apos;t just take our word for it. Here&apos;s what our clients have to say about working with us.
           </p>
         </motion.div>
 
@@ -141,13 +141,14 @@ function TestimonialCard({ testimonial, index, containerRef, isHovered, onHover,
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: false, amount: 0.1 }}
-      transition={{ duration: 0.8, delay: index * 0.2 }} // For initial/whileInView
       className="bg-black/50 backdrop-blur-sm p-8 rounded-xl border border-white/10 flex flex-col h-full relative group shadow-lg"
       onMouseEnter={onHover}
       onMouseLeave={onLeave}
       animate={getPositionStyles()}
       transition={{
-        // This transition applies to the 'animate' prop for all state changes
+        // Combined transition for all animations
+        duration: 0.8,
+        delay: index * 0.2,
         type: "spring",
         stiffness: 200,
         damping: 20,
@@ -176,7 +177,7 @@ function TestimonialCard({ testimonial, index, containerRef, isHovered, onHover,
 
       {/* Quote */}
       <p className="text-white/90 italic mb-8 flex-grow relative z-10 text-base leading-relaxed">
-        "{testimonial.quote}"
+        &ldquo;{testimonial.quote}&rdquo;
       </p>
 
       {/* Author */}
