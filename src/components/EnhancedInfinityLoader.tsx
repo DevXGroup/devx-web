@@ -9,21 +9,31 @@ interface EnhancedInfinityLoaderProps {
   maxScale?: number
 }
 
+// Custom hook for Safari detection with proper hydration handling
+function useSafariDetection() {
+  const [mounted, setMounted] = useState(false)
+  const [isSafari, setIsSafari] = useState(false)
+
+  useEffect(() => {
+    // Only run on client to prevent hydration mismatch
+    if (typeof window !== 'undefined') {
+      const userAgent = navigator.userAgent.toLowerCase()
+      const isSafariBrowser = userAgent.includes('safari') && !userAgent.includes('chrome') && !userAgent.includes('firefox')
+      setIsSafari(isSafariBrowser)
+    }
+    setMounted(true)
+  }, [])
+
+  return { mounted, isSafari }
+}
+
 export default function EnhancedInfinityLoader({
   scrollThreshold = 0.3,
   baseScale = 1,
   maxScale = 2,
 }: EnhancedInfinityLoaderProps) {
   const containerRef = useRef<HTMLDivElement>(null)
-  const [mounted, setMounted] = useState(false)
-  const [isSafari, setIsSafari] = useState(false)
-
-  // Detect Safari for additional optimizations
-  useEffect(() => {
-    const userAgent = navigator.userAgent.toLowerCase()
-    const isSafariBrowser = userAgent.includes('safari') && !userAgent.includes('chrome') && !userAgent.includes('firefox')
-    setIsSafari(isSafariBrowser)
-  }, [])
+  const { mounted, isSafari } = useSafariDetection()
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -45,10 +55,6 @@ export default function EnhancedInfinityLoader({
     damping: 30,
   })
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
   if (!mounted) {
     return (
       <div className="flex items-center justify-center h-32 w-full">
@@ -56,6 +62,9 @@ export default function EnhancedInfinityLoader({
       </div>
     )
   }
+
+  // Use a stable key to force re-render after Safari detection
+  const stableKey = `infinity-${isSafari ? 'safari' : 'other'}`
 
   return (
     <div 
@@ -68,6 +77,7 @@ export default function EnhancedInfinityLoader({
       }}
     >
       <motion.div
+        key={stableKey}
         style={{
           scale,
           opacity,
@@ -86,6 +96,7 @@ export default function EnhancedInfinityLoader({
           height={isSafari ? "200" : "100"} 
           viewBox="0 0 200 100" 
           className="drop-shadow-lg"
+          suppressHydrationWarning
           style={{
             // Safari-specific fixes for pixelation
             width: "200px",
@@ -113,7 +124,7 @@ export default function EnhancedInfinityLoader({
               <stop offset="50%" stopColor="#CFB53B" />
               <stop offset="100%" stopColor="#4834D4" />
             </linearGradient>
-            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%" suppressHydrationWarning>
               <feGaussianBlur stdDeviation={isSafari ? "1" : "2"} result="coloredBlur" />
               <feMerge>
                 <feMergeNode in="coloredBlur" />
@@ -131,6 +142,7 @@ export default function EnhancedInfinityLoader({
             strokeLinecap="round"
             strokeLinejoin="round"
             filter={isSafari ? "none" : "url(#glow)"}
+            suppressHydrationWarning
             style={{
               // Additional Safari optimizations
               vectorEffect: "non-scaling-stroke",
@@ -167,6 +179,7 @@ export default function EnhancedInfinityLoader({
         >
           <div 
             className={`w-6 h-6 rounded-full bg-gradient-to-r from-[#4CD787] via-[#CFB53B] to-[#4834D4] opacity-30 ${isSafari ? '' : 'blur-sm'}`}
+            suppressHydrationWarning
             style={{
               // Safari-specific blur optimizations
               WebkitTransform: "translateZ(0)",
