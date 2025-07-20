@@ -10,6 +10,7 @@ import EnhancedInfinityLoader from "@/components/EnhancedInfinityLoader"
 import dynamic from "next/dynamic"
 import ServicesBanner from "@/components/ServicesBanner"
 import TrueFocus from "@/components/TrueFocus"
+import BlurText from "@/components/BlurText"
 
 // Import the newly separated components
 import ParticleAnimation from "@/components/services/ParticleAnimation"
@@ -371,46 +372,40 @@ export default function ServicesPage() {
         </div>
 
         <div className="relative z-10 w-full flex flex-col items-center">
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={{
-              hidden: { opacity: 0 },
-              visible: {
-                opacity: 1,
-                transition: {
-                  staggerChildren: 0.2,
+          <div className="container mx-auto px-4 relative">
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              variants={{
+                hidden: { opacity: 0 },
+                visible: {
+                  opacity: 1,
+                  transition: {
+                    staggerChildren: 0.2,
+                  },
                 },
-              },
-            }}
-            className="text-center max-w-3xl mx-auto mb-6 px-4 mt-0"
-            style={{
-              transform: isClient ? `translateY(${titleY.get()}px) scale(${titleScale.get()})` : "none",
-            }}
-          >
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="text-3xl md:text-4xl lg:text-5xl font-bold font-['IBM_Plex_Mono'] text-center relative mt-0"
-            >
-              {/* Applied animated gradient to the title */}
-              <span className="animate-gradient-text inline-block pb-10">Services</span>
-            </motion.h1>
-
-            <motion.p
-              variants={floatingAnimation}
-              className="text-lg md:text-xl text-foreground/80 font-light"
-              style={{
-                textShadow: "0 1px 2px rgba(0,0,0,0.5)",
-                WebkitTextStroke: "0.5px rgba(0,0,0,0.2)",
               }}
+              className="text-center max-w-4xl mx-auto mb-12"
             >
-              Comprehensive software solutions to drive your business forward. We combine expertise with innovation to
-              deliver exceptional results.
-            </motion.p>
-          </motion.div>
+              <div className="flex flex-col items-center">
+                <BlurText 
+                  text="Our Services"
+                  className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-center text-[#CFB53B] font-['IBM_Plex_Mono']"
+                  delay={120}
+                  animateBy="words"
+                  direction="top"
+                />
+              </div>
+
+              <motion.p
+                variants={floatingAnimation}
+                className="text-xl text-foreground/80 font-light max-w-2xl mx-auto"
+              >
+                Comprehensive software solutions to drive your business forward. We combine expertise with innovation to
+                deliver exceptional results.
+              </motion.p>
+            </motion.div>
+          </div>
 
           {/* Replace ModernCube3D with EnhancedInfinityLoader - better positioned and more responsive */}
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="w-full mx-auto mb-12">
@@ -423,27 +418,19 @@ export default function ServicesPage() {
               {valueProps.map((prop, index) => (
                 <motion.div
                   key={prop.title}
-                  initial={{ opacity: 0, y: 50, scale: 0.9 }}
-                  whileInView={{
-                    opacity: 1,
-                    y: 0,
-                    scale: 1,
-                    transition: {
-                      duration: 0.7,
-                      delay: index * 0.1,
-                      ease: [0.22, 1, 0.36, 1],
-                    },
-                  }}
-                  viewport={{ once: true, amount: 0.3 }}
-                  className="bg-black/40 backdrop-blur-sm p-6 rounded-xl border border-white/10 hover:border-[#4CD787]/30 hover:bg-black/50 transition-all duration-300"
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="bg-black/40 backdrop-blur-sm p-6 rounded-xl border border-white/10 hover:border-[#4CD787]/30 hover:bg-black/50 transition-all duration-300 group cursor-pointer"
                   whileHover={{
                     scale: 1.03,
                     boxShadow: "0 8px 20px -8px rgba(207, 181, 59, 0.3)",
                     transition: { duration: 0.2 },
                   }}
                 >
-                  <h3 className="text-xl font-semibold text-[#CFB53B] mb-2">{prop.title}</h3>
-                  <p className="text-foreground/70 text-sm">{prop.description}</p>
+                  <h3 className="text-xl font-semibold text-[#CFB53B] mb-2 group-hover:text-white transition-colors duration-300">{prop.title}</h3>
+                  <p className="text-foreground/70 text-sm group-hover:text-white/80 transition-colors duration-300">{prop.description}</p>
                 </motion.div>
               ))}
             </div>
@@ -583,7 +570,7 @@ export default function ServicesPage() {
                   WebkitTextStroke: "0.5px rgba(0,0,0,0.2)",
                 }}
               >
-                Let's discuss how we can help you achieve your goals with our expert software development services.
+                Let&apos;s discuss how we can help you achieve your goals with our expert software development services.
               </motion.p>
 
               <AnimatePresence>

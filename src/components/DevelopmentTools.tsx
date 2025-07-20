@@ -4,6 +4,7 @@ import { LayoutGroup, motion, AnimatePresence } from "framer-motion"
 import { useEffect, useState, useCallback, useRef, useMemo } from "react"
 import Image from "next/image"
 import seedrandom from "seedrandom"
+import BlurText from "./BlurText"
 
 const tools = [
   {
@@ -99,6 +100,21 @@ export default function DevelopmentTools() {
   const cycleRef = useRef<NodeJS.Timeout | null>(null)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
 
+  // Move stars generation to component level
+  const stars = useMemo(() => {
+    const rng = seedrandom("devx-stars") // seed to ensure deterministic output
+    return Array.from({ length: 60 }).map((_, i) => ({
+      id: i,
+      width: rng() * 2 + 1,
+      height: rng() * 2 + 1,
+      left: rng() * 100,
+      top: rng() * 100,
+      boxShadow: `0 0 ${rng() * 3 + 2}px rgba(255, 255, 255, ${rng() * 0.3 + 0.2})`,
+      duration: 3 + rng() * 4,
+      delay: rng() * 2,
+    }))
+  }, [])
+
   // Removed useEffect for safariReady
 
   // Automatic cycle
@@ -150,27 +166,12 @@ export default function DevelopmentTools() {
 
   return (
     <LayoutGroup>
-      {/* Increased height and added padding for cleaner spacing */}
-      <div className="relative w-full h-[200vh] bg-black overflow-hidden pb-96 md:pb-[400px] lg:pb-[500px] z-[150]">
+      {/* Optimized height for better spacing */}
+      <div className="relative w-full h-[120vh] bg-black overflow-hidden pb-32 md:pb-48 lg:pb-64 z-[150]">
         {" "}
-        {/* Increased height and padding */}
+        {/* Reduced height and padding */}
         {/* Reduced number of stars and added glow effect */}
-        {(() => {
-          const stars = useMemo(() => {
-            const rng = seedrandom("devx-stars") // seed to ensure deterministic output
-            return Array.from({ length: 60 }).map((_, i) => ({
-              id: i,
-              width: rng() * 2 + 1,
-              height: rng() * 2 + 1,
-              left: rng() * 100,
-              top: rng() * 100,
-              boxShadow: `0 0 ${rng() * 3 + 2}px rgba(255, 255, 255, ${rng() * 0.3 + 0.2})`,
-              duration: 3 + rng() * 4,
-              delay: rng() * 2,
-            }))
-          }, []);
-          // Render stars
-          return stars.map((star) => (
+        {stars.map((star) => (
             <motion.div
               key={star.id}
               className="absolute rounded-full"
@@ -191,27 +192,23 @@ export default function DevelopmentTools() {
                 delay: star.delay,
               }}
             />
-          ));
-        })()}
-        {/* Increased top padding and bottom margin for better spacing */}
-        <div className="pt-6 pb-8">
-          <motion.h3
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-3xl md:text-4xl lg:text-5xl font-bold mt-[150px] font-['IBM_Plex_Mono'] text-center relative"
-          >
-            {/* Applied animated gradient to the title */}
-            <span className="animate-gradient-text inline-block pb-10">DevX Development Tools</span>
-          </motion.h3>
+        ))}
+        {/* Fixed spacing between title and animation */}
+        <div className="pt-20 pb-4">
+          <div className="container mx-auto px-4">
+            <div className="flex flex-col items-center">
+              <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold font-['IBM_Plex_Mono'] text-center animate-gradient-text mb-4">
+                DevX Development Tools
+              </h3>
+            </div>
+          </div>
         </div>
         {/* ============ Center black circle with glowing border ============ */}
-        {/* Moved center position from top-1/2 to top-[55%] to push it down */}
+        {/* Optimized center position for better spacing */}
         <div
           className="
             absolute z-[100]
-            top-[65%] left-1/2 -translate-x-1/2 -translate-y-1/2
+            top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2
             w-[55vw] h-[55vw] max-w-[300px] max-h-[300px]
             rounded-full bg-black text-white
             flex items-center justify-center text-center p-6 shadow-md
@@ -355,7 +352,7 @@ function StaticIconsOrbit({
   const radius = 230
 
   return (
-    <div className="absolute z-[90] top-[65%] left-1/2 -translate-x-1/2 -translate-y-1/2">
+    <div className="absolute z-[90] top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2">
       {tools.map((tool, i) => {
         if (i === activeIndex) return null
         const angle = (i * 360) / tools.length
@@ -429,7 +426,7 @@ function AIToolsOrbit() {
   return (
     <div
       ref={orbitRef}
-      className="absolute z-[80] top-[65%] left-1/2 -translate-x-1/2 -translate-y-1/2"
+      className="absolute z-[80] top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2"
       style={{
         width: 0,
         height: 0,

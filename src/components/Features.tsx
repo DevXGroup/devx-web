@@ -1,10 +1,47 @@
 "use client"
 
-import { motion, useScroll, useTransform } from "framer-motion"
-import { useRef, useEffect, useState } from "react"
+import { motion, useScroll, useTransform, useReducedMotion, useInView } from "framer-motion"
+import { useRef, useEffect, useState, useMemo } from "react"
 import { Rocket, User, Layers, Search, Flag, ArrowRight } from "lucide-react"
 import Link from "next/link"
 import InfinityLogo from "./InfinityLogo"
+
+// Enhanced animation variants for better performance
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2
+    }
+  }
+}
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 50, scale: 0.95 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.6,
+      ease: [0.22, 1, 0.36, 1]
+    }
+  }
+}
+
+const stepVariants = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.4,
+      ease: "easeOut"
+    }
+  }
+}
 
 // Black falling stars component - pure CSS implementation
 function BlackFallingStars() {
@@ -18,25 +55,33 @@ function BlackFallingStars() {
 }
 
 function StepAnimation({ step, text, isActive }: { step: number; text: string; isActive: boolean }) {
+  const shouldReduceMotion = useReducedMotion()
+  
   return (
     <motion.div
       key={`step-${step}`}
-      initial={{ opacity: 1, x: 0 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.5 }}
-      className={`flex flex-col items-center space-y-3 ${
-        isActive ? "text-black scale-110" : "text-black/60"
-      } transition-all duration-300`}
+      className={`flex flex-col items-center space-y-4 transition-all duration-700 ease-in-out ${
+        isActive ? "text-black" : "text-black/40"
+      }`}
     >
-      <div
-        className={`w-14 h-14 md:w-16 md:h-16 rounded-full ${
-          isActive ? "bg-black text-white text-xl" : "bg-white/20 text-robinhood text-lg"
-        } flex items-center justify-center transition-all duration-300`}
+      {/* Step Circle - Simple lamp effect */}
+      <motion.div
+        className={`w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-lg md:text-xl font-bold font-['IBM_Plex_Mono'] transition-all duration-700 ease-in-out ${
+          isActive 
+            ? "bg-black text-white shadow-lg shadow-black/30" 
+            : "bg-black/20 text-black/50 border-2 border-black/30"
+        }`}
+        whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
+        whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
       >
         {step}
-      </div>
+      </motion.div>
+      
+      {/* Step Text */}
       <p
-        className={`text-sm md:text-base font-['IBM_Plex_Mono'] transition-colors duration-300 ${isActive ? "font-bold" : ""}`}
+        className={`text-sm md:text-base font-['IBM_Plex_Mono'] text-center transition-all duration-700 ${
+          isActive ? "font-bold" : "font-normal"
+        }`}
       >
         {text}
       </p>
@@ -45,21 +90,28 @@ function StepAnimation({ step, text, isActive }: { step: number; text: string; i
 }
 
 function Card({ icon: Icon, title, description }: { icon: any; title: string; description: string }) {
+  const shouldReduceMotion = useReducedMotion()
+  
   return (
     <motion.div
-      initial={{ opacity: 1, y: 0 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
-      className="bg-[#1a2e00]/90 p-8 md:p-10 rounded-2xl flex flex-col items-start text-left shadow-lg w-full h-full"
+      variants={cardVariants}
+      className="bg-[#1a2e00]/90 p-8 md:p-10 rounded-2xl flex flex-col items-start text-left shadow-lg w-full h-full hover:bg-[#1a2e00]/95 transition-colors duration-300 group"
+      whileHover={shouldReduceMotion ? {} : { 
+        y: -5,
+        boxShadow: "0 20px 40px rgba(204, 255, 0, 0.1)"
+      }}
     >
       <div className="flex items-start mb-6">
-        <div className="bg-[#ccff00]/90 rounded-full w-16 h-16 flex items-center justify-center mr-4 aspect-square shrink-0">
+        <motion.div 
+          className="bg-[#ccff00]/90 rounded-full w-16 h-16 flex items-center justify-center mr-4 aspect-square shrink-0 group-hover:bg-[#ccff00] transition-colors duration-300"
+          whileHover={shouldReduceMotion ? {} : { rotate: 360 }}
+          transition={{ duration: 0.6, ease: "easeInOut" }}
+        >
           <Icon className="w-8 h-8 text-black" />
-        </div>
+        </motion.div>
         <div>
-          <h3 className="text-xl md:text-2xl font-bold text-[#ccff00] font-['IBM_Plex_Mono'] mb-2">{title}</h3>
-          <p className="text-white/80 font-['IBM_Plex_Mono'] text-base">{description}</p>
+          <h3 className="text-xl md:text-2xl font-bold text-[#ccff00] font-['IBM_Plex_Mono'] mb-2 group-hover:text-white transition-colors duration-300">{title}</h3>
+          <p className="text-white/80 font-['IBM_Plex_Mono'] text-base group-hover:text-white/90 transition-colors duration-300">{description}</p>
         </div>
       </div>
     </motion.div>
@@ -67,21 +119,28 @@ function Card({ icon: Icon, title, description }: { icon: any; title: string; de
 }
 
 function WhyUsCard({ icon: Icon, title, description }: { icon: any; title: string; description: string }) {
+  const shouldReduceMotion = useReducedMotion()
+  
   return (
     <motion.div
-      initial={{ opacity: 1, y: 0 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
-      className="bg-black/80 p-8 md:p-10 rounded-2xl flex flex-col items-start text-left shadow-lg w-full h-full"
+      variants={cardVariants}
+      className="bg-black/80 p-8 md:p-10 rounded-2xl flex flex-col items-start text-left shadow-lg w-full h-full hover:bg-black/90 transition-colors duration-300 group backdrop-blur-sm"
+      whileHover={shouldReduceMotion ? {} : { 
+        y: -8,
+        boxShadow: "0 25px 50px rgba(204, 255, 0, 0.15)"
+      }}
     >
       <div className="flex items-center mb-6">
-        <div className="w-16 h-16 mr-4 flex items-center justify-center bg-robinhood rounded-full group-hover:scale-110 transition-transform aspect-square shrink-0">
+        <motion.div 
+          className="w-16 h-16 mr-4 flex items-center justify-center bg-robinhood rounded-full aspect-square shrink-0 group-hover:bg-robinhood/90 transition-colors duration-300"
+          whileHover={shouldReduceMotion ? {} : { scale: 1.1, rotate: -5 }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+        >
           <Icon className="w-8 h-8 text-black" />
-        </div>
-        <h3 className="text-xl md:text-2xl font-bold text-robinhood font-['IBM_Plex_Mono']">{title}</h3>
+        </motion.div>
+        <h3 className="text-xl md:text-2xl font-bold text-robinhood font-['IBM_Plex_Mono'] group-hover:text-white transition-colors duration-300">{title}</h3>
       </div>
-      <p className="text-white/80 font-['IBM_Plex_Mono'] text-base">{description}</p>
+      <p className="text-white/80 font-['IBM_Plex_Mono'] text-base group-hover:text-white/90 transition-colors duration-300">{description}</p>
     </motion.div>
   )
 }
@@ -100,6 +159,14 @@ export default function Features() {
   const steps = ["Talk to us", "Plan together", "Build something great"]
 
   const [isMounted, setIsMounted] = useState(false)
+  const shouldReduceMotion = useReducedMotion()
+  const isInView = useInView(containerRef, { once: true, margin: "-100px" })
+
+  // Memoize animation timing based on reduced motion preference
+  const animationTiming = useMemo(() => ({
+    stepInterval: shouldReduceMotion ? 5000 : 3500, // Longer intervals for better UX
+    cardDelay: shouldReduceMotion ? 0 : 0.1
+  }), [shouldReduceMotion])
 
   useEffect(() => {
     setIsMounted(true)
@@ -108,10 +175,10 @@ export default function Features() {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentStep((prevStep) => (prevStep + 1) % steps.length)
-    }, 2000)
+    }, animationTiming.stepInterval)
 
     return () => clearInterval(timer)
-  }, [])
+  }, [animationTiming.stepInterval])
 
   return (
     <section ref={containerRef} className="relative py-28 md:py-32 overflow-hidden bg-robinhood w-full">
@@ -124,6 +191,9 @@ export default function Features() {
           opacity: isMounted ? opacity : 1,
           y: isMounted ? y : 0,
         }}
+        variants={containerVariants}
+        initial="hidden"
+        animate={isInView ? "visible" : "hidden"}
         className="relative container mx-auto px-4 z-10 max-w-6xl"
       >
         {/* Hero Section */}
@@ -141,7 +211,10 @@ export default function Features() {
         </div>
 
         {/* Cards Section */}
-        <div className="grid md:grid-cols-2 gap-6 md:gap-8 mb-24 md:mb-28 max-w-5xl mx-auto">
+        <motion.div 
+          className="grid md:grid-cols-2 gap-6 md:gap-8 mb-24 md:mb-28 max-w-5xl mx-auto"
+          variants={containerVariants}
+        >
           <Card
             icon={Rocket}
             title="Are you launching a startup or new product?"
@@ -152,15 +225,25 @@ export default function Features() {
             title="Need a top-tier dev team you can count on?"
             description="We're your plug-and-play solution — no onboarding hassle"
           />
-        </div>
+        </motion.div>
 
-        {/* Improved Step Animation */}
-        <div className="grid grid-cols-3 gap-4 md:gap-8 lg:gap-12 mb-24 md:mb-28 bg-black/20 py-10 px-4 md:px-8 rounded-xl max-w-4xl mx-auto">
-          {steps.map((step, index) => (
-            <div key={index} className="flex justify-center">
-              <StepAnimation step={index + 1} text={step} isActive={currentStep === index} />
+        {/* Clean Step Animation - Lamp Effect */}
+        <div className="relative mb-24 md:mb-28 max-w-4xl mx-auto">
+          {/* Steps Container */}
+          <div className="relative bg-gradient-to-br from-black/15 to-black/5 backdrop-blur-sm py-12 px-6 md:px-12 rounded-2xl border border-black/20 shadow-lg">            
+            {/* Steps Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+              {steps.map((step, index) => (
+                <div key={index} className="flex justify-center">
+                  <StepAnimation 
+                    step={index + 1} 
+                    text={step} 
+                    isActive={currentStep === index}
+                  />
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
 
         {/* Why Us Section */}
@@ -184,7 +267,10 @@ export default function Features() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 md:gap-10 max-w-6xl mx-auto px-4">
+          <motion.div 
+            className="grid md:grid-cols-3 gap-8 md:gap-10 max-w-6xl mx-auto px-4"
+            variants={containerVariants}
+          >
             <WhyUsCard
               icon={Flag}
               title="USA Based"
@@ -200,7 +286,7 @@ export default function Features() {
               title="Full Stack Expertise"
               description="Experts in modern and legacy stacks — from MVP to enterprise-scale systems"
             />
-          </div>
+          </motion.div>
 
           {/* Added link to About page */}
           <div className="mt-12 text-center">
@@ -217,10 +303,10 @@ export default function Features() {
         {/* Final CTA */}
         <div className="text-center mb-16">
           <p className="text-black text-2xl md:text-3xl font-bold mb-4 font-['IBM_Plex_Mono']">
-            We're ready to transform your vision into reality.
+            We&apos;re ready to transform your vision into reality.
           </p>
           <p className="text-black text-xl md:text-2xl font-['IBM_Plex_Mono']">
-            Let's embark on this journey together!
+            Let&apos;s embark on this journey together!
           </p>
         </div>
       </motion.div>

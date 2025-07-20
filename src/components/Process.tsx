@@ -5,6 +5,7 @@ import { useRef, useEffect, useState } from "react"
 import { Code2, Rocket, Users, Zap, Pencil, Settings } from "lucide-react"
 import SDLCProcess from "./SDLCProcess"
 import { AnimatedGradientText } from "./AnimatedGradientText"
+import BlurText from "./BlurText"
 
 const processes = [
   {
@@ -80,12 +81,18 @@ export default function Process() {
 
       <motion.div style={{ opacity, y }} className="relative container mx-auto px-4">
         <div className="text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 mt-8 font-['IBM_Plex_Mono']">
-            <AnimatedGradientText>Process</AnimatedGradientText>
-          </h2>
-          <p className="text-lg text-foreground/80 max-w-2xl mx-auto font-['IBM_Plex_Mono'] font-light mb-16">
-            From first spark to post-launch support — our process is built for long-term success.
-          </p>
+          <div className="flex flex-col items-center">
+            <BlurText 
+              text="Our Process"
+              className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-center text-[#9d4edd] font-['IBM_Plex_Mono']"
+              delay={120}
+              animateBy="words"
+              direction="top"
+            />
+            <p className="text-lg text-foreground/80 max-w-2xl mx-auto font-['IBM_Plex_Mono'] font-light mb-16">
+              From first spark to post-launch support — our process is built for long-term success.
+            </p>
+          </div>
         </div>
 
         {/* Add SDLCProcess component above the cards */}

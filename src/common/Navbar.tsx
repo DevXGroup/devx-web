@@ -57,41 +57,47 @@ export default function Navbar() {
           </div>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-8 font-['IBM_Plex_Mono'] font-light">
+          <div className="hidden md:flex items-center space-x-8 font-['IBM_Plex_Mono'] font-medium">
             <Link
               href="/"
-              className={`${isActive("/") ? "text-pink-400 bg-pink-400/10 rounded px-2 py-1" : "text-white hover:text-white/80"} nav-link ${isActive("/") ? "active" : ""}`}
+              className={`${isActive("/") ? "text-pink-400 bg-pink-400/10 rounded px-2 py-1" : "text-white hover:text-white/80"} nav-link ${isActive("/") ? "active" : ""} transition-colors duration-200 antialiased`}
+              style={{ textShadow: "0 0 1px rgba(255, 255, 255, 0.3)" }}
             >
               Home
             </Link>
             <Link
               href="/services"
               scroll={false}
-              className={`${isActive("/services") ? "text-pink-400 bg-pink-400/10 rounded px-2 py-1" : "text-white hover:text-white/80"} nav-link ${isActive("/services") ? "active" : ""}`}
+              className={`${isActive("/services") ? "text-pink-400 bg-pink-400/10 rounded px-2 py-1" : "text-white hover:text-white/80"} nav-link ${isActive("/services") ? "active" : ""} transition-colors duration-200 antialiased`}
+              style={{ textShadow: "0 0 1px rgba(255, 255, 255, 0.3)" }}
             >
               Services
             </Link>
             <Link
               href="/portfolio"
-              className={`${isActive("/portfolio") ? "text-pink-400 bg-pink-400/10 rounded px-2 py-1" : "text-white hover:text-white/80"} nav-link ${isActive("/portfolio") ? "active" : ""}`}
+              className={`${isActive("/portfolio") ? "text-pink-400 bg-pink-400/10 rounded px-2 py-1" : "text-white hover:text-white/80"} nav-link ${isActive("/portfolio") ? "active" : ""} transition-colors duration-200 antialiased`}
+              style={{ textShadow: "0 0 1px rgba(255, 255, 255, 0.3)" }}
             >
               Portfolio
             </Link>
             <Link
               href="/about"
-              className={`${isActive("/about") ? "text-pink-400 bg-pink-400/10 rounded px-2 py-1" : "text-white hover:text-white/80"} nav-link ${isActive("/about") ? "active" : ""}`}
+              className={`${isActive("/about") ? "text-pink-400 bg-pink-400/10 rounded px-2 py-1" : "text-white hover:text-white/80"} nav-link ${isActive("/about") ? "active" : ""} transition-colors duration-200 antialiased`}
+              style={{ textShadow: "0 0 1px rgba(255, 255, 255, 0.3)" }}
             >
               About
             </Link>
             <Link
               href="/pricing"
-              className={`${isActive("/pricing") ? "text-pink-400 bg-pink-400/10 rounded px-2 py-1" : "text-white hover:text-white/80"} nav-link ${isActive("/pricing") ? "active" : ""}`}
+              className={`${isActive("/pricing") ? "text-pink-400 bg-pink-400/10 rounded px-2 py-1" : "text-white hover:text-white/80"} nav-link ${isActive("/pricing") ? "active" : ""} transition-colors duration-200 antialiased`}
+              style={{ textShadow: "0 0 1px rgba(255, 255, 255, 0.3)" }}
             >
               Pricing
             </Link>
             <Link
               href="/contact"
-              className={`${isActive("/contact") ? "text-pink-400 bg-pink-400/10 rounded px-2 py-1" : "text-white hover:text-white/80"} nav-link ${isActive("/contact") ? "active" : ""}`}
+              className={`${isActive("/contact") ? "text-pink-400 bg-pink-400/10 rounded px-2 py-1" : "text-white hover:text-white/80"} nav-link ${isActive("/contact") ? "active" : ""} transition-colors duration-200 antialiased`}
+              style={{ textShadow: "0 0 1px rgba(255, 255, 255, 0.3)" }}
             >
               Contact
             </Link>
