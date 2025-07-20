@@ -389,7 +389,7 @@ export default function ServicesBanner() {
         ))}
       </div>
     ),
-    [services],
+    [],
   )
 
   const secondRowElements = useMemo(
@@ -418,7 +418,7 @@ export default function ServicesBanner() {
           ))}
       </div>
     ),
-    [services],
+    [],
   )
 
   return (

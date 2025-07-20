@@ -178,7 +178,7 @@ export default function Features() {
     }, animationTiming.stepInterval)
 
     return () => clearInterval(timer)
-  }, [animationTiming.stepInterval])
+  }, [animationTiming.stepInterval, steps.length])
 
   return (
     <section ref={containerRef} className="relative py-28 md:py-32 overflow-hidden bg-robinhood w-full">
