@@ -16,6 +16,14 @@ export default function EnhancedInfinityLoader({
 }: EnhancedInfinityLoaderProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [mounted, setMounted] = useState(false)
+  const [isSafari, setIsSafari] = useState(false)
+
+  // Detect Safari for additional optimizations
+  useEffect(() => {
+    const userAgent = navigator.userAgent.toLowerCase()
+    const isSafariBrowser = userAgent.includes('safari') && !userAgent.includes('chrome') && !userAgent.includes('firefox')
+    setIsSafari(isSafariBrowser)
+  }, [])
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -50,16 +58,54 @@ export default function EnhancedInfinityLoader({
   }
 
   return (
-    <div ref={containerRef} className="flex items-center justify-center min-h-[40vh] w-full">
+    <div 
+      ref={containerRef} 
+      className="flex items-center justify-center min-h-[40vh] w-full"
+      style={{
+        // Force hardware acceleration on container
+        WebkitTransform: "translateZ(0)",
+        transform: "translateZ(0)",
+      }}
+    >
       <motion.div
         style={{
           scale,
           opacity,
+          // Safari optimizations for smooth scaling
+          WebkitTransform: "translateZ(0)",
+          transform: "translateZ(0)",
+          WebkitBackfaceVisibility: "hidden",
+          backfaceVisibility: "hidden",
+          willChange: "transform, opacity",
         }}
         className="relative"
       >
-        {/* Main infinity symbol - simplified without rotation */}
-        <svg width="200" height="100" viewBox="0 0 200 100" className="drop-shadow-lg">
+        {/* Main infinity symbol - Safari optimized */}
+        <svg 
+          width={isSafari ? "400" : "200"} 
+          height={isSafari ? "200" : "100"} 
+          viewBox="0 0 200 100" 
+          className="drop-shadow-lg"
+          style={{
+            // Safari-specific fixes for pixelation
+            width: "200px",
+            height: "100px",
+            shapeRendering: "geometricPrecision",
+            textRendering: "geometricPrecision",
+            imageRendering: isSafari ? "optimizeQuality" : "crisp-edges",
+            WebkitTransform: "translateZ(0)", // Force hardware acceleration
+            transform: "translateZ(0)",
+            WebkitBackfaceVisibility: "hidden",
+            backfaceVisibility: "hidden",
+            WebkitPerspective: "1000px",
+            perspective: "1000px",
+            // Higher resolution for Safari
+            ...(isSafari && {
+              WebkitImageRendering: "optimizeQuality",
+              imageRendering: "optimizeQuality",
+            }),
+          }}
+        >
           {/* Gradient definitions */}
           <defs>
             <linearGradient id="infinityGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -67,8 +113,8 @@ export default function EnhancedInfinityLoader({
               <stop offset="50%" stopColor="#CFB53B" />
               <stop offset="100%" stopColor="#4834D4" />
             </linearGradient>
-            <filter id="glow">
-              <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation={isSafari ? "1" : "2"} result="coloredBlur" />
               <feMerge>
                 <feMergeNode in="coloredBlur" />
                 <feMergeNode in="SourceGraphic" />
@@ -76,13 +122,19 @@ export default function EnhancedInfinityLoader({
             </filter>
           </defs>
 
-          {/* Infinity path - kept with animation */}
+          {/* Infinity path - Safari optimized */}
           <motion.path
             d="M50 50 C50 25, 75 25, 100 50 C125 75, 150 75, 150 50 C150 25, 125 25, 100 50 C75 75, 50 75, 50 50"
             fill="none"
             stroke="url(#infinityGradient)"
-            strokeWidth="4"
-            filter="url(#glow)"
+            strokeWidth={isSafari ? "6" : "4"}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            filter={isSafari ? "none" : "url(#glow)"}
+            style={{
+              // Additional Safari optimizations
+              vectorEffect: "non-scaling-stroke",
+            }}
             initial={{ pathLength: 0 }}
             animate={{ pathLength: 1 }}
             transition={{
@@ -94,9 +146,15 @@ export default function EnhancedInfinityLoader({
           />
         </svg>
 
-        {/* Central subtle glow effect */}
+        {/* Central subtle glow effect - Safari optimized */}
         <motion.div
           className="absolute inset-0 flex items-center justify-center"
+          style={{
+            // Safari optimizations for the glow effect
+            WebkitTransform: "translateZ(0)",
+            transform: "translateZ(0)",
+            willChange: "transform, opacity",
+          }}
           animate={{
             scale: [1, 1.1, 1],
             opacity: [0.2, 0.4, 0.2],
@@ -107,7 +165,21 @@ export default function EnhancedInfinityLoader({
             ease: "easeInOut",
           }}
         >
-          <div className="w-6 h-6 rounded-full bg-gradient-to-r from-[#4CD787] via-[#CFB53B] to-[#4834D4] blur-sm opacity-30" />
+          <div 
+            className={`w-6 h-6 rounded-full bg-gradient-to-r from-[#4CD787] via-[#CFB53B] to-[#4834D4] opacity-30 ${isSafari ? '' : 'blur-sm'}`}
+            style={{
+              // Safari-specific blur optimizations
+              WebkitTransform: "translateZ(0)",
+              transform: "translateZ(0)",
+              ...(isSafari 
+                ? {} 
+                : { 
+                    WebkitFilter: "blur(2px)",
+                    filter: "blur(2px)",
+                  }
+              ),
+            }}
+          />
         </motion.div>
       </motion.div>
     </div>

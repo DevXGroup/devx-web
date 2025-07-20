@@ -127,16 +127,25 @@ export default function DevelopmentTools() {
     cycleRef.current = setTimeout(runCycle, DISPLAY_DURATION)
     return () => {
       if (cycleRef.current) clearTimeout(cycleRef.current)
-      if (timerRef.current) clearTimeout(timerRef.current)
+      const timer = timerRef.current
+      if (timer) clearTimeout(timer)
     }
-  }, [isManual, tools.length])
+  }, [isManual])
 
   // User click => override
   const handleIconClick = useCallback((index: number) => {
     setIsManual(true)
     setActiveIndex(index)
-    setTimeout(() => {
+    
+    // Clear any existing timer
+    if (timerRef.current) {
+      clearTimeout(timerRef.current)
+    }
+    
+    // Set new timer
+    timerRef.current = setTimeout(() => {
       setIsManual(false)
+      timerRef.current = null
     }, DISPLAY_DURATION)
   }, [])
 
