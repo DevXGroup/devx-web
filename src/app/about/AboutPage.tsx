@@ -105,7 +105,7 @@ const TeamMemberCard = ({ name, role, image, delay = 0 }) => {
   )
 }
 
-// Enhanced value card component
+// Enhanced value card component with running shine animation
 const ValueCard = ({ icon: Icon, title, description, delay = 0 }) => {
   const shouldReduceMotion = useReducedMotion()
   const ref = useRef(null)
@@ -118,22 +118,81 @@ const ValueCard = ({ icon: Icon, title, description, delay = 0 }) => {
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
       transition={{ ...fadeInUpVariants.visible.transition, delay: shouldReduceMotion ? 0 : delay }}
-      className="bg-black/30 backdrop-blur-sm p-6 rounded-xl border border-white/10 hover:border-[#4CD787]/30 transition-all duration-300 group cursor-pointer"
+      className="bg-black/30 backdrop-blur-sm p-6 rounded-xl border border-white/10 hover:border-[#4CD787]/30 transition-all duration-300 group cursor-pointer relative overflow-hidden"
       whileHover={shouldReduceMotion ? {} : {
         scale: 1.02,
         boxShadow: "0 10px 30px rgba(76, 215, 135, 0.1)",
         borderColor: "rgba(76, 215, 135, 0.3)"
       }}
     >
+      {/* Running shine line animation */}
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <motion.div
+          className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-[#4CD787] to-transparent"
+          initial={{ x: "-100%" }}
+          whileHover={{
+            x: "200%",
+            transition: {
+              duration: 1.5,
+              ease: "easeInOut",
+              repeat: Number.POSITIVE_INFINITY,
+              repeatDelay: 0.5
+            }
+          }}
+        />
+        <motion.div
+          className="absolute bottom-0 right-0 w-full h-0.5 bg-gradient-to-r from-transparent via-[#CFB53B] to-transparent"
+          initial={{ x: "100%" }}
+          whileHover={{
+            x: "-200%",
+            transition: {
+              duration: 1.5,
+              ease: "easeInOut",
+              repeat: Number.POSITIVE_INFINITY,
+              repeatDelay: 0.5,
+              delay: 0.3
+            }
+          }}
+        />
+        <motion.div
+          className="absolute top-0 left-0 h-full w-0.5 bg-gradient-to-b from-transparent via-[#4834D4] to-transparent"
+          initial={{ y: "-100%" }}
+          whileHover={{
+            y: "200%",
+            transition: {
+              duration: 1.5,
+              ease: "easeInOut",
+              repeat: Number.POSITIVE_INFINITY,
+              repeatDelay: 0.5,
+              delay: 0.6
+            }
+          }}
+        />
+        <motion.div
+          className="absolute top-0 right-0 h-full w-0.5 bg-gradient-to-b from-transparent via-[#9d4edd] to-transparent"
+          initial={{ y: "100%" }}
+          whileHover={{
+            y: "-200%",
+            transition: {
+              duration: 1.5,
+              ease: "easeInOut",
+              repeat: Number.POSITIVE_INFINITY,
+              repeatDelay: 0.5,
+              delay: 0.9
+            }
+          }}
+        />
+      </div>
+
       <motion.div 
-        className="w-12 h-12 rounded-full bg-[#4CD787]/10 flex items-center justify-center mb-4 group-hover:bg-[#4CD787]/20 transition-colors"
+        className="w-12 h-12 rounded-full bg-[#4CD787]/10 flex items-center justify-center mb-4 group-hover:bg-[#4CD787]/20 transition-colors relative z-10"
         whileHover={shouldReduceMotion ? {} : { rotate: 360, scale: 1.1 }}
         transition={{ duration: 0.6, ease: "easeInOut" }}
       >
         <Icon className="w-6 h-6 text-[#4CD787]" />
       </motion.div>
-      <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-[#4CD787] transition-colors duration-300">{title}</h3>
-      <p className="text-foreground/70 text-sm group-hover:text-white/80 transition-colors duration-300">{description}</p>
+      <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-[#4CD787] transition-colors duration-300 relative z-10">{title}</h3>
+      <p className="text-foreground/70 text-sm group-hover:text-white/80 transition-colors duration-300 relative z-10">{description}</p>
     </motion.div>
   )
 }

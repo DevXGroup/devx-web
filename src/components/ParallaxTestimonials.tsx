@@ -1,9 +1,10 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useRef, useState, useEffect } from "react"
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
 import Image from "next/image"
 import { Quote } from "lucide-react"
+import EnhancedInfinityLoader from "./EnhancedInfinityLoader"
 
 const testimonials = [
   {
@@ -35,6 +36,18 @@ const testimonials = [
 export default function ParallaxTestimonials() {
   const containerRef = useRef(null)
   const [hoveredIndex, setHoveredIndex] = useState(null)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    
+    checkIsMobile()
+    window.addEventListener('resize', checkIsMobile)
+    
+    return () => window.removeEventListener('resize', checkIsMobile)
+  }, [])
 
   return (
     <section className="relative py-24 overflow-hidden bg-gradient-to-b from-black via-purple-900/10 to-black">
@@ -68,6 +81,17 @@ export default function ParallaxTestimonials() {
       </div>
 
       <div className="container mx-auto px-4">
+        {/* Infinity Animation */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          className="flex justify-center mb-16 -mt-24"
+        >
+          <EnhancedInfinityLoader scrollThreshold={0.25} baseScale={0.5} maxScale={4.5} />
+        </motion.div>
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -81,7 +105,7 @@ export default function ParallaxTestimonials() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8" ref={containerRef}>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 pb-16" ref={containerRef}>
           {testimonials.map((testimonial, index) => (
             <TestimonialCard
               key={index}
@@ -92,6 +116,7 @@ export default function ParallaxTestimonials() {
               onHover={() => setHoveredIndex(index)}
               onLeave={() => setHoveredIndex(null)}
               allHovered={hoveredIndex !== null}
+              isMobile={isMobile}
             />
           ))}
         </div>
@@ -100,7 +125,7 @@ export default function ParallaxTestimonials() {
   )
 }
 
-function TestimonialCard({ testimonial, index, containerRef, isHovered, onHover, onLeave, allHovered }) {
+function TestimonialCard({ testimonial, index, containerRef, isHovered, onHover, onLeave, allHovered, isMobile }) {
   const cardRef = useRef(null)
 
   const { scrollYProgress } = useScroll({
@@ -108,12 +133,12 @@ function TestimonialCard({ testimonial, index, containerRef, isHovered, onHover,
     offset: ["start end", "end start"],
   })
 
-  // Create parallax effect based on index
-  const y = useTransform(scrollYProgress, [0, 1], [0, index % 2 === 0 ? -50 : 50])
+  // Create parallax effect based on index - disabled on mobile
+  const y = useTransform(scrollYProgress, [0, 1], [0, isMobile ? 0 : (index % 2 === 0 ? -50 : 50)])
 
-  // Calculate the position adjustments for non-hovered cards
+  // Calculate the position adjustments for non-hovered cards - mobile optimized
   const getPositionStyles = () => {
-    if (!allHovered) return {}
+    if (!allHovered || isMobile) return {} // Disable all hover effects on mobile
 
     if (isHovered) {
       return {
@@ -123,11 +148,10 @@ function TestimonialCard({ testimonial, index, containerRef, isHovered, onHover,
         boxShadow: "0 20px 30px rgba(0, 0, 0, 0.2)",
       }
     } else {
-      // Shuffle effect for non-hovered cards - made more subtle
       const xShift = index < 1 ? -5 : index > 1 ? 5 : 0
       return {
-        scale: 0.98, // Slightly less scale down
-        opacity: 0.8, // Slightly less opacity reduction
+        scale: 0.98,
+        opacity: 0.8,
         x: xShift,
         y: 5,
       }
@@ -141,9 +165,9 @@ function TestimonialCard({ testimonial, index, containerRef, isHovered, onHover,
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: false, amount: 0.1 }}
-      className="bg-black/50 backdrop-blur-sm p-8 rounded-xl border border-white/10 flex flex-col h-full relative group shadow-lg"
-      onMouseEnter={onHover}
-      onMouseLeave={onLeave}
+      className="bg-black/50 backdrop-blur-sm p-6 md:p-8 rounded-xl border border-white/10 flex flex-col h-full min-h-[320px] md:min-h-[360px] relative group shadow-lg mb-6 md:mb-0"
+      onMouseEnter={isMobile ? undefined : onHover}
+      onMouseLeave={isMobile ? undefined : onLeave}
       animate={getPositionStyles()}
       transition={{
         // Combined transition for all animations

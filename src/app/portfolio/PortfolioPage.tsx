@@ -1,10 +1,10 @@
 "use client"
 
-import { motion, useReducedMotion, useInView } from "framer-motion"
+import { motion, useReducedMotion, useInView, AnimatePresence } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
-import { useRef, useMemo } from "react"
-import { ExternalLink, Github, ArrowRight } from "lucide-react"
+import { useRef, useMemo, useState } from "react"
+import { ExternalLink, Github, ArrowRight, Code2, Rocket, Database, Cloud, Brain, Cog, Smartphone, Globe, Cpu, X, Quote } from "lucide-react"
 import IntertwineAnimation from "@/components/IntertwineAnimation"
 import BlurText from "@/components/BlurText"
 
@@ -42,6 +42,191 @@ const cardHoverVariants = {
       ease: "easeInOut"
     }
   }
+}
+
+// Complete services data for circular icons with modal functionality
+const services = [
+  {
+    icon: Code2,
+    title: "Custom",
+    fullTitle: "Custom Software Development",
+    description: "We create tailored software solutions that perfectly align with your business needs. From web applications to enterprise systems, we deliver scalable and efficient solutions.",
+    features: ["Full-stack Development", "API Development & Integration", "Legacy System Modernization", "Custom CRM & ERP Solutions"],
+    color: "#4CD787"
+  },
+  {
+    icon: Brain,
+    title: "AI",
+    fullTitle: "AI & Machine Learning", 
+    description: "Harness the power of artificial intelligence to transform your business. We develop intelligent solutions that automate processes and provide valuable insights.",
+    features: ["Predictive Analytics", "Natural Language Processing", "Computer Vision Solutions", "Machine Learning Models"],
+    color: "#9d4edd"
+  },
+  {
+    icon: Cloud,
+    title: "Cloud",
+    fullTitle: "Cloud Solutions",
+    description: "Leverage cloud technology to scale your business efficiently. We provide comprehensive cloud services to optimize your operations and reduce costs.",
+    features: ["Cloud Migration", "Cloud-Native Development", "Serverless Architecture", "Cloud Infrastructure Management"],
+    color: "#4834D4"
+  },
+  {
+    icon: Smartphone,
+    title: "Mobile",
+    fullTitle: "Mobile App Development",
+    description: "Create engaging mobile experiences for your users. We develop native and cross-platform mobile applications that deliver exceptional performance.",
+    features: ["iOS Development", "Android Development", "Cross-platform Solutions", "Mobile App Strategy"],
+    color: "#CFB53B"
+  },
+  {
+    icon: Database,
+    title: "Database",
+    fullTitle: "Database Solutions",
+    description: "Design and implement robust database solutions that ensure data integrity and optimal performance. We help you manage and analyze your data effectively.",
+    features: ["Database Design", "Data Migration", "Performance Optimization", "Data Security Implementation"],
+    color: "#ff6b6b"
+  },
+  {
+    icon: Globe,
+    title: "Web",
+    fullTitle: "Web Development",
+    description: "Build powerful web applications that drive your business forward. We create responsive, user-friendly websites that engage your audience.",
+    features: ["Frontend Development", "Backend Development", "E-commerce Solutions", "Progressive Web Apps"],
+    color: "#4CD787"
+  },
+  {
+    icon: Cog,
+    title: "DevOps",
+    fullTitle: "DevOps Services",
+    description: "Streamline your development and operations with our DevOps expertise. We implement efficient workflows and automation to enhance your delivery pipeline.",
+    features: ["CI/CD Implementation", "Infrastructure as Code", "Container Orchestration", "Monitoring & Logging"],
+    color: "#4834D4"
+  },
+  {
+    icon: Rocket,
+    title: "Digital",
+    fullTitle: "Digital Transformation",
+    description: "Transform your business with modern digital solutions. We help you embrace new technologies and optimize your digital presence.",
+    features: ["Digital Strategy Consulting", "Process Automation", "Technology Migration", "Digital Innovation"],
+    color: "#CFB53B"
+  },
+  {
+    icon: Cpu,
+    title: "Hardware",
+    fullTitle: "Hardware IoT Design",
+    description: "Bridge the physical and digital worlds with our IoT hardware design expertise. We create custom connected devices and systems that collect, analyze, and act on real-world data.",
+    features: ["Custom IoT Device Development", "Sensor Integration & Networking", "Embedded Systems Design", "Edge Computing Solutions"],
+    color: "#9d4edd"
+  },
+]
+
+// Service Modal Component
+const ServiceModal = ({ service, isOpen, onClose, clickPosition }) => {
+  if (!service) return null
+
+  const Icon = service.icon
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50"
+            onClick={(e) => {
+              e.stopPropagation()
+              onClose()
+            }}
+          />
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8">
+            <motion.div
+              initial={{
+                opacity: 0,
+                scale: 0,
+                x: clickPosition ? clickPosition.x - window.innerWidth / 2 : 0,
+                y: clickPosition ? clickPosition.y - window.innerHeight / 2 : 0,
+                borderRadius: "100%",
+              }}
+              animate={{
+                opacity: 1,
+                scale: 1,
+                x: 0,
+                y: 0,
+                borderRadius: "12px",
+              }}
+              exit={{
+                opacity: 0,
+                scale: 0,
+                x: clickPosition ? clickPosition.x - window.innerWidth / 2 : 0,
+                y: clickPosition ? clickPosition.y - window.innerHeight / 2 : 0,
+                borderRadius: "100%",
+              }}
+              transition={{
+                type: "spring",
+                damping: 25,
+                opacity: { duration: 0.2 },
+                scale: { duration: 0.4 },
+                borderRadius: { duration: 0.4 },
+              }}
+              className="bg-black/80 backdrop-blur-md border border-white/10 rounded-xl max-w-2xl w-full max-h-[90vh] overflow-auto p-6 relative"
+            >
+              <button
+                onClick={onClose}
+                className="absolute top-4 right-4 p-1 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="flex items-center mb-6">
+                <div
+                  className="w-12 h-12 rounded-full flex items-center justify-center mr-4"
+                  style={{ backgroundColor: service.color }}
+                >
+                  <Icon className="w-6 h-6 text-black" />
+                </div>
+                <h2 className="text-2xl font-bold" style={{ color: service.color }}>
+                  {service.fullTitle}
+                </h2>
+              </div>
+
+              <div className="mb-6">
+                <p className="text-white/90 mb-4">{service.description}</p>
+                <h3 className="text-lg font-semibold mb-3" style={{ color: service.color }}>
+                  Key Benefits
+                </h3>
+                <ul className="space-y-2">
+                  {service.features.map((feature) => (
+                    <li key={feature} className="flex items-center">
+                      <div className="w-2 h-2 rounded-full mr-3" style={{ backgroundColor: service.color }} />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="flex justify-between mt-8 pt-4 border-t border-white/10">
+                <button
+                  className="px-5 py-2 rounded-lg text-black font-medium transition-all"
+                  style={{ backgroundColor: service.color }}
+                  onClick={onClose}
+                >
+                  Close
+                </button>
+                <Link
+                  href="/contact"
+                  className="px-5 py-2 rounded-lg bg-robinhood text-black font-medium transition-all hover:bg-robinhood/90"
+                >
+                  Get Started
+                </Link>
+              </div>
+            </motion.div>
+          </div>
+        </>
+      )}
+    </AnimatePresence>
+  )
 }
 
 const projects = [
@@ -100,6 +285,68 @@ const projects = [
     github: "#"
   },
 ]
+
+// Circular Service Icon Component
+function ServiceIcon({ service, index, onClick }) {
+  const shouldReduceMotion = useReducedMotion()
+  
+  return (
+    <motion.button
+      onClick={(e) => {
+        e.stopPropagation()
+        e.preventDefault()
+        onClick(service, e)
+      }}
+      className="relative group service-icon-container"
+      initial={{ opacity: 0, scale: 0 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true }}
+      transition={{ 
+        duration: 0.5, 
+        delay: index * 0.1,
+        type: "spring",
+        damping: 20
+      }}
+      whileHover={shouldReduceMotion ? {} : { scale: 1.08 }}
+      whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
+    >
+      <motion.div
+        className="w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center relative overflow-hidden"
+        style={{ backgroundColor: service.color }}
+      >
+        {/* Shine effect */}
+        <motion.div
+          className="absolute w-24 h-24 bg-white/40 blur-md"
+          animate={shouldReduceMotion ? {} : {
+            x: [30, -30],
+            y: [30, -30],
+          }}
+          transition={{
+            repeat: Number.POSITIVE_INFINITY,
+            repeatType: "mirror",
+            duration: 2,
+            ease: "linear",
+          }}
+        />
+
+        <service.icon className="w-8 h-8 md:w-10 md:h-10 text-black relative z-10" />
+
+        {/* Enhanced reflection with gradient */}
+        <div
+          className="absolute top-0 left-0 right-0 h-1/2 rounded-t-full"
+          style={{
+            background: `linear-gradient(to bottom, rgba(255,255,255,0.2), transparent)`,
+          }}
+        />
+      </motion.div>
+
+      {/* Title below icon */}
+      <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs font-medium whitespace-nowrap text-center">
+        {service.title}
+      </div>
+    </motion.button>
+  )
+}
 
 function ProjectCard({ project, index }) {
   const shouldReduceMotion = useReducedMotion()
@@ -171,12 +418,37 @@ function ProjectCard({ project, index }) {
 
 export default function PortfolioPage() {
   const shouldReduceMotion = useReducedMotion()
+  const [selectedService, setSelectedService] = useState(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [clickPosition, setClickPosition] = useState({ x: 0, y: 0 })
   
   // Memoize animation timing based on reduced motion preference
   const animationTiming = useMemo(() => ({
     duration: shouldReduceMotion ? 0.3 : 0.8,
     stagger: shouldReduceMotion ? 0.05 : 0.1
   }), [shouldReduceMotion])
+
+  // Function to open modal with service details
+  const handleServiceClick = (service, event) => {
+    if (event) {
+      const x = event.clientX
+      const y = event.clientY
+      setClickPosition({ x, y })
+    } else {
+      setClickPosition({ x: window.innerWidth / 2, y: window.innerHeight / 2 })
+    }
+    setSelectedService(service)
+    setIsModalOpen(true)
+  }
+
+  // Handle modal close
+  const handleCloseModal = () => {
+    setIsModalOpen(false)
+    setSelectedService(null)
+    setTimeout(() => {
+      setClickPosition({ x: 0, y: 0 })
+    }, 100)
+  }
   
   return (
     <div className="min-h-screen bg-background pt-24">
@@ -298,6 +570,34 @@ export default function PortfolioPage() {
           </motion.div>
         </div>
       </section>
+
+      {/* Services Icons Section - moved from ServicesPage */}
+      <section className="py-16 relative">
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-900/10 to-black" />
+        
+        <div className="container mx-auto px-4">
+          {/* Circular Service Icons */}
+          <div className="flex flex-wrap justify-center gap-8 md:gap-12 lg:gap-16 relative z-10">
+            {services.map((service, index) => (
+              <ServiceIcon 
+                key={service.title} 
+                service={service} 
+                index={index} 
+                onClick={handleServiceClick}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Service Modal */}
+        <ServiceModal
+          service={selectedService}
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          clickPosition={clickPosition}
+        />
+      </section>
+
       {/* Remove Footer component at the bottom */}
       {/* Remove: <Footer /> */}
     </div>

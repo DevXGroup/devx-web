@@ -56,8 +56,8 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-8 font-['IBM_Plex_Mono'] font-medium">
+          {/* Desktop Menu - switch to mobile earlier to prevent cutoff */}
+          <div className="hidden lg:flex items-center space-x-8 font-['IBM_Plex_Mono'] font-medium">
             <Link
               href="/"
               className={`${isActive("/") ? "text-pink-400 bg-pink-400/10 rounded px-2 py-1" : "text-white hover:text-white/80"} nav-link ${isActive("/") ? "active" : ""} transition-colors duration-200 antialiased`}
@@ -109,8 +109,8 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center">
+          {/* Mobile Menu Button - show for tablets too */}
+          <div className="lg:hidden flex items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="text-white hover:text-primary transition-colors"
@@ -127,7 +127,7 @@ export default function Navbar() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="md:hidden"
+            className="lg:hidden"
             style={scrolledBgStyle}
           >
             <div className="px-2 pt-2 pb-3 space-y-1 font-['IBM_Plex_Mono'] font-light">
