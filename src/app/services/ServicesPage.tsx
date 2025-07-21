@@ -7,6 +7,7 @@ import { useRef, useState, useEffect } from "react"
 import HorizontalScroll from "@/components/HorizontalScroll"
 import ParallaxTestimonials from "@/components/ParallaxTestimonials"
 import EnhancedInfinityLoader from "@/components/EnhancedInfinityLoader"
+import BraidedRopeAnimation from "@/components/BraidedRopeAnimation"
 import dynamic from "next/dynamic"
 import ServicesBanner from "@/components/ServicesBanner"
 import TrueFocus from "@/components/TrueFocus"
@@ -251,9 +252,16 @@ export default function ServicesPage() {
 
   return (
     <div className="min-h-screen bg-background mt-0 pt-0">
-      {/* Hero Section with Infinity Loader */}
-      <section ref={heroRef} className="relative min-h-screen py-20 flex flex-col items-center justify-center pt-32">
+      {/* Hero Section with Enhanced Metallic Helix */}
+      <section ref={heroRef} className="relative min-h-screen py-20 flex flex-col items-center justify-center pt-32 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-900/10 to-black" />
+        
+        {/* Full-screen 3D Braided Rope Animation - Responsive */}
+        {isClient && (
+          <div className="absolute inset-0 w-full h-full z-10 overflow-hidden">
+            <BraidedRopeAnimation className="absolute inset-0 w-full h-full" />
+          </div>
+        )}
 
         {/* Enhanced background animations */}
         <div className="absolute inset-0">
@@ -371,8 +379,8 @@ export default function ServicesPage() {
           />
         </div>
 
-        <div className="relative z-10 w-full flex flex-col items-center">
-          <div className="container mx-auto px-4 relative">
+        <div className="relative z-20 w-full flex flex-col items-center">
+          <div className="container mx-auto px-4 relative z-20">
             <motion.div
               initial="hidden"
               animate="visible"
@@ -390,16 +398,24 @@ export default function ServicesPage() {
               <div className="flex flex-col items-center">
                 <BlurText 
                   text="Our Services"
-                  className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-center text-[#CFB53B] font-['IBM_Plex_Mono']"
+                  className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-center text-[#4A148C] font-['IBM_Plex_Mono'] relative z-30"
                   delay={120}
                   animateBy="words"
                   direction="top"
+                  style={{
+                    textShadow: "0 2px 8px rgba(0,0,0,0.8), 0 0 20px rgba(74,20,140,0.5)",
+                    WebkitTextStroke: "1px rgba(0,0,0,0.5)",
+                  }}
                 />
               </div>
 
               <motion.p
                 variants={floatingAnimation}
-                className="text-xl text-foreground/80 font-light max-w-2xl mx-auto"
+                className="text-xl text-foreground/80 font-light max-w-2xl mx-auto relative z-30"
+                style={{
+                  textShadow: "0 1px 4px rgba(0,0,0,0.8)",
+                  WebkitTextStroke: "0.5px rgba(0,0,0,0.3)",
+                }}
               >
                 Comprehensive software solutions to drive your business forward. We combine expertise with innovation to
                 deliver exceptional results.
@@ -407,14 +423,12 @@ export default function ServicesPage() {
             </motion.div>
           </div>
 
-          {/* Replace ModernCube3D with EnhancedInfinityLoader - better positioned and more responsive */}
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="w-full mx-auto mb-12">
-            {isClient && <EnhancedInfinityLoader scrollThreshold={0.35} baseScale={0.3} maxScale={19} />}
-          </motion.div>
+          {/* Content spacing for braided rope animation */}
+          <div className="w-full mx-auto mb-12 h-20"></div>
 
           {/* Value Propositions with Apple-style reveal */}
-          <div ref={valuePropsRef} className="w-full max-w-5xl mt-8 mb-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 px-2 md:px-8 lg:px-16 relative z-10">
+          <div ref={valuePropsRef} className="w-full max-w-5xl mt-8 mb-8 relative z-20">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 px-2 md:px-8 lg:px-16 relative z-20">
               {valueProps.map((prop, index) => (
                 <motion.div
                   key={prop.title}
@@ -602,8 +616,6 @@ export default function ServicesPage() {
         </section>
       </AppleScrollSection>
 
-      {/* Dynamic Auto-Scrolling Banner with ScrollVelocity - now a separate component */}
-      {isClient && <ServicesBanner />}
 
       {/* Case Studies with Horizontal Scroll */}
       <AppleScrollSection delay={0.4}>
