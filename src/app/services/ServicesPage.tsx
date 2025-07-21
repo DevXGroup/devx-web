@@ -242,10 +242,10 @@ export default function ServicesPage() {
   const activeServiceData = services.find((s, i) => i === activeService) || services[0]
 
   return (
-    <div className="min-h-screen bg-background mt-0 pt-0">
+    <div className="min-h-screen bg-background mt-0 pt-0 z-30">
       {/* Hero Section with Enhanced Metallic Helix */}
       <section ref={heroRef} className="relative min-h-screen py-20 flex flex-col items-center justify-center pt-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-900/10 to-black" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-900/10 to-black z-0" />
         
 
         {/* Enhanced background animations */}
@@ -384,7 +384,7 @@ export default function ServicesPage() {
                 <BlurText 
                   text="Services"
                   className="heading-hero text-accent-gold mb-8 text-center relative z-40"
-                  delay={120}
+                  delay={133}
                   animateBy="words"
                   direction="top"
                 />
