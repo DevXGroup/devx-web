@@ -229,7 +229,7 @@ export default function ContactPage() {
           >
             <div className="flex flex-col items-center">
               <BlurText 
-                text="Get in Touch"
+                text="Contact"
                 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-center text-[#4CD787]"
                 delay={120}
                 animateBy="words"
