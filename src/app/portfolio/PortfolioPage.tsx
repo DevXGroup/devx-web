@@ -5,8 +5,10 @@ import Image from "next/image"
 import Link from "next/link"
 import { useRef, useMemo, useState } from "react"
 import { ExternalLink, Github, ArrowRight, Code2, Rocket, Database, Cloud, Brain, Cog, Smartphone, Globe, Cpu, X, Quote } from "lucide-react"
-import IntertwineAnimation from "@/components/IntertwineAnimation"
 import BlurText from "@/components/BlurText"
+import ParticleField from "@/components/ParticleField"
+import MorphingShapes from "@/components/MorphingShapes"
+import MagneticCard from "@/components/MagneticCard"
 
 // Enhanced animation variants
 const fadeInUpVariants = {
@@ -354,14 +356,21 @@ function ProjectCard({ project, index }) {
   const isInView = useInView(ref, { once: true, margin: "-50px" })
   
   return (
-    <motion.div
-      ref={ref}
-      variants={cardHoverVariants}
-      initial="hidden"
-      animate={isInView ? "visible" : "hidden"}
-      className="bg-black/30 backdrop-blur-sm rounded-xl overflow-hidden border border-white/10 group hover:border-[#4CD787]/50 transition-all duration-300 cursor-pointer"
-      whileHover={shouldReduceMotion ? {} : cardHoverVariants.hover}
+    <MagneticCard
+      intensity={0.15}
+      className="h-full"
     >
+      <motion.div
+        ref={ref}
+        variants={cardHoverVariants}
+        initial="hidden"
+        animate={isInView ? "visible" : "hidden"}
+        className="bg-black/30 backdrop-blur-sm rounded-xl overflow-hidden border border-white/10 group hover:border-[#4CD787]/50 transition-all duration-300 cursor-pointer h-full relative"
+        whileHover={shouldReduceMotion ? {} : {
+          scale: 1.02,
+          boxShadow: "0 25px 50px -12px rgba(76, 215, 135, 0.25)"
+        }}
+      >
       <div className="relative overflow-hidden">
         <Image
           src={project.image || "/placeholder.svg"}
@@ -412,7 +421,8 @@ function ProjectCard({ project, index }) {
           ))}
         </div>
       </div>
-    </motion.div>
+      </motion.div>
+    </MagneticCard>
   )
 }
 
@@ -455,40 +465,11 @@ export default function PortfolioPage() {
       <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-900/20 to-black" />
 
-        {/* Enhanced animated background elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <motion.div 
-            className="absolute w-[500px] h-[500px] bg-[#4CD787]/20 rounded-full blur-3xl -top-48 -left-24"
-            animate={shouldReduceMotion ? {} : {
-              opacity: [0.2, 0.4, 0.2],
-              scale: [1, 1.1, 1],
-              x: [0, 20, 0],
-              y: [0, -10, 0]
-            }}
-            transition={{
-              duration: 8,
-              repeat: Number.POSITIVE_INFINITY,
-              repeatType: "reverse",
-              ease: "easeInOut"
-            }}
-          />
-          <motion.div 
-            className="absolute w-[400px] h-[400px] bg-[#4834D4]/20 rounded-full blur-3xl top-96 -right-24"
-            animate={shouldReduceMotion ? {} : {
-              opacity: [0.2, 0.4, 0.2],
-              scale: [1, 1.2, 1],
-              x: [0, -30, 0],
-              y: [0, 15, 0]
-            }}
-            transition={{
-              duration: 10,
-              repeat: Number.POSITIVE_INFINITY,
-              repeatType: "reverse",
-              ease: "easeInOut",
-              delay: 1
-            }}
-          />
-        </div>
+        {/* Particle Field Background */}
+        <ParticleField className="opacity-60" />
+        
+        {/* Morphing Shapes */}
+        <MorphingShapes />
 
         <div className="relative container mx-auto px-4">
           <motion.div
@@ -506,12 +487,91 @@ export default function PortfolioPage() {
                 direction="top"
               />
               
-              {/* Intertwined Animation - centered */}
+              {/* Dynamic Grid Pattern */}
               <motion.div
                 variants={fadeInUpVariants}
-                className="mb-8 flex justify-center"
+                className="mb-8 flex justify-center relative"
               >
-                <IntertwineAnimation className="" width={500} height={120} />
+                <div className="relative w-full max-w-2xl h-32">
+                  {/* Animated grid lines */}
+                  <svg width="100%" height="100%" className="absolute inset-0">
+                    <defs>
+                      <linearGradient id="gridGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="#4CD787" stopOpacity="0" />
+                        <stop offset="50%" stopColor="#4CD787" stopOpacity="0.6" />
+                        <stop offset="100%" stopColor="#4CD787" stopOpacity="0" />
+                      </linearGradient>
+                    </defs>
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <motion.line
+                        key={`h-${i}`}
+                        x1="0"
+                        y1={i * 32 + 16}
+                        x2="100%"
+                        y2={i * 32 + 16}
+                        stroke="url(#gridGradient)"
+                        strokeWidth="1"
+                        initial={{ pathLength: 0, opacity: 0 }}
+                        animate={{ pathLength: 1, opacity: 1 }}
+                        transition={{
+                          duration: 2,
+                          delay: i * 0.2,
+                          repeat: Infinity,
+                          repeatType: "reverse",
+                          repeatDelay: 1
+                        }}
+                      />
+                    ))}
+                    {Array.from({ length: 8 }).map((_, i) => (
+                      <motion.line
+                        key={`v-${i}`}
+                        x1={`${(i + 1) * 12.5}%`}
+                        y1="0"
+                        x2={`${(i + 1) * 12.5}%`}
+                        y2="100%"
+                        stroke="#4834D4"
+                        strokeWidth="0.5"
+                        strokeOpacity="0.3"
+                        initial={{ pathLength: 0 }}
+                        animate={{ pathLength: 1 }}
+                        transition={{
+                          duration: 1.5,
+                          delay: i * 0.15,
+                          repeat: Infinity,
+                          repeatType: "reverse",
+                          repeatDelay: 2
+                        }}
+                      />
+                    ))}
+                  </svg>
+                  
+                  {/* Floating geometric elements */}
+                  <motion.div
+                    className="absolute top-4 left-1/4 w-3 h-3 bg-[#CFB53B] rounded-full"
+                    animate={{
+                      y: [0, -10, 0],
+                      scale: [1, 1.2, 1],
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  />
+                  <motion.div
+                    className="absolute bottom-4 right-1/3 w-4 h-4 border-2 border-[#9d4edd] rotate-45"
+                    animate={{
+                      rotate: [45, 225, 45],
+                      scale: [1, 0.8, 1],
+                    }}
+                    transition={{
+                      duration: 4,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: 1
+                    }}
+                  />
+                </div>
               </motion.div>
               
               <motion.p 
@@ -525,10 +585,22 @@ export default function PortfolioPage() {
         </div>
       </section>
 
-      <section className="py-20">
+      <section className="py-20 relative">
         <div className="container mx-auto px-4">
+          {/* Holographic Grid Background */}
+          <div className="absolute inset-0 opacity-20 overflow-hidden">
+            <div className="absolute inset-0" style={{
+              backgroundImage: `
+                linear-gradient(90deg, transparent 79px, rgba(76, 215, 135, 0.1) 79px, rgba(76, 215, 135, 0.1) 81px, transparent 81px),
+                linear-gradient(0deg, transparent 79px, rgba(72, 52, 212, 0.1) 79px, rgba(72, 52, 212, 0.1) 81px, transparent 81px)
+              `,
+              backgroundSize: '80px 80px',
+              animation: shouldReduceMotion ? 'none' : 'float 20s ease-in-out infinite'
+            }} />
+          </div>
+          
           <motion.div 
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative z-10"
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"

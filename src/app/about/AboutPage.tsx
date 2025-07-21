@@ -8,6 +8,7 @@ import { Check, Users, Zap, Award, Globe, Shield } from "lucide-react"
 import BlurText from "@/components/BlurText"
 import SpiralAnimation from "@/components/SpiralAnimation"
 import RunningLineAnimation from "@/components/RunningLineAnimation"
+import ShapeBlur from "@/components/ShapeBlur"
 
 // Enhanced animation variants for better performance
 const fadeInUpVariants = {
@@ -333,7 +334,7 @@ export default function AboutPage() {
               <AnimatedSection>
                 <BlurText 
                   text="About DevX Group"
-                  className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-[#CFB53B]"
+                  className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-[#CFB53B]"
                   delay={120}
                   animateBy="words"
                   direction="top"
@@ -369,28 +370,44 @@ export default function AboutPage() {
 
               <AnimatedSection delay={0.2} className="relative">
                 <div className="relative h-[400px] w-full rounded-2xl overflow-hidden">
-                  <Image 
-                    src="/images/about/testimonial-background.png" 
-                    alt="DevX Team" 
-                    fill 
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    priority={false}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-                  <div className="absolute bottom-0 left-0 right-0 p-6">
+                  {/* Background image with ShapeBlur effect applied as mask */}
+                  <div className="absolute inset-0">
+                    <Image 
+                      src="/images/about/testimonial-background.png" 
+                      alt="DevX Team" 
+                      fill 
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      priority={false}
+                    />
+                    {/* ShapeBlur effect that creates animated mask on the image */}
+                    <div className="absolute inset-0 mix-blend-multiply">
+                      <ShapeBlur 
+                        className="w-full h-full"
+                        variation={0}
+                        shapeSize={1.2}
+                        roundness={0.4}
+                        borderSize={0.05}
+                        circleSize={0.3}
+                        circleEdge={0.5}
+                      />
+                    </div>
+                  </div>
+                  
+                  {/* Enhanced testimonial overlay with better visibility */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-black/60 backdrop-blur-sm">
                     <div className="flex gap-2 mb-3">
                       {[...Array(5)].map((_, i) => (
-                        <svg key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                        <svg key={i} className="w-5 h-5 text-[#CFB53B]" fill="currentColor" viewBox="0 0 20 20">
                           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                         </svg>
                       ))}
                     </div>
-                    <p className="text-white text-sm italic">
-                      &ldquo;DevX Group delivered our project ahead of schedule and exceeded our expectations. Their team&apos;s
-                      expertise and communication made the entire process seamless.&rdquo;
+                    <p className="text-white text-sm italic font-medium leading-relaxed">
+                      &ldquo;Our partnership with Dev Group has driven our company to be a leader in online channels. We recommend them for any business looking to have an active online presence creatively.&rdquo;
                     </p>
-                    <div className="mt-3 text-white/80 text-sm">— Michael R., CTO at TechVentures</div>
+                    <div className="mt-3 text-[#4CD787] text-sm font-medium">— Lazurd Inc CEO</div>
                   </div>
                 </div>
               </AnimatedSection>
