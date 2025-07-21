@@ -2,6 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Portfolio Page Animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  25% {
+    transform: translateY(-10px) translateX(5px);
+  }
+  50% {
+    transform: translateY(-5px) translateX(-5px);
+  }
+  75% {
+    transform: translateY(-15px) translateX(3px);
+  }
+}
+
 /* Import DevX Typography System */
 @import '../styles/typography.css';
 
@@ -866,6 +882,14 @@ body {
 html.is-touching {
   /* Reduce animation complexity on touch devices */
   --touch-scale: 1;
+}
+
+/* Line clamp utilities */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 html.is-touching .animation-heavy {
