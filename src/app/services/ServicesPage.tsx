@@ -266,16 +266,16 @@ export default function ServicesPage() {
             }}
             transition={{ type: "spring", stiffness: 50, damping: 20 }}
           >
-            {/* Floating particles */}
+            {/* Static floating particles - fixes hydration */}
             {Array.from({ length: 8 }).map((_, i) => (
               <motion.div
                 key={i}
                 className="absolute w-1 h-1 rounded-full bg-white/30"
                 initial={{
-                  x: Math.random() * (typeof window !== "undefined" ? window.innerWidth : 1000),
-                  y: Math.random() * (typeof window !== "undefined" ? window.innerHeight : 1000),
-                  opacity: Math.random() * 0.3 + 0.1,
-                  scale: Math.random() * 0.5 + 0.5,
+                  x: [100, 300, 500, 700, 900, 1100, 200, 800][i] || 400,
+                  y: [150, 350, 250, 450, 180, 380, 280, 320][i] || 300,
+                  opacity: [0.1, 0.15, 0.2, 0.25, 0.12, 0.18, 0.22, 0.16][i] || 0.15,
+                  scale: [0.7, 1.0, 0.8, 1.2, 0.9, 0.6, 1.1, 0.5][i] || 0.8,
                 }}
                 animate={{
                   y: [0, -15, 0, 15, 0],
@@ -283,10 +283,10 @@ export default function ServicesPage() {
                   scale: [1, 1.2, 1],
                 }}
                 transition={{
-                  duration: 3 + Math.random() * 5,
+                  duration: [3, 4, 5, 6, 3.5, 4.5, 5.5, 7][i] || 4,
                   repeat: Number.POSITIVE_INFINITY,
                   repeatType: "reverse",
-                  delay: Math.random() * 5,
+                  delay: [0, 1, 2, 3, 0.5, 1.5, 2.5, 4][i] || 0,
                 }}
               />
             ))}
@@ -411,7 +411,7 @@ export default function ServicesPage() {
           <div className="w-full mx-auto mb-12 h-20"></div>
 
           {/* Value Propositions with Apple-style reveal */}
-          <div ref={valuePropsRef} className="w-full max-w-5xl mt-8 mb-8 relative z-20">
+          <div ref={valuePropsRef} className="w-full max-w-5xl mt-0 mb-8 relative z-20 -translate-y-12 md:translate-y-0">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 px-4 sm:px-6 md:px-8 lg:px-16 relative z-20">
               {valueProps.map((prop, index) => (
                 <motion.div
