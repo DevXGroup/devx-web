@@ -497,7 +497,7 @@ export default function PricingPage() {
             >
               <BlurText 
                 text="Pricing Plans"
-                className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-white flex items-center justify-center"
+                className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white flex items-center justify-center"
                 delay={133}
                 animateBy="words"
                 direction="top"
