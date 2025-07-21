@@ -2,7 +2,6 @@
 import { useRef, useEffect, useState, useCallback } from "react"
 import { motion, useMotionValue, animate } from "framer-motion"
 import Image from "next/image"
-import Link from "next/link"
 
 const originalCaseStudies = [
   {
@@ -11,7 +10,6 @@ const originalCaseStudies = [
     description:
       "Developed a scalable analytics dashboard for a Fortune 500 company, improving data insights and decision-making by 30%.",
     tags: ["AI/ML", "React", "Python", "AWS"],
-    client: "TechCorp Inc.",
     results: "40% increase in data processing efficiency",
     link: "/portfolio/analytics-platform",
   },
@@ -21,7 +19,6 @@ const originalCaseStudies = [
     description:
       "Built a real-time GPS tracking and management system for a logistics firm, reducing operational costs by 15% and improving delivery efficiency.",
     tags: ["IoT", "React Native", "Node.js", "MongoDB"],
-    client: "LogiFlow Solutions",
     results: "60% reduction in operational costs",
     link: "/portfolio/fleet-management",
   },
@@ -31,7 +28,6 @@ const originalCaseStudies = [
     description:
       "Redesigned and re-platformed an existing e-commerce site, leading to a 25% increase in conversion rates and a smoother user experience.",
     tags: ["E-commerce", "Next.js", "Stripe", "PostgreSQL"],
-    client: "RetailMax",
     results: "150% increase in conversion rates",
     link: "/portfolio/ecommerce-revamp",
   },
@@ -41,7 +37,6 @@ const originalCaseStudies = [
     description:
       "Implemented an AI chatbot solution for a SaaS company, automating 60% of customer inquiries and enhancing support team productivity.",
     tags: ["AI/ML", "NLP", "Python", "OpenAI"],
-    client: "ServicePro",
     results: "80% reduction in response time",
     link: "/portfolio/ai-chatbot",
   },
@@ -51,7 +46,6 @@ const originalCaseStudies = [
     description:
       "A secure telemedicine application enabling remote consultations, prescription management, and health monitoring with HIPAA compliance.",
     tags: ["Healthcare", "React Native", "WebRTC", "FHIR"],
-    client: "HealthConnect",
     results: "300% increase in patient engagement",
     link: "/portfolio/telemedicine",
   },
@@ -148,51 +142,46 @@ export default function HorizontalScroll() {
             {caseStudies.map((study, index) => (
               <motion.div
                 key={index}
-                className="flex-shrink-0 w-[280px] md:w-[320px] h-[500px] bg-black/30 backdrop-blur-sm rounded-xl border border-gray-600 flex flex-col"
+                className="flex-shrink-0 w-[280px] md:w-[320px] h-[500px] bg-black/40 backdrop-blur-md rounded-xl border border-white/20 hover:border-[#4CD787]/40 flex flex-col transition-all duration-300 hover:shadow-[0_8px_32px_rgba(76,215,135,0.15)]"
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.1 }}
                 transition={{ duration: 0.5, delay: (index % originalCaseStudies.length) * 0.05 }}
+                whileHover={{
+                  scale: 1.02,
+                  transition: { duration: 0.2 }
+                }}
               >
-                <div className="p-3 h-full flex flex-col">
+                <div className="p-4 h-full flex flex-col">
                   <Image
                     src={study.image || "/placeholder.svg"}
                     alt={study.title}
                     width={320}
                     height={140}
-                    className="rounded-lg mb-3 object-cover w-full h-[140px]"
+                    className="rounded-lg mb-3 object-cover w-full h-[140px] border border-white/10"
                   />
-                  <h3 className="text-lg font-semibold text-white mb-2 leading-tight">{study.title}</h3>
-                  <p className="text-foreground/70 text-sm mb-3 leading-snug">{study.description}</p>
+                  <h3 className="text-lg font-bold text-white mb-2 leading-tight font-mono">{study.title}</h3>
+                  <p className="text-white/80 text-sm mb-3 leading-relaxed font-sans line-clamp-3">{study.description}</p>
 
                   {/* Tech Stack Bubbles */}
-                  <div className="flex flex-wrap gap-2 mb-3">
+                  <div className="flex flex-wrap gap-1.5 mb-3">
                     {study.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="px-2 py-1 text-xs rounded-full bg-[#4CD787]/20 text-[#4CD787] border border-[#4CD787]/30"
+                        className="px-2.5 py-1 text-xs font-medium rounded-full bg-[#4CD787]/20 text-[#4CD787] border border-[#4CD787]/40 backdrop-blur-sm"
                       >
                         {tag}
                       </span>
                     ))}
                   </div>
 
-                  {/* Client and Results */}
-                  <div className="space-y-2 mb-4">
-                    <div className="text-xs text-foreground/60">
-                      <span className="font-medium">Client:</span> {study.client}
-                    </div>
-                    <div className="text-xs text-[#CFB53B]">
-                      <span className="font-medium">Results:</span> {study.results}
+                  {/* Results - at bottom */}
+                  <div className="mt-auto pt-2 border-t border-white/10">
+                    <div className="text-sm text-white/90">
+                      <span className="font-semibold text-[#4CD787]">Results:</span> 
+                      <span className="font-medium ml-1">{study.results}</span>
                     </div>
                   </div>
-
-                  <Link
-                    href={study.link}
-                    className="inline-block bg-[#8A4FFF] text-white hover:bg-[#8A4FFF]/80 px-5 py-1.5 rounded-md text-sm font-medium text-center mt-auto transition-colors duration-200"
-                  >
-                    View Case Study
-                  </Link>
                 </div>
               </motion.div>
             ))}
