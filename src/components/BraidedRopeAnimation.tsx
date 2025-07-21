@@ -58,7 +58,9 @@ export default function BraidedRopeAnimation({ className = "" }: BraidedRopeAnim
         style={{
           cursor: "grab",
           touchAction: "none",
-          minHeight: screenSize.width < 768 ? '400px' : '500px', // Ensure minimum height on mobile
+          minHeight: screenSize.width < 768 
+            ? `${Math.max(400, screenSize.height * 0.6)}px` // Responsive minimum height for mobile
+            : `${Math.max(500, screenSize.height * 0.7)}px`, // Responsive minimum height for desktop
           backgroundColor: 'transparent',
         }}
       >
@@ -68,44 +70,44 @@ export default function BraidedRopeAnimation({ className = "" }: BraidedRopeAnim
           onContextMenu={(e) => e.preventDefault()}
           camera={{ 
             position: screenSize.width < 768 
-              ? [0, 0, 8] // Much closer, centered view for mobile
+              ? [0, 0, 8] // Centered view under title for mobile
               : screenSize.width < 1024 
-                ? [4, 0, 10] // Medium view for tablet
-                : [8, 0, 12], // Default view for desktop
-            fov: screenSize.width < 768 ? 70 : 45 // Much wider FOV for mobile
+                ? [0, 2, 10] // Slightly elevated for tablet
+                : [0, 4, 12], // Elevated view for desktop
+            fov: screenSize.width < 768 ? 60 : 45
           }}
         >
           <PerspectiveCamera 
             makeDefault 
             position={screenSize.width < 768 
-              ? [0, 0, 8] // Much closer, centered view for mobile
+              ? [0, 0, 8] // Centered under title
               : screenSize.width < 1024 
-                ? [4, 0, 10] // Medium view for tablet
-                : [8, 0, 12] // Default view for desktop
+                ? [0, 2, 10] // Tablet view
+                : [0, 4, 12] // Desktop view
             } 
-            fov={screenSize.width < 768 ? 70 : 45}
+            fov={screenSize.width < 768 ? 60 : 45}
           />
           <Environment preset="studio" />
           <ambientLight intensity={0.3} />
           
-          {/* Enhanced lighting for braided ropes - adjusted direction */}
+          {/* Enhanced lighting for horizontal braided ropes */}
           <directionalLight
             castShadow
-            position={[35, 28, 25]}
-            intensity={2.8}
+            position={[0, 20, 25]} // Positioned above for horizontal layout
+            intensity={3.2}
             shadow-mapSize-width={2048}
             shadow-mapSize-height={2048}
-            shadow-camera-far={75}
-            shadow-camera-left={-16}
-            shadow-camera-right={16}
-            shadow-camera-top={16}
-            shadow-camera-bottom={-16}
-            color="#F5F5F5"
+            shadow-camera-far={100}
+            shadow-camera-left={-25}
+            shadow-camera-right={25}
+            shadow-camera-top={20}
+            shadow-camera-bottom={-5}
+            color="#FFFFFF" // Pure white for metallic sheen
           />
           
-          {/* Key lights for rope highlights - rotated light sources */}
-          <spotLight position={[38, 25, 28]} angle={0.18} penumbra={1} intensity={2.6} castShadow color="#FFFFFF" />
-          <spotLight position={[-25, 30, 35]} angle={0.18} penumbra={1} intensity={2.4} castShadow color="#E6E6FA" />
+          {/* Key lights for horizontal rope highlights */}
+          <spotLight position={[15, 15, 20]} angle={0.20} penumbra={1} intensity={3.0} castShadow color="#FFFFFF" />
+          <spotLight position={[-15, 15, 20]} angle={0.20} penumbra={1} intensity={2.8} castShadow color="#F0E6FF" />
           
           {/* Fill lights for purple enhancement */}
           <pointLight position={[14, 10, 22]} intensity={2.4} color="#9C27B0" distance={32} decay={2} />
@@ -153,79 +155,94 @@ function AnimatedHighlights({ screenSize }: { screenSize: { width: number; heigh
   useFrame((state) => {
     const time = state.clock.getElapsedTime()
     
-    // Moving white highlights that follow rope spiral motion
-    const highlightAngle1 = time * 0.5 // Matches rope animation speed
-    const highlightAngle2 = time * 0.5 + Math.PI // 180° offset for second rope
+    // Moving metallic highlights with different speeds for realistic intertwining
+    const highlightSpeed1 = time * 1.0 // First rope speed
+    const highlightSpeed2 = time * 1.4 // Second rope faster speed for intertwining effect
+    const highlightAngle1 = highlightSpeed1 // First rope highlights
+    const highlightAngle2 = highlightSpeed2 + Math.PI * 0.5 // 90° offset with different speed
     
-    const radius = screenSize.width < 768 ? 1.5 : 1.8 // Much smaller radius to match tighter ropes
-    const height = Math.sin(time * 0.3) * (screenSize.width < 768 ? 1.5 : 2) // Reduced height variation for mobile
+    const radius = screenSize.width < 768 ? 1.2 : 1.5 // Adjusted radius to match new rope spacing
+    const height = Math.sin(time * 0.4) * (screenSize.width < 768 ? 1.5 : 2) // Dynamic height for winding motion
     
-    // First set of moving highlights for first rope
+    // Simple lighting that follows the animated rope positions
+    const intertwineSpeed = time * 0.8
+    
+    // Follow first rope's animated position
+    const rope1Angle = intertwineSpeed
+    const rope1Radius = 1.5
+    const rope1X = Math.cos(rope1Angle) * rope1Radius
+    const rope1Z = Math.sin(rope1Angle) * rope1Radius * 0.5
+    
+    // Follow second rope's animated position
+    const rope2Angle = -intertwineSpeed + Math.PI
+    const rope2X = Math.cos(rope2Angle) * rope1Radius
+    const rope2Z = Math.sin(rope2Angle) * rope1Radius * 0.5
+    
+    // Lights follow the animated rope positions
     if (light1Ref.current) {
       light1Ref.current.position.set(
-        Math.cos(highlightAngle1) * radius,
-        height + 2,
-        Math.sin(highlightAngle1) * radius
+        rope1X, // Follow first rope X
+        2, // Above the rope
+        rope1Z + 1 // Slightly offset Z
       )
     }
     
     if (light2Ref.current) {
       light2Ref.current.position.set(
-        Math.cos(highlightAngle1 + Math.PI) * radius,
-        height - 2,
-        Math.sin(highlightAngle1 + Math.PI) * radius
+        rope1X + 2, // Offset along rope
+        1,
+        rope1Z - 1
       )
     }
     
-    // Second set of moving highlights for second rope (with pinkish tint)
     if (light3Ref.current) {
       light3Ref.current.position.set(
-        Math.cos(highlightAngle2) * radius,
-        height + 1,
-        Math.sin(highlightAngle2) * radius
+        rope2X, // Follow second rope X
+        2, // Above the rope
+        rope2Z + 1
       )
     }
     
     if (light4Ref.current) {
       light4Ref.current.position.set(
-        Math.cos(highlightAngle2 + Math.PI) * radius,
-        height - 1,
-        Math.sin(highlightAngle2 + Math.PI) * radius
+        rope2X - 2, // Offset along rope
+        1,
+        rope2Z - 1
       )
     }
   })
 
   return (
     <>
-      {/* Moving white highlights for first rope */}
+      {/* White metallic highlights for deep purple rope */}
       <pointLight 
         ref={light1Ref}
-        intensity={3.5}
-        color="#FFFFFF"
-        distance={8}
+        intensity={5.0}
+        color="#FFFFFF" // Pure white metallic highlight
+        distance={12}
         decay={2}
       />
       <pointLight 
         ref={light2Ref}
-        intensity={3.2}
-        color="#F8F8FF"
-        distance={8}
+        intensity={4.5}
+        color="#F8F8FF" // Ghost white with purple hint
+        distance={11}
         decay={2}
       />
       
-      {/* Moving pinkish-white highlights for second rope */}
+      {/* Purple-gold highlights for pinkish-purple rope */}
       <pointLight 
         ref={light3Ref}
-        intensity={3.0}
-        color="#FFE4E6"
-        distance={8}
+        intensity={4.2}
+        color="#DDA0DD" // Plum purple highlight
+        distance={12}
         decay={2}
       />
       <pointLight 
         ref={light4Ref}
-        intensity={2.8}
-        color="#FDF2F8"
-        distance={7}
+        intensity={3.8}
+        color="#FFD700" // Gold accent highlight
+        distance={10}
         decay={2}
       />
     </>
@@ -257,38 +274,46 @@ function BraidedRopeMesh({ screenSize }: { screenSize: { width: number; height: 
     }
 
     getPoint(t: number, optionalTarget = new Vector3()) {
-      // Perfect helix motion like the canvas example but in 3D with elastic stretch
-      // Both ropes follow same helical path but with phase offset
-      const spiralAngle = this.time * 2 + this.offset + t * Math.PI * 8 // 4 full rotations like the example
+      // Create unified rope with one thread wrapping around the other
       
-      // Elastic height variation - rope stretches and compresses naturally
-      const elasticStretch = 1 + Math.sin(this.time * 0.22) * 0.15 + Math.cos(this.time * 0.15) * 0.08
-      const dynamicHeight = this.height * elasticStretch
-      
-      // Height progression from top to bottom with elastic stretching
-      const heightPos = (dynamicHeight / 2) - (t * dynamicHeight)
-      
-      // Radius varies with stretch - much tighter overall
-      const stretchRadius = this.radius * (1 - Math.sin(this.time * 0.22) * 0.05)
-      
-      // Use elliptical pattern to reduce side-to-side spread
-      const ellipseFactorX = 0.6 // Compress horizontally
-      const ellipseFactorZ = 1.0 // Keep full depth
-      
-      const x = Math.cos(spiralAngle) * stretchRadius * ellipseFactorX
-      const z = Math.sin(spiralAngle) * stretchRadius * ellipseFactorZ
-      
-      // Subtle rope texture variation with elastic movement
-      const textureVariation = Math.sin(t * Math.PI * 12 + this.time * 0.5) * 0.015
-      
-      // Smooth ends with elastic fade
-      const endFade = Math.sin(t * Math.PI) * 0.98 + 0.02
-      
-      return optionalTarget.set(
-        x * endFade + textureVariation,
-        heightPos,
-        z * endFade
-      )
+      if (this.offset === 0) {
+        // First rope: Core rope (straight with slight wave)
+        const waveAmplitude = 0.1
+        const x = (t - 0.5) * this.height // Horizontal progression
+        const y = Math.sin(t * Math.PI * 4 + this.time) * waveAmplitude // Gentle wave
+        const z = 0 // Core stays centered
+        
+        return optionalTarget.set(x, y, z)
+      } else {
+        // Second rope: Wrapping thread around the core
+        const coreX = (t - 0.5) * this.height // Follow core rope position
+        const coreY = Math.sin(t * Math.PI * 4 + this.time) * 0.1
+        
+        // Wrapping motion around the core
+        const wrapAngle = this.time * 2 + t * Math.PI * 12 // Continuous wrapping
+        const wrapRadius = this.radius * 0.3 // Small radius around core
+        
+        const x = coreX + Math.cos(wrapAngle) * wrapRadius * 0.5 // X offset from core
+        const y = coreY + Math.sin(wrapAngle) * wrapRadius // Y offset from core
+        const z = Math.sin(wrapAngle + Math.PI * 0.5) * wrapRadius * 0.8 // Z wrapping around core
+        
+        // Fade at ends
+        const startFadeLength = 0.15
+        const endFadeLength = 0.20
+        
+        let fadeMultiplier = 1
+        if (t < startFadeLength) {
+          fadeMultiplier = t / startFadeLength
+        } else if (t > (1 - endFadeLength)) {
+          fadeMultiplier = (1 - t) / endFadeLength
+        }
+        
+        return optionalTarget.set(
+          x * fadeMultiplier,
+          y * fadeMultiplier, 
+          z * fadeMultiplier
+        )
+      }
     }
 
     // Method to update animation time
@@ -297,18 +322,31 @@ function BraidedRopeMesh({ screenSize }: { screenSize: { width: number; height: 
     }
   }
 
-  // Create two rope strands - responsive sizing with tighter radius
+  // Create two rope strands - close braided ropes like before
   const getRopeScale = () => {
     if (typeof window !== 'undefined') {
-      if (window.innerWidth < 768) return { radius: 1.2, height: 16 } // Mobile - much tighter
-      if (window.innerWidth < 1024) return { radius: 1.0, height: 16 } // Tablet - tighter
+      if (window.innerWidth < 768) {
+        return { 
+          radius: 0.8, // Restore close braiding radius
+          height: 18 // Restore original height
+        }
+      }
+      if (window.innerWidth < 1024) {
+        return { 
+          radius: 0.7,
+          height: 22 // Restore tablet dimensions
+        }
+      }
     }
-    return { radius: 1.1, height: 18 } // Desktop - tighter
+    return { 
+      radius: 0.8, 
+      height: 26 // Restore desktop dimensions
+    }
   }
   
   const ropeScale = getRopeScale()
-  const curve1 = useRef(new BraidedRopeCurve(ropeScale.radius, ropeScale.height, 4.0, 0, 1, 0)) // First rope
-  const curve2 = useRef(new BraidedRopeCurve(ropeScale.radius, ropeScale.height, 4.0, Math.PI, 1, 0)) // Second rope, 180° offset
+  const curve1 = useRef(new BraidedRopeCurve(ropeScale.radius, ropeScale.height, 4.0, 0, 1, 0)) // Core rope
+  const curve2 = useRef(new BraidedRopeCurve(ropeScale.radius, ropeScale.height, 4.0, Math.PI, 1, 0)) // Wrapping thread (offset for wrapping)
   
   const tubeRadius = 0.30 // Reduced thickness by 5px equivalent
   const radialSegments = 24 // More segments for smoother, rounded edges
@@ -406,10 +444,14 @@ function BraidedRopeMesh({ screenSize }: { screenSize: { width: number; height: 
     // Sync the hit area position
     hitAreaRef.current.position.copy(meshRef1.current.position)
 
-    // Remove global Y-axis rotation - let the spiral motion show naturally
-    // The helix motion is built into the curves, no additional rotation needed
-    meshRef1.current.rotation.y = 0
-    meshRef2.current.rotation.y = 0
+    // Keep ropes in fixed positions as one unified rope - no individual movement
+    // The wrapping motion is built into the curve geometry itself
+    meshRef1.current.position.set(0, 0, 0) // Core rope stays centered
+    meshRef2.current.position.set(0, 0, 0) // Wrapping thread at same position
+    
+    // Reset rotations to let the curve geometry handle the wrapping
+    meshRef1.current.rotation.set(0, 0, 0)
+    meshRef2.current.rotation.set(0, 0, 0)
 
     // Apply momentum after release (only for additional rotation, not rope animation)
     if (momentumActive.current) {
@@ -453,7 +495,7 @@ function BraidedRopeMesh({ screenSize }: { screenSize: { width: number; height: 
         <meshBasicMaterial opacity={0} transparent />
       </mesh>
 
-      {/* First Rope Strand - Purple with animated white highlights */}
+      {/* First Rope Strand - Deep Purple with white metallic highlights */}
       <mesh
         ref={meshRef1}
         geometry={geometry1.current}
@@ -463,28 +505,28 @@ function BraidedRopeMesh({ screenSize }: { screenSize: { width: number; height: 
         onPointerUp={onPointerUp}
         onPointerLeave={onPointerUp}
         onPointerMove={onPointerMove}
-        rotation={[Math.PI / 9, Math.PI / 9, 0]}
+        rotation={[0, Math.PI / 4, 0]} // 45 degrees base rotation
         position={[
-          screenSize.width < 768 ? 0 : 1.5, // Centered on mobile
-          0, 
+          -6, // Start from left side for diagonal rope
+          0, // Keep same Y position under title
           0
         ]}
       >
         <meshStandardMaterial
-          color="#4A148C"
-          metalness={screenSize.width < 768 ? 0.8 : 0.95}
-          roughness={screenSize.width < 768 ? 0.2 : 0.05}
-          emissive="#2A0845"
-          emissiveIntensity={screenSize.width < 768 ? 0.4 : 0.2}
+          color="#6A1B9A" // Rich deep purple
+          metalness={0.95} // High metallic for white metallic sheen
+          roughness={0.02} // Very smooth for metallic finish
+          emissive="#4A148C" // Purple emissive glow
+          emissiveIntensity={0.15}
           transparent={true}
-          opacity={screenSize.width < 768 ? 0.9 : 0.75} // More opaque on mobile
+          opacity={0.6} // Reduced opacity to stay in background
           alphaTest={0.05}
-          blending={screenSize.width < 768 ? 1 : 2} // Normal blending on mobile
-          depthWrite={screenSize.width < 768 ? true : false} // Enable depth write on mobile
+          blending={2} // Additive blending for intersection effects
+          depthWrite={false}
         />
       </mesh>
 
-      {/* Second Rope Strand - Purple with subtle pinkish hints and animated highlights */}
+      {/* Second Rope Strand - Dark Pinkish-Purple with gold accents */}
       <mesh
         ref={meshRef2}
         geometry={geometry2.current}
@@ -494,24 +536,24 @@ function BraidedRopeMesh({ screenSize }: { screenSize: { width: number; height: 
         onPointerUp={onPointerUp}
         onPointerLeave={onPointerUp}
         onPointerMove={onPointerMove}
-        rotation={[Math.PI / 9, Math.PI / 9, 0]}
+        rotation={[0, Math.PI / 4, 0]} // 45 degrees base rotation
         position={[
-          screenSize.width < 768 ? 0 : 1.5, // Centered on mobile
-          0, 
+          -6, // Start from left side for diagonal rope
+          0, // Keep same Y position under title
           0
         ]}
       >
         <meshStandardMaterial
-          color="#5A1F6B"
-          metalness={screenSize.width < 768 ? 0.8 : 0.92}
-          roughness={screenSize.width < 768 ? 0.2 : 0.08}
-          emissive="#3D1A47"
-          emissiveIntensity={screenSize.width < 768 ? 0.4 : 0.18}
+          color="#8E24AA" // Dark pinkish-purple
+          metalness={0.90} // High metallic with slight gold influence
+          roughness={0.05}
+          emissive="#AD1457" // Pink-purple emissive
+          emissiveIntensity={0.12}
           transparent={true}
-          opacity={screenSize.width < 768 ? 0.85 : 0.70} // More opaque on mobile
+          opacity={0.55} // Reduced opacity for background positioning
           alphaTest={0.05}
-          blending={screenSize.width < 768 ? 1 : 2} // Normal blending on mobile
-          depthWrite={screenSize.width < 768 ? true : false} // Enable depth write on mobile
+          blending={2}
+          depthWrite={false}
         />
       </mesh>
     </>

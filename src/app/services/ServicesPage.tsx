@@ -256,9 +256,9 @@ export default function ServicesPage() {
       <section ref={heroRef} className="relative min-h-screen py-20 flex flex-col items-center justify-center pt-32 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-900/10 to-black" />
         
-        {/* Full-screen 3D Braided Rope Animation - Responsive */}
+        {/* Full-screen 3D Braided Rope Animation - Background under Our Services title */}
         {isClient && (
-          <div className="absolute inset-0 w-full h-full z-10 overflow-hidden">
+          <div className="absolute inset-0 w-full h-full z-5 overflow-hidden">
             <BraidedRopeAnimation className="absolute inset-0 w-full h-full" />
           </div>
         )}
