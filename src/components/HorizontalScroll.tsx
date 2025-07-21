@@ -69,7 +69,7 @@ export default function HorizontalScroll() {
 
   useEffect(() => {
     const calculateWidth = () => {
-      const cardWidth = window.innerWidth >= 768 ? 320 : 240
+      const cardWidth = window.innerWidth >= 768 ? 320 : 280
       const gap = 32
       const calculatedWidth = originalCaseStudies.length * cardWidth + (originalCaseStudies.length - 1) * gap
       setSingleSetWidth(calculatedWidth)
@@ -148,7 +148,7 @@ export default function HorizontalScroll() {
             {caseStudies.map((study, index) => (
               <motion.div
                 key={index}
-                className="flex-shrink-0 w-[240px] md:w-[320px] h-[480px] bg-black/30 backdrop-blur-sm rounded-xl border border-gray-600 flex flex-col"
+                className="flex-shrink-0 w-[280px] md:w-[320px] h-[500px] bg-black/30 backdrop-blur-sm rounded-xl border border-gray-600 flex flex-col"
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.1 }}

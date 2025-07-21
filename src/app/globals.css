@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import DevX Typography System */
+@import '../styles/typography.css';
+
 @layer base {
   :root {
     --background: 0 0% 0%;

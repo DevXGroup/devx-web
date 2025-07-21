@@ -1,7 +1,7 @@
 "use client"
 
 import { motion, useAnimation, useInView, useScroll, useTransform, AnimatePresence } from "framer-motion"
-import { Code2, Rocket, Database, Cloud, Brain, Cog, Smartphone, Globe, Cpu } from "lucide-react"
+import { Code2, Rocket, Database, Cloud, Brain, Cog, Smartphone, Globe, Cpu, Bot } from "lucide-react"
 import Link from "next/link"
 import { useRef, useState, useEffect } from "react"
 import HorizontalScroll from "@/components/HorizontalScroll"
@@ -20,18 +20,19 @@ import AnimatedGradient from "@/components/services/AnimatedGradient"
 import FloatingElement from "@/components/services/FloatingElement"
 import AppleScrollSection from "@/components/services/AppleScrollSection"
 
+
 // Define services array here, as it's specific to this page's cards
 const services = [
   {
     icon: Code2,
     title: "Custom Software Development",
     description:
-      "We create tailored software solutions that perfectly align with your business needs. From web applications to enterprise systems, we deliver scalable and efficient solutions.",
+      "Transform your vision into reality with bespoke software solutions that perfectly match your unique business requirements. We craft scalable, robust applications that grow with your success.",
     features: [
-      "Full-stack Development",
-      "API Development & Integration",
+      "Full-stack Web Applications",
+      "Enterprise System Integration",
       "Legacy System Modernization",
-      "Custom CRM & ERP Solutions",
+      "Custom CRM & ERP Platforms",
     ],
     color: "#4CD787",
   },
@@ -39,25 +40,38 @@ const services = [
     icon: Brain,
     title: "AI & Machine Learning",
     description:
-      "Harness the power of artificial intelligence to transform your business. We develop intelligent solutions that automate processes and provide valuable insights.",
+      "Unlock the future of business intelligence with cutting-edge AI solutions. We create smart systems that learn, adapt, and provide actionable insights to drive your competitive advantage.",
     features: [
-      "Predictive Analytics",
+      "Predictive Analytics & Forecasting",
       "Natural Language Processing",
-      "Computer Vision Solutions",
-      "Machine Learning Models",
+      "Computer Vision & Image Recognition",
+      "Custom Machine Learning Models",
     ],
     color: "#9d4edd",
+  },
+  {
+    icon: Bot,
+    title: "AI Agents & Workflow Automation",
+    description:
+      "Revolutionize your operations with intelligent AI agents that work 24/7. We design sophisticated automation systems that eliminate repetitive tasks and optimize your entire workflow.",
+    features: [
+      "Intelligent Process Automation",
+      "Custom AI Assistant Development",
+      "Workflow Orchestration",
+      "Decision Engine Integration",
+    ],
+    color: "#00D2FF",
   },
   {
     icon: Cloud,
     title: "Cloud Solutions",
     description:
-      "Leverage cloud technology to scale your business efficiently. We provide comprehensive cloud services to optimize your operations and reduce costs.",
+      "Elevate your business with enterprise-grade cloud infrastructure that scales seamlessly. We architect secure, high-performance cloud environments that reduce costs and maximize efficiency.",
     features: [
-      "Cloud Migration",
-      "Cloud-Native Development",
-      "Serverless Architecture",
-      "Cloud Infrastructure Management",
+      "Multi-Cloud Architecture",
+      "Serverless & Microservices",
+      "DevOps & CI/CD Pipelines",
+      "Cloud Security & Compliance",
     ],
     color: "#4834D4",
   },
@@ -65,54 +79,27 @@ const services = [
     icon: Smartphone,
     title: "Mobile App Development",
     description:
-      "Create engaging mobile experiences for your users. We develop native and cross-platform mobile applications that deliver exceptional performance.",
-    features: ["iOS Development", "Android Development", "Cross-platform Solutions", "Mobile App Strategy"],
-    color: "#CFB53B",
-  },
-  {
-    icon: Database,
-    title: "Database Solutions",
-    description:
-      "Design and implement robust database solutions that ensure data integrity and optimal performance. We help you manage and analyze your data effectively.",
-    features: ["Database Design", "Data Migration", "Performance Optimization", "Data Security Implementation"],
-    color: "#ff6b6b",
-  },
-  {
-    icon: Globe,
-    title: "Web Development",
-    description:
-      "Build powerful web applications that drive your business forward. We create responsive, user-friendly websites that engage your audience.",
-    features: ["Frontend Development", "Backend Development", "E-commerce Solutions", "Progressive Web Apps"],
-    color: "#4CD787",
-  },
-  {
-    icon: Cog,
-    title: "DevOps Services",
-    description:
-      "Streamline your development and operations with our DevOps expertise. We implement efficient workflows and automation to enhance your delivery pipeline.",
-    features: ["CI/CD Implementation", "Infrastructure as Code", "Container Orchestration", "Monitoring & Logging"],
-    color: "#4834D4",
-  },
-  {
-    icon: Rocket,
-    title: "Digital Transformation",
-    description:
-      "Transform your business with modern digital solutions. We help you embrace new technologies and optimize your digital presence.",
-    features: ["Digital Strategy Consulting", "Process Automation", "Technology Migration", "Digital Innovation"],
+      "Captivate your audience with stunning mobile experiences that users love. We build high-performance native and cross-platform apps that deliver exceptional user engagement and business results.",
+    features: [
+      "Native iOS & Android Development",
+      "React Native & Flutter",
+      "App Store Optimization",
+      "Mobile-First UI/UX Design",
+    ],
     color: "#CFB53B",
   },
   {
     icon: Cpu,
-    title: "Hardware IoT Design",
+    title: "IoT Hardware & Edge Computing",
     description:
-      "Bridge the physical and digital worlds with our IoT hardware design expertise. We create custom connected devices and systems that collect, analyze, and act on real-world data.",
+      "Bridge the physical and digital worlds with innovative IoT solutions. We design and develop connected devices and edge computing systems that collect, process, and act on real-time data.",
     features: [
       "Custom IoT Device Development",
+      "Edge AI & Real-time Processing",
       "Sensor Integration & Networking",
-      "Embedded Systems Design",
-      "Edge Computing Solutions",
+      "Industrial IoT Solutions",
     ],
-    color: "#9d4edd",
+    color: "#ff6b6b",
   },
 ]
 
@@ -137,6 +124,10 @@ const valueProps = [
   {
     title: "Seasoned Software Team",
     description: "Our team of engineers, designers, and managers ready to deliver outstanding job.",
+  },
+  {
+    title: "AI-Powered Automation",
+    description: "Leverage cutting-edge AI agents and workflow automation to transform your operations.",
   },
 ]
 
@@ -256,12 +247,6 @@ export default function ServicesPage() {
       <section ref={heroRef} className="relative min-h-screen py-20 flex flex-col items-center justify-center pt-32 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-900/10 to-black" />
         
-        {/* Full-screen 3D Braided Rope Animation - Background under Our Services title */}
-        {isClient && (
-          <div className="absolute inset-0 w-full h-full z-5 overflow-hidden">
-            <BraidedRopeAnimation className="absolute inset-0 w-full h-full" />
-          </div>
-        )}
 
         {/* Enhanced background animations */}
         <div className="absolute inset-0">
@@ -397,25 +382,17 @@ export default function ServicesPage() {
             >
               <div className="flex flex-col items-center">
                 <BlurText 
-                  text="Our Services"
-                  className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-center text-[#4A148C] font-['IBM_Plex_Mono'] relative z-30"
+                  text="Services"
+                  className="heading-hero text-accent-gold mb-8 text-center relative z-40"
                   delay={120}
                   animateBy="words"
                   direction="top"
-                  style={{
-                    textShadow: "0 2px 8px rgba(0,0,0,0.8), 0 0 20px rgba(74,20,140,0.5)",
-                    WebkitTextStroke: "1px rgba(0,0,0,0.5)",
-                  }}
                 />
               </div>
 
               <motion.p
                 variants={floatingAnimation}
-                className="text-xl text-foreground/80 font-light max-w-2xl mx-auto relative z-30"
-                style={{
-                  textShadow: "0 1px 4px rgba(0,0,0,0.8)",
-                  WebkitTextStroke: "0.5px rgba(0,0,0,0.3)",
-                }}
+                className="text-body-large text-white/95 max-w-3xl mx-auto relative z-40"
               >
                 Comprehensive software solutions to drive your business forward. We combine expertise with innovation to
                 deliver exceptional results.
@@ -423,12 +400,19 @@ export default function ServicesPage() {
             </motion.div>
           </div>
 
-          {/* Content spacing for braided rope animation */}
+          {/* Two rope strands animation - extends above screen */}
+          {isClient && (
+            <div className="absolute w-full z-0 overflow-hidden" style={{ top: '-100px', height: '80vh' }}>
+              <BraidedRopeAnimation className="w-full h-full" />
+            </div>
+          )}
+
+          {/* Content spacing */}
           <div className="w-full mx-auto mb-12 h-20"></div>
 
           {/* Value Propositions with Apple-style reveal */}
           <div ref={valuePropsRef} className="w-full max-w-5xl mt-8 mb-8 relative z-20">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 px-2 md:px-8 lg:px-16 relative z-20">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 px-4 sm:px-6 md:px-8 lg:px-16 relative z-20">
               {valueProps.map((prop, index) => (
                 <motion.div
                   key={prop.title}
@@ -452,6 +436,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
+
       {/* Services Grid with Apple-style reveal */}
       <AppleScrollSection>
         <section className="py-0 relative">
@@ -464,11 +449,7 @@ export default function ServicesPage() {
                 transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
               }}
               viewport={{ once: true, amount: 0.2 }}
-              className="text-3xl md:text-4xl font-bold mb-12 text-center text-[#CFB53B] mt-0"
-              style={{
-                textShadow: "0 2px 4px rgba(0,0,0,0.5)",
-                WebkitTextStroke: "1px rgba(0,0,0,0.3)",
-              }}
+              className="heading-section text-accent-gold text-center mb-12 mt-0"
             >
               Our Expertise
             </motion.h2>
@@ -478,7 +459,7 @@ export default function ServicesPage() {
               <ParticleAnimation density={15} speed={0.2} />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 px-2 md:px-8 lg:px-16 relative z-10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 px-4 sm:px-6 md:px-8 lg:px-16 relative z-10">
               {services.map((service, index) => (
                 <motion.div
                   key={service.title}
@@ -558,31 +539,23 @@ export default function ServicesPage() {
               className="text-center max-w-3xl mx-auto px-4"
             >
               <motion.h2
-                className="text-3xl md:text-4xl font-bold mb-6 text-[#CFB53B]"
+                className="heading-section text-accent-gold mb-6"
                 whileHover={{
                   scale: 1.03,
                   transition: { duration: 0.2 },
-                }}
-                style={{
-                  textShadow: "0 2px 4px rgba(0,0,0,0.5)",
-                  WebkitTextStroke: "1px rgba(0,0,0,0.3)",
                 }}
               >
                 Ready to Transform Your Business?
               </motion.h2>
 
               <motion.p
-                className="text-lg text-foreground/80 font-light mb-8"
+                className="text-body text-white/85 mb-8"
                 initial={{ opacity: 0 }}
                 whileInView={{
                   opacity: 1,
                   transition: { delay: 0.2, duration: 0.6 },
                 }}
                 viewport={{ once: true, amount: 0.5 }}
-                style={{
-                  textShadow: "0 1px 2px rgba(0,0,0,0.5)",
-                  WebkitTextStroke: "0.5px rgba(0,0,0,0.2)",
-                }}
               >
                 Let&apos;s discuss how we can help you achieve your goals with our expert software development services.
               </motion.p>

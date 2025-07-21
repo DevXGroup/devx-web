@@ -29,30 +29,45 @@ function useSafariDetection() {
 
 export default function EnhancedInfinityLoader({
   scrollThreshold = 0.3,
-  baseScale = 1,
-  maxScale = 2,
+  baseScale = 0.8,
+  maxScale = 1.2,
 }: EnhancedInfinityLoaderProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const { mounted, isSafari } = useSafariDetection()
+  const [screenSize, setScreenSize] = useState({ width: 1920, height: 1080 })
+
+  useEffect(() => {
+    const updateScreenSize = () => {
+      setScreenSize({ 
+        width: window.innerWidth, 
+        height: window.innerHeight 
+      })
+    }
+    
+    updateScreenSize()
+    window.addEventListener('resize', updateScreenSize)
+    
+    return () => window.removeEventListener('resize', updateScreenSize)
+  }, [])
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"],
   })
 
-  // Smooth spring animations
+  // Simplified, smooth scaling that works consistently across devices
   const scale = useSpring(
     useTransform(
       scrollYProgress,
       [0, scrollThreshold, 1 - scrollThreshold, 1],
       [baseScale, maxScale, maxScale, baseScale],
     ),
-    { stiffness: 100, damping: 30, mass: 0.8 },
+    { stiffness: 100, damping: 25, mass: 1 },
   )
 
   const opacity = useSpring(useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0.3, 1, 1, 0.3]), {
-    stiffness: 100,
-    damping: 30,
+    stiffness: 120,
+    damping: 20,
   })
 
   if (!mounted) {
@@ -66,10 +81,26 @@ export default function EnhancedInfinityLoader({
   // Use a stable key to force re-render after Safari detection
   const stableKey = `infinity-${isSafari ? 'safari' : 'other'}`
 
+  // Get responsive size based on screen dimensions
+  const getInfinitySize = () => {
+    if (screenSize.width < 640) {
+      // Mobile: smaller, consistent size
+      return { width: 120, height: 60, className: "w-[120px] h-[60px]" }
+    } else if (screenSize.width < 1024) {
+      // Tablet: medium size
+      return { width: 160, height: 80, className: "w-[160px] h-[80px]" }
+    } else {
+      // Desktop: larger size
+      return { width: 200, height: 100, className: "w-[200px] h-[100px]" }
+    }
+  }
+
+  const infinitySize = getInfinitySize()
+
   return (
     <div 
       ref={containerRef} 
-      className="flex items-center justify-center min-h-[40vh] w-full"
+      className="flex items-center justify-center h-[30vh] sm:h-[35vh] md:h-[40vh] w-full"
       style={{
         // Force hardware acceleration on container
         WebkitTransform: "translateZ(0)",
@@ -90,30 +121,22 @@ export default function EnhancedInfinityLoader({
         }}
         className="relative"
       >
-        {/* Main infinity symbol - Safari optimized */}
+        {/* Responsive infinity symbol - Safari optimized */}
         <svg 
-          width={isSafari ? "400" : "200"} 
-          height={isSafari ? "200" : "100"} 
           viewBox="0 0 200 100" 
-          className="drop-shadow-lg"
+          className={`${infinitySize.className} drop-shadow-lg`}
           suppressHydrationWarning
           style={{
-            // Safari-specific fixes for pixelation
-            width: "200px",
-            height: "100px",
-            shapeRendering: "geometricPrecision",
+            shapeRendering: isSafari ? "optimizeQuality" : "geometricPrecision",
             textRendering: "geometricPrecision",
             imageRendering: isSafari ? "optimizeQuality" : "crisp-edges",
-            WebkitTransform: "translateZ(0)", // Force hardware acceleration
+            WebkitTransform: "translateZ(0)",
             transform: "translateZ(0)",
             WebkitBackfaceVisibility: "hidden",
             backfaceVisibility: "hidden",
-            WebkitPerspective: "1000px",
-            perspective: "1000px",
-            // Higher resolution for Safari
             ...(isSafari && {
-              WebkitImageRendering: "optimizeQuality",
-              imageRendering: "optimizeQuality",
+              WebkitFontSmoothing: "antialiased",
+              WebkitTextStroke: "0.1px transparent",
             }),
           }}
         >
@@ -124,8 +147,8 @@ export default function EnhancedInfinityLoader({
               <stop offset="50%" stopColor="#CFB53B" />
               <stop offset="100%" stopColor="#4834D4" />
             </linearGradient>
-            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%" suppressHydrationWarning>
-              <feGaussianBlur stdDeviation={isSafari ? "1" : "2"} result="coloredBlur" />
+            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%" suppressHydrationWarning>
+              <feGaussianBlur stdDeviation={isSafari ? "1" : "1.5"} result="coloredBlur" />
               <feMerge>
                 <feMergeNode in="coloredBlur" />
                 <feMergeNode in="SourceGraphic" />
@@ -133,19 +156,24 @@ export default function EnhancedInfinityLoader({
             </filter>
           </defs>
 
-          {/* Infinity path - Safari optimized */}
+          {/* Infinity path - Safari optimized rendering */}
           <motion.path
             d="M50 50 C50 25, 75 25, 100 50 C125 75, 150 75, 150 50 C150 25, 125 25, 100 50 C75 75, 50 75, 50 50"
             fill="none"
             stroke="url(#infinityGradient)"
-            strokeWidth={isSafari ? "6" : "4"}
+            strokeWidth={screenSize.width < 640 ? "4" : screenSize.width < 1024 ? "5" : "6"}
             strokeLinecap="round"
             strokeLinejoin="round"
             filter={isSafari ? "none" : "url(#glow)"}
             suppressHydrationWarning
             style={{
-              // Additional Safari optimizations
-              vectorEffect: "non-scaling-stroke",
+              vectorEffect: isSafari ? "none" : "non-scaling-stroke",
+              strokeMiterlimit: "10",
+              paintOrder: "stroke fill markers",
+              ...(isSafari && {
+                WebkitTransform: "translateZ(0)",
+                transform: "translateZ(0)",
+              }),
             }}
             initial={{ pathLength: 0 }}
             animate={{ pathLength: 1 }}
@@ -158,42 +186,6 @@ export default function EnhancedInfinityLoader({
           />
         </svg>
 
-        {/* Central subtle glow effect - Safari optimized */}
-        <motion.div
-          className="absolute inset-0 flex items-center justify-center"
-          style={{
-            // Safari optimizations for the glow effect
-            WebkitTransform: "translateZ(0)",
-            transform: "translateZ(0)",
-            willChange: "transform, opacity",
-          }}
-          animate={{
-            scale: [1, 1.1, 1],
-            opacity: [0.2, 0.4, 0.2],
-          }}
-          transition={{
-            duration: 3,
-            repeat: Number.POSITIVE_INFINITY,
-            ease: "easeInOut",
-          }}
-        >
-          <div 
-            className={`w-6 h-6 rounded-full bg-gradient-to-r from-[#4CD787] via-[#CFB53B] to-[#4834D4] opacity-30 ${isSafari ? '' : 'blur-sm'}`}
-            suppressHydrationWarning
-            style={{
-              // Safari-specific blur optimizations
-              WebkitTransform: "translateZ(0)",
-              transform: "translateZ(0)",
-              ...(isSafari 
-                ? {} 
-                : { 
-                    WebkitFilter: "blur(2px)",
-                    filter: "blur(2px)",
-                  }
-              ),
-            }}
-          />
-        </motion.div>
       </motion.div>
     </div>
   )
