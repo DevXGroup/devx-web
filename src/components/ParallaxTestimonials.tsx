@@ -9,26 +9,23 @@ import EnhancedInfinityLoader from "./EnhancedInfinityLoader"
 const testimonials = [
   {
     quote:
-      "DevX Group transformed our business with their innovative software solutions. Their team's expertise and dedication exceeded our expectations.",
-    author: "Sarah Johnson",
-    position: "CTO, TechVision Inc.",
-    image: "/professional-woman-headshot.png",
+      "Our partnership with Dev Group has driven our company to be a leader in online channels. We recommend them for any business looking to have an active online presence creatively.",
+    author: "Lazurd Inc CEO",
+    position: "CEO, Lazurd Inc",
     logo: "/abstract-tech-logo.png",
   },
   {
     quote:
-      "Working with DevX Group has been a game-changer for our company. Their AI solutions have increased our efficiency by 40% and reduced costs significantly.",
-    author: "Michael Chen",
-    position: "CEO, Innovate Solutions",
-    image: "/professional-man-headshot.png",
+      "DevX Group has been assisting our company for the past three years in developing and implementing new and customized solutions utilizing cutting-edge technologies. Their dedication to precision and discipline ensures that great solutions are delivered with minimal redesign. We strongly recommend them to knowledgeable clients seeking a highly productive and solution-focused team.",
+    author: "Chamrosh Inc Founder/CEO",
+    position: "Founder/CEO, Chamrosh Inc",
     logo: "/innovative-company-logo.png",
   },
   {
     quote:
-      "The mobile app DevX Group built for us has received outstanding feedback from our users. Their attention to detail and user experience expertise is unmatched.",
-    author: "Emily Rodriguez",
-    position: "Product Manager, MobileFirst",
-    image: "/professional-latina-woman-headshot.png",
+      "The DevX Group team showed high professionalism handling our project, starting with collecting all the required data to precisely understand our operations' needs, to providing a clear approach and an accurate timeline for the completion of the project, and very transparent payables (even explained the ones that might occur in the future). We had great communication with the team; they were very responsive, punctual, and on time, and they have always provided us with feedback and recommendations from a professional point of view. I'm very pleased and satisfied with our collaboration; I see it will last many years. I would HIGHLY RECOMMEND them for anyone seeking a professional partner!",
+    author: "Lawazm Inc CEO",
+    position: "CEO, Lawazm Inc",
     logo: "/generic-mobile-logo.png",
   },
 ]
@@ -206,15 +203,32 @@ function TestimonialCard({ testimonial, index, containerRef, isHovered, onHover,
 
       {/* Author */}
       <div className="flex items-center mt-auto relative z-10">
-        <div className="w-12 h-12 rounded-full overflow-hidden mr-4 border border-[#4CD787]/50 shadow-md">
-          {" "}
-          {/* Softened border */}
-          <Image
-            src={testimonial.image || "/placeholder.svg"}
-            alt={testimonial.author}
-            width={48}
-            height={48}
-            className="object-cover"
+        <div className="w-12 h-12 rounded-full mr-4 shadow-md flex items-center justify-center relative">
+          {/* Gradient background based on index */}
+          <div 
+            className="absolute inset-0 rounded-full"
+            style={{
+              background: index % 3 === 0 
+                ? 'linear-gradient(135deg, #4CD787, #66E6A4)' 
+                : index % 3 === 1 
+                ? 'linear-gradient(135deg, #CFB53B, #E6D055)' 
+                : 'linear-gradient(135deg, #9d4edd, #B766F0)'
+            }}
+          />
+          {/* Initial letter */}
+          <span className="text-black font-bold text-lg relative z-10">
+            {testimonial.author.charAt(0)}
+          </span>
+          {/* Subtle glow effect */}
+          <div 
+            className="absolute inset-0 rounded-full opacity-30 blur-sm"
+            style={{
+              background: index % 3 === 0 
+                ? '#4CD787' 
+                : index % 3 === 1 
+                ? '#CFB53B' 
+                : '#9d4edd'
+            }}
           />
         </div>
         <div>
