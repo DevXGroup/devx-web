@@ -32,7 +32,7 @@ const testimonials = [
 
 export default function ParallaxTestimonials() {
   const containerRef = useRef(null)
-  const [hoveredIndex, setHoveredIndex] = useState(null)
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
@@ -84,7 +84,7 @@ export default function ParallaxTestimonials() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 1, ease: "easeOut" }}
-          className="flex justify-center mb-16 -mt-24"
+          className="flex justify-center mb-12 -mt-8 sm:-mt-12 md:-mt-16"
         >
           <EnhancedInfinityLoader scrollThreshold={0.25} baseScale={0.5} maxScale={4.5} />
         </motion.div>
@@ -122,7 +122,18 @@ export default function ParallaxTestimonials() {
   )
 }
 
-function TestimonialCard({ testimonial, index, containerRef, isHovered, onHover, onLeave, allHovered, isMobile }) {
+interface TestimonialCardProps {
+  testimonial: any;
+  index: number;
+  containerRef: React.RefObject<HTMLDivElement>;
+  isHovered: boolean;
+  onHover: () => void;
+  onLeave: () => void;
+  allHovered: boolean;
+  isMobile: boolean;
+}
+
+function TestimonialCard({ testimonial, index, containerRef, isHovered, onHover, onLeave, allHovered, isMobile }: TestimonialCardProps) {
   const cardRef = useRef(null)
 
   const { scrollYProgress } = useScroll({
