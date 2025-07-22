@@ -244,7 +244,7 @@ export default function ServicesPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section with Enhanced Metallic Helix */}
-      <section ref={heroRef} className="relative min-h-screen py-20 flex flex-col items-center justify-center pt-30 overflow-hidden">
+      <section ref={heroRef} className="relative min-h-screen py-20 flex flex-col items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-900/10 to-black z-0" />
         
 
@@ -380,7 +380,7 @@ export default function ServicesPage() {
               }}
               className="text-center max-w-4xl mx-auto mb-12"
             >
-              <div className="flex flex-col items-center">
+              <div className="flex flex-col items-center pt-20">
                 <BlurText 
                   text="Services"
                   className="heading-hero text-accent-gold mb-8 text-center relative z-40"
