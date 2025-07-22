@@ -286,6 +286,114 @@ const projects = [
     link: "#",
     github: "#"
   },
+  {
+    title: "Joyful",
+    description: "Joyful is a Qatari confectionery store whose job is to sell flowers, snacks, chocolates and cakes.",
+    image: "/images/portfolio/previews/joyful-preview.webp",
+    tags: ["E-commerce", "React", "Node.js", "Stripe"],
+    category: "E-commerce/Confectionery",
+    link: "#",
+    github: "#"
+  },
+  {
+    title: "Lazurd",
+    description: "The word 'Lazurd' is derived from the semi-precious stone called 'Lapis Lazuli'. This stone's beauty, and unique deep blue colour, distinguishes it from all other stones- including precious ones.",
+    image: "/images/portfolio/previews/lazurd-preview.webp",
+    tags: ["E-commerce", "Vue.js", "Payment", "Luxury"],
+    category: "Luxury/Jewelry",
+    link: "#",
+    github: "#"
+  },
+  {
+    title: "JoyJoy",
+    description: "Begin your journey of inspiration and daily affirmations, tailored just for you, with our mobile application JoyJoy.",
+    image: "/images/portfolio/previews/joyjoy-preview.webp",
+    tags: ["React Native", "Wellness", "iOS", "Android"],
+    category: "Mobile App/Wellness",
+    link: "#",
+    github: "#"
+  },
+  {
+    title: "ChatFly",
+    description: "ChatFly combines powerful AI with a user-friendly interface. The simplicity and power of AI communication provide a pleasant user experience with features such as auto-response reading.",
+    image: "/images/portfolio/previews/chatfly-preview.webp",
+    tags: ["AI", "Chat", "React", "Machine Learning"],
+    category: "AI/Communication",
+    link: "#",
+    github: "#"
+  },
+  {
+    title: "Lawazm",
+    description: "A distinguished electronic platform in Kuwait and The Middle East for household products, baby & children needs.",
+    image: "/images/portfolio/previews/lawazm-preview.webp",
+    tags: ["E-commerce", "Next.js", "MongoDB", "Kuwait"],
+    category: "E-commerce/Household",
+    link: "#",
+    github: "#"
+  },
+  {
+    title: "I Love Food (ILF)",
+    description: "I love food app is the simplest and most effective healthy eating & weight loss app",
+    image: "/images/portfolio/previews/i-love-food-ilf-preview.webp",
+    tags: ["React Native", "Health", "Fitness", "Nutrition"],
+    category: "Health/Fitness",
+    link: "#",
+    github: "#"
+  },
+  {
+    title: "Chayyel",
+    description: "Chayyel is a start-up Co. about gaming that wants to expand the company all over the world.",
+    image: "/images/portfolio/previews/chayyel-preview.webp",
+    tags: ["Gaming", "Unity", "React", "WebGL"],
+    category: "Gaming/Startup",
+    link: "#",
+    github: "#"
+  },
+  {
+    title: "LetsPass",
+    description: "LetsPass is a platform founded for online education.",
+    image: "/images/portfolio/previews/letspass-preview.webp",
+    tags: ["Education", "React", "LMS", "E-learning"],
+    category: "Education/E-learning",
+    link: "#",
+    github: "#"
+  },
+  {
+    title: "Zahra Farm",
+    description: "Buy organic products Rent plots for planting Visit greenhouses and rent huts",
+    image: "/images/portfolio/previews/zahra-farm-preview.webp",
+    tags: ["Agriculture", "E-commerce", "Organic", "React"],
+    category: "Agriculture/Organic",
+    link: "#",
+    github: "#"
+  },
+  {
+    title: "Kanii",
+    description: "Kanii is a Company for the mobile vans that provide some services for the customers.",
+    image: "/images/portfolio/previews/kanii-preview.webp",
+    tags: ["Service", "Mobile", "GPS", "React Native"],
+    category: "Service/Mobile",
+    link: "#",
+    github: "#"
+  },
+  {
+    title: "Aljawda",
+    description: "Aljawda Provide a wide variety and the finest quality with affordable prices that wanted to empower their business through mobile applications and website",
+    image: "/images/portfolio/previews/aljawda-preview.webp",
+    tags: ["E-commerce", "Quality", "React", "Mobile"],
+    category: "E-commerce/Quality Products",
+    link: "#",
+    github: "#"
+  },
+  {
+    title: "Jawaherji",
+    description: "Are you looking for stunning jewelry that will catch the eye of any viewer? Then, this is the right place for you.",
+    image: "/images/portfolio/previews/jawaherji-preview.webp",
+    tags: ["Jewelry", "Luxury", "E-commerce", "Vue.js"],
+    category: "Jewelry/Luxury",
+    link: "#",
+    github: "#"
+  }
 ]
 
 // Circular Service Icon Component
@@ -357,7 +465,7 @@ function ProjectCard({ project, index }) {
   
   return (
     <MagneticCard
-      intensity={0.15}
+      intensity={0.2}
       className="h-full"
     >
       <motion.div
@@ -365,62 +473,119 @@ function ProjectCard({ project, index }) {
         variants={cardHoverVariants}
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
-        className="bg-black/30 backdrop-blur-sm rounded-xl overflow-hidden border border-white/10 group hover:border-[#4CD787]/50 transition-all duration-300 cursor-pointer h-full relative"
+        className="bg-black/40 backdrop-blur-lg rounded-2xl overflow-hidden border border-white/10 group hover:border-[#4CD787]/60 transition-all duration-500 cursor-pointer h-full relative shadow-2xl"
         whileHover={shouldReduceMotion ? {} : {
-          scale: 1.02,
-          boxShadow: "0 25px 50px -12px rgba(76, 215, 135, 0.25)"
+          scale: 1.03,
+          y: -8,
+          boxShadow: "0 30px 60px -12px rgba(76, 215, 135, 0.3)"
         }}
       >
-      <div className="relative overflow-hidden">
-        <Image
-          src={project.image || "/placeholder.svg"}
-          alt={project.title}
-          width={400}
-          height={300}
-          className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
-          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          priority={false}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-        <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <span className="bg-[#4CD787]/90 text-black px-2 py-1 rounded-full text-xs font-medium">
-            {project.category}
-          </span>
-        </div>
-        <div className="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <div className="flex gap-2">
-            <motion.a
-              href={project.link}
-              className="flex items-center gap-1 bg-white/90 text-black px-3 py-1 rounded-full text-sm font-medium hover:bg-white transition-colors"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <ExternalLink className="w-3 h-3" />
-              View
-            </motion.a>
-            <motion.a
-              href={project.github}
-              className="flex items-center gap-1 bg-[#4CD787]/90 text-black px-3 py-1 rounded-full text-sm font-medium hover:bg-[#4CD787] transition-colors"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Github className="w-3 h-3" />
-              Code
-            </motion.a>
-          </div>
-        </div>
-      </div>
-      <div className="p-6">
-        <h3 className="text-xl font-semibold text-[#4CD787] mb-2 group-hover:text-white transition-colors duration-300">{project.title}</h3>
-        <p className="text-foreground/80 font-light mb-4 group-hover:text-white/90 transition-colors duration-300">{project.description}</p>
-        <div className="flex flex-wrap gap-2">
-          {project.tags.map((tag) => (
-            <span key={tag} className="px-2 py-1 bg-[#4CD787]/20 text-[#4CD787] text-xs rounded-full group-hover:bg-[#4CD787]/30 transition-colors duration-300">
-              {tag}
+        {/* Enhanced Image Section */}
+        <div className="relative overflow-hidden h-64 md:h-72">
+          <Image
+            src={project.image || "/placeholder.svg"}
+            alt={project.title}
+            width={600}
+            height={400}
+            className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110"
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            priority={index < 6}
+          />
+          
+          {/* Sophisticated overlay gradients */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#4CD787]/10 via-transparent to-[#4834D4]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          
+          {/* Animated category badge */}
+          <motion.div 
+            className="absolute top-4 right-4"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: index * 0.1 + 0.3 }}
+          >
+            <span className="bg-gradient-to-r from-[#4CD787] to-[#CFB53B] text-black px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg backdrop-blur-sm">
+              {project.category}
             </span>
-          ))}
+          </motion.div>
+          
+          {/* Premium action buttons */}
+          <div className="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
+            <div className="flex gap-3 justify-center">
+              <motion.a
+                href={project.link}
+                className="flex items-center gap-2 bg-white/95 text-black px-4 py-2.5 rounded-full text-sm font-semibold hover:bg-white hover:shadow-lg transition-all duration-300 backdrop-blur-sm"
+                whileHover={shouldReduceMotion ? {} : { scale: 1.05, y: -2 }}
+                whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
+              >
+                <ExternalLink className="w-4 h-4" />
+                View Live
+              </motion.a>
+              <motion.a
+                href={project.github}
+                className="flex items-center gap-2 bg-[#4CD787]/95 text-black px-4 py-2.5 rounded-full text-sm font-semibold hover:bg-[#4CD787] hover:shadow-lg transition-all duration-300 backdrop-blur-sm"
+                whileHover={shouldReduceMotion ? {} : { scale: 1.05, y: -2 }}
+                whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
+              >
+                <Github className="w-4 h-4" />
+                Source
+              </motion.a>
+            </div>
+          </div>
+          
+          {/* Elegant corner accent */}
+          <div className="absolute top-0 left-0 w-20 h-20 bg-gradient-to-br from-[#4CD787]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         </div>
-      </div>
+        
+        {/* Enhanced Content Section */}
+        <div className="p-6 md:p-8 relative">
+          {/* Subtle background pattern */}
+          <div className="absolute inset-0 opacity-5">
+            <div className="w-full h-full bg-gradient-to-br from-[#4CD787] to-[#4834D4]" />
+          </div>
+          
+          <div className="relative z-10">
+            <motion.h3 
+              className="text-xl md:text-2xl font-bold text-white mb-3 group-hover:text-[#4CD787] transition-colors duration-300"
+              initial={{ opacity: 0, y: 10 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+              transition={{ delay: index * 0.1 + 0.4 }}
+            >
+              {project.title}
+            </motion.h3>
+            
+            <motion.p 
+              className="text-white/80 font-light mb-6 leading-relaxed group-hover:text-white/95 transition-colors duration-300"
+              initial={{ opacity: 0, y: 10 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+              transition={{ delay: index * 0.1 + 0.5 }}
+            >
+              {project.description}
+            </motion.p>
+            
+            {/* Enhanced tags section */}
+            <motion.div 
+              className="flex flex-wrap gap-2"
+              initial={{ opacity: 0, y: 10 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+              transition={{ delay: index * 0.1 + 0.6 }}
+            >
+              {project.tags.map((tag, tagIndex) => (
+                <motion.span 
+                  key={tag} 
+                  className="px-3 py-1.5 bg-gradient-to-r from-[#4CD787]/20 to-[#CFB53B]/20 text-[#4CD787] border border-[#4CD787]/30 text-xs font-medium rounded-full group-hover:bg-gradient-to-r group-hover:from-[#4CD787]/30 group-hover:to-[#CFB53B]/30 group-hover:border-[#4CD787]/50 transition-all duration-300 backdrop-blur-sm"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+                  transition={{ delay: index * 0.1 + 0.7 + tagIndex * 0.05 }}
+                >
+                  {tag}
+                </motion.span>
+              ))}
+            </motion.div>
+          </div>
+          
+          {/* Subtle bottom accent line */}
+          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#4CD787]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        </div>
       </motion.div>
     </MagneticCard>
   )
@@ -585,31 +750,53 @@ export default function PortfolioPage() {
         </div>
       </section>
 
-      <section className="py-20 relative">
-        <div className="container mx-auto px-4">
-          {/* Holographic Grid Background */}
-          <div className="absolute inset-0 opacity-20 overflow-hidden">
+      <section className="py-24 relative">
+        <div className="container mx-auto px-4 max-w-7xl">
+          {/* Enhanced Background Effects */}
+          <div className="absolute inset-0 opacity-10 overflow-hidden">
             <div className="absolute inset-0" style={{
               backgroundImage: `
-                linear-gradient(90deg, transparent 79px, rgba(76, 215, 135, 0.1) 79px, rgba(76, 215, 135, 0.1) 81px, transparent 81px),
-                linear-gradient(0deg, transparent 79px, rgba(72, 52, 212, 0.1) 79px, rgba(72, 52, 212, 0.1) 81px, transparent 81px)
+                radial-gradient(circle at 25% 25%, rgba(76, 215, 135, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(72, 52, 212, 0.15) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 79px, rgba(76, 215, 135, 0.08) 79px, rgba(76, 215, 135, 0.08) 81px, transparent 81px),
+                linear-gradient(0deg, transparent 79px, rgba(72, 52, 212, 0.08) 79px, rgba(72, 52, 212, 0.08) 81px, transparent 81px)
               `,
-              backgroundSize: '80px 80px',
-              animation: shouldReduceMotion ? 'none' : 'float 20s ease-in-out infinite'
+              backgroundSize: '400px 400px, 400px 400px, 80px 80px, 80px 80px',
+              animation: shouldReduceMotion ? 'none' : 'float 30s ease-in-out infinite'
             }} />
           </div>
           
+          {/* Premium Portfolio Grid */}
           <motion.div 
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative z-10"
+            className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 lg:gap-10 relative z-10"
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
           >
             {projects.map((project, index) => (
-              <ProjectCard key={project.title} project={project} index={index} />
+              <motion.div
+                key={project.title}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ 
+                  duration: 0.6, 
+                  delay: index * 0.1,
+                  ease: [0.22, 1, 0.36, 1]
+                }}
+              >
+                <ProjectCard project={project} index={index} />
+              </motion.div>
             ))}
           </motion.div>
+          
+          {/* Elegant section divider */}
+          <div className="mt-20 flex items-center justify-center">
+            <div className="h-px bg-gradient-to-r from-transparent via-[#4CD787]/30 to-transparent w-64"></div>
+            <div className="mx-4 w-2 h-2 bg-[#4CD787] rounded-full opacity-60"></div>
+            <div className="h-px bg-gradient-to-r from-transparent via-[#4CD787]/30 to-transparent w-64"></div>
+          </div>
         </div>
       </section>
 
