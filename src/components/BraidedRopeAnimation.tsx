@@ -411,6 +411,13 @@ function BraidedRopeMesh({ screenSize }: { screenSize: { width: number; height: 
     const elasticScaleY = 1 + Math.sin(time * 0.22) * 0.06 + Math.cos(time * 0.15) * 0.03 // More subtle
     const elasticScaleXZ = 1 - Math.sin(time * 0.22) * 0.015 // Cleaner scaling
     
+    // Continuous rotation - only when not being manually controlled
+    if (!mouseDown.current && !momentumActive.current) {
+      const continuousRotationSpeed = 0.3 // Adjust speed as needed
+      meshRef1.current.rotation.y += continuousRotationSpeed * delta
+      meshRef2.current.rotation.y += continuousRotationSpeed * delta
+    }
+    
     meshRef1.current.position.y = stretchY
     meshRef2.current.position.y = stretchY + 0.5
     meshRef1.current.scale.set(elasticScaleXZ, elasticScaleY, elasticScaleXZ)
