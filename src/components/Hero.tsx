@@ -1,10 +1,11 @@
 "use client"
 
-import { useEffect, useState, useCallback, useMemo } from "react"
+import { useEffect, useCallback } from "react"
 import { motion, useReducedMotion, useAnimation } from "framer-motion"
 import { useRouter } from "next/navigation"
 import ClientOnly from "./ClientOnly"
 import dynamic from "next/dynamic"
+import TextType from "./TextType"
 
 // Dynamically import components that use browser APIs with better loading states
 const DynamicHeroBackground = dynamic(() => import("./hero/HeroBackground"), { 
@@ -63,44 +64,9 @@ const buttonVariants = {
 }
 
 export default function Hero() {
-  const [currentSubheader, setCurrentSubheader] = useState(0)
-  const [displayText, setDisplayText] = useState("")
-  const [isTyping, setIsTyping] = useState(true)
   const router = useRouter()
   const shouldReduceMotion = useReducedMotion()
   const controls = useAnimation()
-  
-  // Memoize typewriter effect for better performance
-  const typewriterSpeed = useMemo(() => ({
-    typing: shouldReduceMotion ? 50 : 150,
-    erasing: shouldReduceMotion ? 30 : 100,
-    pause: shouldReduceMotion ? 1000 : 3000
-  }), [shouldReduceMotion])
-
-  // Enhanced typewriter effect with better performance
-  useEffect(() => {
-    let timer: NodeJS.Timeout
-    if (isTyping) {
-      if (displayText.length < subheaders[currentSubheader].length) {
-        timer = setTimeout(() => {
-          setDisplayText(subheaders[currentSubheader].slice(0, displayText.length + 1))
-        }, typewriterSpeed.typing)
-      } else {
-        setIsTyping(false)
-        timer = setTimeout(() => setIsTyping(true), typewriterSpeed.pause)
-      }
-    } else {
-      if (displayText.length > 0) {
-        timer = setTimeout(() => {
-          setDisplayText(displayText.slice(0, -1))
-        }, typewriterSpeed.erasing)
-      } else {
-        setCurrentSubheader((prev) => (prev + 1) % subheaders.length)
-        setIsTyping(true)
-      }
-    }
-    return () => clearTimeout(timer)
-  }, [displayText, currentSubheader, isTyping, typewriterSpeed])
 
   // Function to navigate to the "Our Values" section in the About page
   const navigateToOurValues = useCallback(() => {
@@ -157,10 +123,18 @@ export default function Hero() {
               variants={itemVariants}
               className="h-16"
             >
-              <p className="text-2xl md:text-3xl font-mono text-robinhood typewriter-text">
-                {displayText}
-                <span className="animate-pulse">|</span>
-              </p>
+              <TextType
+                text={subheaders}
+                as="p"
+                typingSpeed={shouldReduceMotion ? 50 : 150}
+                deletingSpeed={shouldReduceMotion ? 30 : 100}
+                pauseDuration={shouldReduceMotion ? 1000 : 3000}
+                className="text-2xl md:text-3xl font-mono text-robinhood typewriter-text"
+                showCursor={true}
+                cursorCharacter="_"
+                cursorClassName=""
+                loop={true}
+              />
             </motion.div>
           </div>
 

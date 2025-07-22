@@ -1,0 +1,148 @@
+{
+  "projects": [
+    {
+      "name": "Joyful",
+      "description": "Joyful is a Qatari confectionery store whose job is to sell flowers, snacks, chocolates and cakes.",
+      "banner_image": "/assets/images/projects/banners/joyful.webp",
+      "preview_image": "/assets/images/projects/mocks/joyful.webp",
+      "project_url": "/projects/all/joyful",
+      "category": "E-commerce/Confectionery",
+      "local_banner_image": "/images/portfolio/banners/joyful-banner.webp",
+      "local_preview_image": "/images/portfolio/previews/joyful-preview.webp",
+      "original_banner_url": "https://source-site.com/assets/images/projects/banners/joyful.webp",
+      "original_preview_url": "https://source-site.com/assets/images/projects/mocks/joyful.webp"
+    },
+    {
+      "name": "Lazurd",
+      "description": "The word 'Lazurd' is derived from the semi-precious stone called 'Lapis Lazuli'. This stone's beauty, and unique deep blue colour, distinguishes it from all other stones- including precious ones.",
+      "banner_image": "/assets/images/projects/banners/lazurd.webp",
+      "preview_image": "/assets/images/projects/mocks/lazurd.webp",
+      "project_url": "/projects/all/lazurd",
+      "category": "Luxury/Jewelry",
+      "local_banner_image": "/images/portfolio/banners/lazurd-banner.webp",
+      "local_preview_image": "/images/portfolio/previews/lazurd-preview.webp",
+      "original_banner_url": "https://source-site.com/assets/images/projects/banners/lazurd.webp",
+      "original_preview_url": "https://source-site.com/assets/images/projects/mocks/lazurd.webp"
+    },
+    {
+      "name": "JoyJoy",
+      "description": "Begin your journey of inspiration and daily affirmations, tailored just for you, with our mobile application JoyJoy.",
+      "banner_image": "/assets/images/projects/banners/joyjoy.webp",
+      "preview_image": "/assets/images/projects/mocks/joyjoy.webp",
+      "project_url": "/projects/all/joyjoy",
+      "category": "Mobile App/Wellness",
+      "local_banner_image": "/images/portfolio/banners/joyjoy-banner.webp",
+      "local_preview_image": "/images/portfolio/previews/joyjoy-preview.webp",
+      "original_banner_url": "https://source-site.com/assets/images/projects/banners/joyjoy.webp",
+      "original_preview_url": "https://source-site.com/assets/images/projects/mocks/joyjoy.webp"
+    },
+    {
+      "name": "ChatFly",
+      "description": "ChatFly combines powerful AI with a user-friendly interface. The simplicity and power of AI communication provide a pleasant user experience with features such as auto-response reading.",
+      "banner_image": "/assets/images/projects/banners/chatfly.webp",
+      "preview_image": "/assets/images/projects/mocks/chatfly.webp",
+      "project_url": "/projects/all/chatfly",
+      "category": "AI/Communication",
+      "local_banner_image": "/images/portfolio/banners/chatfly-banner.webp",
+      "local_preview_image": "/images/portfolio/previews/chatfly-preview.webp",
+      "original_banner_url": "https://source-site.com/assets/images/projects/banners/chatfly.webp",
+      "original_preview_url": "https://source-site.com/assets/images/projects/mocks/chatfly.webp"
+    },
+    {
+      "name": "Lawazm",
+      "description": "A distinguished electronic platform in Kuwait and The Middle East for household products, baby & children needs.",
+      "banner_image": "/assets/images/projects/banners/lawazm.webp",
+      "preview_image": "/assets/images/projects/mocks/lawazm.webp",
+      "project_url": "/projects/all/lawazm",
+      "category": "E-commerce/Household",
+      "local_banner_image": "/images/portfolio/banners/lawazm-banner.webp",
+      "local_preview_image": "/images/portfolio/previews/lawazm-preview.webp",
+      "original_banner_url": "https://source-site.com/assets/images/projects/banners/lawazm.webp",
+      "original_preview_url": "https://source-site.com/assets/images/projects/mocks/lawazm.webp"
+    },
+    {
+      "name": "I Love Food (ILF)",
+      "description": "I love food app is the simplest and most effective healthy eating & weight loss app",
+      "banner_image": "/assets/images/projects/banners/ilf.webp",
+      "preview_image": "/assets/images/projects/mocks/ilf.webp",
+      "project_url": "/projects/all/ilf",
+      "category": "Health/Fitness",
+      "local_banner_image": "/images/portfolio/banners/i-love-food-ilf-banner.webp",
+      "local_preview_image": "/images/portfolio/previews/i-love-food-ilf-preview.webp",
+      "original_banner_url": "https://source-site.com/assets/images/projects/banners/ilf.webp",
+      "original_preview_url": "https://source-site.com/assets/images/projects/mocks/ilf.webp"
+    },
+    {
+      "name": "Chayyel",
+      "description": "Chayyel is a start-up Co. about gaming that wants to expand the company all over the world.",
+      "banner_image": "/assets/images/projects/banners/chayyel.webp",
+      "preview_image": "/assets/images/projects/mocks/chayyel.webp",
+      "project_url": "/projects/all/chayyel",
+      "category": "Gaming/Startup",
+      "local_banner_image": "/images/portfolio/banners/chayyel-banner.webp",
+      "local_preview_image": "/images/portfolio/previews/chayyel-preview.webp",
+      "original_banner_url": "https://source-site.com/assets/images/projects/banners/chayyel.webp",
+      "original_preview_url": "https://source-site.com/assets/images/projects/mocks/chayyel.webp"
+    },
+    {
+      "name": "LetsPass",
+      "description": "LetsPass is a platform founded for online education.",
+      "banner_image": "/assets/images/projects/banners/letspass.webp",
+      "preview_image": "/assets/images/projects/mocks/letspass.webp",
+      "project_url": "/projects/all/letspass",
+      "category": "Education/E-learning",
+      "local_banner_image": "/images/portfolio/banners/letspass-banner.webp",
+      "local_preview_image": "/images/portfolio/previews/letspass-preview.webp",
+      "original_banner_url": "https://source-site.com/assets/images/projects/banners/letspass.webp",
+      "original_preview_url": "https://source-site.com/assets/images/projects/mocks/letspass.webp"
+    },
+    {
+      "name": "Zahra Farm",
+      "description": "Buy organic products Rent plots for planting Visit greenhouses and rent huts",
+      "banner_image": "/assets/images/projects/banners/zahrafarm.webp",
+      "preview_image": "/assets/images/projects/mocks/zahrafarm.webp",
+      "project_url": "/projects/all/zahrafarm",
+      "category": "Agriculture/Organic",
+      "local_banner_image": "/images/portfolio/banners/zahra-farm-banner.webp",
+      "local_preview_image": "/images/portfolio/previews/zahra-farm-preview.webp",
+      "original_banner_url": "https://source-site.com/assets/images/projects/banners/zahrafarm.webp",
+      "original_preview_url": "https://source-site.com/assets/images/projects/mocks/zahrafarm.webp"
+    },
+    {
+      "name": "Kanii",
+      "description": "Kanii is a Company for the mobile vans that provide some services for the customers.",
+      "banner_image": "/assets/images/projects/banners/kanii.webp",
+      "preview_image": "/assets/images/projects/mocks/kanii.webp",
+      "project_url": "/projects/all/kanii",
+      "category": "Service/Mobile",
+      "local_banner_image": "/images/portfolio/banners/kanii-banner.webp",
+      "local_preview_image": "/images/portfolio/previews/kanii-preview.webp",
+      "original_banner_url": "https://source-site.com/assets/images/projects/banners/kanii.webp",
+      "original_preview_url": "https://source-site.com/assets/images/projects/mocks/kanii.webp"
+    },
+    {
+      "name": "Aljawda",
+      "description": "Aljawda Provide a wide variety and the finest quality with affordable prices that wanted to empower their business through mobile applications and website",
+      "banner_image": "/assets/images/projects/banners/aljawda.webp",
+      "preview_image": "/assets/images/projects/mocks/aljawda.webp",
+      "project_url": "/projects/all/aljawda",
+      "category": "E-commerce/Quality Products",
+      "local_banner_image": "/images/portfolio/banners/aljawda-banner.webp",
+      "local_preview_image": "/images/portfolio/previews/aljawda-preview.webp",
+      "original_banner_url": "https://source-site.com/assets/images/projects/banners/aljawda.webp",
+      "original_preview_url": "https://source-site.com/assets/images/projects/mocks/aljawda.webp"
+    },
+    {
+      "name": "Jawaherji",
+      "description": "Are you looking for stunning jewelry that will catch the eye of any viewer? Then, this is the right place for you.",
+      "banner_image": "/assets/images/projects/banners/jawaherji.webp",
+      "preview_image": "/assets/images/projects/mocks/jawaherji.webp",
+      "project_url": "/projects/all/jawaherji",
+      "category": "Jewelry/Luxury",
+      "local_banner_image": "/images/portfolio/banners/jawaherji-banner.webp",
+      "local_preview_image": "/images/portfolio/previews/jawaherji-preview.webp",
+      "original_banner_url": "https://source-site.com/assets/images/projects/banners/jawaherji.webp",
+      "original_preview_url": "https://source-site.com/assets/images/projects/mocks/jawaherji.webp"
+    }
+  ]
+}
