@@ -242,14 +242,14 @@ export default function ServicesPage() {
   const activeServiceData = services.find((s, i) => i === activeService) || services[0]
 
   return (
-    <div className="min-h-screen bg-background mt-0 pt-0 z-30">
+    <div className="min-h-screen bg-background">
       {/* Hero Section with Enhanced Metallic Helix */}
-      <section ref={heroRef} className="relative min-h-screen py-20 flex flex-col items-center justify-center pt-32 overflow-hidden">
+      <section ref={heroRef} className="relative min-h-screen py-20 flex flex-col items-center justify-center pt-30 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-900/10 to-black z-0" />
         
 
         {/* Enhanced background animations */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 z-0">
           <AnimatedGradient />
 
           {/* Floating background elements */}
@@ -294,7 +294,7 @@ export default function ServicesPage() {
         </div>
 
         {/* Subtle light beams */}
-        <div className="absolute inset-0 w-full">
+        <div className="absolute inset-0 w-full z-0">
           <motion.div
             initial={{ opacity: 0, rotate: -45, x: "-50%", y: "100%" }}
             animate={{
@@ -387,6 +387,9 @@ export default function ServicesPage() {
                   delay={133}
                   animateBy="words"
                   direction="top"
+                  animationFrom={undefined}
+                  animationTo={undefined}
+                  onAnimationComplete={() => {}}
                 />
               </div>
 

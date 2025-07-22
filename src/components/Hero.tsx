@@ -141,7 +141,7 @@ export default function Hero() {
           <div className="mb-12">
             <motion.h1
               variants={itemVariants}
-              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-mono font-extralight tracking-wide text-white mb-6 leading-tight whitespace-nowrap text-glow-hero drop-shadow-[0_0_25px_rgba(255,255,255,0.8)]"
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-mono font-extralight tracking-wide text-white mb-6 leading-tight md:whitespace-nowrap text-glow-hero drop-shadow-[0_0_25px_rgba(255,255,255,0.8)]"
             >
               Hire <span className="crossed-a">a</span> Software Team
             </motion.h1>

@@ -39,7 +39,7 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed w-full z-[200] transition-all duration-300`}
+      className={`fixed w-full z-[9999] transition-all duration-300`}
       style={isScrolled ? scrolledBgStyle : { backgroundColor: "rgba(0, 0, 0, 0.1)" }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -152,7 +152,7 @@ export default function Navbar() {
           </div>
 
           {/* Mobile Menu Button - show for tablets too */}
-          <div className="lg:hidden flex items-center">
+          <div className="lg:hidden flex items-center z-[10000]">
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="text-white hover:text-primary transition-colors"

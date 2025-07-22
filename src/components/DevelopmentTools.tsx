@@ -203,7 +203,7 @@ export default function DevelopmentTools() {
             />
         ))}
         {/* Fixed spacing between title and animation */}
-        <div className="pt-20 pb-4">
+        <div className="pt-3 pb-3">
           <div className="container mx-auto px-4">
             <div className="flex flex-col items-center">
               <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold font-['IBM_Plex_Mono'] text-center animate-gradient-text mb-4">
