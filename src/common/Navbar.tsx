@@ -153,13 +153,69 @@ export default function Navbar() {
 
           {/* Mobile Menu Button - show for tablets too */}
           <div className="lg:hidden flex items-center z-[10000]">
-            <button
+            <motion.button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-white hover:text-primary transition-colors"
+              className="relative w-12 h-12 rounded-full bg-gradient-to-r from-purple-600/20 via-pink-500/20 to-blue-500/20 backdrop-blur-sm border border-white/10 hover:border-white/30 transition-all duration-300 group overflow-hidden"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               aria-label="Toggle menu"
             >
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+              {/* Background glow effect */}
+              <motion.div
+                className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-400/10 via-pink-400/10 to-blue-400/10"
+                animate={isOpen ? { opacity: 1, scale: 1.2 } : { opacity: 0, scale: 1 }}
+                transition={{ duration: 0.3 }}
+              />
+              
+              {/* Hamburger lines container */}
+              <div className="flex flex-col items-center justify-center w-full h-full space-y-1">
+                {/* Top line */}
+                <motion.div
+                  className="w-5 h-0.5 bg-gradient-to-r from-white via-pink-300 to-purple-300 rounded-full shadow-sm"
+                  animate={isOpen 
+                    ? { rotate: 45, y: 6, background: "linear-gradient(45deg, #ff6b6b, #feca57)" } 
+                    : { rotate: 0, y: 0, background: "linear-gradient(90deg, #ffffff, #f8bbd9, #e1bee7)" }
+                  }
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                />
+                
+                {/* Middle line */}
+                <motion.div
+                  className="w-5 h-0.5 bg-gradient-to-r from-pink-300 via-purple-300 to-blue-300 rounded-full shadow-sm"
+                  animate={isOpen 
+                    ? { opacity: 0, scale: 0, rotate: 180 } 
+                    : { opacity: 1, scale: 1, rotate: 0 }
+                  }
+                  transition={{ duration: 0.2, ease: "easeInOut" }}
+                />
+                
+                {/* Bottom line */}
+                <motion.div
+                  className="w-5 h-0.5 bg-gradient-to-r from-purple-300 via-blue-300 to-cyan-300 rounded-full shadow-sm"
+                  animate={isOpen 
+                    ? { rotate: -45, y: -6, background: "linear-gradient(45deg, #feca57, #ff6b6b)" } 
+                    : { rotate: 0, y: 0, background: "linear-gradient(90deg, #e1bee7, #b39ddb, #90caf9)" }
+                  }
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                />
+              </div>
+              
+              {/* Ripple effect on click */}
+              <motion.div
+                className="absolute inset-0 rounded-full bg-white/20"
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 0, opacity: 0 }}
+                whileTap={{ scale: 1.5, opacity: [0, 1, 0] }}
+                transition={{ duration: 0.4 }}
+              />
+              
+              {/* Rotating ring effect */}
+              <motion.div
+                className="absolute inset-0 rounded-full border border-gradient-to-r from-purple-400/30 via-pink-400/30 to-blue-400/30"
+                animate={{ rotate: isOpen ? 180 : 0 }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+              />
+            </motion.button>
           </div>
         </div>
 

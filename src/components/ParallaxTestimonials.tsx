@@ -102,7 +102,7 @@ export default function ParallaxTestimonials() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 pb-16" ref={containerRef}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 pb-16 max-w-6xl mx-auto" ref={containerRef}>
           {testimonials.map((testimonial, index) => (
             <TestimonialCard
               key={index}
