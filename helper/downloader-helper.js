@@ -105,7 +105,7 @@ const projectsData = {
   ]
 };
 
-const BASE_URL = 'https://source-site.com';
+const BASE_URL = 'https://tatbiqit.com';
 
 // Create directories
 const createDirectories = () => {
