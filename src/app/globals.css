@@ -428,33 +428,11 @@ html.no-backdrop-filter .glass-effect {
 .typewriter-text {
   display: inline-block;
   overflow: hidden;
-  border-right: 2px solid #4cd787;
   white-space: nowrap;
-  animation: blink-caret 0.75s step-end infinite;
-  -webkit-animation: blink-caret 0.75s step-end infinite;
   visibility: visible !important; /* Force visibility in Safari */
   color: var(--robinhood-green);
 }
 
-@keyframes blink-caret {
-  from,
-  to {
-    border-color: transparent;
-  }
-  50% {
-    border-color: #4cd787;
-  }
-}
-
-@-webkit-keyframes blink-caret {
-  from,
-  to {
-    border-color: transparent;
-  }
-  50% {
-    border-color: #4cd787;
-  }
-}
 
 @keyframes gradient-x {
   0% {

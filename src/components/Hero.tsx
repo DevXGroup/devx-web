@@ -25,6 +25,7 @@ const subheaders = [
   "rapid delivery",
   "workflow automation",
   "ai adoption",
+  "agentic ai",
   "stunning design",
   "IoT hardware development",
 ]
@@ -126,9 +127,9 @@ export default function Hero() {
               <TextType
                 text={subheaders}
                 as="p"
-                typingSpeed={shouldReduceMotion ? 50 : 150}
-                deletingSpeed={shouldReduceMotion ? 30 : 100}
-                pauseDuration={shouldReduceMotion ? 1000 : 3000}
+                typingSpeed={shouldReduceMotion ? 40 : 80}
+                deletingSpeed={shouldReduceMotion ? 25 : 50}
+                pauseDuration={shouldReduceMotion ? 800 : 2000}
                 className="text-2xl md:text-3xl font-mono text-robinhood typewriter-text"
                 showCursor={true}
                 cursorCharacter="_"
