@@ -252,7 +252,14 @@ export default function ServicesPage() {
   const activeServiceData = services.find((s, i) => i === activeService) || services[0]
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative">
+      {/* Two rope strands animation - extends from top of page */}
+      {isClient && (
+        <div className="absolute inset-0 w-full z-0 overflow-hidden" suppressHydrationWarning={true}>
+          <BraidedRopeAnimation className="w-full h-full" />
+        </div>
+      )}
+
       {/* Hero Section with Enhanced Metallic Helix */}
       <section ref={heroRef} className="relative min-h-screen hero-padding flex flex-col items-center justify-center services-section">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-900/10 to-black z-0" />
@@ -412,12 +419,6 @@ export default function ServicesPage() {
             </motion.div>
           </div>
 
-          {/* Two rope strands animation - extends from top of page */}
-          {isClient && (
-            <div className="absolute w-full z-0 overflow-hidden" style={{ top: '0px', height: '100vh' }} suppressHydrationWarning={true}>
-              <BraidedRopeAnimation className="w-full h-full" />
-            </div>
-          )}
 
           {/* Interactive rope indicator */}
           {isClient && (

@@ -135,7 +135,6 @@ const TextTrail: React.FC<TextTrailProps> = ({
   supersample = 2,
 }) => {
   const { isSafari, isClient } = useSafariDetection();
-  const [isReady, setIsReady] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   const persistColor = useRef<[number, number, number]>(
@@ -150,7 +149,7 @@ const TextTrail: React.FC<TextTrailProps> = ({
   ]);
 
   useEffect(() => {
-    if (!ref.current) return;
+    if (!ref.current || !isClient) return;
 
     const size = () => ({
       w: ref.current!.clientWidth,
@@ -351,13 +350,12 @@ const TextTrail: React.FC<TextTrailProps> = ({
     backgroundColor,
     colorCycleInterval,
     supersample,
-    isReady,
   ]);
 
-  if (!isClient || !isReady) {
+  if (!isClient) {
     return (
       <div className="w-full h-full flex items-center justify-center" suppressHydrationWarning={true}>
-        <div className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#CFB53B] font-['IBM_Plex_Mono'] animate-pulse">
+        <div className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#CFB53B] font-['IBM_Plex_Mono']">
           {text}
         </div>
       </div>
