@@ -413,19 +413,14 @@ export default function ServicesPage() {
           </div>
 
           {/* Two rope strands animation - extends from top of page */}
-          <SafariCompatibleWrapper 
-            delay={200}
-            className="absolute w-full z-0 overflow-hidden" 
-            style={{ top: '0px', height: '100vh' }}
-            fallback={
-              <div className="absolute inset-0 w-full h-full bg-gradient-to-b from-transparent via-purple-900/5 to-transparent" />
-            }
-          >
-            <BraidedRopeAnimation className="w-full h-full" />
-          </SafariCompatibleWrapper>
+          {isClient && (
+            <div className="absolute w-full z-0 overflow-hidden" style={{ top: '0px', height: '100vh' }} suppressHydrationWarning={true}>
+              <BraidedRopeAnimation className="w-full h-full" />
+            </div>
+          )}
 
           {/* Interactive rope indicator */}
-          <SafariCompatibleWrapper delay={400}>
+          {isClient && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: [0.5, 0.8, 0.5] }}
@@ -438,7 +433,7 @@ export default function ServicesPage() {
             >
               → drag/interact ←
             </motion.div>
-          </SafariCompatibleWrapper>
+          )}
 
         </div>
       </section>
@@ -643,20 +638,22 @@ export default function ServicesPage() {
                 viewport={{ once: true, amount: 0.3 }}
                 className="mt-16 w-full max-w-none overflow-hidden"
               >
-                <SafariCompatibleWrapper delay={800}>
-                  <ScrollVelocityText baseVelocity={50} className="text-2xl md:text-3xl lg:text-4xl font-bold text-white/20 mb-4">
-                    {[
-                      "Custom Software • AI Solutions • Mobile Apps • Cloud Infrastructure • ",
-                      "IoT Development • Workflow Automation • Digital Transformation • "
-                    ]}
-                  </ScrollVelocityText>
-                  <ScrollVelocityText baseVelocity={-30} className="text-xl md:text-2xl lg:text-3xl font-light text-white/15">
-                    {[
-                      "Fast Delivery • Expert Team • Modern Technology • Reliable Results • ",
-                      "Long-term Support • Clear Pricing • Proven Success • Your Vision • "
-                    ]}
-                  </ScrollVelocityText>
-                </SafariCompatibleWrapper>
+                {isClient && (
+                  <div suppressHydrationWarning={true}>
+                    <ScrollVelocityText baseVelocity={50} className="text-2xl md:text-3xl lg:text-4xl font-bold text-white/20 mb-4">
+                      {[
+                        "Custom Software • AI Solutions • Mobile Apps • Cloud Infrastructure • ",
+                        "IoT Development • Workflow Automation • Digital Transformation • "
+                      ]}
+                    </ScrollVelocityText>
+                    <ScrollVelocityText baseVelocity={-30} className="text-xl md:text-2xl lg:text-3xl font-light text-white/15">
+                      {[
+                        "Fast Delivery • Expert Team • Modern Technology • Reliable Results • ",
+                        "Long-term Support • Clear Pricing • Proven Success • Your Vision • "
+                      ]}
+                    </ScrollVelocityText>
+                  </div>
+                )}
               </motion.div>
             </motion.div>
           </div>
@@ -683,17 +680,13 @@ export default function ServicesPage() {
               <TrueFocus sentence="Case Studies" />
             </motion.div>
           </div>
-          <SafariCompatibleWrapper delay={600}>
-            <HorizontalScroll />
-          </SafariCompatibleWrapper>
+          {isClient && <HorizontalScroll />}
         </section>
       </AppleScrollSection>
 
       {/* Testimonials with Parallax - Consistent spacing */}
       <AppleScrollSection delay={0.5} className="section-margin">
-        <SafariCompatibleWrapper delay={700}>
-          <ParallaxTestimonials />
-        </SafariCompatibleWrapper>
+        {isClient && <ParallaxTestimonials />}
       </AppleScrollSection>
     </div>
   )

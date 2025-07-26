@@ -158,8 +158,12 @@ const TextTrail: React.FC<TextTrailProps> = ({
     });
     let { w, h } = size();
 
-    const renderer = new WebGLRenderer({ antialias: true });
-    renderer.setClearColor(new Color(backgroundColor as any), 1);
+    const renderer = new WebGLRenderer({ antialias: true, alpha: true });
+    if (backgroundColor === "transparent") {
+      renderer.setClearColor(new Color(0x000000), 0);
+    } else {
+      renderer.setClearColor(new Color(backgroundColor as any), 1);
+    }
     renderer.setPixelRatio(window.devicePixelRatio || 1);
     renderer.setSize(w, h);
     ref.current.appendChild(renderer.domElement);
@@ -353,7 +357,7 @@ const TextTrail: React.FC<TextTrailProps> = ({
   if (!isClient || !isReady) {
     return (
       <div className="w-full h-full flex items-center justify-center" suppressHydrationWarning={true}>
-        <div className="text-5xl md:text-6xl lg:text-7xl font-bold text-[#CFB53B] font-['IBM_Plex_Mono']">
+        <div className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#CFB53B] font-['IBM_Plex_Mono'] animate-pulse">
           {text}
         </div>
       </div>

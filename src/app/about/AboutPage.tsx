@@ -471,18 +471,21 @@ export default function AboutPage() {
           <div className="text-center mb-20 relative">
             <div className="relative inline-block">
               <AnimatedSection>
-                <div className="h-32 md:h-40 lg:h-48 flex items-center justify-center">
-                  <TextTrail 
-                    text="Our Story"
-                    fontFamily="IBM Plex Mono"
-                    fontWeight="700"
-                    textColor="#CFB53B"
-                    backgroundColor={0x000000}
-                    noiseFactor={1.2}
-                    noiseScale={0.0008}
-                    rgbPersistFactor={0.97}
-                    alphaPersistFactor={0.92}
-                  />
+                <div className="w-full h-32 md:h-40 lg:h-48 flex items-center justify-center">
+                  <div className="w-full max-w-4xl h-full">
+                    <TextTrail 
+                      text="Our Story"
+                      fontFamily="IBM Plex Mono"
+                      fontWeight="700"
+                      textColor="#CFB53B"
+                      backgroundColor="transparent"
+                      noiseFactor={1.5}
+                      noiseScale={0.001}
+                      rgbPersistFactor={0.95}
+                      alphaPersistFactor={0.9}
+                      supersample={1}
+                    />
+                  </div>
                 </div>
               </AnimatedSection>
             </div>
