@@ -6,7 +6,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Check, Users, Zap, Award, Globe, Shield } from "lucide-react"
 import BlurText from "@/components/BlurText"
-import SpiralAnimation from "@/components/SpiralAnimation"
+import TextTrail from "@/components/TextTrail"
 import RunningLineAnimation from "@/components/RunningLineAnimation"
 import ShapeBlur from "@/components/ShapeBlur"
 
@@ -467,23 +467,24 @@ export default function AboutPage() {
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
-          {/* Header with Spiral Animation */}
+          {/* Header with TextTrail Animation */}
           <div className="text-center mb-20 relative">
             <div className="relative inline-block">
               <AnimatedSection>
-                <BlurText 
-                  text="Our Story"
-                  className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-[#CFB53B]"
-                  delay={120}
-                  animateBy="words"
-                  direction="top"
-                />
+                <div className="h-32 md:h-40 lg:h-48 flex items-center justify-center">
+                  <TextTrail 
+                    text="Our Story"
+                    fontFamily="IBM Plex Mono"
+                    fontWeight="700"
+                    textColor="#CFB53B"
+                    backgroundColor={0x000000}
+                    noiseFactor={1.2}
+                    noiseScale={0.0008}
+                    rgbPersistFactor={0.97}
+                    alphaPersistFactor={0.92}
+                  />
+                </div>
               </AnimatedSection>
-              
-              {/* Spiral Animation behind title */}
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -z-10">
-                <SpiralAnimation size={300} color="#4CD787" duration={10} />
-              </div>
             </div>
             
             <AnimatedSection delay={0.2}>

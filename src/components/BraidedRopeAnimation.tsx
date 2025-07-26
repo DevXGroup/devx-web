@@ -1,37 +1,89 @@
 "use client"
 
-import { useRef, useEffect, useState } from "react"
+import { useRef, useEffect, useState, Component, type ReactNode, type ErrorInfo } from "react"
 import { Canvas, useFrame } from "@react-three/fiber"
 import { Environment, PerspectiveCamera } from "@react-three/drei"
 import { Vector3, Curve, TubeGeometry, type Mesh, SphereGeometry } from "three"
+import { useSafariDetection } from "@/hooks/use-safari-detection"
+
+// Error boundary for the Three.js Canvas to prevent hydration crashes
+class CanvasErrorBoundary extends Component<
+  { children: ReactNode },
+  { hasError: boolean }
+> {
+  constructor(props: { children: ReactNode }) {
+    super(props)
+    this.state = { hasError: false }
+  }
+
+  static getDerivedStateFromError(): { hasError: boolean } {
+    return { hasError: true }
+  }
+
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.log('Canvas rendering error caught:', error, errorInfo)
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="absolute inset-0 w-full h-full bg-transparent">
+          <div className="absolute inset-0 w-full h-full bg-gradient-to-b from-transparent via-purple-900/5 to-transparent" />
+        </div>
+      )
+    }
+
+    return this.props.children
+  }
+}
 
 interface BraidedRopeAnimationProps {
   className?: string
 }
 
 export default function BraidedRopeAnimation({ className = "" }: BraidedRopeAnimationProps) {
+  const { isSafari, isClient: clientDetected } = useSafariDetection()
   const [isMounted, setIsMounted] = useState(false)
+  const [isHydrated, setIsHydrated] = useState(false)
   const [screenSize, setScreenSize] = useState({ width: 1920, height: 1080 })
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    setIsMounted(true)
+    if (!clientDetected) return
+    
+    // Use significantly longer delay for Safari to prevent hydration flash
+    const delay = isSafari ? 1000 : 200
+    
+    const timer = setTimeout(() => {
+      setIsMounted(true)
+      // Add additional delay for hydration completion in Safari
+      setTimeout(() => setIsHydrated(true), isSafari ? 300 : 100)
+    }, delay)
     
     const updateScreenSize = () => {
-      setScreenSize({ 
-        width: window.innerWidth, 
-        height: window.innerHeight 
-      })
+      if (typeof window !== 'undefined') {
+        setScreenSize({ 
+          width: window.innerWidth, 
+          height: window.innerHeight 
+        })
+      }
     }
     
     updateScreenSize()
-    window.addEventListener('resize', updateScreenSize)
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', updateScreenSize)
+    }
     
-    return () => window.removeEventListener('resize', updateScreenSize)
-  }, [])
+    return () => {
+      clearTimeout(timer)
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('resize', updateScreenSize)
+      }
+    }
+  }, [clientDetected, isSafari])
 
   useEffect(() => {
-    if (!containerRef.current) return
+    if (!containerRef.current || !clientDetected || !isMounted) return
 
     const preventDefault = (e: Event) => {
       e.preventDefault()
@@ -45,31 +97,41 @@ export default function BraidedRopeAnimation({ className = "" }: BraidedRopeAnim
       container.removeEventListener("wheel", preventDefault)
       container.removeEventListener("touchmove", preventDefault)
     }
-  }, [])
+  }, [clientDetected, isMounted])
 
-  if (!isMounted) return null
+  // Prevent hydration mismatches by not rendering until fully mounted and hydrated
+  if (!clientDetected || !isMounted || !isHydrated) {
+    return (
+      <div className={`w-full h-full overflow-hidden ${className}`} suppressHydrationWarning={true}>
+        <div className="absolute inset-0 w-full h-full bg-gradient-to-b from-transparent via-purple-900/5 to-transparent" />
+        {isSafari && (
+          <div className="absolute inset-0 w-full h-full bg-black/10" />
+        )}
+      </div>
+    )
+  }
 
   return (
-    <div className={`absolute w-full overflow-hidden ${className}`} style={{ top: '-100px', height: '80vh' }}>
+    <div className={`w-full h-full overflow-hidden ${className}`} suppressHydrationWarning={true}>
       <div
         ref={containerRef}
         className="absolute inset-0 w-full h-full touch-none"
         style={{
-          minHeight: 'calc(80vh + 100px)',
           backgroundColor: 'transparent',
           cursor: "grab",
           touchAction: "none",
         }}
       >
-        <Canvas 
-          shadows 
-          style={{ width: "100%", height: "100%" }}
-          onContextMenu={(e) => e.preventDefault()}
-          camera={{ 
-            position: [0, 0, 6], // Desktop camera for all sizes
-            fov: 65 // Desktop FOV for all sizes
-          }}
-        >
+        <CanvasErrorBoundary>
+          <Canvas 
+            shadows 
+            style={{ width: "100%", height: "100%" }}
+            onContextMenu={(e) => e.preventDefault()}
+            camera={{ 
+              position: [0, 0, 6], // Desktop camera for all sizes
+              fov: 65 // Desktop FOV for all sizes
+            }}
+          >
           <PerspectiveCamera 
             makeDefault 
             position={[0, 0, 6]} // Desktop camera for all sizes
@@ -111,7 +173,8 @@ export default function BraidedRopeAnimation({ className = "" }: BraidedRopeAnim
           <AnimatedHighlights screenSize={screenSize} />
 
           <BraidedRopeMesh screenSize={screenSize} />
-        </Canvas>
+          </Canvas>
+        </CanvasErrorBoundary>
       </div>
       
       <div className={`absolute inset-0 pointer-events-none z-10 ${
