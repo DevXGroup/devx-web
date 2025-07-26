@@ -49,6 +49,69 @@ const originalCaseStudies = [
     results: "300% increase in patient engagement",
     link: "/portfolio/telemedicine",
   },
+  {
+    image: "/images/portfolio/previews/chatfly-preview.webp",
+    title: "ChatFly AI Platform",
+    description:
+      "Built a comprehensive AI-powered communication platform combining GPT and DALL-E technologies for chatbots, text processing, and creative content generation.",
+    tags: ["AI/ML", "GPT", "DALL-E", "No-Code"],
+    results: "60% reduction in customer support costs",
+    link: "/portfolio/chatfly",
+  },
+  {
+    image: "/images/portfolio/previews/joyful-preview.webp",
+    title: "Joyful E-commerce Platform",
+    description:
+      "Developed a sophisticated e-commerce platform for a Qatari confectionery store with advanced product customization and same-day delivery features.",
+    tags: ["E-commerce", "Mobile App", "Payment", "Delivery"],
+    results: "85% increase in order customization rates",
+    link: "/portfolio/joyful",
+  },
+  {
+    image: "/images/portfolio/previews/lawazm-preview.webp",
+    title: "Lawazm Marketplace",
+    description:
+      "Created a comprehensive e-commerce platform for household products serving Kuwait and Middle East with 5000+ products and global brand sourcing.",
+    tags: ["E-commerce", "Marketplace", "Multi-vendor", "Mobile"],
+    results: "200% growth in regional market share",
+    link: "/portfolio/lawazm",
+  },
+  {
+    image: "/images/portfolio/previews/joyjoy-preview.webp",
+    title: "JoyJoy Wellness App",
+    description:
+      "Designed a comprehensive wellness platform focused on daily motivation, affirmations, and positive mindset building with AI companion features.",
+    tags: ["Wellness", "AI Companion", "Mobile App", "Psychology"],
+    results: "90% user retention after 30 days",
+    link: "/portfolio/joyjoy",
+  },
+  {
+    image: "/images/portfolio/previews/letspass-preview.webp",
+    title: "LetsPass Education Platform",
+    description:
+      "Built a complete online education platform with course management, interactive learning modules, and certification systems for digital learning.",
+    tags: ["EdTech", "E-learning", "Course Management", "Certification"],
+    results: "75% improvement in learning outcomes",
+    link: "/portfolio/letspass",
+  },
+  {
+    image: "/images/portfolio/previews/lazurd-preview.webp",
+    title: "Lazurd Luxury Platform",
+    description:
+      "Developed a luxury brand platform for home-cooked meals and chocolates, achieving top chart position in Kuwait with sophisticated UI design.",
+    tags: ["Luxury", "Food Delivery", "Premium UI", "Kuwait"],
+    results: "300% increase in premium orders",
+    link: "/portfolio/lazurd",
+  },
+  {
+    image: "/images/portfolio/previews/zahra-farm-preview.webp",
+    title: "Zahra Farm AgriTech",
+    description:
+      "Created an innovative agricultural platform combining organic product sales, plot rentals, greenhouse tours, and agricultural tourism services.",
+    tags: ["AgriTech", "Organic", "E-commerce", "Tourism"],
+    results: "50% boost in sustainable farming adoption",
+    link: "/portfolio/zahrafarm",
+  },
 ]
 
 // Duplicate content for seamless looping

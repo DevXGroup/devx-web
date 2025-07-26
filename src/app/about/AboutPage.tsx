@@ -468,26 +468,19 @@ export default function AboutPage() {
 
         <div className="container mx-auto px-4 relative z-10">
           {/* Header with TextTrail Animation */}
-          <div className="text-center mb-20 relative">
-            <div className="relative inline-block">
-              <AnimatedSection>
-                <div className="w-full h-32 md:h-40 lg:h-48 flex items-center justify-center">
-                  <div className="w-full max-w-4xl h-full">
-                    <TextTrail 
-                      text="Our Story"
-                      fontFamily="IBM Plex Mono"
-                      fontWeight="700"
-                      textColor="#CFB53B"
-                      backgroundColor="transparent"
-                      noiseFactor={1.5}
-                      noiseScale={0.001}
-                      rgbPersistFactor={0.95}
-                      alphaPersistFactor={0.9}
-                      supersample={1}
-                    />
-                  </div>
+          <div className="text-center mb-20 relative z-10">
+            <div className="relative inline-block w-full">
+              <div className="w-full h-48 md:h-56 lg:h-64 flex items-center justify-center relative z-10">
+                <div className="w-full max-w-5xl h-full relative z-10">
+                  <TextTrail 
+                    text="Our Story"
+                    fontFamily="IBM Plex Mono, monospace"
+                    fontWeight="700"
+                    textColor="#CFB53B"
+                    backgroundColor="transparent"
+                  />
                 </div>
-              </AnimatedSection>
+              </div>
             </div>
             
             <AnimatedSection delay={0.2}>

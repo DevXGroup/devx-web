@@ -1,33 +1,23 @@
-'use client'
+"use client"
 
-import { motion } from 'framer-motion'
-import {
-  Code,
-  Server,
-  Smartphone,
-  ComputerIcon as Desktop,
-  Database,
-  Cloud,
-  Brain,
-  Cpu,
-  Cog,
-} from 'lucide-react'
+import { motion } from "framer-motion"
+import { Code, Server, Smartphone, ComputerIcon as Desktop, Database, Cloud, Brain, Cpu, Cog } from "lucide-react"
 
 const technologies = [
-  { name: 'Web Development', icon: Code },
-  { name: 'Backend Systems', icon: Server },
-  { name: 'Mobile Apps', icon: Smartphone },
-  { name: 'Desktop Applications', icon: Desktop },
-  { name: 'Database Management', icon: Database },
-  { name: 'Cloud Solutions', icon: Cloud },
-  { name: 'AI Development', icon: Brain },
-  { name: 'AI Integration', icon: Cpu },
-  { name: 'Automation', icon: Cog },
+  { name: "Web Development", icon: Code },
+  { name: "Backend Systems", icon: Server },
+  { name: "Mobile Apps", icon: Smartphone },
+  { name: "Desktop Applications", icon: Desktop },
+  { name: "Database Management", icon: Database },
+  { name: "Cloud Solutions", icon: Cloud },
+  { name: "AI Development", icon: Brain },
+  { name: "AI Integration", icon: Cpu },
+  { name: "Automation", icon: Cog },
 ]
 
 export default function Technologies() {
   return (
-    <section className="relative w-full py-32 mt-32 overflow-hidden">
+    <section className="relative w-full py-24 overflow-hidden">
       {/* Background Effect */}
       <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-900/20 to-black"></div>
 
@@ -43,8 +33,8 @@ export default function Technologies() {
             Technologies Mastered
           </h2>
           <p className="text-lg text-foreground/80 max-w-2xl mx-auto font-['IBM_Plex_Mono'] font-light">
-            Our expertise spans across multiple technologies and frameworks to deliver the best
-            solutions for your needs.
+            Our expertise spans across multiple technologies and frameworks to deliver the best solutions for your
+            needs.
           </p>
         </motion.div>
 

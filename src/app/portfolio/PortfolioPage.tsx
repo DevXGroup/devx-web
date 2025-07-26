@@ -9,6 +9,7 @@ import BlurText from "@/components/BlurText"
 import ParticleField from "@/components/ParticleField"
 import MorphingShapes from "@/components/MorphingShapes"
 import MagneticCard from "@/components/MagneticCard"
+import SplashCursor from "@/components/SplashCursor"
 
 // Enhanced animation variants
 const fadeInUpVariants = {
@@ -494,7 +495,6 @@ function ProjectCard({ project, index }) {
           
           {/* Sophisticated overlay gradients */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-br from-[#4CD787]/10 via-transparent to-[#4834D4]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
           
           {/* Animated category badge */}
           <motion.div 
@@ -508,32 +508,7 @@ function ProjectCard({ project, index }) {
             </span>
           </motion.div>
           
-          {/* Premium action buttons */}
-          <div className="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
-            <div className="flex gap-3 justify-center">
-              <motion.a
-                href={project.link}
-                className="flex items-center gap-2 bg-white/95 text-black px-4 py-2.5 rounded-full text-sm font-semibold hover:bg-white hover:shadow-lg transition-all duration-300 backdrop-blur-sm"
-                whileHover={shouldReduceMotion ? {} : { scale: 1.05, y: -2 }}
-                whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
-              >
-                <ExternalLink className="w-4 h-4" />
-                View Live
-              </motion.a>
-              <motion.a
-                href={project.github}
-                className="flex items-center gap-2 bg-[#4CD787]/95 text-black px-4 py-2.5 rounded-full text-sm font-semibold hover:bg-[#4CD787] hover:shadow-lg transition-all duration-300 backdrop-blur-sm"
-                whileHover={shouldReduceMotion ? {} : { scale: 1.05, y: -2 }}
-                whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
-              >
-                <Github className="w-4 h-4" />
-                Source
-              </motion.a>
-            </div>
-          </div>
           
-          {/* Elegant corner accent */}
-          <div className="absolute top-0 left-0 w-20 h-20 bg-gradient-to-br from-[#4CD787]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         </div>
         
         {/* Enhanced Content Section */}
@@ -583,8 +558,6 @@ function ProjectCard({ project, index }) {
             </motion.div>
           </div>
           
-          {/* Subtle bottom accent line */}
-          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#4CD787]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         </div>
       </motion.div>
     </MagneticCard>
@@ -786,7 +759,9 @@ export default function PortfolioPage() {
                   ease: [0.22, 1, 0.36, 1]
                 }}
               >
-                <ProjectCard project={project} index={index} />
+                <SplashCursor splashColor="#4CD787">
+                  <ProjectCard project={project} index={index} />
+                </SplashCursor>
               </motion.div>
             ))}
           </motion.div>

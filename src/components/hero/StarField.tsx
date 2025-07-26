@@ -1,21 +1,33 @@
-"use client"
+'use client'
 
-import { useRef } from "react"
-import { useFrame } from "@react-three/fiber"
-import { AdditiveBlending } from "three"
+import { useRef } from 'react'
+import { useFrame } from '@react-three/fiber'
+import { AdditiveBlending } from 'three'
 
 // Enhanced starfield with magical twinkling stars
-export default function EnhancedStarfield({ viewport }: { viewport: { width: number; height: number } }) {
+export default function EnhancedStarfield({
+  viewport,
+}: {
+  viewport: { width: number; height: number }
+}) {
   return (
     <>
       {/* Enhanced twinkling background stars */}
-      <SimpleStarLayer count={2000} viewport={viewport} />
+      <SimpleStarLayer count={1800} viewport={viewport} />
+      {/* Bright stars with diffraction spikes */}
+      <BrightStarsLayer count={50} viewport={viewport} />
     </>
   )
 }
 
 // Enhanced star layer with realistic twinkling effect
-function SimpleStarLayer({ count, viewport }: { count: number; viewport: { width: number; height: number } }) {
+function SimpleStarLayer({
+  count,
+  viewport,
+}: {
+  count: number
+  viewport: { width: number; height: number }
+}) {
   const mesh = useRef<any>(null)
 
   const positions = useRef(() => {
@@ -91,26 +103,27 @@ function SimpleStarLayer({ count, viewport }: { count: number; viewport: { width
 
   useFrame((state) => {
     if (mesh.current) {
-      const alphaAttribute = mesh.current.geometry.getAttribute("alpha")
+      const alphaAttribute = mesh.current.geometry.getAttribute('alpha')
 
       for (let i = 0; i < count; i++) {
         const phase = twinklePhases[i]
         const speed = twinkleSpeeds[i]
         const time = state.clock.getElapsedTime() * speed + phase
-        
+
         // Enhanced twinkling with multiple wave patterns for more realistic effect
         const primaryTwinkle = (Math.sin(time) + 1) / 2
         const secondaryTwinkle = (Math.sin(time * 1.7 + phase * 0.5) + 1) / 2
         const tertiaryTwinkle = (Math.sin(time * 0.3 + phase * 1.2) + 1) / 2
-        
+
         // Combine waves for complex twinkling pattern
-        const combinedTwinkle = (primaryTwinkle * 0.5 + secondaryTwinkle * 0.3 + tertiaryTwinkle * 0.2)
-        
+        const combinedTwinkle =
+          primaryTwinkle * 0.5 + secondaryTwinkle * 0.3 + tertiaryTwinkle * 0.2
+
         // More dramatic alpha variation with occasional bright flashes
         const baseAlpha = 0.4 + combinedTwinkle * 0.6
         const flashChance = Math.random()
         const finalAlpha = flashChance < 0.001 ? Math.min(1.0, baseAlpha + 0.4) : baseAlpha
-        
+
         alphaAttribute.setX(i, finalAlpha)
       }
 
@@ -121,7 +134,12 @@ function SimpleStarLayer({ count, viewport }: { count: number; viewport: { width
   return (
     <points ref={mesh}>
       <bufferGeometry>
-        <bufferAttribute attach="attributes-position" count={count} array={positions} itemSize={3} />
+        <bufferAttribute
+          attach="attributes-position"
+          count={count}
+          array={positions}
+          itemSize={3}
+        />
         <bufferAttribute attach="attributes-color" count={count} array={starColors} itemSize={3} />
         <bufferAttribute
           attach="attributes-alpha"
@@ -184,5 +202,223 @@ function SimpleStarLayer({ count, viewport }: { count: number; viewport: { width
         `}
       />
     </points>
+  )
+}
+
+// Bright stars with realistic diffraction spikes
+function BrightStarsLayer({
+  count,
+  viewport,
+}: {
+  count: number
+  viewport: { width: number; height: number }
+}) {
+  const groupRef = useRef<any>(null)
+
+  const starData = useRef(() => {
+    const data = []
+    for (let i = 0; i < count; i++) {
+      const spread = viewport.width > 768 ? 35 : 25
+      const brightness = 0.3 + Math.random() * 0.7 // Vary brightness
+      const size = 0.1 + Math.random() * 0.15 // Larger sizes for bright stars
+
+      data.push({
+        position: [
+          (Math.random() - 0.5) * spread,
+          (Math.random() - 0.5) * spread,
+          (Math.random() - 0.5) * 25 - 12,
+        ],
+        brightness,
+        size,
+        twinkleSpeed: 0.2 + Math.random() * 0.8,
+        twinklePhase: Math.random() * Math.PI * 2,
+        spikeRotation: Math.random() * Math.PI * 2,
+        spikeRotationSpeed: 0.1 + Math.random() * 0.3,
+        color:
+          Math.random() < 0.8 ? [1, 1, 1] : Math.random() < 0.5 ? [0.9, 0.95, 1] : [1, 0.95, 0.85], // White, blue-white, or yellow-white
+      })
+    }
+    return data
+  }).current()
+
+  // Remove scroll-connected effects - stars should be independent
+
+  return (
+    <group ref={groupRef}>
+      {starData.map((star, index) => (
+        <BrightStar
+          key={index}
+          position={star.position}
+          brightness={star.brightness}
+          size={star.size}
+          twinkleSpeed={star.twinkleSpeed}
+          twinklePhase={star.twinklePhase}
+          spikeRotation={star.spikeRotation}
+          spikeRotationSpeed={star.spikeRotationSpeed}
+          color={star.color}
+        />
+      ))}
+    </group>
+  )
+}
+
+// Individual bright star with animated diffraction spikes
+function BrightStar({
+  position,
+  brightness,
+  size,
+  twinkleSpeed,
+  twinklePhase,
+  spikeRotation,
+  spikeRotationSpeed,
+  color,
+}: {
+  position: [number, number, number]
+  brightness: number
+  size: number
+  twinkleSpeed: number
+  twinklePhase: number
+  spikeRotation: number
+  spikeRotationSpeed: number
+  color: [number, number, number]
+}) {
+  const starRef = useRef<any>(null)
+  const spikesRef = useRef<any>(null)
+
+  useFrame((state) => {
+    if (starRef.current && spikesRef.current) {
+      const time = state.clock.elapsedTime * twinkleSpeed + twinklePhase
+
+      // Realistic atmospheric twinkling
+      const primaryTwinkle = (Math.sin(time) + 1) / 2
+      const secondaryTwinkle = (Math.sin(time * 1.3 + twinklePhase) + 1) / 2
+      const atmosphericTwinkle = (Math.sin(time * 0.7 + twinklePhase * 1.5) + 1) / 2
+
+      // Combine multiple twinkling frequencies like real atmospheric turbulence
+      const combinedTwinkle =
+        primaryTwinkle * 0.4 + secondaryTwinkle * 0.35 + atmosphericTwinkle * 0.25
+      const finalBrightness = brightness * (0.6 + combinedTwinkle * 0.4)
+
+      // Update star core brightness
+      starRef.current.material.uniforms.uOpacity.value = finalBrightness
+
+      // Animate diffraction spikes
+      const spikeIntensity = finalBrightness * 0.8
+      spikesRef.current.material.uniforms.uOpacity.value = spikeIntensity
+
+      // Slow rotation of spikes for realism (like atmospheric distortion)
+      spikesRef.current.rotation.z =
+        spikeRotation + state.clock.elapsedTime * spikeRotationSpeed * 0.1
+
+      // Scale variation with twinkling for spikes only
+      const scaleVariation = 1 + combinedTwinkle * 0.15
+      spikesRef.current.scale.setScalar(size * scaleVariation * 1.2)
+    }
+  })
+
+  return (
+    <group position={position}>
+      {/* Star core - circular using points */}
+      <points ref={starRef}>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            count={1}
+            array={new Float32Array([0, 0, 0])}
+            itemSize={3}
+          />
+          <bufferAttribute
+            attach="attributes-size"
+            count={1}
+            array={new Float32Array([size * 20])}
+            itemSize={1}
+          />
+        </bufferGeometry>
+        <shaderMaterial
+          transparent
+          blending={AdditiveBlending}
+          vertexShader={`
+            attribute float size;
+            void main() {
+              vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+              gl_PointSize = size;
+              gl_Position = projectionMatrix * mvPosition;
+            }
+          `}
+          fragmentShader={`
+            uniform vec3 uColor;
+            uniform float uOpacity;
+            
+            void main() {
+              vec2 center = vec2(0.5, 0.5);
+              vec2 uv = gl_PointCoord.xy;
+              float dist = distance(uv, center);
+              
+              // Create a smooth circular star with soft glow
+              float starCore = smoothstep(0.5, 0.2, dist);
+              float glow = smoothstep(0.5, 0.0, dist) * 0.4;
+              float finalStar = max(starCore, glow);
+              
+              gl_FragColor = vec4(uColor, finalStar * uOpacity);
+            }
+          `}
+          uniforms={{
+            uColor: { value: color },
+            uOpacity: { value: brightness },
+          }}
+        />
+      </points>
+
+      {/* Diffraction spikes */}
+      <mesh ref={spikesRef} rotation={[0, 0, spikeRotation]}>
+        <planeGeometry args={[size * 8, size * 8]} />
+        <shaderMaterial
+          transparent
+          blending={AdditiveBlending}
+          vertexShader={`
+            varying vec2 vUv;
+            void main() {
+              vUv = uv;
+              gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            }
+          `}
+          fragmentShader={`
+            varying vec2 vUv;
+            uniform vec3 uColor;
+            uniform float uOpacity;
+            
+            void main() {
+              vec2 center = vec2(0.5, 0.5);
+              vec2 uv = vUv;
+              vec2 centered = uv - center;
+              
+              // Create 4 main diffraction spikes (like Hubble telescope)
+              float spike1 = abs(centered.x) < 0.005 ? 1.0 : 0.0; // Vertical spike
+              float spike2 = abs(centered.y) < 0.005 ? 1.0 : 0.0; // Horizontal spike
+              
+              // Create diagonal spikes at 45 degrees
+              float diagonal1 = abs(centered.x - centered.y) < 0.003 ? 1.0 : 0.0;
+              float diagonal2 = abs(centered.x + centered.y) < 0.003 ? 1.0 : 0.0;
+              
+              // Combine all spikes
+              float spikes = max(max(spike1, spike2), max(diagonal1, diagonal2));
+              
+              // Add distance falloff for realistic light ray effect
+              float distFromCenter = length(centered);
+              float falloff = 1.0 - smoothstep(0.0, 0.4, distFromCenter);
+              
+              // Final spike intensity
+              float finalSpike = spikes * falloff * 0.8;
+              
+              gl_FragColor = vec4(uColor, finalSpike * uOpacity);
+            }
+          `}
+          uniforms={{
+            uColor: { value: color },
+            uOpacity: { value: brightness * 0.6 },
+          }}
+        />
+      </mesh>
+    </group>
   )
 }

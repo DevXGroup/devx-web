@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "pnpm next dev",
+    "dev": "pnpm next dev --port 3009",
     "build": "pnpm next build",
     "start": "pnpm next start",
     "lint": "pnpm next lint",

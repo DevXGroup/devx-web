@@ -17,6 +17,9 @@ module.exports = {
       },
     },
     extend: {
+      screens: {
+        'xs': '475px',
+      },
       fontFamily: {
         mono: ["var(--font-ibm-plex-mono)", "monospace"],
         sans: ["var(--font-ibm-plex-sans)", "sans-serif"],

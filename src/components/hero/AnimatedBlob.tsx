@@ -38,9 +38,9 @@ function RefinedBlobMaterial({ scrollY }: { scrollY: number }) {
     // Very slow breathing effect
     uniforms.uBreathingFactor.value = Math.sin(time * 0.15) * 0.5 + 0.5
 
-    // Extremely smooth noise variation
-    uniforms.uNoiseFreq.value = 0.2 + Math.sin(time * 0.01) * 0.02
-    uniforms.uNoiseAmp.value = 0.08 + Math.sin(time * 0.015) * 0.005
+    // Enhanced organic noise variation for more blob-like movement
+    uniforms.uNoiseFreq.value = 0.25 + Math.sin(time * 0.012) * 0.03
+    uniforms.uNoiseAmp.value = 0.10 + Math.sin(time * 0.018) * 0.008
 
     // Very slow hue shift
     uniforms.uHueShift.value = (Math.sin(time * 0.008) * 0.5 + 0.5) * 0.04
@@ -147,9 +147,9 @@ function RefinedBlobMaterial({ scrollY }: { scrollY: number }) {
       vNormal = normal;
       vPosition = position;
       
-      // Create very smooth distortion
+      // Create very smooth distortion with enhanced blob-like movement
       float scrollFactor = uScrollY * 0.8;
-      float timeFactor = uTime * 0.1;
+      float timeFactor = uTime * 0.15; // Slightly faster base movement
       
       // Create multiple layers of noise for organic movement
       float noise1 = snoise(vec3(position.x * uNoiseFreq + timeFactor, 
@@ -166,12 +166,15 @@ function RefinedBlobMaterial({ scrollY }: { scrollY: number }) {
       // Combine noise layers for final displacement
       vec3 newPosition = position + normal * (noise1 + noise2 + scrollNoise) * 0.5;
       
-      // Add very gentle breathing effect
-      float breathingEffect = sin(uTime * 0.15) * 0.01 + 1.0;
+      // Add enhanced organic breathing effect
+      float breathingEffect = sin(uTime * 0.12) * 0.02 + 1.0;
       newPosition *= breathingEffect;
       
-      // Add very subtle pulsing
-      newPosition += normal * sin(uTime * 0.2) * 0.003;
+      // Add enhanced organic pulsing with multiple frequencies
+      float pulse1 = sin(uTime * 0.18) * 0.008;
+      float pulse2 = sin(uTime * 0.25 + position.x) * 0.005;
+      float pulse3 = cos(uTime * 0.1 + position.y) * 0.006;
+      newPosition += normal * (pulse1 + pulse2 + pulse3);
       
       // Add very subtle scroll-reactive scaling
       float scrollScale = 1.0 + sin(scrollFactor * 0.3) * 0.01;
@@ -348,10 +351,10 @@ function RefinedBlob({
   const particlesRef = useRef<any>(null)
   const groupRef = useRef<any>(null)
 
-  // Restored original movement parameters
-  const speedFactor = useRef(0.7 + Math.random() * 0.3).current // Faster for more dynamic effect
-  const amplitudeFactor = useRef(0.7 + Math.random() * 0.4).current // More individual movement
-  const rotationFactor = useRef(0.5 + Math.random() * 0.25).current // Faster rotation
+  // Enhanced organic movement parameters for blob-like behavior
+  const speedFactor = useRef(0.4 + Math.random() * 0.3).current // Slower, more organic movement
+  const amplitudeFactor = useRef(0.8 + Math.random() * 0.5).current // More fluid movement
+  const rotationFactor = useRef(0.2 + Math.random() * 0.15).current // Slower, more organic rotation
   const phaseOffset = useRef(Math.random() * Math.PI * 2).current
 
   // Restored circular movement parameters

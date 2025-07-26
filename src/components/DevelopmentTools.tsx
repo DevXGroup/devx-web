@@ -1,91 +1,91 @@
- "use client"
+'use client'
 
-import { LayoutGroup, motion, AnimatePresence } from "framer-motion"
-import { useEffect, useState, useCallback, useRef, useMemo } from "react"
-import Image from "next/image"
-import seedrandom from "seedrandom"
-import BlurText from "./BlurText"
+import { LayoutGroup, motion, AnimatePresence } from 'framer-motion'
+import { useEffect, useState, useCallback, useRef, useMemo } from 'react'
+import Image from 'next/image'
+import seedrandom from 'seedrandom'
+import BlurText from './BlurText'
 
 const tools = [
   {
-    name: "Laravel",
+    name: 'Laravel',
     description: "Quickly build secure web apps with Laravel's powerful features",
-    icon: "https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg",
+    icon: 'https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg',
   },
   {
-    name: "Figma",
+    name: 'Figma',
     description: "Design & prototype collaboratively with Figma's robust toolset",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg",
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg',
   },
   {
-    name: "Angular",
+    name: 'Angular',
     description: "Innovative enterprise solutions with Angular's robust framework",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-original.svg",
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-original.svg',
   },
   {
-    name: "React",
-    description: "Fast & dynamic user interfaces seamlessly built with React",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
+    name: 'React',
+    description: 'Fast & dynamic user interfaces seamlessly built with React',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg',
   },
   {
-    name: "Flutter",
-    description: "Multi-platform apps for mobile, web, & desktop using Flutter",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg",
+    name: 'Flutter',
+    description: 'Multi-platform apps for mobile, web, & desktop using Flutter',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg',
   },
   {
-    name: ".NET",
+    name: '.NET',
     description: "Develop robust, scalable solutions with Microsoft's .NET platform",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dot-net/dot-net-original.svg",
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dot-net/dot-net-original.svg',
   },
   {
-    name: "Adobe XD",
-    description: "Prototype and design beautiful UX with Adobe XD",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/xd/xd-plain.svg",
+    name: 'Adobe XD',
+    description: 'Prototype and design beautiful UX with Adobe XD',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/xd/xd-plain.svg',
   },
   {
-    name: "Magento",
-    description: "Build scalable e-commerce solutions with Magento ecosystem",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/magento/magento-original.svg",
+    name: 'Magento',
+    description: 'Build scalable e-commerce solutions with Magento ecosystem',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/magento/magento-original.svg',
   },
 ]
 
 // Updated AI tools with proper placeholder SVGs for missing icons
 const aiTools = [
   {
-    name: "TensorFlow",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg",
+    name: 'TensorFlow',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg',
   },
   {
-    name: "PyTorch",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg",
+    name: 'PyTorch',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg',
   },
   {
-    name: "Hugging Face",
-    icon: "https://huggingface.co/favicon.ico",
+    name: 'Hugging Face',
+    icon: 'https://huggingface.co/favicon.ico',
   },
   {
-    name: "LangChain",
-    icon: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI3MiIgaGVpZ2h0PSI3MiIgdmlld0JveD0iMCAwIDcyIDcyIiBmaWxsPSJub25lIj48cGF0aCBkPSJNMzYgNTkuODVMMTIuMTUgNDYuOTJWMjEuMDhMMzYgOC4xNUw1OS44NSAyMS4wOFY0Ni45MkwzNiA1OS44NVoiIGZpbGw9IiMxMEI5ODEiLz48L3N2Zz4=",
+    name: 'LangChain',
+    icon: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI3MiIgaGVpZ2h0PSI3MiIgdmlld0JveD0iMCAwIDcyIDcyIiBmaWxsPSJub25lIj48cGF0aCBkPSJNMzYgNTkuODVMMTIuMTUgNDYuOTJWMjEuMDhMMzYgOC4xNUw1OS44NSAyMS4wOFY0Ni45MkwzNiA1OS44NVoiIGZpbGw9IiMxMEI5ODEiLz48L3N2Zz4=',
   },
   {
-    name: "OpenAI",
-    icon: "/openai-logo-inspired-abstract.png",
+    name: 'OpenAI',
+    icon: '/openai-logo-inspired-abstract.png',
   },
   {
-    name: "AutoGPT",
-    icon: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI3MiIgaGVpZ2h0PSI3MiIgdmlld0JveD0iMCAwIDcyIDcyIiBmaWxsPSJub25lIj48cmVjdCB3aWR0aD0iNzIiIGhlaWdodD0iNzIiIGZpbGw9IiMzNDM1NDEiLz48cGF0aCBkPSJNMTggMThIMzZWMzZIMThWMThaIiBmaWxsPSIjMTBCOTgxIi8+PHBhdGggZD0iTTM2IDE4SDU0VjM2SDM2VjE4WiIgZmlsbD0iIzEwQjk4MSIvPjxwYXRoIGQ9Ik0xOCAzNkgzNlY1NEgxOFYzNloiIGZpbGw9IiMxMEI5ODEiLz48cGF0aCBkPSJNMzYgMzZINTRWNTRIMzZWMzZaIiBmaWxsPSIjMTBCOTgxIi8+PC9zdmc+",
+    name: 'AutoGPT',
+    icon: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI3MiIgaGVpZ2h0PSI3MiIgdmlld0JveD0iMCAwIDcyIDcyIiBmaWxsPSJub25lIj48cmVjdCB3aWR0aD0iNzIiIGhlaWdodD0iNzIiIGZpbGw9IiMzNDM1NDEiLz48cGF0aCBkPSJNMTggMThIMzZWMzZIMThWMThaIiBmaWxsPSIjMTBCOTgxIi8+PHBhdGggZD0iTTM2IDE4SDU0VjM2SDM2VjE4WiIgZmlsbD0iIzEwQjk4MSIvPjxwYXRoIGQ9Ik0xOCAzNkgzNlY1NEgxOFYzNloiIGZpbGw9IiMxMEI5ODEiLz48cGF0aCBkPSJNMzYgMzZINTRWNTRIMzZWMzZaIiBmaWxsPSIjMTBCOTgxIi8+PC9zdmc+',
   },
   {
-    name: "LlamaIndex",
-    icon: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI3MiIgaGVpZ2h0PSI3MiIgdmlld0JveD0iMCAwIDcyIDcyIiBmaWxsPSJub25lIj48cGF0aCBkPSJNMTIgMTJINjBWNjBIMTJWMTJaIiBmaWxsPSIjRkZDQzRDIi8+PHBhdGggZD0iTTI0IDI0SDQ4VjQ4SDI0VjI0WiIgZmlsbD0iI0ZGRkZGRiIvPjwvc3ZnPg==",
+    name: 'LlamaIndex',
+    icon: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI3MiIgaGVpZ2h0PSI3MiIgdmlld0JveD0iMCAwIDcyIDcyIiBmaWxsPSJub25lIj48cGF0aCBkPSJNMTIgMTJINjBWNjBIMTJWMTJaIiBmaWxsPSIjRkZDQzRDIi8+PHBhdGggZD0iTTI0IDI0SDQ4VjQ4SDI0VjI0WiIgZmlsbD0iI0ZGRkZGRiIvPjwvc3ZnPg==',
   },
   {
-    name: "Anthropic",
-    icon: "/anthropic-logo-abstract.png",
+    name: 'Anthropic',
+    icon: '/anthropic-logo-abstract.png',
   },
   {
-    name: "Mistral AI",
-    icon: "/mistral-ai-logo-inspired.png",
+    name: 'Mistral AI',
+    icon: '/mistral-ai-logo-inspired.png',
   },
 ]
 
@@ -102,7 +102,7 @@ export default function DevelopmentTools() {
 
   // Move stars generation to component level
   const stars = useMemo(() => {
-    const rng = seedrandom("devx-stars") // seed to ensure deterministic output
+    const rng = seedrandom('devx-stars') // seed to ensure deterministic output
     return Array.from({ length: 60 }).map((_, i) => ({
       id: i,
       width: rng() * 2 + 1,
@@ -136,12 +136,12 @@ export default function DevelopmentTools() {
   const handleIconClick = useCallback((index: number) => {
     setIsManual(true)
     setActiveIndex(index)
-    
+
     // Clear any existing timer
     if (timerRef.current) {
       clearTimeout(timerRef.current)
     }
-    
+
     // Set new timer
     timerRef.current = setTimeout(() => {
       setIsManual(false)
@@ -166,7 +166,7 @@ export default function DevelopmentTools() {
       rotate: [0, 360, 720, 1080],
       transition: {
         duration: 4 + i * 0.5,
-        ease: "easeInOut",
+        ease: 'easeInOut',
         repeat: Number.POSITIVE_INFINITY,
         delay: i * 0.2,
       },
@@ -176,31 +176,31 @@ export default function DevelopmentTools() {
   return (
     <LayoutGroup>
       {/* Optimized height for better spacing */}
-      <div className="relative w-full h-[120vh] bg-black overflow-hidden pb-32 md:pb-48 lg:pb-64 z-[150]">
-        {" "}
+      <div className="relative w-full h-[140vh] bg-black overflow-hidden pb-16 md:pb-24 lg:pb-32 z-[150]">
+        {' '}
         {/* Reduced height and padding */}
         {/* Reduced number of stars and added glow effect */}
         {stars.map((star) => (
-            <motion.div
-              key={star.id}
-              className="absolute rounded-full"
-              style={{
-                width: `${star.width}px`,
-                height: `${star.height}px`,
-                left: `${star.left}%`,
-                top: `${star.top}%`,
-                boxShadow: star.boxShadow,
-                backgroundColor: "rgba(255, 255, 255, 0.8)",
-              }}
-              initial={{ opacity: 0.2 }}
-              animate={{ opacity: [0.2, 0.6, 0.2] }}
-              transition={{
-                duration: star.duration,
-                repeat: Number.POSITIVE_INFINITY,
-                repeatType: "reverse",
-                delay: star.delay,
-              }}
-            />
+          <motion.div
+            key={star.id}
+            className="absolute rounded-full"
+            style={{
+              width: `${star.width}px`,
+              height: `${star.height}px`,
+              left: `${star.left}%`,
+              top: `${star.top}%`,
+              boxShadow: star.boxShadow,
+              backgroundColor: 'rgba(255, 255, 255, 0.8)',
+            }}
+            initial={{ opacity: 0.2 }}
+            animate={{ opacity: [0.2, 0.6, 0.2] }}
+            transition={{
+              duration: star.duration,
+              repeat: Number.POSITIVE_INFINITY,
+              repeatType: 'reverse',
+              delay: star.delay,
+            }}
+          />
         ))}
         {/* Fixed spacing between title and animation */}
         <div className="pt-3 pb-3">
@@ -228,21 +228,21 @@ export default function DevelopmentTools() {
           */}
           <motion.div
             className="pointer-events-none absolute inset-0 rounded-full border-4"
-            style={{ borderColor: "rgba(255, 255, 255, 0.7)" }}
+            style={{ borderColor: 'rgba(255, 255, 255, 0.7)' }}
             animate={{
               opacity: [0.7, 1, 0.7],
               scale: [1, 1.05, 1],
               boxShadow: [
-                "0 0 10px rgba(255,255,255,0.4)",
-                "0 0 30px rgba(255,255,255,0.8)",
-                "0 0 10px rgba(255,255,255,0.4)",
+                '0 0 10px rgba(255,255,255,0.4)',
+                '0 0 30px rgba(255,255,255,0.8)',
+                '0 0 10px rgba(255,255,255,0.4)',
               ],
             }}
             transition={{
               duration: 4,
               repeat: Number.POSITIVE_INFINITY,
-              repeatType: "reverse",
-              ease: "easeInOut",
+              repeatType: 'reverse',
+              ease: 'easeInOut',
             }}
           />
 
@@ -257,11 +257,17 @@ export default function DevelopmentTools() {
             transition={{
               duration: 6, // faster spin
               repeat: Number.POSITIVE_INFINITY,
-              ease: "linear",
+              ease: 'linear',
             }}
           >
-            <svg width="100%" height="100%" viewBox="0 0 200 200" fill="none" className="opacity-70">
-              {" "}
+            <svg
+              width="100%"
+              height="100%"
+              viewBox="0 0 200 200"
+              fill="none"
+              className="opacity-70"
+            >
+              {' '}
               {/* Increased from 0.5 to 0.7 */}
               {/* 
                 Larger arcs => r=50,70,90. 
@@ -313,7 +319,7 @@ export default function DevelopmentTools() {
               <motion.div
                 layoutId={`icon-${activeTool.name}`}
                 transition={{
-                  type: "spring",
+                  type: 'spring',
                   stiffness: 250,
                   damping: 30,
                   layout: { duration: 0.6 },
@@ -322,7 +328,7 @@ export default function DevelopmentTools() {
               >
                 <div className="relative w-12 h-12">
                   <Image
-                    src={activeTool.icon || "/placeholder.svg"}
+                    src={activeTool.icon || '/placeholder.svg'}
                     alt={activeTool.name}
                     fill
                     className="object-contain"
@@ -331,7 +337,9 @@ export default function DevelopmentTools() {
               </motion.div>
 
               <h2 className="text-lg sm:text-xl font-semibold mb-2">{activeTool.name}</h2>
-              <p className="text-xs sm:text-sm text-gray-100/90 leading-snug">{activeTool.description}</p>
+              <p className="text-xs sm:text-sm text-gray-100/90 leading-snug">
+                {activeTool.description}
+              </p>
             </motion.div>
           </AnimatePresence>
         </div>
@@ -378,7 +386,7 @@ function StaticIconsOrbit({
             style={{
               left: `${x}px`,
               top: `${y}px`,
-              transform: "translate(-50%, -50%)",
+              transform: 'translate(-50%, -50%)',
             }}
           >
             <motion.div
@@ -387,14 +395,19 @@ function StaticIconsOrbit({
               className="w-16 h-16 rounded-full bg-gray-800 shadow border border-gray-500 flex items-center justify-center"
               whileHover={{ scale: 1.1 }}
               transition={{
-                type: "spring",
+                type: 'spring',
                 stiffness: 300,
                 damping: 24,
                 layout: { duration: 0.6 },
               }}
             >
               <div className="relative w-8 h-8">
-                <Image src={tool.icon || "/placeholder.svg"} alt={tool.name} fill className="object-contain" />
+                <Image
+                  src={tool.icon || '/placeholder.svg'}
+                  alt={tool.name}
+                  fill
+                  className="object-contain"
+                />
               </div>
             </motion.div>
           </motion.div>
@@ -440,7 +453,7 @@ function AIToolsOrbit() {
         width: 0,
         height: 0,
         transform: `rotate(${rotation}deg)`,
-        willChange: "transform", // Optimize for animation performance
+        willChange: 'transform', // Optimize for animation performance
       }}
     >
       {aiTools.map((tool, i) => {
@@ -476,21 +489,26 @@ function AIToolsOrbit() {
                   className="absolute inset-0 rounded-full"
                   animate={{
                     boxShadow: [
-                      "0 0 5px rgba(76, 215, 135, 0.4)",
-                      "0 0 15px rgba(76, 215, 135, 0.6)",
-                      "0 0 5px rgba(76, 215, 135, 0.4)",
+                      '0 0 5px rgba(76, 215, 135, 0.4)',
+                      '0 0 15px rgba(76, 215, 135, 0.6)',
+                      '0 0 5px rgba(76, 215, 135, 0.4)',
                     ],
                   }}
                   transition={{
                     duration: 3,
                     repeat: Number.POSITIVE_INFINITY,
-                    repeatType: "reverse",
+                    repeatType: 'reverse',
                   }}
                 />
 
                 {/* Icon */}
                 <div className="relative w-7 h-7">
-                  <Image src={tool.icon || "/placeholder.svg"} alt={tool.name} fill className="object-contain" />
+                  <Image
+                    src={tool.icon || '/placeholder.svg'}
+                    alt={tool.name}
+                    fill
+                    className="object-contain"
+                  />
                 </div>
               </motion.div>
 

@@ -98,31 +98,31 @@ export default function Hero() {
 
       {/* Content */}
       <motion.div 
-        className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-30 pt-20 w-full"
+        className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-30 pt-16 sm:pt-20 w-full"
         variants={containerVariants}
         initial="hidden"
         animate={controls}
       >
         <div className="text-center mx-auto max-w-4xl">
           {/* Hero content wrapper - this div prevents movement on button hover */}
-          <div className="mb-12">
+          <div className="mb-8 sm:mb-12">
             <motion.h1
               variants={itemVariants}
-              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-mono font-extralight tracking-wide text-white mb-6 leading-tight md:whitespace-nowrap text-glow-hero drop-shadow-[0_0_25px_rgba(255,255,255,0.8)]"
+              className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-mono font-extralight tracking-wide text-white mb-4 sm:mb-6 leading-tight md:whitespace-nowrap text-glow-hero drop-shadow-[0_0_25px_rgba(255,255,255,0.8)] px-2 sm:px-0"
             >
               Hire <span className="crossed-a">a</span> Software Team
             </motion.h1>
 
             <motion.p
               variants={itemVariants}
-              className="text-xl md:text-2xl text-white font-mono font-light mb-8"
+              className="text-lg sm:text-xl md:text-2xl text-white font-mono font-light mb-6 sm:mb-8 px-2 sm:px-0 leading-relaxed"
             >
               accelerate your software projects with our expert team.
             </motion.p>
 
             <motion.div
               variants={itemVariants}
-              className="h-16"
+              className="h-12 sm:h-16"
             >
               <TextType
                 text={subheaders}
@@ -130,7 +130,7 @@ export default function Hero() {
                 typingSpeed={shouldReduceMotion ? 40 : 80}
                 deletingSpeed={shouldReduceMotion ? 25 : 50}
                 pauseDuration={shouldReduceMotion ? 800 : 2000}
-                className="text-2xl md:text-3xl font-mono text-robinhood typewriter-text"
+                className="text-xl sm:text-2xl md:text-3xl font-mono text-robinhood typewriter-text px-2 sm:px-0"
                 showCursor={true}
                 cursorCharacter="_"
                 cursorClassName=""
@@ -149,7 +149,7 @@ export default function Hero() {
               initial="rest"
               whileHover="hover"
               whileTap="tap"
-              className="hero-button bg-blue-500 text-white hover:bg-blue-600 px-8 py-3 rounded-lg font-mono font-medium border border-white/30 hover:border-white transition-colors duration-300"
+              className="hero-button bg-blue-500 text-white hover:bg-blue-600 px-6 sm:px-8 py-3 rounded-lg font-mono font-medium border border-white/30 hover:border-white transition-colors duration-300 min-h-[44px]"
             >
               learn more
             </motion.button>
@@ -161,7 +161,7 @@ export default function Hero() {
               initial="rest"
               whileHover="hover"
               whileTap="tap"
-              className="hero-button bg-robinhood text-black hover:bg-robinhood-90 px-8 py-3 rounded-lg font-mono font-medium border border-black/30 hover:border-black transition-colors duration-300"
+              className="hero-button bg-robinhood text-black hover:bg-robinhood-90 px-6 sm:px-8 py-3 rounded-lg font-mono font-medium border border-black/30 hover:border-black transition-colors duration-300 min-h-[44px]"
             >
               quick start
             </motion.a>
