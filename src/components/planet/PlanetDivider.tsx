@@ -63,13 +63,43 @@ export default function PlanetDivider() {
   // Responsive sizing helper
   const getResponsiveSizes = () => {
     const { width } = screenSize
+    // Better breakpoint handling for planet sizing
+    const isMobile = width < 768
+    const isTablet = width >= 768 && width < 1024
+    const isDesktop = width >= 1024
+    
+    let planetSize, planetMargin, containerWidth, containerHeight
+    
+    if (isMobile) {
+      // Mobile: Use screen width percentage for better centering
+      planetSize = Math.min(width * 0.9, 350) // 90% of screen width, max 350px
+      planetMargin = -planetSize / 2 // Perfect centering
+      containerWidth = width
+      containerHeight = Math.min(width * 0.5, 200)
+    } else if (isTablet) {
+      planetSize = 400
+      planetMargin = -200
+      containerWidth = 500
+      containerHeight = 250
+    } else {
+      planetSize = 500
+      planetMargin = -250
+      containerWidth = 600
+      containerHeight = 300
+    }
+    
     return {
       glowRadius: getResponsiveValue(60, 70, 80),
       glowRadius2: getResponsiveValue(120, 140, 160),
       shadowSize: getResponsiveValue(15, 18, 20),
       blurAmount: getResponsiveValue(1.5, 1.8, 2),
       planetShadow: getResponsiveValue(40, 50, 60),
-      planetGlow: getResponsiveValue(150, 175, 200)
+      planetGlow: getResponsiveValue(150, 175, 200),
+      // Pixel-based sizing for better control
+      planetMaxWidth: planetSize,
+      planetMarginLeft: planetMargin,
+      containerMaxWidth: containerWidth,
+      containerHeight: containerHeight
     }
   }
 
@@ -89,7 +119,7 @@ export default function PlanetDivider() {
   })
 
   return (
-    <div className="relative w-full max-w-[100vh] mx-auto h-[40vh] overflow-hidden pointer-events-none z-10">
+    <div className={`relative w-full mx-auto overflow-hidden pointer-events-none z-10`} style={{ maxWidth: `${sizes.containerMaxWidth}px`, height: `${sizes.containerHeight}px` }}>
       {/* Main planet body with enhanced 3D definition */}
       <div
         className="absolute w-full h-[200%] left-0 planet-glow-effect"
@@ -97,10 +127,10 @@ export default function PlanetDivider() {
           bottom: `${position * 20 - 30}%`,
           aspectRatio: "1/1",
           borderRadius: "50%",
-          maxWidth: "80vh",
-          maxHeight: "80vh",
+          width: `${sizes.planetMaxWidth}px`,
+          height: `${sizes.planetMaxWidth}px`,
           left: "50%",
-          marginLeft: "-40vh",
+          marginLeft: `${sizes.planetMarginLeft}px`,
           background: `
             radial-gradient(circle at 30% 30%, #444444 0%, #2f2f2f 20%, #1f1f1f 40%, #0d0d0d 70%, #000000 100%),
             radial-gradient(ellipse 45% 55% at 25% 25%, rgba(51, 51, 51, 0.8) 0%, rgba(42, 42, 42, 0.6) 25%, rgba(31, 31, 31, 0.4) 50%, transparent 70%),
@@ -127,10 +157,10 @@ export default function PlanetDivider() {
           bottom: `${position * 20 - 30}%`,
           aspectRatio: "1/1",
           borderRadius: "50%",
-          maxWidth: "80vh",
-          maxHeight: "80vh",
+          width: `${sizes.planetMaxWidth}px`,
+          height: `${sizes.planetMaxWidth}px`,
           left: "50%",
-          marginLeft: "-40vh",
+          marginLeft: `${sizes.planetMarginLeft}px`,
           background: `
             radial-gradient(ellipse 22% 28% at 30% 20%, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.7) 20%, rgba(0, 0, 0, 0.4) 40%, rgba(0, 0, 0, 0.1) 60%, transparent 75%),
             radial-gradient(ellipse 18% 24% at 70% 40%, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.04) 15%, rgba(255, 255, 255, 0.01) 30%, transparent 50%),
@@ -151,10 +181,10 @@ export default function PlanetDivider() {
           bottom: `${position * 20 - 30}%`,
           aspectRatio: "1/1",
           borderRadius: "50%",
-          maxWidth: "80vh",
-          maxHeight: "80vh",
+          width: `${sizes.planetMaxWidth}px`,
+          height: `${sizes.planetMaxWidth}px`,
           left: "50%",
-          marginLeft: "-40vh",
+          marginLeft: `${sizes.planetMarginLeft}px`,
           background: `
             radial-gradient(ellipse 10% 14% at 35% 35%, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.4) 25%, rgba(0, 0, 0, 0.1) 50%, transparent 70%),
             radial-gradient(ellipse 6% 10% at 15% 55%, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.03) 25%, rgba(255, 255, 255, 0.01) 50%, transparent 75%),
@@ -177,10 +207,10 @@ export default function PlanetDivider() {
           bottom: `${position * 20 - 30}%`,
           aspectRatio: "1/1",
           borderRadius: "50%",
-          maxWidth: "80vh",
-          maxHeight: "80vh",
+          width: `${sizes.planetMaxWidth}px`,
+          height: `${sizes.planetMaxWidth}px`,
           left: "50%",
-          marginLeft: "-40vh",
+          marginLeft: `${sizes.planetMarginLeft}px`,
           background: `
             radial-gradient(ellipse 5% 7% at 20% 30%, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.25) 30%, rgba(0, 0, 0, 0.08) 60%, transparent 80%),
             radial-gradient(ellipse 3% 5% at 40% 15%, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 40%, transparent 85%),
@@ -206,10 +236,10 @@ export default function PlanetDivider() {
           bottom: `${position * 20 - 30}%`,
           aspectRatio: "1/1",
           borderRadius: "50%",
-          maxWidth: "80vh",
-          maxHeight: "80vh",
+          width: `${sizes.planetMaxWidth}px`,
+          height: `${sizes.planetMaxWidth}px`,
           left: "50%",
-          marginLeft: "-40vh",
+          marginLeft: `${sizes.planetMarginLeft}px`,
           background: `
             radial-gradient(ellipse 2% 3% at 25% 25%, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.1) 60%, transparent 85%),
             radial-gradient(ellipse 1% 2% at 45% 35%, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 70%, transparent 90%),
@@ -233,10 +263,10 @@ export default function PlanetDivider() {
           bottom: `${position * 20 - 30}%`,
           aspectRatio: "1/1",
           borderRadius: "50%",
-          maxWidth: "80vh",
-          maxHeight: "80vh",
+          width: `${sizes.planetMaxWidth}px`,
+          height: `${sizes.planetMaxWidth}px`,
           left: "50%",
-          marginLeft: "-40vh",
+          marginLeft: `${sizes.planetMarginLeft}px`,
           background: `radial-gradient(circle at ${20 + Math.sin(time * 0.04) * 2}% ${20 + Math.cos(time * 0.03) * 1.5}%, 
             transparent 65%, 
             rgba(76, 215, 135, ${0.03 + Math.sin(time * 0.06) * 0.01}) 78%, 

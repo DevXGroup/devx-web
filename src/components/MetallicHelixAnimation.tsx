@@ -42,11 +42,11 @@ export default function MetallicHelixAnimation({
       // Create slanted helix with stronger metallic curves
       const baseX = width / 2 + Math.cos(angle) * amplitude * (1 - t * 0.2)
       const slantOffset = (height - (height * t)) * Math.tan((slantAngle * Math.PI) / 180) * 0.3
-      const x = baseX + slantOffset
+      const x = isFinite(baseX + slantOffset) ? baseX + slantOffset : width / 2
       
       // Start from top of viewport and go down
-      const y = height * t
-      const z = Math.sin(angle) * 60 // Enhanced depth for metallic effect
+      const y = isFinite(height * t) ? height * t : 0
+      const z = isFinite(Math.sin(angle) * 60) ? Math.sin(angle) * 60 : 0 // Enhanced depth for metallic effect
       
       // Opacity fading towards top
       const opacity = Math.max(0.1, t * 0.9 + 0.1)
@@ -63,20 +63,37 @@ export default function MetallicHelixAnimation({
   const createSmoothPath = (points: any[]) => {
     if (points.length < 2) return ""
     
-    let path = `M ${points[0].x} ${points[0].y}`
+    // Ensure first point is valid
+    const firstX = isFinite(points[0].x) ? points[0].x : 0
+    const firstY = isFinite(points[0].y) ? points[0].y : 0
+    let path = `M ${firstX} ${firstY}`
     
     for (let i = 1; i < points.length; i++) {
       const prev = points[i - 1]
       const curr = points[i]
       const next = points[i + 1] || curr
       
-      // Enhanced control points for more dramatic metallic curves
-      const cp1x = prev.x + (curr.x - prev.x) * 0.4
-      const cp1y = prev.y + (curr.y - prev.y) * 0.4
-      const cp2x = curr.x - (next.x - curr.x) * 0.4
-      const cp2y = curr.y - (next.y - curr.y) * 0.4
+      // Validate all coordinates to prevent NaN
+      const validCurrX = isFinite(curr.x) ? curr.x : prev.x
+      const validCurrY = isFinite(curr.y) ? curr.y : prev.y
+      const validNextX = isFinite(next.x) ? next.x : curr.x
+      const validNextY = isFinite(next.y) ? next.y : curr.y
+      const validPrevX = isFinite(prev.x) ? prev.x : 0
+      const validPrevY = isFinite(prev.y) ? prev.y : 0
       
-      path += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${curr.x} ${curr.y}`
+      // Enhanced control points for more dramatic metallic curves
+      const cp1x = validPrevX + (validCurrX - validPrevX) * 0.4
+      const cp1y = validPrevY + (validCurrY - validPrevY) * 0.4
+      const cp2x = validCurrX - (validNextX - validCurrX) * 0.4
+      const cp2y = validCurrY - (validNextY - validCurrY) * 0.4
+      
+      // Final validation before adding to path
+      const finalCP1X = isFinite(cp1x) ? cp1x : validPrevX
+      const finalCP1Y = isFinite(cp1y) ? cp1y : validPrevY
+      const finalCP2X = isFinite(cp2x) ? cp2x : validCurrX
+      const finalCP2Y = isFinite(cp2y) ? cp2y : validCurrY
+      
+      path += ` C ${finalCP1X} ${finalCP1Y}, ${finalCP2X} ${finalCP2Y}, ${validCurrX} ${validCurrY}`
     }
     
     return path

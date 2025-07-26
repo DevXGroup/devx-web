@@ -12,7 +12,7 @@ const processes = [
   {
     icon: Users,
     title: "Discovery",
-    description: "We begin by exploring your goals, challenges, and vision through deep consultation.",
+    description: "Share your vision. We'll understand your goals and map the perfect solution path.",
     shapeVariation: 0,
     color: "#4CD787",
     useFullCard: true,
@@ -20,23 +20,23 @@ const processes = [
   {
     icon: Pencil,
     title: "Design",
-    description: "Our designers craft intuitive interfaces and robust architectures tailored to your needs.",
+    description: "Get beautiful, user-friendly designs that perfectly match your brand and goals.",
     shapeVariation: 0,
     color: "#9d4edd",
     useFullCard: true,
   },
   {
     icon: Code2,
-    title: "Development",
-    description: "Our engineers bring your vision to life — fast, scalable, and future-ready.",
+    title: "Build",
+    description: "Watch your idea come to life with clean, fast, and scalable code.",
     shapeVariation: 0,
     color: "#4834D4",
     useFullCard: true,
   },
   {
     icon: Zap,
-    title: "Testing",
-    description: "We test rigorously to ensure flawless performance and quality across all devices.",
+    title: "Test",
+    description: "Relax while we ensure everything works flawlessly across all devices.",
     shapeVariation: 0,
     color: "#CFB53B",
     useFullCard: true,
@@ -44,16 +44,15 @@ const processes = [
   {
     icon: Rocket,
     title: "Launch",
-    description: "We launch your product and stay by your side with ongoing support and optimization.",
+    description: "Go live with confidence. We handle the technical details so you can celebrate.",
     shapeVariation: 0,
     color: "#ff6b6b",
     useFullCard: true,
   },
   {
     icon: Settings,
-    title: "Maintenance",
-    description:
-      "We provide continuous updates, monitoring, and improvements to keep your software at peak performance.",
+    title: "Grow",
+    description: "Keep thriving with ongoing updates, monitoring, and new features as you scale.",
     shapeVariation: 0,
     color: "#4CD787",
     useFullCard: true,
@@ -101,15 +100,11 @@ export default function Process() {
       <motion.div style={{ opacity, y }} className="relative container mx-auto px-4">
         <div className="text-center">
           <div className="flex flex-col items-center">
-            <BlurText 
-              text="Our Process"
-              className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-center text-[#9d4edd] font-['IBM_Plex_Mono']"
-              delay={120}
-              animateBy="words"
-              direction="top"
-            />
-            <p className="text-lg text-foreground/80 max-w-2xl mx-auto font-['IBM_Plex_Mono'] font-light mb-16">
-              From first spark to post-launch support — our process is built for long-term success.
+            <AnimatedGradientText className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-center font-['IBM_Plex_Mono']">
+              How it works
+            </AnimatedGradientText>
+            <p className="text-lg md:text-xl text-foreground/80 max-w-3xl mx-auto font-['IBM_Plex_Mono'] font-light mb-16 px-4">
+              Simple steps to bring your software vision to life — from idea to launch in record time.
             </p>
           </div>
         </div>
@@ -120,7 +115,7 @@ export default function Process() {
         </div>
 
         {/* Process cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-24 px-4 sm:px-0">
           {processes.map((process, index) => (
             <motion.div
               key={process.title}
@@ -129,13 +124,17 @@ export default function Process() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.2 }}
               whileHover={{
-                scale: 1.02,
-                transition: { duration: 0.3 }
+                scale: 1.05,
+                y: -12,
+                rotateY: 5,
+                boxShadow: `0 25px 50px ${process.color}50`,
+                transition: { duration: 0.4, ease: "easeOut" }
               }}
-              className="group relative bg-black/50 backdrop-blur-sm p-8 md:p-10 rounded-xl border border-white/10 flex flex-col items-start text-left overflow-hidden cursor-pointer"
+              whileTap={{ scale: 0.98 }}
+              className="group relative bg-black/50 backdrop-blur-sm p-6 sm:p-8 md:p-10 rounded-xl border border-white/10 flex flex-col items-start text-left overflow-hidden cursor-pointer"
             >
               {/* Full-Card ShapeBlur Effect */}
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-50 transition-opacity duration-700">
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-700">
                 <ShapeBlur
                   variation={0}
                   shapeSize={2.8}
@@ -167,14 +166,17 @@ export default function Process() {
                   >
                     <process.icon 
                       className="w-6 h-6 transition-colors duration-300" 
-                      style={{ color: process.color }}
+                      style={{ 
+                        color: process.color === '#4CD787' ? '#166534' : process.color,
+                        filter: process.color === '#4CD787' ? 'drop-shadow(0 0 1px #166534)' : 'none'
+                      }}
                     />
                   </div>
-                  <h3 className="text-xl font-semibold font-['IBM_Plex_Mono'] group-hover:text-white transition-colors duration-300">
+                  <h3 className="text-lg sm:text-xl font-semibold font-['IBM_Plex_Mono'] group-hover:text-white transition-colors duration-300">
                     {process.title}
                   </h3>
                 </div>
-                <p className="text-foreground/70 font-['IBM_Plex_Mono'] font-light text-base leading-relaxed group-hover:text-foreground/90 transition-colors duration-300">
+                <p className="text-foreground/70 font-['IBM_Plex_Mono'] font-light text-sm sm:text-base leading-relaxed group-hover:text-foreground/90 transition-colors duration-300">
                   {process.description}
                 </p>
               </div>
