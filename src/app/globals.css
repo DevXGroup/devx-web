@@ -46,6 +46,16 @@
     --robinhood-green: #ccff00;
     --navbar-blur-bg: rgba(0, 0, 0, 0.5);
     --navbar-no-blur-bg: rgba(0, 0, 0, 0.85);
+    
+    /* Unified spacing system for cross-browser consistency */
+    --section-padding-y: 4rem;
+    --section-padding-y-md: 5rem;
+    --section-margin-y: 2rem;
+    --section-margin-y-md: 3rem;
+    --hero-padding-y: 4rem;
+    --hero-padding-y-md: 6rem;
+    --title-margin-bottom: 3rem;
+    --title-margin-bottom-md: 4rem;
   }
 }
 
@@ -497,6 +507,134 @@ html.no-backdrop-filter .glass-effect {
 .animate-pulse-subtle {
   animation: pulse-subtle 2s ease-in-out infinite;
   -webkit-animation: pulse-subtle 2s ease-in-out infinite;
+}
+
+/* Cross-browser spacing consistency utilities */
+.section-padding {
+  padding-top: var(--section-padding-y);
+  padding-bottom: var(--section-padding-y);
+}
+
+@media (min-width: 768px) {
+  .section-padding {
+    padding-top: var(--section-padding-y-md);
+    padding-bottom: var(--section-padding-y-md);
+  }
+}
+
+.section-margin {
+  margin-top: var(--section-margin-y);
+  margin-bottom: var(--section-margin-y);
+}
+
+@media (min-width: 768px) {
+  .section-margin {
+    margin-top: var(--section-margin-y-md);
+    margin-bottom: var(--section-margin-y-md);
+  }
+}
+
+.hero-padding {
+  padding-top: var(--hero-padding-y);
+  padding-bottom: var(--hero-padding-y);
+}
+
+@media (min-width: 768px) {
+  .hero-padding {
+    padding-top: var(--hero-padding-y-md);
+    padding-bottom: var(--hero-padding-y-md);
+  }
+}
+
+.title-margin {
+  margin-bottom: var(--title-margin-bottom);
+}
+
+@media (min-width: 768px) {
+  .title-margin {
+    margin-bottom: var(--title-margin-bottom-md);
+  }
+}
+
+.case-studies-section {
+  padding-top: calc(var(--section-padding-y) + 2rem);
+}
+
+@media (min-width: 768px) {
+  .case-studies-section {
+    padding-top: calc(var(--section-padding-y-md) + 3rem);
+  }
+}
+
+/* Safari-specific fixes for hydration and spacing issues */
+@supports (-webkit-appearance: none) {
+  /* Override spacing variables for Safari to ensure consistency */
+  :root {
+    --section-padding-y: 4rem;
+    --section-padding-y-md: 5rem;
+    --section-margin-y: 2rem;
+    --section-margin-y-md: 3rem;
+    --hero-padding-y: 4rem;
+    --hero-padding-y-md: 6rem;
+    --title-margin-bottom: 3rem;
+    --title-margin-bottom-md: 4rem;
+  }
+  
+  /* Safari animation fixes */
+  .safari-animation-fix {
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    will-change: transform;
+  }
+  
+  /* Safari hydration flash prevention */
+  .safari-hydration-fix {
+    visibility: hidden;
+    animation: safari-fade-in 0.3s ease-in forwards;
+    animation-delay: 0.8s;
+  }
+  
+  @keyframes safari-fade-in {
+    from {
+      visibility: hidden;
+      opacity: 0;
+    }
+    to {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+  
+  /* Safari scroll velocity text fix */
+  .scroll-velocity-safari {
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  
+  /* Force uniform spacing in Safari */
+  .services-section {
+    padding-top: var(--section-padding-y) !important;
+    padding-bottom: var(--section-padding-y) !important;
+  }
+  
+  @media (min-width: 768px) {
+    .services-section {
+      padding-top: var(--section-padding-y-md) !important;
+      padding-bottom: var(--section-padding-y-md) !important;
+    }
+  }
+  
+  .services-title {
+    margin-bottom: var(--title-margin-bottom) !important;
+  }
+  
+  @media (min-width: 768px) {
+    .services-title {
+      margin-bottom: var(--title-margin-bottom-md) !important;
+    }
+  }
 }
 
 @keyframes gradient-shift {

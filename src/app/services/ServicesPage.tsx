@@ -7,7 +7,6 @@ import { useRef, useState, useEffect } from "react"
 import HorizontalScroll from "@/components/HorizontalScroll"
 import ParallaxTestimonials from "@/components/ParallaxTestimonials"
 import EnhancedInfinityLoader from "@/components/EnhancedInfinityLoader"
-import BraidedRopeAnimation from "@/components/BraidedRopeAnimation"
 import dynamic from "next/dynamic"
 import ServicesBanner from "@/components/ServicesBanner"
 import TrueFocus from "@/components/TrueFocus"
@@ -19,7 +18,18 @@ import ServiceCard from "@/components/services/ServiceCard"
 import AnimatedGradient from "@/components/services/AnimatedGradient"
 import FloatingElement from "@/components/services/FloatingElement"
 import AppleScrollSection from "@/components/services/AppleScrollSection"
+import ScrollVelocityText from "@/components/ScrollVelocityText"
+import SafariCompatibleWrapper from "@/components/SafariCompatibleWrapper"
 
+// Import BraidedRopeAnimation dynamically to prevent hydration issues
+const BraidedRopeAnimation = dynamic(() => import("@/components/BraidedRopeAnimation"), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full bg-transparent">
+      <div className="absolute inset-0 w-full h-full bg-transparent" />
+    </div>
+  ),
+})
 
 // Define services array here, as it's specific to this page's cards
 const services = [
@@ -27,7 +37,7 @@ const services = [
     icon: Code2,
     title: "Custom Software Development",
     description:
-      "Transform your vision into reality with bespoke software solutions that perfectly match your unique business requirements. We craft scalable, robust applications that grow with your success.",
+      "We build custom software that fits your exact needs. Get web apps, mobile apps, and systems that grow with your business.",
     features: [
       "Full-stack Web Applications",
       "Enterprise System Integration",
@@ -40,7 +50,7 @@ const services = [
     icon: Brain,
     title: "AI & Machine Learning",
     description:
-      "Unlock the future of business intelligence with cutting-edge AI solutions. We create smart systems that learn, adapt, and provide actionable insights to drive your competitive advantage.",
+      "Use AI to automate tasks and make better decisions. We build smart systems that learn from your data and help you work faster.",
     features: [
       "Predictive Analytics & Forecasting",
       "Natural Language Processing",
@@ -53,7 +63,7 @@ const services = [
     icon: Bot,
     title: "AI Agents & Workflow Automation",
     description:
-      "Revolutionize your operations with intelligent AI agents that work 24/7. We design sophisticated automation systems that eliminate repetitive tasks and optimize your entire workflow.",
+      "Let AI handle repetitive work so your team can focus on what matters. We create automation that works 24/7 and gets smarter over time.",
     features: [
       "Intelligent Process Automation",
       "Custom AI Assistant Development",
@@ -66,7 +76,7 @@ const services = [
     icon: Cloud,
     title: "Cloud Solutions",
     description:
-      "Elevate your business with enterprise-grade cloud infrastructure that scales seamlessly. We architect secure, high-performance cloud environments that reduce costs and maximize efficiency.",
+      "Move your apps to the cloud for better reliability and lower costs. We set up secure systems that handle more users without slowing down.",
     features: [
       "Multi-Cloud Architecture",
       "Serverless & Microservices",
@@ -79,7 +89,7 @@ const services = [
     icon: Smartphone,
     title: "Mobile App Development",
     description:
-      "Captivate your audience with stunning mobile experiences that users love. We build high-performance native and cross-platform apps that deliver exceptional user engagement and business results.",
+      "Build mobile apps your users will love. We create fast, easy-to-use apps for iPhone and Android that keep people coming back.",
     features: [
       "Native iOS & Android Development",
       "React Native & Flutter",
@@ -92,7 +102,7 @@ const services = [
     icon: Cpu,
     title: "IoT Hardware & Edge Computing",
     description:
-      "Bridge the physical and digital worlds with innovative IoT solutions. We design and develop connected devices and edge computing systems that collect, process, and act on real-time data.",
+      "Connect devices and sensors to collect data automatically. We build IoT systems that monitor your business and send alerts when needed.",
     features: [
       "Custom IoT Device Development",
       "Edge AI & Real-time Processing",
@@ -106,28 +116,28 @@ const services = [
 // Value proposition items
 const valueProps = [
   {
-    title: "Expert Solutions",
-    description: "Start today and be up and running with onboarding us in a matter of a few days.",
+    title: "Fast Delivery",
+    description: "Start your project today and see results in days, not months. We get you up and running quickly.",
   },
   {
-    title: "Fast Results Guaranteed",
-    description: "Achieve your goals quickly with our flexible subscription model.",
+    title: "Reliable Results",
+    description: "We deliver what we promise on time. You'll see real improvements in your business.",
   },
   {
-    title: "Competitive Hourly Rates",
-    description: "Get results efficiently with our competitive hourly based rate.",
+    title: "Clear Pricing",
+    description: "No hidden costs or surprises. You'll know exactly what you pay before we start.",
   },
   {
-    title: "Long-term Partnership",
-    description: "We'd like to help you achieve your goals fast and effortlessly.",
+    title: "Long-term Support",
+    description: "We stick around after launch. Get ongoing help and advice when you need it.",
   },
   {
-    title: "Seasoned Software Team",
-    description: "Our team of engineers, designers, and managers ready to deliver outstanding job.",
+    title: "Experienced Team",
+    description: "Work with skilled developers, designers, and project managers who know what they're doing.",
   },
   {
-    title: "AI-Powered Automation",
-    description: "Leverage cutting-edge AI agents and workflow automation to transform your operations.",
+    title: "Modern AI Tools",
+    description: "Use the latest AI technology to automate work and improve your business processes.",
   },
 ]
 
@@ -244,7 +254,7 @@ export default function ServicesPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section with Enhanced Metallic Helix */}
-      <section ref={heroRef} className="relative min-h-screen py-20 flex flex-col items-center justify-center overflow-hidden">
+      <section ref={heroRef} className="relative min-h-screen hero-padding flex flex-col items-center justify-center services-section">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-900/10 to-black z-0" />
         
 
@@ -378,12 +388,12 @@ export default function ServicesPage() {
                   },
                 },
               }}
-              className="text-center max-w-4xl mx-auto mb-12"
+              className="text-center max-w-4xl mx-auto title-margin"
             >
-              <div className="flex flex-col items-center pt-20">
+              <div className="flex flex-col items-center pt-4 md:pt-8">
                 <BlurText 
                   text="Services"
-                  className="heading-hero text-accent-gold mb-8 text-center relative z-40"
+                  className="heading-hero text-accent-gold title-margin text-center relative z-40 services-title"
                   delay={133}
                   animateBy="words"
                   direction="top"
@@ -397,24 +407,59 @@ export default function ServicesPage() {
                 variants={floatingAnimation}
                 className="text-body-large text-white/95 max-w-3xl mx-auto relative z-40"
               >
-                Comprehensive software solutions to drive your business forward. We combine expertise with innovation to
-                deliver exceptional results.
+                We build software that helps your business work better. Our experienced team creates reliable solutions that save you time and help you serve your customers better.
               </motion.p>
             </motion.div>
           </div>
 
-          {/* Two rope strands animation - extends above screen */}
-          {isClient && (
-            <div className="absolute w-full z-0 overflow-hidden" style={{ top: '-100px', height: '80vh' }}>
-              <BraidedRopeAnimation className="w-full h-full" />
-            </div>
-          )}
+          {/* Two rope strands animation - extends from top of page */}
+          <SafariCompatibleWrapper 
+            delay={200}
+            className="absolute w-full z-0 overflow-hidden" 
+            style={{ top: '0px', height: '100vh' }}
+            fallback={
+              <div className="absolute inset-0 w-full h-full bg-gradient-to-b from-transparent via-purple-900/5 to-transparent" />
+            }
+          >
+            <BraidedRopeAnimation className="w-full h-full" />
+          </SafariCompatibleWrapper>
 
-          {/* Content spacing */}
-          <div className="w-full mx-auto mb-12 h-20"></div>
+          {/* Interactive rope indicator */}
+          <SafariCompatibleWrapper delay={400}>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0.5, 0.8, 0.5] }}
+              transition={{
+                duration: 2,
+                repeat: Number.POSITIVE_INFINITY,
+                ease: "easeInOut"
+              }}
+              className="absolute bottom-16 left-1/2 transform -translate-x-1/2 z-20 text-white/60 text-xs font-mono tracking-wider cursor-pointer select-none"
+            >
+              → drag/interact ←
+            </motion.div>
+          </SafariCompatibleWrapper>
 
-          {/* Value Propositions with Apple-style reveal */}
-          <div ref={valuePropsRef} className="w-full max-w-5xl mt-0 mb-8 relative z-20 -translate-y-12 md:translate-y-0">
+        </div>
+      </section>
+
+      {/* Value Propositions Section */}
+      <AppleScrollSection>
+        <section className="section-padding relative services-section">
+          <div className="container mx-auto px-4">
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{
+                opacity: 1,
+                y: 0,
+                transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
+              }}
+              viewport={{ once: true, amount: 0.2 }}
+              className="heading-section text-accent-gold text-center title-margin mt-0 font-['IBM_Plex_Mono'] services-title"
+            >
+              The DevX edge
+            </motion.h2>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 px-4 sm:px-6 md:px-8 lg:px-16 relative z-20">
               {valueProps.map((prop, index) => (
                 <motion.div
@@ -436,13 +481,13 @@ export default function ServicesPage() {
               ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </AppleScrollSection>
 
 
       {/* Services Grid with Apple-style reveal */}
       <AppleScrollSection>
-        <section className="py-0 relative">
+        <section className="section-padding relative services-section">
           <div className="container mx-auto px-4">
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
@@ -452,7 +497,7 @@ export default function ServicesPage() {
                 transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
               }}
               viewport={{ once: true, amount: 0.2 }}
-              className="heading-section text-accent-gold text-center mb-12 mt-0"
+              className="heading-section text-accent-gold text-center title-margin mt-0 font-['IBM_Plex_Mono'] services-title"
             >
               Our Expertise
             </motion.h2>
@@ -488,7 +533,7 @@ export default function ServicesPage() {
 
       {/* CTA Section with Apple-style reveal */}
       <AppleScrollSection delay={0.2}>
-        <section className="py-20 relative">
+        <section className="section-padding relative services-section">
           <div className="absolute inset-0 bg-gradient-to-t from-black via-purple-900/10 to-black" />
 
           {/* Subtle light beams */}
@@ -542,13 +587,13 @@ export default function ServicesPage() {
               className="text-center max-w-3xl mx-auto px-4"
             >
               <motion.h2
-                className="heading-section text-accent-gold mb-6"
+                className="heading-section text-accent-gold text-center mb-12"
                 whileHover={{
                   scale: 1.03,
                   transition: { duration: 0.2 },
                 }}
               >
-                Ready to Transform Your Business?
+                Ready to Accelerate Your Success?
               </motion.h2>
 
               <motion.p
@@ -560,7 +605,7 @@ export default function ServicesPage() {
                 }}
                 viewport={{ once: true, amount: 0.5 }}
               >
-                Let&apos;s discuss how we can help you achieve your goals with our expert software development services.
+                Don&apos;t let outdated technology hold you back. Schedule a strategic consultation and discover how our proven solutions can drive measurable growth for your business—starting today.
               </motion.p>
 
               <AnimatePresence>
@@ -577,7 +622,7 @@ export default function ServicesPage() {
                     href="/contact"
                     className="inline-block bg-robinhood text-black hover:bg-robinhood-90 px-8 py-3 rounded-lg font-medium border border-black/30 hover:border-black/60 hover:shadow-[0_5px_15px_rgba(204,255,0,0.3)] relative overflow-hidden group transition-all duration-300"
                   >
-                    <span className="relative z-10">Get Started</span>
+                    <span className="relative z-10">Start Your Transformation</span>
                     <motion.span
                       className="absolute inset-0 bg-white/20"
                       initial={{ x: "-100%", opacity: 0 }}
@@ -587,6 +632,32 @@ export default function ServicesPage() {
                   </Link>
                 </motion.div>
               </AnimatePresence>
+
+              {/* Scroll Velocity Animation */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{
+                  opacity: 1,
+                  transition: { delay: 0.6, duration: 0.8 },
+                }}
+                viewport={{ once: true, amount: 0.3 }}
+                className="mt-16 w-full max-w-none overflow-hidden"
+              >
+                <SafariCompatibleWrapper delay={800}>
+                  <ScrollVelocityText baseVelocity={50} className="text-2xl md:text-3xl lg:text-4xl font-bold text-white/20 mb-4">
+                    {[
+                      "Custom Software • AI Solutions • Mobile Apps • Cloud Infrastructure • ",
+                      "IoT Development • Workflow Automation • Digital Transformation • "
+                    ]}
+                  </ScrollVelocityText>
+                  <ScrollVelocityText baseVelocity={-30} className="text-xl md:text-2xl lg:text-3xl font-light text-white/15">
+                    {[
+                      "Fast Delivery • Expert Team • Modern Technology • Reliable Results • ",
+                      "Long-term Support • Clear Pricing • Proven Success • Your Vision • "
+                    ]}
+                  </ScrollVelocityText>
+                </SafariCompatibleWrapper>
+              </motion.div>
             </motion.div>
           </div>
         </section>
@@ -595,9 +666,9 @@ export default function ServicesPage() {
 
       {/* Case Studies with Horizontal Scroll */}
       <AppleScrollSection delay={0.4}>
-        <section className="py-20 relative pt-32">
+        <section className="section-padding relative services-section case-studies-section">
           {" "}
-          {/* Increased pt-20 to pt-32 for more top margin */}
+          {/* Responsive top margin for better spacing */}
           <div className="container mx-auto px-4">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -607,18 +678,22 @@ export default function ServicesPage() {
                 transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
               }}
               viewport={{ once: true, amount: 0.2 }}
-              className="mb-12 text-center"
+              className="title-margin text-center"
             >
               <TrueFocus sentence="Case Studies" />
             </motion.div>
           </div>
-          {isClient && <HorizontalScroll />}
+          <SafariCompatibleWrapper delay={600}>
+            <HorizontalScroll />
+          </SafariCompatibleWrapper>
         </section>
       </AppleScrollSection>
 
-      {/* Testimonials with Parallax - Reduced spacing above */}
-      <AppleScrollSection delay={0.5} className="py-0">
-        {isClient && <ParallaxTestimonials />}
+      {/* Testimonials with Parallax - Consistent spacing */}
+      <AppleScrollSection delay={0.5} className="section-margin">
+        <SafariCompatibleWrapper delay={700}>
+          <ParallaxTestimonials />
+        </SafariCompatibleWrapper>
       </AppleScrollSection>
     </div>
   )
