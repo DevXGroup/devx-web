@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useEffect, useRef, useState } from "react";
+import { useSafariDetection } from "@/hooks/use-safari-detection";
 import {
   CanvasTexture,
   Clock,
