@@ -8,36 +8,19 @@ import {
   useTransform,
   AnimatePresence,
 } from 'framer-motion'
-import {
-  Code2,
-  Rocket,
-  Database,
-  Cloud,
-  Brain,
-  Cog,
-  Smartphone,
-  Globe,
-  Cpu,
-  Bot,
-} from 'lucide-react'
+import { Code2, Cloud, Brain, Smartphone, Cpu, Bot } from 'lucide-react'
 import Link from 'next/link'
 import { useRef, useState, useEffect } from 'react'
 import HorizontalScroll from '@/components/HorizontalScroll'
 import ParallaxTestimonials from '@/components/ParallaxTestimonials'
-import EnhancedInfinityLoader from '@/components/EnhancedInfinityLoader'
 import dynamic from 'next/dynamic'
-import ServicesBanner from '@/components/ServicesBanner'
 import TrueFocus from '@/components/TrueFocus'
 import BlurText from '@/components/BlurText'
 
 // Import the newly separated components
-import ParticleAnimation from '@/components/services/ParticleAnimation'
 import ServiceCard from '@/components/services/ServiceCard'
-import AnimatedGradient from '@/components/services/AnimatedGradient'
-import FloatingElement from '@/components/services/FloatingElement'
 import AppleScrollSection from '@/components/services/AppleScrollSection'
 import ScrollVelocityText from '@/components/ScrollVelocityText'
-import SafariCompatibleWrapper from '@/components/SafariCompatibleWrapper'
 
 import BraidedRopeAnimation from '@/components/BraidedRopeAnimation'
 
@@ -277,76 +260,9 @@ export default function ServicesPage() {
         {/* Full-screen 3D Braided Rope Animation - Background under Our Services title */}
         {isClient && (
           <div className="absolute inset-0 w-full h-full z-10 overflow-hidden pointer-events-auto">
-            <BraidedRopeAnimation
-              className="absolute inset-0 w-full h-full"
-              ropeScale={isMobile ? { radius: 0.45, height: 7 } : { radius: 0.7, height: 12 }}
-            />
+            <BraidedRopeAnimation className="absolute inset-0 w-full h-full" />
           </div>
         )}
-
-        {/* Enhanced background animations */}
-        <div className="absolute inset-0 z-0">
-          <AnimatedGradient />
-
-          {/* Floating background elements */}
-          <FloatingElement
-            delay={0}
-            size={400}
-            color="rgba(76, 215, 135, 0.2)"
-            left="10%"
-            top="-10%"
-          />
-          <FloatingElement
-            delay={3}
-            size={350}
-            color="rgba(72, 52, 212, 0.2)"
-            left="70%"
-            top="60%"
-          />
-          <FloatingElement
-            delay={7}
-            size={300}
-            duration={15}
-            color="rgba(207, 181, 59, 0.15)"
-            left="30%"
-            top="40%"
-          />
-
-          {/* Subtle parallax effect based on mouse position */}
-          <motion.div
-            className="absolute inset-0 pointer-events-none"
-            animate={{
-              x: mousePosition.x * -10,
-              y: mousePosition.y * -10,
-            }}
-            transition={{ type: 'spring', stiffness: 50, damping: 20 }}
-          >
-            {/* Static floating particles - fixes hydration */}
-            {Array.from({ length: 8 }).map((_, i) => (
-              <motion.div
-                key={i}
-                className="absolute w-1 h-1 rounded-full bg-white/30"
-                initial={{
-                  x: [100, 300, 500, 700, 900, 1100, 200, 800][i] || 400,
-                  y: [150, 350, 250, 450, 180, 380, 280, 320][i] || 300,
-                  opacity: [0.1, 0.15, 0.2, 0.25, 0.12, 0.18, 0.22, 0.16][i] || 0.15,
-                  scale: [0.7, 1.0, 0.8, 1.2, 0.9, 0.6, 1.1, 0.5][i] || 0.8,
-                }}
-                animate={{
-                  y: [0, -15, 0, 15, 0],
-                  opacity: [0.1, 0.3, 0.1],
-                  scale: [1, 1.2, 1],
-                }}
-                transition={{
-                  duration: [3, 4, 5, 6, 3.5, 4.5, 5.5, 7][i] || 4,
-                  repeat: Number.POSITIVE_INFINITY,
-                  repeatType: 'reverse',
-                  delay: [0, 1, 2, 3, 0.5, 1.5, 2.5, 4][i] || 0,
-                }}
-              />
-            ))}
-          </motion.div>
-        </div>
 
         {/* Subtle light beams */}
         <div className="absolute inset-0 w-full z-0">
@@ -496,6 +412,22 @@ export default function ServicesPage() {
             ref={valuePropsRef}
             className="w-full max-w-5xl mt-8 mb-8 relative z-20 pointer-events-auto"
           >
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{
+                opacity: 1,
+                y: 0,
+                transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
+              }}
+              viewport={{ once: true, amount: 0.2 }}
+              className="text-3xl md:text-4xl font-bold mb-12 text-center text-[#CFB53B] mt-0"
+              style={{
+                textShadow: '0 2px 4px rgba(0,0,0,0.5)',
+                WebkitTextStroke: '1px rgba(0,0,0,0.3)',
+              }}
+            >
+              The DevX Edge
+            </motion.h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 px-2 md:px-8 lg:px-16 relative z-20">
               {valueProps.map((prop, index) => (
                 <motion.div
@@ -522,6 +454,48 @@ export default function ServicesPage() {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* Scroll Velocity Animation */}
+      <section className="relative overflow-hidden">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{
+            opacity: 1,
+            transition: { delay: 0.3, duration: 0.8 },
+          }}
+          viewport={{ once: true, amount: 0.3 }}
+          className="w-full overflow-hidden"
+        >
+          {isClient && (
+            <div suppressHydrationWarning={true} className="w-full">
+              <ScrollVelocityText
+                baseVelocity={75}
+                className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#4CD787]/30 mb-6"
+                damping={30}
+                stiffness={600}
+                velocityMapping={{ input: [0, 1000], output: [0, 3] }}
+              >
+                {[
+                  'Custom Software • AI Solutions • Mobile Apps • Cloud Infrastructure • ',
+                  'IoT Development • Workflow Automation • Digital Transformation • ',
+                ]}
+              </ScrollVelocityText>
+              <ScrollVelocityText
+                baseVelocity={-50}
+                className="text-3xl md:text-4xl lg:text-5xl font-light text-[#CFB53B]/25"
+                damping={30}
+                stiffness={600}
+                velocityMapping={{ input: [0, 1000], output: [0, 3] }}
+              >
+                {[
+                  'Fast Delivery • Expert Team • Modern Technology • Reliable Results • ',
+                  'Long-term Support • Clear Pricing • Proven Success • Your Vision • ',
+                ]}
+              </ScrollVelocityText>
+            </div>
+          )}
+        </motion.div>
       </section>
 
       {/* Services Grid with Apple-style reveal */}
@@ -679,46 +653,6 @@ export default function ServicesPage() {
                   </Link>
                 </motion.div>
               </AnimatePresence>
-
-              {/* Scroll Velocity Animation */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{
-                  opacity: 1,
-                  transition: { delay: 0.6, duration: 0.8 },
-                }}
-                viewport={{ once: true, amount: 0.3 }}
-                className="mt-16 w-screen overflow-hidden -mx-4 md:-mx-8 lg:-mx-16"
-              >
-                {isClient && (
-                  <div suppressHydrationWarning={true} className="w-full">
-                    <ScrollVelocityText
-                      baseVelocity={25}
-                      className="text-2xl md:text-3xl lg:text-4xl font-bold text-white/20 mb-4"
-                      damping={80}
-                      stiffness={300}
-                      velocityMapping={{ input: [0, 1000], output: [0, 1.5] }}
-                    >
-                      {[
-                        'Custom Software • AI Solutions • Mobile Apps • Cloud Infrastructure • ',
-                        'IoT Development • Workflow Automation • Digital Transformation • ',
-                      ]}
-                    </ScrollVelocityText>
-                    <ScrollVelocityText
-                      baseVelocity={-20}
-                      className="text-xl md:text-2xl lg:text-3xl font-light text-white/15"
-                      damping={80}
-                      stiffness={300}
-                      velocityMapping={{ input: [0, 1000], output: [0, 1.5] }}
-                    >
-                      {[
-                        'Fast Delivery • Expert Team • Modern Technology • Reliable Results • ',
-                        'Long-term Support • Clear Pricing • Proven Success • Your Vision • ',
-                      ]}
-                    </ScrollVelocityText>
-                  </div>
-                )}
-              </motion.div>
             </motion.div>
           </div>
         </section>
