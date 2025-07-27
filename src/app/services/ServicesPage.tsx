@@ -457,16 +457,13 @@ export default function ServicesPage() {
           </div>
 
           {/* Two rope strands animation - extends from top of page */}
-          <SafariCompatibleWrapper 
-            delay={200}
-            className="absolute w-full z-0 overflow-hidden" 
-            style={{ top: '0px', height: '100vh' }}
-            fallback={
-              <div className="absolute inset-0 w-full h-full bg-gradient-to-b from-transparent via-purple-900/5 to-transparent" />
-            }
+          <div
+            className="absolute w-full z-0 overflow-hidden"
+            style={{ top: '-200px', height: '100vh' }}
+            suppressHydrationWarning={true}
           >
             <BraidedRopeAnimation className="w-full h-full" />
-          </SafariCompatibleWrapper>
+          </div>
 
           {/* Interactive rope indicator */}
           <SafariCompatibleWrapper delay={400}>
@@ -476,7 +473,7 @@ export default function ServicesPage() {
               transition={{
                 duration: 2,
                 repeat: Number.POSITIVE_INFINITY,
-                ease: "easeInOut"
+                ease: 'easeInOut',
               }}
               className="absolute bottom-16 left-1/2 transform -translate-x-1/2 z-20 text-white/60 text-xs font-mono tracking-wider cursor-pointer select-none"
             >
