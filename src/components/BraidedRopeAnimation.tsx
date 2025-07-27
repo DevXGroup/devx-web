@@ -4,7 +4,6 @@ import { useRef, useEffect, useState, Component, type ReactNode, type ErrorInfo 
 import { Canvas, useFrame } from "@react-three/fiber"
 import { Environment, PerspectiveCamera } from "@react-three/drei"
 import { Vector3, Curve, TubeGeometry, type Mesh, SphereGeometry } from "three"
-import { useSafariDetection } from "@/hooks/use-safari-detection"
 
 // Error boundary for the Three.js Canvas to prevent hydration crashes
 class CanvasErrorBoundary extends Component<
@@ -42,23 +41,13 @@ interface BraidedRopeAnimationProps {
 }
 
 export default function BraidedRopeAnimation({ className = "" }: BraidedRopeAnimationProps) {
-  const { isSafari, isClient: clientDetected } = useSafariDetection()
-  const [isMounted, setIsMounted] = useState(false)
-  const [isHydrated, setIsHydrated] = useState(false)
+  const [isClient, setIsClient] = useState(false)
   const [screenSize, setScreenSize] = useState({ width: 1920, height: 1080 })
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (!clientDetected) return
-    
-    // Use significantly longer delay for Safari to prevent hydration flash
-    const delay = isSafari ? 1000 : 200
-    
-    const timer = setTimeout(() => {
-      setIsMounted(true)
-      // Add additional delay for hydration completion in Safari
-      setTimeout(() => setIsHydrated(true), isSafari ? 300 : 100)
-    }, delay)
+    // Simple client detection without delays
+    setIsClient(true)
     
     const updateScreenSize = () => {
       if (typeof window !== 'undefined') {
@@ -75,15 +64,14 @@ export default function BraidedRopeAnimation({ className = "" }: BraidedRopeAnim
     }
     
     return () => {
-      clearTimeout(timer)
       if (typeof window !== 'undefined') {
         window.removeEventListener('resize', updateScreenSize)
       }
     }
-  }, [clientDetected, isSafari])
+  }, [])
 
   useEffect(() => {
-    if (!containerRef.current || !clientDetected || !isMounted) return
+    if (!containerRef.current || !isClient) return
 
     const preventDefault = (e: Event) => {
       e.preventDefault()
@@ -97,16 +85,13 @@ export default function BraidedRopeAnimation({ className = "" }: BraidedRopeAnim
       container.removeEventListener("wheel", preventDefault)
       container.removeEventListener("touchmove", preventDefault)
     }
-  }, [clientDetected, isMounted])
+  }, [isClient])
 
-  // Prevent hydration mismatches by not rendering until fully mounted and hydrated
-  if (!clientDetected || !isMounted || !isHydrated) {
+  // Always render with fallback during SSR
+  if (!isClient) {
     return (
       <div className={`w-full h-full overflow-hidden ${className}`} suppressHydrationWarning={true}>
         <div className="absolute inset-0 w-full h-full bg-gradient-to-b from-transparent via-purple-900/5 to-transparent" />
-        {isSafari && (
-          <div className="absolute inset-0 w-full h-full bg-black/10" />
-        )}
       </div>
     )
   }
@@ -177,17 +162,9 @@ export default function BraidedRopeAnimation({ className = "" }: BraidedRopeAnim
         </CanvasErrorBoundary>
       </div>
       
-      <div className={`absolute inset-0 pointer-events-none z-10 ${
-        screenSize.width < 768 
-          ? 'bg-gradient-to-b from-black/60 via-transparent to-black/60'
-          : 'bg-gradient-to-b from-black/80 via-transparent to-black/80'
-      }`} />
-      <div className={`absolute top-0 left-0 right-0 bg-gradient-to-b from-black to-transparent pointer-events-none z-10 ${
-        screenSize.width < 768 ? 'h-16' : 'h-48'
-      }`} />
-      <div className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent pointer-events-none z-10 ${
-        screenSize.width < 768 ? 'h-16' : 'h-48'
-      }`} />
+      <div className="absolute inset-0 pointer-events-none z-10 bg-gradient-to-b from-black/80 via-transparent to-black/80" />
+      <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-black to-transparent pointer-events-none z-10 h-48" />
+      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent pointer-events-none z-10 h-48" />
     </div>
   )
 }
@@ -474,12 +451,7 @@ function BraidedRopeMesh({ screenSize }: { screenSize: { width: number; height: 
     const elasticScaleY = 1 + Math.sin(time * 0.22) * 0.06 + Math.cos(time * 0.15) * 0.03 // More subtle
     const elasticScaleXZ = 1 - Math.sin(time * 0.22) * 0.015 // Cleaner scaling
     
-    // Continuous rotation - only when not being manually controlled
-    if (!mouseDown.current && !momentumActive.current) {
-      const continuousRotationSpeed = 0.3 // Adjust speed as needed
-      meshRef1.current.rotation.y += continuousRotationSpeed * delta
-      meshRef2.current.rotation.y += continuousRotationSpeed * delta
-    }
+    // Remove continuous rotation - keep rope static unless manually controlled
     
     meshRef1.current.position.y = stretchY
     meshRef2.current.position.y = stretchY + 0.5
