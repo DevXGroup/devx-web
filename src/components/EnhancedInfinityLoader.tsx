@@ -1,7 +1,7 @@
 "use client"
 
 import { useRef, useEffect, useState } from "react"
-import { motion, useScroll, useTransform, useSpring } from "framer-motion"
+import { motion, useScroll, useTransform, useSpring, useMotionValue } from "framer-motion"
 
 interface EnhancedInfinityLoaderProps {
   scrollThreshold?: number
@@ -50,6 +50,7 @@ export default function EnhancedInfinityLoader({
     return () => window.removeEventListener('resize', updateScreenSize)
   }, [])
 
+  // Always call useScroll to maintain hooks order
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"],

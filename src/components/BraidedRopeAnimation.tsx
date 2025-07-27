@@ -1,130 +1,83 @@
-"use client"
+'use client'
 
-import { useRef, useEffect, useState, Component, type ReactNode, type ErrorInfo } from "react"
-import { Canvas, useFrame } from "@react-three/fiber"
-import { Environment, PerspectiveCamera } from "@react-three/drei"
-import { Vector3, Curve, TubeGeometry, type Mesh, SphereGeometry } from "three"
-
-// Error boundary for the Three.js Canvas to prevent hydration crashes
-class CanvasErrorBoundary extends Component<
-  { children: ReactNode },
-  { hasError: boolean }
-> {
-  constructor(props: { children: ReactNode }) {
-    super(props)
-    this.state = { hasError: false }
-  }
-
-  static getDerivedStateFromError(): { hasError: boolean } {
-    return { hasError: true }
-  }
-
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.log('Canvas rendering error caught:', error, errorInfo)
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return (
-        <div className="absolute inset-0 w-full h-full bg-transparent">
-          <div className="absolute inset-0 w-full h-full bg-gradient-to-b from-transparent via-purple-900/5 to-transparent" />
-        </div>
-      )
-    }
-
-    return this.props.children
-  }
-}
+import { useRef, useEffect, useState } from 'react'
+import { Canvas, useFrame } from '@react-three/fiber'
+import { Environment, PerspectiveCamera } from '@react-three/drei'
+import { Vector3, Curve, TubeGeometry, type Mesh, SphereGeometry } from 'three'
 
 interface BraidedRopeAnimationProps {
   className?: string
 }
 
-export default function BraidedRopeAnimation({ className = "" }: BraidedRopeAnimationProps) {
-  const [isClient, setIsClient] = useState(false)
+export default function BraidedRopeAnimation({ className = '' }: BraidedRopeAnimationProps) {
+  const [isMounted, setIsMounted] = useState(false)
   const [screenSize, setScreenSize] = useState({ width: 1920, height: 1080 })
   const containerRef = useRef<HTMLDivElement>(null)
 
+  // Prevent scrolling when interacting with the canvas
   useEffect(() => {
-    // Simple client detection without delays
-    setIsClient(true)
-    
-    const updateScreenSize = () => {
-      if (typeof window !== 'undefined') {
-        setScreenSize({ 
-          width: window.innerWidth, 
-          height: window.innerHeight 
-        })
+    if (!containerRef.current) return
+
+    const preventDefault = (e: Event) => {
+      // Only prevent if we're actually dragging
+      if (e.target && (e.target as HTMLElement).closest('canvas')) {
+        e.preventDefault()
       }
     }
-    
-    updateScreenSize()
-    if (typeof window !== 'undefined') {
-      window.addEventListener('resize', updateScreenSize)
-    }
-    
+
+    const container = containerRef.current
+    container.addEventListener('wheel', preventDefault, { passive: false })
+    container.addEventListener('touchmove', preventDefault, { passive: false })
+
     return () => {
-      if (typeof window !== 'undefined') {
-        window.removeEventListener('resize', updateScreenSize)
-      }
+      container.removeEventListener('wheel', preventDefault)
+      container.removeEventListener('touchmove', preventDefault)
     }
   }, [])
 
   useEffect(() => {
-    if (!containerRef.current || !isClient) return
+    setIsMounted(true)
 
-    const preventDefault = (e: Event) => {
-      e.preventDefault()
+    const updateScreenSize = () => {
+      setScreenSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      })
     }
 
-    const container = containerRef.current
-    container.addEventListener("wheel", preventDefault, { passive: false })
-    container.addEventListener("touchmove", preventDefault, { passive: false })
+    updateScreenSize()
+    window.addEventListener('resize', updateScreenSize)
 
-    return () => {
-      container.removeEventListener("wheel", preventDefault)
-      container.removeEventListener("touchmove", preventDefault)
-    }
-  }, [isClient])
+    return () => window.removeEventListener('resize', updateScreenSize)
+  }, [])
 
-  // Always render with fallback during SSR
-  if (!isClient) {
-    return (
-      <div className={`w-full h-full overflow-hidden ${className}`} suppressHydrationWarning={true}>
-        <div className="absolute inset-0 w-full h-full bg-gradient-to-b from-transparent via-purple-900/5 to-transparent" />
-      </div>
-    )
-  }
+  if (!isMounted) return null
 
   return (
     <div className={`w-full h-full overflow-hidden ${className}`} suppressHydrationWarning={true}>
       <div
         ref={containerRef}
-        className="absolute inset-0 w-full h-full touch-none"
+        className="absolute inset-0 w-full h-full"
         style={{
+          cursor: 'grab',
+          touchAction: 'pan-y',
           backgroundColor: 'transparent',
-          cursor: "grab",
-          touchAction: "none",
+          pointerEvents: 'auto',
         }}
       >
-        <CanvasErrorBoundary>
-          <Canvas 
-            shadows 
-            style={{ width: "100%", height: "100%" }}
-            onContextMenu={(e) => e.preventDefault()}
-            camera={{ 
-              position: [0, 0, 6], // Desktop camera for all sizes
-              fov: 65 // Desktop FOV for all sizes
-            }}
-          >
-          <PerspectiveCamera 
-            makeDefault 
-            position={[0, 0, 6]} // Desktop camera for all sizes
-            fov={65} // Desktop FOV for all sizes
-          />
+        <Canvas
+          shadows
+          style={{ width: '100%', height: '100%', pointerEvents: 'auto' }}
+          onContextMenu={(e) => e.preventDefault()}
+          camera={{
+            position: [0, 0, 6], // Fixed position for consistency
+            fov: 65, // Fixed FOV
+          }}
+        >
+          <PerspectiveCamera makeDefault position={[0, 0, 6]} fov={65} />
           <Environment preset="studio" />
           <ambientLight intensity={0.3} />
-          
+
           <directionalLight
             castShadow
             position={[20, 15, 15]}
@@ -138,30 +91,98 @@ export default function BraidedRopeAnimation({ className = "" }: BraidedRopeAnim
             shadow-camera-bottom={-10}
             color="#F5F5F5"
           />
-          
-          <spotLight position={[15, 12, 15]} angle={0.25} penumbra={1} intensity={1.2} castShadow color="#FFFFFF" />
-          <spotLight position={[-15, 15, 20]} angle={0.25} penumbra={1} intensity={1.0} castShadow color="#E6E6FA" />
-          
-          <pointLight position={[8, 6, 12]} intensity={1.2} color="#9C27B0" distance={20} decay={2} />
-          <pointLight position={[-8, -6, 12]} intensity={1.0} color="#6A1B9A" distance={18} decay={2} />
-          <pointLight position={[0, 10, 8]} intensity={0.8} color="#BA68C8" distance={15} decay={2} />
-          
-          <pointLight position={[24, 6, -10]} intensity={2.8} color="#FFFFFF" distance={42} decay={3} />
-          <pointLight position={[-24, 6, -10]} intensity={2.8} color="#E1BEE7" distance={42} decay={3} />
-          
-          <pointLight position={[0, -12, 28]} intensity={1.8} color="#CE93D8" distance={22} decay={2} />
-          <pointLight position={[16, 28, 6]} intensity={1.6} color="#F3E5F5" distance={34} decay={2} />
-          
-          <pointLight position={[-10, 2, -16]} intensity={2.0} color="#AB47BC" distance={38} decay={3} />
-          <pointLight position={[10, 2, -16]} intensity={2.0} color="#F8BBD9" distance={38} decay={3} />
+
+          <spotLight
+            position={[15, 12, 15]}
+            angle={0.25}
+            penumbra={1}
+            intensity={1.2}
+            castShadow
+            color="#FFFFFF"
+          />
+          <spotLight
+            position={[-15, 15, 20]}
+            angle={0.25}
+            penumbra={1}
+            intensity={1.0}
+            castShadow
+            color="#E6E6FA"
+          />
+
+          <pointLight
+            position={[8, 6, 12]}
+            intensity={1.2}
+            color="#9C27B0"
+            distance={20}
+            decay={2}
+          />
+          <pointLight
+            position={[-8, -6, 12]}
+            intensity={1.0}
+            color="#6A1B9A"
+            distance={18}
+            decay={2}
+          />
+          <pointLight
+            position={[0, 10, 8]}
+            intensity={0.8}
+            color="#BA68C8"
+            distance={15}
+            decay={2}
+          />
+
+          <pointLight
+            position={[24, 6, -10]}
+            intensity={2.8}
+            color="#FFFFFF"
+            distance={42}
+            decay={3}
+          />
+          <pointLight
+            position={[-24, 6, -10]}
+            intensity={2.8}
+            color="#E1BEE7"
+            distance={42}
+            decay={3}
+          />
+
+          <pointLight
+            position={[0, -12, 28]}
+            intensity={1.8}
+            color="#CE93D8"
+            distance={22}
+            decay={2}
+          />
+          <pointLight
+            position={[16, 28, 6]}
+            intensity={1.6}
+            color="#F3E5F5"
+            distance={34}
+            decay={2}
+          />
+
+          <pointLight
+            position={[-10, 2, -16]}
+            intensity={2.0}
+            color="#AB47BC"
+            distance={38}
+            decay={3}
+          />
+          <pointLight
+            position={[10, 2, -16]}
+            intensity={2.0}
+            color="#F8BBD9"
+            distance={38}
+            decay={3}
+          />
 
           <AnimatedHighlights screenSize={screenSize} />
 
-          <BraidedRopeMesh screenSize={screenSize} />
-          </Canvas>
-        </CanvasErrorBoundary>
+          <BraidedRopeMesh screenSize={screenSize} containerRef={containerRef} />
+        </Canvas>
       </div>
-      
+
+      {/* Simplified overlay */}
       <div className="absolute inset-0 pointer-events-none z-10 bg-gradient-to-b from-black/80 via-transparent to-black/80" />
       <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-black to-transparent pointer-events-none z-10 h-48" />
       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent pointer-events-none z-10 h-48" />
@@ -177,100 +198,66 @@ function AnimatedHighlights({ screenSize }: { screenSize: { width: number; heigh
 
   useFrame((state) => {
     const time = state.clock.getElapsedTime()
-    
-    const baseRadius = 0.7 // Desktop base radius for all sizes
-    const helixSpeed = time * 1.6 // Match updated rope speed
-    const helixRadius = baseRadius * 1.1 // Match updated rope radius
-    
+
+    const baseRadius = 0.7
+    const helixSpeed = time * 1.6
+    const helixRadius = baseRadius * 1.1
+
     if (light1Ref.current) {
       const helixAngle = helixSpeed
       const spiralX = Math.cos(helixAngle) * helixRadius
       const spiralY = Math.sin(helixAngle * 0.5) * 0.15
       const spiralZ = Math.sin(helixAngle) * helixRadius
-      
-      light1Ref.current.position.set(
-        spiralX,
-        4 + spiralY,
-        spiralZ
-      )
+
+      light1Ref.current.position.set(spiralX, 4 + spiralY, spiralZ)
     }
-    
+
     if (light2Ref.current) {
-      const helixAngle = helixSpeed + Math.PI/3
+      const helixAngle = helixSpeed + Math.PI / 3
       const spiralX = Math.cos(helixAngle) * helixRadius
       const spiralY = Math.sin(helixAngle * 0.5) * 0.15
       const spiralZ = Math.sin(helixAngle) * helixRadius
-      
-      light2Ref.current.position.set(
-        spiralX,
-        2 + spiralY,
-        spiralZ
-      )
+
+      light2Ref.current.position.set(spiralX, 2 + spiralY, spiralZ)
     }
-    
+
     if (light3Ref.current) {
       const helixAngle = helixSpeed + Math.PI
       const spiralX = Math.cos(helixAngle) * helixRadius
       const spiralY = Math.sin(helixAngle * 0.5) * 0.15
       const spiralZ = Math.sin(helixAngle) * helixRadius
-      
-      light3Ref.current.position.set(
-        spiralX,
-        3 + spiralY,
-        spiralZ
-      )
+
+      light3Ref.current.position.set(spiralX, 3 + spiralY, spiralZ)
     }
-    
+
     if (light4Ref.current) {
-      const helixAngle = helixSpeed + Math.PI + Math.PI/3
+      const helixAngle = helixSpeed + Math.PI + Math.PI / 3
       const spiralX = Math.cos(helixAngle) * helixRadius
       const spiralY = Math.sin(helixAngle * 0.5) * 0.15
       const spiralZ = Math.sin(helixAngle) * helixRadius
-      
-      light4Ref.current.position.set(
-        spiralX,
-        1 + spiralY,
-        spiralZ
-      )
+
+      light4Ref.current.position.set(spiralX, 1 + spiralY, spiralZ)
     }
   })
 
   return (
     <>
-      <pointLight 
-        ref={light1Ref}
-        intensity={2.0}
-        color="#FFFFFF"
-        distance={4}
-        decay={3}
-      />
-      <pointLight 
-        ref={light2Ref}
-        intensity={1.6}
-        color="#F8F8FF"
-        distance={4}
-        decay={3}
-      />
-      
-      <pointLight 
-        ref={light3Ref}
-        intensity={1.8}
-        color="#E1BEE7"
-        distance={4}
-        decay={3}
-      />
-      <pointLight 
-        ref={light4Ref}
-        intensity={1.4}
-        color="#CE93D8"
-        distance={3.5}
-        decay={3}
-      />
+      <pointLight ref={light1Ref} intensity={2.0} color="#FFFFFF" distance={4} decay={3} />
+      <pointLight ref={light2Ref} intensity={1.6} color="#F8F8FF" distance={4} decay={3} />
+
+      <pointLight ref={light3Ref} intensity={1.8} color="#E1BEE7" distance={4} decay={3} />
+      <pointLight ref={light4Ref} intensity={1.4} color="#CE93D8" distance={3.5} decay={3} />
     </>
   )
 }
 
-function BraidedRopeMesh({ screenSize }: { screenSize: { width: number; height: number } }) {
+function BraidedRopeMesh({
+  screenSize,
+  containerRef,
+}: {
+  screenSize: { width: number; height: number }
+  containerRef: React.RefObject<HTMLDivElement>
+}) {
   const meshRef1 = useRef<Mesh>(null!)
   const meshRef2 = useRef<Mesh>(null!)
   const hitAreaRef = useRef<Mesh>(null!)
@@ -278,7 +265,7 @@ function BraidedRopeMesh({ screenSize }: { screenSize: { width: number; height: 
   const lastMousePosition = useRef({ x: 0, y: 0 })
   const lastUpdateTime = useRef(0)
   const velocity = useRef({ x: 0, y: 0 })
-  const autoRotateSpeed = useRef({ x: 0, y: 0.015 })
+  const autoRotateSpeed = useRef({ x: 0, y: 10.15 })
   const momentumActive = useRef(false)
 
   class BraidedRopeCurve extends Curve<Vector3> {
@@ -294,20 +281,19 @@ function BraidedRopeMesh({ screenSize }: { screenSize: { width: number; height: 
     }
 
     getPoint(t: number, optionalTarget = new Vector3()) {
-      const verticalProgress = (this.height / 2) - (t * this.height)
-      
-      // Cleaner helix parameters
-      const helixTurns = 4.5 // Slightly fewer turns for smoother motion
+      const verticalProgress = this.height / 2 - t * this.height
+
+      const helixTurns = 4.5
       const helixAngle = this.time * 1.6 + t * Math.PI * helixTurns * this.direction + this.offset
-      
-      const helixRadius = this.radius * 1.1 // Slightly tighter for cleaner look
-      
+
+      const helixRadius = this.radius * 1.1
+
       const x = Math.cos(helixAngle) * helixRadius
-      const y = verticalProgress + Math.sin(helixAngle * 0.3) * 0.12 // Subtler vertical wave
+      const y = verticalProgress + Math.sin(helixAngle * 0.3) * 0.12
       const z = Math.sin(helixAngle) * helixRadius
-      
+
       let fadeMultiplier = 1
-      
+
       const fadeStart = 0.12
       const fadeEnd = 0.88
       if (t < fadeStart) {
@@ -317,12 +303,8 @@ function BraidedRopeMesh({ screenSize }: { screenSize: { width: number; height: 
         const normalized = (1 - t) / (1 - fadeEnd)
         fadeMultiplier = normalized * normalized * (3 - 2 * normalized)
       }
-      
-      return optionalTarget.set(
-        x * fadeMultiplier,
-        y,
-        z * fadeMultiplier
-      )
+
+      return optionalTarget.set(x * fadeMultiplier, y, z * fadeMultiplier)
     }
 
     updateTime(time: number) {
@@ -330,23 +312,24 @@ function BraidedRopeMesh({ screenSize }: { screenSize: { width: number; height: 
     }
   }
 
-  const getRopeScale = () => {
-    // Unified rope scale - desktop version for all sizes
-    return { radius: 0.7, height: 12 }
-  }
-  
-  const ropeScale = getRopeScale()
+  const ropeScale = { radius: 0.7, height: 12 }
   const curve1 = useRef(new BraidedRopeCurve(ropeScale.radius, ropeScale.height, 4.0, 0, 1, 0))
-  const curve2 = useRef(new BraidedRopeCurve(ropeScale.radius, ropeScale.height, 4.0, Math.PI, -1, 0))
-  
+  const curve2 = useRef(
+    new BraidedRopeCurve(ropeScale.radius, ropeScale.height, 4.0, Math.PI, -1, 0)
+  )
+
   const tubeRadius = 0.3
   const radialSegments = 32
   const tubularSegments = 200
 
-  const geometry1 = useRef(new TubeGeometry(curve1.current, tubularSegments, tubeRadius, radialSegments, false))
-  const geometry2 = useRef(new TubeGeometry(curve2.current, tubularSegments, tubeRadius, radialSegments, false))
+  const geometry1 = useRef(
+    new TubeGeometry(curve1.current, tubularSegments, tubeRadius, radialSegments, false)
+  )
+  const geometry2 = useRef(
+    new TubeGeometry(curve2.current, tubularSegments, tubeRadius, radialSegments, false)
+  )
 
-  const hitAreaGeometry = new SphereGeometry(5, 16, 16)
+  const hitAreaGeometry = new SphereGeometry(8, 16, 16)
 
   const onPointerDown = (e: any) => {
     e.stopPropagation()
@@ -355,11 +338,14 @@ function BraidedRopeMesh({ screenSize }: { screenSize: { width: number; height: 
     lastUpdateTime.current = performance.now()
     momentumActive.current = false
 
-    if (e.target.setPointerCapture) {
+    if (e.target && e.target.setPointerCapture) {
       e.target.setPointerCapture(e.pointerId)
     }
 
-    document.body.style.cursor = "grabbing"
+    if (containerRef.current) {
+      containerRef.current.style.cursor = 'grabbing'
+    }
+    document.body.style.cursor = 'grabbing'
   }
 
   const onPointerUp = (e: any) => {
@@ -374,11 +360,14 @@ function BraidedRopeMesh({ screenSize }: { screenSize: { width: number; height: 
       }
     }
 
-    if (e.target.releasePointerCapture) {
+    if (e.target && e.target.releasePointerCapture) {
       e.target.releasePointerCapture(e.pointerId)
     }
 
-    document.body.style.cursor = "grab"
+    if (containerRef.current) {
+      containerRef.current.style.cursor = 'grab'
+    }
+    document.body.style.cursor = 'grab'
   }
 
   const onPointerMove = (e: any) => {
@@ -423,8 +412,20 @@ function BraidedRopeMesh({ screenSize }: { screenSize: { width: number; height: 
       curve1.current.updateTime(animationSpeed)
       curve2.current.updateTime(animationSpeed)
 
-      const newGeometry1 = new TubeGeometry(curve1.current, tubularSegments, tubeRadius, radialSegments, false)
-      const newGeometry2 = new TubeGeometry(curve2.current, tubularSegments, tubeRadius, radialSegments, false)
+      const newGeometry1 = new TubeGeometry(
+        curve1.current,
+        tubularSegments,
+        tubeRadius,
+        radialSegments,
+        false
+      )
+      const newGeometry2 = new TubeGeometry(
+        curve2.current,
+        tubularSegments,
+        tubeRadius,
+        radialSegments,
+        false
+      )
 
       meshRef1.current.geometry.dispose()
       meshRef2.current.geometry.dispose()
@@ -444,15 +445,13 @@ function BraidedRopeMesh({ screenSize }: { screenSize: { width: number; height: 
       if (Math.abs(velocity.current.x) < 0.001 && Math.abs(velocity.current.y) < 0.001) {
         momentumActive.current = false
       }
-    } 
+    }
 
     // Enhanced natural rope movement
-    const stretchY = Math.sin(time * 0.18) * 0.2 + Math.sin(time * 0.35) * 0.08 // Slightly less movement
-    const elasticScaleY = 1 + Math.sin(time * 0.22) * 0.06 + Math.cos(time * 0.15) * 0.03 // More subtle
-    const elasticScaleXZ = 1 - Math.sin(time * 0.22) * 0.015 // Cleaner scaling
-    
-    // Remove continuous rotation - keep rope static unless manually controlled
-    
+    const stretchY = Math.sin(time * 0.18) * 0.2 + Math.sin(time * 0.35) * 0.08
+    const elasticScaleY = 1 + Math.sin(time * 0.22) * 0.06 + Math.cos(time * 0.15) * 0.03
+    const elasticScaleXZ = 1 - Math.sin(time * 0.22) * 0.015
+
     meshRef1.current.position.y = stretchY
     meshRef2.current.position.y = stretchY + 0.5
     meshRef1.current.scale.set(elasticScaleXZ, elasticScaleY, elasticScaleXZ)
@@ -479,28 +478,23 @@ function BraidedRopeMesh({ screenSize }: { screenSize: { width: number; height: 
         castShadow
         receiveShadow
         rotation={[0, 0, Math.PI / 6]}
-        position={[
-          0,
-          2, // Desktop position for all sizes
-          0
-        ]}
+        position={[0, 2, 0]}
         onPointerDown={onPointerDown}
         onPointerUp={onPointerUp}
         onPointerLeave={onPointerUp}
         onPointerMove={onPointerMove}
-        style={{ cursor: 'grab' }}
       >
         <meshStandardMaterial
           color="#6A1B9A"
-          metalness={0.95} // Desktop metalness for all sizes
-          roughness={0.05} // Desktop roughness for all sizes
+          metalness={0.95}
+          roughness={0.05}
           emissive="#4A148C"
-          emissiveIntensity={0.25} // Desktop emissive for all sizes
+          emissiveIntensity={0.25}
           transparent={true}
-          opacity={0.6} // Desktop opacity for all sizes
+          opacity={0.6}
           alphaTest={0.05}
-          blending={2} // Desktop blending for all sizes
-          depthWrite={false} // Desktop depth write for all sizes
+          blending={2}
+          depthWrite={false}
         />
       </mesh>
 
@@ -510,28 +504,23 @@ function BraidedRopeMesh({ screenSize }: { screenSize: { width: number; height: 
         castShadow
         receiveShadow
         rotation={[0, 0, Math.PI / 6]}
-        position={[
-          0,
-          2.5, // Desktop position for all sizes
-          0
-        ]}
+        position={[0, 2.5, 0]}
         onPointerDown={onPointerDown}
         onPointerUp={onPointerUp}
         onPointerLeave={onPointerUp}
         onPointerMove={onPointerMove}
-        style={{ cursor: 'grab' }}
       >
         <meshStandardMaterial
           color="#2E0A3E"
-          metalness={0.92} // Desktop metalness for all sizes
-          roughness={0.08} // Desktop roughness for all sizes
+          metalness={0.92}
+          roughness={0.08}
           emissive="#1A0624"
-          emissiveIntensity={0.22} // Desktop emissive for all sizes
+          emissiveIntensity={0.22}
           transparent={true}
-          opacity={0.5} // Desktop opacity for all sizes
+          opacity={0.5}
           alphaTest={0.05}
-          blending={2} // Desktop blending for all sizes
-          depthWrite={false} // Desktop depth write for all sizes
+          blending={2}
+          depthWrite={false}
         />
       </mesh>
     </>

@@ -1,122 +1,128 @@
 "use client"
 
-import { useRef, useEffect, useState } from "react"
-import { motion } from "framer-motion"
-import { useSafariDetection } from "@/hooks/use-safari-detection"
+import React, { useRef, useLayoutEffect, useState } from "react"
+import {
+  motion,
+  useScroll,
+  useSpring,
+  useTransform,
+  useMotionValue,
+  useVelocity,
+  useAnimationFrame,
+} from "framer-motion"
+
+interface VelocityMapping {
+  input: [number, number]
+  output: [number, number]
+}
 
 interface ScrollVelocityTextProps {
   children: React.ReactNode[]
   baseVelocity?: number
   className?: string
+  scrollContainerRef?: React.RefObject<HTMLElement>
+  damping?: number
+  stiffness?: number
+  numCopies?: number
+  velocityMapping?: VelocityMapping
 }
 
-export default function ScrollVelocityText({ 
-  children, 
-  baseVelocity = 100, 
-  className = "" 
-}: ScrollVelocityTextProps) {
-  const { isSafari, isClient } = useSafariDetection()
-  const baseX = useRef(0)
-  const scrollVelocity = useRef(0)
-  const smoothVelocity = useRef(0) 
-  const velocityFactor = useRef(0)
-  const [animationX, setAnimationX] = useState(0)
-  const [isMounted, setIsMounted] = useState(false)
-  const directionFactor = useRef(1)
+function useElementWidth<T extends HTMLElement>(ref: React.RefObject<T | null>): number {
+  const [width, setWidth] = useState(0)
 
-  useEffect(() => {
-    if (!isClient) return
-    
-    const delay = isSafari ? 600 : 100
-    const timer = setTimeout(() => {
-      setIsMounted(true)
-    }, delay)
-    
-    return () => clearTimeout(timer)
-  }, [isClient, isSafari])
-
-  useEffect(() => {
-    if (!isMounted) return
-    
-    let lastScrollY = window.scrollY
-    let animationFrame: number
-
-    const updateVelocity = () => {
-      const currentScrollY = window.scrollY
-      const scrollDelta = currentScrollY - lastScrollY
-      lastScrollY = currentScrollY
-
-      // Calculate scroll velocity
-      scrollVelocity.current = scrollDelta
-      
-      // Smooth the velocity for better animation
-      smoothVelocity.current = smoothVelocity.current * 0.8 + scrollVelocity.current * 0.2
-      
-      // Determine direction (-1 for up, 1 for down)
-      directionFactor.current = smoothVelocity.current < 0 ? -1 : 1
-      
-      // Calculate velocity factor (affects animation speed)
-      velocityFactor.current = Math.min(Math.abs(smoothVelocity.current) / 300, 2)
-      
-      // Update base position with continuous movement and scroll influence
-      const moveBy = (baseVelocity * directionFactor.current * (1 + velocityFactor.current)) / 100
-      baseX.current += moveBy
-      
-      // Keep the animation position within bounds for seamless looping
-      if (baseX.current > 100) baseX.current = -100
-      if (baseX.current < -100) baseX.current = 100
-      
-      setAnimationX(baseX.current)
-      
-      animationFrame = requestAnimationFrame(updateVelocity)
-    }
-
-    animationFrame = requestAnimationFrame(updateVelocity)
-
-    return () => {
-      if (animationFrame) {
-        cancelAnimationFrame(animationFrame)
+  useLayoutEffect(() => {
+    function updateWidth() {
+      if (ref.current) {
+        setWidth(ref.current.offsetWidth)
       }
     }
-  }, [baseVelocity])
+    updateWidth()
+    window.addEventListener("resize", updateWidth)
+    return () => window.removeEventListener("resize", updateWidth)
+  }, [ref])
 
-  if (!isClient || !isMounted) {
-    return (
-      <div className={`flex whitespace-nowrap overflow-hidden ${className}`} suppressHydrationWarning={true}>
-        <div className="flex whitespace-nowrap">
-          {children.map((child, childIndex) => (
-            <div key={childIndex} className="mx-4">
-              {child}
-            </div>
-          ))}
-        </div>
-      </div>
+  return width
+}
+
+export default function ScrollVelocityText({
+  children,
+  baseVelocity = 50, // Reduced default speed
+  className = "",
+  scrollContainerRef,
+  damping = 50,
+  stiffness = 400,
+  numCopies = 4,
+  velocityMapping = { input: [0, 1000], output: [0, 2] }, // Reduced output range
+}: ScrollVelocityTextProps) {
+  const baseX = useMotionValue(0)
+  const scrollOptions = scrollContainerRef
+    ? { container: scrollContainerRef }
+    : {}
+  const { scrollY } = useScroll(scrollOptions)
+  const scrollVelocity = useVelocity(scrollY)
+  const smoothVelocity = useSpring(scrollVelocity, {
+    damping: damping,
+    stiffness: stiffness,
+  })
+  const velocityFactor = useTransform(
+    smoothVelocity,
+    velocityMapping.input,
+    velocityMapping.output,
+    { clamp: false }
+  )
+
+  const copyRef = useRef<HTMLSpanElement>(null)
+  const copyWidth = useElementWidth(copyRef)
+
+  function wrap(min: number, max: number, v: number): number {
+    const range = max - min
+    const mod = (((v - min) % range) + range) % range
+    return mod + min
+  }
+
+  const x = useTransform(baseX, (v) => {
+    if (copyWidth === 0) return "0px"
+    return `${wrap(-copyWidth, 0, v)}px`
+  })
+
+  const directionFactor = useRef<number>(1)
+  useAnimationFrame((t, delta) => {
+    let moveBy = directionFactor.current * baseVelocity * (delta / 1000)
+
+    if (velocityFactor.get() < 0) {
+      directionFactor.current = -1
+    } else if (velocityFactor.get() > 0) {
+      directionFactor.current = 1
+    }
+
+    moveBy += directionFactor.current * moveBy * velocityFactor.get()
+    baseX.set(baseX.get() + moveBy)
+  })
+
+  const spans = []
+  for (let i = 0; i < numCopies; i++) {
+    spans.push(
+      <span
+        className="flex-shrink-0"
+        key={i}
+        ref={i === 0 ? copyRef : null}
+      >
+        {children.map((child, childIndex) => (
+          <span key={`${i}-${childIndex}`} className="mx-4">
+            {child}
+          </span>
+        ))}
+      </span>
     )
   }
 
   return (
-    <div className={`flex whitespace-nowrap overflow-hidden ${className}`}>
+    <div className={`w-full overflow-hidden ${className}`}>
       <motion.div
         className="flex whitespace-nowrap"
-        style={{
-          x: `${animationX}%`,
-        }}
-        transition={{
-          type: "tween",
-          ease: "linear",
-          duration: 0
-        }}
+        style={{ x }}
       >
-        {/* Render children multiple times for seamless loop */}
-        {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="flex shrink-0">
-            {children.map((child, childIndex) => (
-              <div key={`${i}-${childIndex}`} className="mx-4">
-                {child}
-              </div>
-            ))}
-          </div>
-        ))}
+        {spans}
       </motion.div>
     </div>
   )

@@ -67,3 +67,7 @@ Apply these guidelines consistently across all apps to maintain quality and user
 # Impressive Content and Animations
 
 "refernce https://reactbits.dev as a good source of animated components and act as atop notch staff and architecture software develpers and group of talented designers to create trully unique pages that represent our work as a all in one agency that can earn trust."
+
+# gitbub commit message
+
+"alaways should assign author as Max Sheikhizadeh and remove any "Claude" mentioning any where

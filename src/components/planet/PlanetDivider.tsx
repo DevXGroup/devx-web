@@ -119,7 +119,7 @@ export default function PlanetDivider() {
   })
 
   return (
-    <div className={`relative w-full mx-auto overflow-hidden pointer-events-none z-10`} style={{ maxWidth: `${sizes.containerMaxWidth}px`, height: `${sizes.containerHeight}px` }}>
+    <div className={`relative w-full mx-auto pointer-events-none z-10`} style={{ height: `${sizes.containerHeight}px` }}>
       {/* Main planet body with enhanced 3D definition */}
       <div
         className="absolute w-full h-[200%] left-0 planet-glow-effect"

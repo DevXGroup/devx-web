@@ -39,15 +39,7 @@ import AppleScrollSection from '@/components/services/AppleScrollSection'
 import ScrollVelocityText from '@/components/ScrollVelocityText'
 import SafariCompatibleWrapper from '@/components/SafariCompatibleWrapper'
 
-// Import BraidedRopeAnimation dynamically to prevent hydration issues
-const BraidedRopeAnimation = dynamic(() => import('@/components/BraidedRopeAnimation'), {
-  ssr: false,
-  loading: () => (
-    <div className="w-full h-full bg-transparent">
-      <div className="absolute inset-0 w-full h-full bg-transparent" />
-    </div>
-  ),
-})
+import BraidedRopeAnimation from '@/components/BraidedRopeAnimation'
 
 // Define services array here, as it's specific to this page's cards
 const services = [
@@ -274,13 +266,23 @@ export default function ServicesPage() {
   const activeServiceData = services.find((s, i) => i === activeService) || services[0]
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background mt-0 pt-0">
       {/* Hero Section with Enhanced Metallic Helix */}
       <section
         ref={heroRef}
-        className="relative min-h-screen hero-padding flex flex-col items-center justify-center services-section"
+        className="relative min-h-screen py-20 flex flex-col items-center justify-center pt-32 overflow-hidden"
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-900/10 to-black z-0" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-900/10 to-black" />
+
+        {/* Full-screen 3D Braided Rope Animation - Background under Our Services title */}
+        {isClient && (
+          <div className="absolute inset-0 w-full h-full z-10 overflow-hidden pointer-events-auto">
+            <BraidedRopeAnimation
+              className="absolute inset-0 w-full h-full"
+              ropeScale={isMobile ? { radius: 0.45, height: 7 } : { radius: 0.7, height: 12 }}
+            />
+          </div>
+        )}
 
         {/* Enhanced background animations */}
         <div className="absolute inset-0 z-0">
@@ -417,8 +419,8 @@ export default function ServicesPage() {
           />
         </div>
 
-        <div className="relative z-20 w-full flex flex-col items-center">
-          <div className="container mx-auto px-4 relative z-20">
+        <div className="relative z-20 w-full flex flex-col items-center pointer-events-none">
+          <div className="container mx-auto px-4 relative z-20 pointer-events-none">
             <motion.div
               initial="hidden"
               animate="visible"
@@ -431,76 +433,70 @@ export default function ServicesPage() {
                   },
                 },
               }}
-              className="text-center max-w-4xl mx-auto title-margin"
+              className="text-center max-w-4xl mx-auto title-margin pointer-events-none"
             >
-              <div className="flex flex-col items-center pt-4 md:pt-8 ">
+              <div className="flex flex-col items-center">
                 <BlurText
                   text="Services"
-                  className="heading-hero text-accent-gold title-margin text-center relative z-40 services-title"
-                  delay={133}
+                  className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-center text-[#CFB53B] font-['IBM_Plex_Mono'] relative z-30"
+                  delay={120}
                   animateBy="words"
                   direction="top"
-                  animationFrom={undefined}
-                  animationTo={undefined}
+                  animationFrom={{ opacity: 0, y: 20 }}
+                  animationTo={[{ opacity: 1, y: 0 }]}
                   onAnimationComplete={() => {}}
                 />
               </div>
 
               <motion.p
                 variants={floatingAnimation}
-                className="text-body-large text-white/95 max-w-3xl mx-auto relative z-40"
+                className="text-xl text-foreground/80 font-light max-w-2xl mx-auto relative z-30"
+                style={{
+                  textShadow: '0 1px 4px rgba(0,0,0,0.8)',
+                  WebkitTextStroke: '0.5px rgba(0,0,0,0.3)',
+                }}
               >
-                We build software that helps your business work better. Our experienced team creates
-                reliable solutions that save you time and help you serve your customers better.
+                Comprehensive software solutions to drive your business forward. We combine
+                expertise with innovation to deliver exceptional results.
               </motion.p>
             </motion.div>
           </div>
 
-          {/* Two rope strands animation - extends from top of page */}
-          <div
-            className="absolute w-full z-0 overflow-hidden"
-            style={{ top: '-200px', height: '100vh' }}
-            suppressHydrationWarning={true}
+          {/* Drag indicator for rope animation */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.5, duration: 0.8 }}
+            className="relative z-30 text-center mb-8"
           >
-            <BraidedRopeAnimation className="w-full h-full" />
-          </div>
-
-          {/* Interactive rope indicator */}
-          <SafariCompatibleWrapper delay={400}>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: [0.5, 0.8, 0.5] }}
+            <motion.p
+              animate={{
+                opacity: [0.6, 1, 0.6],
+                scale: [0.98, 1.02, 0.98],
+              }}
               transition={{
                 duration: 2,
-                repeat: Number.POSITIVE_INFINITY,
+                repeat: Infinity,
                 ease: 'easeInOut',
               }}
-              className="absolute bottom-16 left-1/2 transform -translate-x-1/2 z-20 text-white/60 text-xs font-mono tracking-wider cursor-pointer select-none"
+              className="text-sm text-white/60 font-light tracking-wide"
+              style={{
+                textShadow: '0 1px 4px rgba(0,0,0,0.8)',
+              }}
             >
               → drag/interact ←
-            </motion.div>
-          </SafariCompatibleWrapper>
-        </div>
-      </section>
+            </motion.p>
+          </motion.div>
 
-      {/* Value Propositions Section */}
-      <AppleScrollSection>
-        <section className="section-padding relative services-section">
-          <div className="container mx-auto px-4">
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{
-                opacity: 1,
-                y: 0,
-                transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
-              }}
-              viewport={{ once: true, amount: 0.2 }}
-              className="heading-section text-accent-gold text-center title-margin mt-0 font-['IBM_Plex_Mono'] services-title"
-            >
-              The DevX edge
-            </motion.h2>
+          {/* Content spacing for braided rope animation */}
+          <div className="w-full mx-auto mb-12 h-8"></div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 px-4 sm:px-6 md:px-8 lg:px-16 relative z-20">
+          {/* Value Propositions with Apple-style reveal */}
+          <div
+            ref={valuePropsRef}
+            className="w-full max-w-5xl mt-8 mb-8 relative z-20 pointer-events-auto"
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 px-2 md:px-8 lg:px-16 relative z-20">
               {valueProps.map((prop, index) => (
                 <motion.div
                   key={prop.title}
@@ -511,7 +507,7 @@ export default function ServicesPage() {
                   className="bg-black/40 backdrop-blur-sm p-6 rounded-xl border border-white/10 hover:border-[#4CD787]/30 hover:bg-black/50 transition-all duration-300 group cursor-pointer"
                   whileHover={{
                     scale: 1.03,
-                    boxShadow: '0 8px 20px -8px rgba(207, 181, 59, 0.3)',
+                    boxShadow: '0 8px 20px -8px rgba(207,181,59,0.3)',
                     transition: { duration: 0.2 },
                   }}
                 >
@@ -525,8 +521,8 @@ export default function ServicesPage() {
               ))}
             </div>
           </div>
-        </section>
-      </AppleScrollSection>
+        </div>
+      </section>
 
       {/* Services Grid with Apple-style reveal */}
       <AppleScrollSection>
@@ -540,17 +536,16 @@ export default function ServicesPage() {
                 transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
               }}
               viewport={{ once: true, amount: 0.2 }}
-              className="heading-section text-accent-gold text-center title-margin mt-0 font-['IBM_Plex_Mono'] services-title"
+              className="text-3xl md:text-4xl font-bold mb-12 text-center text-[#CFB53B] mt-0"
+              style={{
+                textShadow: '0 2px 4px rgba(0,0,0,0.5)',
+                WebkitTextStroke: '1px rgba(0,0,0,0.3)',
+              }}
             >
               Our Expertise
             </motion.h2>
 
-            {/* Interactive background elements */}
-            <div className="absolute inset-0 pointer-events-none">
-              <ParticleAnimation density={15} speed={0.2} />
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 px-4 sm:px-6 md:px-8 lg:px-16 relative z-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 px-2 md:px-8 lg:px-16 relative z-10">
               {services.map((service, index) => (
                 <motion.div
                   key={service.title}
@@ -630,27 +625,34 @@ export default function ServicesPage() {
               className="text-center max-w-3xl mx-auto px-4"
             >
               <motion.h2
-                className="heading-section text-accent-gold text-center mb-12"
+                className="text-3xl md:text-4xl font-bold mb-6 text-[#CFB53B]"
                 whileHover={{
                   scale: 1.03,
                   transition: { duration: 0.2 },
                 }}
+                style={{
+                  textShadow: '0 2px 4px rgba(0,0,0,0.5)',
+                  WebkitTextStroke: '1px rgba(0,0,0,0.3)',
+                }}
               >
-                Ready to Accelerate Your Success?
+                Ready to Transform Your Business?
               </motion.h2>
 
               <motion.p
-                className="text-body text-white/85 mb-8"
+                className="text-lg text-foreground/80 font-light mb-8"
                 initial={{ opacity: 0 }}
                 whileInView={{
                   opacity: 1,
                   transition: { delay: 0.2, duration: 0.6 },
                 }}
                 viewport={{ once: true, amount: 0.5 }}
+                style={{
+                  textShadow: '0 1px 2px rgba(0,0,0,0.5)',
+                  WebkitTextStroke: '0.5px rgba(0,0,0,0.2)',
+                }}
               >
-                Don&apos;t let outdated technology hold you back. Schedule a strategic consultation
-                and discover how our proven solutions can drive measurable growth for your
-                business—starting today.
+                Let&apos;s discuss how we can help you achieve your goals with our expert software
+                development services.
               </motion.p>
 
               <AnimatePresence>
@@ -667,7 +669,7 @@ export default function ServicesPage() {
                     href="/contact"
                     className="inline-block bg-robinhood text-black hover:bg-robinhood-90 px-8 py-3 rounded-lg font-medium border border-black/30 hover:border-black/60 hover:shadow-[0_5px_15px_rgba(204,255,0,0.3)] relative overflow-hidden group transition-all duration-300"
                   >
-                    <span className="relative z-10">Start Your Transformation</span>
+                    <span className="relative z-10">Get Started</span>
                     <motion.span
                       className="absolute inset-0 bg-white/20"
                       initial={{ x: '-100%', opacity: 0 }}
@@ -686,13 +688,16 @@ export default function ServicesPage() {
                   transition: { delay: 0.6, duration: 0.8 },
                 }}
                 viewport={{ once: true, amount: 0.3 }}
-                className="mt-16 w-full max-w-none overflow-hidden"
+                className="mt-16 w-screen overflow-hidden -mx-4 md:-mx-8 lg:-mx-16"
               >
                 {isClient && (
-                  <div suppressHydrationWarning={true}>
+                  <div suppressHydrationWarning={true} className="w-full">
                     <ScrollVelocityText
-                      baseVelocity={50}
+                      baseVelocity={25}
                       className="text-2xl md:text-3xl lg:text-4xl font-bold text-white/20 mb-4"
+                      damping={80}
+                      stiffness={300}
+                      velocityMapping={{ input: [0, 1000], output: [0, 1.5] }}
                     >
                       {[
                         'Custom Software • AI Solutions • Mobile Apps • Cloud Infrastructure • ',
@@ -700,8 +705,11 @@ export default function ServicesPage() {
                       ]}
                     </ScrollVelocityText>
                     <ScrollVelocityText
-                      baseVelocity={-30}
+                      baseVelocity={-20}
                       className="text-xl md:text-2xl lg:text-3xl font-light text-white/15"
+                      damping={80}
+                      stiffness={300}
+                      velocityMapping={{ input: [0, 1000], output: [0, 1.5] }}
                     >
                       {[
                         'Fast Delivery • Expert Team • Modern Technology • Reliable Results • ',
