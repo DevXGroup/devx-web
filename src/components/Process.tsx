@@ -1,6 +1,6 @@
 "use client"
 
-import { motion, useScroll, useTransform } from "framer-motion"
+import { motion, useScroll, useTransform, useMotionValue } from "framer-motion"
 import { useRef, useEffect, useState } from "react"
 import { Code2, Rocket, Users, Zap, Pencil, Settings } from "lucide-react"
 import SDLCProcess from "./SDLCProcess"
@@ -61,10 +61,17 @@ const processes = [
 
 export default function Process() {
   const containerRef = useRef<HTMLDivElement>(null)
+  const [isClient, setIsClient] = useState(false)
+  
+  // Always call useScroll to maintain hooks order
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"],
   })
+  
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   const opacity = useTransform(scrollYProgress, [0, 0.5], [0, 1])
   const y = useTransform(scrollYProgress, [0, 0.5], [100, 0])

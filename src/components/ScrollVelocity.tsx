@@ -92,8 +92,15 @@ export const ScrollVelocity: React.FC<ScrollVelocityProps> = ({
     parallaxStyle,
     scrollerStyle,
   }: VelocityTextProps) {
+    const [isClient, setIsClient] = useState(false)
     const baseX = useMotionValue(0)
+    
+    useLayoutEffect(() => {
+      setIsClient(true)
+    }, [])
+    
     const scrollOptions = scrollContainerRef ? { container: scrollContainerRef } : {}
+    // Always call useScroll to maintain hooks order
     const { scrollY } = useScroll(scrollOptions)
     const scrollVelocity = useVelocity(scrollY)
     const smoothVelocity = useSpring(scrollVelocity, {

@@ -34,8 +34,11 @@ export default function ParallaxTestimonials() {
   const containerRef = useRef(null)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const [isMobile, setIsMobile] = useState(false)
+  const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
+    setIsClient(true)
+    
     const checkIsMobile = () => {
       setIsMobile(window.innerWidth < 768)
     }
@@ -114,6 +117,7 @@ export default function ParallaxTestimonials() {
               onLeave={() => setHoveredIndex(null)}
               allHovered={hoveredIndex !== null}
               isMobile={isMobile}
+              isClient={isClient}
             />
           ))}
         </div>
@@ -131,11 +135,13 @@ interface TestimonialCardProps {
   onLeave: () => void;
   allHovered: boolean;
   isMobile: boolean;
+  isClient: boolean;
 }
 
-function TestimonialCard({ testimonial, index, containerRef, isHovered, onHover, onLeave, allHovered, isMobile }: TestimonialCardProps) {
+function TestimonialCard({ testimonial, index, containerRef, isHovered, onHover, onLeave, allHovered, isMobile, isClient }: TestimonialCardProps) {
   const cardRef = useRef(null)
 
+  // Always call useScroll to maintain hooks order
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"],

@@ -1,6 +1,6 @@
 "use client"
 
-import { motion, useScroll, useTransform, useReducedMotion, useInView } from "framer-motion"
+import { motion, useScroll, useTransform, useReducedMotion, useInView, useMotionValue } from "framer-motion"
 import { useRef, useEffect, useState, useMemo } from "react"
 import { Rocket, User, Layers, Search, Flag, ArrowRight } from "lucide-react"
 import Link from "next/link"
@@ -147,10 +147,17 @@ function WhyUsCard({ icon: Icon, title, description }: { icon: any; title: strin
 
 export default function Features() {
   const containerRef = useRef<HTMLDivElement>(null)
+  const [isClient, setIsClient] = useState(false)
+  
+  // Always call useScroll to maintain hooks order
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"],
   })
+  
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   const opacity = useTransform(scrollYProgress, [0, 0.2], [0, 1])
   const y = useTransform(scrollYProgress, [0, 0.2], [100, 0])
