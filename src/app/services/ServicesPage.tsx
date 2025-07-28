@@ -156,6 +156,7 @@ export default function ServicesPage() {
   const [activeSection, setActiveSection] = useState(null)
   const heroRef = useRef(null)
   const valuePropsRef = useRef(null)
+  const velocityRef = useRef(null)
   const isHeroInView = useInView(heroRef, { once: false })
   const heroControls = useAnimation()
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
@@ -169,6 +170,12 @@ export default function ServicesPage() {
   const { scrollYProgress: heroScrollProgress } = useScroll({
     target: heroRef,
     offset: ['start start', 'end start'],
+  })
+
+  // Scroll progress tracking for velocity animation
+  const { scrollYProgress: velocityScrollProgress } = useScroll({
+    target: velocityRef,
+    offset: ['start 0.8', 'end 0.2'],
   })
 
   // Force a re-render after component mounts to ensure visibility
@@ -193,6 +200,10 @@ export default function ServicesPage() {
   // Simplified transform values - removed complex scroll-based transforms
   const titleY = useTransform(heroScrollProgress, [0, 1], [0, -30])
   const titleScale = useTransform(heroScrollProgress, [0, 1], [1, 0.95])
+
+  // Apple-style scaling effect for velocity animation
+  const velocityScale = useTransform(velocityScrollProgress, [0, 0.5, 1], [1, 1.8, 3])
+  const velocityOpacity = useTransform(velocityScrollProgress, [0, 0.4, 1], [1, 0.8, 0.3])
 
   useEffect(() => {
     // Detect Safari
@@ -351,14 +362,14 @@ export default function ServicesPage() {
               }}
               className="text-center max-w-4xl mx-auto title-margin pointer-events-none"
             >
-              <div className="flex flex-col items-center">
+              <div className="flex justify-center text-center">
                 <BlurText
                   text="Services"
                   className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-center text-[#CFB53B] font-['IBM_Plex_Mono'] relative z-30"
-                  delay={120}
+                  delay={30}
                   animateBy="words"
                   direction="top"
-                  animationFrom={{ opacity: 0, y: 20 }}
+                  animationFrom={{ opacity: 0, y: 70 }}
                   animationTo={[{ opacity: 1, y: 0 }]}
                   onAnimationComplete={() => {}}
                 />
@@ -366,10 +377,11 @@ export default function ServicesPage() {
 
               <motion.p
                 variants={floatingAnimation}
-                className="text-xl text-foreground/80 font-light max-w-2xl mx-auto relative z-30"
+                className="text-md max-w-xl mx-auto relative z-30 font-['IBM_Plex_Sans']"
                 style={{
-                  textShadow: '0 1px 4px rgba(0,0,0,0.8)',
-                  WebkitTextStroke: '0.5px rgba(0,0,0,0.3)',
+                  textShadow: '0 2px 8px rgba(0,0,0,0.9)',
+                  fontWeight: '500',
+                  letterSpacing: '0.025em',
                 }}
               >
                 Comprehensive software solutions to drive your business forward. We combine
@@ -412,23 +424,19 @@ export default function ServicesPage() {
             ref={valuePropsRef}
             className="w-full max-w-5xl mt-8 mb-8 relative z-20 pointer-events-auto"
           >
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{
-                opacity: 1,
-                y: 0,
-                transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
-              }}
-              viewport={{ once: true, amount: 0.2 }}
-              className="text-3xl md:text-4xl font-bold mb-12 text-center text-[#CFB53B] mt-0"
-              style={{
-                textShadow: '0 2px 4px rgba(0,0,0,0.5)',
-                WebkitTextStroke: '1px rgba(0,0,0,0.3)',
-              }}
-            >
-              The DevX Edge
-            </motion.h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 px-2 md:px-8 lg:px-16 relative z-20">
+            <div className="flex justify-center items-center mb-16 text-center">
+              <BlurText
+                text="The DevX Edge"
+                className="text-4xl md:text-3xl font-bold text-center text-[#CFB53B] mt-10 tracking-wide"
+                delay={45}
+                animateBy="words"
+                direction="top"
+                animationFrom={{ opacity: 0, y: 70 }}
+                animationTo={[{ opacity: 1, y: 0 }]}
+                onAnimationComplete={() => {}}
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 px-6 md:px-8 lg:px-16 relative z-20">
               {valueProps.map((prop, index) => (
                 <motion.div
                   key={prop.title}
@@ -446,7 +454,10 @@ export default function ServicesPage() {
                   <h3 className="text-xl font-semibold text-[#CFB53B] mb-2 group-hover:text-white transition-colors duration-300">
                     {prop.title}
                   </h3>
-                  <p className="text-foreground/70 text-sm group-hover:text-white/80 transition-colors duration-300">
+                  <p
+                    className="text-white/90 text-sm group-hover:text-white transition-colors duration-300 font-['IBM_Plex_Sans'] font-medium"
+                    style={{ textShadow: '0 1px 4px rgba(0,0,0,0.7)', letterSpacing: '0.025em' }}
+                  >
                     {prop.description}
                   </p>
                 </motion.div>
@@ -457,7 +468,10 @@ export default function ServicesPage() {
       </section>
 
       {/* Scroll Velocity Animation */}
-      <section className="relative overflow-hidden">
+      <section
+        ref={velocityRef}
+        className="relative overflow-hidden pt-12 pb-12 md:pt-16 md:pb-16 lg:pt-20 lg:pb-20"
+      >
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{
@@ -466,31 +480,39 @@ export default function ServicesPage() {
           }}
           viewport={{ once: true, amount: 0.3 }}
           className="w-full overflow-hidden"
+          style={{
+            scale: velocityScale,
+            opacity: velocityOpacity,
+          }}
         >
           {isClient && (
-            <div suppressHydrationWarning={true} className="w-full">
+            <div
+              suppressHydrationWarning={true}
+              className="w-full"
+              style={{ gap: '-10px', display: 'flex', flexDirection: 'column' }}
+            >
               <ScrollVelocityText
                 baseVelocity={75}
-                className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#4CD787]/30 mb-6"
+                className="text-4xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold text-[#d0c0f5] leading-tight"
                 damping={30}
                 stiffness={600}
-                velocityMapping={{ input: [0, 1000], output: [0, 3] }}
+                velocityMapping={{ input: [0, 1000], output: [0, 6] }}
               >
                 {[
-                  'Custom Software • AI Solutions • Mobile Apps • Cloud Infrastructure • ',
-                  'IoT Development • Workflow Automation • Digital Transformation • ',
+                  ' Custom Software  •  AI Solutions  •  Mobile Apps  •  Cloud Infrastructure  • ',
+                  ' IoT Development  •  Workflow Automation  •  Digital Transformation  • ',
                 ]}
               </ScrollVelocityText>
               <ScrollVelocityText
-                baseVelocity={-50}
-                className="text-3xl md:text-4xl lg:text-5xl font-light text-[#CFB53B]/25"
+                baseVelocity={-80}
+                className="text-3xl md:text-4xl lg:text-5xl xl:text-5xl font-extralight text-[#696869] leading-tight"
                 damping={30}
                 stiffness={600}
-                velocityMapping={{ input: [0, 1000], output: [0, 3] }}
+                velocityMapping={{ input: [0, 1000], output: [0, 7] }}
               >
                 {[
-                  'Fast Delivery • Expert Team • Modern Technology • Reliable Results • ',
-                  'Long-term Support • Clear Pricing • Proven Success • Your Vision • ',
+                  'Fast Delivery • Expert Team • Modern Technology • Reliable Results •',
+                  'Long-term Support • Clear Pricing • Proven Success • Your Vision •',
                 ]}
               </ScrollVelocityText>
             </div>
@@ -502,22 +524,24 @@ export default function ServicesPage() {
       <AppleScrollSection>
         <section className="section-padding relative services-section">
           <div className="container mx-auto px-4">
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{
-                opacity: 1,
-                y: 0,
-                transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
-              }}
-              viewport={{ once: true, amount: 0.2 }}
-              className="text-3xl md:text-4xl font-bold mb-12 text-center text-[#CFB53B] mt-0"
-              style={{
-                textShadow: '0 2px 4px rgba(0,0,0,0.5)',
-                WebkitTextStroke: '1px rgba(0,0,0,0.3)',
-              }}
-            >
-              Our Expertise
-            </motion.h2>
+            <div className="w-full flex justify-center">
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{
+                  opacity: 1,
+                  y: 0,
+                  transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
+                }}
+                viewport={{ once: true, amount: 0.2 }}
+                className="text-3xl md:text-4xl font-bold mb-12 text-center text-[#CFB53B] mt-0"
+                style={{
+                  textShadow: '0 2px 4px rgba(0,0,0,0.5)',
+                  WebkitTextStroke: '1px rgba(0,0,0,0.3)',
+                }}
+              >
+                Our Expertise
+              </motion.h2>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 px-2 md:px-8 lg:px-16 relative z-10">
               {services.map((service, index) => (
@@ -613,7 +637,7 @@ export default function ServicesPage() {
               </motion.h2>
 
               <motion.p
-                className="text-lg text-foreground/80 font-light mb-8"
+                className="text-lg text-white font-medium mb-8 font-['IBM_Plex_Sans']"
                 initial={{ opacity: 0 }}
                 whileInView={{
                   opacity: 1,
@@ -621,8 +645,9 @@ export default function ServicesPage() {
                 }}
                 viewport={{ once: true, amount: 0.5 }}
                 style={{
-                  textShadow: '0 1px 2px rgba(0,0,0,0.5)',
-                  WebkitTextStroke: '0.5px rgba(0,0,0,0.2)',
+                  textShadow: '0 2px 6px rgba(0,0,0,0.8)',
+                  letterSpacing: '0.025em',
+                  fontWeight: '500',
                 }}
               >
                 Let&apos;s discuss how we can help you achieve your goals with our expert software

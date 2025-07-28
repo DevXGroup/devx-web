@@ -14,6 +14,10 @@ export default function BraidedRopeAnimation({ className = '' }: BraidedRopeAnim
   const [screenSize, setScreenSize] = useState({ width: 1920, height: 1080 })
   const containerRef = useRef<HTMLDivElement>(null)
 
+  // Screen size detection
+  const isMobile = screenSize.width < 768
+  const isTablet = screenSize.width >= 768 && screenSize.width < 1024
+
   // Prevent scrolling when interacting with the canvas
   useEffect(() => {
     if (!containerRef.current) return
@@ -70,11 +74,15 @@ export default function BraidedRopeAnimation({ className = '' }: BraidedRopeAnim
           style={{ width: '100%', height: '100%', pointerEvents: 'auto' }}
           onContextMenu={(e) => e.preventDefault()}
           camera={{
-            position: [0, 0, 6], // Fixed position for consistency
-            fov: 65, // Fixed FOV
+            position: [0, isMobile ? -0.5 : 0, isMobile ? 8 : isTablet ? 7 : 6],
+            fov: isMobile ? 65 : isTablet ? 70 : 65,
           }}
         >
-          <PerspectiveCamera makeDefault position={[0, 0, 6]} fov={65} />
+          <PerspectiveCamera
+            makeDefault
+            position={[0, 0, isMobile ? 8 : isTablet ? 7 : 6]}
+            fov={isMobile ? 75 : isTablet ? 70 : 65}
+          />
           <Environment preset="studio" />
           <ambientLight intensity={0.3} />
 
@@ -178,7 +186,7 @@ export default function BraidedRopeAnimation({ className = '' }: BraidedRopeAnim
 
           <AnimatedHighlights screenSize={screenSize} />
 
-          <BraidedRopeMesh screenSize={screenSize} containerRef={containerRef} />
+          <BraidedRopeMesh containerRef={containerRef} isMobile={isMobile} isTablet={isTablet} />
         </Canvas>
       </div>
 
@@ -252,11 +260,13 @@ function AnimatedHighlights({ screenSize }: { screenSize: { width: number; heigh
 }
 
 function BraidedRopeMesh({
-  screenSize,
   containerRef,
+  isMobile,
+  isTablet,
 }: {
-  screenSize: { width: number; height: number }
   containerRef: React.RefObject<HTMLDivElement>
+  isMobile: boolean
+  isTablet: boolean
 }) {
   const meshRef1 = useRef<Mesh>(null!)
   const meshRef2 = useRef<Mesh>(null!)
@@ -275,7 +285,8 @@ function BraidedRopeMesh({
       public twists = 3.0,
       public offset = 0,
       public direction = 1,
-      public time = 0
+      public time = 0,
+      public isMoving = true
     ) {
       super()
     }
@@ -283,28 +294,27 @@ function BraidedRopeMesh({
     getPoint(t: number, optionalTarget = new Vector3()) {
       const verticalProgress = this.height / 2 - t * this.height
 
+      // Enhanced braiding effect with better helix parameters
       const helixTurns = 4.5
-      const helixAngle = this.time * 1.6 + t * Math.PI * helixTurns * this.direction + this.offset
-
-      const helixRadius = this.radius * 1.1
+      const timeMultiplier = this.direction > 0 ? 8 : -10 // More distinct counter-rotation
+      const helixAngle =
+        this.time * timeMultiplier + t * Math.PI * helixTurns * this.direction + this.offset
+      const helixRadius = this.radius * 1.4
 
       const x = Math.cos(helixAngle) * helixRadius
-      const y = verticalProgress + Math.sin(helixAngle * 0.3) * 0.12
       const z = Math.sin(helixAngle) * helixRadius
 
+      // Simple fading at ends
       let fadeMultiplier = 1
-
-      const fadeStart = 0.12
-      const fadeEnd = 0.88
+      const fadeStart = 0.1
+      const fadeEnd = 0.9
       if (t < fadeStart) {
-        const normalized = t / fadeStart
-        fadeMultiplier = normalized * normalized * (3 - 2 * normalized)
+        fadeMultiplier = t / fadeStart
       } else if (t > fadeEnd) {
-        const normalized = (1 - t) / (1 - fadeEnd)
-        fadeMultiplier = normalized * normalized * (3 - 2 * normalized)
+        fadeMultiplier = (1 - t) / (1 - fadeEnd)
       }
 
-      return optionalTarget.set(x * fadeMultiplier, y, z * fadeMultiplier)
+      return optionalTarget.set(x * fadeMultiplier, verticalProgress, z * fadeMultiplier)
     }
 
     updateTime(time: number) {
@@ -312,15 +322,34 @@ function BraidedRopeMesh({
     }
   }
 
-  const ropeScale = { radius: 0.7, height: 12 }
-  const curve1 = useRef(new BraidedRopeCurve(ropeScale.radius, ropeScale.height, 4.0, 0, 1, 0))
+  // Responsive scaling based on screen size
+
+  const ropeScale = {
+    radius: 0.4,
+    height: 8,
+  }
+
+  // Create two helical threads rotating in opposite directions with enhanced braiding
+  const curve1 = useRef(
+    new BraidedRopeCurve(ropeScale.radius, ropeScale.height, 8.0, 0, 1, 0, true)
+  ) // Clockwise
   const curve2 = useRef(
-    new BraidedRopeCurve(ropeScale.radius, ropeScale.height, 4.0, Math.PI, -1, 0)
+    new BraidedRopeCurve(ropeScale.radius, ropeScale.height, 6.0, Math.PI, -1, 0, true) // Counter-clockwise
   )
 
-  const tubeRadius = 0.3
-  const radialSegments = 32
-  const tubularSegments = 200
+  const tubeRadius = 0.19
+  const radialSegments = 24
+  const tubularSegments = 49
+
+  // Update curves with new scale and enhanced braiding parameters
+  curve1.current.radius = ropeScale.radius
+  curve1.current.height = ropeScale.height
+  curve1.current.direction = 1
+  curve1.current.offset = 0
+  curve2.current.radius = ropeScale.radius
+  curve2.current.height = ropeScale.height
+  curve2.current.direction = -1
+  curve2.current.offset = Math.PI / 2
 
   const geometry1 = useRef(
     new TubeGeometry(curve1.current, tubularSegments, tubeRadius, radialSegments, false)
@@ -329,7 +358,8 @@ function BraidedRopeMesh({
     new TubeGeometry(curve2.current, tubularSegments, tubeRadius, radialSegments, false)
   )
 
-  const hitAreaGeometry = new SphereGeometry(8, 16, 16)
+  const hitAreaRadius = 5
+  const hitAreaGeometry = new SphereGeometry(hitAreaRadius, 16, 16)
 
   const onPointerDown = (e: any) => {
     e.stopPropagation()
@@ -398,7 +428,7 @@ function BraidedRopeMesh({
     lastUpdateTime.current = currentTime
   }
 
-  useFrame((state, delta) => {
+  useFrame((state) => {
     if (!meshRef1.current || !meshRef2.current || !hitAreaRef.current) return
 
     hitAreaRef.current.position.copy(meshRef1.current.position)
@@ -406,9 +436,9 @@ function BraidedRopeMesh({
 
     const time = state.clock.getElapsedTime()
 
-    // Optimize: Only update geometry every few frames for performance
-    if (Math.floor(time * 60) % 2 === 0) {
-      const animationSpeed = time * 0.45
+    // Update geometry for better braiding animation
+    if (Math.floor(time * 60) % 3 === 0) {
+      const animationSpeed = time * 0.3
       curve1.current.updateTime(animationSpeed)
       curve2.current.updateTime(animationSpeed)
 
@@ -450,10 +480,12 @@ function BraidedRopeMesh({
     // Enhanced natural rope movement
     const stretchY = Math.sin(time * 0.18) * 0.2 + Math.sin(time * 0.35) * 0.08
     const elasticScaleY = 1 + Math.sin(time * 0.22) * 0.06 + Math.cos(time * 0.15) * 0.03
-    const elasticScaleXZ = 1 - Math.sin(time * 0.22) * 0.015
+    const elasticScaleXZ = 1 - Math.sin(time * 0.22) * 0.015 * 3
 
-    meshRef1.current.position.y = stretchY
-    meshRef2.current.position.y = stretchY + 0.5
+    const baseY1 = isMobile ? 2 : 3
+    const baseY2 = isMobile ? 2.2 : 3.2
+    meshRef1.current.position.y = baseY1 + stretchY
+    meshRef2.current.position.y = baseY2 + stretchY
     meshRef1.current.scale.set(elasticScaleXZ, elasticScaleY, elasticScaleXZ)
     meshRef2.current.scale.set(elasticScaleXZ, elasticScaleY, elasticScaleXZ)
   })
@@ -477,21 +509,21 @@ function BraidedRopeMesh({
         geometry={geometry1.current}
         castShadow
         receiveShadow
-        rotation={[0, 0, Math.PI / 6]}
-        position={[0, 2, 0]}
+        rotation={[0, 0, Math.PI / 4]}
+        position={[0, isMobile ? 2 : 3, 0]}
         onPointerDown={onPointerDown}
         onPointerUp={onPointerUp}
         onPointerLeave={onPointerUp}
         onPointerMove={onPointerMove}
       >
         <meshStandardMaterial
-          color="#6A1B9A"
+          color="#8E24AA"
           metalness={0.95}
           roughness={0.05}
-          emissive="#4A148C"
-          emissiveIntensity={0.25}
+          emissive="#6A1B9A"
+          emissiveIntensity={0.3}
           transparent={true}
-          opacity={0.6}
+          opacity={0.7}
           alphaTest={0.05}
           blending={2}
           depthWrite={false}
@@ -503,21 +535,21 @@ function BraidedRopeMesh({
         geometry={geometry2.current}
         castShadow
         receiveShadow
-        rotation={[0, 0, Math.PI / 6]}
-        position={[0, 2.5, 0]}
+        rotation={[0, 0, Math.PI / 4]}
+        position={[0, isMobile ? 2.2 : 3.2, 0]}
         onPointerDown={onPointerDown}
         onPointerUp={onPointerUp}
         onPointerLeave={onPointerUp}
         onPointerMove={onPointerMove}
       >
         <meshStandardMaterial
-          color="#2E0A3E"
+          color="#4A148C"
           metalness={0.92}
           roughness={0.08}
-          emissive="#1A0624"
-          emissiveIntensity={0.22}
+          emissive="#2E0A3E"
+          emissiveIntensity={0.28}
           transparent={true}
-          opacity={0.5}
+          opacity={0.6}
           alphaTest={0.05}
           blending={2}
           depthWrite={false}
