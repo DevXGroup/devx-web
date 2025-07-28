@@ -24,9 +24,6 @@ export default function ServiceCard({ service, index }: ServiceCardProps) {
   const [isHovered, setIsHovered] = useState(false)
   const [showParticles, setShowParticles] = useState(false)
   
-  const handleCardClick = () => {
-    window.location.href = '/portfolio'
-  }
 
   useEffect(() => {
     if (isInView) {
@@ -56,7 +53,6 @@ export default function ServiceCard({ service, index }: ServiceCardProps) {
       className="bg-black/60 md:bg-black/30 backdrop-blur-md md:backdrop-blur-sm p-4 sm:p-6 md:p-8 rounded-xl border border-white/20 md:border-white/10 group hover:border-white/30 transition-all duration-300 relative overflow-hidden h-full flex flex-col cursor-pointer"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={handleCardClick}
       style={{
         opacity: isInView ? 1 : 0,
         transform: `translateY(${isInView ? 0 : 20}px)`,

@@ -216,13 +216,15 @@ export default function HorizontalScroll() {
                 }}
               >
                 <div className="p-4 h-full flex flex-col">
-                  <Image
-                    src={study.image || "/placeholder.svg"}
-                    alt={study.title}
-                    width={320}
-                    height={140}
-                    className="rounded-lg mb-3 object-cover w-full h-[140px] border border-white/10"
-                  />
+                  <div className="relative w-full h-[140px] rounded-lg mb-3 overflow-hidden border border-white/10 bg-gray-900/50">
+                    <Image
+                      src={study.image || "/placeholder.svg"}
+                      alt={study.title}
+                      fill
+                      className="object-cover object-center"
+                      sizes="(max-width: 768px) 280px, 320px"
+                    />
+                  </div>
                   <h3 className="text-lg font-bold text-white mb-2 leading-tight font-mono">{study.title}</h3>
                   <p className="text-white/80 text-sm mb-3 leading-relaxed font-sans line-clamp-3">{study.description}</p>
 

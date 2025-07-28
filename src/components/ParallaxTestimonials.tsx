@@ -32,9 +32,20 @@ const testimonials = [
 
 export default function ParallaxTestimonials() {
   const containerRef = useRef(null)
+  const infinityRef = useRef(null)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const [isMobile, setIsMobile] = useState(false)
   const [isClient, setIsClient] = useState(false)
+
+  // Scroll progress tracking for infinity animation
+  const { scrollYProgress: infinityScrollProgress } = useScroll({
+    target: infinityRef,
+    offset: ['start 0.8', 'end 0.2'],
+  })
+
+  // Apple-style scaling effect for infinity animation
+  const infinityScale = useTransform(infinityScrollProgress, [0, 0.5, 1], [1, 1.8, 3])
+  const infinityOpacity = useTransform(infinityScrollProgress, [0, 0.4, 1], [1, 0.8, 0.3])
 
   useEffect(() => {
     setIsClient(true)
@@ -83,11 +94,16 @@ export default function ParallaxTestimonials() {
       <div className="container mx-auto px-4">
         {/* Infinity Animation */}
         <motion.div
+          ref={infinityRef}
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 1, ease: "easeOut" }}
           className="flex justify-center mb-12 -mt-8 sm:-mt-12 md:-mt-16"
+          style={{
+            scale: infinityScale,
+            opacity: infinityOpacity,
+          }}
         >
           <EnhancedInfinityLoader scrollThreshold={0.25} baseScale={0.5} maxScale={4.5} />
         </motion.div>
@@ -105,7 +121,7 @@ export default function ParallaxTestimonials() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 pb-16 max-w-6xl mx-auto" ref={containerRef}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-16 max-w-6xl mx-auto" ref={containerRef}>
           {testimonials.map((testimonial, index) => (
             <TestimonialCard
               key={index}
@@ -147,27 +163,23 @@ function TestimonialCard({ testimonial, index, containerRef, isHovered, onHover,
     offset: ["start end", "end start"],
   })
 
-  // Create parallax effect based on index - disabled on mobile
-  const y = useTransform(scrollYProgress, [0, 1], [0, isMobile ? 0 : (index % 2 === 0 ? -50 : 50)])
+  // Disable parallax effect for better alignment
+  const y = useTransform(scrollYProgress, [0, 1], [0, 0])
 
-  // Calculate the position adjustments for non-hovered cards - mobile optimized
+  // Calculate the position adjustments for non-hovered cards - simplified
   const getPositionStyles = () => {
     if (!allHovered || isMobile) return {} // Disable all hover effects on mobile
 
     if (isHovered) {
       return {
         zIndex: 20,
-        scale: 1.05,
-        y: -15,
-        boxShadow: "0 20px 30px rgba(0, 0, 0, 0.2)",
+        scale: 1.02,
+        boxShadow: "0 10px 20px rgba(0, 0, 0, 0.15)",
       }
     } else {
-      const xShift = index < 1 ? -5 : index > 1 ? 5 : 0
       return {
         scale: 0.98,
-        opacity: 0.8,
-        x: xShift,
-        y: 5,
+        opacity: 0.9,
       }
     }
   }
@@ -179,24 +191,16 @@ function TestimonialCard({ testimonial, index, containerRef, isHovered, onHover,
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: false, amount: 0.1 }}
-      className="bg-black/50 backdrop-blur-sm p-6 md:p-8 rounded-xl border border-white/10 flex flex-col h-full min-h-[320px] md:min-h-[360px] relative group shadow-lg mb-6 md:mb-0"
+      className="bg-black/50 backdrop-blur-sm p-6 md:p-8 rounded-xl border border-white/10 flex flex-col h-full min-h-[400px] relative group shadow-lg"
       onMouseEnter={isMobile ? undefined : onHover}
       onMouseLeave={isMobile ? undefined : onLeave}
-      animate={getPositionStyles()}
+      animate={isMobile ? {} : getPositionStyles()}
       transition={{
-        // Combined transition for all animations
-        duration: 0.8,
-        delay: index * 0.2,
+        duration: 0.6,
+        delay: index * 0.1,
         type: "spring",
-        stiffness: 200,
-        damping: 20,
-        mass: 0.5,
-        // Specific transitions for properties that might change
-        x: { type: "spring", stiffness: 200, damping: 20, mass: 0.5 },
-        y: { type: "spring", stiffness: 200, damping: 20, mass: 0.5 },
-        scale: { type: "spring", stiffness: 200, damping: 20, mass: 0.5 },
-        opacity: { duration: 0.2, ease: "easeOut" },
-        boxShadow: { duration: 0.2, ease: "easeOut" },
+        stiffness: 300,
+        damping: 25,
       }}
     >
       {/* Quote icon - reduced opacity */}

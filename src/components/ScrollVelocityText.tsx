@@ -119,7 +119,7 @@ export default function ScrollVelocityText({
   return (
     <div className={`w-full overflow-hidden ${className}`}>
       <motion.div
-        className="flex whitespace-nowrap"
+        className="flex whitespace-nowrap items-center"
         style={{ x }}
       >
         {spans}
