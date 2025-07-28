@@ -304,14 +304,15 @@ function BraidedRopeMesh({
       const x = Math.cos(helixAngle) * helixRadius
       const z = Math.sin(helixAngle) * helixRadius
 
-      // Simple fading at ends
+      // Enhanced fading at both ends with better bottom fade
       let fadeMultiplier = 1
-      const fadeStart = 0.1
-      const fadeEnd = 0.9
+      const fadeStart = 0.12
+      const fadeEnd = 0.82
       if (t < fadeStart) {
-        fadeMultiplier = t / fadeStart
+        fadeMultiplier = Math.pow(t / fadeStart, 1.8)
       } else if (t > fadeEnd) {
-        fadeMultiplier = (1 - t) / (1 - fadeEnd)
+        const fadeProgress = (1 - t) / (1 - fadeEnd)
+        fadeMultiplier = Math.pow(fadeProgress, 0.8)
       }
 
       return optionalTarget.set(x * fadeMultiplier, verticalProgress, z * fadeMultiplier)
@@ -326,7 +327,7 @@ function BraidedRopeMesh({
 
   const ropeScale = {
     radius: 0.4,
-    height: 8,
+    height: isMobile ? 7 : isTablet ? 7 : 6.5,
   }
 
   // Create two helical threads rotating in opposite directions with enhanced braiding
@@ -438,7 +439,7 @@ function BraidedRopeMesh({
 
     // Update geometry for better braiding animation
     if (Math.floor(time * 60) % 3 === 0) {
-      const animationSpeed = time * 0.3
+      const animationSpeed = time * 0.25
       curve1.current.updateTime(animationSpeed)
       curve2.current.updateTime(animationSpeed)
 
@@ -482,8 +483,8 @@ function BraidedRopeMesh({
     const elasticScaleY = 1 + Math.sin(time * 0.22) * 0.06 + Math.cos(time * 0.15) * 0.03
     const elasticScaleXZ = 1 - Math.sin(time * 0.22) * 0.015 * 3
 
-    const baseY1 = isMobile ? 2 : 3
-    const baseY2 = isMobile ? 2.2 : 3.2
+    const baseY1 = isMobile ? 2 : 2.5
+    const baseY2 = isMobile ? 2.2 : 2.7
     meshRef1.current.position.y = baseY1 + stretchY
     meshRef2.current.position.y = baseY2 + stretchY
     meshRef1.current.scale.set(elasticScaleXZ, elasticScaleY, elasticScaleXZ)
@@ -510,7 +511,7 @@ function BraidedRopeMesh({
         castShadow
         receiveShadow
         rotation={[0, 0, Math.PI / 4]}
-        position={[0, isMobile ? 2 : 3, 0]}
+        position={[0, isMobile ? 2 : 2.5, 0]}
         onPointerDown={onPointerDown}
         onPointerUp={onPointerUp}
         onPointerLeave={onPointerUp}
@@ -536,7 +537,7 @@ function BraidedRopeMesh({
         castShadow
         receiveShadow
         rotation={[0, 0, Math.PI / 4]}
-        position={[0, isMobile ? 2.2 : 3.2, 0]}
+        position={[0, isMobile ? 2.2 : 2.7, 0]}
         onPointerDown={onPointerDown}
         onPointerUp={onPointerUp}
         onPointerLeave={onPointerUp}

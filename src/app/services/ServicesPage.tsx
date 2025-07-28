@@ -366,7 +366,7 @@ export default function ServicesPage() {
                 <BlurText
                   text="Services"
                   className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-center text-[#CFB53B] font-['IBM_Plex_Mono'] relative z-30"
-                  delay={30}
+                  delay={100}
                   animateBy="words"
                   direction="top"
                   animationFrom={{ opacity: 0, y: 70 }}
@@ -427,8 +427,8 @@ export default function ServicesPage() {
             <div className="flex justify-center items-center mb-16 text-center">
               <BlurText
                 text="The DevX Edge"
-                className="text-4xl md:text-3xl font-bold text-center text-[#CFB53B] mt-10 tracking-wide"
-                delay={45}
+                className="text-3xl md:text-4xl lg:text-5xl font-bold text-center text-[#CFB53B] mt-10 tracking-wide"
+                delay={120}
                 animateBy="words"
                 direction="top"
                 animationFrom={{ opacity: 0, y: 70 }}
@@ -533,13 +533,13 @@ export default function ServicesPage() {
                   transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
                 }}
                 viewport={{ once: true, amount: 0.2 }}
-                className="text-3xl md:text-4xl font-bold mb-12 text-center text-[#CFB53B] mt-0"
+                className="lg:text-6xl md:text-5xl sm:text-4xl xs:text-4xl font-bold mb-32 mt-32 text-center text-[#CFB53B]"
                 style={{
                   textShadow: '0 2px 4px rgba(0,0,0,0.5)',
                   WebkitTextStroke: '1px rgba(0,0,0,0.3)',
                 }}
               >
-                Our Expertise
+                Expertise In
               </motion.h2>
             </div>
 
@@ -700,6 +700,23 @@ export default function ServicesPage() {
               className="title-margin text-center"
             >
               <TrueFocus sentence="Case Studies" />
+              <motion.p
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{
+                  opacity: 1,
+                  y: 0,
+                  transition: { delay: 0.3, duration: 0.6 },
+                }}
+                viewport={{ once: true, amount: 0.2 }}
+                className="text-lg text-white/80 mt-4 max-w-2xl mx-auto font-['IBM_Plex_Sans']"
+                style={{
+                  textShadow: '0 2px 6px rgba(0,0,0,0.8)',
+                  letterSpacing: '0.025em',
+                  fontWeight: '400',
+                }}
+              >
+                Proven results backed by analytics data from 6 months to 1 year implementations
+              </motion.p>
             </motion.div>
           </div>
           {isClient && <HorizontalScroll />}
