@@ -208,8 +208,8 @@ export default function HorizontalScroll() {
                 className="flex-shrink-0 w-[280px] md:w-[320px] h-[500px] bg-black/40 backdrop-blur-md rounded-xl border border-white/20 hover:border-[#4CD787]/40 flex flex-col transition-all duration-300 hover:shadow-[0_8px_32px_rgba(76,215,135,0.15)]"
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.1 }}
-                transition={{ duration: 0.5, delay: (index % originalCaseStudies.length) * 0.05 }}
+                viewport={{ once: true, amount: 0.05 }}
+                transition={{ duration: 0.5, delay: (index % 6) * 0.03 }}
                 whileHover={{
                   scale: 1.02,
                   transition: { duration: 0.2 }
