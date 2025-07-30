@@ -184,7 +184,7 @@ export default function BraidedRopeAnimation({ className = '' }: BraidedRopeAnim
             decay={3}
           />
 
-          <AnimatedHighlights screenSize={screenSize} />
+          <AnimatedHighlights />
 
           <BraidedRopeMesh containerRef={containerRef} isMobile={isMobile} isTablet={isTablet} />
         </Canvas>
@@ -198,7 +198,7 @@ export default function BraidedRopeAnimation({ className = '' }: BraidedRopeAnim
   )
 }
 
-function AnimatedHighlights({ screenSize }: { screenSize: { width: number; height: number } }) {
+function AnimatedHighlights() {
   const light1Ref = useRef<any>(null)
   const light2Ref = useRef<any>(null)
   const light3Ref = useRef<any>(null)

@@ -8,6 +8,10 @@ type WavySeparatorProps = {
 }
 
 export default function WavySeparator({ color = "#9d4edd", height = 200, opacity = 0.2 }: WavySeparatorProps) {
+  // Validate inputs to prevent rendering issues
+  const safeHeight = Math.max(50, Math.round(height))
+  const safeOpacity = Math.max(0, Math.min(1, opacity))
+  
   // Define additional colors for the waves
   const neonGreen = "#39FF14"
 
@@ -15,7 +19,7 @@ export default function WavySeparator({ color = "#9d4edd", height = 200, opacity
     <div
       className="relative w-full overflow-hidden"
       style={{
-        height: `${height}px`,
+        height: `${safeHeight}px`,
         // Adjust mask to hide top edges completely
         maskImage: "linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)",
         WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)",
@@ -27,7 +31,7 @@ export default function WavySeparator({ color = "#9d4edd", height = 200, opacity
         style={{
           padding: "20px 0",
           marginTop: "-40px", // Increased negative margin to hide top edges
-          height: `${height + 80}px`, // Increased height to compensate for margin
+          height: `${safeHeight + 80}px`, // Increased height to compensate for margin
         }}
       >
         {/* Wave 1 - Bottom wave */}
@@ -50,13 +54,13 @@ export default function WavySeparator({ color = "#9d4edd", height = 200, opacity
             className="absolute w-[130%] left-[-15%]"
             preserveAspectRatio="none"
             style={{
-              height: `${height + 80}px`,
+              height: `${safeHeight + 80}px`,
               transform: "rotate(180deg)",
             }}
           >
             <motion.path
               fill={color}
-              fillOpacity={opacity * 0.9}
+              fillOpacity={safeOpacity * 0.9}
               initial={{
                 d: "M0,160L48,165C96,170,192,180,288,174.7C384,169,480,149,576,154.7C672,160,768,192,864,197.3C960,203,1056,181,1152,165.3C1248,149,1344,139,1392,133.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z",
               }}
@@ -98,13 +102,13 @@ export default function WavySeparator({ color = "#9d4edd", height = 200, opacity
             className="absolute w-[130%] left-[-15%]"
             preserveAspectRatio="none"
             style={{
-              height: `${height + 80}px`,
+              height: `${safeHeight + 80}px`,
               transform: "rotate(180deg)",
             }}
           >
             <motion.path
               fill={color}
-              fillOpacity={opacity * 0.7}
+              fillOpacity={safeOpacity * 0.7}
               initial={{
                 d: "M0,192L48,186.7C96,181,192,171,288,165.3C384,160,480,160,576,165.3C672,171,768,181,864,186.7C960,192,1056,192,1152,181.3C1248,171,1344,149,1392,138.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z",
               }}
@@ -146,7 +150,7 @@ export default function WavySeparator({ color = "#9d4edd", height = 200, opacity
             className="absolute w-[130%] left-[-15%]"
             preserveAspectRatio="none"
             style={{
-              height: `${height + 80}px`,
+              height: `${safeHeight + 80}px`,
               transform: "rotate(180deg)",
             }}
           >
@@ -195,7 +199,7 @@ export default function WavySeparator({ color = "#9d4edd", height = 200, opacity
             className="absolute w-[130%] left-[-15%]"
             preserveAspectRatio="none"
             style={{
-              height: `${height + 80}px`,
+              height: `${safeHeight + 80}px`,
               transform: "rotate(180deg)",
             }}
           >
@@ -243,13 +247,13 @@ export default function WavySeparator({ color = "#9d4edd", height = 200, opacity
             className="absolute w-[130%] left-[-15%]"
             preserveAspectRatio="none"
             style={{
-              height: `${height + 80}px`,
+              height: `${safeHeight + 80}px`,
               transform: "rotate(180deg)",
             }}
           >
             <motion.path
               fill={color}
-              fillOpacity={opacity * 0.5}
+              fillOpacity={safeOpacity * 0.5}
               initial={{
                 d: "M0,256L48,240C96,224,192,192,288,192C384,192,480,224,576,218.7C672,213,768,171,864,165.3C960,160,1056,192,1152,208C1248,224,1344,224,1392,224L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z",
               }}
@@ -277,7 +281,7 @@ export default function WavySeparator({ color = "#9d4edd", height = 200, opacity
           style={{
             height: "450px",
             boxShadow: `0 -15px 30px ${color}`,
-            opacity: opacity * 0.7,
+            opacity: safeOpacity * 0.7,
           }}
         />
 
