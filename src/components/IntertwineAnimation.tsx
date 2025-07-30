@@ -50,10 +50,19 @@ export default function IntertwineAnimation({
     )
   }
 
-  // Define the intertwined path data
-  const path1 = `M 0,${height/2} Q ${width/4},${height/4} ${width/2},${height/2} Q ${width*3/4},${height*3/4} ${width},${height/2}`
-  const path2 = `M 0,${height/2} Q ${width/4},${height*3/4} ${width/2},${height/2} Q ${width*3/4},${height/4} ${width},${height/2}`
-  const path3 = `M ${width/8},${height/2} Q ${width*3/8},${height/8} ${width*5/8},${height/2} Q ${width*7/8},${height*7/8} ${width},${height/2}`
+  // Define the intertwined path data with proper number validation
+  const generatePath = (w: number, h: number) => {
+    const safeWidth = Math.max(1, Math.round(w))
+    const safeHeight = Math.max(1, Math.round(h))
+    
+    return {
+      path1: `M 0,${Math.round(safeHeight/2)} Q ${Math.round(safeWidth/4)},${Math.round(safeHeight/4)} ${Math.round(safeWidth/2)},${Math.round(safeHeight/2)} Q ${Math.round(safeWidth*3/4)},${Math.round(safeHeight*3/4)} ${safeWidth},${Math.round(safeHeight/2)}`,
+      path2: `M 0,${Math.round(safeHeight/2)} Q ${Math.round(safeWidth/4)},${Math.round(safeHeight*3/4)} ${Math.round(safeWidth/2)},${Math.round(safeHeight/2)} Q ${Math.round(safeWidth*3/4)},${Math.round(safeHeight/4)} ${safeWidth},${Math.round(safeHeight/2)}`,
+      path3: `M ${Math.round(safeWidth/8)},${Math.round(safeHeight/2)} Q ${Math.round(safeWidth*3/8)},${Math.round(safeHeight/8)} ${Math.round(safeWidth*5/8)},${Math.round(safeHeight/2)} Q ${Math.round(safeWidth*7/8)},${Math.round(safeHeight*7/8)} ${safeWidth},${Math.round(safeHeight/2)}`
+    }
+  }
+
+  const { path1, path2, path3 } = generatePath(width, height)
 
   // Use a stable key to force re-render after Safari detection
   const stableKey = `intertwine-${mounted ? (isSafari ? 'safari' : 'other') : 'loading'}`
@@ -91,14 +100,13 @@ export default function IntertwineAnimation({
             height: `${height}px`,
             shapeRendering: "geometricPrecision",
             textRendering: "geometricPrecision",
-            imageRendering: "optimizeQuality",
+            imageRendering: "auto" as const,
             WebkitTransform: "translateZ(0)",
             transform: "translateZ(0)",
             WebkitBackfaceVisibility: "hidden",
             backfaceVisibility: "hidden",
             WebkitPerspective: "1000px",
             perspective: "1000px",
-            WebkitImageRendering: "optimizeQuality",
           }}
         >
         {/* Enhanced gradient definitions with better opacity and shiny effects */}

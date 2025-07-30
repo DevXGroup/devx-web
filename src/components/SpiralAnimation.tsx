@@ -24,19 +24,35 @@ export default function SpiralAnimation({
 
   if (!mounted) return null
 
-  const spiralPath = `
-    M${size/2},${size/2}
-    m-${size/4},0
-    a${size/4},${size/4} 0 1,1 ${size/2},0
-    a${size/6},${size/6} 0 1,1 -${size/3},0
-    a${size/8},${size/8} 0 1,1 ${size/4},0
-    a${size/12},${size/12} 0 1,1 -${size/6},0
-    a${size/16},${size/16} 0 1,1 ${size/8},0
-    a${size/20},${size/20} 0 1,1 -${size/10},0
-    a${size/24},${size/24} 0 1,1 ${size/12},0
-    a${size/28},${size/28} 0 1,1 -${size/14},0
-    a${size/32},${size/32} 0 1,1 ${size/16},0
-  `
+  // Generate spiral path with validation to prevent SVG parsing errors
+  const generateSpiralPath = (size: number) => {
+    if (!size || size <= 0 || !isFinite(size)) {
+      return "M0,0"
+    }
+    
+    const safeSize = Math.max(100, Math.round(size))
+    const centerX = Math.round(safeSize / 2)
+    const centerY = Math.round(safeSize / 2)
+    
+    // Ensure all values are valid numbers and properly rounded
+    const segments = [
+      `M${centerX},${centerY}`,
+      `m-${Math.round(safeSize/4)},0`,
+      `a${Math.round(safeSize/4)},${Math.round(safeSize/4)} 0 1,1 ${Math.round(safeSize/2)},0`,
+      `a${Math.round(safeSize/6)},${Math.round(safeSize/6)} 0 1,1 -${Math.round(safeSize/3)},0`,
+      `a${Math.round(safeSize/8)},${Math.round(safeSize/8)} 0 1,1 ${Math.round(safeSize/4)},0`,
+      `a${Math.round(safeSize/12)},${Math.round(safeSize/12)} 0 1,1 -${Math.round(safeSize/6)},0`,
+      `a${Math.round(safeSize/16)},${Math.round(safeSize/16)} 0 1,1 ${Math.round(safeSize/8)},0`,
+      `a${Math.round(safeSize/20)},${Math.round(safeSize/20)} 0 1,1 -${Math.round(safeSize/10)},0`,
+      `a${Math.round(safeSize/24)},${Math.round(safeSize/24)} 0 1,1 ${Math.round(safeSize/12)},0`,
+      `a${Math.round(safeSize/28)},${Math.round(safeSize/28)} 0 1,1 -${Math.round(safeSize/14)},0`,
+      `a${Math.round(safeSize/32)},${Math.round(safeSize/32)} 0 1,1 ${Math.round(safeSize/16)},0`
+    ]
+    
+    return segments.join(' ')
+  }
+
+  const spiralPath = generateSpiralPath(size)
 
   return (
     <div className={`relative ${className}`}>
