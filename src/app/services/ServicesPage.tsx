@@ -470,7 +470,7 @@ export default function ServicesPage() {
       {/* Scroll Velocity Animation */}
       <section
         ref={velocityRef}
-        className="relative overflow-hidden pt-12 pb-12 md:pt-16 md:pb-16 lg:pt-20 lg:pb-20"
+        className="relative overflow-hidden pt-12 pb-20 md:pt-16 md:pb-24 lg:pt-20 lg:pb-28"
       >
         <motion.div
           initial={{ opacity: 0 }}
@@ -539,7 +539,7 @@ export default function ServicesPage() {
                   WebkitTextStroke: '1px rgba(0,0,0,0.3)',
                 }}
               >
-                Expertise In
+                Expertise
               </motion.h2>
             </div>
 
