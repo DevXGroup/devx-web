@@ -14,6 +14,7 @@ export default function Navbar() {
   const pathname = usePathname()
   const supportsBackdropFilter = useBackdropFilterSupport()
   const mobileMenuRef = useRef<HTMLDivElement>(null)
+  const hamburgerButtonRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,20 +28,37 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  // Click outside to close mobile menu
+  // Click outside to close mobile menu and handle escape key
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target as Node)) {
+      const target = event.target as Node
+      const isClickInsideMenu = mobileMenuRef.current && mobileMenuRef.current.contains(target)
+      const isClickOnButton = hamburgerButtonRef.current && hamburgerButtonRef.current.contains(target)
+      
+      if (!isClickInsideMenu && !isClickOnButton) {
+        setIsOpen(false)
+      }
+    }
+
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
         setIsOpen(false)
       }
     }
 
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside)
+      document.addEventListener('keydown', handleEscapeKey)
+      // Also prevent body scroll when menu is open
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'unset'
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('keydown', handleEscapeKey)
+      document.body.style.overflow = 'unset'
     }
   }, [isOpen])
 
@@ -63,7 +81,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0">
-            <Link href="/" className="flex items-center">
+            <Link href="/home" className="flex items-center">
               <Image
                 src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/devx-logo-main-light-qTrRkjnHwbdPvqPRaKWQzeV7Emn14i.png"
                 alt="DevX Logo"
@@ -77,15 +95,15 @@ export default function Navbar() {
           {/* Desktop Menu - switch to mobile earlier to prevent cutoff */}
           <div className="hidden lg:flex items-center space-x-8 font-['IBM_Plex_Mono'] font-medium">
             <Link
-              href="/"
+              href="/home"
               className={`relative px-2 py-1 rounded transition-all duration-150 ease-out transform will-change-transform antialiased ${
-                isActive("/") 
+                isActive("/home") 
                   ? "text-pink-400" 
                   : "text-white hover:text-white/80"
               }`}
               style={{ textShadow: "0 0 1px rgba(255, 255, 255, 0.3)" }}
             >
-              {isActive("/") && (
+              {isActive("/home") && (
                 <div className="absolute inset-0 bg-pink-400/10 rounded -z-10" />
               )}
               Home
@@ -172,6 +190,7 @@ export default function Navbar() {
           {/* Mobile Menu Button - show for tablets too */}
           <div className="lg:hidden flex items-center z-[10000]">
             <motion.button
+              ref={hamburgerButtonRef}
               onClick={() => setIsOpen(!isOpen)}
               className="relative w-12 h-12 rounded-full bg-gradient-to-r from-purple-600/20 via-pink-500/20 to-blue-500/20 backdrop-blur-sm border border-white/10 hover:border-white/30 transition-all duration-300 group overflow-hidden"
               whileHover={{ scale: 1.05 }}
@@ -249,15 +268,15 @@ export default function Navbar() {
           >
             <div className="px-2 pt-2 pb-3 space-y-1 font-['IBM_Plex_Mono'] font-light">
               <Link
-                href="/"
+                href="/home"
                 className={`relative block px-3 py-2 rounded transition-all duration-150 ease-out transform will-change-transform ${
-                  isActive("/") 
+                  isActive("/home") 
                     ? "text-pink-400" 
                     : "text-white hover:text-white/80"
                 }`}
                 onClick={() => setIsOpen(false)}
               >
-                {isActive("/") && (
+                {isActive("/home") && (
                   <div className="absolute inset-0 bg-pink-400/10 rounded -z-10" />
                 )}
                 Home

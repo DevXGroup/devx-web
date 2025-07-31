@@ -2,9 +2,7 @@ import type React from 'react'
 import './globals.css'
 import type { Metadata } from 'next'
 import { IBM_Plex_Mono, IBM_Plex_Sans } from 'next/font/google'
-import Navbar from '@/common/Navbar'
-import Footer from '@/common/Footer'
-import ScrollToTop from '@/components/ScrollToTop'
+import ConditionalLayout from '@/components/ConditionalLayout'
 import { BrowserCompatibilityDetector } from '@/components/BrowserCompatibilityDetector'
 
 const ibmPlexMono = IBM_Plex_Mono({
@@ -29,12 +27,12 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${ibmPlexMono.variable} ${ibmPlexSans.variable} dark`}>
+      <head>
+        <link href="https://fonts.googleapis.com/css2?family=Boldonse&display=swap" rel="stylesheet" />
+      </head>
       <body className="bg-black text-white font-sans">
         <BrowserCompatibilityDetector />
-        <Navbar />
-        <main className="min-h-screen">{children}</main>
-        <Footer />
-        <ScrollToTop />
+        <ConditionalLayout>{children}</ConditionalLayout>
       </body>
     </html>
   )
