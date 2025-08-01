@@ -663,7 +663,7 @@ function AnimatedInfinity({ onComplete }: { onComplete: () => void }) {
             initial={{ scale: 1 }}
             animate={{ scale: 50, opacity: 0.3 }}
             transition={{
-              duration: 1,
+              duration: 0.6,
               ease: 'easeIn',
               onComplete: handleZoomDComplete,
             }}
