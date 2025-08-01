@@ -695,7 +695,7 @@ export default function EntryPage() {
         // Navigate after collapse animation completes
         setTimeout(() => {
           router.push('/home')
-        }, 800)
+        }, 600)
       }, 200)
 
       return () => clearTimeout(timer)
@@ -741,18 +741,26 @@ export default function EntryPage() {
       />
       <AnimatedInfinity onComplete={() => setAnimationComplete(true)} />
       
-      {/* Collapse Animation - Top and Bottom bars */}
+      {/* Shutter Collapse Animation - Top and Bottom bars */}
       <motion.div
-        className="fixed top-0 left-0 right-0 bg-black z-50"
+        className="fixed top-0 left-0 right-0 z-50"
+        style={{
+          background: '#000000',
+          boxShadow: '0 4px 20px rgba(0,0,0,0.8)'
+        }}
         initial={{ height: 0 }}
         animate={{ height: isCollapsing ? '50vh' : 0 }}
-        transition={{ duration: 0.8, ease: "easeInOut" }}
+        transition={{ duration: 0.6, ease: "easeInOut" }}
       />
       <motion.div
-        className="fixed bottom-0 left-0 right-0 bg-black z-50"
+        className="fixed bottom-0 left-0 right-0 z-50"
+        style={{
+          background: '#000000',
+          boxShadow: '0 -4px 20px rgba(0,0,0,0.8)'
+        }}
         initial={{ height: 0 }}
         animate={{ height: isCollapsing ? '50vh' : 0 }}
-        transition={{ duration: 0.8, ease: "easeInOut" }}
+        transition={{ duration: 0.6, ease: "easeInOut" }}
       />
     </div>
   )
