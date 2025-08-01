@@ -1,9 +1,361 @@
-"use client"
+'use client'
 
-import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { motion } from "framer-motion"
-import { useReducedMotion } from "@/hooks/use-reduced-motion"
+import { useState, useEffect, useRef } from 'react'
+import { useRouter } from 'next/navigation'
+import { motion } from 'framer-motion'
+import { useReducedMotion } from '@/hooks/use-reduced-motion'
+
+// Concentrated Letter Glitch Background Effect
+const LetterGlitch = ({
+  glitchColors = ['#00ff41', '#008f11', '#004d0a'],
+  glitchSpeed = 50,
+  centerVignette = true,
+  outerVignette = false,
+  smooth = true,
+}) => {
+  const canvasRef = useRef(null)
+  const animationRef = useRef(null)
+  const letters = useRef([])
+  const grid = useRef({ columns: 0, rows: 0 })
+  const context = useRef(null)
+  const lastGlitchTime = useRef(Date.now())
+
+  const fontSize = 16
+  const charWidth = 10
+  const charHeight = 20
+
+  const lettersAndSymbols = [
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F',
+    'G',
+    'H',
+    'I',
+    'J',
+    'K',
+    'L',
+    'M',
+    'N',
+    'O',
+    'P',
+    'Q',
+    'R',
+    'S',
+    'T',
+    'U',
+    'V',
+    'W',
+    'X',
+    'Y',
+    'Z',
+    '!',
+    '@',
+    '#',
+    '$',
+    '&',
+    '*',
+    '(',
+    ')',
+    '-',
+    '_',
+    '+',
+    '=',
+    '/',
+    '[',
+    ']',
+    '{',
+    '}',
+    ';',
+    ':',
+    '<',
+    '>',
+    ',',
+    '0',
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+  ]
+
+  const getRandomChar = () => {
+    return lettersAndSymbols[Math.floor(Math.random() * lettersAndSymbols.length)]
+  }
+
+  const getRandomColor = () => {
+    return glitchColors[Math.floor(Math.random() * glitchColors.length)]
+  }
+
+  const hexToRgb = (hex) => {
+    const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i
+    hex = hex.replace(shorthandRegex, (m, r, g, b) => {
+      return r + r + g + g + b + b
+    })
+
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+    return result
+      ? {
+          r: parseInt(result[1], 16),
+          g: parseInt(result[2], 16),
+          b: parseInt(result[3], 16),
+        }
+      : null
+  }
+
+  const interpolateColor = (start, end, factor) => {
+    const result = {
+      r: Math.round(start.r + (end.r - start.r) * factor),
+      g: Math.round(start.g + (end.g - start.g) * factor),
+      b: Math.round(start.b + (end.b - start.b) * factor),
+    }
+    return `rgb(${result.r}, ${result.g}, ${result.b})`
+  }
+
+  const calculateGrid = (width, height) => {
+    const columns = Math.ceil(width / charWidth)
+    const rows = Math.ceil(height / charHeight)
+    return { columns, rows }
+  }
+
+  const initializeLetters = (columns, rows) => {
+    grid.current = { columns, rows }
+    const totalLetters = columns * rows
+    letters.current = Array.from({ length: totalLetters }, () => ({
+      char: getRandomChar(),
+      color: getRandomColor(),
+      targetColor: getRandomColor(),
+      colorProgress: 1,
+    }))
+  }
+
+  const resizeCanvas = () => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const parent = canvas.parentElement
+    if (!parent) return
+
+    const dpr = window.devicePixelRatio || 1
+    const rect = parent.getBoundingClientRect()
+
+    canvas.width = rect.width * dpr
+    canvas.height = rect.height * dpr
+
+    canvas.style.width = `${rect.width}px`
+    canvas.style.height = `${rect.height}px`
+
+    if (context.current) {
+      context.current.setTransform(dpr, 0, 0, dpr, 0, 0)
+    }
+
+    const { columns, rows } = calculateGrid(rect.width, rect.height)
+    initializeLetters(columns, rows)
+
+    drawLetters()
+  }
+
+  const drawLetters = () => {
+    if (!context.current || letters.current.length === 0) return
+    const ctx = context.current
+    const { width, height } = canvasRef.current.getBoundingClientRect()
+    ctx.clearRect(0, 0, width, height)
+    ctx.font = `${fontSize}px monospace`
+    ctx.textBaseline = 'top'
+
+    letters.current.forEach((letter, index) => {
+      const x = (index % grid.current.columns) * charWidth
+      const y = Math.floor(index / grid.current.columns) * charHeight
+      // Dim the background letters to make text more prominent
+      ctx.globalAlpha = 0.3
+      ctx.fillStyle = letter.color
+      ctx.fillText(letter.char, x, y)
+    })
+    // Reset alpha for other elements
+    ctx.globalAlpha = 1
+  }
+
+  const updateLetters = () => {
+    if (!letters.current || letters.current.length === 0) return
+
+    const updateCount = Math.max(1, Math.floor(letters.current.length * 0.05))
+
+    for (let i = 0; i < updateCount; i++) {
+      const index = Math.floor(Math.random() * letters.current.length)
+      if (!letters.current[index]) continue
+
+      letters.current[index].char = getRandomChar()
+      letters.current[index].targetColor = getRandomColor()
+
+      if (!smooth) {
+        letters.current[index].color = letters.current[index].targetColor
+        letters.current[index].colorProgress = 1
+      } else {
+        letters.current[index].colorProgress = 0
+      }
+    }
+  }
+
+  const handleSmoothTransitions = () => {
+    let needsRedraw = false
+    letters.current.forEach((letter) => {
+      if (letter.colorProgress < 1) {
+        letter.colorProgress += 0.05
+        if (letter.colorProgress > 1) letter.colorProgress = 1
+
+        const startRgb = hexToRgb(letter.color)
+        const endRgb = hexToRgb(letter.targetColor)
+        if (startRgb && endRgb) {
+          letter.color = interpolateColor(startRgb, endRgb, letter.colorProgress)
+          needsRedraw = true
+        }
+      }
+    })
+
+    if (needsRedraw) {
+      drawLetters()
+    }
+  }
+
+  const animate = () => {
+    const now = Date.now()
+    if (now - lastGlitchTime.current >= glitchSpeed) {
+      updateLetters()
+      drawLetters()
+      lastGlitchTime.current = now
+    }
+
+    if (smooth) {
+      handleSmoothTransitions()
+    }
+
+    animationRef.current = requestAnimationFrame(animate)
+  }
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+
+    context.current = canvas.getContext('2d')
+    resizeCanvas()
+    animate()
+
+    let resizeTimeout
+
+    const handleResize = () => {
+      clearTimeout(resizeTimeout)
+      resizeTimeout = setTimeout(() => {
+        cancelAnimationFrame(animationRef.current)
+        resizeCanvas()
+        animate()
+      }, 100)
+    }
+
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      cancelAnimationFrame(animationRef.current)
+      window.removeEventListener('resize', handleResize)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [glitchSpeed, smooth])
+
+  return (
+    <div className="absolute inset-0 w-full h-full bg-black overflow-hidden">
+      <canvas ref={canvasRef} className="block w-full h-full" />
+      {outerVignette && (
+        <div className="absolute top-0 left-0 w-full h-full pointer-events-none bg-[radial-gradient(circle,_rgba(0,0,0,0)_60%,_rgba(0,0,0,1)_100%)]"></div>
+      )}
+      {centerVignette && (
+        <div className="absolute top-0 left-0 w-full h-full pointer-events-none bg-[radial-gradient(circle,_rgba(0,0,0,0.8)_0%,_rgba(0,0,0,0)_60%)]"></div>
+      )}
+    </div>
+  )
+}
+
+// Loading text animation for DevX Group LLC
+function LoadingText({ text, onComplete }: { text: string; onComplete: () => void }) {
+  const [displayText, setDisplayText] = useState('')
+  const [isComplete, setIsComplete] = useState(false)
+
+  useEffect(() => {
+    // Reset state when text changes
+    setDisplayText('')
+    setIsComplete(false)
+
+    const targetText = text || 'DevX Group LLC' // Fallback text
+    const chars = targetText.split('')
+    let currentIndex = 0
+
+    const interval = setInterval(() => {
+      if (currentIndex < chars.length) {
+        setDisplayText(chars.slice(0, currentIndex + 1).join(''))
+        currentIndex++
+      } else {
+        setIsComplete(true)
+        clearInterval(interval)
+        setTimeout(() => onComplete(), 800)
+      }
+    }, 100)
+
+    return () => clearInterval(interval)
+  }, [text, onComplete])
+
+  return (
+    <div className="relative z-10 flex items-center justify-center min-h-[80px]">
+      <motion.h1
+        className="text-2xl md:text-4xl font-mono text-center"
+        style={{
+          fontFamily: "'IBM Plex Mono', 'SF Pro Display', 'Helvetica Neue', sans-serif",
+          fontWeight: 600,
+          letterSpacing: '0.1em',
+          minWidth: '300px', // Prevent layout shift
+          height: '1.2em', // Fixed height
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <motion.span
+          className="inline-block"
+          initial={{ opacity: 0 }}
+          animate={{
+            opacity: 1,
+            color: isComplete ? '#ffffff' : '#cccccc',
+          }}
+          transition={{
+            opacity: { duration: 0.3 },
+            color: { duration: isComplete ? 0.8 : 0 },
+          }}
+          style={{
+            textShadow: isComplete
+              ? '0 0 20px rgba(255,255,255,0.6), 0 0 10px rgba(255,255,255,0.4)'
+              : 'none',
+          }}
+        >
+          {displayText}
+        </motion.span>
+        {!isComplete && (
+          <motion.span
+            className="text-white ml-1"
+            animate={{ opacity: [1, 0] }}
+            transition={{ duration: 0.8, repeat: Infinity }}
+          >
+            |
+          </motion.span>
+        )}
+      </motion.h1>
+    </div>
+  )
+}
 
 // Enhanced star field component with more realistic distribution
 function StarField() {
@@ -12,9 +364,13 @@ function StarField() {
     x: Math.random() * 100,
     y: Math.random() * 100,
     size: Math.random() * 1.5 + 0.5,
-    opacity: Math.random() * 0.7 + 0.3,
-    duration: Math.random() * 4 + 3,
-    delay: Math.random() * 2,
+    opacity: Math.random() * 0.8 + 0.4,
+    duration: Math.random() * 2 + 1.5,
+    delay: Math.random() * 3,
+    twinkleIntensity: Math.random() * 0.6 + 0.4,
+    isFlashing: Math.random() < 0.3, // 30% of stars will have flashing effect
+    flashDuration: Math.random() * 3 + 2,
+    flashDelay: Math.random() * 5,
   }))
 
   return (
@@ -28,17 +384,27 @@ function StarField() {
             top: `${star.y}%`,
             width: `${star.size}px`,
             height: `${star.size}px`,
-            boxShadow: `0 0 ${star.size * 2}px rgba(255,255,255,0.5)`,
+            boxShadow: `0 0 ${star.size * 3}px rgba(255,255,255,0.8)`,
           }}
-          initial={{ opacity: 0 }}
-          animate={{
-            opacity: [0, star.opacity, 0],
-          }}
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={
+            star.isFlashing
+              ? {
+                  // Flashing stars: turn completely on and off
+                  opacity: [0, star.opacity, star.opacity, 0, 0, star.opacity],
+                  scale: [0.5, 1.3, 1.3, 0.3, 0.3, 1.3],
+                }
+              : {
+                  // Regular twinkling stars
+                  opacity: [0, star.opacity * star.twinkleIntensity, star.opacity, 0.1, star.opacity, 0],
+                  scale: [0.5, 1.2, 1, 0.8, 1.1, 0.5],
+                }
+          }
           transition={{
-            duration: star.duration,
+            duration: star.isFlashing ? star.flashDuration : star.duration,
             repeat: Infinity,
-            delay: star.delay,
-            ease: "easeInOut",
+            delay: star.isFlashing ? star.flashDelay : star.delay,
+            ease: star.isFlashing ? 'easeInOut' : 'easeInOut',
           }}
         />
       ))}
@@ -46,9 +412,9 @@ function StarField() {
   )
 }
 
-// Epic Big Bang sequence with Boldonse font - 5 seconds total
+// Animation sequence ending at zoomed D
 function AnimatedInfinity({ onComplete }: { onComplete: () => void }) {
-  const [animationPhase, setAnimationPhase] = useState<'drawing' | 'text' | 'zoomD' | 'bigBang'>('drawing')
+  const [animationPhase, setAnimationPhase] = useState<'drawing' | 'text' | 'zoomD'>('drawing')
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -64,11 +430,7 @@ function AnimatedInfinity({ onComplete }: { onComplete: () => void }) {
   }
 
   const handleZoomDComplete = () => {
-    setTimeout(() => setAnimationPhase('bigBang'), 300)
-  }
-
-  const handleBigBangComplete = () => {
-    setTimeout(() => onComplete(), 200)
+    setTimeout(() => onComplete(), 500)
   }
 
   if (!mounted) return null
@@ -81,26 +443,21 @@ function AnimatedInfinity({ onComplete }: { onComplete: () => void }) {
           initial={{ scale: 0.5, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.8, opacity: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
           className="relative flex items-center justify-center"
         >
-          <svg
-            width="200"
-            height="100"
-            viewBox="0 0 200 100"
-            className="relative z-10"
-          >
+          <svg width="200" height="100" viewBox="0 0 200 100" className="relative z-10">
             <defs>
               {/* White glow effect */}
               <filter id="infinityGlow" x="-50%" y="-50%" width="200%" height="200%">
-                <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
-                <feMerge> 
-                  <feMergeNode in="coloredBlur"/>
-                  <feMergeNode in="SourceGraphic"/>
+                <feGaussianBlur stdDeviation="4" result="coloredBlur" />
+                <feMerge>
+                  <feMergeNode in="coloredBlur" />
+                  <feMergeNode in="SourceGraphic" />
                 </feMerge>
               </filter>
             </defs>
-            
+
             <motion.path
               d="M50 50 C50 25, 75 25, 100 50 C125 75, 150 75, 150 50 C150 25, 125 25, 100 50 C75 75, 50 75, 50 50"
               fill="none"
@@ -111,38 +468,30 @@ function AnimatedInfinity({ onComplete }: { onComplete: () => void }) {
               filter="url(#infinityGlow)"
               initial={{ pathLength: 0, opacity: 0 }}
               animate={{ pathLength: 1, opacity: 1 }}
-              transition={{ 
+              transition={{
                 duration: 2,
-                ease: "easeInOut",
-                onComplete: handleDrawingComplete
+                ease: 'easeInOut',
+                onComplete: handleDrawingComplete,
               }}
             />
           </svg>
         </motion.div>
       )}
 
-      {/* Text Phase - DevX Group with Boldonse Font */}
+      {/* Text Phase - DevX Group LLC with Loading Animation */}
       {animationPhase === 'text' && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
-          className="text-center"
-          onAnimationComplete={handleTextComplete}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
+          className="text-center relative z-10"
         >
-          <motion.h1
-            className="text-4xl md:text-6xl font-['IBM_Plex_Mono'] font-bold text-white text-glow-hero drop-shadow-[0_0_25px_rgba(255,255,255,0.8)] tracking-wide"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-          >
-            DevX Group
-          </motion.h1>
+          <LoadingText text="DevX Group LLC" onComplete={handleTextComplete} />
         </motion.div>
       )}
 
-      {/* Zoom D Phase - Focus on D letter and scale up */}
+      {/* Zoom D Phase - Focus on D letter with subtle fade */}
       {animationPhase === 'zoomD' && (
         <motion.div
           className="absolute inset-0 flex items-center justify-center"
@@ -153,155 +502,14 @@ function AnimatedInfinity({ onComplete }: { onComplete: () => void }) {
             className="text-6xl md:text-9xl font-['IBM_Plex_Mono'] font-bold text-white text-glow-hero drop-shadow-[0_0_25px_rgba(255,255,255,0.8)]"
             initial={{ scale: 1 }}
             animate={{ scale: 50, opacity: 0.3 }}
-            transition={{ 
-              duration: 1, 
-              ease: "easeIn",
-              onComplete: handleZoomDComplete
+            transition={{
+              duration: 1,
+              ease: 'easeIn',
+              onComplete: handleZoomDComplete,
             }}
           >
             D
           </motion.span>
-        </motion.div>
-      )}
-
-      {/* Big Bang Phase - NASA-Style Cosmic Explosion */}
-      {animationPhase === 'bigBang' && (
-        <motion.div
-          className="absolute inset-0 flex items-center justify-center overflow-hidden"
-          initial={{ opacity: 1 }}
-          animate={{ opacity: 1 }}
-        >
-          {/* Central Bright Core */}
-          <motion.div
-            className="absolute rounded-full"
-            style={{
-              left: "50%",
-              top: "50%",
-              transform: "translate(-50%, -50%)",
-              background: "radial-gradient(circle, #ffffff 0%, #e0c3fc 20%, #9d4edd 40%, #4834D4 60%, transparent 100%)",
-              boxShadow: "0 0 100px #ffffff, 0 0 200px #e0c3fc, 0 0 300px #9d4edd"
-            }}
-            initial={{ scale: 0, opacity: 1 }}
-            animate={{ scale: 20, opacity: 0.8 }}
-            transition={{ 
-              duration: 0.8,
-              ease: "easeOut"
-            }}
-          />
-
-          {/* Horizontal Energy Beam */}
-          <motion.div
-            className="absolute h-8"
-            style={{
-              left: "0%",
-              top: "50%",
-              width: "100%",
-              transform: "translateY(-50%)",
-              background: "linear-gradient(90deg, transparent 0%, #ffffff 20%, #e0c3fc 50%, #ffffff 80%, transparent 100%)",
-              boxShadow: "0 0 50px #ffffff, 0 0 100px #e0c3fc"
-            }}
-            initial={{ scaleX: 0, opacity: 1 }}
-            animate={{ scaleX: 1, opacity: 0.9 }}
-            transition={{ 
-              duration: 0.6,
-              ease: "easeOut"
-            }}
-          />
-
-          {/* Energy Bursts */}
-          {[...Array(12)].map((_, i) => (
-            <motion.div
-              key={`burst-${i}`}
-              className="absolute"
-              style={{
-                left: "50%",
-                top: "50%",
-                transform: "translate(-50%, -50%)",
-                width: "4px",
-                height: "100px",
-                background: "linear-gradient(0deg, transparent 0%, #ffffff 30%, #e0c3fc 70%, transparent 100%)",
-                boxShadow: "0 0 20px #ffffff",
-                transformOrigin: "center bottom",
-                rotate: `${i * 30}deg`
-              }}
-              initial={{ scaleY: 0, opacity: 1 }}
-              animate={{ 
-                scaleY: [0, 3, 0],
-                opacity: [1, 0.8, 0]
-              }}
-              transition={{ 
-                duration: 0.8,
-                delay: 0.1,
-                ease: "easeOut"
-              }}
-            />
-          ))}
-
-          {/* Expanding Energy Rings */}
-          {[...Array(5)].map((_, i) => (
-            <motion.div
-              key={`ring-${i}`}
-              className="absolute rounded-full border-2"
-              style={{
-                left: "50%",
-                top: "50%",
-                transform: "translate(-50%, -50%)",
-                borderColor: i % 2 === 0 ? "#e0c3fc" : "#9d4edd",
-                boxShadow: `0 0 20px ${i % 2 === 0 ? "#e0c3fc" : "#9d4edd"}`
-              }}
-              initial={{ scale: 0, opacity: 1 }}
-              animate={{ 
-                scale: 30 + (i * 10), 
-                opacity: 0,
-                borderWidth: 0 
-              }}
-              transition={{ 
-                duration: 1,
-                delay: i * 0.1,
-                ease: "easeOut"
-              }}
-            />
-          ))}
-
-          {/* Particle Shards */}
-          {[...Array(20)].map((_, i) => (
-            <motion.div
-              key={`shard-${i}`}
-              className="absolute w-1 h-8 bg-white"
-              style={{
-                left: "50%",
-                top: "50%",
-                transform: "translate(-50%, -50%)",
-                boxShadow: "0 0 10px #ffffff",
-                borderRadius: "50%"
-              }}
-              initial={{ scale: 0, x: 0, y: 0, opacity: 1 }}
-              animate={{ 
-                scale: [0, 1, 0],
-                x: Math.cos((i * 18) * Math.PI / 180) * 400,
-                y: Math.sin((i * 18) * Math.PI / 180) * 400,
-                opacity: [1, 0.8, 0]
-              }}
-              transition={{ 
-                duration: 0.9,
-                delay: 0.2,
-                ease: "easeOut"
-              }}
-            />
-          ))}
-
-          {/* Final White Flash */}
-          <motion.div
-            className="absolute inset-0 bg-white"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: [0, 0, 1] }}
-            transition={{ 
-              duration: 1,
-              times: [0, 0.7, 1],
-              ease: "easeOut",
-              onComplete: handleBigBangComplete
-            }}
-          />
         </motion.div>
       )}
     </div>
@@ -324,7 +532,7 @@ export default function EntryPage() {
       const timer = setTimeout(() => {
         router.push('/home')
       }, 500)
-      
+
       return () => clearTimeout(timer)
     }
   }, [animationComplete, router])
@@ -335,7 +543,7 @@ export default function EntryPage() {
       const timer = setTimeout(() => {
         router.push('/home')
       }, 1000)
-      
+
       return () => clearTimeout(timer)
     }
   }, [reduceMotion, mounted, router])
@@ -359,6 +567,13 @@ export default function EntryPage() {
   return (
     <div className="fixed inset-0 bg-black overflow-hidden">
       <StarField />
+      <LetterGlitch
+        glitchColors={['#4CD787', '#CFB53B', '#9d4edd', '#4834D4', '#00ff41', '#008f11']}
+        glitchSpeed={50}
+        centerVignette={true}
+        outerVignette={false}
+        smooth={true}
+      />
       <AnimatedInfinity onComplete={() => setAnimationComplete(true)} />
     </div>
   )
