@@ -22,7 +22,7 @@ const LetterGlitch = ({
   const grid = useRef({ columns: 0, rows: 0 })
   const context = useRef(null)
   const lastGlitchTime = useRef(Date.now())
-  const [opacity, setOpacity] = useState(fadeIn ? 0 : 0.3)
+  const [opacity, setOpacity] = useState(fadeIn ? 0 : 0.6)
   const startTime = useRef(Date.now())
 
   const fontSize = 16
@@ -236,12 +236,14 @@ const LetterGlitch = ({
     // Handle fade in/out animation
     if (fadeIn && elapsed < fadeDuration) {
       const progress = elapsed / fadeDuration
-      setOpacity(progress * 0.3) // Fade in to 0.3 opacity
+      setOpacity(progress * 0.6) // Fade in to 0.6 opacity (more visible)
     } else if (fadeOut && elapsed > fadeDuration) {
       const fadeProgress = Math.min((elapsed - fadeDuration) / fadeDuration, 1)
-      setOpacity(0.3 * (1 - fadeProgress)) // Fade out from 0.3 to 0
+      setOpacity(0.6 * (1 - fadeProgress)) // Fade out from 0.6 to 0
+    } else if (fadeIn && elapsed >= fadeDuration && !fadeOut) {
+      setOpacity(0.6) // Maintain visibility at 0.6 opacity
     } else if (!fadeIn && !fadeOut) {
-      setOpacity(0.3) // Static opacity
+      setOpacity(0.6) // Static opacity
     }
     
     if (now - lastGlitchTime.current >= glitchSpeed) {
