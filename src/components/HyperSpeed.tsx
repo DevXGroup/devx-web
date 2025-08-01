@@ -130,6 +130,13 @@ const HyperSpeed: React.FC<HyperSpeedProps> = ({
     if (!canvas) return;
 
     const rect = canvas.getBoundingClientRect();
+    
+    // Don't initialize if container is too small (likely still animating)
+    if (rect.width < 10 || rect.height < 10) {
+      setTimeout(resizeCanvas, 100);
+      return;
+    }
+    
     const dpr = window.devicePixelRatio || 1;
 
     canvas.width = rect.width * dpr;
@@ -150,13 +157,17 @@ const HyperSpeed: React.FC<HyperSpeedProps> = ({
   }, [speed]);
 
   useEffect(() => {
-    resizeCanvas();
-    animate();
+    // Delay initialization to allow parent animations to complete
+    const initTimeout = setTimeout(() => {
+      resizeCanvas();
+      animate();
+    }, 100);
 
     const handleResize = () => resizeCanvas();
     window.addEventListener('resize', handleResize);
 
     return () => {
+      clearTimeout(initTimeout);
       window.removeEventListener('resize', handleResize);
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
@@ -176,9 +187,9 @@ const HyperSpeed: React.FC<HyperSpeedProps> = ({
     <div className={`relative w-full h-full overflow-hidden ${className}`}>
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 w-full h-full cursor-pointer"
+        className="absolute inset-0 w-full h-full cursor-pointer block"
         onClick={handleClick}
-        style={{ background: backgroundColor }}
+        style={{ background: backgroundColor, width: '100%', height: '100%' }}
       />
     </div>
   );

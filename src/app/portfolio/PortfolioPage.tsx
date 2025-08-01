@@ -14,6 +14,9 @@ import LetterGlitch from "@/components/LetterGlitch"
 import DotGrid from "@/components/DotGrid"
 import HyperSpeed from "@/components/HyperSpeed"
 import Squares from "@/components/Squares"
+import Waves from "@/components/Waves"
+import WavesNew from "@/components/WavesNew"
+import GridAnimation from "@/components/GridAnimation"
 
 // Enhanced animation variants
 const fadeInUpVariants = {
@@ -618,12 +621,16 @@ export default function PortfolioPage() {
           
           {/* LetterGlitch Square - Top Left */}
           <motion.div
-            className="absolute top-20 left-[15%] w-32 h-32 bg-black/60 backdrop-blur-md overflow-hidden cursor-pointer"
+            className="absolute top-4 sm:top-6 md:top-8 lg:top-10 left-[2%] sm:left-[4%] md:left-[6%] lg:left-[8%] backdrop-blur-md overflow-hidden cursor-pointer"
             style={{
+              width: 'clamp(60px, 8vw, 112px)',
+              height: 'clamp(60px, 8vw, 112px)',
               transform: 'rotate(-8deg)',
               border: '2px solid rgba(76, 215, 135, 0.4)',
-              borderRadius: '10px',
-              boxShadow: '0 0 20px rgba(76, 215, 135, 0.2)'
+              borderRadius: '16px',
+              boxShadow: '0 0 20px rgba(76, 215, 135, 0.2)',
+              backgroundColor: 'rgba(0, 0, 0, 0.3)',
+              zIndex: 1
             }}
             initial={{ opacity: 0, scale: 0, rotate: -23 }}
             animate={{ opacity: 1, scale: 1, rotate: -8 }}
@@ -642,12 +649,16 @@ export default function PortfolioPage() {
           
           {/* DotGrid Square - Top Right */}
           <motion.div
-            className="absolute top-16 right-[18%] w-36 h-36 bg-black/60 backdrop-blur-md overflow-hidden cursor-pointer"
+            className="absolute top-4 sm:top-6 md:top-8 lg:top-10 right-[2%] sm:right-[4%] md:right-[6%] lg:right-[8%] backdrop-blur-md overflow-hidden cursor-pointer"
             style={{
+              width: 'clamp(65px, 9vw, 120px)',
+              height: 'clamp(65px, 9vw, 120px)',
               transform: 'rotate(12deg)',
               border: '2px solid rgba(72, 52, 212, 0.4)',
-              borderRadius: '10px',
-              boxShadow: '0 0 20px rgba(72, 52, 212, 0.2)'
+              borderRadius: '16px',
+              boxShadow: '0 0 20px rgba(72, 52, 212, 0.2)',
+              backgroundColor: 'rgba(0, 0, 0, 0.3)',
+              zIndex: 1
             }}
             initial={{ opacity: 0, scale: 0, rotate: 27 }}
             animate={{ opacity: 1, scale: 1, rotate: 12 }}
@@ -667,14 +678,18 @@ export default function PortfolioPage() {
             />
           </motion.div>
           
-          {/* HyperSpeed Square - Top Center */}
+          {/* GridAnimation Square - Top Center (moved away from title) */}
           <motion.div
-            className="absolute top-12 right-[42%] w-28 h-28 bg-black/60 backdrop-blur-md overflow-hidden cursor-pointer"
+            className="absolute top-32 sm:top-36 md:top-40 lg:top-44 left-1/2 backdrop-blur-md overflow-hidden cursor-pointer"
             style={{
-              transform: 'rotate(-15deg)',
+              width: 'clamp(70px, 10vw, 128px)',
+              height: 'clamp(70px, 10vw, 128px)',
+              transform: 'translateX(-50%) rotate(-15deg)',
               border: '2px solid rgba(207, 181, 59, 0.4)',
-              borderRadius: '10px',
-              boxShadow: '0 0 20px rgba(207, 181, 59, 0.2)'
+              borderRadius: '16px',
+              boxShadow: '0 0 20px rgba(207, 181, 59, 0.2)',
+              backgroundColor: 'rgba(0, 0, 0, 0.3)',
+              zIndex: 1
             }}
             initial={{ opacity: 0, scale: 0, y: -30 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -682,24 +697,27 @@ export default function PortfolioPage() {
             whileHover={{ scale: 1.05, rotate: -12 }}
             whileTap={{ scale: 0.95 }}
           >
-            <HyperSpeed
-              starCount={300}
-              speed={0.5}
-              starColor="#CFB53B"
-              backgroundColor="transparent"
+            <GridAnimation
+              direction="diagonal"
+              speed={0.8}
+              borderColor="#CFB53B"
+              squareSize={12}
+              hoverFillColor="rgba(207, 181, 59, 0.3)"
             />
           </motion.div>
           
           {/* Squares Square - Bottom Left */}
           <motion.div
-            className="absolute bottom-16 left-[22%] w-34 h-34 bg-black/60 backdrop-blur-md overflow-hidden cursor-pointer"
+            className="absolute bottom-8 sm:bottom-12 md:bottom-16 lg:bottom-20 left-[2%] sm:left-[4%] md:left-[6%] lg:left-[8%] backdrop-blur-md overflow-hidden cursor-pointer"
             style={{
+              width: 'clamp(75px, 11vw, 136px)',
+              height: 'clamp(75px, 11vw, 136px)',
               transform: 'rotate(18deg)',
               border: '2px solid rgba(157, 78, 221, 0.4)',
-              borderRadius: '10px',
+              borderRadius: '16px',
               boxShadow: '0 0 20px rgba(157, 78, 221, 0.2)',
-              width: '136px',
-              height: '136px'
+              backgroundColor: 'rgba(0, 0, 0, 0.3)',
+              zIndex: 1
             }}
             initial={{ opacity: 0, scale: 0, rotate: 33 }}
             animate={{ opacity: 1, scale: 1, rotate: 18 }}
@@ -716,16 +734,18 @@ export default function PortfolioPage() {
             />
           </motion.div>
           
-          {/* Enhanced LetterGlitch Square - Bottom Right */}
+          {/* Waves Square - Bottom Right */}
           <motion.div
-            className="absolute bottom-20 right-[30%] w-30 h-30 bg-black/60 backdrop-blur-md overflow-hidden cursor-pointer"
+            className="absolute bottom-8 sm:bottom-12 md:bottom-16 lg:bottom-20 right-[2%] sm:right-[4%] md:right-[6%] lg:right-[8%] backdrop-blur-md overflow-hidden cursor-pointer"
             style={{
+              width: 'clamp(65px, 9vw, 120px)',
+              height: 'clamp(65px, 9vw, 120px)',
               transform: 'rotate(-10deg)',
               border: '2px solid rgba(76, 215, 135, 0.4)',
-              borderRadius: '10px',
+              borderRadius: '16px',
               boxShadow: '0 0 20px rgba(76, 215, 135, 0.2)',
-              width: '120px',
-              height: '120px'
+              backgroundColor: 'rgba(0, 0, 0, 0.3)',
+              zIndex: 1
             }}
             initial={{ opacity: 0, scale: 0, x: 30 }}
             animate={{ opacity: 1, scale: 1, x: 0 }}
@@ -733,12 +753,18 @@ export default function PortfolioPage() {
             whileHover={{ scale: 1.05, rotate: -7 }}
             whileTap={{ scale: 0.95 }}
           >
-            <LetterGlitch
-              glitchColors={["#4CD787", "#00ff87", "#1a3d2e"]}
-              glitchSpeed={120}
-              centerVignette={false}
-              outerVignette={false}
-              smooth={true}
+            <Waves
+              lineColor="#4CD787"
+              backgroundColor="transparent"
+              waveSpeedX={0.015}
+              waveSpeedY={0.008}
+              waveAmpX={25}
+              waveAmpY={12}
+              xGap={12}
+              yGap={20}
+              friction={0.93}
+              tension={0.008}
+              maxCursorMove={80}
             />
           </motion.div>
 
@@ -757,92 +783,24 @@ export default function PortfolioPage() {
                 direction="top"
               />
               
-              {/* Dynamic Grid Pattern */}
+              {/* New Waves Animation */}
               <motion.div
                 variants={fadeInUpVariants}
                 className="mb-8 flex justify-center relative"
               >
                 <div className="relative w-full max-w-2xl h-32">
-                  {/* Subtle glowing horizontal line */}
-                  <motion.div
-                    className="absolute inset-0 flex items-center justify-center"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 2, delay: 0.5 }}
-                  >
-                    <motion.div
-                      className="w-full h-px relative"
-                      style={{
-                        background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.1) 20%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,0.1) 80%, transparent 100%)',
-                        boxShadow: '0 0 20px rgba(255,255,255,0.5), 0 0 40px rgba(255,255,255,0.3), 0 0 60px rgba(255,255,255,0.1)'
-                      }}
-                      animate={{
-                        opacity: [0.3, 1, 0.3],
-                        scaleX: [0.8, 1.2, 0.8],
-                      }}
-                      transition={{
-                        duration: 4,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                      }}
-                    />
-                    
-                    {/* Additional subtle glow layers */}
-                    <motion.div
-                      className="absolute inset-0 w-full h-px"
-                      style={{
-                        background: 'linear-gradient(90deg, transparent 0%, rgba(76,215,135,0.05) 30%, rgba(76,215,135,0.2) 50%, rgba(76,215,135,0.05) 70%, transparent 100%)',
-                        filter: 'blur(2px)'
-                      }}
-                      animate={{
-                        opacity: [0.2, 0.6, 0.2],
-                      }}
-                      transition={{
-                        duration: 3,
-                        repeat: Infinity,
-                        ease: "sine",
-                        delay: 0.5
-                      }}
-                    />
-                  </motion.div>
-                  
-                  
-                  {/* Subtle floating elements with gradient transparency */}
-                  <motion.div
-                    className="absolute top-4 left-1/4 w-3 h-3 rounded-full opacity-20"
-                    style={{
-                      background: 'radial-gradient(circle, rgba(207,181,59,0.6) 0%, rgba(207,181,59,0.2) 70%, transparent 100%)',
-                      boxShadow: '0 0 10px rgba(207,181,59,0.3)'
-                    }}
-                    animate={{
-                      y: [0, -10, 0],
-                      scale: [1, 1.2, 1],
-                      opacity: [0.2, 0.4, 0.2]
-                    }}
-                    transition={{
-                      duration: 3,
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }}
-                  />
-                  <motion.div
-                    className="absolute bottom-4 right-1/3 w-4 h-4 rotate-45 opacity-15"
-                    style={{
-                      background: 'linear-gradient(45deg, rgba(157,78,221,0.3) 0%, rgba(157,78,221,0.1) 50%, transparent 100%)',
-                      border: '1px solid rgba(157,78,221,0.2)',
-                      filter: 'blur(0.5px)'
-                    }}
-                    animate={{
-                      rotate: [45, 225, 45],
-                      scale: [1, 0.8, 1],
-                      opacity: [0.15, 0.3, 0.15]
-                    }}
-                    transition={{
-                      duration: 4,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                      delay: 1
-                    }}
+                  <WavesNew
+                    lineColor="#4CD787"
+                    backgroundColor="transparent"
+                    waveSpeedX={0.008}
+                    waveSpeedY={0.005}
+                    waveAmpX={20}
+                    waveAmpY={10}
+                    xGap={15}
+                    yGap={25}
+                    friction={0.92}
+                    tension={0.006}
+                    maxCursorMove={60}
                   />
                 </div>
               </motion.div>

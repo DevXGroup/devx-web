@@ -68,6 +68,13 @@ const DotGrid = ({
     if (!wrap || !canvas) return;
 
     const { width, height } = wrap.getBoundingClientRect();
+    
+    // Don't initialize if container is too small (likely still animating)
+    if (width < 10 || height < 10) {
+      setTimeout(buildGrid, 100);
+      return;
+    }
+    
     const dpr = window.devicePixelRatio || 1;
 
     canvas.width = width * dpr;
@@ -297,13 +304,14 @@ const DotGrid = ({
 
   return (
     <section
-      className={`flex items-center justify-center h-full w-full relative ${className}`}
+      className={`h-full w-full relative ${className}`}
       style={style}
     >
       <div ref={wrapperRef} className="w-full h-full relative">
         <canvas
           ref={canvasRef}
-          className="absolute inset-0 w-full h-full"
+          className="absolute inset-0 w-full h-full block"
+          style={{ width: '100%', height: '100%' }}
         />
       </div>
     </section>

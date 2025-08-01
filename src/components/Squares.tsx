@@ -23,11 +23,11 @@ interface SquaresProps {
 
 const Squares: React.FC<SquaresProps> = ({
   className = '',
-  squareCount = 50,
+  squareCount = 25,
   colors = ['#4CD787', '#4834D4', '#CFB53B', '#9d4edd'],
-  minSize = 10,
-  maxSize = 40,
-  speed = 0.5,
+  minSize = 15,
+  maxSize = 45,
+  speed = 0.3,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationFrameRef = useRef<number>();
@@ -36,16 +36,22 @@ const Squares: React.FC<SquaresProps> = ({
 
   const initSquares = useCallback((width: number, height: number) => {
     const squares: Square[] = [];
+    
+    // Scale square sizes based on container size for better responsiveness
+    const scaleFactor = Math.min(width / 400, height / 400, 1);
+    const responsiveMinSize = Math.max(minSize * scaleFactor, 8);
+    const responsiveMaxSize = Math.max(maxSize * scaleFactor, 15);
 
     for (let i = 0; i < squareCount; i++) {
+      const squareSize = Math.random() * (responsiveMaxSize - responsiveMinSize) + responsiveMinSize;
       squares.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        size: Math.random() * (maxSize - minSize) + minSize,
+        x: Math.random() * (width - squareSize) + squareSize/2,
+        y: Math.random() * (height - squareSize) + squareSize/2,
+        size: squareSize,
         rotation: Math.random() * 360,
-        opacity: Math.random() * 0.7 + 0.3,
-        speed: Math.random() * speed + 0.5,
-        rotationSpeed: (Math.random() - 0.5) * 3,
+        opacity: Math.random() * 0.4 + 0.6,
+        speed: Math.random() * speed + 0.1,
+        rotationSpeed: (Math.random() - 0.5) * 2,
         color: colors[Math.floor(Math.random() * colors.length)],
       });
     }
@@ -67,14 +73,13 @@ const Squares: React.FC<SquaresProps> = ({
 
     // Update and draw squares
     squaresRef.current.forEach((square) => {
-      // Update position
       square.y -= square.speed;
       square.rotation += square.rotationSpeed;
 
       // Reset square if it goes off screen
       if (square.y + square.size < 0) {
         square.y = height + square.size;
-        square.x = Math.random() * width;
+        square.x = Math.random() * (width - square.size);
       }
 
       // Draw square
@@ -83,17 +88,42 @@ const Squares: React.FC<SquaresProps> = ({
       ctx.rotate((square.rotation * Math.PI) / 180);
       ctx.globalAlpha = square.opacity;
 
-      // Draw filled square with glow
+      // Draw rounded square with enhanced radius
+      const radius = square.size * 0.25; // Increased border radius
+      
+      // Draw filled rounded square with glow
       ctx.fillStyle = square.color;
       ctx.shadowColor = square.color;
       ctx.shadowBlur = 8;
-      ctx.fillRect(-square.size / 2, -square.size / 2, square.size, square.size);
+      
+      // Create rounded rectangle path with fallback
+      ctx.beginPath();
+      if (ctx.roundRect) {
+        ctx.roundRect(-square.size / 2, -square.size / 2, square.size, square.size, radius);
+      } else {
+        // Fallback for browsers that don't support roundRect
+        const x = -square.size / 2;
+        const y = -square.size / 2;
+        const width = square.size;
+        const height = square.size;
+        ctx.moveTo(x + radius, y);
+        ctx.lineTo(x + width - radius, y);
+        ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+        ctx.lineTo(x + width, y + height - radius);
+        ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+        ctx.lineTo(x + radius, y + height);
+        ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+        ctx.lineTo(x, y + radius);
+        ctx.quadraticCurveTo(x, y, x + radius, y);
+        ctx.closePath();
+      }
+      ctx.fill();
 
       // Draw border with enhanced visibility
       ctx.strokeStyle = square.color;
       ctx.lineWidth = 2;
       ctx.shadowBlur = 4;
-      ctx.strokeRect(-square.size / 2, -square.size / 2, square.size, square.size);
+      ctx.stroke();
       
       // Reset shadow
       ctx.shadowBlur = 0;
@@ -109,6 +139,13 @@ const Squares: React.FC<SquaresProps> = ({
     if (!canvas) return;
 
     const rect = canvas.getBoundingClientRect();
+    
+    // Don't initialize if container is too small (likely still animating)
+    if (rect.width < 10 || rect.height < 10) {
+      setTimeout(resizeCanvas, 100);
+      return;
+    }
+    
     const dpr = window.devicePixelRatio || 1;
 
     canvas.width = rect.width * dpr;
@@ -125,13 +162,18 @@ const Squares: React.FC<SquaresProps> = ({
   }, [initSquares]);
 
   useEffect(() => {
-    resizeCanvas();
-    animate();
+    // Delay initialization to allow parent animations to complete
+    const initTimeout = setTimeout(() => {
+      resizeCanvas();
+      animate();
+    }, 100);
 
     const handleResize = () => resizeCanvas();
+
     window.addEventListener('resize', handleResize);
 
     return () => {
+      clearTimeout(initTimeout);
       window.removeEventListener('resize', handleResize);
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
@@ -139,51 +181,16 @@ const Squares: React.FC<SquaresProps> = ({
     };
   }, [resizeCanvas, animate]);
 
-  const handleClick = () => {
-    // Burst effect - temporarily increase speed and add more squares
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const rect = canvas.getBoundingClientRect();
-    
-    // Add temporary burst squares
-    for (let i = 0; i < 20; i++) {
-      squaresRef.current.push({
-        x: Math.random() * rect.width,
-        y: rect.height,
-        size: Math.random() * (maxSize - minSize) + minSize,
-        rotation: Math.random() * 360,
-        opacity: Math.random() * 0.8 + 0.2,
-        speed: Math.random() * speed * 3 + 1,
-        rotationSpeed: (Math.random() - 0.5) * 6,
-        color: colors[Math.floor(Math.random() * colors.length)],
-      });
-    }
-
-    // Increase existing squares speed temporarily
-    squaresRef.current.forEach((square, index) => {
-      if (index < squareCount) {
-        square.speed *= 2;
-        square.rotationSpeed *= 2;
-      }
-    });
-
-    // Reset speeds after burst
-    setTimeout(() => {
-      squaresRef.current = squaresRef.current.slice(0, squareCount);
-      squaresRef.current.forEach((square) => {
-        square.speed = Math.random() * speed + 0.1;
-        square.rotationSpeed = (Math.random() - 0.5) * 2;
-      });
-    }, 1000);
-  };
 
   return (
-    <div className={`relative w-full h-full overflow-hidden ${className}`}>
+    <div className={`relative w-full h-full overflow-hidden ${className}`} style={{ zIndex: 1 }}>
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 w-full h-full cursor-pointer"
-        onClick={handleClick}
+        className="absolute inset-0 w-full h-full block"
+        style={{ 
+          width: '100%', 
+          height: '100%'
+        }}
       />
     </div>
   );
