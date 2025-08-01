@@ -187,38 +187,137 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Mobile Menu Button - show for tablets too */}
-          <div className="lg:hidden flex items-center z-[10000]">
+          {/* Mobile Menu Button - 3D Floating Sphere */}
+          <div className="lg:hidden flex items-center z-[10000] pt-2">
             <motion.button
               ref={hamburgerButtonRef}
               onClick={() => setIsOpen(!isOpen)}
-              className="relative w-12 h-12 rounded-full bg-gradient-to-r from-purple-600/20 via-pink-500/20 to-blue-500/20 backdrop-blur-sm border border-white/10 hover:border-white/30 transition-all duration-300 group overflow-hidden"
+              className="relative w-12 h-12 rounded-full overflow-hidden group"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               aria-label="Toggle menu"
+              animate={{
+                x: [-4, 4, -4, 4, -4],
+                y: [-0.5, 0.5, -0.5, 0.5, -0.5],
+                rotateY: [0, 2, 0, -2, 0],
+                rotateX: [0, 0.5, 0, -0.5, 0],
+              }}
+              transition={{
+                duration: 8,
+                repeat: Infinity,
+                ease: "easeInOut",
+                type: "tween",
+              }}
+              style={{
+                filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3)) drop-shadow(0 2px 4px rgba(0,0,0,0.2))',
+              }}
             >
-              {/* Background glow effect */}
+              {/* 3D Sphere Base */}
               <motion.div
-                className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-400/10 via-pink-400/10 to-blue-400/10"
-                animate={isOpen ? { opacity: 1, scale: 1.2 } : { opacity: 0, scale: 1 }}
+                className="absolute inset-0 rounded-full"
+                style={{
+                  background: `radial-gradient(circle at 30% 30%, 
+                    rgba(255,255,255,0.8) 0%, 
+                    rgba(147,51,234,0.6) 20%, 
+                    rgba(236,72,153,0.5) 40%, 
+                    rgba(59,130,246,0.4) 60%, 
+                    rgba(16,185,129,0.3) 80%, 
+                    rgba(0,0,0,0.2) 100%)`,
+                  boxShadow: `
+                    inset -3px -3px 6px rgba(0,0,0,0.4),
+                    inset 3px 3px 6px rgba(255,255,255,0.3),
+                    0 6px 12px rgba(147,51,234,0.2),
+                    0 0 15px rgba(236,72,153,0.1)
+                  `,
+                }}
+                animate={{
+                  boxShadow: isOpen ? `
+                    inset -3px -3px 6px rgba(0,0,0,0.4),
+                    inset 3px 3px 6px rgba(255,255,255,0.3),
+                    0 6px 12px rgba(255,107,107,0.2),
+                    0 0 15px rgba(254,202,87,0.1)
+                  ` : undefined
+                }}
                 transition={{ duration: 0.3 }}
               />
+
+              {/* Floating particles around sphere */}
+              <motion.div
+                className="absolute inset-0 rounded-full"
+                animate={{
+                  rotate: 360,
+                }}
+                transition={{
+                  duration: 10,
+                  repeat: Infinity,
+                  ease: "linear",
+                }}
+              >
+                {[...Array(4)].map((_, i) => (
+                  <motion.div
+                    key={i}
+                    className="absolute w-0.5 h-0.5 bg-white/50 rounded-full"
+                    style={{
+                      top: `${30 + Math.sin(i * Math.PI / 2) * 25}%`,
+                      left: `${50 + Math.cos(i * Math.PI / 2) * 30}%`,
+                    }}
+                    animate={{
+                      scale: [0.3, 0.8, 0.3],
+                      opacity: [0.2, 0.6, 0.2],
+                    }}
+                    transition={{
+                      duration: 2.5 + i * 0.5,
+                      repeat: Infinity,
+                      delay: i * 0.3,
+                    }}
+                  />
+                ))}
+              </motion.div>
+
+              {/* Atmospheric glow */}
+              <motion.div
+                className="absolute inset-0 rounded-full"
+                style={{
+                  background: `radial-gradient(circle, 
+                    transparent 65%, 
+                    rgba(236,72,153,0.08) 75%, 
+                    rgba(147,51,234,0.04) 100%)`,
+                  filter: 'blur(1px)',
+                }}
+                animate={{
+                  scale: [1, 1.15, 1],
+                  opacity: [0.4, 0.7, 0.4],
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
               
-              {/* Hamburger lines container */}
-              <div className="flex flex-col items-center justify-center w-full h-full space-y-1">
+              {/* Hamburger lines with 3D effect */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center space-y-1 z-10">
                 {/* Top line */}
                 <motion.div
-                  className="w-5 h-0.5 bg-gradient-to-r from-white via-pink-300 to-purple-300 rounded-full shadow-sm"
+                  className="w-5 h-0.5 rounded-full shadow-lg"
+                  style={{
+                    background: 'linear-gradient(90deg, rgba(255,255,255,0.9) 0%, rgba(248,187,217,0.7) 50%, rgba(225,190,231,0.7) 100%)',
+                    boxShadow: '0 1px 2px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.5)',
+                  }}
                   animate={isOpen 
-                    ? { rotate: 45, y: 6, background: "linear-gradient(45deg, #ff6b6b, #feca57)" } 
-                    : { rotate: 0, y: 0, background: "linear-gradient(90deg, #ffffff, #f8bbd9, #e1bee7)" }
+                    ? { rotate: 45, y: 6, background: 'linear-gradient(90deg, rgba(255,107,107,0.9) 0%, rgba(254,202,87,0.7) 100%)' } 
+                    : { rotate: 0, y: 0, background: 'linear-gradient(90deg, rgba(255,255,255,0.9) 0%, rgba(248,187,217,0.7) 50%, rgba(225,190,231,0.7) 100%)' }
                   }
                   transition={{ duration: 0.3, ease: "easeInOut" }}
                 />
                 
                 {/* Middle line */}
                 <motion.div
-                  className="w-5 h-0.5 bg-gradient-to-r from-pink-300 via-purple-300 to-blue-300 rounded-full shadow-sm"
+                  className="w-5 h-0.5 rounded-full shadow-lg"
+                  style={{
+                    background: 'linear-gradient(90deg, rgba(248,187,217,0.8) 0%, rgba(225,190,231,0.6) 50%, rgba(179,157,219,0.6) 100%)',
+                    boxShadow: '0 1px 2px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.4)',
+                  }}
                   animate={isOpen 
                     ? { opacity: 0, scale: 0, rotate: 180 } 
                     : { opacity: 1, scale: 1, rotate: 0 }
@@ -228,29 +327,29 @@ export default function Navbar() {
                 
                 {/* Bottom line */}
                 <motion.div
-                  className="w-5 h-0.5 bg-gradient-to-r from-purple-300 via-blue-300 to-cyan-300 rounded-full shadow-sm"
+                  className="w-5 h-0.5 rounded-full shadow-lg"
+                  style={{
+                    background: 'linear-gradient(90deg, rgba(225,190,231,0.9) 0%, rgba(179,157,219,0.7) 50%, rgba(144,202,249,0.7) 100%)',
+                    boxShadow: '0 1px 2px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.5)',
+                  }}
                   animate={isOpen 
-                    ? { rotate: -45, y: -6, background: "linear-gradient(45deg, #feca57, #ff6b6b)" } 
-                    : { rotate: 0, y: 0, background: "linear-gradient(90deg, #e1bee7, #b39ddb, #90caf9)" }
+                    ? { rotate: -45, y: -6, background: 'linear-gradient(90deg, rgba(254,202,87,0.9) 0%, rgba(255,107,107,0.7) 100%)' } 
+                    : { rotate: 0, y: 0, background: 'linear-gradient(90deg, rgba(225,190,231,0.9) 0%, rgba(179,157,219,0.7) 50%, rgba(144,202,249,0.7) 100%)' }
                   }
                   transition={{ duration: 0.3, ease: "easeInOut" }}
                 />
               </div>
               
-              {/* Ripple effect on click */}
+              {/* Click ripple effect */}
               <motion.div
-                className="absolute inset-0 rounded-full bg-white/20"
+                className="absolute inset-0 rounded-full"
+                style={{
+                  background: 'radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 60%)',
+                }}
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: 0, opacity: 0 }}
-                whileTap={{ scale: 1.5, opacity: [0, 1, 0] }}
+                whileTap={{ scale: 1.8, opacity: [0, 1, 0] }}
                 transition={{ duration: 0.4 }}
-              />
-              
-              {/* Rotating ring effect */}
-              <motion.div
-                className="absolute inset-0 rounded-full border border-gradient-to-r from-purple-400/30 via-pink-400/30 to-blue-400/30"
-                animate={{ rotate: isOpen ? 180 : 0 }}
-                transition={{ duration: 0.5, ease: "easeInOut" }}
               />
             </motion.button>
           </div>
