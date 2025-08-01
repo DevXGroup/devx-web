@@ -27,9 +27,9 @@ const LetterGlitch = ({
   const context = useRef<CanvasRenderingContext2D | null>(null);
   const lastGlitchTime = useRef(Date.now());
 
-  const fontSize = 18;
-  const charWidth = 12;
-  const charHeight = 22;
+  const fontSize = 14;
+  const charWidth = 9;
+  const charHeight = 16;
 
   const lettersAndSymbols = [
     "A",
@@ -157,6 +157,13 @@ const LetterGlitch = ({
     const dpr = window.devicePixelRatio || 1;
     const rect = parent.getBoundingClientRect();
 
+    // Don't initialize if container is too small (likely still animating)
+    if (rect.width < 10 || rect.height < 10) {
+      setTimeout(resizeCanvas, 100);
+      return;
+    }
+
+    // Ensure canvas fills the entire parent
     canvas.width = rect.width * dpr;
     canvas.height = rect.height * dpr;
 
@@ -175,8 +182,9 @@ const LetterGlitch = ({
   const drawLetters = () => {
     if (!context.current || letters.current.length === 0) return;
     const ctx = context.current;
-    const { width, height } = canvasRef.current!.getBoundingClientRect();
-    ctx.clearRect(0, 0, width, height);
+    const canvas = canvasRef.current!;
+    const rect = canvas.getBoundingClientRect();
+    ctx.clearRect(0, 0, rect.width, rect.height);
     ctx.font = `${fontSize}px monospace`;
     ctx.textBaseline = "top";
 
@@ -254,8 +262,12 @@ const LetterGlitch = ({
     if (!canvas) return;
 
     context.current = canvas.getContext("2d");
-    resizeCanvas();
-    animate();
+    
+    // Delay initialization to allow parent animations to complete
+    const initTimeout = setTimeout(() => {
+      resizeCanvas();
+      animate();
+    }, 100);
 
     let resizeTimeout: NodeJS.Timeout;
 
@@ -271,6 +283,7 @@ const LetterGlitch = ({
     window.addEventListener("resize", handleResize);
 
     return () => {
+      clearTimeout(initTimeout);
       cancelAnimationFrame(animationRef.current!);
       window.removeEventListener("resize", handleResize);
     };
@@ -279,7 +292,11 @@ const LetterGlitch = ({
 
   return (
     <div className="relative w-full h-full bg-black overflow-hidden">
-      <canvas ref={canvasRef} className="block w-full h-full" />
+      <canvas 
+        ref={canvasRef} 
+        className="absolute inset-0 w-full h-full block"
+        style={{ width: '100%', height: '100%' }}
+      />
       {outerVignette && (
         <div
           className="absolute top-0 left-0 w-full h-full pointer-events-none bg-[radial-gradient(circle,_rgba(0,0,0,0)_60%,_rgba(0,0,0,1)_100%)]"
