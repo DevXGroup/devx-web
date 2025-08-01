@@ -12,9 +12,6 @@ const LetterGlitch = ({
   centerVignette = true,
   outerVignette = false,
   smooth = true,
-  fadeIn = true,
-  fadeOut = false,
-  fadeDuration = 1000,
 }) => {
   const canvasRef = useRef(null)
   const animationRef = useRef(null)
@@ -22,8 +19,6 @@ const LetterGlitch = ({
   const grid = useRef({ columns: 0, rows: 0 })
   const context = useRef(null)
   const lastGlitchTime = useRef(Date.now())
-  const [opacity, setOpacity] = useState(fadeIn ? 0 : 0.6)
-  const startTime = useRef(Date.now())
 
   const fontSize = 16
   const charWidth = 10
@@ -178,8 +173,8 @@ const LetterGlitch = ({
     letters.current.forEach((letter, index) => {
       const x = (index % grid.current.columns) * charWidth
       const y = Math.floor(index / grid.current.columns) * charHeight
-      // Apply fade opacity combined with dimming
-      ctx.globalAlpha = opacity
+      // Dim the background letters to make text more prominent
+      ctx.globalAlpha = 0.3
       ctx.fillStyle = letter.color
       ctx.fillText(letter.char, x, y)
     })
@@ -231,21 +226,6 @@ const LetterGlitch = ({
 
   const animate = () => {
     const now = Date.now()
-    const elapsed = now - startTime.current
-    
-    // Handle fade in/out animation
-    if (fadeIn && elapsed < fadeDuration) {
-      const progress = elapsed / fadeDuration
-      setOpacity(progress * 0.6) // Fade in to 0.6 opacity (more visible)
-    } else if (fadeOut && elapsed > fadeDuration) {
-      const fadeProgress = Math.min((elapsed - fadeDuration) / fadeDuration, 1)
-      setOpacity(0.6 * (1 - fadeProgress)) // Fade out from 0.6 to 0
-    } else if (fadeIn && elapsed >= fadeDuration && !fadeOut) {
-      setOpacity(0.6) // Maintain visibility at 0.6 opacity
-    } else if (!fadeIn && !fadeOut) {
-      setOpacity(0.6) // Static opacity
-    }
-    
     if (now - lastGlitchTime.current >= glitchSpeed) {
       updateLetters()
       drawLetters()
@@ -595,9 +575,6 @@ export default function EntryPage() {
         centerVignette={true}
         outerVignette={false}
         smooth={true}
-        fadeIn={true}
-        fadeOut={animationComplete}
-        fadeDuration={1500}
       />
       <AnimatedInfinity onComplete={() => setAnimationComplete(true)} />
     </div>
