@@ -679,6 +679,7 @@ function AnimatedInfinity({ onComplete }: { onComplete: () => void }) {
 export default function EntryPage() {
   const [mounted, setMounted] = useState(false)
   const [animationComplete, setAnimationComplete] = useState(false)
+  const [isCollapsing, setIsCollapsing] = useState(false)
   const router = useRouter()
   const reduceMotion = useReducedMotion()
 
@@ -688,10 +689,14 @@ export default function EntryPage() {
 
   useEffect(() => {
     if (animationComplete) {
-      // Small delay before transitioning to main page
+      // Start collapse animation after short delay
       const timer = setTimeout(() => {
-        router.push('/home')
-      }, 500)
+        setIsCollapsing(true)
+        // Navigate after collapse animation completes
+        setTimeout(() => {
+          router.push('/home')
+        }, 800)
+      }, 200)
 
       return () => clearTimeout(timer)
     }
@@ -735,6 +740,20 @@ export default function EntryPage() {
         smooth={true}
       />
       <AnimatedInfinity onComplete={() => setAnimationComplete(true)} />
+      
+      {/* Collapse Animation - Top and Bottom bars */}
+      <motion.div
+        className="fixed top-0 left-0 right-0 bg-black z-50"
+        initial={{ height: 0 }}
+        animate={{ height: isCollapsing ? '50vh' : 0 }}
+        transition={{ duration: 0.8, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="fixed bottom-0 left-0 right-0 bg-black z-50"
+        initial={{ height: 0 }}
+        animate={{ height: isCollapsing ? '50vh' : 0 }}
+        transition={{ duration: 0.8, ease: "easeInOut" }}
+      />
     </div>
   )
 }
