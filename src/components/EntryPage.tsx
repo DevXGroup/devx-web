@@ -12,6 +12,9 @@ const LetterGlitch = ({
   centerVignette = true,
   outerVignette = false,
   smooth = true,
+  fadeIn = true,
+  fadeOut = false,
+  fadeDuration = 1000,
 }) => {
   const canvasRef = useRef(null)
   const animationRef = useRef(null)
@@ -19,6 +22,8 @@ const LetterGlitch = ({
   const grid = useRef({ columns: 0, rows: 0 })
   const context = useRef(null)
   const lastGlitchTime = useRef(Date.now())
+  const [opacity, setOpacity] = useState(fadeIn ? 0 : 0.3)
+  const startTime = useRef(Date.now())
 
   const fontSize = 16
   const charWidth = 10
@@ -161,9 +166,11 @@ const LetterGlitch = ({
   }
 
   const drawLetters = () => {
-    if (!context.current || letters.current.length === 0) return
+    if (!context.current || letters.current.length === 0 || !canvasRef.current) return
     const ctx = context.current
-    const { width, height } = canvasRef.current.getBoundingClientRect()
+    const rect = canvasRef.current.getBoundingClientRect()
+    const { width, height } = rect
+    
     ctx.clearRect(0, 0, width, height)
     ctx.font = `${fontSize}px monospace`
     ctx.textBaseline = 'top'
@@ -171,8 +178,8 @@ const LetterGlitch = ({
     letters.current.forEach((letter, index) => {
       const x = (index % grid.current.columns) * charWidth
       const y = Math.floor(index / grid.current.columns) * charHeight
-      // Dim the background letters to make text more prominent
-      ctx.globalAlpha = 0.3
+      // Apply fade opacity combined with dimming
+      ctx.globalAlpha = opacity
       ctx.fillStyle = letter.color
       ctx.fillText(letter.char, x, y)
     })
@@ -224,6 +231,19 @@ const LetterGlitch = ({
 
   const animate = () => {
     const now = Date.now()
+    const elapsed = now - startTime.current
+    
+    // Handle fade in/out animation
+    if (fadeIn && elapsed < fadeDuration) {
+      const progress = elapsed / fadeDuration
+      setOpacity(progress * 0.3) // Fade in to 0.3 opacity
+    } else if (fadeOut && elapsed > fadeDuration) {
+      const fadeProgress = Math.min((elapsed - fadeDuration) / fadeDuration, 1)
+      setOpacity(0.3 * (1 - fadeProgress)) // Fade out from 0.3 to 0
+    } else if (!fadeIn && !fadeOut) {
+      setOpacity(0.3) // Static opacity
+    }
+    
     if (now - lastGlitchTime.current >= glitchSpeed) {
       updateLetters()
       drawLetters()
@@ -573,6 +593,9 @@ export default function EntryPage() {
         centerVignette={true}
         outerVignette={false}
         smooth={true}
+        fadeIn={true}
+        fadeOut={animationComplete}
+        fadeDuration={1500}
       />
       <AnimatedInfinity onComplete={() => setAnimationComplete(true)} />
     </div>
