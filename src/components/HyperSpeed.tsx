@@ -157,17 +157,22 @@ const HyperSpeed: React.FC<HyperSpeedProps> = ({
   }, [speed]);
 
   useEffect(() => {
-    // Delay initialization to allow parent animations to complete
-    const initTimeout = setTimeout(() => {
+    // Multiple initialization attempts for better reliability
+    const initCanvas = () => {
       resizeCanvas();
       animate();
-    }, 100);
+    };
+    
+    initCanvas();
+    const initTimeout = setTimeout(initCanvas, 50);
+    const initTimeout2 = setTimeout(initCanvas, 200);
 
     const handleResize = () => resizeCanvas();
     window.addEventListener('resize', handleResize);
 
     return () => {
       clearTimeout(initTimeout);
+      clearTimeout(initTimeout2);
       window.removeEventListener('resize', handleResize);
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);

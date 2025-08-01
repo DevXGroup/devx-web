@@ -157,26 +157,27 @@ const LetterGlitch = ({
     const dpr = window.devicePixelRatio || 1;
     const rect = parent.getBoundingClientRect();
 
-    // Don't initialize if container is too small (likely still animating)
-    if (rect.width < 10 || rect.height < 10) {
-      setTimeout(resizeCanvas, 100);
-      return;
-    }
+    // Ensure minimum canvas size for better reliability
+    const width = Math.max(rect.width, 80);
+    const height = Math.max(rect.height, 80);
 
-    // Ensure canvas fills the entire parent
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
 
-    canvas.style.width = `${rect.width}px`;
-    canvas.style.height = `${rect.height}px`;
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
 
     if (context.current) {
       context.current.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
-    const { columns, rows } = calculateGrid(rect.width, rect.height);
+    const { columns, rows } = calculateGrid(width, height);
     initializeLetters(columns, rows);
-    drawLetters();
+    
+    // Force initial draw with delay to ensure context is ready
+    requestAnimationFrame(() => {
+      drawLetters();
+    });
   };
 
   const drawLetters = () => {
@@ -263,18 +264,25 @@ const LetterGlitch = ({
 
     context.current = canvas.getContext("2d");
     
-    // Delay initialization to allow parent animations to complete
-    const initTimeout = setTimeout(() => {
+    // Initialize immediately and more reliably
+    const initCanvas = () => {
       resizeCanvas();
       animate();
-    }, 100);
+    };
+
+    // Multiple initialization attempts for reliability
+    initCanvas();
+    const initTimeout = setTimeout(initCanvas, 50);
+    const initTimeout2 = setTimeout(initCanvas, 200);
 
     let resizeTimeout: NodeJS.Timeout;
 
     const handleResize = () => {
       clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(() => {
-        cancelAnimationFrame(animationRef.current as number);
+        if (animationRef.current) {
+          cancelAnimationFrame(animationRef.current as number);
+        }
         resizeCanvas();
         animate();
       }, 100);
@@ -284,7 +292,10 @@ const LetterGlitch = ({
 
     return () => {
       clearTimeout(initTimeout);
-      cancelAnimationFrame(animationRef.current!);
+      clearTimeout(initTimeout2);
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current!);
+      }
       window.removeEventListener("resize", handleResize);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

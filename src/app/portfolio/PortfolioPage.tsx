@@ -617,156 +617,200 @@ export default function PortfolioPage() {
         <MorphingShapes />
 
         <div className="relative container mx-auto px-4">
-          {/* Interactive React Bits Components in slanted squares */}
+          {/* Interactive Animation Squares - Widely Spaced Layout */}
           
           {/* LetterGlitch Square - Top Left */}
           <motion.div
-            className="absolute top-4 sm:top-6 md:top-8 lg:top-10 left-[2%] sm:left-[4%] md:left-[6%] lg:left-[8%] backdrop-blur-md overflow-hidden cursor-pointer"
+            className="absolute top-4 sm:top-8 md:top-12 left-[5%] sm:left-[8%] backdrop-blur-md overflow-hidden"
             style={{
-              width: 'clamp(60px, 8vw, 112px)',
-              height: 'clamp(60px, 8vw, 112px)',
+              width: 'clamp(80px, 8vw, 110px)',
+              height: 'clamp(80px, 8vw, 110px)',
               transform: 'rotate(-8deg)',
-              border: '2px solid rgba(76, 215, 135, 0.4)',
-              borderRadius: '16px',
-              boxShadow: '0 0 20px rgba(76, 215, 135, 0.2)',
-              backgroundColor: 'rgba(0, 0, 0, 0.3)',
-              zIndex: 1
+              border: '2px solid rgba(76, 215, 135, 0.6)',
+              borderRadius: '12px',
+              boxShadow: '0 0 20px rgba(76, 215, 135, 0.4)',
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              zIndex: 2
             }}
             initial={{ opacity: 0, scale: 0, rotate: -23 }}
             animate={{ opacity: 1, scale: 1, rotate: -8 }}
-            transition={{ delay: 1, duration: 0.8, type: "spring" }}
-            whileHover={{ scale: 1.05, rotate: -5 }}
-            whileTap={{ scale: 0.95 }}
+            transition={{ delay: 0.5, duration: 0.6, ease: "easeOut" }}
           >
-            <LetterGlitch
-              glitchColors={["#4CD787", "#61dca3", "#2b4539"]}
-              glitchSpeed={150}
-              centerVignette={false}
-              outerVignette={false}
-              smooth={true}
-            />
-          </motion.div>
-          
-          {/* DotGrid Square - Top Right */}
-          <motion.div
-            className="absolute top-4 sm:top-6 md:top-8 lg:top-10 right-[2%] sm:right-[4%] md:right-[6%] lg:right-[8%] backdrop-blur-md overflow-hidden cursor-pointer"
-            style={{
-              width: 'clamp(65px, 9vw, 120px)',
-              height: 'clamp(65px, 9vw, 120px)',
-              transform: 'rotate(12deg)',
-              border: '2px solid rgba(72, 52, 212, 0.4)',
-              borderRadius: '16px',
-              boxShadow: '0 0 20px rgba(72, 52, 212, 0.2)',
-              backgroundColor: 'rgba(0, 0, 0, 0.3)',
-              zIndex: 1
-            }}
-            initial={{ opacity: 0, scale: 0, rotate: 27 }}
-            animate={{ opacity: 1, scale: 1, rotate: 12 }}
-            transition={{ delay: 1.3, duration: 0.8, type: "spring" }}
-            whileHover={{ scale: 1.05, rotate: 15 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <DotGrid
-              dotSize={5}
-              gap={12}
-              baseColor="#4834D4"
-              activeColor="#9d4edd"
-              proximity={80}
-              shockRadius={100}
-              shockStrength={4}
-              returnDuration={1.2}
-            />
-          </motion.div>
-          
-          {/* GridAnimation Square - Top Center (moved away from title) */}
-          <motion.div
-            className="absolute top-32 sm:top-36 md:top-40 lg:top-44 left-1/2 backdrop-blur-md overflow-hidden cursor-pointer"
-            style={{
-              width: 'clamp(70px, 10vw, 128px)',
-              height: 'clamp(70px, 10vw, 128px)',
-              transform: 'translateX(-50%) rotate(-15deg)',
-              border: '2px solid rgba(207, 181, 59, 0.4)',
-              borderRadius: '16px',
-              boxShadow: '0 0 20px rgba(207, 181, 59, 0.2)',
-              backgroundColor: 'rgba(0, 0, 0, 0.3)',
-              zIndex: 1
-            }}
-            initial={{ opacity: 0, scale: 0, y: -30 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ delay: 1.6, duration: 0.8, type: "spring" }}
-            whileHover={{ scale: 1.05, rotate: -12 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <GridAnimation
-              direction="diagonal"
-              speed={0.8}
-              borderColor="#CFB53B"
-              squareSize={12}
-              hoverFillColor="rgba(207, 181, 59, 0.3)"
-            />
+            <div className="w-full h-full">
+              <LetterGlitch
+                glitchColors={["#4CD787", "#61dca3", "#2b4539"]}
+                glitchSpeed={100}
+                centerVignette={false}
+                outerVignette={false}
+                smooth={true}
+              />
+            </div>
           </motion.div>
           
           {/* Squares Square - Bottom Left */}
           <motion.div
-            className="absolute bottom-8 sm:bottom-12 md:bottom-16 lg:bottom-20 left-[2%] sm:left-[4%] md:left-[6%] lg:left-[8%] backdrop-blur-md overflow-hidden cursor-pointer"
+            className="absolute bottom-4 sm:bottom-8 md:bottom-12 left-[5%] sm:left-[8%] backdrop-blur-md overflow-hidden"
             style={{
-              width: 'clamp(75px, 11vw, 136px)',
-              height: 'clamp(75px, 11vw, 136px)',
+              width: 'clamp(80px, 8vw, 110px)',
+              height: 'clamp(80px, 8vw, 110px)',
               transform: 'rotate(18deg)',
-              border: '2px solid rgba(157, 78, 221, 0.4)',
-              borderRadius: '16px',
-              boxShadow: '0 0 20px rgba(157, 78, 221, 0.2)',
-              backgroundColor: 'rgba(0, 0, 0, 0.3)',
-              zIndex: 1
+              border: '2px solid rgba(157, 78, 221, 0.6)',
+              borderRadius: '12px',
+              boxShadow: '0 0 20px rgba(157, 78, 221, 0.4)',
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              zIndex: 2
             }}
             initial={{ opacity: 0, scale: 0, rotate: 33 }}
             animate={{ opacity: 1, scale: 1, rotate: 18 }}
-            transition={{ delay: 1.9, duration: 0.8, type: "spring" }}
-            whileHover={{ scale: 1.05, rotate: 21 }}
-            whileTap={{ scale: 0.95 }}
+            transition={{ delay: 0.8, duration: 0.6, ease: "easeOut" }}
           >
-            <Squares
-              squareCount={35}
-              colors={["#9d4edd", "#c77dff", "#e0aaff"]}
-              minSize={8}
-              maxSize={20}
-              speed={1.2}
-            />
+            <div className="w-full h-full">
+              <Squares
+                squareCount={20}
+                colors={["#9d4edd", "#c77dff", "#e0aaff"]}
+                minSize={4}
+                maxSize={12}
+                speed={0.6}
+              />
+            </div>
+          </motion.div>
+          
+          {/* DotGrid Square - Top Right */}
+          <motion.div
+            className="absolute top-4 sm:top-8 md:top-12 right-[5%] sm:right-[8%] backdrop-blur-md overflow-hidden"
+            style={{
+              width: 'clamp(80px, 8vw, 110px)',
+              height: 'clamp(80px, 8vw, 110px)',
+              transform: 'rotate(12deg)',
+              border: '2px solid rgba(72, 52, 212, 0.6)',
+              borderRadius: '12px',
+              boxShadow: '0 0 20px rgba(72, 52, 212, 0.4)',
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              zIndex: 2
+            }}
+            initial={{ opacity: 0, scale: 0, rotate: 27 }}
+            animate={{ opacity: 1, scale: 1, rotate: 12 }}
+            transition={{ delay: 0.6, duration: 0.6, ease: "easeOut" }}
+          >
+            <div className="w-full h-full">
+              <DotGrid
+                dotSize={3}
+                gap={12}
+                baseColor="#4834D4"
+                activeColor="#9d4edd"
+                proximity={50}
+                shockRadius={60}
+                shockStrength={2}
+                returnDuration={1.0}
+              />
+            </div>
+          </motion.div>
+          
+          {/* GridAnimation Square - Top Center */}
+          <motion.div
+            className="absolute top-16 sm:top-20 md:top-24 left-1/2 backdrop-blur-md overflow-hidden"
+            style={{
+              width: 'clamp(70px, 7vw, 95px)',
+              height: 'clamp(70px, 7vw, 95px)',
+              transform: 'translateX(-50%) rotate(-15deg)',
+              border: '2px solid rgba(207, 181, 59, 0.6)',
+              borderRadius: '12px',
+              boxShadow: '0 0 20px rgba(207, 181, 59, 0.4)',
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              zIndex: 2
+            }}
+            initial={{ opacity: 0, scale: 0, y: -30 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ delay: 1.0, duration: 0.6, ease: "easeOut" }}
+          >
+            <div className="w-full h-full">
+              <GridAnimation
+                direction="diagonal"
+                speed={0.2}
+                borderColor="#CFB53B"
+                squareSize={10}
+                hoverFillColor="rgba(207, 181, 59, 0.3)"
+              />
+            </div>
           </motion.div>
           
           {/* Waves Square - Bottom Right */}
           <motion.div
-            className="absolute bottom-8 sm:bottom-12 md:bottom-16 lg:bottom-20 right-[2%] sm:right-[4%] md:right-[6%] lg:right-[8%] backdrop-blur-md overflow-hidden cursor-pointer"
+            className="absolute bottom-4 sm:bottom-8 md:bottom-12 right-[5%] sm:right-[8%] backdrop-blur-md overflow-hidden"
             style={{
-              width: 'clamp(65px, 9vw, 120px)',
-              height: 'clamp(65px, 9vw, 120px)',
+              width: 'clamp(80px, 8vw, 110px)',
+              height: 'clamp(80px, 8vw, 110px)',
               transform: 'rotate(-10deg)',
-              border: '2px solid rgba(76, 215, 135, 0.4)',
-              borderRadius: '16px',
-              boxShadow: '0 0 20px rgba(76, 215, 135, 0.2)',
-              backgroundColor: 'rgba(0, 0, 0, 0.3)',
-              zIndex: 1
+              border: '2px solid rgba(76, 215, 135, 0.6)',
+              borderRadius: '12px',
+              boxShadow: '0 0 20px rgba(76, 215, 135, 0.4)',
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              zIndex: 2
             }}
             initial={{ opacity: 0, scale: 0, x: 30 }}
             animate={{ opacity: 1, scale: 1, x: 0 }}
-            transition={{ delay: 2.2, duration: 0.8, type: "spring" }}
-            whileHover={{ scale: 1.05, rotate: -7 }}
-            whileTap={{ scale: 0.95 }}
+            transition={{ delay: 1.2, duration: 0.6, ease: "easeOut" }}
           >
-            <Waves
-              lineColor="#4CD787"
-              backgroundColor="transparent"
-              waveSpeedX={0.015}
-              waveSpeedY={0.008}
-              waveAmpX={25}
-              waveAmpY={12}
-              xGap={12}
-              yGap={20}
-              friction={0.93}
-              tension={0.008}
-              maxCursorMove={80}
-            />
+            <div className="w-full h-full">
+              <Waves
+                lineColor="#4CD787"
+                backgroundColor="transparent"
+                waveSpeedX={0.008}
+                waveSpeedY={0.004}
+                waveAmpX={15}
+                waveAmpY={8}
+                xGap={12}
+                yGap={20}
+                friction={0.95}
+                tension={0.005}
+                maxCursorMove={40}
+              />
+            </div>
           </motion.div>
+
+          {/* Original floating elements */}
+          {/* Subtle floating circle */}
+          <motion.div
+            className="absolute top-1/3 left-1/4 w-4 h-4 rounded-full"
+            style={{
+              background: 'radial-gradient(circle, rgba(207,181,59,0.8) 0%, rgba(207,181,59,0.3) 70%, transparent 100%)',
+              boxShadow: '0 0 15px rgba(207,181,59,0.4)',
+              zIndex: 1
+            }}
+            animate={{
+              y: [0, -15, 0],
+              scale: [1, 1.3, 1],
+              opacity: [0.6, 1, 0.6]
+            }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+
+          {/* Yellow animated square */}
+          <motion.div
+            className="absolute bottom-1/3 right-1/4 w-6 h-6 rotate-45"
+            style={{
+              background: 'linear-gradient(45deg, rgba(207,181,59,0.7) 0%, rgba(207,181,59,0.3) 50%, transparent 100%)',
+              border: '1px solid rgba(207,181,59,0.5)',
+              borderRadius: '2px',
+              boxShadow: '0 0 12px rgba(207,181,59,0.3)',
+              zIndex: 1
+            }}
+            animate={{
+              rotate: [45, 225, 45],
+              scale: [1, 0.8, 1],
+              opacity: [0.7, 1, 0.7]
+            }}
+            transition={{
+              duration: 5,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 1
+            }}
+          />
 
           <motion.div
             variants={containerVariants}
