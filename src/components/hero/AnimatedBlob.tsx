@@ -351,20 +351,6 @@ function RefinedBlob({
   const particlesRef = useRef<any>(null)
   const groupRef = useRef<any>(null)
 
-  // Enhanced organic movement parameters for blob-like behavior
-  const speedFactor = useRef(0.4 + Math.random() * 0.3).current // Slower, more organic movement
-  const amplitudeFactor = useRef(0.8 + Math.random() * 0.5).current // More fluid movement
-  const rotationFactor = useRef(0.2 + Math.random() * 0.15).current // Slower, more organic rotation
-  const phaseOffset = useRef(Math.random() * Math.PI * 2).current
-
-  // Restored circular movement parameters
-  const circleCenter = useRef(new Vector3(position[0], position[1], position[2])).current
-  const circleRadius = useRef(1.0 + Math.random() * 1.0).current // Increased radius for wider circular movement
-  const originalPositionVector = useRef(
-    new Vector3(originalPosition[0], originalPosition[1], originalPosition[2]),
-  ).current
-  const circleSpeed = useRef(0.3 + Math.random() * 0.2).current // Increased speed of circular movement
-
   // Keep reduced particle count for performance
   const particleCount = 50
   const particlePositions = useRef(() => {
@@ -383,6 +369,21 @@ function RefinedBlob({
 
     return positions
   }).current()
+
+  // Enhanced organic movement parameters for blob-like behavior
+  const speedFactor = useRef(0.4 + Math.random() * 0.3).current // Slower, more organic movement
+  const amplitudeFactor = useRef(0.8 + Math.random() * 0.5).current // More fluid movement
+  const rotationFactor = useRef(0.2 + Math.random() * 0.15).current // Slower, more organic rotation
+  const phaseOffset = useRef(Math.random() * Math.PI * 2).current
+
+  // Restored circular movement parameters
+  const circleCenter = useRef(new Vector3(position[0], position[1], position[2])).current
+  const circleRadius = useRef(1.0 + Math.random() * 1.0).current // Increased radius for wider circular movement
+  const originalPositionVector = useRef(
+    new Vector3(originalPosition[0], originalPosition[1], originalPosition[2]),
+  ).current
+  const circleSpeed = useRef(0.3 + Math.random() * 0.2).current // Increased speed of circular movement
+
 
   useFrame((state) => {
     if (mesh.current && groupRef.current) {
