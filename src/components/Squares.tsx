@@ -32,6 +32,8 @@ const Squares: React.FC<SquaresProps> = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationFrameRef = useRef<number>();
   const squaresRef = useRef<Square[]>([]);
+  const mousePosition = useRef({ x: -1, y: -1 });
+  const isHovering = useRef(false);
   const [isAnimating, setIsAnimating] = useState(true);
 
   const initSquares = useCallback((width: number, height: number) => {
@@ -73,6 +75,17 @@ const Squares: React.FC<SquaresProps> = ({
 
     // Update and draw squares
     squaresRef.current.forEach((square) => {
+      // Mouse interaction - add horizontal drift toward cursor
+      if (isHovering.current && mousePosition.current.x >= 0) {
+        const dx = mousePosition.current.x - square.x;
+        const distance = Math.abs(dx);
+        
+        if (distance < 60) {
+          const attraction = (60 - distance) / 60 * 0.5;
+          square.x += Math.sign(dx) * attraction;
+        }
+      }
+      
       square.y -= square.speed;
       square.rotation += square.rotationSpeed;
 
@@ -162,39 +175,108 @@ const Squares: React.FC<SquaresProps> = ({
   }, [initSquares]);
 
   useEffect(() => {
-    // Multiple initialization attempts for better reliability
+    // Force immediate and reliable initialization
     const initCanvas = () => {
-      resizeCanvas();
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      
+      const rect = canvas.getBoundingClientRect();
+      const width = Math.max(rect.width || 100, 100);
+      const height = Math.max(rect.height || 100, 100);
+      const dpr = window.devicePixelRatio || 1;
+
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.scale(dpr, dpr);
+      }
+
+      initSquares(width, height);
+      
+      // Ensure animation starts and doesn't stop
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
       animate();
     };
     
+    // Multiple initialization attempts with longer intervals
     initCanvas();
-    const initTimeout = setTimeout(initCanvas, 50);
-    const initTimeout2 = setTimeout(initCanvas, 200);
+    const timeout1 = setTimeout(initCanvas, 100);
+    const timeout2 = setTimeout(initCanvas, 300);
+    const timeout3 = setTimeout(initCanvas, 500);
+    const timeout4 = setTimeout(initCanvas, 1000);
 
-    const handleResize = () => resizeCanvas();
+    // Mouse event handlers for interaction
+    const handleMouseMove = (e: MouseEvent) => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      mousePosition.current = {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      };
+    };
 
+    const handleMouseEnter = () => {
+      isHovering.current = true;
+    };
+
+    const handleMouseLeave = () => {
+      isHovering.current = false;
+      mousePosition.current = { x: -1, y: -1 };
+    };
+
+    const handleResize = () => {
+      // Delay reinit on resize to prevent flashing
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      setTimeout(() => {
+        if (canvasRef.current) {
+          initCanvas();
+        }
+      }, 50);
+    };
+    
+    const canvas = canvasRef.current;
+    if (canvas) {
+      canvas.addEventListener('mousemove', handleMouseMove);
+      canvas.addEventListener('mouseenter', handleMouseEnter);
+      canvas.addEventListener('mouseleave', handleMouseLeave);
+    }
     window.addEventListener('resize', handleResize);
 
     return () => {
-      clearTimeout(initTimeout);
-      clearTimeout(initTimeout2);
+      clearTimeout(timeout1);
+      clearTimeout(timeout2);
+      clearTimeout(timeout3);
+      clearTimeout(timeout4);
+      if (canvas) {
+        canvas.removeEventListener('mousemove', handleMouseMove);
+        canvas.removeEventListener('mouseenter', handleMouseEnter);
+        canvas.removeEventListener('mouseleave', handleMouseLeave);
+      }
       window.removeEventListener('resize', handleResize);
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [resizeCanvas, animate]);
+  }, [initSquares]);
 
 
   return (
-    <div className={`relative w-full h-full overflow-hidden ${className}`} style={{ zIndex: 1 }}>
+    <div className={`relative w-full h-full overflow-hidden ${className}`} style={{ zIndex: 0 }}>
       <canvas
         ref={canvasRef}
         className="absolute inset-0 w-full h-full block"
         style={{ 
           width: '100%', 
-          height: '100%'
+          height: '100%',
+          zIndex: 0
         }}
       />
     </div>

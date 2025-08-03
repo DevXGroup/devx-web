@@ -26,6 +26,8 @@ const LetterGlitch = ({
   const grid = useRef({ columns: 0, rows: 0 });
   const context = useRef<CanvasRenderingContext2D | null>(null);
   const lastGlitchTime = useRef(Date.now());
+  const mousePosition = useRef({ x: -1, y: -1 });
+  const isHovering = useRef(false);
 
   const fontSize = 14;
   const charWidth = 9;
@@ -200,10 +202,33 @@ const LetterGlitch = ({
   const updateLetters = () => {
     if (!letters.current || letters.current.length === 0) return;
 
-    const updateCount = Math.max(1, Math.floor(letters.current.length * 0.05));
+    // Increase update rate when hovering
+    const baseRate = isHovering.current ? 0.12 : 0.05;
+    const updateCount = Math.max(1, Math.floor(letters.current.length * baseRate));
 
     for (let i = 0; i < updateCount; i++) {
-      const index = Math.floor(Math.random() * letters.current.length);
+      let index;
+      
+      // If mouse is hovering, bias updates around mouse position
+      if (isHovering.current && mousePosition.current.x >= 0) {
+        const mouseCol = Math.floor(mousePosition.current.x / charWidth);
+        const mouseRow = Math.floor(mousePosition.current.y / charHeight);
+        const radius = 3;
+        
+        // 70% chance to update near cursor, 30% random
+        if (Math.random() < 0.7) {
+          const colOffset = Math.floor(Math.random() * (radius * 2 + 1)) - radius;
+          const rowOffset = Math.floor(Math.random() * (radius * 2 + 1)) - radius;
+          const targetCol = Math.max(0, Math.min(grid.current.columns - 1, mouseCol + colOffset));
+          const targetRow = Math.max(0, Math.min(grid.current.rows - 1, mouseRow + rowOffset));
+          index = targetRow * grid.current.columns + targetCol;
+        } else {
+          index = Math.floor(Math.random() * letters.current.length);
+        }
+      } else {
+        index = Math.floor(Math.random() * letters.current.length);
+      }
+      
       if (!letters.current[index]) continue;
 
       letters.current[index].char = getRandomChar();
@@ -264,38 +289,80 @@ const LetterGlitch = ({
 
     context.current = canvas.getContext("2d");
     
-    // Initialize immediately and more reliably
+    // Force immediate initialization with fixed dimensions
     const initCanvas = () => {
-      resizeCanvas();
+      const parent = canvas.parentElement;
+      if (!parent) return;
+      
+      // Use fixed minimum dimensions to ensure reliability
+      const rect = parent.getBoundingClientRect();
+      const width = Math.max(rect.width || 100, 100);
+      const height = Math.max(rect.height || 100, 100);
+      
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      
+      if (context.current) {
+        context.current.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+      
+      const { columns, rows } = calculateGrid(width, height);
+      initializeLetters(columns, rows);
+      
+      // Start animation immediately
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
       animate();
     };
 
-    // Multiple initialization attempts for reliability
+    // Initialize with multiple attempts and delays
     initCanvas();
-    const initTimeout = setTimeout(initCanvas, 50);
-    const initTimeout2 = setTimeout(initCanvas, 200);
+    const timeout1 = setTimeout(initCanvas, 100);
+    const timeout2 = setTimeout(initCanvas, 300);
+    const timeout3 = setTimeout(initCanvas, 500);
 
-    let resizeTimeout: NodeJS.Timeout;
-
-    const handleResize = () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => {
-        if (animationRef.current) {
-          cancelAnimationFrame(animationRef.current as number);
-        }
-        resizeCanvas();
-        animate();
-      }, 100);
+    // Mouse event handlers
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      mousePosition.current = {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      };
     };
 
+    const handleMouseEnter = () => {
+      isHovering.current = true;
+    };
+
+    const handleMouseLeave = () => {
+      isHovering.current = false;
+      mousePosition.current = { x: -1, y: -1 };
+    };
+
+    // Simple resize handler without debouncing
+    const handleResize = () => {
+      initCanvas();
+    };
+
+    canvas.addEventListener('mousemove', handleMouseMove);
+    canvas.addEventListener('mouseenter', handleMouseEnter);
+    canvas.addEventListener('mouseleave', handleMouseLeave);
     window.addEventListener("resize", handleResize);
 
     return () => {
-      clearTimeout(initTimeout);
-      clearTimeout(initTimeout2);
+      clearTimeout(timeout1);
+      clearTimeout(timeout2);
+      clearTimeout(timeout3);
       if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current!);
+        cancelAnimationFrame(animationRef.current);
       }
+      canvas.removeEventListener('mousemove', handleMouseMove);
+      canvas.removeEventListener('mouseenter', handleMouseEnter);
+      canvas.removeEventListener('mouseleave', handleMouseLeave);
       window.removeEventListener("resize", handleResize);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

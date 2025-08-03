@@ -237,14 +237,17 @@ const Waves: React.FC<WavesProps> = ({
     function setSize() {
       if (!container || !canvas) return;
       const rect = container.getBoundingClientRect();
+      // Ensure minimum size for better reliability
+      const width = Math.max(rect.width, 50);
+      const height = Math.max(rect.height, 50);
       boundingRef.current = {
-        width: rect.width,
-        height: rect.height,
+        width,
+        height,
         left: rect.left,
         top: rect.top,
       };
-      canvas.width = rect.width;
-      canvas.height = rect.height;
+      canvas.width = width;
+      canvas.height = height;
     }
 
     function setLines() {
@@ -402,14 +405,28 @@ const Waves: React.FC<WavesProps> = ({
       }
     }
 
-    setSize();
-    setLines();
-    frameIdRef.current = requestAnimationFrame(tick);
+    // Initialize with multiple attempts to ensure reliable rendering
+    const initWaves = () => {
+      setSize();
+      setLines();
+      if (frameIdRef.current) {
+        cancelAnimationFrame(frameIdRef.current);
+      }
+      frameIdRef.current = requestAnimationFrame(tick);
+    };
+
+    initWaves();
+    // Add delayed initialization attempts
+    const timeout1 = setTimeout(initWaves, 50);
+    const timeout2 = setTimeout(initWaves, 200);
+    
     window.addEventListener("resize", onResize);
     window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("touchmove", onTouchMove, { passive: false });
 
     return () => {
+      clearTimeout(timeout1);
+      clearTimeout(timeout2);
       window.removeEventListener("resize", onResize);
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("touchmove", onTouchMove);

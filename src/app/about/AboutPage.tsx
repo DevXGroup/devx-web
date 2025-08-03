@@ -829,28 +829,16 @@ export default function AboutPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             <TeamMemberCard
-              name="Alex Sheikhizadeh"
+              name="Max Sheikhizadeh"
               role="Founder & CEO"
               image="/images/about/ceo-headshot.png"
               delay={0.1}
             />
             <TeamMemberCard
-              name="Sarah Johnson"
-              role="CTO"
+              name="Milaad Sheikhizadeh"
+              role="General manager"
               image="/images/about/cto-headshot.png"
               delay={0.2}
-            />
-            <TeamMemberCard
-              name="David Chen"
-              role="Lead Developer"
-              image="/images/about/lead-dev-headshot.png"
-              delay={0.3}
-            />
-            <TeamMemberCard
-              name="Maria Rodriguez"
-              role="Project Manager"
-              image="/images/about/pm-headshot.png"
-              delay={0.4}
             />
           </div>
         </div>

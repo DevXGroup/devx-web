@@ -63,8 +63,12 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
               hoveredSquareRef.current.x &&
             Math.floor((y - startY) / squareSize) === hoveredSquareRef.current.y
           ) {
+            // Enhanced hover effect with glow
             ctx.fillStyle = hoverFillColor;
+            ctx.shadowColor = typeof borderColor === 'string' ? borderColor : '#CFB53B';
+            ctx.shadowBlur = 8;
             ctx.fillRect(squareX, squareY, squareSize, squareSize);
+            ctx.shadowBlur = 0;
           }
 
           ctx.strokeStyle = borderColor;
