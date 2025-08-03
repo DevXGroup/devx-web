@@ -69,30 +69,28 @@ const DotGrid = ({
 
     const { width, height } = wrap.getBoundingClientRect();
     
-    // Don't initialize if container is too small (likely still animating)
-    if (width < 10 || height < 10) {
-      setTimeout(buildGrid, 100);
-      return;
-    }
+    // Use minimum dimensions for stability
+    const finalWidth = Math.max(width || 100, 100);
+    const finalHeight = Math.max(height || 100, 100);
     
     const dpr = window.devicePixelRatio || 1;
 
-    canvas.width = width * dpr;
-    canvas.height = height * dpr;
-    canvas.style.width = `${width}px`;
-    canvas.style.height = `${height}px`;
+    canvas.width = finalWidth * dpr;
+    canvas.height = finalHeight * dpr;
+    canvas.style.width = `${finalWidth}px`;
+    canvas.style.height = `${finalHeight}px`;
     const ctx = canvas.getContext("2d");
     if (ctx) ctx.scale(dpr, dpr);
 
-    const cols = Math.floor((width + gap) / (dotSize + gap));
-    const rows = Math.floor((height + gap) / (dotSize + gap));
+    const cols = Math.max(Math.floor((finalWidth + gap) / (dotSize + gap)), 1);
+    const rows = Math.max(Math.floor((finalHeight + gap) / (dotSize + gap)), 1);
     const cell = dotSize + gap;
 
     const gridW = cell * cols - gap;
     const gridH = cell * rows - gap;
 
-    const extraX = width - gridW;
-    const extraY = height - gridH;
+    const extraX = finalWidth - gridW;
+    const extraY = finalHeight - gridH;
 
     const startX = extraX / 2 + dotSize / 2;
     const startY = extraY / 2 + dotSize / 2;
