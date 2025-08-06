@@ -194,6 +194,10 @@ export default function BraidedRopeAnimation({ className = '' }: BraidedRopeAnim
       <div className="absolute inset-0 pointer-events-none z-10 bg-gradient-to-b from-black/80 via-transparent to-black/80" />
       <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-black to-transparent pointer-events-none z-10 h-48" />
       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent pointer-events-none z-10 h-48" />
+      
+      {/* Additional fade-in for rope end point on larger screens */}
+      <div className="absolute top-[45%] left-0 right-0 bg-gradient-to-b from-black via-black/80 to-transparent pointer-events-none z-10 h-48 hidden md:block" />
+      <div className="absolute top-[50%] left-0 right-0 bg-gradient-to-b from-black/60 to-transparent pointer-events-none z-10 h-24 hidden md:block" />
     </div>
   )
 }
@@ -304,15 +308,15 @@ function BraidedRopeMesh({
       const x = Math.cos(helixAngle) * helixRadius
       const z = Math.sin(helixAngle) * helixRadius
 
-      // Enhanced fading at both ends with better bottom fade
+      // Enhanced fading at both ends optimized for all screen sizes
       let fadeMultiplier = 1
-      const fadeStart = 0.12
-      const fadeEnd = 0.82
+      const fadeStart = 0.2
+      const fadeEnd = 0.6
       if (t < fadeStart) {
-        fadeMultiplier = Math.pow(t / fadeStart, 1.8)
+        fadeMultiplier = Math.pow(t / fadeStart, 3.0)
       } else if (t > fadeEnd) {
         const fadeProgress = (1 - t) / (1 - fadeEnd)
-        fadeMultiplier = Math.pow(fadeProgress, 0.8)
+        fadeMultiplier = Math.pow(fadeProgress, 3.0)
       }
 
       return optionalTarget.set(x * fadeMultiplier, verticalProgress, z * fadeMultiplier)
@@ -339,8 +343,8 @@ function BraidedRopeMesh({
   )
 
   const tubeRadius = 0.19
-  const radialSegments = 24
-  const tubularSegments = 49
+  const radialSegments = 32
+  const tubularSegments = 64
 
   // Update curves with new scale and enhanced braiding parameters
   curve1.current.radius = ropeScale.radius
@@ -547,7 +551,7 @@ function BraidedRopeMesh({
           color="#4A148C"
           metalness={0.92}
           roughness={0.08}
-          emissive="#2E0A3E"
+          emissive="#2E4A3E"
           emissiveIntensity={0.28}
           transparent={true}
           opacity={0.6}

@@ -583,7 +583,7 @@ function AnimatedInfinity({ onComplete }: { onComplete: () => void }) {
   }
 
   const handleZoomDComplete = () => {
-    setTimeout(() => onComplete(), 500)
+    onComplete()
   }
 
   if (!mounted) return null
@@ -640,37 +640,50 @@ function AnimatedInfinity({ onComplete }: { onComplete: () => void }) {
           transition={{ duration: 0.4, ease: 'easeOut' }}
           className="text-center relative z-10"
         >
-          <DecryptedText 
-            text="DevX Group LLC" 
-            speed={60}
-            sequential={true}
-            revealDirection="start"
-            animateOn="view"
-            onComplete={handleTextComplete}
-          />
+          <motion.div
+            initial={{ filter: "blur(8px)", opacity: 0.3 }}
+            animate={{ filter: "blur(0px)", opacity: 1 }}
+            transition={{ duration: 1.2, ease: "easeOut" }}
+          >
+            <DecryptedText 
+              text="DevX Group LLC" 
+              speed={60}
+              sequential={true}
+              revealDirection="start"
+              animateOn="view"
+              onComplete={handleTextComplete}
+            />
+          </motion.div>
         </motion.div>
       )}
 
-      {/* Zoom D Phase - Focus on D letter with subtle fade */}
+      {/* Zoom X Phase - Focus on X letter with subtle fade */}
       {animationPhase === 'zoomD' && (
-        <motion.div
-          className="absolute inset-0 flex items-center justify-center"
-          initial={{ opacity: 1 }}
-          animate={{ opacity: 1 }}
-        >
+        <div className="absolute inset-0 flex items-center justify-center">
           <motion.span
-            className="text-6xl md:text-9xl font-['IBM_Plex_Mono'] font-bold text-white text-glow-hero drop-shadow-[0_0_25px_rgba(255,255,255,0.8)]"
-            initial={{ scale: 1 }}
-            animate={{ scale: 50, opacity: 0.3 }}
+            className="text-6xl md:text-9xl font-['IBM_Plex_Mono'] font-bold text-white"
+            style={{
+              transformOrigin: 'center center',
+              textAlign: 'center',
+              lineHeight: 1,
+              willChange: 'transform, opacity',
+              textShadow: '0 0 20px rgba(255,255,255,0.8), 0 0 10px rgba(255,255,255,0.4)'
+            }}
+            initial={{ scale: 1, opacity: 1 }}
+            animate={{ 
+              scale: [1, 1, 100], 
+              opacity: [1, 1, 0.3] 
+            }}
             transition={{
-              duration: 0.6,
-              ease: 'easeIn',
+              duration: 3,
+              times: [0, 0.17, 1],
+              ease: [0.16, 1, 0.3, 1],
               onComplete: handleZoomDComplete,
             }}
           >
-            D
+            X
           </motion.span>
-        </motion.div>
+        </div>
       )}
     </div>
   )
@@ -689,16 +702,12 @@ export default function EntryPage() {
 
   useEffect(() => {
     if (animationComplete) {
-      // Start collapse animation after short delay
-      const timer = setTimeout(() => {
-        setIsCollapsing(true)
-        // Navigate after collapse animation completes
-        setTimeout(() => {
-          router.push('/home')
-        }, 600)
-      }, 200)
-
-      return () => clearTimeout(timer)
+      // Start collapse animation immediately
+      setIsCollapsing(true)
+      // Navigate after collapse animation completes
+      setTimeout(() => {
+        router.push('/home')
+      }, 400)
     }
   }, [animationComplete, router])
 
@@ -752,7 +761,7 @@ export default function EntryPage() {
         }}
         initial={{ height: 0 }}
         animate={{ height: isCollapsing ? '50vh' : 0 }}
-        transition={{ duration: 0.6, ease: "easeInOut" }}
+        transition={{ duration: 0.4, ease: "easeInOut" }}
       />
       <motion.div
         className="fixed bottom-0 left-0 right-0 z-[100] w-full"
@@ -764,7 +773,7 @@ export default function EntryPage() {
         }}
         initial={{ height: 0 }}
         animate={{ height: isCollapsing ? '50vh' : 0 }}
-        transition={{ duration: 0.6, ease: "easeInOut" }}
+        transition={{ duration: 0.4, ease: "easeInOut" }}
       />
     </div>
   )
