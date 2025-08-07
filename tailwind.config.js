@@ -58,6 +58,7 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        robinhood: "#ccff00",
       },
       borderRadius: {
         lg: "var(--radius)",

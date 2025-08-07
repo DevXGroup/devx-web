@@ -1,5 +1,6 @@
 "use client"
 import { motion } from "framer-motion"
+import { useState, useEffect } from "react"
 
 type WavySeparatorProps = {
   color?: string
@@ -8,9 +9,20 @@ type WavySeparatorProps = {
 }
 
 export default function WavySeparator({ color = "#9d4edd", height = 200, opacity = 0.2 }: WavySeparatorProps) {
+  const [mounted, setMounted] = useState(false)
+  
+  // Prevent hydration issues
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+  
   // Validate inputs to prevent rendering issues
   const safeHeight = Math.max(50, Math.round(height))
   const safeOpacity = Math.max(0, Math.min(1, opacity))
+  
+  if (!mounted) {
+    return <div style={{ height: `${safeHeight}px` }} className="w-full bg-black" />
+  }
   
   // Define additional colors for the waves
   const neonGreen = "#39FF14"

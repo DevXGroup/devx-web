@@ -56,7 +56,7 @@ export default function PlanetDivider() {
       position: -0.8 + progress * 0.5,
       opacity: 1 - progress,
       scrollRotation: progress * 10, // Rotation during scroll
-      continuousRotation: time * 0.2 // Continuous slow rotation
+      continuousRotation: time * 0.8 // Continuous slow rotation
     }
   }
 
@@ -132,10 +132,10 @@ export default function PlanetDivider() {
           left: "50%",
           marginLeft: `${sizes.planetMarginLeft}px`,
           background: `
-            radial-gradient(circle at 30% 30%, #444444 0%, #2f2f2f 20%, #1f1f1f 40%, #0d0d0d 70%, #000000 100%),
-            radial-gradient(ellipse 45% 55% at 25% 25%, rgba(51, 51, 51, 0.8) 0%, rgba(42, 42, 42, 0.6) 25%, rgba(31, 31, 31, 0.4) 50%, transparent 70%),
-            radial-gradient(ellipse 35% 45% at 70% 60%, rgba(34, 34, 34, 0.7) 0%, rgba(26, 26, 26, 0.5) 30%, transparent 60%),
-            radial-gradient(ellipse 25% 35% at 40% 70%, rgba(24, 24, 24, 0.6) 0%, rgba(15, 15, 15, 0.4) 40%, transparent 65%)
+            radial-gradient(circle at 30% 30%, #666666 0%, #4f4f4f 20%, #3f3f3f 40%, #2d2d2d 70%, #1a1a1a 100%),
+            radial-gradient(ellipse 45% 55% at 25% 25%, rgba(85, 85, 85, 0.8) 0%, rgba(70, 70, 70, 0.6) 25%, rgba(60, 60, 60, 0.4) 50%, transparent 70%),
+            radial-gradient(ellipse 35% 45% at 70% 60%, rgba(55, 55, 55, 0.7) 0%, rgba(45, 45, 45, 0.5) 30%, transparent 60%),
+            radial-gradient(ellipse 25% 35% at 40% 70%, rgba(40, 40, 40, 0.6) 0%, rgba(30, 30, 30, 0.4) 40%, transparent 65%)
           `,
           boxShadow: `
             0 0 ${sizes.glowRadius}px rgba(76, 215, 135, ${0.05 + Math.sin(time * 0.05) * 0.01}), 
@@ -170,7 +170,7 @@ export default function PlanetDivider() {
             radial-gradient(ellipse 16% 22% at 85% 75%, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.4) 30%, rgba(0, 0, 0, 0.1) 55%, transparent 70%),
             radial-gradient(ellipse 8% 12% at 10% 45%, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.3) 35%, rgba(0, 0, 0, 0.1) 60%, transparent 75%)
           `,
-          opacity: opacity * 0.9,
+          opacity: opacity,
         })}
       />
 
@@ -196,7 +196,7 @@ export default function PlanetDivider() {
             radial-gradient(ellipse 13% 18% at 5% 80%, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.4) 25%, rgba(0, 0, 0, 0.1) 45%, transparent 50%),
             radial-gradient(ellipse 7% 10% at 45% 10%, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 40%, transparent 70%)
           `,
-          opacity: opacity * 0.8,
+          opacity: opacity * 0.95,
         })}
       />
 
@@ -225,7 +225,7 @@ export default function PlanetDivider() {
             radial-gradient(ellipse 2% 3% at 50% 45%, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.1) 60%, transparent 90%),
             radial-gradient(ellipse 3% 4% at 75% 15%, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 50%, transparent 95%)
           `,
-          opacity: opacity * 0.7,
+          opacity: opacity * 0.9,
         })}
       />
 
@@ -252,7 +252,7 @@ export default function PlanetDivider() {
             radial-gradient(ellipse 1% 1% at 95% 45%, rgba(0, 0, 0, 0.28) 0%, rgba(0, 0, 0, 0.06) 70%, transparent 95%),
             radial-gradient(ellipse 1% 2% at 5% 55%, rgba(255, 255, 255, 0.035) 0%, rgba(255, 255, 255, 0.01) 65%, transparent 90%)
           `,
-          opacity: opacity * 0.6,
+          opacity: opacity * 0.85,
         })}
       />
 

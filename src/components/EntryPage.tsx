@@ -565,9 +565,9 @@ function StarField() {
   )
 }
 
-// Animation sequence ending at zoomed D
+// Animation sequence without zoom
 function AnimatedInfinity({ onComplete }: { onComplete: () => void }) {
-  const [animationPhase, setAnimationPhase] = useState<'drawing' | 'text' | 'zoomD'>('drawing')
+  const [animationPhase, setAnimationPhase] = useState<'drawing' | 'text'>('drawing')
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -579,11 +579,7 @@ function AnimatedInfinity({ onComplete }: { onComplete: () => void }) {
   }
 
   const handleTextComplete = () => {
-    setTimeout(() => setAnimationPhase('zoomD'), 400)
-  }
-
-  const handleZoomDComplete = () => {
-    onComplete()
+    setTimeout(onComplete, 400)
   }
 
   if (!mounted) return null
@@ -655,35 +651,6 @@ function AnimatedInfinity({ onComplete }: { onComplete: () => void }) {
             />
           </motion.div>
         </motion.div>
-      )}
-
-      {/* Zoom X Phase - Focus on X letter with subtle fade */}
-      {animationPhase === 'zoomD' && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <motion.span
-            className="text-6xl md:text-9xl font-['IBM_Plex_Mono'] font-bold text-white"
-            style={{
-              transformOrigin: 'center center',
-              textAlign: 'center',
-              lineHeight: 1,
-              willChange: 'transform, opacity',
-              textShadow: '0 0 20px rgba(255,255,255,0.8), 0 0 10px rgba(255,255,255,0.4)'
-            }}
-            initial={{ scale: 1, opacity: 1 }}
-            animate={{ 
-              scale: [1, 1, 100], 
-              opacity: [1, 1, 0.3] 
-            }}
-            transition={{
-              duration: 3,
-              times: [0, 0.17, 1],
-              ease: [0.16, 1, 0.3, 1],
-              onComplete: handleZoomDComplete,
-            }}
-          >
-            X
-          </motion.span>
-        </div>
       )}
     </div>
   )

@@ -16,6 +16,7 @@ import ParallaxTestimonials from '@/components/ParallaxTestimonials'
 import dynamic from 'next/dynamic'
 import TrueFocus from '@/components/TrueFocus'
 import BlurText from '@/components/BlurText'
+import TextPressure from '@/components/TextPressure'
 
 // Import the newly separated components
 import ServiceCard from '@/components/services/ServiceCard'
@@ -362,17 +363,22 @@ export default function ServicesPage() {
               }}
               className="text-center max-w-4xl mx-auto title-margin pointer-events-none"
             >
-              <div className="flex justify-center text-center">
-                <BlurText
-                  text="Services"
-                  className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-center text-[#CFB53B] font-['IBM_Plex_Mono'] relative z-30"
-                  delay={100}
-                  animateBy="words"
-                  direction="top"
-                  animationFrom={{ opacity: 0, y: 70 }}
-                  animationTo={[{ opacity: 1, y: 0 }]}
-                  onAnimationComplete={() => {}}
-                />
+              <div className="h-16 sm:h-20 md:h-24 flex items-center justify-center w-full mb-8">
+                <div className="w-full max-w-2xl">
+                  <TextPressure
+                    fontFamily="IBM Plex Mono"
+                    fontUrl="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap"
+                    text="Our Elite Services"
+                    textColor="#CFB53B"
+                    flex={true}
+                    alpha={false}
+                    stroke={true}
+                    width={true}
+                    weight={true}
+                    italic={false}
+                    minFontSize={28}
+                  />
+                </div>
               </div>
 
               <motion.p
@@ -664,18 +670,20 @@ export default function ServicesPage() {
                   }}
                   viewport={{ once: true, amount: 0.5 }}
                 >
-                  <Link
-                    href="/contact"
+                  <a
+                    href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="inline-block bg-robinhood text-black hover:bg-robinhood-90 px-8 py-3 rounded-lg font-medium border border-black/30 hover:border-black/60 hover:shadow-[0_5px_15px_rgba(204,255,0,0.3)] relative overflow-hidden group transition-all duration-300"
                   >
-                    <span className="relative z-10">Get Started</span>
+                    <span className="relative z-10">Schedule a Strategy Call</span>
                     <motion.span
                       className="absolute inset-0 bg-white/20"
                       initial={{ x: '-100%', opacity: 0 }}
                       whileHover={{ x: '100%', opacity: 0.2 }}
                       transition={{ duration: 0.6 }}
                     />
-                  </Link>
+                  </a>
                 </motion.div>
               </AnimatePresence>
             </motion.div>

@@ -192,7 +192,7 @@ export default function Navbar() {
             <motion.button
               ref={hamburgerButtonRef}
               onClick={() => setIsOpen(!isOpen)}
-              className="relative w-12 h-12 rounded-full overflow-hidden group"
+              className="relative w-10 h-10 rounded-full overflow-hidden group"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               aria-label="Toggle menu"
@@ -212,31 +212,28 @@ export default function Navbar() {
                 filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3)) drop-shadow(0 2px 4px rgba(0,0,0,0.2))',
               }}
             >
-              {/* 3D Sphere Base */}
+              {/* Glass Base */}
               <motion.div
                 className="absolute inset-0 rounded-full"
                 style={{
-                  background: `radial-gradient(circle at 30% 30%, 
-                    rgba(255,255,255,0.8) 0%, 
-                    rgba(147,51,234,0.6) 20%, 
-                    rgba(236,72,153,0.5) 40%, 
-                    rgba(59,130,246,0.4) 60%, 
-                    rgba(16,185,129,0.3) 80%, 
-                    rgba(0,0,0,0.2) 100%)`,
+                  background: `rgba(255, 255, 255, 0.1)`,
+                  backdropFilter: supportsBackdropFilter ? "blur(10px)" : "none",
+                  WebkitBackdropFilter: supportsBackdropFilter ? "blur(10px)" : "none",
+                  border: "1px solid rgba(255, 255, 255, 0.2)",
                   boxShadow: `
-                    inset -3px -3px 6px rgba(0,0,0,0.4),
-                    inset 3px 3px 6px rgba(255,255,255,0.3),
-                    0 6px 12px rgba(147,51,234,0.2),
-                    0 0 15px rgba(236,72,153,0.1)
+                    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                    inset 0 -1px 0 rgba(0, 0, 0, 0.1),
+                    0 4px 8px rgba(0, 0, 0, 0.1),
+                    0 0 0 1px rgba(255, 255, 255, 0.05)
                   `,
                 }}
                 animate={{
-                  boxShadow: isOpen ? `
-                    inset -3px -3px 6px rgba(0,0,0,0.4),
-                    inset 3px 3px 6px rgba(255,255,255,0.3),
-                    0 6px 12px rgba(255,107,107,0.2),
-                    0 0 15px rgba(254,202,87,0.1)
-                  ` : undefined
+                  background: isOpen 
+                    ? `rgba(255, 255, 255, 0.15)` 
+                    : `rgba(255, 255, 255, 0.1)`,
+                  borderColor: isOpen 
+                    ? "rgba(255, 255, 255, 0.3)" 
+                    : "rgba(255, 255, 255, 0.2)"
                 }}
                 transition={{ duration: 0.3 }}
               />
@@ -274,22 +271,22 @@ export default function Navbar() {
                 ))}
               </motion.div>
 
-              {/* Atmospheric glow */}
+              {/* Glass glow effect */}
               <motion.div
                 className="absolute inset-0 rounded-full"
                 style={{
                   background: `radial-gradient(circle, 
-                    transparent 65%, 
-                    rgba(236,72,153,0.08) 75%, 
-                    rgba(147,51,234,0.04) 100%)`,
+                    rgba(255, 255, 255, 0.1) 0%, 
+                    rgba(255, 255, 255, 0.05) 50%, 
+                    transparent 70%)`,
                   filter: 'blur(1px)',
                 }}
                 animate={{
-                  scale: [1, 1.15, 1],
-                  opacity: [0.4, 0.7, 0.4],
+                  scale: [1, 1.1, 1],
+                  opacity: [0.3, 0.6, 0.3],
                 }}
                 transition={{
-                  duration: 4,
+                  duration: 3,
                   repeat: Infinity,
                   ease: "easeInOut",
                 }}
@@ -299,24 +296,24 @@ export default function Navbar() {
               <div className="absolute inset-0 flex flex-col items-center justify-center space-y-1 z-10">
                 {/* Top line */}
                 <motion.div
-                  className="w-5 h-0.5 rounded-full shadow-lg"
+                  className="w-5 h-0.5 rounded-full"
                   style={{
-                    background: 'linear-gradient(90deg, rgba(255,255,255,0.9) 0%, rgba(248,187,217,0.7) 50%, rgba(225,190,231,0.7) 100%)',
-                    boxShadow: '0 1px 2px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.5)',
+                    background: 'rgba(255, 255, 255, 0.9)',
+                    boxShadow: '0 1px 2px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3)',
                   }}
                   animate={isOpen 
-                    ? { rotate: 45, y: 6, background: 'linear-gradient(90deg, rgba(255,107,107,0.9) 0%, rgba(254,202,87,0.7) 100%)' } 
-                    : { rotate: 0, y: 0, background: 'linear-gradient(90deg, rgba(255,255,255,0.9) 0%, rgba(248,187,217,0.7) 50%, rgba(225,190,231,0.7) 100%)' }
+                    ? { rotate: 45, y: 6 } 
+                    : { rotate: 0, y: 0 }
                   }
                   transition={{ duration: 0.3, ease: "easeInOut" }}
                 />
                 
                 {/* Middle line */}
                 <motion.div
-                  className="w-5 h-0.5 rounded-full shadow-lg"
+                  className="w-5 h-0.5 rounded-full"
                   style={{
-                    background: 'linear-gradient(90deg, rgba(248,187,217,0.8) 0%, rgba(225,190,231,0.6) 50%, rgba(179,157,219,0.6) 100%)',
-                    boxShadow: '0 1px 2px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.4)',
+                    background: 'rgba(255, 255, 255, 0.8)',
+                    boxShadow: '0 1px 2px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.2)',
                   }}
                   animate={isOpen 
                     ? { opacity: 0, scale: 0, rotate: 180 } 
@@ -327,14 +324,14 @@ export default function Navbar() {
                 
                 {/* Bottom line */}
                 <motion.div
-                  className="w-5 h-0.5 rounded-full shadow-lg"
+                  className="w-5 h-0.5 rounded-full"
                   style={{
-                    background: 'linear-gradient(90deg, rgba(225,190,231,0.9) 0%, rgba(179,157,219,0.7) 50%, rgba(144,202,249,0.7) 100%)',
-                    boxShadow: '0 1px 2px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.5)',
+                    background: 'rgba(255, 255, 255, 0.9)',
+                    boxShadow: '0 1px 2px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3)',
                   }}
                   animate={isOpen 
-                    ? { rotate: -45, y: -6, background: 'linear-gradient(90deg, rgba(254,202,87,0.9) 0%, rgba(255,107,107,0.7) 100%)' } 
-                    : { rotate: 0, y: 0, background: 'linear-gradient(90deg, rgba(225,190,231,0.9) 0%, rgba(179,157,219,0.7) 50%, rgba(144,202,249,0.7) 100%)' }
+                    ? { rotate: -45, y: -6 } 
+                    : { rotate: 0, y: 0 }
                   }
                   transition={{ duration: 0.3, ease: "easeInOut" }}
                 />
@@ -365,7 +362,7 @@ export default function Navbar() {
             className="lg:hidden"
             style={scrolledBgStyle}
           >
-            <div className="px-2 pt-2 pb-3 space-y-1 font-['IBM_Plex_Mono'] font-light">
+            <div className="px-2 pt-2 pb-3 space-y-1 font-['IBM_Plex_Mono'] font-light text-center">
               <Link
                 href="/home"
                 className={`relative block px-3 py-2 rounded transition-all duration-150 ease-out transform will-change-transform ${
