@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "pnpm next dev --port 3009",
+    "dev": "next dev --port 3001",
     "build": "pnpm next build",
     "start": "pnpm next start",
     "lint": "pnpm next lint",
@@ -65,7 +65,7 @@
     "react-resizable-panels": "^2.1.7",
     "recharts": "2.15.0",
     "seedrandom": "^3.0.5",
-    "sharp": "0.33.2",
+    "sharp": "^0.34.3",
     "sonner": "^1.7.1",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
