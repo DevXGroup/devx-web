@@ -5,6 +5,7 @@ import { Check, Star, Zap, Users, Shield, ArrowRight, Sparkles, Target, Crown } 
 import Link from 'next/link'
 import { useRef, useState, useEffect } from 'react'
 import BlurText from '@/components/BlurText'
+import TextPressure from '@/components/TextPressure'
 
 // Enhanced animation variants
 const fadeInUpVariants = {
@@ -381,7 +382,7 @@ function PricingCard({ plan, index, isYearly }) {
             style={{ color: plan.color }}
           >
             <ArrowRight className="w-3 h-3" />
-            What's Included
+            What&apos;s Included
           </h4>
           <motion.ul
             className="space-y-1.5 text-xs text-white/60"
@@ -414,8 +415,10 @@ function PricingCard({ plan, index, isYearly }) {
 
         {/* Enhanced CTA button */}
         <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="mt-auto">
-          <Link
-            href="/contact"
+          <a
+            href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
+            target="_blank"
+            rel="noopener noreferrer"
             className={`
               block w-full text-center py-3 px-4 rounded-lg font-semibold text-sm
               transition-all duration-300 relative overflow-hidden group/button
@@ -427,7 +430,7 @@ function PricingCard({ plan, index, isYearly }) {
             `}
           >
             <span className="relative z-10 flex items-center justify-center gap-2">
-              Get Started Today
+              Schedule a Strategy Call
               <ArrowRight className="w-4 h-4 group-hover/button:translate-x-1 transition-transform duration-300" />
             </span>
 
@@ -438,7 +441,7 @@ function PricingCard({ plan, index, isYearly }) {
               whileHover={{ x: '100%' }}
               transition={{ duration: 0.6 }}
             />
-          </Link>
+          </a>
         </motion.div>
       </div>
     </motion.div>
@@ -513,13 +516,23 @@ export default function PricingPage() {
             className="max-w-4xl mx-auto"
           >
             <motion.div variants={fadeInUpVariants} className="mb-8">
-              <BlurText
-                text="Pricing Plans"
-                className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white flex items-center justify-center"
-                delay={133}
-                animateBy="words"
-                direction="top"
-              />
+              <div className="h-16 sm:h-20 md:h-24 flex items-center justify-center w-full mb-8">
+                <div className="w-full max-w-3xl">
+                  <TextPressure
+                    fontFamily="IBM Plex Mono"
+                    fontUrl="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap"
+                    text="Mission Pricing"
+                    textColor="#FFFFFF"
+                    flex={true}
+                    alpha={false}
+                    stroke={true}
+                    width={true}
+                    weight={true}
+                    italic={false}
+                    minFontSize={28}
+                  />
+                </div>
+              </div>
             </motion.div>
 
             <motion.p
@@ -590,17 +603,19 @@ export default function PricingPage() {
                 ?
               </h2>
               <p className="text-xl text-white/80 font-light mb-8 leading-relaxed">
-                Every project is unique. Let's discuss your specific requirements and create a
+                Every project is unique. Let&apos;s discuss your specific requirements and create a
                 tailored solution that perfectly fits your vision and budget.
               </p>
 
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link
-                  href="/contact"
+                <a
+                  href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center gap-3 bg-gradient-to-r from-[#4CD787] to-[#66E6A4] text-black px-8 py-4 rounded-xl font-bold text-lg hover:shadow-xl hover:shadow-[#4CD787]/30 transition-all duration-300 relative overflow-hidden group"
                 >
                   <Sparkles className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
-                  Get Custom Quote
+                  Schedule a Strategy Call
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
                   {/* Button shimmer */}
                   <motion.div
@@ -609,7 +624,7 @@ export default function PricingPage() {
                     whileHover={{ x: '100%' }}
                     transition={{ duration: 0.6 }}
                   />
-                </Link>
+                </a>
               </motion.div>
 
               <motion.p

@@ -27,9 +27,6 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${ibmPlexMono.variable} ${ibmPlexSans.variable} dark`}>
-      <head>
-        <link href="https://fonts.googleapis.com/css2?family=Boldonse&display=swap" rel="stylesheet" />
-      </head>
       <body className="bg-black text-white font-sans">
         <BrowserCompatibilityDetector />
         <ConditionalLayout>{children}</ConditionalLayout>

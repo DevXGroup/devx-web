@@ -265,7 +265,7 @@ const Squares: React.FC<SquaresProps> = ({
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [initSquares]);
+  }, [initSquares, animate]);
 
 
   return (

@@ -357,29 +357,32 @@ export default function AboutPage() {
           <div className="max-w-5xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <AnimatedSection>
-                <BlurText
-                  text="About DevX Group"
-                  className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-[#CFB53B]"
-                  delay={120}
-                  animateBy="words"
-                  direction="top"
-                />
+                <div className="h-16 sm:h-20 md:h-24 flex items-center justify-start w-full mb-8">
+                  <div className="w-full max-w-3xl">
+                    <TextPressure
+                      fontFamily="IBM Plex Mono"
+                      fontUrl="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap"
+                      text="An Elite Unit for Your Most Critical Projects"
+                      textColor="#CFB53B"
+                      flex={true}
+                      alpha={false}
+                      stroke={true}
+                      width={true}
+                      weight={true}
+                      italic={false}
+                      minFontSize={24}
+                    />
+                  </div>
+                </div>
                 <p className="text-xl text-foreground/80 mb-8">
-                  A California-based software and IoT development powerhouse built on decades of
-                  industry experience and a passion for solving complex challenges.
+                  We are the elite software development unit that high-growth companies trust when their most critical projects demand precision, speed, and guaranteed results.
                 </p>
                 <div className="flex flex-wrap gap-4">
-                  <Link
-                    href="/contact"
-                    className="bg-[#4CD787] text-black hover:bg-[#4CD787]/90 px-6 py-3 rounded-lg transition-colors font-medium"
-                  >
-                    Get in Touch
-                  </Link>
                   <a
                     href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="bg-transparent text-white hover:bg-white/10 px-6 py-3 rounded-lg transition-colors font-medium border border-white/30"
+                    className="bg-robinhood text-black hover:bg-robinhood-90 px-6 py-3 rounded-lg transition-colors font-medium border border-black/30"
                     onClick={(e) => {
                       window.open(
                         'https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05',
@@ -388,8 +391,14 @@ export default function AboutPage() {
                       e.preventDefault()
                     }}
                   >
-                    Schedule a Call
+                    Schedule a Strategy Call
                   </a>
+                  <Link
+                    href="/portfolio"
+                    className="bg-transparent text-white hover:bg-white/10 px-6 py-3 rounded-lg transition-colors font-medium border border-white/30"
+                  >
+                    See Our Work
+                  </Link>
                 </div>
               </AnimatedSection>
 
@@ -545,12 +554,10 @@ export default function AboutPage() {
                       <div className="relative">
                         <div className="absolute -left-4 top-0 w-1 h-full bg-gradient-to-b from-[#4CD787] to-[#CFB53B] rounded-full" />
                         <p className="text-lg leading-relaxed pl-8">
-                          DevX Group LLC is a California-based software and IoT development
-                          powerhouse built on decades of industry experience and a passion for
-                          solving complex challenges. Our team is a hand-selected group of elite
-                          professionals chosen not just for their technical expertise but also for
-                          their ability to operate with precision, efficiency, and excellence—much
-                          like a commando unit.
+                          We are not your typical development agency. We are an elite commando unit, 
+                          assembled to handle the missions others can&apos;t complete. Every member of our
+                          team has been hand-selected for their exceptional skills, proven track record, 
+                          and ability to execute under pressure.
                         </p>
                       </div>
                     </AnimatedSection>
@@ -558,12 +565,29 @@ export default function AboutPage() {
                     <AnimatedSection delay={0.4}>
                       <div className="relative">
                         <div className="absolute -left-4 top-0 w-1 h-full bg-gradient-to-b from-[#CFB53B] to-[#4834D4] rounded-full" />
-                        <p className="text-lg leading-relaxed pl-8">
-                          What sets us apart is our unique approach. We don&apos;t just work; we
-                          deliver solutions. Whether you&apos;re a startup looking to bring an idea
-                          to life or an established company with lingering projects or challenging
-                          problems, we step in and get the job done.
-                        </p>
+                        <div className="pl-8">
+                          <h4 className="text-xl font-semibold text-[#4CD787] mb-4">Our Three Core Principles:</h4>
+                          <div className="space-y-4">
+                            <div>
+                              <h5 className="font-semibold text-white mb-2">1. Vetted Experts Only</h5>
+                              <p className="text-lg leading-relaxed">
+                                No junior developers, no learning on your dime. Our team consists solely of senior-level professionals with 5+ years of proven experience.
+                              </p>
+                            </div>
+                            <div>
+                              <h5 className="font-semibold text-white mb-2">2. Precision & Efficiency</h5>
+                              <p className="text-lg leading-relaxed">
+                                We move fast without breaking things. Every line of code, every decision, every deliverable is executed with military precision.
+                              </p>
+                            </div>
+                            <div>
+                              <h5 className="font-semibold text-white mb-2">3. No Project Left Behind</h5>
+                              <p className="text-lg leading-relaxed">
+                                When we take on your project, it gets completed. Period. We don&apos;t abandon missions, and we don&apos;t leave clients hanging.
+                              </p>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </AnimatedSection>
 
@@ -571,10 +595,9 @@ export default function AboutPage() {
                       <div className="relative">
                         <div className="absolute -left-4 top-0 w-1 h-full bg-gradient-to-b from-[#4834D4] to-[#9d4edd] rounded-full" />
                         <p className="text-lg leading-relaxed pl-8">
-                          At DevX Group LLC, flexibility is key. We can partner with you on a
-                          project basis or seamlessly integrate into your team as hourly specialists
-                          to tackle your most pressing challenges. Our mission is simple: to provide
-                          exceptional results that exceed expectations.
+                          Whether you need rapid MVP development, complex system integrations, or rescue operations 
+                          for failing projects, we deploy the right specialists for your specific mission. Our California-based 
+                          command ensures adherence to the highest standards while our distributed team enables 24/7 execution.
                         </p>
                       </div>
                     </AnimatedSection>
@@ -728,94 +751,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Our Process Section */}
-      <section className="py-20 relative">
-        <div className="container mx-auto px-4">
-          <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#CFB53B]">Our Process</h2>
-            <p className="text-foreground/80">
-              We follow a proven methodology to ensure successful project delivery every time.
-            </p>
-          </AnimatedSection>
-
-          <div className="relative">
-            {/* Process timeline line */}
-            <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#4CD787]/0 via-[#4CD787] to-[#4CD787]/0 transform -translate-x-1/2 hidden md:block"></div>
-
-            <div className="space-y-16">
-              {[
-                {
-                  number: '01',
-                  title: 'Discovery',
-                  description:
-                    'We begin by exploring your goals, challenges, and vision through deep consultation.',
-                  image: '/images/about/process-discovery.png',
-                },
-                {
-                  number: '02',
-                  title: 'Planning',
-                  description:
-                    'We create a detailed roadmap with timelines, milestones, and resource allocation.',
-                  image: '/images/about/process-planning.png',
-                },
-                {
-                  number: '03',
-                  title: 'Development',
-                  description:
-                    'Our engineers bring your vision to life — fast, scalable, and future-ready.',
-                  image: '/images/about/process-development.png',
-                },
-                {
-                  number: '04',
-                  title: 'Testing & Launch',
-                  description:
-                    'We rigorously test and deploy your solution, ensuring a smooth launch.',
-                  image: '/images/about/process-testing.png',
-                },
-                {
-                  number: '05',
-                  title: 'Support & Growth',
-                  description:
-                    'We provide ongoing maintenance and identify opportunities for enhancement.',
-                  image: '/images/about/process-support.png',
-                },
-              ].map((step, index) => (
-                <AnimatedSection key={step.number} delay={index * 0.1}>
-                  <div
-                    className={`grid grid-cols-1 md:grid-cols-2 gap-8 items-center ${
-                      index % 2 === 1 ? 'md:flex-row-reverse' : ''
-                    }`}
-                  >
-                    <div className={`${index % 2 === 1 ? 'md:text-right' : ''}`}>
-                      <div className="inline-block bg-[#4CD787]/10 text-[#4CD787] text-xl font-bold px-4 py-2 rounded-lg mb-4">
-                        {step.number}
-                      </div>
-                      <h3 className="text-2xl font-semibold text-white mb-4">{step.title}</h3>
-                      <p className="text-foreground/80 leading-relaxed">{step.description}</p>
-                    </div>
-
-                    <div className="relative">
-                      <div className="aspect-video rounded-xl overflow-hidden">
-                        <Image
-                          src={step.image || '/placeholder.svg'}
-                          alt={step.title}
-                          fill
-                          className="object-cover"
-                          sizes="(max-width: 768px) 100vw, 50vw"
-                          priority={false}
-                        />
-                      </div>
-
-                      {/* Timeline dot for desktop */}
-                      <div className="absolute top-1/2 left-0 transform -translate-y-1/2 -translate-x-[calc(50%+12px)] w-6 h-6 bg-[#4CD787] rounded-full border-4 border-black hidden md:block"></div>
-                    </div>
-                  </div>
-                </AnimatedSection>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Team Section */}
       <section className="py-20 relative">
@@ -830,13 +765,13 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             <TeamMemberCard
               name="Max Sheikhizadeh"
-              role="Founder & CEO"
+              role="Mission Commander & Founder"
               image="/images/about/ceo-headshot.png"
               delay={0.1}
             />
             <TeamMemberCard
               name="Milaad Sheikhizadeh"
-              role="General manager"
+              role="Operations Director"
               image="/images/about/cto-headshot.png"
               delay={0.2}
             />
@@ -869,17 +804,11 @@ export default function AboutPage() {
               development services.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Link
-                href="/contact"
-                className="bg-[#4CD787] text-black hover:bg-[#4CD787]/90 px-8 py-3 rounded-lg transition-colors font-medium"
-              >
-                Get in Touch
-              </Link>
               <a
                 href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-transparent text-white hover:bg-white/10 px-8 py-3 rounded-lg transition-colors font-medium border border-white/30"
+                className="bg-robinhood text-black hover:bg-robinhood-90 px-8 py-3 rounded-lg transition-colors font-medium border border-black/30"
                 onClick={(e) => {
                   window.open(
                     'https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05',
@@ -888,8 +817,14 @@ export default function AboutPage() {
                   e.preventDefault()
                 }}
               >
-                Schedule a Call
+                Schedule a Strategy Call
               </a>
+              <Link
+                href="/portfolio"
+                className="bg-transparent text-white hover:bg-white/10 px-8 py-3 rounded-lg transition-colors font-medium border border-white/30"
+              >
+                See Our Work
+              </Link>
             </div>
           </AnimatedSection>
         </div>
