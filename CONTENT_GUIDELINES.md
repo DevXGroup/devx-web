@@ -70,4 +70,4 @@ Apply these guidelines consistently across all apps to maintain quality and user
 
 # gitbub commit message
 
-"alaways should assign author as Max Sheikhizadeh and remove any "Claude" mentioning any where
+"alaways should assign author as Max Sheikhizadeh and remove any "Claude" mentioning anywhere
