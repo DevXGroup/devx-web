@@ -5,8 +5,8 @@ import { motion, useReducedMotion, useAnimation } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import ClientOnly from './ClientOnly'
 import dynamic from 'next/dynamic'
-import RotatingText from './RotatingText'
 import StarBorder from './StarBorder'
+import TextType from './TextType'
 
 // Dynamically import components that use browser APIs with better loading states
 const DynamicHeroBackground = dynamic(() => import('./hero/HeroBackground'), {
@@ -27,17 +27,14 @@ const DynamicShootingStars = dynamic(() => import('./hero/ShootingStars'), {
 })
 
 const subheaders = [
-  'AI-Powered Solutions',
-  'Software Engineering',
-  'AI Integeration',
-  'Workflow Automation',
-  'Cloud Solutions',
-  'DevOps & Infrastructure',
-  'Custom Software Solutions',
-  'Legacy System Modernization',
-  'Cross-Platform Development',
-  'Stunning UI/UX Design',
+  "Rapid MVP Development",
+  "AI-Powered Automation",
+  "Scalable Cloud Solutions",
+  "Engaging Mobile Apps",
+  "IoT & Hardware Integration",
+  "Stunning UI/UX Design"
 ]
+
 
 // Enhanced animation variants for better performance
 const containerVariants = {
@@ -121,6 +118,7 @@ export default function Hero() {
               Your Vision, <span style={{ color: '#ccff00' }}>Engineered.</span>
             </motion.h1>
 
+
             <motion.p
               variants={itemVariants}
               className="text-lg sm:text-xl md:text-2xl text-white font-mono font-light mb-6 sm:mb-8 px-2 sm:px-0 leading-relaxed"
@@ -129,38 +127,29 @@ export default function Hero() {
               <br />
               build, launch, and scale your vision.
             </motion.p>
-
-            <motion.div
-              variants={itemVariants}
-              className="h-12 sm:h-16 flex items-center justify-center"
-            >
-              <span className="text-lg sm:text-2xl md:text-3xl font-mono font-black text-white" style={{
-                marginRight: '4px'
-              }}>
-                Creative
-              </span>
-              <RotatingText
-                texts={subheaders}
-                rotationInterval={shouldReduceMotion ? 2000 : 2500}
-                transition={{ type: 'tween', ease: 'easeInOut', duration: 0.2 }}
-                initial={{ y: '150%', opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: '-150%', opacity: 0 }}
-                splitBy="characters"
-                staggerDuration={0.02}
-                staggerFrom="last"
-                mainClassName="px-2 py-1 bg-indigo-600 text-white rounded-lg font-bold text-lg sm:text-2xl md:text-3xl font-mono overflow-hidden shadow-inner"
-                splitLevelClassName="overflow-hidden"
-                elementLevelClassName="inline-block drop-shadow-sm"
-                loop={true}
-                auto={true}
-              />
-            </motion.div>
           </div>
 
           <motion.div
             variants={itemVariants}
-            className="flex flex-wrap justify-center gap-4 relative z-30"
+            className="h-12 sm:h-16 mb-6 sm:mb-8"
+          >
+            <TextType
+              text={subheaders}
+              as="p"
+              typingSpeed={shouldReduceMotion ? 40 : 80}
+              deletingSpeed={shouldReduceMotion ? 25 : 50}
+              pauseDuration={shouldReduceMotion ? 800 : 2000}
+              className="text-xl sm:text-2xl md:text-3xl font-mono text-robinhood typewriter-text px-2 sm:px-0"
+              showCursor={true}
+              cursorCharacter="_"
+              cursorClassName=""
+              loop={true}
+            />
+          </motion.div>
+
+          <motion.div
+            variants={itemVariants}
+            className="flex flex-wrap justify-center gap-4 relative z-50 mt-4 md:mt-6 lg:mt-8"
           >
             <motion.div
               variants={buttonVariants}
@@ -175,7 +164,7 @@ export default function Hero() {
                 rel="noopener noreferrer"
                 color="#ccff00"
                 speed="3s"
-                className="font-mono font-bold text-xs"
+                className="font-mono font-bold text-xs text-white hover:text-robinhood"
               >
                 Schedule a Strategy Call
               </StarBorder>
@@ -190,7 +179,7 @@ export default function Hero() {
                 onClick={navigateToOurValues}
                 color="#9d4edd"
                 speed="4s"
-                className="font-mono font-bold text-xs"
+                className="font-mono font-bold text-xs text-white hover:text-blue-500"
               >
                 See Our Work
               </StarBorder>

@@ -37,7 +37,7 @@ export default function ShootingStars() {
     for (let i = 0; i < 4; i++) {
       // Randomize direction by setting different speedX and speedY values
       const angle = Math.random() * Math.PI * 2 // Random angle in radians
-      const speed = Math.random() * 4 + 2 // Base speed
+      const speed = Math.random() * 2 + 1 // Slower base speed (1-3 instead of 2-6)
 
       stars.push({
         x: Math.random() * canvas.width,
@@ -47,7 +47,7 @@ export default function ShootingStars() {
         speedY: Math.sin(angle) * speed, // Y component of velocity
         size: Math.random() * 1.5 + 0.5,
         active: false,
-        delay: Math.random() * 8000, // Random delay up to 8 seconds
+        delay: Math.random() * 6000 + 2000, // Random delay 2-8 seconds
       })
     }
 
@@ -103,11 +103,11 @@ export default function ShootingStars() {
         // Reset star if it goes off screen
         if (star.x < 0 || star.x > canvas.width || star.y < 0 || star.y > canvas.height) {
           star.active = false
-          star.delay = Math.random() * 5000 // Random delay before reappearing
+          star.delay = Math.random() * 4000 + 3000 // Random delay 3-7 seconds before reappearing
 
           // Randomize direction again when resetting
           const newAngle = Math.random() * Math.PI * 2
-          const newSpeed = Math.random() * 4 + 2
+          const newSpeed = Math.random() * 2 + 1 // Match the slower speed
           star.speedX = Math.cos(newAngle) * newSpeed
           star.speedY = Math.sin(newAngle) * newSpeed
         }

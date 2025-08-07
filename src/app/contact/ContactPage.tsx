@@ -18,6 +18,7 @@ import {
   MessageCircle
 } from "lucide-react"
 import BlurText from "@/components/BlurText"
+import TextPressure from "@/components/TextPressure"
 
 // Enhanced animation variants
 const fadeInUpVariants = {
@@ -228,15 +229,25 @@ export default function ContactPage() {
             className="text-center max-w-4xl mx-auto"
           >
             <div className="flex flex-col items-center">
-              <BlurText 
-                text="Contact"
-                className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-center text-[#4CD787]"
-                delay={120}
-                animateBy="words"
-                direction="top"
-              />
+              <div className="h-16 sm:h-20 md:h-24 flex items-center justify-center w-full mb-8">
+                <div className="w-full max-w-3xl">
+                  <TextPressure
+                    fontFamily="IBM Plex Mono"
+                    fontUrl="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap"
+                    text="Mission Command"
+                    textColor="#4CD787"
+                    flex={true}
+                    alpha={false}
+                    stroke={true}
+                    width={true}
+                    weight={true}
+                    italic={false}
+                    minFontSize={28}
+                  />
+                </div>
+              </div>
               <p className="text-xl text-foreground/80 font-light max-w-2xl text-center">
-                Have a project in mind or questions about our services? We&apos;re here to help turn your vision into reality.
+                Ready to deploy the elite unit? Contact our command center to discuss your mission requirements and objectives.
               </p>
             </div>
           </motion.div>

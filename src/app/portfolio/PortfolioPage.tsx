@@ -21,6 +21,7 @@ import {
   Quote,
 } from 'lucide-react'
 import BlurText from '@/components/BlurText'
+import TextPressure from '@/components/TextPressure'
 import ParticleField from '@/components/ParticleField'
 import MagneticCard from '@/components/MagneticCard'
 import SplashCursor from '@/components/SplashCursor'
@@ -295,12 +296,14 @@ const ServiceModal = ({ service, isOpen, onClose, clickPosition }) => {
                 >
                   Close
                 </button>
-                <Link
-                  href="/contact"
+                <a
+                  href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="px-5 py-2 rounded-lg bg-robinhood text-black font-medium transition-all hover:bg-robinhood/90"
                 >
-                  Get Started
-                </Link>
+                  Schedule a Strategy Call
+                </a>
               </div>
             </motion.div>
           </div>
@@ -922,14 +925,24 @@ export default function PortfolioPage() {
             className="text-center max-w-4xl mx-auto relative z-10"
           >
             <div className="flex flex-col items-center">
+              <div className="h-16 sm:h-20 md:h-24 flex items-center justify-center w-full mb-8">
+                <div className="w-full max-w-2xl">
+                  <TextPressure
+                    fontFamily="IBM Plex Mono"
+                    fontUrl="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap"
+                    text="Mission Portfolio"
+                    textColor="#4834D4"
+                    flex={true}
+                    alpha={false}
+                    stroke={true}
+                    width={true}
+                    weight={true}
+                    italic={false}
+                    minFontSize={28}
+                  />
+                </div>
+              </div>
               <div className="relative inline-block">
-                <BlurText
-                  text="Portfolio"
-                  className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-center text-[#4834D4]"
-                  delay={120}
-                  animateBy="words"
-                  direction="top"
-                />
 
                 {/* Design tool-like elements beside the "O" */}
                 {/* Bouncing orange ball */}
@@ -1073,13 +1086,15 @@ export default function PortfolioPage() {
               whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
               whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
             >
-              <Link
-                href="/contact"
+              <a
+                href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-robinhood text-black hover:bg-robinhood-90 px-8 py-3 rounded-lg font-medium border-robinhood hover:shadow-[0_5px_15px_rgba(204,255,0,0.3)] transition-all duration-300"
               >
-                Start Your Project
+                Schedule a Strategy Call
                 <ArrowRight className="w-4 h-4" />
-              </Link>
+              </a>
             </motion.div>
           </motion.div>
         </div>

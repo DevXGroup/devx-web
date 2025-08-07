@@ -10,7 +10,7 @@ const tools = [
   {
     name: 'Laravel',
     description: "Quickly build secure web apps with Laravel's powerful features",
-    icon: 'https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg',
+    icon: 'https://laravel.com/img/logomark.min.svg',
   },
   {
     name: 'Figma',
@@ -40,7 +40,7 @@ const tools = [
   {
     name: 'Adobe XD',
     description: 'Prototype and design beautiful UX with Adobe XD',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/xd/xd-plain.svg',
+    icon: 'https://upload.wikimedia.org/wikipedia/commons/c/c2/Adobe_XD_CC_icon.svg',
   },
   {
     name: 'Magento',
@@ -49,43 +49,47 @@ const tools = [
   },
 ]
 
-// Updated AI tools with proper placeholder SVGs for missing icons
+// Updated AI tools with better logos and descriptions
 const aiTools = [
   {
     name: 'TensorFlow',
+    description: 'Build and deploy ML models with Google\'s TensorFlow platform',
     icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg',
   },
   {
     name: 'PyTorch',
+    description: 'Dynamic neural networks and deep learning with PyTorch',
     icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg',
   },
   {
-    name: 'Hugging Face',
-    icon: 'https://huggingface.co/favicon.ico',
-  },
-  {
-    name: 'LangChain',
-    icon: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI3MiIgaGVpZ2h0PSI3MiIgdmlld0JveD0iMCAwIDcyIDcyIiBmaWxsPSJub25lIj48cGF0aCBkPSJNMzYgNTkuODVMMTIuMTUgNDYuOTJWMjEuMDhMMzYgOC4xNUw1OS44NSAyMS4wOFY0Ni45MkwzNiA1OS44NVoiIGZpbGw9IiMxMEI5ODEiLz48L3N2Zz4=',
-  },
-  {
     name: 'OpenAI',
-    icon: '/openai-logo-inspired-abstract.png',
+    description: 'Integrate powerful AI models with OpenAI\'s cutting-edge APIs',
+    icon: 'https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg',
   },
   {
-    name: 'AutoGPT',
-    icon: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI3MiIgaGVpZ2h0PSI3MiIgdmlld0JveD0iMCAwIDcyIDcyIiBmaWxsPSJub25lIj48cmVjdCB3aWR0aD0iNzIiIGhlaWdodD0iNzIiIGZpbGw9IiMzNDM1NDEiLz48cGF0aCBkPSJNMTggMThIMzZWMzZIMThWMThaIiBmaWxsPSIjMTBCOTgxIi8+PHBhdGggZD0iTTM2IDE4SDU0VjM2SDM2VjE4WiIgZmlsbD0iIzEwQjk4MSIvPjxwYXRoIGQ9Ik0xOCAzNkgzNlY1NEgxOFYzNloiIGZpbGw9IiMxMEI5ODEiLz48cGF0aCBkPSJNMzYgMzZINTRWNTRIMzZWMzZaIiBmaWxsPSIjMTBCOTgxIi8+PC9zdmc+',
+    name: 'Python',
+    description: 'Versatile programming language for AI, web, and data science',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
   },
   {
-    name: 'LlamaIndex',
-    icon: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI3MiIgaGVpZ2h0PSI3MiIgdmlld0JveD0iMCAwIDcyIDcyIiBmaWxsPSJub25lIj48cGF0aCBkPSJNMTIgMTJINjBWNjBIMTJWMTJaIiBmaWxsPSIjRkZDQzRDIi8+PHBhdGggZD0iTTI0IDI0SDQ4VjQ4SDI0VjI0WiIgZmlsbD0iI0ZGRkZGRiIvPjwvc3ZnPg==',
+    name: 'Node.js',
+    description: 'Build scalable server-side applications with JavaScript runtime',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg',
   },
   {
-    name: 'Anthropic',
-    icon: '/anthropic-logo-abstract.png',
+    name: 'Docker',
+    description: 'Containerize applications for consistent deployment environments',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg',
   },
   {
-    name: 'Mistral AI',
-    icon: '/mistral-ai-logo-inspired.png',
+    name: 'AWS',
+    description: 'Cloud computing services for scalable infrastructure solutions',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg',
+  },
+  {
+    name: 'MongoDB',
+    description: 'NoSQL database for modern application development',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
   },
 ]
 
@@ -95,10 +99,40 @@ const DISPLAY_DURATION = 6000
 export default function DevelopmentTools() {
   const [activeIndex, setActiveIndex] = useState(0)
   const [isManual, setIsManual] = useState(false)
-  // Removed safariReady state
+  const [transitioning, setTransitioning] = useState(false)
+  const [mounted, setMounted] = useState(false)
+  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 })
+  const [transitionData, setTransitionData] = useState<{
+    from: { x: number; y: number }
+    to: { x: number; y: number }
+    tool: any
+  } | null>(null)
 
   const cycleRef = useRef<NodeJS.Timeout | null>(null)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
+
+  // Handle mounting and window size for hydration safety
+  useEffect(() => {
+    setMounted(true)
+    const updateWindowSize = () => {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight })
+    }
+    
+    updateWindowSize()
+    window.addEventListener('resize', updateWindowSize)
+    
+    return () => window.removeEventListener('resize', updateWindowSize)
+  }, [])
+
+  // Helper function for responsive radius - hydration safe with more spacing
+  const getResponsiveRadius = useCallback(() => {
+    if (!mounted || windowSize.width === 0) return 200 // Safe default
+    
+    if (windowSize.width < 640) return 170   // mobile - increased spacing
+    if (windowSize.width < 768) return 190   // small tablet - increased spacing  
+    if (windowSize.width < 1024) return 220  // tablet - increased spacing
+    return 240 // desktop - increased spacing
+  }, [mounted, windowSize.width])
 
   // Move stars generation to component level
   const stars = useMemo(() => {
@@ -115,41 +149,136 @@ export default function DevelopmentTools() {
     }))
   }, [])
 
-  // Removed useEffect for safariReady
-
-  // Automatic cycle
+  // Automatic cycle with transition animation - continues running alongside manual interactions
   useEffect(() => {
+    if (transitioning) return
+    
     const runCycle = () => {
-      if (isManual) return
-      setActiveIndex((prev) => (prev + 1) % tools.length)
-      cycleRef.current = setTimeout(runCycle, DISPLAY_DURATION)
+      if (transitioning) return
+      
+      // Skip auto-cycle if user recently interacted, but don't stop the timer
+      if (isManual) {
+        // Schedule next cycle attempt
+        if (cycleRef.current) clearTimeout(cycleRef.current)
+        cycleRef.current = setTimeout(runCycle, 1000) // Check again in 1 second
+        return
+      }
+      
+      // Trigger transition animation before changing activeIndex
+      const nextIndex = (activeIndex + 1) % tools.length
+      const nextTool = tools[nextIndex]
+      
+      // Calculate orbit position for the next tool
+      const angle = (nextIndex * 360) / tools.length
+      const radian = (angle * Math.PI) / 180
+      const radius = getResponsiveRadius()
+      const fromX = Math.cos(radian) * radius
+      const fromY = Math.sin(radian) * radius
+      
+      // Start transition animation
+      setTransitionData({
+        from: { x: fromX, y: fromY },
+        to: { x: 0, y: 0 },
+        tool: nextTool
+      })
+      setTransitioning(true)
+      
+      // After transition completes, update activeIndex
+      setTimeout(() => {
+        setActiveIndex(nextIndex)
+        setTransitioning(false)
+        setTransitionData(null)
+      }, 1200) // Transition duration
     }
+    
+    // Clear any existing timer
+    if (cycleRef.current) {
+      clearTimeout(cycleRef.current)
+    }
+    
+    // Set new cycle timer
     cycleRef.current = setTimeout(runCycle, DISPLAY_DURATION)
+    
     return () => {
       if (cycleRef.current) clearTimeout(cycleRef.current)
-      const timer = timerRef.current
-      if (timer) clearTimeout(timer)
+      if (timerRef.current) clearTimeout(timerRef.current)
     }
-  }, [isManual])
+  }, [isManual, activeIndex, transitioning, getResponsiveRadius, mounted, windowSize])
 
-  // User click => override
+  // User click => override with transition effect - improved auto-cycle restoration
   const handleIconClick = useCallback((index: number) => {
-    setIsManual(true)
-    setActiveIndex(index)
-
-    // Clear any existing timer
+    if (transitioning) return // Prevent clicks during transitions
+    
+    // Clear all existing timers first
     if (timerRef.current) {
       clearTimeout(timerRef.current)
+      timerRef.current = null
+    }
+    if (cycleRef.current) {
+      clearTimeout(cycleRef.current)
+      cycleRef.current = null
+    }
+    
+    setIsManual(true)
+    
+    // If clicking on a different tool, trigger transition animation
+    if (index !== activeIndex) {
+      const clickedTool = tools[index]
+      const angle = (index * 360) / tools.length
+      const radian = (angle * Math.PI) / 180
+      const radius = getResponsiveRadius()
+      const fromX = Math.cos(radian) * radius
+      const fromY = Math.sin(radian) * radius
+      
+      // Start transition animation - the actual clicked circle moves
+      setTransitionData({
+        from: { x: fromX, y: fromY },
+        to: { x: 0, y: 0 },
+        tool: clickedTool
+      })
+      setTransitioning(true)
+      
+      // After transition completes, update activeIndex
+      setTimeout(() => {
+        setActiveIndex(index)
+        setTransitioning(false)
+        setTransitionData(null)
+      }, 800) // Shorter duration for manual clicks
     }
 
-    // Set new timer
+    // Set shorter timer to resume auto-cycle after manual interaction
     timerRef.current = setTimeout(() => {
       setIsManual(false)
-      timerRef.current = null
-    }, DISPLAY_DURATION)
+    }, 3000) // Resume auto-cycle after 3 seconds instead of full DISPLAY_DURATION
+  }, [activeIndex, transitioning, getResponsiveRadius])
+
+  // AI tools radius function
+  const getAIResponsiveRadius = useCallback(() => {
+    if (!mounted || windowSize.width === 0) return 320 // Safe default
+    
+    if (windowSize.width < 640) return 280   // mobile - increased spacing
+    if (windowSize.width < 768) return 320   // small tablet - increased spacing
+    if (windowSize.width < 1024) return 360  // tablet - increased spacing
+    return 380 // desktop - increased spacing
+  }, [mounted, windowSize.width])
+
+  // Handle AI tool clicks (for now just log, later can be expanded)
+  const handleAIToolClick = useCallback((index: number) => {
+    console.log(`AI Tool clicked: ${aiTools[index].name}`)
+    // Future: Could show AI tool info or integrate into main cycle
   }, [])
 
   const activeTool = tools[activeIndex] ?? null
+  
+  // Prevent hydration issues by showing loading state
+  if (!mounted) {
+    return (
+      <div className="relative w-full h-[140vh] bg-black overflow-hidden pb-32 sm:pb-48 md:pb-64 lg:pb-72 xl:pb-80 z-[150] flex items-center justify-center">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
+    )
+  }
+  
   if (!activeTool) {
     return <div className="text-red-500">No tools found.</div>
   }
@@ -175,8 +304,8 @@ export default function DevelopmentTools() {
 
   return (
     <LayoutGroup>
-      {/* Optimized height for better spacing */}
-      <div className="relative w-full h-[140vh] bg-black overflow-hidden pb-16 md:pb-24 lg:pb-32 z-[150]">
+      {/* Optimized height for better spacing with extra bottom padding for tablets */}
+      <div className="relative w-full h-[140vh] bg-black overflow-hidden pb-32 sm:pb-48 md:pb-64 lg:pb-72 xl:pb-80 z-[150]">
         {' '}
         {/* Reduced height and padding */}
         {/* Reduced number of stars and added glow effect */}
@@ -213,14 +342,15 @@ export default function DevelopmentTools() {
           </div>
         </div>
         {/* ============ Center black circle with glowing border ============ */}
-        {/* Optimized center position for better spacing */}
+        {/* Responsive center position with decreased circumference */}
         <div
           className="
             absolute z-[100]
-            top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2
-            w-[55vw] h-[55vw] max-w-[300px] max-h-[300px]
+            top-[50%] sm:top-[55%] md:top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2
+            w-[60vw] h-[60vw] sm:w-[50vw] sm:h-[50vw] md:w-[45vw] md:h-[45vw] 
+            max-w-[220px] max-h-[220px] sm:max-w-[240px] sm:max-h-[240px] md:max-w-[260px] md:max-h-[260px]
             rounded-full bg-black text-white
-            flex items-center justify-center text-center p-6 shadow-md
+            flex items-center justify-center text-center p-3 sm:p-4 md:p-5 shadow-md
           "
         >
           {/* 
@@ -247,17 +377,19 @@ export default function DevelopmentTools() {
           />
 
           {/* 
-            "Black hole lines" inside => rotating arcs, 
-            now at slightly bigger radii, faster spin, higher opacity for tablet visibility
+            "Black hole lines" inside => rotating arcs with motion blur trails
           */}
           <motion.div
             className="pointer-events-none absolute inset-0 flex items-center justify-center"
-            initial={{ rotate: 0 }} // Ensure animation starts
+            initial={{ rotate: 0 }}
             animate={{ rotate: 360 }}
             transition={{
-              duration: 6, // faster spin
+              duration: 6,
               repeat: Number.POSITIVE_INFINITY,
               ease: 'linear',
+            }}
+            style={{
+              filter: 'blur(0.5px)', // Add subtle motion blur
             }}
           >
             <svg
@@ -267,38 +399,62 @@ export default function DevelopmentTools() {
               fill="none"
               className="opacity-70"
             >
-              {' '}
-              {/* Increased from 0.5 to 0.7 */}
-              {/* 
-                Larger arcs => r=50,70,90. 
-                Higher opacities for tablet visibility
-              */}
+              <defs>
+                {/* Enhanced motion blur filter for more blur effect */}
+                <filter id="motionBlur" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="2.5 1.5" result="blur"/>
+                  <feOffset dx="1.5" dy="0" result="offset" in="SourceGraphic"/>
+                  <feMerge>
+                    <feMergeNode in="blur"/>
+                    <feMergeNode in="offset"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+                
+                {/* Enhanced glowing trail effect with more blur */}
+                <filter id="glowTrail" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="3.5" result="coloredBlur"/>
+                  <feMerge>
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+              </defs>
+              
+              {/* Inner ring with subtle trail - increased intensity by 5% */}
               <circle
                 cx="100"
                 cy="100"
-                r="50"
-                stroke="rgba(255,255,255,0.25)" // Increased from 0.15 to 0.25
-                strokeWidth="2"
-                strokeDasharray="30 10"
+                r="45"
+                stroke="rgba(255,255,255,0.126)"
+                strokeWidth="1"
+                strokeDasharray="20 15"
                 fill="none"
+                filter="url(#glowTrail)"
               />
+              
+              {/* Middle ring with medium trail - increased intensity by 5% */}
               <circle
                 cx="100"
                 cy="100"
-                r="70"
-                stroke="rgba(255,255,255,0.25)" // Increased from 0.15 to 0.25
-                strokeWidth="2"
-                strokeDasharray="50 20"
+                r="65"
+                stroke="rgba(255,255,255,0.189)"
+                strokeWidth="1.5"
+                strokeDasharray="30 20"
                 fill="none"
+                filter="url(#glowTrail)"
               />
+              
+              {/* Outer ring with subtle trail - increased intensity by 5% */}
               <circle
                 cx="100"
                 cy="100"
-                r="90"
-                stroke="rgba(255,255,255,0.25)" // Increased from 0.15 to 0.25
-                strokeWidth="2"
-                strokeDasharray="40 30"
+                r="85"
+                stroke="rgba(255,255,255,0.1575)"
+                strokeWidth="1"
+                strokeDasharray="25 25"
                 fill="none"
+                filter="url(#glowTrail)"
               />
             </svg>
           </motion.div>
@@ -326,31 +482,226 @@ export default function DevelopmentTools() {
                 }}
                 className="mb-3"
               >
-                <div className="relative w-12 h-12">
+                <div className="relative w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12">
                   <Image
                     src={activeTool.icon || '/placeholder.svg'}
                     alt={activeTool.name}
                     fill
-                    className="object-contain"
+                    className={`object-contain ${activeTool.name === 'Laravel' ? 'brightness-150 saturate-150' : ''}`}
+                    style={activeTool.name === 'Laravel' ? {
+                      filter: 'brightness(1.5) saturate(1.5) hue-rotate(300deg) contrast(1.2)'
+                    } : undefined}
                   />
                 </div>
               </motion.div>
 
-              <h2 className="text-lg sm:text-xl font-semibold mb-2">{activeTool.name}</h2>
-              <p className="text-xs sm:text-sm text-gray-100/90 leading-snug">
+              <h2 className="text-base sm:text-lg md:text-xl font-bold mb-2 text-white drop-shadow-lg" style={{
+                textShadow: '0 2px 4px rgba(0,0,0,0.9), 0 0 15px rgba(255,255,255,0.6), 0 0 25px rgba(255,255,255,0.3)'
+              }}>{activeTool.name}</h2>
+              <p className="text-xs sm:text-sm md:text-base text-white font-light leading-relaxed px-2" style={{
+                textShadow: '0 1px 3px rgba(0,0,0,0.9), 0 0 10px rgba(255,255,255,0.3)'
+              }}>
                 {activeTool.description}
               </p>
             </motion.div>
           </AnimatePresence>
         </div>
+        {/* ============ Transition Animation ============ */}
+        {transitioning && transitionData && (
+          <TransitionPlanet
+            from={transitionData.from}
+            to={transitionData.to}
+            tool={transitionData.tool}
+            duration={1200}
+          />
+        )}
+        
         {/* ============ Orbiting Icons ============ */}
-        {/* Moved center position from top-1/2 to top-[55%] to push it down */}
-        <StaticIconsOrbit tools={tools} activeIndex={activeIndex} onIconClick={handleIconClick} />
+        {/* z-[85] - Below center but above AI tools */}
+        <StaticIconsOrbit 
+          tools={tools} 
+          activeIndex={activeIndex} 
+          onIconClick={handleIconClick} 
+          getResponsiveRadius={getResponsiveRadius}
+          transitioning={transitioning}
+          transitionData={transitionData}
+        />
+        
         {/* ============ Outer AI Tools Orbit ============ */}
-        {/* Moved center position from top-1/2 to top-[55%] to push it down */}
-        <AIToolsOrbit />
+        {/* z-[90] - Below inner orbit but visible */}
+        <AIToolsOrbit 
+          activeIndex={activeIndex} 
+          onIconClick={handleAIToolClick} 
+          getResponsiveRadius={getAIResponsiveRadius} 
+        />
       </div>
     </LayoutGroup>
+  )
+}
+
+/**
+ * Transition component for "planet being sucked into black hole" effect
+ */
+function TransitionPlanet({ 
+  from, 
+  to, 
+  tool, 
+  duration 
+}: { 
+  from: { x: number; y: number }
+  to: { x: number; y: number }
+  tool: any
+  duration: number 
+}) {
+  return (
+    <motion.div
+      className="absolute z-[105] top-[50%] sm:top-[55%] md:top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+      initial={{
+        x: from.x,
+        y: from.y,
+        scale: 0.8,
+        opacity: 1,
+      }}
+      animate={{
+        x: [from.x, from.x * 0.7, from.x * 0.4, from.x * 0.1, 0, 0],
+        y: [from.y, from.y * 0.7, from.y * 0.4, from.y * 0.1, 0, 0],
+        scale: [0.8, 0.6, 0.4, 0.2, 1.2, 1],
+        opacity: [1, 0.9, 0.7, 0.3, 0.8, 1],
+      }}
+      transition={{
+        duration: duration / 1000,
+        ease: [0.25, 0.8, 0.25, 1], // Custom easing for gravitational pull feel
+        times: [0, 0.2, 0.4, 0.6, 0.8, 1],
+      }}
+      style={{
+        filter: 'blur(0px)',
+      }}
+    >
+      {/* White trailing light effect */}
+      <motion.div
+        className="absolute inset-0"
+        animate={{
+          background: [
+            'radial-gradient(ellipse 80px 40px, rgba(255,255,255,0) 0%, transparent 100%)',
+            'radial-gradient(ellipse 120px 60px, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 50%, transparent 100%)',
+            'radial-gradient(ellipse 160px 80px, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.2) 40%, transparent 100%)',
+            'radial-gradient(ellipse 200px 100px, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.3) 30%, transparent 100%)',
+            'radial-gradient(ellipse 100px 50px, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 50%, transparent 100%)',
+            'radial-gradient(ellipse 40px 20px, rgba(255,255,255,0) 0%, transparent 100%)'
+          ],
+          filter: [
+            'blur(2px)',
+            'blur(4px)',
+            'blur(6px)',
+            'blur(8px)',
+            'blur(4px)',
+            'blur(1px)'
+          ]
+        }}
+        transition={{
+          duration: duration / 1000,
+          times: [0, 0.2, 0.4, 0.6, 0.8, 1],
+        }}
+      />
+
+      {/* Motion blur trail effect during transition */}
+      <motion.div
+        className="relative"
+        animate={{
+          filter: [
+            'blur(0px) brightness(1) drop-shadow(0 0 5px rgba(255,255,255,0.3))',
+            'blur(2px) brightness(1.3) drop-shadow(0 0 15px rgba(255,255,255,0.6))', 
+            'blur(4px) brightness(1.6) drop-shadow(0 0 25px rgba(255,255,255,0.8))',
+            'blur(6px) brightness(2.2) drop-shadow(0 0 35px rgba(255,255,255,1))',
+            'blur(2px) brightness(1.4) drop-shadow(0 0 20px rgba(255,255,255,0.7))',
+            'blur(0px) brightness(1) drop-shadow(0 0 5px rgba(255,255,255,0.3))'
+          ]
+        }}
+        transition={{
+          duration: duration / 1000,
+          times: [0, 0.2, 0.4, 0.6, 0.8, 1],
+        }}
+      >
+        {/* Gravitational distortion effect */}
+        <motion.div
+          className="absolute inset-0 rounded-full"
+          animate={{
+            boxShadow: [
+              '0 0 5px rgba(255,255,255,0.3)',
+              '0 0 15px rgba(255,255,255,0.6)',
+              '0 0 25px rgba(255,255,255,0.9)',
+              '0 0 35px rgba(255,255,255,1)',
+              '0 0 20px rgba(255,255,255,0.8)',
+              '0 0 10px rgba(255,255,255,0.5)'
+            ],
+            background: [
+              'radial-gradient(circle, transparent 60%, rgba(255,255,255,0.1) 100%)',
+              'radial-gradient(circle, transparent 50%, rgba(255,255,255,0.2) 100%)',
+              'radial-gradient(circle, transparent 40%, rgba(255,255,255,0.3) 100%)',
+              'radial-gradient(circle, transparent 20%, rgba(255,255,255,0.5) 100%)',
+              'radial-gradient(circle, transparent 30%, rgba(255,255,255,0.3) 100%)',
+              'radial-gradient(circle, transparent 60%, rgba(255,255,255,0.1) 100%)'
+            ]
+          }}
+          transition={{
+            duration: duration / 1000,
+            times: [0, 0.2, 0.4, 0.6, 0.8, 1],
+          }}
+        />
+
+        {/* The actual tool icon */}
+        <motion.div
+          className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-gray-800 shadow border border-gray-500 flex items-center justify-center relative overflow-hidden"
+          animate={{
+            rotateY: [0, 180, 360, 540, 720],
+            rotateX: [0, 45, 90, 45, 0],
+          }}
+          transition={{
+            duration: duration / 1000,
+            ease: "easeInOut",
+          }}
+        >
+          <div className="relative w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8">
+            <Image
+              src={tool.icon || '/placeholder.svg'}
+              alt={tool.name}
+              fill
+              className={`object-contain ${tool.name === 'Laravel' ? 'brightness-150 saturate-150' : ''}`}
+              style={tool.name === 'Laravel' ? {
+                filter: 'brightness(1.5) saturate(1.5) hue-rotate(300deg) contrast(1.2)'
+              } : undefined}
+            />
+          </div>
+        </motion.div>
+
+        {/* Flash of light when reaching destination */}
+        <motion.div
+          className="absolute inset-0 rounded-full pointer-events-none"
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{
+            opacity: [0, 0, 0, 0, 0, 1, 0.8, 0.6, 0.3, 0],
+            scale: [0.5, 0.5, 0.5, 0.5, 0.5, 2, 3, 4, 5, 6],
+            background: [
+              'radial-gradient(circle, transparent 0%, transparent 100%)',
+              'radial-gradient(circle, transparent 0%, transparent 100%)',
+              'radial-gradient(circle, transparent 0%, transparent 100%)',
+              'radial-gradient(circle, transparent 0%, transparent 100%)',
+              'radial-gradient(circle, transparent 0%, transparent 100%)',
+              'radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.3) 30%, transparent 60%)',
+              'radial-gradient(circle, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.2) 40%, transparent 70%)',
+              'radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 50%, transparent 80%)',
+              'radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 60%, transparent 90%)',
+              'radial-gradient(circle, transparent 0%, transparent 100%)'
+            ]
+          }}
+          transition={{
+            duration: duration / 1000,
+            times: [0, 0.1, 0.2, 0.3, 0.75, 0.8, 0.85, 0.9, 0.95, 1],
+            ease: "easeOut"
+          }}
+        />
+      </motion.div>
+    </motion.div>
   )
 }
 
@@ -361,21 +712,34 @@ function StaticIconsOrbit({
   tools,
   activeIndex,
   onIconClick,
+  getResponsiveRadius,
+  transitioning,
+  transitionData
 }: {
   tools: typeof tools
   activeIndex: number
   onIconClick: (index: number) => void
+  getResponsiveRadius: () => number
+  transitioning: boolean
+  transitionData: {
+    from: { x: number; y: number }
+    to: { x: number; y: number }
+    tool: any
+  } | null
 }) {
-  const radius = 230
-
   return (
-    <div className="absolute z-[90] top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2">
+    <div className="absolute z-[85] top-[50%] sm:top-[55%] md:top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2">
       {tools.map((tool, i) => {
         if (i === activeIndex) return null
+        
+        // Hide the orbiting circle if it's currently transitioning
+        if (transitioning && transitionData?.tool.name === tool.name) return null
+        
         const angle = (i * 360) / tools.length
         const radian = (angle * Math.PI) / 180
 
         // Calculate position using trigonometry for precise placement
+        const radius = getResponsiveRadius()
         const x = Math.cos(radian) * radius
         const y = Math.sin(radian) * radius
 
@@ -392,8 +756,9 @@ function StaticIconsOrbit({
             <motion.div
               layoutId={`icon-${tool.name}`}
               onClick={() => onIconClick(i)}
-              className="w-16 h-16 rounded-full bg-gray-800 shadow border border-gray-500 flex items-center justify-center"
+              className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-gray-800 shadow border border-gray-500 flex items-center justify-center cursor-pointer"
               whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
               transition={{
                 type: 'spring',
                 stiffness: 300,
@@ -401,12 +766,15 @@ function StaticIconsOrbit({
                 layout: { duration: 0.6 },
               }}
             >
-              <div className="relative w-8 h-8">
+              <div className="relative w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8">
                 <Image
                   src={tool.icon || '/placeholder.svg'}
                   alt={tool.name}
                   fill
-                  className="object-contain"
+                  className={`object-contain ${tool.name === 'Laravel' ? 'brightness-150 saturate-150' : ''}`}
+                  style={tool.name === 'Laravel' ? {
+                    filter: 'brightness(1.5) saturate(1.5) hue-rotate(300deg) contrast(1.2)'
+                  } : undefined}
                 />
               </div>
             </motion.div>
@@ -421,47 +789,65 @@ function StaticIconsOrbit({
  * AI Tools in an outer orbit
  * Slower rotation, larger radius, with labels that move with their icons
  */
-function AIToolsOrbit() {
-  // Larger radius for the outer orbit
-  const radius = 380 // Increased from 230 for the inner orbit
+function AIToolsOrbit({ 
+  activeIndex, 
+  onIconClick, 
+  getResponsiveRadius 
+}: { 
+  activeIndex: number
+  onIconClick: (index: number) => void
+  getResponsiveRadius: () => number
+}) {
   const [rotation, setRotation] = useState(0)
+  const [mounted, setMounted] = useState(false)
   const orbitRef = useRef<HTMLDivElement>(null)
 
-  // Use useEffect to animate the rotation with a fixed time step
+  // Handle mounting for hydration safety  
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  // Use useEffect to animate the rotation with motion blur
   useEffect(() => {
     let lastTime = performance.now()
-    const rotationSpeed = 0.005 // degrees per millisecond (slower than inner orbit)
+    const rotationSpeed = 0.008 // slightly faster for more visible trail effect
 
     const animate = (time: number) => {
       const deltaTime = time - lastTime
       lastTime = time
 
-      // Use a fixed rotation increment for stability
       setRotation((prev) => (prev + rotationSpeed * deltaTime) % 360)
       requestAnimationFrame(animate)
     }
 
     const animationFrame = requestAnimationFrame(animate)
     return () => cancelAnimationFrame(animationFrame)
-  }, [])
+  }, [mounted])
+
+  // Don't render until mounted to prevent hydration issues
+  if (!mounted) {
+    return null
+  }
 
   return (
     <div
       ref={orbitRef}
-      className="absolute z-[80] top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2"
+      className="absolute z-[90] top-[50%] sm:top-[55%] md:top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2"
       style={{
         width: 0,
         height: 0,
         transform: `rotate(${rotation}deg)`,
-        willChange: 'transform', // Optimize for animation performance
+        willChange: 'transform',
+        filter: 'blur(0.2px)', // Add subtle motion blur for trail effect
       }}
     >
       {aiTools.map((tool, i) => {
         const angle = (i * 360) / aiTools.length
+        const radius = getResponsiveRadius()
         return (
           <div
             className="absolute"
-            key={tool.name} // Added key for consistent rendering
+            key={tool.name}
             style={{
               top: 0,
               left: 0,
@@ -479,30 +865,35 @@ function AIToolsOrbit() {
                 height: 0,
               }}
             >
-              {/* Main icon container */}
+              {/* Main icon container with enhanced trail effect - now clickable */}
               <motion.div
-                className="absolute w-12 h-12 -ml-6 -mt-6 rounded-full bg-gray-900/80 backdrop-blur-sm shadow border border-[#4CD787]/30 flex items-center justify-center"
+                className="absolute w-10 h-10 sm:w-12 sm:h-12 -ml-5 -mt-5 sm:-ml-6 sm:-mt-6 rounded-full bg-gray-900/80 backdrop-blur-sm shadow border border-[#4CD787]/30 flex items-center justify-center cursor-pointer"
                 whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => onIconClick(i)}
+                style={{
+                  filter: 'drop-shadow(0 0 4px rgba(76, 215, 135, 0.3))', // Add subtle trail glow
+                }}
               >
-                {/* Glowing effect - enhanced for tablet visibility */}
+                {/* Enhanced glowing trail effect */}
                 <motion.div
                   className="absolute inset-0 rounded-full"
                   animate={{
                     boxShadow: [
-                      '0 0 5px rgba(76, 215, 135, 0.4)',
-                      '0 0 15px rgba(76, 215, 135, 0.6)',
-                      '0 0 5px rgba(76, 215, 135, 0.4)',
+                      '0 0 8px rgba(76, 215, 135, 0.4), 0 0 2px rgba(76, 215, 135, 0.6)',
+                      '0 0 20px rgba(76, 215, 135, 0.6), 0 0 6px rgba(76, 215, 135, 0.8)',
+                      '0 0 8px rgba(76, 215, 135, 0.4), 0 0 2px rgba(76, 215, 135, 0.6)',
                     ],
                   }}
                   transition={{
-                    duration: 3,
+                    duration: 2.5,
                     repeat: Number.POSITIVE_INFINITY,
                     repeatType: 'reverse',
                   }}
                 />
 
                 {/* Icon */}
-                <div className="relative w-7 h-7">
+                <div className="relative w-6 h-6 sm:w-7 sm:h-7">
                   <Image
                     src={tool.icon || '/placeholder.svg'}
                     alt={tool.name}
@@ -512,9 +903,9 @@ function AIToolsOrbit() {
                 </div>
               </motion.div>
 
-              {/* Tool name label - moves with the icon but stays below it */}
-              <div className="absolute whitespace-nowrap top-12 left-0 -translate-x-1/2 mt-1">
-                <span className="text-xs text-white/80 bg-black/70 px-2 py-0.5 rounded-full backdrop-blur-sm">
+              {/* Tool name label - closer to circles with reduced spacing */}
+              <div className="absolute whitespace-nowrap top-6 sm:top-7 left-0 -translate-x-1/2">
+                <span className="text-xs sm:text-sm text-white/80 bg-black/70 px-2 py-0.5 rounded-full backdrop-blur-sm border border-white/10">
                   {tool.name}
                 </span>
               </div>

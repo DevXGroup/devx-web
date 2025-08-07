@@ -5,6 +5,20 @@ import { useRef, useEffect, useState, useMemo } from "react"
 import { Rocket, User, Layers, Search, Flag, ArrowRight } from "lucide-react"
 import Link from "next/link"
 import InfinityLogo from "./InfinityLogo"
+import RotatingText from "./RotatingText"
+
+const subheaders = [
+  'AI-Powered Solutions',
+  'Software Engineering',
+  'AI Integration',
+  'Workflow Automation',
+  'Cloud Solutions',
+  'DevOps & Infrastructure',
+  'Custom Software Solutions',
+  'Legacy System Modernization',
+  'Cross-Platform Development',
+  'Stunning UI/UX Design',
+]
 
 // Enhanced animation variants for better performance
 const containerVariants = {
@@ -219,7 +233,7 @@ export default function Features() {
 
         {/* Cards Section */}
         <motion.div 
-          className="grid md:grid-cols-2 gap-6 md:gap-8 mb-24 md:mb-28 max-w-5xl mx-auto"
+          className="grid md:grid-cols-2 gap-6 md:gap-8 mb-16 md:mb-20 max-w-5xl mx-auto"
           variants={containerVariants}
         >
           <Card
@@ -233,6 +247,36 @@ export default function Features() {
             description="We're your plug-and-play solution — no onboarding hassle"
           />
         </motion.div>
+
+        {/* Creative Rotating Text Section */}
+        <div className="text-center my-20 md:my-24">
+          <motion.div
+            variants={cardVariants}
+            className="h-12 sm:h-16 flex items-center justify-center"
+          >
+            <span className="text-2xl sm:text-4xl md:text-5xl font-mono font-black text-black" style={{
+              marginRight: '5px'
+            }}>
+              Creative
+            </span>
+            <RotatingText
+              texts={subheaders}
+              rotationInterval={shouldReduceMotion ? 2000 : 2500}
+              transition={{ type: 'tween', ease: 'easeInOut', duration: 0.2 }}
+              initial={{ y: '150%', opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: '-150%', opacity: 0 }}
+              splitBy="characters"
+              staggerDuration={0.02}
+              staggerFrom="last"
+              mainClassName="px-2 py-1 bg-black text-white rounded-lg font-bold text-lg sm:text-2xl md:text-3xl font-mono overflow-hidden shadow-inner"
+              splitLevelClassName="overflow-hidden"
+              elementLevelClassName="inline-block drop-shadow-sm"
+              loop={true}
+              auto={true}
+            />
+          </motion.div>
+        </div>
 
         {/* Clean Step Animation - Lamp Effect */}
         <div className="relative mb-24 md:mb-28 max-w-4xl mx-auto">
