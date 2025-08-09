@@ -24,296 +24,165 @@ export default function WavySeparator({ color = "#9d4edd", height = 200, opacity
     return <div style={{ height: `${safeHeight}px` }} className="w-full bg-black" />
   }
   
-  // Define additional colors for the waves
-  const neonGreen = "#39FF14"
+  // Define smoother wave paths with more fluid curves
+  const createSmoothWavePath = (offset: number, amplitude: number, frequency: number) => {
+    const points = []
+    const width = 1440
+    const steps = 100
+    
+    for (let i = 0; i <= steps; i++) {
+      const x = (i / steps) * width
+      const baseY = safeHeight * 0.6
+      const wave1 = Math.sin((x / width) * frequency * Math.PI + offset) * amplitude
+      const wave2 = Math.sin((x / width) * frequency * 2 * Math.PI + offset * 1.5) * (amplitude * 0.3)
+      const y = baseY + wave1 + wave2
+      points.push([x, Math.max(y, safeHeight * 0.3)])
+    }
+    
+    let path = `M0,${safeHeight}L`
+    points.forEach(([x, y], i) => {
+      if (i === 0) {
+        path += `${x},${y}`
+      } else {
+        const prevPoint = points[i - 1]
+        const controlX1 = prevPoint[0] + (x - prevPoint[0]) * 0.25
+        const controlY1 = prevPoint[1]
+        const controlX2 = prevPoint[0] + (x - prevPoint[0]) * 0.75  
+        const controlY2 = y
+        path += ` C${controlX1},${controlY1} ${controlX2},${controlY2} ${x},${y}`
+      }
+    })
+    path += ` L${width},${safeHeight} L0,${safeHeight}Z`
+    return path
+  }
 
   return (
     <div
       className="relative w-full overflow-hidden"
       style={{
         height: `${safeHeight}px`,
-        // Adjust mask to hide top edges completely
-        maskImage: "linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)",
-        WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)",
+        maskImage: "linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%)",
+        WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%)",
       }}
     >
-      {/* Container with extra padding to prevent visible edges */}
       <div
         className="absolute inset-0 w-full h-full"
         style={{
-          padding: "20px 0",
-          marginTop: "-40px", // Increased negative margin to hide top edges
-          height: `${safeHeight + 80}px`, // Increased height to compensate for margin
+          height: `${safeHeight}px`,
         }}
       >
-        {/* Wave 1 - Bottom wave */}
-        <motion.div
-          className="absolute inset-0 w-full"
-          initial={{ x: "-15%" }}
+        {/* Primary Wave Layer - Smooth continuous animation */}
+        <motion.svg
+          viewBox="0 0 1440 320"
+          className="absolute w-full h-full"
+          preserveAspectRatio="none"
           animate={{
-            x: ["-15%", "15%", "-15%"],
-          }}
-          transition={{
-            duration: 15,
-            repeat: Number.POSITIVE_INFINITY,
-            repeatType: "loop",
-            ease: "easeInOut",
-            delay: 0, // Ensure no delay
-          }}
-        >
-          <svg
-            viewBox="0 0 1440 320"
-            className="absolute w-[130%] left-[-15%]"
-            preserveAspectRatio="none"
-            style={{
-              height: `${safeHeight + 80}px`,
-              transform: "rotate(180deg)",
-            }}
-          >
-            <motion.path
-              fill={color}
-              fillOpacity={safeOpacity * 0.9}
-              initial={{
-                d: "M0,160L48,165C96,170,192,180,288,174.7C384,169,480,149,576,154.7C672,160,768,192,864,197.3C960,203,1056,181,1152,165.3C1248,149,1344,139,1392,133.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z",
-              }}
-              animate={{
-                d: [
-                  "M0,160L48,165C96,170,192,180,288,174.7C384,169,480,149,576,154.7C672,160,768,192,864,197.3C960,203,1056,181,1152,165.3C1248,149,1344,139,1392,133.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z",
-                  "M0,192L48,186.7C96,181,192,171,288,165.3C384,160,480,160,576,165.3C672,171,768,181,864,186.7C960,192,1056,192,1152,181.3C1248,171,1344,149,1392,138.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z",
-                  "M0,160L48,165C96,170,192,180,288,174.7C384,169,480,149,576,154.7C672,160,768,192,864,197.3C960,203,1056,181,1152,165.3C1248,149,1344,139,1392,133.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z",
-                ],
-              }}
-              transition={{
-                duration: 15,
-                repeat: Number.POSITIVE_INFINITY,
-                repeatType: "loop",
-                ease: "easeInOut",
-                delay: 0, // Ensure no delay
-              }}
-            />
-          </svg>
-        </motion.div>
-
-        {/* Wave 2 - Middle wave */}
-        <motion.div
-          className="absolute inset-0 w-full"
-          initial={{ x: "10%" }}
-          animate={{
-            x: ["10%", "-10%", "10%"],
+            x: [0, -20, 0],
           }}
           transition={{
             duration: 12,
-            repeat: Number.POSITIVE_INFINITY,
+            repeat: Infinity,
+            ease: "linear",
             repeatType: "loop",
-            ease: "easeInOut",
-            delay: 0,
           }}
         >
-          <svg
-            viewBox="0 0 1440 320"
-            className="absolute w-[130%] left-[-15%]"
-            preserveAspectRatio="none"
-            style={{
-              height: `${safeHeight + 80}px`,
-              transform: "rotate(180deg)",
+          <motion.path
+            fill={color}
+            fillOpacity={safeOpacity * 0.8}
+            animate={{
+              d: [
+                `M0,${safeHeight}L0,${safeHeight * 0.6}C240,${safeHeight * 0.5},480,${safeHeight * 0.7},720,${safeHeight * 0.55}C960,${safeHeight * 0.4},1200,${safeHeight * 0.65},1440,${safeHeight * 0.5}L1440,${safeHeight}Z`,
+                `M0,${safeHeight}L0,${safeHeight * 0.7}C240,${safeHeight * 0.6},480,${safeHeight * 0.4},720,${safeHeight * 0.65}C960,${safeHeight * 0.8},1200,${safeHeight * 0.45},1440,${safeHeight * 0.6}L1440,${safeHeight}Z`,
+                `M0,${safeHeight}L0,${safeHeight * 0.55}C240,${safeHeight * 0.75},480,${safeHeight * 0.5},720,${safeHeight * 0.7}C960,${safeHeight * 0.35},1200,${safeHeight * 0.6},1440,${safeHeight * 0.45}L1440,${safeHeight}Z`,
+                `M0,${safeHeight}L0,${safeHeight * 0.6}C240,${safeHeight * 0.5},480,${safeHeight * 0.7},720,${safeHeight * 0.55}C960,${safeHeight * 0.4},1200,${safeHeight * 0.65},1440,${safeHeight * 0.5}L1440,${safeHeight}Z`,
+              ],
             }}
-          >
-            <motion.path
-              fill={color}
-              fillOpacity={safeOpacity * 0.7}
-              initial={{
-                d: "M0,192L48,186.7C96,181,192,171,288,165.3C384,160,480,160,576,165.3C672,171,768,181,864,186.7C960,192,1056,192,1152,181.3C1248,171,1344,149,1392,138.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z",
-              }}
-              animate={{
-                d: [
-                  "M0,192L48,186.7C96,181,192,171,288,165.3C384,160,480,160,576,165.3C672,171,768,181,864,186.7C960,192,1056,192,1152,181.3C1248,171,1344,149,1392,138.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z",
-                  "M0,160L48,165C96,170,192,180,288,174.7C384,169,480,149,576,154.7C672,160,768,192,864,197.3C960,203,1056,181,1152,165.3C1248,149,1344,139,1392,133.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z",
-                  "M0,192L48,186.7C96,181,192,171,288,165.3C384,160,480,160,576,165.3C672,171,768,181,864,186.7C960,192,1056,192,1152,181.3C1248,171,1344,149,1392,138.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z",
-                ],
-              }}
-              transition={{
-                duration: 12,
-                repeat: Number.POSITIVE_INFINITY,
-                repeatType: "loop",
-                ease: "easeInOut",
-                delay: 0,
-              }}
-            />
-          </svg>
-        </motion.div>
-
-        {/* Wave 3 - Neon green accent */}
-        <motion.div
-          className="absolute inset-0 w-full"
-          initial={{ x: "-12%" }}
-          animate={{
-            x: ["-12%", "12%", "-12%"],
-          }}
-          transition={{
-            duration: 14,
-            repeat: Number.POSITIVE_INFINITY,
-            repeatType: "loop",
-            ease: "easeInOut",
-            delay: 0,
-          }}
-        >
-          <svg
-            viewBox="0 0 1440 320"
-            className="absolute w-[130%] left-[-15%]"
-            preserveAspectRatio="none"
-            style={{
-              height: `${safeHeight + 80}px`,
-              transform: "rotate(180deg)",
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: "easeInOut",
+              repeatType: "loop",
             }}
-          >
-            <motion.path
-              fill={neonGreen}
-              fillOpacity={0.25}
-              initial={{
-                d: "M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,202.7C672,203,768,181,864,170.7C960,160,1056,160,1152,165.3C1248,171,1344,181,1392,186.7L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z",
-              }}
-              animate={{
-                d: [
-                  "M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,202.7C672,203,768,181,864,170.7C960,160,1056,160,1152,165.3C1248,171,1344,181,1392,186.7L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z",
-                  "M0,192L48,197.3C96,203,192,213,288,208C384,203,480,181,576,186.7C672,224,768,229.3C960,235,1056,213,1152,197.3C1248,181,1344,171,1392,165.3L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z",
-                  "M0,192L48,197.3C96,203,192,213,288,208C384,203,480,181,576,186.7C672,192,768,224,864,229.3C960,235,1056,213,1152,197.3C1248,181,1344,171,1392,165.3L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z",
-                  "M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,202.7C672,203,768,181,864,170.7C960,160,1056,160,1152,165.3C1248,171,1344,181,1392,186.7L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z",
-                ],
-              }}
-              transition={{
-                duration: 14,
-                repeat: Number.POSITIVE_INFINITY,
-                repeatType: "loop",
-                ease: "easeInOut",
-                delay: 0,
-              }}
-            />
-          </svg>
-        </motion.div>
+          />
+        </motion.svg>
 
-        {/* Additional neon green wave */}
-        <motion.div
-          className="absolute inset-0 w-full"
-          initial={{ x: "8%" }}
+        {/* Secondary Wave Layer - Offset animation for depth */}
+        <motion.svg
+          viewBox="0 0 1440 320"
+          className="absolute w-full h-full"
+          preserveAspectRatio="none"
           animate={{
-            x: ["8%", "-8%", "8%"],
+            x: [20, 0, 20],
           }}
           transition={{
             duration: 10,
-            repeat: Number.POSITIVE_INFINITY,
+            repeat: Infinity,
+            ease: "linear",
             repeatType: "loop",
-            ease: "easeInOut",
-            delay: 0,
           }}
         >
-          <svg
-            viewBox="0 0 1440 320"
-            className="absolute w-[130%] left-[-15%]"
-            preserveAspectRatio="none"
-            style={{
-              height: `${safeHeight + 80}px`,
-              transform: "rotate(180deg)",
+          <motion.path
+            fill={color}
+            fillOpacity={safeOpacity * 0.6}
+            animate={{
+              d: [
+                `M0,${safeHeight}L0,${safeHeight * 0.75}C240,${safeHeight * 0.6},480,${safeHeight * 0.8},720,${safeHeight * 0.65}C960,${safeHeight * 0.5},1200,${safeHeight * 0.75},1440,${safeHeight * 0.6}L1440,${safeHeight}Z`,
+                `M0,${safeHeight}L0,${safeHeight * 0.6}C240,${safeHeight * 0.75},480,${safeHeight * 0.55},720,${safeHeight * 0.8}C960,${safeHeight * 0.65},1200,${safeHeight * 0.5},1440,${safeHeight * 0.7}L1440,${safeHeight}Z`,
+                `M0,${safeHeight}L0,${safeHeight * 0.8}C240,${safeHeight * 0.55},480,${safeHeight * 0.7},720,${safeHeight * 0.5}C960,${safeHeight * 0.75},1200,${safeHeight * 0.6},1440,${safeHeight * 0.55}L1440,${safeHeight}Z`,
+                `M0,${safeHeight}L0,${safeHeight * 0.75}C240,${safeHeight * 0.6},480,${safeHeight * 0.8},720,${safeHeight * 0.65}C960,${safeHeight * 0.5},1200,${safeHeight * 0.75},1440,${safeHeight * 0.6}L1440,${safeHeight}Z`,
+              ],
             }}
-          >
-            <motion.path
-              fill={neonGreen}
-              fillOpacity={0.2}
-              initial={{
-                d: "M0,256L48,240C96,224,192,192,288,192C384,192,480,224,576,218.7C672,213,768,171,864,165.3C960,160,1056,192,1152,208C1248,224,1344,224,1392,224L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z",
-              }}
-              animate={{
-                d: [
-                  "M0,256L48,240C96,224,192,192,288,192C384,192,480,224,576,218.7C672,213,768,171,864,165.3C960,160,1056,192,1152,208C1248,224,1344,224,1392,224L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z",
-                  "M0,224L48,229.3C96,235,192,245,288,240C384,235,480,213,576,218.7C672,224,768,256,864,261.3C960,267,1056,245,1152,229.3C1248,213,1344,203,1392,197.3L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z",
-                  "M0,256L48,240C96,224,192,192,288,192C384,192,480,224,576,218.7C672,213,768,171,864,165.3C960,160,1056,192,1152,208C1248,224,1344,224,1392,224L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z",
-                ],
-              }}
-              transition={{
-                duration: 10,
-                repeat: Number.POSITIVE_INFINITY,
-                repeatType: "loop",
-                ease: "easeInOut",
-                delay: 0,
-              }}
-            />
-          </svg>
-        </motion.div>
+            transition={{
+              duration: 6,
+              repeat: Infinity,
+              ease: "easeInOut",
+              repeatType: "loop",
+            }}
+          />
+        </motion.svg>
 
-        {/* Wave 4 - Top wave */}
-        <motion.div
-          className="absolute inset-0 w-full"
-          initial={{ x: "7%" }}
+        {/* Accent Wave Layer - Neon green with subtle glow */}
+        <motion.svg
+          viewBox="0 0 1440 320"
+          className="absolute w-full h-full"
+          preserveAspectRatio="none"
           animate={{
-            x: ["7%", "-7%", "7%"],
+            x: [-10, 10, -10],
           }}
           transition={{
-            duration: 8,
-            repeat: Number.POSITIVE_INFINITY,
+            duration: 14,
+            repeat: Infinity,
+            ease: "linear",
             repeatType: "loop",
-            ease: "easeInOut",
-            delay: 0,
           }}
         >
-          <svg
-            viewBox="0 0 1440 320"
-            className="absolute w-[130%] left-[-15%]"
-            preserveAspectRatio="none"
-            style={{
-              height: `${safeHeight + 80}px`,
-              transform: "rotate(180deg)",
+          <motion.path
+            fill="#39FF14"
+            fillOpacity={0.25}
+            filter="drop-shadow(0 0 8px rgba(57, 255, 20, 0.3))"
+            animate={{
+              d: [
+                `M0,${safeHeight}L0,${safeHeight * 0.8}C240,${safeHeight * 0.7},480,${safeHeight * 0.85},720,${safeHeight * 0.75}C960,${safeHeight * 0.9},1200,${safeHeight * 0.7},1440,${safeHeight * 0.8}L1440,${safeHeight}Z`,
+                `M0,${safeHeight}L0,${safeHeight * 0.7}C240,${safeHeight * 0.85},480,${safeHeight * 0.6},720,${safeHeight * 0.9}C960,${safeHeight * 0.75},1200,${safeHeight * 0.8},1440,${safeHeight * 0.65}L1440,${safeHeight}Z`,
+                `M0,${safeHeight}L0,${safeHeight * 0.85}C240,${safeHeight * 0.65},480,${safeHeight * 0.8},720,${safeHeight * 0.6}C960,${safeHeight * 0.85},1200,${safeHeight * 0.9},1440,${safeHeight * 0.75}L1440,${safeHeight}Z`,
+                `M0,${safeHeight}L0,${safeHeight * 0.8}C240,${safeHeight * 0.7},480,${safeHeight * 0.85},720,${safeHeight * 0.75}C960,${safeHeight * 0.9},1200,${safeHeight * 0.7},1440,${safeHeight * 0.8}L1440,${safeHeight}Z`,
+              ],
             }}
-          >
-            <motion.path
-              fill={color}
-              fillOpacity={safeOpacity * 0.5}
-              initial={{
-                d: "M0,256L48,240C96,224,192,192,288,192C384,192,480,224,576,218.7C672,213,768,171,864,165.3C960,160,1056,192,1152,208C1248,224,1344,224,1392,224L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z",
-              }}
-              animate={{
-                d: [
-                  "M0,256L48,240C96,224,192,192,288,192C384,192,480,224,576,218.7C672,213,768,171,864,165.3C960,160,1056,192,1152,208C1248,224,1344,224,1392,224L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z",
-                  "M0,224L48,229.3C96,235,192,245,288,240C384,235,480,213,576,218.7C672,224,768,256,864,261.3C960,267,1056,245,1152,229.3C1248,213,1344,203,1392,197.3L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z",
-                  "M0,256L48,240C96,224,192,192,288,192C384,192,480,224,576,218.7C672,213,768,171,864,165.3C960,160,1056,192,1152,208C1248,224,1344,224,1392,224L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z",
-                ],
-              }}
-              transition={{
-                duration: 8,
-                repeat: Number.POSITIVE_INFINITY,
-                repeatType: "loop",
-                ease: "easeInOut",
-                delay: 0,
-              }}
-            />
-          </svg>
-        </motion.div>
+            transition={{
+              duration: 9,
+              repeat: Infinity,
+              ease: "easeInOut",
+              repeatType: "loop",
+            }}
+          />
+        </motion.svg>
 
-        {/* Enhanced shadow effects */}
+        {/* Subtle glow effect */}
         <div
-          className="absolute top-0 left-0 w-full"
+          className="absolute top-0 left-0 w-full h-full"
           style={{
-            height: "450px",
-            boxShadow: `0 -15px 30px ${color}`,
-            opacity: safeOpacity * 0.7,
-          }}
-        />
-
-        {/* Enhanced green glow */}
-        <div
-          className="absolute top-0 left-0 w-full"
-          style={{
-            height: "35px",
-            boxShadow: `0 -8px 20px ${neonGreen}`,
-            opacity: 0.18,
-          }}
-        />
-
-        {/* Additional green glow */}
-        <div
-          className="absolute top-0 left-0 w-full"
-          style={{
-            height: "25px",
-            boxShadow: `0 -5px 15px ${neonGreen}`,
-            opacity: 0.12,
+            background: `linear-gradient(to bottom, transparent 60%, ${color}15 80%, ${color}25 100%)`,
+            filter: `blur(2px)`,
           }}
         />
       </div>

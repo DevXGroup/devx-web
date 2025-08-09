@@ -357,20 +357,19 @@ export default function AboutPage() {
           <div className="max-w-5xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <AnimatedSection>
-                <div className="h-16 sm:h-20 md:h-24 flex items-center justify-start w-full mb-8">
-                  <div className="w-full max-w-3xl">
+                <div className="flex items-center justify-center w-full mb-8">
+                  <div style={{position: 'relative', height: '120px', width: '800px', padding: '0 20px', marginRight: '30px'}}>
                     <TextPressure
-                      fontFamily="IBM Plex Mono"
-                      fontUrl="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap"
-                      text="An Elite Unit for Your Most Critical Projects"
-                      textColor="#CFB53B"
+                      text="An Elite Unit for Your Most Critical Projects  "
                       flex={true}
                       alpha={false}
-                      stroke={true}
+                      stroke={false}
                       width={true}
                       weight={true}
                       italic={false}
-                      minFontSize={24}
+                      textColor="#CFB53B"
+                      strokeColor="#FFFFFF"
+                      minFontSize={36}
                     />
                   </div>
                 </div>
@@ -512,19 +511,18 @@ export default function AboutPage() {
           {/* Header with TextTrail Animation */}
           <div className="text-center mb-20 relative z-10">
             <div className="relative inline-block w-full">
-              <div className="w-full h-48 md:h-56 lg:h-64 flex items-center justify-center relative z-10">
-                <div className="w-full max-w-7xl h-[300] relative z-10 mb-0 *:scale-100 scale-50 mx-0 px-0 font-mono">
+              <div className="flex items-center justify-center w-full">
+                <div style={{position: 'relative', height: '120px', width: '400px', padding: '0 20px', marginRight: '30px'}}>
                   <TextPressure
-                    fontFamily="IBM Plex Mono"
-                    fontUrl="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap"
-                    text="Our Story"
-                    textColor="#CFB53B"
+                    text="Our Story  "
                     flex={true}
                     alpha={false}
-                    stroke={true}
+                    stroke={false}
                     width={true}
                     weight={true}
                     italic={false}
+                    textColor="#CFB53B"
+                    strokeColor="#FFFFFF"
                     minFontSize={36}
                   />
                 </div>

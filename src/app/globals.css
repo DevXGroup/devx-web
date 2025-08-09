@@ -100,28 +100,11 @@
     font-family: var(--font-ibm-plex-sans);
   }
 
-  /* Ensure hero heading has extra-light font weight with enhanced visibility */
-  h1.font-extralight {
-    font-weight: 200;
+  /* Ensure hero heading has normal font weight with enhanced visibility */
+  h1.font-normal {
+    font-weight: 400;
     -webkit-font-smoothing: subpixel-antialiased;
     font-feature-settings: "kern", "liga", "clig", "calt";
-  }
-
-  /* Make sure IBM Plex Mono loads the lighter weights */
-  @font-face {
-    font-family: "IBM Plex Mono";
-    font-style: normal;
-    font-weight: 200;
-    font-display: swap;
-    src: url(https://fonts.gstatic.com/s/ibmplexmono/v19/-F6qfjptAgt5VM-kVkqdyU8n3uAL8ldPg-IUDNg.woff2) format("woff2");
-  }
-
-  @font-face {
-    font-family: "IBM Plex Mono";
-    font-style: normal;
-    font-weight: 300;
-    font-display: swap;
-    src: url(https://fonts.gstatic.com/s/ibmplexmono/v19/-F6qfjptAgt5VM-kVkqdyU8n3oQI8ldPg-IUDNg.woff2) format("woff2");
   }
 }
 
