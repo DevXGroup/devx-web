@@ -229,20 +229,19 @@ export default function ContactPage() {
             className="text-center max-w-4xl mx-auto"
           >
             <div className="flex flex-col items-center">
-              <div className="h-16 sm:h-20 md:h-24 flex items-center justify-center w-full mb-8">
-                <div className="w-full max-w-3xl">
+              <div className="flex items-center justify-center w-full mb-8">
+                <div style={{position: 'relative', height: '120px', width: '300px', padding: '0 20px', marginRight: '30px'}}>
                   <TextPressure
-                    fontFamily="IBM Plex Mono"
-                    fontUrl="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap"
-                    text="Mission Command"
-                    textColor="#4CD787"
+                    text="Contact  "
                     flex={true}
                     alpha={false}
-                    stroke={true}
+                    stroke={false}
                     width={true}
                     weight={true}
                     italic={false}
-                    minFontSize={28}
+                    textColor="#4CD787"
+                    strokeColor="#FFFFFF"
+                    minFontSize={36}
                   />
                 </div>
               </div>

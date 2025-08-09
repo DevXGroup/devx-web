@@ -363,20 +363,19 @@ export default function ServicesPage() {
               }}
               className="text-center max-w-4xl mx-auto title-margin pointer-events-none"
             >
-              <div className="h-16 sm:h-20 md:h-24 flex items-center justify-center w-full mb-8">
-                <div className="w-full max-w-2xl">
+              <div className="flex items-center justify-center w-full mb-8">
+                <div style={{position: 'relative', height: '120px', width: '320px', padding: '0 20px', marginRight: '30px'}}>
                   <TextPressure
-                    fontFamily="IBM Plex Mono"
-                    fontUrl="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap"
-                    text="Our Elite Services"
-                    textColor="#CFB53B"
+                    text="Services  "
                     flex={true}
                     alpha={false}
-                    stroke={true}
+                    stroke={false}
                     width={true}
                     weight={true}
                     italic={false}
-                    minFontSize={28}
+                    textColor="#CFB53B"
+                    strokeColor="#FFFFFF"
+                    minFontSize={36}
                   />
                 </div>
               </div>
@@ -511,7 +510,7 @@ export default function ServicesPage() {
               </ScrollVelocityText>
               <ScrollVelocityText
                 baseVelocity={-80}
-                className="text-3xl md:text-4xl lg:text-5xl xl:text-5xl font-extralight text-[#696869] leading-tight"
+                className="text-3xl md:text-4xl lg:text-5xl xl:text-5xl font-normal text-[#696869] leading-tight"
                 damping={30}
                 stiffness={600}
                 velocityMapping={{ input: [0, 1000], output: [0, 7] }}

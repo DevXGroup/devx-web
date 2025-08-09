@@ -113,7 +113,7 @@ export default function Hero() {
           <div className="mb-8 sm:mb-12">
             <motion.h1
               variants={itemVariants}
-              className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-6xl font-mono font-extralight tracking-tight text-white mb-4 sm:mb-6 leading-tight md:whitespace-nowrap text-glow-hero drop-shadow-[0_0_25px_rgba(255,255,255,0.8)] px-2 sm:px-0"
+              className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-6xl font-mono font-normal tracking-tight text-white mb-4 sm:mb-6 leading-tight md:whitespace-nowrap text-glow-hero drop-shadow-[0_0_25px_rgba(255,255,255,0.8)] px-2 sm:px-0"
             >
               Your Vision, <span style={{ color: '#ccff00' }}>Engineered.</span>
             </motion.h1>
