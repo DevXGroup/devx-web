@@ -88,20 +88,33 @@ const ConnectingLine = ({ currentStep, progress, totalSteps }) => {
 export default function SDLCProcess() {
   const [currentStep, setCurrentStep] = useState(0)
   const [progress, setProgress] = useState(0)
+  const [completedSteps, setCompletedSteps] = useState(new Set())
   const controls = useAnimation()
 
   useEffect(() => {
     const animateProcess = async () => {
       while (true) {
+        // Reset completed steps at start of cycle
+        setCompletedSteps(new Set())
+        
         for (let i = 0; i < sdlcSteps.length; i++) {
           setCurrentStep(i)
           for (let p = 0; p <= 1; p += 0.01) {
             setProgress(p)
             await new Promise((resolve) => setTimeout(resolve, 30))
           }
-          await new Promise((resolve) => setTimeout(resolve, 1000))
+          
+          // Mark step as completed when progress reaches 1
+          setCompletedSteps(prev => new Set([...prev, i]))
+          
+          // Special case for maintenance (last step) - hold green state longer
+          if (i === sdlcSteps.length - 1) {
+            await new Promise((resolve) => setTimeout(resolve, 2000)) // Hold green state for 2 seconds
+          } else {
+            await new Promise((resolve) => setTimeout(resolve, 1000))
+          }
         }
-        await new Promise((resolve) => setTimeout(resolve, 2000))
+        await new Promise((resolve) => setTimeout(resolve, 1000)) // 1 sec delay before restart
         setCurrentStep(0)
         setProgress(0)
       }
@@ -127,12 +140,12 @@ export default function SDLCProcess() {
               <AnimatedIcon
                 Icon={step.icon}
                 isActive={currentStep === index}
-                isComplete={currentStep > index}
+                isComplete={completedSteps.has(index)}
                 progress={currentStep === index ? progress : 0}
               />
               <p
                 className={`text-sm font-['IBM_Plex_Mono'] text-center mt-4 ${
-                  currentStep > index || (currentStep === sdlcSteps.length - 1 && index === sdlcSteps.length - 1)
+                  completedSteps.has(index)
                     ? "font-bold text-[#4CD787] drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]"
                     : "font-light text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]"
                 }`}

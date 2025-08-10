@@ -44,7 +44,14 @@ const StarBorder = <T extends React.ElementType = "button">({
           animationDuration: speed,
         }}
       ></div>
-      <div className="relative z-1 bg-gradient-to-b from-black to-gray-900 border border-gray-800 text-center text-[14px] py-[10px] px-[18px] rounded-[20px] transition-colors duration-300">
+      <div 
+        className="relative z-1 border border-gray-800 text-center text-[14px] py-[10px] px-[18px] rounded-[20px] transition-all duration-300"
+        style={{
+          background: `linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(15,15,15,0.95) 50%, rgba(0,0,0,0.9) 100%), radial-gradient(circle at center, ${color}25, transparent 60%)`,
+          backdropFilter: 'blur(2px)',
+          boxShadow: `inset 0 1px 0 rgba(255,255,255,0.1), 0 0 20px ${color}20`
+        }}
+      >
         {children}
       </div>
     </Component>

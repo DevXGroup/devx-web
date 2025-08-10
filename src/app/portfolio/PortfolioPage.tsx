@@ -48,6 +48,9 @@ import Squares from '@/components/Squares'
 import Waves from '@/components/Waves'
 import WavesNew from '@/components/WavesNew'
 import GridAnimation from '@/components/GridAnimation'
+import EnhancedProjectCard from '@/components/portfolio/EnhancedProjectCard'
+import ProjectDetailModal from '@/components/portfolio/ProjectDetailModal'
+import { portfolioProjects, ProjectData } from '@/data/portfolioProjects'
 
 // Enhanced animation variants
 const fadeInUpVariants = {
@@ -329,7 +332,10 @@ const ServiceModal = ({ service, isOpen, onClose, clickPosition }) => {
   )
 }
 
-const projects = [
+// Use the enhanced project data from our data file
+const projects = portfolioProjects
+
+const oldProjects = [
   {
     title: 'E-commerce Platform',
     description:
@@ -682,6 +688,8 @@ export default function PortfolioPage() {
   const [selectedService, setSelectedService] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [clickPosition, setClickPosition] = useState({ x: 0, y: 0 })
+  const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null)
+  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
 
   // Memoize animation timing based on reduced motion preference
   const animationTiming = useMemo(
@@ -712,6 +720,17 @@ export default function PortfolioPage() {
     setTimeout(() => {
       setClickPosition({ x: 0, y: 0 })
     }, 100)
+  }
+
+  // Handle project detail modal
+  const handleViewProjectDetails = (project: ProjectData) => {
+    setSelectedProject(project)
+    setIsProjectModalOpen(true)
+  }
+
+  const handleCloseProjectModal = () => {
+    setIsProjectModalOpen(false)
+    setTimeout(() => setSelectedProject(null), 300)
   }
 
   return (
@@ -1143,7 +1162,11 @@ export default function PortfolioPage() {
                   ease: [0.22, 1, 0.36, 1],
                 }}
               >
-                <ProjectCard project={project} index={index} />
+                <EnhancedProjectCard 
+                  project={project} 
+                  index={index} 
+                  onViewDetails={handleViewProjectDetails}
+                />
               </motion.div>
             ))}
           </motion.div>
@@ -1218,6 +1241,13 @@ export default function PortfolioPage() {
           clickPosition={clickPosition}
         />
       </section>
+
+      {/* Project Detail Modal */}
+      <ProjectDetailModal
+        project={selectedProject}
+        isOpen={isProjectModalOpen}
+        onClose={handleCloseProjectModal}
+      />
 
       {/* Remove Footer component at the bottom */}
       {/* Remove: <Footer /> */}

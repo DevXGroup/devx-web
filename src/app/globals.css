@@ -106,6 +106,25 @@
     -webkit-font-smoothing: subpixel-antialiased;
     font-feature-settings: "kern", "liga", "clig", "calt";
   }
+
+  /* Reduced hero title sizes (40% smaller) */
+  @screen lg {
+    .hero-title {
+      font-size: 3rem !important;
+    }
+  }
+  
+  @screen xl {
+    .hero-title {
+      font-size: 3.6rem !important;
+    }
+  }
+  
+  @screen 2xl {
+    .hero-title {
+      font-size: 4.2rem !important;
+    }
+  }
 }
 
 /* True Focus effect from reactbits.dev */

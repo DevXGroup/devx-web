@@ -108,12 +108,12 @@ export default function Hero() {
         initial="hidden"
         animate={controls}
       >
-        <div className="text-center mx-auto max-w-4xl">
+        <div className="text-center mx-auto max-w-full px-4">
           {/* Hero content wrapper - this div prevents movement on button hover */}
           <div className="mb-8 sm:mb-12">
             <motion.h1
               variants={itemVariants}
-              className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-6xl font-mono font-normal tracking-tight text-white mb-4 sm:mb-6 leading-tight md:whitespace-nowrap text-glow-hero drop-shadow-[0_0_25px_rgba(255,255,255,0.8)] px-2 sm:px-0"
+              className="hero-title text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-[8rem] xl:text-[10rem] 2xl:text-[12rem] font-mono font-normal tracking-tight text-white mb-4 sm:mb-6 leading-tight md:whitespace-nowrap text-glow-hero drop-shadow-[0_0_25px_rgba(255,255,255,0.8)] px-2 sm:px-0"
             >
               Your Vision, <span style={{ color: '#ccff00' }}>Engineered.</span>
             </motion.h1>
