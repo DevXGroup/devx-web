@@ -3,182 +3,110 @@
     {
       "name": "Joyful",
       "description": "Joyful is a Qatari confectionery store whose job is to sell flowers, snacks, chocolates and cakes.",
-      "detailed_description": "Joyful is a comprehensive e-commerce platform for a Qatari confectionery store specializing in flowers, snacks, chocolates, and cakes. The project involved creating a well-designed mobile application with advanced product customization features - a real challenge that was successfully addressed. The client needed more than a typical online store; they required sophisticated customization options for their products. We developed both mobile applications and an educational website that reflects an exquisite user experience. The project was built using Agile principles with iterative UX/UI design approval before development. The platform includes features for ordering, customization, delivery, and payment options. The app is available on both iOS and Android platforms and serves the Qatari market with same-day delivery options.",
       "banner_image": "/assets/images/projects/banners/joyful.webp",
       "preview_image": "/assets/images/projects/mocks/joyful.webp",
       "project_url": "/projects/all/joyful",
       "category": "E-commerce/Confectionery",
-      "full_banner_url": "https://tatbiqit.com/assets/images/projects/banners/joyful.webp",
-      "full_preview_url": "https://tatbiqit.com/assets/images/projects/mocks/joyful.webp",
-      "tech_stack": ["Mobile App Development", "E-commerce Platform", "Payment Integration", "Delivery System"],
-      "platforms": ["iOS", "Android", "Website"],
-      "key_features": ["Product Customization", "Same-day Delivery", "Payment Options", "Order Tracking", "Product Categories"],
-      "app_store_info": {
-        "developer": "NARBASH & PARTNERS GENERAL TRADING CO. WLL",
-        "app_name": "Joyful Boxes",
-        "description": "Qatari local shop specialized in flowers, cake, sweets, snacks"
-      }
+      "local_banner_image": "/images/portfolio/banners/joyful-banner.webp",
+      "local_preview_image": "/images/portfolio/previews/joyful-preview.webp",
+      "original_banner_url": "https://tatbiqit.com/assets/images/projects/banners/joyful.webp",
+      "original_preview_url": "https://tatbiqit.com/assets/images/projects/mocks/joyful.webp"
     },
     {
       "name": "Lazurd",
       "description": "The word 'Lazurd' is derived from the semi-precious stone called 'Lapis Lazuli'. This stone's beauty, and unique deep blue colour, distinguishes it from all other stones- including precious ones.",
-      "detailed_description": "Lazurd is a luxury brand inspired by the semi-precious stone 'Lapis Lazuli', known for its unique deep blue color that distinguishes it from all other stones, including precious ones. This Kuwaiti business specializes in home-cooked meals, cakes, and chocolates for all occasions. We were selected to design and develop both their website and mobile application. The project focused on creating an eye-catching UI that made Lazurd reach the top charts in Kuwait. The design philosophy centers around the stone's beauty and luxury, translating these qualities into a digital experience that reflects sophistication and premium quality. The platform serves customers looking for high-end culinary experiences and special occasion treats.",
       "banner_image": "/assets/images/projects/banners/lazurd.webp",
       "preview_image": "/assets/images/projects/mocks/lazurd.webp",
       "project_url": "/projects/all/lazurd",
-      "category": "Luxury/Food & Jewelry",
-      "full_banner_url": "https://tatbiqit.com/assets/images/projects/banners/lazurd.webp",
-      "full_preview_url": "https://tatbiqit.com/assets/images/projects/mocks/lazurd.webp",
-      "tech_stack": ["Mobile App Development", "Website Development", "UI/UX Design"],
-      "platforms": ["iOS", "Android", "Website"],
-      "key_features": ["Luxury Design", "Food Ordering", "Special Occasions", "Premium UI", "Kuwait Market Focus"],
-      "market_performance": "Top chart position in Kuwait",
-      "target_market": "Kuwait"
+      "category": "Luxury/Jewelry",
+      "local_banner_image": "/images/portfolio/banners/lazurd-banner.webp",
+      "local_preview_image": "/images/portfolio/previews/lazurd-preview.webp",
+      "original_banner_url": "https://tatbiqit.com/assets/images/projects/banners/lazurd.webp",
+      "original_preview_url": "https://tatbiqit.com/assets/images/projects/mocks/lazurd.webp"
     },
     {
       "name": "JoyJoy",
       "description": "Begin your journey of inspiration and daily affirmations, tailored just for you, with our mobile application JoyJoy.",
-      "detailed_description": "JoyJoy is a comprehensive daily motivation and affirmation mobile application designed to help users cultivate a positive mindset and improve their overall well-being. The app provides users with inspirational quotes, positive affirmations, and uplifting messages to help them start their day with a positive mindset. Key features include a wide selection of quote categories allowing users to choose content that resonates with them, easy navigation through daily content, the ability to save favorite quotes and affirmations, social media sharing capabilities, and daily reminder notifications to maintain a routine of positivity. The app aims to help users break free from negative thought cycles, rewire their brain, boost self-esteem, and empower themselves by affirming their dreams and ambitions. JoyJoy connects conscious and unconscious minds through simple yet powerful affirmations, making users more resilient when facing difficult circumstances. The app includes an AI companion feature for interactive chat, learning, and growth.",
       "banner_image": "/assets/images/projects/banners/joyjoy.webp",
       "preview_image": "/assets/images/projects/mocks/joyjoy.webp",
       "project_url": "/projects/all/joyjoy",
       "category": "Mobile App/Wellness",
-      "full_banner_url": "https://tatbiqit.com/assets/images/projects/banners/joyjoy.webp",
-      "full_preview_url": "https://tatbiqit.com/assets/images/projects/mocks/joyjoy.webp",
-      "tech_stack": ["Mobile App Development", "AI Integration", "Push Notifications", "Social Media Integration"],
-      "platforms": ["iOS", "Android"],
-      "key_features": ["Daily Affirmations", "Inspirational Quotes", "Category Selection", "Social Sharing", "Daily Reminders", "AI Companion", "Favorite Quotes", "Positive Mindset Building"],
-      "app_store_info": {
-        "developer": "DevX Group",
-        "available_languages": ["English", "Spanish"],
-        "free_app": true
-      },
-      "wellness_benefits": ["Increased self-awareness", "Negative thought pattern recognition", "Goal achievement focus", "Abundance mindset creation", "Opportunity recognition", "Resilience building"]
+      "local_banner_image": "/images/portfolio/banners/joyjoy-banner.webp",
+      "local_preview_image": "/images/portfolio/previews/joyjoy-preview.webp",
+      "original_banner_url": "https://tatbiqit.com/assets/images/projects/banners/joyjoy.webp",
+      "original_preview_url": "https://tatbiqit.com/assets/images/projects/mocks/joyjoy.webp"
     },
     {
       "name": "ChatFly",
       "description": "ChatFly combines powerful AI with a user-friendly interface. The simplicity and power of AI communication provide a pleasant user experience with features such as auto-response reading.",
-      "detailed_description": "ChatFly is a comprehensive AI-powered communication platform that combines advanced artificial intelligence with user-friendly design. The application serves as both a mobile app and a no-code AI platform, offering multiple functionalities including AI chatbot capabilities, automatic grammar corrections, text summaries at various reading levels, question and answer functionality, and even a recipe creator. Powered by GPT and DALL-E technologies, ChatFly enhances digital communication with features like auto-response reading, text classification, note summarization, and AI-generated art creation. The platform allows users to create and seamlessly integrate chatbots across various platforms including websites, Telegram, Slack, Microsoft Teams, and more. ChatFly assists businesses in creating, testing, launching, and managing AI chatbots for various use cases at scale. Users can add data from multiple sources, customize chatbot behavior, personalize appearance to match their brand, and deploy across multiple platforms via embeddable widgets or API. The app includes a convenient widget for on-the-go use, weekly updates with new models, and offers free credits for new users with additional weekly credits. ChatFly also features Friend Chat for in-app conversations, emoji generation based on text, and comprehensive API documentation for developers.",
       "banner_image": "/assets/images/projects/banners/chatfly.webp",
       "preview_image": "/assets/images/projects/mocks/chatfly.webp",
       "project_url": "/projects/all/chatfly",
       "category": "AI/Communication",
-      "full_banner_url": "https://tatbiqit.com/assets/images/projects/banners/chatfly.webp",
-      "full_preview_url": "https://tatbiqit.com/assets/images/projects/mocks/chatfly.webp",
-      "tech_stack": ["GPT Integration", "DALL-E API", "No-Code Platform", "Multi-Platform Integration", "API Development", "Mobile App Development"],
-      "platforms": ["iOS", "Android", "Web Platform", "API", "Telegram", "Slack", "Microsoft Teams", "WordPress", "WooCommerce"],
-      "key_features": ["AI Chatbot", "Grammar Correction", "Text Summarization", "Q&A Functionality", "Recipe Creator", "AI Art Generation", "Multi-Platform Integration", "Custom Branding", "API Access", "Conversation History", "Auto-Response Reading", "Friend Chat", "Emoji Generation"],
-      "integrations": ["Slack", "WordPress", "Messenger", "Zapier", "WooCommerce", "Telegram", "Zalo", "WhatsApp"],
-      "pricing_model": {
-        "free_tier": "2,000 message credits/month, 2 chatbots",
-        "pro_tier": "12,000 message credits/month, 4 chatbots",
-        "enterprise": "50,000 message credits/month, 10 chatbots"
-      },
-      "app_store_info": {
-        "developer": "NARBASH & PARTNERS GENERAL TRADING CO. WLL",
-        "rating": "Highly rated",
-        "age_requirement": "12+"
-      }
+      "local_banner_image": "/images/portfolio/banners/chatfly-banner.webp",
+      "local_preview_image": "/images/portfolio/previews/chatfly-preview.webp",
+      "original_banner_url": "https://tatbiqit.com/assets/images/projects/banners/chatfly.webp",
+      "original_preview_url": "https://tatbiqit.com/assets/images/projects/mocks/chatfly.webp"
     },
     {
       "name": "Lawazm",
       "description": "A distinguished electronic platform in Kuwait and The Middle East for household products, baby & children needs.",
-      "detailed_description": "Lawazm is a comprehensive e-commerce platform established as a distinguished electronic marketplace in Kuwait and the Middle East, specializing in household products, baby & children needs, and family supplies. With over 25 years of rich trading experience in household, cleaning, and baby/children/maternity needs, Lawazm has built a reputation for authenticity and trust. The platform features more than 5,000 unique, high-quality household products from prominent American, British, European, Turkish, Indian, and Japanese factories, all brought together under one comprehensive platform. Lawazm holds a wide range of globally known brands, some established over 250 years ago, ensuring decades of experience and infinite quality. The platform guarantees authentic products imported directly from original sources worldwide, complete with original packaging, components, and warranties extending up to 15 years. The mission is to become the ultimate destination for high-quality household products, cleaning tools and materials, baby & children needs, as well as mother needs, supported by first-class service. The platform offers same-day delivery and serves customers across Kuwait and the broader Middle East region.",
       "banner_image": "/assets/images/projects/banners/lawazm.webp",
       "preview_image": "/assets/images/projects/mocks/lawazm.webp",
       "project_url": "/projects/all/lawazm",
       "category": "E-commerce/Household",
-      "full_banner_url": "https://tatbiqit.com/assets/images/projects/banners/lawazm.webp",
-      "full_preview_url": "https://tatbiqit.com/assets/images/projects/mocks/lawazm.webp",
-      "tech_stack": ["E-commerce Platform", "Mobile App Development", "Inventory Management", "Multi-vendor System"],
-      "platforms": ["iOS", "Android", "Website"],
-      "key_features": ["5000+ Products", "Same-day Delivery", "Multi-category Shopping", "Authentic Brands", "International Sourcing", "Warranty Support", "Express Delivery"],
-      "product_categories": [
-        "Kitchenware & Tableware",
-        "Cleaning Products", 
-        "Laundry Essentials",
-        "Bedding & Bath",
-        "Body Care",
-        "Home & Garden",
-        "Waste Management",
-        "Storage Boxes & Cabinets",
-        "Baby Products",
-        "Maternity & Mother Care"
-      ],
-      "global_sourcing": ["USA", "Europe", "Japan", "Turkey", "India", "Far East"],
-      "experience": "25+ years in trading",
-      "product_count": "5000+ unique products",
-      "warranty": "Up to 15 years on select products",
-      "target_market": "Kuwait and Middle East",
-      "app_store_info": {
-        "developer": "Eisa Alarbash",
-        "user_feedback": "Highly rated for product variety and same-day delivery"
-      }
+      "local_banner_image": "/images/portfolio/banners/lawazm-banner.webp",
+      "local_preview_image": "/images/portfolio/previews/lawazm-preview.webp",
+      "original_banner_url": "https://tatbiqit.com/assets/images/projects/banners/lawazm.webp",
+      "original_preview_url": "https://tatbiqit.com/assets/images/projects/mocks/lawazm.webp"
     },
     {
       "name": "I Love Food (ILF)",
       "description": "I love food app is the simplest and most effective healthy eating & weight loss app",
-      "detailed_description": "I Love Food (ILF) is a comprehensive health and fitness mobile application designed to be the simplest yet most effective solution for healthy eating and weight loss. The app focuses on helping users develop sustainable healthy eating habits through an intuitive and user-friendly interface. Key features likely include meal planning, calorie tracking, nutritional information, recipe suggestions, progress monitoring, and personalized diet recommendations. The application emphasizes simplicity in design while maintaining effectiveness in helping users achieve their health and fitness goals. The app demonstrates our expertise in creating wellness-focused applications that combine functionality with ease of use, similar to our approach with JoyJoy for mental wellness.",
       "banner_image": "/assets/images/projects/banners/ilf.webp",
       "preview_image": "/assets/images/projects/mocks/ilf.webp",
       "project_url": "/projects/all/ilf",
       "category": "Health/Fitness",
-      "full_banner_url": "https://tatbiqit.com/assets/images/projects/banners/ilf.webp",
-      "full_preview_url": "https://tatbiqit.com/assets/images/projects/mocks/ilf.webp",
-      "tech_stack": ["Mobile App Development", "Health Tracking", "Nutrition Database", "User Analytics"],
-      "platforms": ["iOS", "Android"],
-      "key_features": ["Healthy Eating Guidance", "Weight Loss Tracking", "Simple Interface", "Meal Planning", "Progress Monitoring", "Nutritional Information"],
-      "focus_areas": ["Healthy Eating", "Weight Loss", "Nutrition Education", "Lifestyle Change"]
+      "local_banner_image": "/images/portfolio/banners/i-love-food-ilf-banner.webp",
+      "local_preview_image": "/images/portfolio/previews/i-love-food-ilf-preview.webp",
+      "original_banner_url": "https://tatbiqit.com/assets/images/projects/banners/ilf.webp",
+      "original_preview_url": "https://tatbiqit.com/assets/images/projects/mocks/ilf.webp"
     },
     {
       "name": "Chayyel",
       "description": "Chayyel is a start-up Co. about gaming that wants to expand the company all over the world.",
-      "detailed_description": "Chayyel is an ambitious gaming startup company with global expansion aspirations. As a gaming-focused startup, Chayyel represents our venture into the gaming industry, developing platforms and applications that support gaming ecosystems. The project likely involves creating gaming platforms, community features, gaming-related services, or gaming infrastructure solutions. Given our expertise in mobile and web development, Chayyel probably encompasses both mobile gaming applications and web-based gaming platforms. The company's goal to expand worldwide suggests a scalable platform designed to accommodate international markets, multiple languages, and diverse gaming communities. The project demonstrates our ability to work with innovative startups in the rapidly growing gaming industry.",
       "banner_image": "/assets/images/projects/banners/chayyel.webp",
       "preview_image": "/assets/images/projects/mocks/chayyel.webp",
       "project_url": "/projects/all/chayyel",
       "category": "Gaming/Startup",
-      "full_banner_url": "https://tatbiqit.com/assets/images/projects/banners/chayyel.webp",
-      "full_preview_url": "https://tatbiqit.com/assets/images/projects/mocks/chayyel.webp",
-      "tech_stack": ["Gaming Platform Development", "Mobile Gaming", "Web Platform", "Scalable Architecture"],
-      "platforms": ["Mobile", "Web", "Cross-platform"],
-      "key_features": ["Gaming Platform", "Global Scalability", "Community Features", "Multi-platform Support"],
-      "business_model": "Gaming Startup",
-      "expansion_goal": "Global market penetration",
-      "industry_focus": "Gaming and Entertainment"
+      "local_banner_image": "/images/portfolio/banners/chayyel-banner.webp",
+      "local_preview_image": "/images/portfolio/previews/chayyel-preview.webp",
+      "original_banner_url": "https://tatbiqit.com/assets/images/projects/banners/chayyel.webp",
+      "original_preview_url": "https://tatbiqit.com/assets/images/projects/mocks/chayyel.webp"
     },
     {
       "name": "LetsPass",
       "description": "LetsPass is a platform founded for online education.",
-      "detailed_description": "LetsPass is a comprehensive online education platform designed to facilitate digital learning experiences. As an e-learning solution, LetsPass likely provides features such as course management, student enrollment, interactive learning modules, progress tracking, assessment tools, and certification systems. The platform serves educational institutions, corporate training programs, or individual learners seeking online education opportunities. Given our expertise in creating user-friendly applications, LetsPass probably features an intuitive interface that makes online learning accessible and engaging. The platform may include video lectures, interactive quizzes, discussion forums, assignment submissions, and performance analytics. LetsPass represents our contribution to the growing edtech sector, providing scalable solutions for modern educational needs.",
       "banner_image": "/assets/images/projects/banners/letspass.webp",
       "preview_image": "/assets/images/projects/mocks/letspass.webp",
       "project_url": "/projects/all/letspass",
       "category": "Education/E-learning",
-      "full_banner_url": "https://tatbiqit.com/assets/images/projects/banners/letspass.webp",
-      "full_preview_url": "https://tatbiqit.com/assets/images/projects/mocks/letspass.webp",
-      "tech_stack": ["E-learning Platform", "Course Management System", "Video Integration", "Assessment Tools"],
-      "platforms": ["Web Platform", "Mobile App"],
-      "key_features": ["Online Education", "Course Management", "Student Enrollment", "Progress Tracking", "Assessments", "Certification"],
-      "target_audience": ["Educational Institutions", "Corporate Training", "Individual Learners"],
-      "industry_focus": "Education Technology (EdTech)"
+      "local_banner_image": "/images/portfolio/banners/letspass-banner.webp",
+      "local_preview_image": "/images/portfolio/previews/letspass-preview.webp",
+      "original_banner_url": "https://tatbiqit.com/assets/images/projects/banners/letspass.webp",
+      "original_preview_url": "https://tatbiqit.com/assets/images/projects/mocks/letspass.webp"
     },
     {
       "name": "Zahra Farm",
       "description": "Buy organic products Rent plots for planting Visit greenhouses and rent huts",
-      "detailed_description": "Zahra Farm is an innovative agricultural and eco-tourism platform that combines organic product sales with experiential farming services. The platform offers multiple services including the sale of organic products, plot rental for personal planting, greenhouse visits, and hut rentals for agricultural tourism. This unique concept bridges the gap between urban consumers and sustainable agriculture, allowing people to engage directly with farming while purchasing high-quality organic produce. The platform likely features e-commerce functionality for organic product sales, booking systems for plot rentals and greenhouse visits, and reservation capabilities for hut accommodations. Zahra Farm represents our work in the agricultural technology sector, promoting sustainable farming practices and connecting consumers with organic food sources. The project demonstrates expertise in creating platforms that support environmental sustainability and agricultural innovation.",
       "banner_image": "/assets/images/projects/banners/zahrafarm.webp",
       "preview_image": "/assets/images/projects/mocks/zahrafarm.webp",
       "project_url": "/projects/all/zahrafarm",
       "category": "Agriculture/Organic",
-      "full_banner_url": "https://tatbiqit.com/assets/images/projects/banners/zahrafarm.webp",
-      "full_preview_url": "https://tatbiqit.com/assets/images/projects/mocks/zahrafarm.webp",
-      "tech_stack": ["E-commerce Platform", "Booking System", "Agricultural Management", "Mobile App"],
-      "platforms": ["Mobile App", "Website"],
-      "key_features": ["Organic Product Sales", "Plot Rental System", "Greenhouse Tours", "Hut Rentals", "Agricultural Tourism", "Booking Management"],
-      "services": ["Organic Products", "Plot Rentals", "Greenhouse Visits", "Hut Accommodations"],
-      "industry_focus": "AgriTech and Sustainable Agriculture",
-      "business_model": "Agricultural Tourism and Organic E-commerce"
+      "local_banner_image": "/images/portfolio/banners/zahra-farm-banner.webp",
+      "local_preview_image": "/images/portfolio/previews/zahra-farm-preview.webp",
+      "original_banner_url": "https://tatbiqit.com/assets/images/projects/banners/zahrafarm.webp",
+      "original_preview_url": "https://tatbiqit.com/assets/images/projects/mocks/zahrafarm.webp"
     },
     {
       "name": "Kanii",
@@ -187,8 +115,10 @@
       "preview_image": "/assets/images/projects/mocks/kanii.webp",
       "project_url": "/projects/all/kanii",
       "category": "Service/Mobile",
-      "full_banner_url": "https://tatbiqit.com/assets/images/projects/banners/kanii.webp",
-      "full_preview_url": "https://tatbiqit.com/assets/images/projects/mocks/kanii.webp"
+      "local_banner_image": "/images/portfolio/banners/kanii-banner.webp",
+      "local_preview_image": "/images/portfolio/previews/kanii-preview.webp",
+      "original_banner_url": "https://tatbiqit.com/assets/images/projects/banners/kanii.webp",
+      "original_preview_url": "https://tatbiqit.com/assets/images/projects/mocks/kanii.webp"
     },
     {
       "name": "Aljawda",
@@ -197,8 +127,10 @@
       "preview_image": "/assets/images/projects/mocks/aljawda.webp",
       "project_url": "/projects/all/aljawda",
       "category": "E-commerce/Quality Products",
-      "full_banner_url": "https://tatbiqit.com/assets/images/projects/banners/aljawda.webp",
-      "full_preview_url": "https://tatbiqit.com/assets/images/projects/mocks/aljawda.webp"
+      "local_banner_image": "/images/portfolio/banners/aljawda-banner.webp",
+      "local_preview_image": "/images/portfolio/previews/aljawda-preview.webp",
+      "original_banner_url": "https://tatbiqit.com/assets/images/projects/banners/aljawda.webp",
+      "original_preview_url": "https://tatbiqit.com/assets/images/projects/mocks/aljawda.webp"
     },
     {
       "name": "Jawaherji",
@@ -207,45 +139,10 @@
       "preview_image": "/assets/images/projects/mocks/jawaherji.webp",
       "project_url": "/projects/all/jawaherji",
       "category": "Jewelry/Luxury",
-      "full_banner_url": "https://tatbiqit.com/assets/images/projects/banners/jawaherji.webp",
-      "full_preview_url": "https://tatbiqit.com/assets/images/projects/mocks/jawaherji.webp"
+      "local_banner_image": "/images/portfolio/banners/jawaherji-banner.webp",
+      "local_preview_image": "/images/portfolio/previews/jawaherji-preview.webp",
+      "original_banner_url": "https://tatbiqit.com/assets/images/projects/banners/jawaherji.webp",
+      "original_preview_url": "https://tatbiqit.com/assets/images/projects/mocks/jawaherji.webp"
     }
-  ],
-  "metadata": {
-    "source_url": "https://tatbiqit.com/projects/",
-    "base_url": "https://tatbiqit.com",
-    "total_projects": 12,
-    "scraped_date": "2025-07-22T09:05:28.927Z",
-    "categories": [
-      "E-commerce/Confectionery",
-      "Luxury/Jewelry", 
-      "Mobile App/Wellness",
-      "AI/Communication",
-      "E-commerce/Household",
-      "Health/Fitness",
-      "Gaming/Startup",
-      "Education/E-learning",
-      "Agriculture/Organic",
-      "Service/Mobile",
-      "E-commerce/Quality Products",
-      "Jewelry/Luxury"
-    ],
-    "image_info": {
-      "banner_base_url": "https://tatbiqit.com/assets/images/projects/banners/",
-      "preview_base_url": "https://tatbiqit.com/assets/images/projects/mocks/",
-      "format": "webp",
-      "note": "All images are in WebP format and hosted on the main domain"
-    },
-    "development_notes": {
-      "individual_project_pages": "Each project has a detail page at /projects/all/{project-name}",
-      "image_accessibility": "Images are publicly accessible via direct URL",
-      "potential_features": [
-        "Portfolio gallery display",
-        "Category filtering",
-        "Project detail modals",
-        "Image lazy loading",
-        "Responsive design showcase"
-      ]
-    }
-  }
+  ]
 }

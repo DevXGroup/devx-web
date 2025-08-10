@@ -459,7 +459,7 @@ function DecryptedText({
     <div className="relative z-10 flex items-center justify-center min-h-[80px]">
       <motion.h1
         ref={containerRef}
-        className="text-2xl md:text-4xl font-mono text-center"
+        className="text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-mono text-center"
         style={{
           fontFamily: "'IBM Plex Mono', 'SF Pro Display', 'Helvetica Neue', sans-serif",
           fontWeight: 600,

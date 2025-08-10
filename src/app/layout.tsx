@@ -5,9 +5,9 @@ import { IBM_Plex_Mono, IBM_Plex_Sans } from 'next/font/google'
 import ConditionalLayout from '@/components/ConditionalLayout'
 import { BrowserCompatibilityDetector } from '@/components/BrowserCompatibilityDetector'
 
-// Configure IBM Plex Mono with only available weights (300-700)
+// Configure IBM Plex Mono with all weights
 const ibmPlexMono = IBM_Plex_Mono({
-  weight: ['400', '500', '600', '700'],
+  weight: ['100', '200', '300', '400', '500', '600', '700'],
   style: ['normal'],
   subsets: ['latin'],
   variable: '--font-ibm-plex-mono',
