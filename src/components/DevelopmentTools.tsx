@@ -4,7 +4,6 @@ import { LayoutGroup, motion, AnimatePresence } from 'framer-motion'
 import { useEffect, useState, useCallback, useRef, useMemo } from 'react'
 import Image from 'next/image'
 import seedrandom from 'seedrandom'
-import BlurText from './BlurText'
 
 const tools = [
   {
@@ -53,7 +52,7 @@ const tools = [
 const aiTools = [
   {
     name: 'TensorFlow',
-    description: 'Build and deploy ML models with Google\'s TensorFlow platform',
+    description: "Build and deploy ML models with Google's TensorFlow platform",
     icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg',
   },
   {
@@ -63,7 +62,7 @@ const aiTools = [
   },
   {
     name: 'OpenAI',
-    description: 'Integrate powerful AI models with OpenAI\'s cutting-edge APIs',
+    description: "Integrate powerful AI models with OpenAI's cutting-edge APIs",
     icon: 'https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg',
   },
   {
@@ -94,14 +93,13 @@ const aiTools = [
 ]
 
 // Duration each tool remains in center
-const DISPLAY_DURATION = 6000
+const DISPLAY_DURATION = 3500
 
 export default function DevelopmentTools() {
   const [activeIndex, setActiveIndex] = useState(0)
   const [isManual, setIsManual] = useState(false)
-  const [transitioning, setTransitioning] = useState(false)
   const [mounted, setMounted] = useState(false)
-  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 })
+  const [transitioning, setTransitioning] = useState(false)
   const [transitionData, setTransitionData] = useState<{
     from: { x: number; y: number }
     to: { x: number; y: number }
@@ -111,28 +109,11 @@ export default function DevelopmentTools() {
   const cycleRef = useRef<NodeJS.Timeout | null>(null)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
 
-  // Handle mounting and window size for hydration safety
+  // Handle mounting for hydration safety
   useEffect(() => {
     setMounted(true)
-    const updateWindowSize = () => {
-      setWindowSize({ width: window.innerWidth, height: window.innerHeight })
-    }
-    
-    updateWindowSize()
-    window.addEventListener('resize', updateWindowSize)
-    
-    return () => window.removeEventListener('resize', updateWindowSize)
   }, [])
 
-  // Helper function for responsive radius - hydration safe with more spacing
-  const getResponsiveRadius = useCallback(() => {
-    if (!mounted || windowSize.width === 0) return 200 // Safe default
-    
-    if (windowSize.width < 640) return 170   // mobile - increased spacing
-    if (windowSize.width < 768) return 190   // small tablet - increased spacing  
-    if (windowSize.width < 1024) return 220  // tablet - increased spacing
-    return 240 // desktop - increased spacing
-  }, [mounted, windowSize.width])
 
   // Move stars generation to component level
   const stars = useMemo(() => {
@@ -149,29 +130,29 @@ export default function DevelopmentTools() {
     }))
   }, [])
 
-  // Automatic cycle with transition animation - continues running alongside manual interactions
+  // Automatic cycle with black hole transition animation
   useEffect(() => {
-    if (transitioning) return
-    
+    // Clear any existing cycle timer first
+    if (cycleRef.current) {
+      clearTimeout(cycleRef.current)
+      cycleRef.current = null
+    }
+
     const runCycle = () => {
-      if (transitioning) return
+      if (isManual || transitioning) return
       
-      // Skip auto-cycle if user recently interacted, but don't stop the timer
-      if (isManual) {
-        // Schedule next cycle attempt
-        if (cycleRef.current) clearTimeout(cycleRef.current)
-        cycleRef.current = setTimeout(runCycle, 1000) // Check again in 1 second
-        return
-      }
-      
-      // Trigger transition animation before changing activeIndex
+      // Calculate next tool and its orbit position
       const nextIndex = (activeIndex + 1) % tools.length
       const nextTool = tools[nextIndex]
-      
-      // Calculate orbit position for the next tool
       const angle = (nextIndex * 360) / tools.length
       const radian = (angle * Math.PI) / 180
-      const radius = getResponsiveRadius()
+      
+      // Use responsive radius based on current screen size
+      let radius = 240 // desktop default
+      if (window.innerWidth < 640) radius = 170
+      else if (window.innerWidth < 768) radius = 190
+      else if (window.innerWidth < 1024) radius = 220
+      
       const fromX = Math.cos(radian) * radius
       const fromY = Math.sin(radian) * radius
       
@@ -179,88 +160,75 @@ export default function DevelopmentTools() {
       setTransitionData({
         from: { x: fromX, y: fromY },
         to: { x: 0, y: 0 },
-        tool: nextTool
+        tool: nextTool,
       })
       setTransitioning(true)
       
-      // After transition completes, update activeIndex
+      // After transition, update active index
       setTimeout(() => {
         setActiveIndex(nextIndex)
         setTransitioning(false)
         setTransitionData(null)
-      }, 1200) // Transition duration
+        
+        // Schedule next cycle
+        cycleRef.current = setTimeout(runCycle, DISPLAY_DURATION)
+      }, 1200)
     }
     
-    // Clear any existing timer
-    if (cycleRef.current) {
-      clearTimeout(cycleRef.current)
-    }
-    
-    // Set new cycle timer
+    // Start the cycle
     cycleRef.current = setTimeout(runCycle, DISPLAY_DURATION)
     
     return () => {
       if (cycleRef.current) clearTimeout(cycleRef.current)
       if (timerRef.current) clearTimeout(timerRef.current)
     }
-  }, [isManual, activeIndex, transitioning, getResponsiveRadius, mounted, windowSize])
+  }, [isManual, activeIndex, transitioning])
 
-  // User click => override with transition effect - improved auto-cycle restoration
+  // User click => trigger transition animation
   const handleIconClick = useCallback((index: number) => {
-    if (transitioning) return // Prevent clicks during transitions
-    
-    // Clear all existing timers first
-    if (timerRef.current) {
-      clearTimeout(timerRef.current)
-      timerRef.current = null
-    }
-    if (cycleRef.current) {
-      clearTimeout(cycleRef.current)
-      cycleRef.current = null
-    }
+    if (transitioning || index === activeIndex) return
     
     setIsManual(true)
     
-    // If clicking on a different tool, trigger transition animation
-    if (index !== activeIndex) {
-      const clickedTool = tools[index]
-      const angle = (index * 360) / tools.length
-      const radian = (angle * Math.PI) / 180
-      const radius = getResponsiveRadius()
-      const fromX = Math.cos(radian) * radius
-      const fromY = Math.sin(radian) * radius
-      
-      // Start transition animation - the actual clicked circle moves
-      setTransitionData({
-        from: { x: fromX, y: fromY },
-        to: { x: 0, y: 0 },
-        tool: clickedTool
-      })
-      setTransitioning(true)
-      
-      // After transition completes, update activeIndex
-      setTimeout(() => {
-        setActiveIndex(index)
-        setTransitioning(false)
-        setTransitionData(null)
-      }, 800) // Shorter duration for manual clicks
+    // Calculate clicked tool's position
+    const clickedTool = tools[index]
+    const angle = (index * 360) / tools.length
+    const radian = (angle * Math.PI) / 180
+    
+    // Use responsive radius
+    let radius = 240 // desktop default
+    if (window.innerWidth < 640) radius = 170
+    else if (window.innerWidth < 768) radius = 190
+    else if (window.innerWidth < 1024) radius = 220
+    
+    const fromX = Math.cos(radian) * radius
+    const fromY = Math.sin(radian) * radius
+    
+    // Start transition animation
+    setTransitionData({
+      from: { x: fromX, y: fromY },
+      to: { x: 0, y: 0 },
+      tool: clickedTool,
+    })
+    setTransitioning(true)
+    
+    // After transition, update active index
+    setTimeout(() => {
+      setActiveIndex(index)
+      setTransitioning(false)
+      setTransitionData(null)
+    }, 800)
+
+    // Clear any existing timer
+    if (timerRef.current) {
+      clearTimeout(timerRef.current)
     }
 
-    // Set shorter timer to resume auto-cycle after manual interaction
+    // Set new timer to resume auto-cycle
     timerRef.current = setTimeout(() => {
       setIsManual(false)
-    }, 3000) // Resume auto-cycle after 3 seconds instead of full DISPLAY_DURATION
-  }, [activeIndex, transitioning, getResponsiveRadius])
-
-  // AI tools radius function
-  const getAIResponsiveRadius = useCallback(() => {
-    if (!mounted || windowSize.width === 0) return 320 // Safe default
-    
-    if (windowSize.width < 640) return 280   // mobile - increased spacing
-    if (windowSize.width < 768) return 320   // small tablet - increased spacing
-    if (windowSize.width < 1024) return 360  // tablet - increased spacing
-    return 380 // desktop - increased spacing
-  }, [mounted, windowSize.width])
+    }, 3000) // Resume after 3 seconds
+  }, [isManual, activeIndex, transitioning])
 
   // Handle AI tool clicks (for now just log, later can be expanded)
   const handleAIToolClick = useCallback((index: number) => {
@@ -269,7 +237,7 @@ export default function DevelopmentTools() {
   }, [])
 
   const activeTool = tools[activeIndex] ?? null
-  
+
   // Prevent hydration issues by showing loading state
   if (!mounted) {
     return (
@@ -278,7 +246,7 @@ export default function DevelopmentTools() {
       </div>
     )
   }
-  
+
   if (!activeTool) {
     return <div className="text-red-500">No tools found.</div>
   }
@@ -305,7 +273,7 @@ export default function DevelopmentTools() {
   return (
     <LayoutGroup>
       {/* Optimized height for better spacing with extra bottom padding for tablets */}
-      <div className="relative w-full h-[140vh] bg-black overflow-hidden pb-32 sm:pb-48 md:pb-64 lg:pb-72 xl:pb-80 z-[150]">
+      <div className="relative w-full bg-black z-[150]">
         {' '}
         {/* Reduced height and padding */}
         {/* Reduced number of stars and added glow effect */}
@@ -331,16 +299,19 @@ export default function DevelopmentTools() {
             }}
           />
         ))}
-        {/* Fixed spacing between title and animation */}
-        <div className="pt-3 pb-3">
+        {/* Title section */}
+        <div className="pt-16 pb-32">
           <div className="container mx-auto px-4">
             <div className="flex flex-col items-center">
-              <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold font-['IBM_Plex_Mono'] text-center animate-gradient-text mb-4">
+              <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold font-['IBM_Plex_Mono'] text-center animate-gradient-text mb-16">
                 DevX Development Tools
               </h3>
             </div>
           </div>
         </div>
+        
+        {/* Animation container with proper sizing */}
+        <div className="relative w-full h-[80vh] flex items-center justify-center">
         {/* ============ Center black circle with glowing border ============ */}
         {/* Responsive center position with decreased circumference */}
         <div
@@ -357,15 +328,15 @@ export default function DevelopmentTools() {
             Pulsing outer border - enhanced for tablet visibility
           */}
           <motion.div
-            className="pointer-events-none absolute inset-0 rounded-full border-4"
+            className="pointer-events-none absolute inset-0 rounded-full border"
             style={{ borderColor: 'rgba(255, 255, 255, 0.7)' }}
             animate={{
               opacity: [0.7, 1, 0.7],
               scale: [1, 1.05, 1],
               boxShadow: [
-                '0 0 10px rgba(255,255,255,0.4)',
-                '0 0 30px rgba(255,255,255,0.8)',
-                '0 0 10px rgba(255,255,255,0.4)',
+                '0 0 10px rgba(255,255,255,0.4), inset 0 0 8px rgba(255,255,255,0.2)',
+                '0 0 30px rgba(255,255,255,0.8), inset 0 0 15px rgba(255,255,255,0.4)',
+                '0 0 10px rgba(255,255,255,0.4), inset 0 0 8px rgba(255,255,255,0.2)',
               ],
             }}
             transition={{
@@ -402,25 +373,25 @@ export default function DevelopmentTools() {
               <defs>
                 {/* Enhanced motion blur filter for more blur effect */}
                 <filter id="motionBlur" x="-50%" y="-50%" width="200%" height="200%">
-                  <feGaussianBlur stdDeviation="2.5 1.5" result="blur"/>
-                  <feOffset dx="1.5" dy="0" result="offset" in="SourceGraphic"/>
+                  <feGaussianBlur stdDeviation="2.5 1.5" result="blur" />
+                  <feOffset dx="1.5" dy="0" result="offset" in="SourceGraphic" />
                   <feMerge>
-                    <feMergeNode in="blur"/>
-                    <feMergeNode in="offset"/>
-                    <feMergeNode in="SourceGraphic"/>
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="offset" />
+                    <feMergeNode in="SourceGraphic" />
                   </feMerge>
                 </filter>
-                
+
                 {/* Enhanced glowing trail effect with more blur */}
                 <filter id="glowTrail" x="-50%" y="-50%" width="200%" height="200%">
-                  <feGaussianBlur stdDeviation="3.5" result="coloredBlur"/>
+                  <feGaussianBlur stdDeviation="3.5" result="coloredBlur" />
                   <feMerge>
-                    <feMergeNode in="coloredBlur"/>
-                    <feMergeNode in="SourceGraphic"/>
+                    <feMergeNode in="coloredBlur" />
+                    <feMergeNode in="SourceGraphic" />
                   </feMerge>
                 </filter>
               </defs>
-              
+
               {/* Inner ring with subtle trail - increased intensity by 5% */}
               <circle
                 cx="100"
@@ -432,7 +403,7 @@ export default function DevelopmentTools() {
                 fill="none"
                 filter="url(#glowTrail)"
               />
-              
+
               {/* Middle ring with medium trail - increased intensity by 5% */}
               <circle
                 cx="100"
@@ -444,7 +415,7 @@ export default function DevelopmentTools() {
                 fill="none"
                 filter="url(#glowTrail)"
               />
-              
+
               {/* Outer ring with subtle trail - increased intensity by 5% */}
               <circle
                 cx="100"
@@ -487,20 +458,36 @@ export default function DevelopmentTools() {
                     src={activeTool.icon || '/placeholder.svg'}
                     alt={activeTool.name}
                     fill
-                    className={`object-contain ${activeTool.name === 'Laravel' ? 'brightness-150 saturate-150' : ''}`}
-                    style={activeTool.name === 'Laravel' ? {
-                      filter: 'brightness(1.5) saturate(1.5) hue-rotate(300deg) contrast(1.2)'
-                    } : undefined}
+                    className={`object-contain ${
+                      activeTool.name === 'Laravel' ? 'brightness-150 saturate-150' : ''
+                    }`}
+                    style={
+                      activeTool.name === 'Laravel'
+                        ? {
+                            filter:
+                              'brightness(1.5) saturate(1.5) hue-rotate(300deg) contrast(1.2)',
+                          }
+                        : undefined
+                    }
                   />
                 </div>
               </motion.div>
 
-              <h2 className="text-base sm:text-lg md:text-xl font-bold mb-2 text-white drop-shadow-lg" style={{
-                textShadow: '0 2px 4px rgba(0,0,0,0.9), 0 0 15px rgba(255,255,255,0.6), 0 0 25px rgba(255,255,255,0.3)'
-              }}>{activeTool.name}</h2>
-              <p className="text-xs sm:text-sm md:text-base text-white font-light leading-relaxed px-2" style={{
-                textShadow: '0 1px 3px rgba(0,0,0,0.9), 0 0 10px rgba(255,255,255,0.3)'
-              }}>
+              <h2
+                className="text-base sm:text-lg md:text-xl font-bold mb-2 text-white drop-shadow-lg"
+                style={{
+                  textShadow:
+                    '0 2px 4px rgba(0,0,0,0.9), 0 0 15px rgba(255,255,255,0.6), 0 0 25px rgba(255,255,255,0.3)',
+                }}
+              >
+                {activeTool.name}
+              </h2>
+              <p
+                className="text-xs sm:text-sm md:text-base text-white font-light leading-relaxed px-2"
+                style={{
+                  textShadow: '0 1px 3px rgba(0,0,0,0.9), 0 0 10px rgba(255,255,255,0.3)',
+                }}
+              >
                 {activeTool.description}
               </p>
             </motion.div>
@@ -518,22 +505,23 @@ export default function DevelopmentTools() {
         
         {/* ============ Orbiting Icons ============ */}
         {/* z-[85] - Below center but above AI tools */}
-        <StaticIconsOrbit 
-          tools={tools} 
-          activeIndex={activeIndex} 
-          onIconClick={handleIconClick} 
-          getResponsiveRadius={getResponsiveRadius}
+        <StaticIconsOrbit
+          tools={tools}
+          activeIndex={activeIndex}
+          onIconClick={handleIconClick}
           transitioning={transitioning}
           transitionData={transitionData}
         />
-        
         {/* ============ Outer AI Tools Orbit ============ */}
         {/* z-[90] - Below inner orbit but visible */}
-        <AIToolsOrbit 
-          activeIndex={activeIndex} 
-          onIconClick={handleAIToolClick} 
-          getResponsiveRadius={getAIResponsiveRadius} 
+        <AIToolsOrbit
+          activeIndex={activeIndex}
+          onIconClick={handleAIToolClick}
         />
+        </div>
+        
+        {/* Bottom spacing */}
+        <div className="pb-32"></div>
       </div>
     </LayoutGroup>
   )
@@ -542,16 +530,16 @@ export default function DevelopmentTools() {
 /**
  * Transition component for "planet being sucked into black hole" effect
  */
-function TransitionPlanet({ 
-  from, 
-  to, 
-  tool, 
-  duration 
-}: { 
+function TransitionPlanet({
+  from,
+  to,
+  tool,
+  duration,
+}: {
   from: { x: number; y: number }
   to: { x: number; y: number }
   tool: any
-  duration: number 
+  duration: number
 }) {
   return (
     <motion.div
@@ -587,16 +575,9 @@ function TransitionPlanet({
             'radial-gradient(ellipse 160px 80px, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.2) 40%, transparent 100%)',
             'radial-gradient(ellipse 200px 100px, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.3) 30%, transparent 100%)',
             'radial-gradient(ellipse 100px 50px, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 50%, transparent 100%)',
-            'radial-gradient(ellipse 40px 20px, rgba(255,255,255,0) 0%, transparent 100%)'
+            'radial-gradient(ellipse 40px 20px, rgba(255,255,255,0) 0%, transparent 100%)',
           ],
-          filter: [
-            'blur(2px)',
-            'blur(4px)',
-            'blur(6px)',
-            'blur(8px)',
-            'blur(4px)',
-            'blur(1px)'
-          ]
+          filter: ['blur(2px)', 'blur(4px)', 'blur(6px)', 'blur(8px)', 'blur(4px)', 'blur(1px)'],
         }}
         transition={{
           duration: duration / 1000,
@@ -610,12 +591,12 @@ function TransitionPlanet({
         animate={{
           filter: [
             'blur(0px) brightness(1) drop-shadow(0 0 5px rgba(255,255,255,0.3))',
-            'blur(2px) brightness(1.3) drop-shadow(0 0 15px rgba(255,255,255,0.6))', 
+            'blur(2px) brightness(1.3) drop-shadow(0 0 15px rgba(255,255,255,0.6))',
             'blur(4px) brightness(1.6) drop-shadow(0 0 25px rgba(255,255,255,0.8))',
             'blur(6px) brightness(2.2) drop-shadow(0 0 35px rgba(255,255,255,1))',
             'blur(2px) brightness(1.4) drop-shadow(0 0 20px rgba(255,255,255,0.7))',
-            'blur(0px) brightness(1) drop-shadow(0 0 5px rgba(255,255,255,0.3))'
-          ]
+            'blur(0px) brightness(1) drop-shadow(0 0 5px rgba(255,255,255,0.3))',
+          ],
         }}
         transition={{
           duration: duration / 1000,
@@ -632,7 +613,7 @@ function TransitionPlanet({
               '0 0 25px rgba(255,255,255,0.9)',
               '0 0 35px rgba(255,255,255,1)',
               '0 0 20px rgba(255,255,255,0.8)',
-              '0 0 10px rgba(255,255,255,0.5)'
+              '0 0 10px rgba(255,255,255,0.5)',
             ],
             background: [
               'radial-gradient(circle, transparent 60%, rgba(255,255,255,0.1) 100%)',
@@ -640,8 +621,8 @@ function TransitionPlanet({
               'radial-gradient(circle, transparent 40%, rgba(255,255,255,0.3) 100%)',
               'radial-gradient(circle, transparent 20%, rgba(255,255,255,0.5) 100%)',
               'radial-gradient(circle, transparent 30%, rgba(255,255,255,0.3) 100%)',
-              'radial-gradient(circle, transparent 60%, rgba(255,255,255,0.1) 100%)'
-            ]
+              'radial-gradient(circle, transparent 60%, rgba(255,255,255,0.1) 100%)',
+            ],
           }}
           transition={{
             duration: duration / 1000,
@@ -658,7 +639,7 @@ function TransitionPlanet({
           }}
           transition={{
             duration: duration / 1000,
-            ease: "easeInOut",
+            ease: 'easeInOut',
           }}
         >
           <div className="relative w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8">
@@ -666,10 +647,16 @@ function TransitionPlanet({
               src={tool.icon || '/placeholder.svg'}
               alt={tool.name}
               fill
-              className={`object-contain ${tool.name === 'Laravel' ? 'brightness-150 saturate-150' : ''}`}
-              style={tool.name === 'Laravel' ? {
-                filter: 'brightness(1.5) saturate(1.5) hue-rotate(300deg) contrast(1.2)'
-              } : undefined}
+              className={`object-contain ${
+                tool.name === 'Laravel' ? 'brightness-150 saturate-150' : ''
+              }`}
+              style={
+                tool.name === 'Laravel'
+                  ? {
+                      filter: 'brightness(1.5) saturate(1.5) hue-rotate(300deg) contrast(1.2)',
+                    }
+                  : undefined
+              }
             />
           </div>
         </motion.div>
@@ -691,13 +678,13 @@ function TransitionPlanet({
               'radial-gradient(circle, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.2) 40%, transparent 70%)',
               'radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 50%, transparent 80%)',
               'radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 60%, transparent 90%)',
-              'radial-gradient(circle, transparent 0%, transparent 100%)'
-            ]
+              'radial-gradient(circle, transparent 0%, transparent 100%)',
+            ],
           }}
           transition={{
             duration: duration / 1000,
             times: [0, 0.1, 0.2, 0.3, 0.75, 0.8, 0.85, 0.9, 0.95, 1],
-            ease: "easeOut"
+            ease: 'easeOut',
           }}
         />
       </motion.div>
@@ -712,21 +699,35 @@ function StaticIconsOrbit({
   tools,
   activeIndex,
   onIconClick,
-  getResponsiveRadius,
   transitioning,
-  transitionData
+  transitionData,
 }: {
   tools: typeof tools
   activeIndex: number
   onIconClick: (index: number) => void
-  getResponsiveRadius: () => number
-  transitioning: boolean
-  transitionData: {
+  transitioning?: boolean
+  transitionData?: {
     from: { x: number; y: number }
     to: { x: number; y: number }
     tool: any
   } | null
 }) {
+  // Responsive radius like the original getResponsiveRadius but fixed per render
+  const [radius, setRadius] = useState(240)
+  
+  useEffect(() => {
+    const updateRadius = () => {
+      if (window.innerWidth < 640) setRadius(170)   // mobile
+      else if (window.innerWidth < 768) setRadius(190)   // small tablet
+      else if (window.innerWidth < 1024) setRadius(220)  // tablet
+      else setRadius(240) // desktop
+    }
+    
+    updateRadius()
+    window.addEventListener('resize', updateRadius)
+    return () => window.removeEventListener('resize', updateRadius)
+  }, [])
+
   return (
     <div className="absolute z-[85] top-[50%] sm:top-[55%] md:top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2">
       {tools.map((tool, i) => {
@@ -739,7 +740,6 @@ function StaticIconsOrbit({
         const radian = (angle * Math.PI) / 180
 
         // Calculate position using trigonometry for precise placement
-        const radius = getResponsiveRadius()
         const x = Math.cos(radian) * radius
         const y = Math.sin(radian) * radius
 
@@ -771,10 +771,16 @@ function StaticIconsOrbit({
                   src={tool.icon || '/placeholder.svg'}
                   alt={tool.name}
                   fill
-                  className={`object-contain ${tool.name === 'Laravel' ? 'brightness-150 saturate-150' : ''}`}
-                  style={tool.name === 'Laravel' ? {
-                    filter: 'brightness(1.5) saturate(1.5) hue-rotate(300deg) contrast(1.2)'
-                  } : undefined}
+                  className={`object-contain ${
+                    tool.name === 'Laravel' ? 'brightness-150 saturate-150' : ''
+                  }`}
+                  style={
+                    tool.name === 'Laravel'
+                      ? {
+                          filter: 'brightness(1.5) saturate(1.5) hue-rotate(300deg) contrast(1.2)',
+                        }
+                      : undefined
+                  }
                 />
               </div>
             </motion.div>
@@ -789,20 +795,33 @@ function StaticIconsOrbit({
  * AI Tools in an outer orbit
  * Slower rotation, larger radius, with labels that move with their icons
  */
-function AIToolsOrbit({ 
-  activeIndex, 
-  onIconClick, 
-  getResponsiveRadius 
-}: { 
+function AIToolsOrbit({
+  activeIndex,
+  onIconClick,
+}: {
   activeIndex: number
   onIconClick: (index: number) => void
-  getResponsiveRadius: () => number
 }) {
   const [rotation, setRotation] = useState(0)
   const [mounted, setMounted] = useState(false)
+  const [radius, setRadius] = useState(380)
   const orbitRef = useRef<HTMLDivElement>(null)
+  
+  // Set responsive radius for AI tools
+  useEffect(() => {
+    const updateRadius = () => {
+      if (window.innerWidth < 640) setRadius(280)   // mobile
+      else if (window.innerWidth < 768) setRadius(320)   // small tablet
+      else if (window.innerWidth < 1024) setRadius(360)  // tablet
+      else setRadius(380) // desktop
+    }
+    
+    updateRadius()
+    window.addEventListener('resize', updateRadius)
+    return () => window.removeEventListener('resize', updateRadius)
+  }, [])
 
-  // Handle mounting for hydration safety  
+  // Handle mounting for hydration safety
   useEffect(() => {
     setMounted(true)
   }, [])
@@ -843,7 +862,6 @@ function AIToolsOrbit({
     >
       {aiTools.map((tool, i) => {
         const angle = (i * 360) / aiTools.length
-        const radius = getResponsiveRadius()
         return (
           <div
             className="absolute"
