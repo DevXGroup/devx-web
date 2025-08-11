@@ -402,7 +402,7 @@ const ProjectDetailModal = ({ project, isOpen, onClose }: ProjectDetailModalProp
                   <motion.div variants={itemVariants} className="pt-6 border-t border-white/10">
                     <div className="text-center space-y-4">
                       <h3 className="text-xl font-semibold text-white">Ready to Start Your Project?</h3>
-                      <p className="text-white/70">Let's discuss how we can bring your vision to life with cutting-edge solutions.</p>
+                      <p className="text-white/70">Let&apos;s discuss how we can bring your vision to life with cutting-edge solutions.</p>
                       <motion.a
                         href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative"
                         target="_blank"

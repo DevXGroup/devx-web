@@ -1,11 +1,18 @@
-"use client"
+'use client'
 
-import { motion, useScroll, useTransform, useReducedMotion, useInView, useMotionValue } from "framer-motion"
-import { useRef, useEffect, useState, useMemo } from "react"
-import { Rocket, User, Layers, Search, Flag, ArrowRight } from "lucide-react"
-import Link from "next/link"
-import InfinityLogo from "./InfinityLogo"
-import RotatingText from "./RotatingText"
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useReducedMotion,
+  useInView,
+  useMotionValue,
+} from 'framer-motion'
+import { useRef, useEffect, useState, useMemo } from 'react'
+import { Rocket, User, Layers, Search, Flag, ArrowRight } from 'lucide-react'
+import Link from 'next/link'
+import InfinityLogo from './InfinityLogo'
+import RotatingText from './RotatingText'
 
 const subheaders = [
   'AI-Powered Solutions',
@@ -27,9 +34,9 @@ const containerVariants = {
     opacity: 1,
     transition: {
       staggerChildren: 0.1,
-      delayChildren: 0.2
-    }
-  }
+      delayChildren: 0.2,
+    },
+  },
 }
 
 const cardVariants = {
@@ -40,9 +47,9 @@ const cardVariants = {
     scale: 1,
     transition: {
       duration: 0.6,
-      ease: [0.22, 1, 0.36, 1]
-    }
-  }
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
 }
 
 const stepVariants = {
@@ -52,9 +59,9 @@ const stepVariants = {
     scale: 1,
     transition: {
       duration: 0.4,
-      ease: "easeOut"
-    }
-  }
+      ease: 'easeOut',
+    },
+  },
 }
 
 // Black falling stars component - pure CSS implementation
@@ -68,33 +75,41 @@ function BlackFallingStars() {
   )
 }
 
-function StepAnimation({ step, text, isActive }: { step: number; text: string; isActive: boolean }) {
+function StepAnimation({
+  step,
+  text,
+  isActive,
+}: {
+  step: number
+  text: string
+  isActive: boolean
+}) {
   const shouldReduceMotion = useReducedMotion()
-  
+
   return (
     <motion.div
       key={`step-${step}`}
       className={`flex flex-col items-center space-y-4 transition-all duration-700 ease-in-out ${
-        isActive ? "text-black" : "text-black/40"
+        isActive ? 'text-black' : 'text-black/40'
       }`}
     >
       {/* Step Circle - Simple lamp effect */}
       <motion.div
         className={`w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-lg md:text-xl font-bold font-['IBM_Plex_Mono'] transition-all duration-700 ease-in-out ${
-          isActive 
-            ? "bg-black text-white shadow-lg shadow-black/30" 
-            : "bg-black/20 text-black/50 border-2 border-black/30"
+          isActive
+            ? 'bg-black text-white shadow-lg shadow-black/30'
+            : 'bg-black/20 text-black/50 border-2 border-black/30'
         }`}
         whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
         whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
       >
         {step}
       </motion.div>
-      
+
       {/* Step Text */}
       <p
         className={`text-sm md:text-base font-['IBM_Plex_Mono'] text-center transition-all duration-700 ${
-          isActive ? "font-bold" : "font-normal"
+          isActive ? 'font-bold' : 'font-normal'
         }`}
       >
         {text}
@@ -103,58 +118,90 @@ function StepAnimation({ step, text, isActive }: { step: number; text: string; i
   )
 }
 
-function Card({ icon: Icon, title, description }: { icon: any; title: string; description: string }) {
+function Card({
+  icon: Icon,
+  title,
+  description,
+}: {
+  icon: any
+  title: string
+  description: string
+}) {
   const shouldReduceMotion = useReducedMotion()
-  
+
   return (
     <motion.div
       variants={cardVariants}
       className="bg-[#1a2e00]/90 p-8 md:p-10 rounded-2xl flex flex-col items-start text-left shadow-lg w-full h-full hover:bg-[#1a2e00]/95 transition-colors duration-300 group"
-      whileHover={shouldReduceMotion ? {} : { 
-        y: -5,
-        boxShadow: "0 20px 40px rgba(204, 255, 0, 0.1)"
-      }}
+      whileHover={
+        shouldReduceMotion
+          ? {}
+          : {
+              y: -5,
+              boxShadow: '0 20px 40px rgba(204, 255, 0, 0.1)',
+            }
+      }
     >
       <div className="flex items-start mb-6">
-        <motion.div 
+        <motion.div
           className="bg-[#ccff00]/90 rounded-full w-16 h-16 flex items-center justify-center mr-4 aspect-square shrink-0 group-hover:bg-[#ccff00] transition-colors duration-300"
           whileHover={shouldReduceMotion ? {} : { rotate: 360 }}
-          transition={{ duration: 0.6, ease: "easeInOut" }}
+          transition={{ duration: 0.6, ease: 'easeInOut' }}
         >
           <Icon className="w-8 h-8 text-black" />
         </motion.div>
         <div>
-          <h3 className="text-xl md:text-2xl font-bold text-[#ccff00] font-['IBM_Plex_Mono'] mb-2 group-hover:text-white transition-colors duration-300">{title}</h3>
-          <p className="text-white/80 font-['IBM_Plex_Mono'] text-base group-hover:text-white/90 transition-colors duration-300">{description}</p>
+          <h3 className="text-xl md:text-2xl font-bold text-[#ccff00] font-['IBM_Plex_Mono'] mb-2 group-hover:text-white transition-colors duration-300">
+            {title}
+          </h3>
+          <p className="text-white/80 font-['IBM_Plex_Mono'] text-base group-hover:text-white/90 transition-colors duration-300">
+            {description}
+          </p>
         </div>
       </div>
     </motion.div>
   )
 }
 
-function WhyUsCard({ icon: Icon, title, description }: { icon: any; title: string; description: string }) {
+function WhyUsCard({
+  icon: Icon,
+  title,
+  description,
+}: {
+  icon: any
+  title: string
+  description: string
+}) {
   const shouldReduceMotion = useReducedMotion()
-  
+
   return (
     <motion.div
       variants={cardVariants}
       className="bg-black/80 p-8 md:p-10 rounded-2xl flex flex-col items-start text-left shadow-lg w-full h-full hover:bg-black/90 transition-colors duration-300 group backdrop-blur-sm"
-      whileHover={shouldReduceMotion ? {} : { 
-        y: -8,
-        boxShadow: "0 25px 50px rgba(204, 255, 0, 0.15)"
-      }}
+      whileHover={
+        shouldReduceMotion
+          ? {}
+          : {
+              y: -8,
+              boxShadow: '0 25px 50px rgba(204, 255, 0, 0.15)',
+            }
+      }
     >
       <div className="flex items-center mb-6">
-        <motion.div 
+        <motion.div
           className="w-16 h-16 mr-4 flex items-center justify-center bg-robinhood rounded-full aspect-square shrink-0 group-hover:bg-robinhood/90 transition-colors duration-300"
           whileHover={shouldReduceMotion ? {} : { scale: 1.1, rotate: -5 }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
         >
           <Icon className="w-8 h-8 text-black" />
         </motion.div>
-        <h3 className="text-xl md:text-2xl font-bold text-robinhood font-['IBM_Plex_Mono'] group-hover:text-white transition-colors duration-300">{title}</h3>
+        <h3 className="text-xl md:text-2xl font-bold text-robinhood font-['IBM_Plex_Mono'] group-hover:text-white transition-colors duration-300">
+          {title}
+        </h3>
       </div>
-      <p className="text-white/80 font-['IBM_Plex_Mono'] text-base group-hover:text-white/90 transition-colors duration-300">{description}</p>
+      <p className="text-white/80 font-['IBM_Plex_Mono'] text-base group-hover:text-white/90 transition-colors duration-300">
+        {description}
+      </p>
     </motion.div>
   )
 }
@@ -162,13 +209,13 @@ function WhyUsCard({ icon: Icon, title, description }: { icon: any; title: strin
 export default function Features() {
   const containerRef = useRef<HTMLDivElement>(null)
   const [isClient, setIsClient] = useState(false)
-  
+
   // Always call useScroll to maintain hooks order
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start end", "end start"],
+    offset: ['start end', 'end start'],
   })
-  
+
   useEffect(() => {
     setIsClient(true)
   }, [])
@@ -177,17 +224,20 @@ export default function Features() {
   const y = useTransform(scrollYProgress, [0, 0.2], [100, 0])
 
   const [currentStep, setCurrentStep] = useState(0)
-  const steps = ["Talk to us", "Plan together", "Build something great"]
+  const steps = ['Talk to us', 'Plan together', 'Build something great']
 
   const [isMounted, setIsMounted] = useState(false)
   const shouldReduceMotion = useReducedMotion()
-  const isInView = useInView(containerRef, { once: true, margin: "-100px" })
+  const isInView = useInView(containerRef, { once: true, margin: '-100px' })
 
   // Memoize animation timing based on reduced motion preference
-  const animationTiming = useMemo(() => ({
-    stepInterval: shouldReduceMotion ? 5000 : 3500, // Longer intervals for better UX
-    cardDelay: shouldReduceMotion ? 0 : 0.1
-  }), [shouldReduceMotion])
+  const animationTiming = useMemo(
+    () => ({
+      stepInterval: shouldReduceMotion ? 5000 : 3500, // Longer intervals for better UX
+      cardDelay: shouldReduceMotion ? 0 : 0.1,
+    }),
+    [shouldReduceMotion]
+  )
 
   useEffect(() => {
     setIsMounted(true)
@@ -202,7 +252,10 @@ export default function Features() {
   }, [animationTiming.stepInterval, steps.length])
 
   return (
-    <section ref={containerRef} className="relative py-28 md:py-32 overflow-hidden bg-robinhood w-full">
+    <section
+      ref={containerRef}
+      className="relative py-28 md:py-32 overflow-hidden bg-robinhood w-full"
+    >
       {/* Black falling stars */}
       <BlackFallingStars />
 
@@ -214,7 +267,7 @@ export default function Features() {
         }}
         variants={containerVariants}
         initial="hidden"
-        animate={isInView ? "visible" : "hidden"}
+        animate={isInView ? 'visible' : 'hidden'}
         className="relative container mx-auto px-4 z-10 max-w-6xl"
       >
         {/* Hero Section */}
@@ -223,8 +276,8 @@ export default function Features() {
           <h2
             className="text-4xl md:text-5xl lg:text-6xl font-bold mb-10 font-['IBM_Plex_Mono'] text-black"
             style={{
-              textShadow: "0 0 10px rgba(0, 0, 0, 0.3)",
-              WebkitTextStroke: "1px rgba(0, 0, 0, 0.3)",
+              textShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+              WebkitTextStroke: '1px rgba(0, 0, 0, 0.3)',
             }}
           >
             Hire elite developers, effortlessly.
@@ -232,7 +285,7 @@ export default function Features() {
         </div>
 
         {/* Cards Section */}
-        <motion.div 
+        <motion.div
           className="grid md:grid-cols-2 gap-6 md:gap-8 mb-16 md:mb-20 max-w-5xl mx-auto"
           variants={containerVariants}
         >
@@ -254,9 +307,12 @@ export default function Features() {
             variants={cardVariants}
             className="h-12 sm:h-16 flex items-center justify-center"
           >
-            <span className="text-2xl sm:text-4xl md:text-5xl font-mono font-black text-black" style={{
-              marginRight: '5px'
-            }}>
+            <span
+              className="text-2xl sm:text-4xl md:text-5xl font-normal font-black text-black"
+              style={{
+                marginRight: '13px',
+              }}
+            >
               Creative
             </span>
             <RotatingText
@@ -281,16 +337,12 @@ export default function Features() {
         {/* Clean Step Animation - Lamp Effect */}
         <div className="relative mb-24 md:mb-28 max-w-4xl mx-auto">
           {/* Steps Container */}
-          <div className="relative bg-gradient-to-br from-black/15 to-black/5 backdrop-blur-sm py-12 px-6 md:px-12 rounded-2xl border border-black/20 shadow-lg">            
+          <div className="relative bg-gradient-to-br from-black/15 to-black/5 backdrop-blur-sm py-12 px-6 md:px-12 rounded-2xl border border-black/20 shadow-lg">
             {/* Steps Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
               {steps.map((step, index) => (
                 <div key={index} className="flex justify-center">
-                  <StepAnimation 
-                    step={index + 1} 
-                    text={step} 
-                    isActive={currentStep === index}
-                  />
+                  <StepAnimation step={index + 1} text={step} isActive={currentStep === index} />
                 </div>
               ))}
             </div>
@@ -303,8 +355,8 @@ export default function Features() {
           <h2
             className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 font-['IBM_Plex_Mono'] text-black pb-3"
             style={{
-              textShadow: "0 0 10px rgba(0, 0, 0, 0.3)",
-              WebkitTextStroke: "1px rgba(0, 0, 0, 0.3)",
+              textShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+              WebkitTextStroke: '1px rgba(0, 0, 0, 0.3)',
             }}
           >
             Why choose DevX?
@@ -318,7 +370,7 @@ export default function Features() {
             </p>
           </div>
 
-          <motion.div 
+          <motion.div
             className="grid md:grid-cols-3 gap-8 md:gap-10 max-w-6xl mx-auto px-4"
             variants={containerVariants}
           >

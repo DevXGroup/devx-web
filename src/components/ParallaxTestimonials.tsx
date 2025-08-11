@@ -44,7 +44,7 @@ export default function ParallaxTestimonials() {
   })
 
   // Apple-style scaling effect for infinity animation
-  const infinityScale = useTransform(infinityScrollProgress, [0, 0.5, 1], [1, 1.8, 3])
+  const infinityScale = useTransform(infinityScrollProgress, [0, 0.5, 1], [1, 1.4, 2])
   const infinityOpacity = useTransform(infinityScrollProgress, [0, 0.4, 1], [1, 0.8, 0.3])
 
   useEffect(() => {
@@ -99,13 +99,13 @@ export default function ParallaxTestimonials() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 1, ease: "easeOut" }}
-          className="flex justify-center mb-12 -mt-8 sm:-mt-12 md:-mt-16"
+          className="flex justify-center mb-12 -mt-8 sm:-mt-12 md:-mt-16 relative z-50"
           style={{
             scale: infinityScale,
             opacity: infinityOpacity,
           }}
         >
-          <EnhancedInfinityLoader scrollThreshold={0.25} baseScale={0.5} maxScale={4.5} />
+          <EnhancedInfinityLoader scrollThreshold={0.25} baseScale={0.3} maxScale={2.5} />
         </motion.div>
 
         <motion.div
@@ -191,7 +191,7 @@ function TestimonialCard({ testimonial, index, containerRef, isHovered, onHover,
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: false, amount: 0.1 }}
-      className="bg-black/50 backdrop-blur-sm p-6 md:p-8 rounded-xl border border-white/10 flex flex-col h-full min-h-[400px] relative group shadow-lg"
+      className="bg-black/50 backdrop-blur-sm p-6 md:p-8 rounded-xl border border-white/10 flex flex-col h-full min-h-[400px] relative group shadow-lg overflow-hidden"
       onMouseEnter={isMobile ? undefined : onHover}
       onMouseLeave={isMobile ? undefined : onLeave}
       animate={isMobile ? {} : getPositionStyles()}
@@ -218,7 +218,7 @@ function TestimonialCard({ testimonial, index, containerRef, isHovered, onHover,
       </div>
 
       {/* Quote */}
-      <p className="text-white/90 italic mb-8 flex-grow relative z-10 text-base leading-relaxed">
+      <p className="text-white/90 italic mb-8 flex-grow relative z-10 text-base leading-relaxed break-words hyphens-auto overflow-wrap-break-word">
         &ldquo;{testimonial.quote}&rdquo;
       </p>
 
@@ -252,9 +252,9 @@ function TestimonialCard({ testimonial, index, containerRef, isHovered, onHover,
             }}
           />
         </div>
-        <div>
-          <h4 className="font-semibold text-white">{testimonial.author}</h4>
-          <p className="text-sm text-white/60">{testimonial.position}</p>
+        <div className="flex-1 min-w-0">
+          <h4 className="font-semibold text-white break-words">{testimonial.author}</h4>
+          <p className="text-sm text-white/60 break-words">{testimonial.position}</p>
         </div>
       </div>
 

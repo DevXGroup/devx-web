@@ -1,18 +1,22 @@
-"use client"
+'use client'
 
-import Image from "next/image"
-import Link from "next/link"
-import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Button } from "@/components/ui/button"
-import WavySeparator from "@/components/WavySeparator"
+import Image from 'next/image'
+import Link from 'next/link'
+import { Facebook, Instagram, Linkedin, Twitter } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Button } from '@/components/ui/button'
+import Threads from '@/components/Threads'
 
 export default function Footer() {
   return (
     <>
-      {/* Include the WavySeparator directly in the Footer component */}
-      <WavySeparator color="#9d4edd" opacity={0.66} height={110} />
+      {/* Include the Threads effect touching the footer */}
+      <div className="w-full h-[260px] relative bg-transparent -mb-32 mt-32">
+        <div className="absolute inset-0 z-10">
+          <Threads color={[5, 2, 7]} amplitude={2} distance={0.01} enableMouseInteraction={true} />
+        </div>
+      </div>
 
       <footer className="bg-background text-foreground py-16 relative">
         {/* Background Pattern */}
@@ -32,20 +36,32 @@ export default function Footer() {
                 />
               </Link>
               <p className="text-sm text-muted-foreground mb-6">
-                Connect with us on social media to explore our portfolio and discover our latest projects and exciting
-                announcements.
+                Connect with us on social media to explore our portfolio and discover our latest
+                projects and exciting announcements.
               </p>
               <div className="flex space-x-6 mt-auto">
-                <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link
+                  href="#"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
                   <Instagram className="w-5 h-5" />
                 </Link>
-                <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link
+                  href="#"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
                   <Twitter className="w-5 h-5" />
                 </Link>
-                <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link
+                  href="#"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
                   <Facebook className="w-5 h-5" />
                 </Link>
-                <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link
+                  href="#"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
                   <Linkedin className="w-5 h-5" />
                 </Link>
               </div>
