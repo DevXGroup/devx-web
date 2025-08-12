@@ -357,10 +357,19 @@ export default function AboutPage() {
           <div className="max-w-5xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <AnimatedSection>
+                <h1 className="sr-only">About Us</h1>
                 <div className="flex items-center justify-center w-full mb-8">
-                  <div style={{position: 'relative', height: '120px', width: '800px', padding: '0 20px', marginRight: '30px'}}>
+                  <div
+                    style={{
+                      position: 'relative',
+                      height: '120px',
+                      width: '420px',
+                      padding: '0 20px',
+                      marginRight: '30px',
+                    }}
+                  >
                     <TextPressure
-                      text="An Elite Unit for Your Most Critical Projects  "
+                      text="About  Us  "
                       flex={true}
                       alpha={false}
                       stroke={false}
@@ -373,18 +382,26 @@ export default function AboutPage() {
                     />
                   </div>
                 </div>
-                <p className="text-xl text-foreground/80 mb-8">
-                  We are the elite software development unit that high-growth companies trust when their most critical projects demand precision, speed, and guaranteed results.
+                <p
+                  className="text-lg md:text-xl text-foreground/90 mb-8 leading-relaxed font-['IBM_Plex_Sans'] mt-6"
+                  style={{
+                    letterSpacing: '0.025em',
+                    fontWeight: '400',
+                  }}
+                >
+                  We are a senior engineering team trusted by growth‑stage companies for complex and
+                  time‑sensitive projects. We ship production‑ready software with clear milestones,
+                  ownership, and post‑launch support.
                 </p>
                 <div className="flex flex-wrap gap-4">
                   <a
-                    href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
+                    href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="bg-robinhood text-black hover:bg-robinhood-90 px-6 py-3 rounded-lg transition-colors font-medium border border-black/30"
                     onClick={(e) => {
                       window.open(
-                        'https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05',
+                        'https://calendly.com/a-sheikhizadeh/devx-group-llc-representative',
                         '_blank'
                       )
                       e.preventDefault()
@@ -411,7 +428,7 @@ export default function AboutPage() {
                       fill
                       className="object-cover"
                       sizes="(max-width: 768px) 100vw, 50vw"
-                      priority={false}
+                      priority={true}
                     />
                     {/* ShapeBlur effect that creates animated mask on the image */}
                     <div className="absolute inset-0 mix-blend-multiply">
@@ -443,9 +460,9 @@ export default function AboutPage() {
                       ))}
                     </div>
                     <p className="text-white text-sm italic font-medium leading-relaxed">
-                      &ldquo;Our partnership with Dev Group has driven our company to be a leader in
-                      online channels. We recommend them for any business looking to have an active
-                      online presence creatively.&rdquo;
+                      &ldquo;Our partnership with DevX Group has driven our company to be a leader
+                      in online channels. We recommend them for any business looking to have an
+                      active online presence creatively.&rdquo;
                     </p>
                     <div className="mt-3 text-[#4CD787] text-sm font-medium">— Lazurd Inc CEO</div>
                   </div>
@@ -462,18 +479,79 @@ export default function AboutPage() {
           <AnimatedSection className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#CFB53B]">Our Impact</h2>
-              <p className="text-foreground/80 max-w-2xl mx-auto">
+              <p
+                className="text-lg md:text-xl text-foreground/90 max-w-2xl mx-auto leading-relaxed font-['IBM_Plex_Sans'] mt-4"
+                style={{
+                  letterSpacing: '0.025em',
+                  fontWeight: '400',
+                }}
+              >
                 Numbers that reflect our commitment to excellence and the trust our clients place in
                 us.
               </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
               <StatCounter number="100+" label="Happy Clients" delay={0.1} />
-              <StatCounter number="20+" label="Years Experience" delay={0.2} />
-              <StatCounter number="500+" label="Projects Completed" delay={0.3} />
-              <StatCounter number="15+" label="Team Members" delay={0.4} />
+              <StatCounter number="15+" label="Years Experience" delay={0.2} />
+              <StatCounter number="200+" label="Projects Completed" delay={0.3} />
+              <StatCounter number="23" label="Team Members" delay={0.4} />
             </div>
+            <p className="text-xs text-white/60 text-center mt-4">Totals verified internally.</p>
           </AnimatedSection>
+        </div>
+      </section>
+
+      {/* How We Work Section */}
+      <section className="py-20 relative">
+        <div className="container mx-auto px-4">
+          <AnimatedSection className="max-w-5xl mx-auto text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#CFB53B]">How We Work</h2>
+            <p
+              className="text-lg md:text-xl text-foreground/90 max-w-3xl mx-auto leading-relaxed font-['IBM_Plex_Sans'] mt-4"
+              style={{ letterSpacing: '0.025em', fontWeight: '400' }}
+            >
+              A simple, reliable process that keeps you in control and delivers outcomes on time.
+            </p>
+          </AnimatedSection>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="bg-black/30 backdrop-blur-sm p-6 rounded-xl border border-white/10">
+              <div className="flex items-center gap-3 mb-3">
+                <Users className="w-5 h-5 text-[#4CD787]" />
+                <h3 className="font-semibold text-white">Discovery</h3>
+              </div>
+              <p className="text-foreground/80 text-sm">
+                We align on goals, constraints, and success metrics in a focused call.
+              </p>
+            </div>
+            <div className="bg-black/30 backdrop-blur-sm p-6 rounded-xl border border-white/10">
+              <div className="flex items-center gap-3 mb-3">
+                <Globe className="w-5 h-5 text-[#4CD787]" />
+                <h3 className="font-semibold text-white">Solution Proposal</h3>
+              </div>
+              <p className="text-foreground/80 text-sm">
+                Clear milestones, scope, and ownership, with timeline and dependencies.
+              </p>
+            </div>
+            <div className="bg-black/30 backdrop-blur-sm p-6 rounded-xl border border-white/10">
+              <div className="flex items-center gap-3 mb-3">
+                <Zap className="w-5 h-5 text-[#4CD787]" />
+                <h3 className="font-semibold text-white">Build & Reviews</h3>
+              </div>
+              <p className="text-foreground/80 text-sm">
+                Weekly demos, no surprises. We optimize for reliability and maintainability.
+              </p>
+            </div>
+            <div className="bg-black/30 backdrop-blur-sm p-6 rounded-xl border border-white/10">
+              <div className="flex items-center gap-3 mb-3">
+                <Check className="w-5 h-5 text-[#4CD787]" />
+                <h3 className="font-semibold text-white">Delivery & Support</h3>
+              </div>
+              <p className="text-foreground/80 text-sm">
+                Handover, documentation, and stabilization support after launch.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -512,7 +590,15 @@ export default function AboutPage() {
           <div className="text-center mb-20 relative z-10">
             <div className="relative inline-block w-full">
               <div className="flex items-center justify-center w-full">
-                <div style={{position: 'relative', height: '120px', width: '400px', padding: '0 20px', marginRight: '30px'}}>
+                <div
+                  style={{
+                    position: 'relative',
+                    height: '120px',
+                    width: '400px',
+                    padding: '0 20px',
+                    marginRight: '30px',
+                  }}
+                >
                   <TextPressure
                     text="Our Story  "
                     flex={true}
@@ -530,7 +616,13 @@ export default function AboutPage() {
             </div>
 
             <AnimatedSection delay={0.5}>
-              <p className="text-xl text-foreground/80 max-w-2xl mx-auto leading-relaxed">
+              <p
+                className="text-lg md:text-xl text-foreground/90 max-w-2xl mx-auto leading-relaxed font-['IBM_Plex_Sans'] mt-6"
+                style={{
+                  letterSpacing: '0.025em',
+                  fontWeight: '400',
+                }}
+              >
                 DevX Group LLC was founded with a simple mission: to deliver exceptional software
                 solutions that drive real business results.
               </p>
@@ -552,10 +644,10 @@ export default function AboutPage() {
                       <div className="relative">
                         <div className="absolute -left-4 top-0 w-1 h-full bg-gradient-to-b from-[#4CD787] to-[#CFB53B] rounded-full" />
                         <p className="text-lg leading-relaxed pl-8">
-                          We are not your typical development agency. We are an elite commando unit, 
-                          assembled to handle the missions others can&apos;t complete. Every member of our
-                          team has been hand-selected for their exceptional skills, proven track record, 
-                          and ability to execute under pressure.
+                          We are not a typical development agency. We are a specialized senior team
+                          for complex and time‑sensitive projects. Every member of our team is
+                          hand‑selected for their skills, proven track record, and ability to
+                          execute under pressure.
                         </p>
                       </div>
                     </AnimatedSection>
@@ -564,24 +656,37 @@ export default function AboutPage() {
                       <div className="relative">
                         <div className="absolute -left-4 top-0 w-1 h-full bg-gradient-to-b from-[#CFB53B] to-[#4834D4] rounded-full" />
                         <div className="pl-8">
-                          <h4 className="text-xl font-semibold text-[#4CD787] mb-4">Our Three Core Principles:</h4>
+                          <h4 className="text-xl font-semibold text-[#4CD787] mb-4">
+                            Our Three Core Principles:
+                          </h4>
                           <div className="space-y-4">
                             <div>
-                              <h5 className="font-semibold text-white mb-2">1. Vetted Experts Only</h5>
+                              <h5 className="font-semibold text-white mb-2">
+                                1. Vetted Experts Only
+                              </h5>
                               <p className="text-lg leading-relaxed">
-                                No junior developers, no learning on your dime. Our team consists solely of senior-level professionals with 5+ years of proven experience.
+                                No junior developers, no learning on your dime. Our team consists
+                                solely of senior-level professionals with 5+ years of proven
+                                experience.
                               </p>
                             </div>
                             <div>
-                              <h5 className="font-semibold text-white mb-2">2. Precision & Efficiency</h5>
+                              <h5 className="font-semibold text-white mb-2">
+                                2. Precision & Efficiency
+                              </h5>
                               <p className="text-lg leading-relaxed">
-                                We move fast without breaking things. Every line of code, every decision, every deliverable is executed with military precision.
+                                We move fast without breaking things. Every line of code, every
+                                decision, every deliverable is executed with military precision.
                               </p>
                             </div>
                             <div>
-                              <h5 className="font-semibold text-white mb-2">3. No Project Left Behind</h5>
+                              <h5 className="font-semibold text-white mb-2">
+                                3. No Project Left Behind
+                              </h5>
                               <p className="text-lg leading-relaxed">
-                                When we take on your project, it gets completed. Period. We don&apos;t abandon missions, and we don&apos;t leave clients hanging.
+                                When we take on your project, it gets completed. Period. We
+                                don&apos;t abandon missions, and we don&apos;t leave clients
+                                hanging.
                               </p>
                             </div>
                           </div>
@@ -593,9 +698,11 @@ export default function AboutPage() {
                       <div className="relative">
                         <div className="absolute -left-4 top-0 w-1 h-full bg-gradient-to-b from-[#4834D4] to-[#9d4edd] rounded-full" />
                         <p className="text-lg leading-relaxed pl-8">
-                          Whether you need rapid MVP development, complex system integrations, or rescue operations 
-                          for failing projects, we deploy the right specialists for your specific mission. Our California-based 
-                          command ensures adherence to the highest standards while our distributed team enables 24/7 execution.
+                          Whether you need rapid MVP development, complex system integrations, or
+                          rescue operations for failing projects, we deploy the right specialists
+                          for your specific mission. Our California-based command ensures adherence
+                          to the highest standards while our distributed team enables 24/7
+                          execution.
                         </p>
                       </div>
                     </AnimatedSection>
@@ -667,7 +774,13 @@ export default function AboutPage() {
         <div className="container mx-auto px-4">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#CFB53B]">Our Values</h2>
-            <p className="text-foreground/80">
+            <p
+              className="text-lg md:text-xl text-foreground/90 leading-relaxed font-['IBM_Plex_Sans'] mt-4"
+              style={{
+                letterSpacing: '0.025em',
+                fontWeight: '400',
+              }}
+            >
               Our core values guide everything we do and define how we work with our clients and
               each other.
             </p>
@@ -683,7 +796,7 @@ export default function AboutPage() {
             <ValueCard
               icon={Shield}
               title="Responsible & Accountable"
-              description="We build long-term relationships with our customers and operate based on the USA standards."
+              description="We build long-term relationships and operate under U.S. standards."
               delay={0.2}
             />
             <ValueCard
@@ -722,7 +835,13 @@ export default function AboutPage() {
               <div className="absolute -top-24 -right-24 w-64 h-64 bg-[#4CD787]/10 rounded-full blur-3xl z-0"></div>
               <div className="relative z-10">
                 <h3 className="text-2xl font-semibold mb-6 text-[#4CD787]">Our Vision</h3>
-                <p className="text-foreground/80 leading-relaxed">
+                <p
+                  className="text-lg md:text-xl text-foreground/90 leading-relaxed font-['IBM_Plex_Sans'] mt-4"
+                  style={{
+                    letterSpacing: '0.025em',
+                    fontWeight: '400',
+                  }}
+                >
                   To revolutionize software development by delivering innovative, efficient, and
                   scalable solutions that empower businesses worldwide to thrive in a digital-first
                   future.
@@ -737,11 +856,16 @@ export default function AboutPage() {
               <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-[#4834D4]/10 rounded-full blur-3xl z-0"></div>
               <div className="relative z-10">
                 <h3 className="text-2xl font-semibold mb-6 text-[#4CD787]">Our Mission</h3>
-                <p className="text-foreground/80 leading-relaxed">
+                <p
+                  className="text-lg md:text-xl text-foreground/90 leading-relaxed font-['IBM_Plex_Sans'] mt-4"
+                  style={{
+                    letterSpacing: '0.025em',
+                    fontWeight: '400',
+                  }}
+                >
                   We aim to simplify the software development journey through a streamlined,
-                  result-first process, from free consultation to seamless onboarding and rapid
-                  delivery—ensuring our clients&apos; exceptional quality, adaptability, and
-                  long-term success.
+                  results-first process, from free consultation to seamless onboarding and rapid
+                  delivery, ensuring exceptional quality, adaptability, and long-term success.
                 </p>
               </div>
             </AnimatedSection>
@@ -749,30 +873,83 @@ export default function AboutPage() {
         </div>
       </section>
 
-
       {/* Team Section */}
       <section className="py-20 relative">
         <div className="container mx-auto px-4">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#CFB53B]">Our Leadership</h2>
-            <p className="text-foreground/80">
+            <p
+              className="text-lg md:text-xl text-foreground/90 leading-relaxed font-['IBM_Plex_Sans'] mt-4"
+              style={{
+                letterSpacing: '0.025em',
+                fontWeight: '400',
+              }}
+            >
               Meet the experienced professionals who lead our team and drive our success.
             </p>
           </AnimatedSection>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            <TeamMemberCard
-              name="Max Sheikhizadeh"
-              role="Mission Commander & Founder"
-              image="/images/about/ceo-headshot.png"
-              delay={0.1}
-            />
-            <TeamMemberCard
-              name="Milaad Sheikhizadeh"
-              role="Operations Director"
-              image="/images/about/cto-headshot.png"
-              delay={0.2}
-            />
+            {/* Leadership Card for Max Sheikhizadeh */}
+            <div>
+              <TeamMemberCard
+                name="Max Sheikhizadeh"
+                role="Mission Commander & Founder"
+                image="/images/about/ceo-headshot.png"
+                delay={0.1}
+              />
+              <div className="mt-4 text-foreground/80 text-sm">
+                15+ years of experience at Amazon, Viasat, Qualcomm, and high‑growth startups. Led
+                core teams delivering innovative features for Amazon’s e‑commerce platforms.
+                Combines deep engineering expertise with collaborative leadership to drive team
+                growth and consistent success.
+                <a
+                  href="https://www.linkedin.com/in/max-sheikhizadeh-7847a68/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#4CD787] text-sm hover:underline mt-2 inline-block"
+                >
+                  LinkedIn ›
+                </a>
+              </div>
+            </div>
+            {/* Leadership Card for Milaad Sheikhizadeh */}
+            <div>
+              <TeamMemberCard
+                name="Milaad Sheikhizadeh"
+                role="General Manager"
+                image="/images/about/cto-headshot.png"
+                delay={0.2}
+              />
+              <div className="mt-4 text-foreground/80 text-sm">
+                General Manager with a background in business studies at USD and sales experience at
+                Sunrun. Known for brilliance in sales and marketing, and a bright, effective
+                approach to management.
+                <a
+                  href="https://www.linkedin.com/in/milaad-sheikhizadeh-b086392a8/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#4CD787] text-sm hover:underline mt-2 inline-block"
+                >
+                  LinkedIn ›
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Delivery Ownership Assurance */}
+      <section className="py-12 relative">
+        <div className="container mx-auto px-4">
+          <div className="bg-black/35 backdrop-blur-sm border border-white/10 rounded-2xl p-6 md:p-8 max-w-5xl mx-auto">
+            <h3 className="text-2xl font-semibold mb-4 text-[#4CD787]">Delivery Ownership</h3>
+            <ul className="list-disc pl-5 space-y-2 text-foreground/90">
+              <li>Fixed scope with milestone reviews and progress transparency.</li>
+              <li>NDA by default and U.S.-based contracting.</li>
+              <li>Code ownership transfer with documentation at acceptance.</li>
+              <li>Stabilization support for 30 days post‑launch.</li>
+            </ul>
           </div>
         </div>
       </section>
@@ -797,19 +974,25 @@ export default function AboutPage() {
             <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
               Ready to Start Your Project?
             </h2>
-            <p className="text-xl text-foreground/80 mb-8 max-w-2xl mx-auto">
+            <p
+              className="text-lg md:text-xl text-foreground/90 mb-8 max-w-2xl mx-auto leading-relaxed font-['IBM_Plex_Sans'] mt-4"
+              style={{
+                letterSpacing: '0.025em',
+                fontWeight: '400',
+              }}
+            >
               Let&apos;s discuss how we can help you achieve your goals with our expert software
               development services.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <a
-                href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
+                href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-robinhood text-black hover:bg-robinhood-90 px-8 py-3 rounded-lg transition-colors font-medium border border-black/30"
                 onClick={(e) => {
                   window.open(
-                    'https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05',
+                    'https://calendly.com/a-sheikhizadeh/devx-group-llc-representative',
                     '_blank'
                   )
                   e.preventDefault()

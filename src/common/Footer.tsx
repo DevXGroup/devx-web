@@ -14,7 +14,7 @@ export default function Footer() {
       {/* Include the Threads effect touching the footer */}
       <div className="w-full h-[260px] relative bg-transparent -mb-32 mt-32">
         <div className="absolute inset-0 z-10">
-          <Threads color={[5, 2, 7]} amplitude={2} distance={0.01} enableMouseInteraction={true} />
+          <Threads color={[7, 2, 9]} amplitude={2} distance={0.01} enableMouseInteraction={true} />
         </div>
       </div>
 

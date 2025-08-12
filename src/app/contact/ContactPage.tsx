@@ -245,7 +245,10 @@ export default function ContactPage() {
                   />
                 </div>
               </div>
-              <p className="text-xl text-foreground/80 font-light max-w-2xl text-center">
+              <p className="text-lg md:text-xl text-foreground/90 font-light max-w-2xl text-center leading-relaxed font-['IBM_Plex_Sans'] mt-6" style={{
+                letterSpacing: '0.025em',
+                fontWeight: '400'
+              }}>
                 Ready to deploy the elite unit? Contact our command center to discuss your mission requirements and objectives.
               </p>
             </div>
@@ -267,7 +270,10 @@ export default function ContactPage() {
               <div className="space-y-8">
                 <div>
                   <h2 className="text-2xl font-bold mb-6 text-white">Contact Information</h2>
-                  <p className="text-foreground/70 mb-8">
+                  <p className="text-lg md:text-xl text-foreground/90 mb-8 leading-relaxed font-['IBM_Plex_Sans'] mt-4" style={{
+                    letterSpacing: '0.025em',
+                    fontWeight: '400'
+                  }}>
                     Fill out the form and our team will get back to you within 24 hours.
                   </p>
                 </div>
@@ -510,7 +516,10 @@ export default function ContactPage() {
             className="text-center max-w-3xl mx-auto mb-12"
           >
             <h2 className="text-3xl font-bold mb-6 text-[#CFB53B]">Schedule a Consultation</h2>
-            <p className="text-foreground/70 mb-8">
+            <p className="text-lg md:text-xl text-foreground/90 mb-8 leading-relaxed font-['IBM_Plex_Sans'] mt-4" style={{
+              letterSpacing: '0.025em',
+              fontWeight: '400'
+            }}>
               Book a time that works for you using our online scheduling tool. No back-and-forth emails needed.
             </p>
           </motion.div>
@@ -594,7 +603,10 @@ export default function ContactPage() {
             className="text-center max-w-3xl mx-auto mb-16"
           >
             <h2 className="text-3xl font-bold mb-6 text-[#CFB53B]">Frequently Asked Questions</h2>
-            <p className="text-foreground/70">Find quick answers to common questions about our services and process.</p>
+            <p className="text-lg md:text-xl text-foreground/90 leading-relaxed font-['IBM_Plex_Sans'] mt-4" style={{
+              letterSpacing: '0.025em',
+              fontWeight: '400'
+            }}>Find quick answers to common questions about our services and process.</p>
           </motion.div>
 
           <motion.div 

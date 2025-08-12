@@ -773,12 +773,12 @@ export default function PortfolioPage() {
             </div>
           </motion.div>
 
-          {/* Left Middle Square - DotGrid (130x130px) - Large screens only */}
+          {/* Left Middle Square - DotGrid (132x132px) - Large screens only */}
           <motion.div
             className="hidden lg:block absolute 
               top-1/2 -translate-y-1/2 left-[25%]
               backdrop-blur-md overflow-hidden
-              w-[130px] h-[130px]"
+              w-[132px] h-[132px]"
             style={{
               transform: 'rotate(12deg)',
               border: '2px solid rgba(72, 52, 212, 0.6)',
@@ -964,7 +964,11 @@ export default function PortfolioPage() {
 
               <motion.p
                 variants={fadeInUpVariants}
-                className="text-xl text-foreground/80 font-light max-w-2xl mb-4 sm:mb-8 lg:-mt-12"
+                className="text-lg md:text-xl text-foreground/90 font-light max-w-2xl mb-4 sm:mb-8 lg:-mt-12 leading-relaxed font-['IBM_Plex_Sans'] mt-6"
+                style={{
+                  letterSpacing: '0.025em',
+                  fontWeight: '400'
+                }}
               >
                 Explore our diverse range of projects showcasing our expertise in software
                 development and innovation.
@@ -1025,8 +1029,8 @@ export default function PortfolioPage() {
 
                   <motion.div
                     className="backdrop-blur-md overflow-hidden
-                      w-[80px] h-[80px]
-                      sm:w-[100px] sm:h-[100px]"
+                      w-[82px] h-[82px]
+                      sm:w-[102px] sm:h-[102px]"
                     style={{
                       transform: 'rotate(12deg)',
                       border: '2px solid rgba(72, 52, 212, 0.6)',
@@ -1193,7 +1197,10 @@ export default function PortfolioPage() {
             <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#CFB53B]">
               Ready to Build Your Next Project?
             </h2>
-            <p className="text-lg text-foreground/80 font-light mb-8">
+            <p className="text-lg md:text-xl text-foreground/90 font-light mb-8 leading-relaxed font-['IBM_Plex_Sans'] mt-4" style={{
+              letterSpacing: '0.025em',
+              fontWeight: '400'
+            }}>
               Let&apos;s collaborate to bring your ideas to life with our expertise in cutting-edge
               technologies.
             </p>
