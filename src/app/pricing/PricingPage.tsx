@@ -536,7 +536,11 @@ export default function PricingPage() {
 
             <motion.p
               variants={fadeInUpVariants}
-              className="text-xl md:text-2xl text-white/80 font-light mb-8 leading-relaxed max-w-3xl mx-auto"
+              className="text-lg md:text-xl text-white/90 font-light mb-8 leading-relaxed max-w-3xl mx-auto font-['IBM_Plex_Sans'] mt-6"
+              style={{
+                letterSpacing: '0.025em',
+                fontWeight: '400'
+              }}
             >
               Transparent, competitive hourly rates with no hidden fees.
               <span className="text-[#4CD787] font-medium"> Choose the perfect plan</span> for your
@@ -601,7 +605,10 @@ export default function PricingPage() {
                 </span>
                 ?
               </h2>
-              <p className="text-xl text-white/80 font-light mb-8 leading-relaxed">
+              <p className="text-lg md:text-xl text-white/90 font-light mb-8 leading-relaxed font-['IBM_Plex_Sans'] mt-4" style={{
+                letterSpacing: '0.025em',
+                fontWeight: '400'
+              }}>
                 Every project is unique. Let&apos;s discuss your specific requirements and create a
                 tailored solution that perfectly fits your vision and budget.
               </p>

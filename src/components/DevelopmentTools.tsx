@@ -114,7 +114,6 @@ export default function DevelopmentTools() {
     setMounted(true)
   }, [])
 
-
   // Move stars generation to component level
   const stars = useMemo(() => {
     const rng = seedrandom('devx-stars') // seed to ensure deterministic output
@@ -139,23 +138,27 @@ export default function DevelopmentTools() {
     }
 
     const runCycle = () => {
-      if (isManual || transitioning) return
-      
+      if (isManual || transitioning) {
+        // Keep the cycle alive while user interaction/transition is in progress
+        cycleRef.current = setTimeout(runCycle, 250)
+        return
+      }
+
       // Calculate next tool and its orbit position
       const nextIndex = (activeIndex + 1) % tools.length
       const nextTool = tools[nextIndex]
       const angle = (nextIndex * 360) / tools.length
       const radian = (angle * Math.PI) / 180
-      
+
       // Use responsive radius based on current screen size
       let radius = 240 // desktop default
       if (window.innerWidth < 640) radius = 170
       else if (window.innerWidth < 768) radius = 190
       else if (window.innerWidth < 1024) radius = 220
-      
+
       const fromX = Math.cos(radian) * radius
       const fromY = Math.sin(radian) * radius
-      
+
       // Start transition animation
       setTransitionData({
         from: { x: fromX, y: fromY },
@@ -163,72 +166,81 @@ export default function DevelopmentTools() {
         tool: nextTool,
       })
       setTransitioning(true)
-      
+
       // After transition, update active index
       setTimeout(() => {
         setActiveIndex(nextIndex)
         setTransitioning(false)
         setTransitionData(null)
-        
+
         // Schedule next cycle
         cycleRef.current = setTimeout(runCycle, DISPLAY_DURATION)
       }, 1200)
     }
-    
+
     // Start the cycle
     cycleRef.current = setTimeout(runCycle, DISPLAY_DURATION)
-    
+
     return () => {
       if (cycleRef.current) clearTimeout(cycleRef.current)
-      if (timerRef.current) clearTimeout(timerRef.current)
+      // Do not clear timerRef here, it controls resuming after manual clicks
     }
   }, [isManual, activeIndex, transitioning])
 
   // User click => trigger transition animation
-  const handleIconClick = useCallback((index: number) => {
-    if (transitioning || index === activeIndex) return
-    
-    setIsManual(true)
-    
-    // Calculate clicked tool's position
-    const clickedTool = tools[index]
-    const angle = (index * 360) / tools.length
-    const radian = (angle * Math.PI) / 180
-    
-    // Use responsive radius
-    let radius = 240 // desktop default
-    if (window.innerWidth < 640) radius = 170
-    else if (window.innerWidth < 768) radius = 190
-    else if (window.innerWidth < 1024) radius = 220
-    
-    const fromX = Math.cos(radian) * radius
-    const fromY = Math.sin(radian) * radius
-    
-    // Start transition animation
-    setTransitionData({
-      from: { x: fromX, y: fromY },
-      to: { x: 0, y: 0 },
-      tool: clickedTool,
-    })
-    setTransitioning(true)
-    
-    // After transition, update active index
-    setTimeout(() => {
-      setActiveIndex(index)
-      setTransitioning(false)
-      setTransitionData(null)
-    }, 800)
+  const handleIconClick = useCallback(
+    (index: number) => {
+      if (transitioning || index === activeIndex) return
 
-    // Clear any existing timer
-    if (timerRef.current) {
-      clearTimeout(timerRef.current)
-    }
+      setIsManual(true)
 
-    // Set new timer to resume auto-cycle
-    timerRef.current = setTimeout(() => {
-      setIsManual(false)
-    }, 3000) // Resume after 3 seconds
-  }, [isManual, activeIndex, transitioning])
+      // Pause any pending auto-cycle tick during manual interaction
+      if (cycleRef.current) {
+        clearTimeout(cycleRef.current)
+        cycleRef.current = null
+      }
+
+      // Calculate clicked tool's position
+      const clickedTool = tools[index]
+      const angle = (index * 360) / tools.length
+      const radian = (angle * Math.PI) / 180
+
+      // Use responsive radius
+      let radius = 240 // desktop default
+      if (window.innerWidth < 640) radius = 170
+      else if (window.innerWidth < 768) radius = 190
+      else if (window.innerWidth < 1024) radius = 220
+
+      const fromX = Math.cos(radian) * radius
+      const fromY = Math.sin(radian) * radius
+
+      // Start transition animation
+      setTransitionData({
+        from: { x: fromX, y: fromY },
+        to: { x: 0, y: 0 },
+        tool: clickedTool,
+      })
+      setTransitioning(true)
+
+      // After transition, update active index
+      setTimeout(() => {
+        setActiveIndex(index)
+        setTransitioning(false)
+        setTransitionData(null)
+      }, 800)
+
+      // Clear any existing timer
+      if (timerRef.current) {
+        clearTimeout(timerRef.current)
+      }
+
+      // Set new timer to resume auto-cycle
+      timerRef.current = setTimeout(() => {
+        setIsManual(false)
+      }, 3000) // Resume after 3 seconds
+    },
+    [isManual, activeIndex, transitioning]
+  )
 
   // Handle AI tool clicks (for now just log, later can be expanded)
   const handleAIToolClick = useCallback((index: number) => {
@@ -309,13 +321,12 @@ export default function DevelopmentTools() {
             </div>
           </div>
         </div>
-        
         {/* Animation container with proper sizing */}
         <div className="relative w-full h-[80vh] flex items-center justify-center">
-        {/* ============ Center black circle with glowing border ============ */}
-        {/* Responsive center position with decreased circumference */}
-        <div
-          className="
+          {/* ============ Center black circle with glowing border ============ */}
+          {/* Responsive center position with decreased circumference */}
+          <div
+            className="
             absolute z-[100]
             top-[50%] sm:top-[55%] md:top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2
             w-[60vw] h-[60vw] sm:w-[50vw] sm:h-[50vw] md:w-[45vw] md:h-[45vw] 
@@ -323,203 +334,199 @@ export default function DevelopmentTools() {
             rounded-full bg-black text-white
             flex items-center justify-center text-center p-3 sm:p-4 md:p-5 shadow-md
           "
-        >
-          {/* 
+          >
+            {/* 
             Pulsing outer border - enhanced for tablet visibility
           */}
-          <motion.div
-            className="pointer-events-none absolute inset-0 rounded-full border"
-            style={{ borderColor: 'rgba(255, 255, 255, 0.7)' }}
-            animate={{
-              opacity: [0.7, 1, 0.7],
-              scale: [1, 1.05, 1],
-              boxShadow: [
-                '0 0 10px rgba(255,255,255,0.4), inset 0 0 8px rgba(255,255,255,0.2)',
-                '0 0 30px rgba(255,255,255,0.8), inset 0 0 15px rgba(255,255,255,0.4)',
-                '0 0 10px rgba(255,255,255,0.4), inset 0 0 8px rgba(255,255,255,0.2)',
-              ],
-            }}
-            transition={{
-              duration: 4,
-              repeat: Number.POSITIVE_INFINITY,
-              repeatType: 'reverse',
-              ease: 'easeInOut',
-            }}
-          />
+            <motion.div
+              className="pointer-events-none absolute inset-0 rounded-full border"
+              style={{ borderColor: 'rgba(255, 255, 255, 0.7)' }}
+              animate={{
+                opacity: [0.7, 1, 0.7],
+                scale: [1, 1.05, 1],
+                boxShadow: [
+                  '0 0 10px rgba(255,255,255,0.4), inset 0 0 8px rgba(255,255,255,0.2)',
+                  '0 0 30px rgba(255,255,255,0.8), inset 0 0 15px rgba(255,255,255,0.4)',
+                  '0 0 10px rgba(255,255,255,0.4), inset 0 0 8px rgba(255,255,255,0.2)',
+                ],
+              }}
+              transition={{
+                duration: 4,
+                repeat: Number.POSITIVE_INFINITY,
+                repeatType: 'reverse',
+                ease: 'easeInOut',
+              }}
+            />
 
-          {/* 
+            {/* 
             "Black hole lines" inside => rotating arcs with motion blur trails
           */}
-          <motion.div
-            className="pointer-events-none absolute inset-0 flex items-center justify-center"
-            initial={{ rotate: 0 }}
-            animate={{ rotate: 360 }}
-            transition={{
-              duration: 6,
-              repeat: Number.POSITIVE_INFINITY,
-              ease: 'linear',
-            }}
-            style={{
-              filter: 'blur(0.5px)', // Add subtle motion blur
-            }}
-          >
-            <svg
-              width="100%"
-              height="100%"
-              viewBox="0 0 200 200"
-              fill="none"
-              className="opacity-70"
+            <motion.div
+              className="pointer-events-none absolute inset-0 flex items-center justify-center"
+              initial={{ rotate: 0 }}
+              animate={{ rotate: 360 }}
+              transition={{
+                duration: 6,
+                repeat: Number.POSITIVE_INFINITY,
+                ease: 'linear',
+              }}
+              style={{
+                filter: 'blur(0.5px)', // Add subtle motion blur
+              }}
             >
-              <defs>
-                {/* Enhanced motion blur filter for more blur effect */}
-                <filter id="motionBlur" x="-50%" y="-50%" width="200%" height="200%">
-                  <feGaussianBlur stdDeviation="2.5 1.5" result="blur" />
-                  <feOffset dx="1.5" dy="0" result="offset" in="SourceGraphic" />
-                  <feMerge>
-                    <feMergeNode in="blur" />
-                    <feMergeNode in="offset" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-
-                {/* Enhanced glowing trail effect with more blur */}
-                <filter id="glowTrail" x="-50%" y="-50%" width="200%" height="200%">
-                  <feGaussianBlur stdDeviation="3.5" result="coloredBlur" />
-                  <feMerge>
-                    <feMergeNode in="coloredBlur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-              </defs>
-
-              {/* Inner ring with subtle trail - increased intensity by 5% */}
-              <circle
-                cx="100"
-                cy="100"
-                r="45"
-                stroke="rgba(255,255,255,0.126)"
-                strokeWidth="1"
-                strokeDasharray="20 15"
+              <svg
+                width="100%"
+                height="100%"
+                viewBox="0 0 200 200"
                 fill="none"
-                filter="url(#glowTrail)"
-              />
+                className="opacity-70"
+              >
+                <defs>
+                  {/* Enhanced motion blur filter for more blur effect */}
+                  <filter id="motionBlur" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur stdDeviation="2.5 1.5" result="blur" />
+                    <feOffset dx="1.5" dy="0" result="offset" in="SourceGraphic" />
+                    <feMerge>
+                      <feMergeNode in="blur" />
+                      <feMergeNode in="offset" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
 
-              {/* Middle ring with medium trail - increased intensity by 5% */}
-              <circle
-                cx="100"
-                cy="100"
-                r="65"
-                stroke="rgba(255,255,255,0.189)"
-                strokeWidth="1.5"
-                strokeDasharray="30 20"
-                fill="none"
-                filter="url(#glowTrail)"
-              />
+                  {/* Enhanced glowing trail effect with more blur */}
+                  <filter id="glowTrail" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur stdDeviation="3.5" result="coloredBlur" />
+                    <feMerge>
+                      <feMergeNode in="coloredBlur" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+                </defs>
 
-              {/* Outer ring with subtle trail - increased intensity by 5% */}
-              <circle
-                cx="100"
-                cy="100"
-                r="85"
-                stroke="rgba(255,255,255,0.1575)"
-                strokeWidth="1"
-                strokeDasharray="25 25"
-                fill="none"
-                filter="url(#glowTrail)"
-              />
-            </svg>
-          </motion.div>
+                {/* Inner ring with subtle trail - increased intensity by 5% */}
+                <circle
+                  cx="100"
+                  cy="100"
+                  r="45"
+                  stroke="rgba(255,255,255,0.126)"
+                  strokeWidth="1"
+                  strokeDasharray="20 15"
+                  fill="none"
+                  filter="url(#glowTrail)"
+                />
 
-          {/* 
+                {/* Middle ring with medium trail - increased intensity by 5% */}
+                <circle
+                  cx="100"
+                  cy="100"
+                  r="65"
+                  stroke="rgba(255,255,255,0.189)"
+                  strokeWidth="1.5"
+                  strokeDasharray="30 20"
+                  fill="none"
+                  filter="url(#glowTrail)"
+                />
+
+                {/* Outer ring with subtle trail - increased intensity by 5% */}
+                <circle
+                  cx="100"
+                  cy="100"
+                  r="85"
+                  stroke="rgba(255,255,255,0.1575)"
+                  strokeWidth="1"
+                  strokeDasharray="25 25"
+                  fill="none"
+                  filter="url(#glowTrail)"
+                />
+              </svg>
+            </motion.div>
+
+            {/* 
             AnimatePresence for the tool's name/desc in center 
           */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeTool.name}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ duration: 0.4 }}
-              className="px-4 flex flex-col items-center"
-            >
-              {/* The icon above title (shared layout => ring->center) */}
+            <AnimatePresence mode="wait">
               <motion.div
-                layoutId={`icon-${activeTool.name}`}
-                transition={{
-                  type: 'spring',
-                  stiffness: 250,
-                  damping: 30,
-                  layout: { duration: 0.6 },
-                }}
-                className="mb-3"
+                key={activeTool.name}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.4 }}
+                className="px-4 flex flex-col items-center"
               >
-                <div className="relative w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12">
-                  <Image
-                    src={activeTool.icon || '/placeholder.svg'}
-                    alt={activeTool.name}
-                    fill
-                    className={`object-contain ${
-                      activeTool.name === 'Laravel' ? 'brightness-150 saturate-150' : ''
-                    }`}
-                    style={
-                      activeTool.name === 'Laravel'
-                        ? {
-                            filter:
-                              'brightness(1.5) saturate(1.5) hue-rotate(300deg) contrast(1.2)',
-                          }
-                        : undefined
-                    }
-                  />
-                </div>
-              </motion.div>
+                {/* The icon above title (shared layout => ring->center) */}
+                <motion.div
+                  layoutId={`icon-${activeTool.name}`}
+                  transition={{
+                    type: 'spring',
+                    stiffness: 250,
+                    damping: 30,
+                    layout: { duration: 0.6 },
+                  }}
+                  className="mb-3"
+                >
+                  <div className="relative w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12">
+                    <Image
+                      src={activeTool.icon || '/placeholder.svg'}
+                      alt={activeTool.name}
+                      fill
+                      className={`object-contain ${
+                        activeTool.name === 'Laravel' ? 'brightness-150 saturate-150' : ''
+                      }`}
+                      style={
+                        activeTool.name === 'Laravel'
+                          ? {
+                              filter:
+                                'brightness(1.5) saturate(1.5) hue-rotate(300deg) contrast(1.2)',
+                            }
+                          : undefined
+                      }
+                    />
+                  </div>
+                </motion.div>
 
-              <h2
-                className="text-base sm:text-lg md:text-xl font-bold mb-2 text-white drop-shadow-lg"
-                style={{
-                  textShadow:
-                    '0 2px 4px rgba(0,0,0,0.9), 0 0 15px rgba(255,255,255,0.6), 0 0 25px rgba(255,255,255,0.3)',
-                }}
-              >
-                {activeTool.name}
-              </h2>
-              <p
-                className="text-xs sm:text-sm md:text-base text-white font-light leading-relaxed px-2"
-                style={{
-                  textShadow: '0 1px 3px rgba(0,0,0,0.9), 0 0 10px rgba(255,255,255,0.3)',
-                }}
-              >
-                {activeTool.description}
-              </p>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-        {/* ============ Transition Animation ============ */}
-        {transitioning && transitionData && (
-          <TransitionPlanet
-            from={transitionData.from}
-            to={transitionData.to}
-            tool={transitionData.tool}
-            duration={1200}
+                <h2
+                  className="text-base sm:text-lg md:text-xl font-bold mb-2 text-white drop-shadow-lg"
+                  style={{
+                    textShadow:
+                      '0 2px 4px rgba(0,0,0,0.9), 0 0 15px rgba(255,255,255,0.6), 0 0 25px rgba(255,255,255,0.3)',
+                  }}
+                >
+                  {activeTool.name}
+                </h2>
+                <p
+                  className="text-xs sm:text-sm md:text-base text-white font-light leading-relaxed px-2"
+                  style={{
+                    textShadow: '0 1px 3px rgba(0,0,0,0.9), 0 0 10px rgba(255,255,255,0.3)',
+                  }}
+                >
+                  {activeTool.description}
+                </p>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+          {/* ============ Transition Animation ============ */}
+          {transitioning && transitionData && (
+            <TransitionPlanet
+              from={transitionData.from}
+              to={transitionData.to}
+              tool={transitionData.tool}
+              duration={1200}
+            />
+          )}
+
+          {/* ============ Orbiting Icons ============ */}
+          {/* z-[85] - Below center but above AI tools */}
+          <StaticIconsOrbit
+            tools={tools}
+            activeIndex={activeIndex}
+            onIconClick={handleIconClick}
+            transitioning={transitioning}
+            transitionData={transitionData}
           />
-        )}
-        
-        {/* ============ Orbiting Icons ============ */}
-        {/* z-[85] - Below center but above AI tools */}
-        <StaticIconsOrbit
-          tools={tools}
-          activeIndex={activeIndex}
-          onIconClick={handleIconClick}
-          transitioning={transitioning}
-          transitionData={transitionData}
-        />
-        {/* ============ Outer AI Tools Orbit ============ */}
-        {/* z-[90] - Below inner orbit but visible */}
-        <AIToolsOrbit
-          activeIndex={activeIndex}
-          onIconClick={handleAIToolClick}
-        />
+          {/* ============ Outer AI Tools Orbit ============ */}
+          {/* z-[90] - Below inner orbit but visible */}
+          <AIToolsOrbit activeIndex={activeIndex} onIconClick={handleAIToolClick} />
         </div>
-        
         {/* Bottom spacing */}
         <div className="pb-32"></div>
       </div>
@@ -714,15 +721,15 @@ function StaticIconsOrbit({
 }) {
   // Responsive radius like the original getResponsiveRadius but fixed per render
   const [radius, setRadius] = useState(240)
-  
+
   useEffect(() => {
     const updateRadius = () => {
-      if (window.innerWidth < 640) setRadius(170)   // mobile
-      else if (window.innerWidth < 768) setRadius(190)   // small tablet
-      else if (window.innerWidth < 1024) setRadius(220)  // tablet
+      if (window.innerWidth < 640) setRadius(170) // mobile
+      else if (window.innerWidth < 768) setRadius(190) // small tablet
+      else if (window.innerWidth < 1024) setRadius(220) // tablet
       else setRadius(240) // desktop
     }
-    
+
     updateRadius()
     window.addEventListener('resize', updateRadius)
     return () => window.removeEventListener('resize', updateRadius)
@@ -732,10 +739,10 @@ function StaticIconsOrbit({
     <div className="absolute z-[85] top-[50%] sm:top-[55%] md:top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2">
       {tools.map((tool, i) => {
         if (i === activeIndex) return null
-        
+
         // Hide the orbiting circle if it's currently transitioning
         if (transitioning && transitionData?.tool.name === tool.name) return null
-        
+
         const angle = (i * 360) / tools.length
         const radian = (angle * Math.PI) / 180
 
@@ -806,16 +813,16 @@ function AIToolsOrbit({
   const [mounted, setMounted] = useState(false)
   const [radius, setRadius] = useState(380)
   const orbitRef = useRef<HTMLDivElement>(null)
-  
+
   // Set responsive radius for AI tools
   useEffect(() => {
     const updateRadius = () => {
-      if (window.innerWidth < 640) setRadius(280)   // mobile
-      else if (window.innerWidth < 768) setRadius(320)   // small tablet
-      else if (window.innerWidth < 1024) setRadius(360)  // tablet
+      if (window.innerWidth < 640) setRadius(280) // mobile
+      else if (window.innerWidth < 768) setRadius(320) // small tablet
+      else if (window.innerWidth < 1024) setRadius(360) // tablet
       else setRadius(380) // desktop
     }
-    
+
     updateRadius()
     window.addEventListener('resize', updateRadius)
     return () => window.removeEventListener('resize', updateRadius)

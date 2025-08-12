@@ -382,10 +382,10 @@ export default function ServicesPage() {
 
               <motion.p
                 variants={floatingAnimation}
-                className="text-md max-w-xl mx-auto relative z-30 font-['IBM_Plex_Sans']"
+                className="text-lg md:text-xl max-w-2xl mx-auto relative z-30 font-['IBM_Plex_Sans'] leading-relaxed mt-6"
                 style={{
                   textShadow: '0 2px 8px rgba(0,0,0,0.9)',
-                  fontWeight: '500',
+                  fontWeight: '400',
                   letterSpacing: '0.025em',
                 }}
               >
@@ -642,7 +642,7 @@ export default function ServicesPage() {
               </motion.h2>
 
               <motion.p
-                className="text-lg text-white font-medium mb-8 font-['IBM_Plex_Sans']"
+                className="text-lg md:text-xl text-white font-['IBM_Plex_Sans'] leading-relaxed mb-8 mt-4"
                 initial={{ opacity: 0 }}
                 whileInView={{
                   opacity: 1,
@@ -652,7 +652,7 @@ export default function ServicesPage() {
                 style={{
                   textShadow: '0 2px 6px rgba(0,0,0,0.8)',
                   letterSpacing: '0.025em',
-                  fontWeight: '500',
+                  fontWeight: '400',
                 }}
               >
                 Let&apos;s discuss how we can help you achieve your goals with our expert software
@@ -715,7 +715,7 @@ export default function ServicesPage() {
                   transition: { delay: 0.3, duration: 0.6 },
                 }}
                 viewport={{ once: true, amount: 0.2 }}
-                className="text-lg text-white/80 mt-4 max-w-2xl mx-auto font-['IBM_Plex_Sans']"
+                className="text-lg md:text-xl text-white/90 mt-6 max-w-2xl mx-auto font-['IBM_Plex_Sans'] leading-relaxed"
                 style={{
                   textShadow: '0 2px 6px rgba(0,0,0,0.8)',
                   letterSpacing: '0.025em',
