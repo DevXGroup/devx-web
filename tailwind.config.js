@@ -61,6 +61,9 @@ module.exports = {
         },
         robinhood: "#ccff00",
       },
+      scale: {
+        '120': '1.2',
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

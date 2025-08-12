@@ -27,14 +27,13 @@ const DynamicShootingStars = dynamic(() => import('./hero/ShootingStars'), {
 })
 
 const subheaders = [
-  "Rapid MVP Development",
-  "AI-Powered Automation",
-  "Scalable Cloud Solutions",
-  "Engaging Mobile Apps",
-  "IoT & Hardware Integration",
-  "Stunning UI/UX Design"
+  'Rapid MVP Development',
+  'AI-Powered Automation',
+  'Scalable Cloud Solutions',
+  'Engaging Mobile Apps',
+  'IoT & Hardware Integration',
+  'Stunning UI/UX Design',
 ]
-
 
 // Enhanced animation variants for better performance
 const containerVariants = {
@@ -110,18 +109,17 @@ export default function Hero() {
       >
         <div className="text-center mx-auto max-w-full px-4">
           {/* Hero content wrapper - this div prevents movement on button hover */}
-          <div className="mb-8 sm:mb-12">
+          <div className="sm:mb-12">
             <motion.h1
               variants={itemVariants}
-              className="hero-title text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-[8rem] xl:text-[10rem] 2xl:text-[12rem] font-mono font-normal tracking-tight text-white mb-4 sm:mb-6 leading-tight md:whitespace-nowrap text-glow-hero drop-shadow-[0_0_25px_rgba(255,255,255,0.8)] px-2 sm:px-0"
+              className="hero-title text-3xl xs:text-4xl sm:text-5xl md:text-7xl lg:text-[8rem] xl:text-[10rem] 2xl:text-[12rem] font-mono font-normal tracking-tight text-white sm:mb-6 leading-tight md:whitespace-nowrap text-glow-hero drop-shadow-[0_0_25px_rgba(255,255,255,0.8)] px-2 sm:px-0"
             >
               Your Vision, <span style={{ color: '#ccff00' }}>Engineered.</span>
             </motion.h1>
 
-
             <motion.p
               variants={itemVariants}
-              className="text-lg sm:text-xl md:text-2xl text-white font-mono font-light mb-6 sm:mb-8 px-2 sm:px-0 leading-relaxed"
+              className="text-lg sm:text-xl md:text-2xl text-white font-mono font-light mb-10 sm:mb-12 md:mb-16 px-2 sm:px-0 leading-relaxed mt-16"
             >
               elite software development team.
               <br />
@@ -131,7 +129,7 @@ export default function Hero() {
 
           <motion.div
             variants={itemVariants}
-            className="h-12 sm:h-16 mb-6 sm:mb-8"
+            className="h-12 sm:h-16 mb-6 sm:mb-8 mt-8 sm:mt-12 md:mt-16 lg:h-auto lg:mb-0 lg:mt-0 lg:flex lg:justify-center lg:items-center lg:my-16 xl:my-20"
           >
             <TextType
               text={subheaders}
@@ -149,14 +147,9 @@ export default function Hero() {
 
           <motion.div
             variants={itemVariants}
-            className="flex flex-wrap justify-center gap-4 relative z-50 mt-4 md:mt-6 lg:mt-8"
+            className="flex flex-wrap justify-center gap-4 relative z-50 mt-8 md:mt-12 lg:-mt-8 xl:-mt-12 transform lg:scale-110 xl:scale-120"
           >
-            <motion.div
-              variants={buttonVariants}
-              initial="rest"
-              whileHover="hover"
-              whileTap="tap"
-            >
+            <motion.div variants={buttonVariants} initial="rest" whileHover="hover" whileTap="tap">
               <StarBorder
                 as="a"
                 href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
@@ -169,12 +162,7 @@ export default function Hero() {
                 Schedule a Strategy Call
               </StarBorder>
             </motion.div>
-            <motion.div
-              variants={buttonVariants}
-              initial="rest"
-              whileHover="hover"
-              whileTap="tap"
-            >
+            <motion.div variants={buttonVariants} initial="rest" whileHover="hover" whileTap="tap">
               <StarBorder
                 onClick={navigateToOurValues}
                 color="#9d4edd"
