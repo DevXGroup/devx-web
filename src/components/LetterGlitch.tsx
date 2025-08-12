@@ -183,20 +183,29 @@ const LetterGlitch = ({
   };
 
   const drawLetters = () => {
-    if (!context.current || letters.current.length === 0) return;
+    if (!context.current || !canvasRef.current || letters.current.length === 0) return;
     const ctx = context.current;
-    const canvas = canvasRef.current!;
-    const rect = canvas.getBoundingClientRect();
+    const canvas = canvasRef.current;
+    let rect = { width: 100, height: 100 };
+    try {
+      rect = canvas.getBoundingClientRect();
+    } catch (error) {
+      console.warn('Could not get canvas dimensions, using defaults', error);
+    }
     ctx.clearRect(0, 0, rect.width, rect.height);
     ctx.font = `${fontSize}px monospace`;
     ctx.textBaseline = "top";
 
-    letters.current.forEach((letter, index) => {
-      const x = (index % grid.current.columns) * charWidth;
-      const y = Math.floor(index / grid.current.columns) * charHeight;
-      ctx.fillStyle = letter.color;
-      ctx.fillText(letter.char, x, y);
-    });
+    try {
+      letters.current.forEach((letter, index) => {
+        const x = (index % grid.current.columns) * charWidth;
+        const y = Math.floor(index / grid.current.columns) * charHeight;
+        ctx.fillStyle = letter.color;
+        ctx.fillText(letter.char, x, y);
+      });
+    } catch (error) {
+      console.warn('Error drawing letters', error);
+    }
   };
 
   const updateLetters = () => {
@@ -295,9 +304,15 @@ const LetterGlitch = ({
       if (!parent) return;
       
       // Use fixed minimum dimensions to ensure reliability
-      const rect = parent.getBoundingClientRect();
-      const width = Math.max(rect.width || 100, 100);
-      const height = Math.max(rect.height || 100, 100);
+      let width = 100;
+      let height = 100;
+      try {
+        const rect = parent.getBoundingClientRect();
+        width = Math.max(rect.width || 100, 100);
+        height = Math.max(rect.height || 100, 100);
+      } catch (error) {
+        console.warn('Could not get parent element dimensions, using defaults', error);
+      }
       
       const dpr = window.devicePixelRatio || 1;
       canvas.width = width * dpr;
@@ -373,7 +388,9 @@ const LetterGlitch = ({
       <canvas 
         ref={canvasRef} 
         className="absolute inset-0 w-full h-full block"
-        style={{ width: '100%', height: '100%' }}
+        style={{ width: '100%', height: '100%', minWidth: '50px', minHeight: '50px' }}
+        // Add fallback text if canvas fails
+        aria-label="Animated Glitch Background"
       />
       {outerVignette && (
         <div

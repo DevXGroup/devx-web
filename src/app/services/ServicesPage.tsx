@@ -23,7 +23,7 @@ import ServiceCard from '@/components/services/ServiceCard'
 import AppleScrollSection from '@/components/services/AppleScrollSection'
 import ScrollVelocityText from '@/components/ScrollVelocityText'
 
-import BraidedRopeAnimation from '@/components/BraidedRopeAnimation'
+import HyperSpeed from '@/components/HyperSpeed'
 
 // Define services array here, as it's specific to this page's cards
 const services = [
@@ -261,89 +261,76 @@ export default function ServicesPage() {
   const activeServiceData = services.find((s, i) => i === activeService) || services[0]
 
   return (
-    <div className="min-h-screen bg-background mt-0 pt-0">
+    <div className="min-h-screen bg-background pt-24">
       {/* Hero Section with Enhanced Metallic Helix */}
       <section
         ref={heroRef}
-        className="relative min-h-screen py-20 flex flex-col items-center justify-center pt-32 overflow-hidden"
+        className="relative min-h-screen py-20 flex flex-col items-center justify-center overflow-hidden"
       >
         <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-900/10 to-black" />
 
-        {/* Full-screen 3D Braided Rope Animation - Background under Our Services title */}
+        {/* HyperSpeed Animation - Hero section above DevX Edge */}
         {isClient && (
-          <div className="absolute inset-0 w-full h-full z-10 overflow-hidden pointer-events-auto">
-            <BraidedRopeAnimation className="absolute inset-0 w-full h-full" />
+          <div 
+            className="absolute left-0 right-0 w-screen h-[60vh] z-5 overflow-hidden" 
+            style={{ 
+              top: '-50px',
+              pointerEvents: 'none',
+              userSelect: 'none',
+              touchAction: 'none'
+            }}
+          >
+            <HyperSpeed 
+              className="w-full h-full opacity-40" 
+              effectOptions={{
+                colors: {
+                  roadColor: 0x0f0f0f,
+                  islandColor: 0x1a1a1a,
+                  background: 0x000000,
+                  shoulderLines: 0x4CD787,
+                  brokenLines: 0x6b4d9d,
+                  leftCars: [0x4CD787, 0x6b4d9d, 0x8a7c3b, 0x4856d4],
+                  rightCars: [0x6b4d9d, 0x4CD787, 0x8a7c3b, 0x4856d4],
+                  sticks: 0x4CD787,
+                },
+              }}
+            />
           </div>
         )}
 
-        {/* Subtle light beams */}
+        {/* Minimal light beams */}
         <div className="absolute inset-0 w-full z-0">
           <motion.div
             initial={{ opacity: 0, rotate: -45, x: '-50%', y: '100%' }}
             animate={{
-              opacity: [0, 0.15, 0],
-              y: ['100%', '-100%'],
-              transition: {
-                duration: 8,
-                repeat: Number.POSITIVE_INFINITY,
-                repeatType: 'loop',
-                ease: 'linear',
-              },
-            }}
-            className="absolute left-1/4 w-[40px] h-[600px] bg-gradient-to-t from-[#4CD787]/0 via-[#4CD787]/20 to-[#4CD787]/0"
-            style={{ transform: 'rotate(-45deg)' }}
-          />
-
-          <motion.div
-            initial={{ opacity: 0, rotate: 45, x: '50%', y: '100%' }}
-            animate={{
-              opacity: [0, 0.15, 0],
-              y: ['100%', '-100%'],
-              transition: {
-                duration: 10,
-                repeat: Number.POSITIVE_INFINITY,
-                repeatType: 'loop',
-                ease: 'linear',
-                delay: 4,
-              },
-            }}
-            className="absolute right-1/4 w-[40px] h-[600px] bg-gradient-to-t from-[#4834D4]/0 via-[#4834D4]/20 to-[#4834D4]/0"
-            style={{ transform: 'rotate(45deg)' }}
-          />
-
-          {/* Additional light beams */}
-          <motion.div
-            initial={{ opacity: 0, rotate: -30, x: '-30%', y: '100%' }}
-            animate={{
-              opacity: [0, 0.1, 0],
+              opacity: [0, 0.08, 0],
               y: ['100%', '-100%'],
               transition: {
                 duration: 12,
                 repeat: Number.POSITIVE_INFINITY,
                 repeatType: 'loop',
                 ease: 'linear',
-                delay: 2,
               },
             }}
-            className="absolute left-1/3 w-[30px] h-[800px] bg-gradient-to-t from-[#CFB53B]/0 via-[#CFB53B]/15 to-[#CFB53B]/0"
-            style={{ transform: 'rotate(-30deg)' }}
+            className="absolute left-1/4 w-[30px] h-[500px] bg-gradient-to-t from-[#4CD787]/0 via-[#4CD787]/10 to-[#4CD787]/0"
+            style={{ transform: 'rotate(-45deg)' }}
           />
 
           <motion.div
-            initial={{ opacity: 0, rotate: 30, x: '30%', y: '100%' }}
+            initial={{ opacity: 0, rotate: 45, x: '50%', y: '100%' }}
             animate={{
-              opacity: [0, 0.12, 0],
+              opacity: [0, 0.08, 0],
               y: ['100%', '-100%'],
+              transition: {
+                duration: 14,
+                repeat: Number.POSITIVE_INFINITY,
+                repeatType: 'loop',
+                ease: 'linear',
+                delay: 7,
+              },
             }}
-            transition={{
-              duration: 9,
-              repeat: Number.POSITIVE_INFINITY,
-              repeatType: 'loop',
-              ease: 'linear',
-              delay: 6,
-            }}
-            className="absolute right-1/3 w-[35px] h-[700px] bg-gradient-to-t from-[#9d4edd]/0 via-[#9d4edd]/18 to-[#9d4edd]/0"
-            style={{ transform: 'rotate(30deg)' }}
+            className="absolute right-1/4 w-[30px] h-[500px] bg-gradient-to-t from-[#4834D4]/0 via-[#4834D4]/10 to-[#4834D4]/0"
+            style={{ transform: 'rotate(45deg)' }}
           />
         </div>
 
@@ -361,10 +348,18 @@ export default function ServicesPage() {
                   },
                 },
               }}
-              className="text-center max-w-4xl mx-auto title-margin pointer-events-none"
+              className="text-center max-w-4xl mx-auto title-margin pointer-events-none  -mt-8"
             >
-              <div className="flex items-center justify-center w-full mb-8">
-                <div style={{position: 'relative', height: '120px', width: '320px', padding: '0 20px', marginRight: '30px'}}>
+              <div className="flex items-center justify-center w-full">
+                <div
+                  style={{
+                    position: 'relative',
+                    height: '100px',
+                    width: '320px',
+                    padding: '0 20px',
+                    marginRight: '30px',
+                  }}
+                >
                   <TextPressure
                     text="Services  "
                     flex={true}
@@ -375,14 +370,14 @@ export default function ServicesPage() {
                     italic={false}
                     textColor="#CFB53B"
                     strokeColor="#FFFFFF"
-                    minFontSize={36}
+                    minFontSize={59}
                   />
                 </div>
               </div>
 
               <motion.p
                 variants={floatingAnimation}
-                className="text-lg md:text-xl max-w-2xl mx-auto relative z-30 font-['IBM_Plex_Sans'] leading-relaxed mt-6"
+                className="text-lg md:text-xl font-light max-w-2xl mx-auto relative z-30 font-['IBM_Plex_Sans'] leading-relaxed mt-2"
                 style={{
                   textShadow: '0 2px 8px rgba(0,0,0,0.9)',
                   fontWeight: '400',
@@ -395,34 +390,7 @@ export default function ServicesPage() {
             </motion.div>
           </div>
 
-          {/* Drag indicator for rope animation */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.5, duration: 0.8 }}
-            className="relative z-30 text-center mb-8"
-          >
-            <motion.p
-              animate={{
-                opacity: [0.6, 1, 0.6],
-                scale: [0.98, 1.02, 0.98],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
-              className="text-sm text-white/60 font-light tracking-wide"
-              style={{
-                textShadow: '0 1px 4px rgba(0,0,0,0.8)',
-              }}
-            >
-              → drag/interact ←
-            </motion.p>
-          </motion.div>
 
-          {/* Content spacing for braided rope animation */}
-          <div className="w-full mx-auto mb-12 h-8"></div>
 
           {/* Value Propositions with Apple-style reveal */}
           <div
@@ -642,7 +610,7 @@ export default function ServicesPage() {
               </motion.h2>
 
               <motion.p
-                className="text-lg md:text-xl text-white font-['IBM_Plex_Sans'] leading-relaxed mb-8 mt-4"
+                className="text-lg md:text-xl text-white font-light font-['IBM_Plex_Sans'] leading-relaxed mb-8 mt-2"
                 initial={{ opacity: 0 }}
                 whileInView={{
                   opacity: 1,
@@ -715,7 +683,7 @@ export default function ServicesPage() {
                   transition: { delay: 0.3, duration: 0.6 },
                 }}
                 viewport={{ once: true, amount: 0.2 }}
-                className="text-lg md:text-xl text-white/90 mt-6 max-w-2xl mx-auto font-['IBM_Plex_Sans'] leading-relaxed"
+                className="text-lg md:text-xl text-white/90 font-light mt-2 max-w-2xl mx-auto font-['IBM_Plex_Sans'] leading-relaxed"
                 style={{
                   textShadow: '0 2px 6px rgba(0,0,0,0.8)',
                   letterSpacing: '0.025em',

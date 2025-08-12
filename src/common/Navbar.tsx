@@ -1,12 +1,12 @@
-"use client"
+'use client'
 
-import { useState, useEffect, useRef } from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { Menu, X } from "lucide-react"
-import { motion } from "framer-motion"
-import Image from "next/image"
-import { useBackdropFilterSupport } from "@/hooks/use-backdrop-filter-support"
+import { useState, useEffect, useRef } from 'react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { Menu, X } from 'lucide-react'
+import { motion } from 'framer-motion'
+import Image from 'next/image'
+import { useBackdropFilterSupport } from '@/hooks/use-backdrop-filter-support'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -24,8 +24,8 @@ export default function Navbar() {
     // Initial check on mount
     handleScroll()
 
-    window.addEventListener("scroll", handleScroll, { passive: true })
-    return () => window.removeEventListener("scroll", handleScroll)
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   // Click outside to close mobile menu and handle escape key
@@ -33,8 +33,9 @@ export default function Navbar() {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Node
       const isClickInsideMenu = mobileMenuRef.current && mobileMenuRef.current.contains(target)
-      const isClickOnButton = hamburgerButtonRef.current && hamburgerButtonRef.current.contains(target)
-      
+      const isClickOnButton =
+        hamburgerButtonRef.current && hamburgerButtonRef.current.contains(target)
+
       if (!isClickInsideMenu && !isClickOnButton) {
         setIsOpen(false)
       }
@@ -68,18 +69,18 @@ export default function Navbar() {
   const bgOpacity = supportsBackdropFilter ? 0.5 : 0.85
   const scrolledBgStyle = {
     backgroundColor: `rgba(0, 0, 0, ${bgOpacity})`,
-    backdropFilter: supportsBackdropFilter ? "blur(10px)" : "none",
-    WebkitBackdropFilter: supportsBackdropFilter ? "blur(10px)" : "none",
-    borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+    backdropFilter: supportsBackdropFilter ? 'blur(10px)' : 'none',
+    WebkitBackdropFilter: supportsBackdropFilter ? 'blur(10px)' : 'none',
+    borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
   }
 
   return (
     <nav
       className={`fixed w-full z-[9999] transition-all duration-300`}
-      style={isScrolled ? scrolledBgStyle : { backgroundColor: "rgba(0, 0, 0, 0.1)" }}
+      style={isScrolled ? scrolledBgStyle : { backgroundColor: 'rgba(0, 0, 0, 0.1)' }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center py-4">
           <div className="flex-shrink-0">
             <Link href="/home" className="flex items-center">
               <Image
@@ -87,24 +88,22 @@ export default function Navbar() {
                 alt="DevX Logo"
                 width={180}
                 height={48}
-                className="h-10 w-auto"
+                className="h-12 w-auto lg:w-auto"
                 priority
               />
             </Link>
           </div>
 
           {/* Desktop Menu - switch to mobile earlier to prevent cutoff */}
-          <div className="hidden lg:flex items-center space-x-8 font-['IBM_Plex_Mono'] font-medium">
+          <div className="hidden lg:flex items-center space-x-8 font-['IBM_Plex_Mono'] font-large">
             <Link
               href="/home"
               className={`relative px-2 py-1 rounded transition-all duration-150 ease-out transform will-change-transform antialiased ${
-                isActive("/home") 
-                  ? "text-pink-400" 
-                  : "text-white hover:text-white/80"
+                isActive('/home') ? 'text-pink-500 font-bold' : 'text-white hover:text-white/80 hover:bg-white/10'
               }`}
-              style={{ textShadow: "0 0 1px rgba(255, 255, 255, 0.3)" }}
+              style={{ textShadow: '0 0 1px rgba(255, 255, 255, 0.3)' }}
             >
-              {isActive("/home") && (
+              {isActive('/home') && (
                 <div className="absolute inset-0 bg-pink-400/10 rounded -z-10" />
               )}
               Home
@@ -113,13 +112,11 @@ export default function Navbar() {
               href="/services"
               scroll={false}
               className={`relative px-2 py-1 rounded transition-all duration-150 ease-out transform will-change-transform antialiased ${
-                isActive("/services") 
-                  ? "text-pink-400" 
-                  : "text-white hover:text-white/80"
+                isActive('/services') ? 'text-pink-500 font-bold' : 'text-white hover:text-white/80 hover:bg-white/10'
               }`}
-              style={{ textShadow: "0 0 1px rgba(255, 255, 255, 0.3)" }}
+              style={{ textShadow: '0 0 1px rgba(255, 255, 255, 0.3)' }}
             >
-              {isActive("/services") && (
+              {isActive('/services') && (
                 <div className="absolute inset-0 bg-pink-400/10 rounded -z-10" />
               )}
               Services
@@ -127,13 +124,13 @@ export default function Navbar() {
             <Link
               href="/portfolio"
               className={`relative px-2 py-1 rounded transition-all duration-150 ease-out transform will-change-transform antialiased ${
-                isActive("/portfolio") 
-                  ? "text-pink-400" 
-                  : "text-white hover:text-white/80"
+                isActive('/portfolio')
+                  ? 'text-pink-500 font-bold'
+                  : 'text-white hover:text-white/80 hover:bg-white/10'
               }`}
-              style={{ textShadow: "0 0 1px rgba(255, 255, 255, 0.3)" }}
+              style={{ textShadow: '0 0 1px rgba(255, 255, 255, 0.3)' }}
             >
-              {isActive("/portfolio") && (
+              {isActive('/portfolio') && (
                 <div className="absolute inset-0 bg-pink-400/10 rounded -z-10" />
               )}
               Portfolio
@@ -141,13 +138,11 @@ export default function Navbar() {
             <Link
               href="/about"
               className={`relative px-2 py-1 rounded transition-all duration-150 ease-out transform will-change-transform antialiased ${
-                isActive("/about") 
-                  ? "text-pink-400" 
-                  : "text-white hover:text-white/80"
+                isActive('/about') ? 'text-pink-500 font-bold' : 'text-white hover:text-white/80 hover:bg-white/10'
               }`}
-              style={{ textShadow: "0 0 1px rgba(255, 255, 255, 0.3)" }}
+              style={{ textShadow: '0 0 1px rgba(255, 255, 255, 0.3)' }}
             >
-              {isActive("/about") && (
+              {isActive('/about') && (
                 <div className="absolute inset-0 bg-pink-400/10 rounded -z-10" />
               )}
               About
@@ -155,13 +150,11 @@ export default function Navbar() {
             <Link
               href="/pricing"
               className={`relative px-2 py-1 rounded transition-all duration-150 ease-out transform will-change-transform antialiased ${
-                isActive("/pricing") 
-                  ? "text-pink-400" 
-                  : "text-white hover:text-white/80"
+                isActive('/pricing') ? 'text-pink-500 font-bold' : 'text-white hover:text-white/80 hover:bg-white/10'
               }`}
-              style={{ textShadow: "0 0 1px rgba(255, 255, 255, 0.3)" }}
+              style={{ textShadow: '0 0 1px rgba(255, 255, 255, 0.3)' }}
             >
-              {isActive("/pricing") && (
+              {isActive('/pricing') && (
                 <div className="absolute inset-0 bg-pink-400/10 rounded -z-10" />
               )}
               Pricing
@@ -169,13 +162,11 @@ export default function Navbar() {
             <Link
               href="/contact"
               className={`relative px-2 py-1 rounded transition-all duration-150 ease-out transform will-change-transform antialiased ${
-                isActive("/contact") 
-                  ? "text-pink-400" 
-                  : "text-white hover:text-white/80"
+                isActive('/contact') ? 'text-pink-500 font-bold' : 'text-white hover:text-white/80 hover:bg-white/10'
               }`}
-              style={{ textShadow: "0 0 1px rgba(255, 255, 255, 0.3)" }}
+              style={{ textShadow: '0 0 1px rgba(255, 255, 255, 0.3)' }}
             >
-              {isActive("/contact") && (
+              {isActive('/contact') && (
                 <div className="absolute inset-0 bg-pink-400/10 rounded -z-10" />
               )}
               Contact
@@ -184,12 +175,12 @@ export default function Navbar() {
               href="/schedule"
               className="bg-robinhood text-black hover:bg-robinhood-90 px-6 py-2 rounded-lg transition-all duration-150 ease-out transform hover:scale-105 will-change-transform font-medium border border-black/30 hover:border-black/60"
             >
-              Schedule
+              Let&apos;s Talk
             </Link>
           </div>
 
           {/* Mobile Menu Button - 3D Floating Sphere */}
-          <div className="lg:hidden flex items-center z-[10000] pt-2">
+          <div className="lg:hidden flex items-center z-[10000]">
             <motion.button
               ref={hamburgerButtonRef}
               onClick={() => setIsOpen(!isOpen)}
@@ -206,11 +197,12 @@ export default function Navbar() {
               transition={{
                 duration: 8,
                 repeat: Infinity,
-                ease: "easeInOut",
-                type: "tween",
+                ease: 'easeInOut',
+                type: 'tween',
               }}
               style={{
-                filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3)) drop-shadow(0 2px 4px rgba(0,0,0,0.2))',
+                filter:
+                  'drop-shadow(0 4px 8px rgba(0,0,0,0.3)) drop-shadow(0 2px 4px rgba(0,0,0,0.2))',
               }}
             >
               {/* Glass Base */}
@@ -218,9 +210,9 @@ export default function Navbar() {
                 className="absolute inset-0 rounded-full"
                 style={{
                   background: `rgba(255, 255, 255, 0.1)`,
-                  backdropFilter: supportsBackdropFilter ? "blur(10px)" : "none",
-                  WebkitBackdropFilter: supportsBackdropFilter ? "blur(10px)" : "none",
-                  border: "1px solid rgba(255, 255, 255, 0.2)",
+                  backdropFilter: supportsBackdropFilter ? 'blur(10px)' : 'none',
+                  WebkitBackdropFilter: supportsBackdropFilter ? 'blur(10px)' : 'none',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
                   boxShadow: `
                     inset 0 1px 0 rgba(255, 255, 255, 0.3),
                     inset 0 -1px 0 rgba(0, 0, 0, 0.1),
@@ -229,12 +221,8 @@ export default function Navbar() {
                   `,
                 }}
                 animate={{
-                  background: isOpen 
-                    ? `rgba(255, 255, 255, 0.15)` 
-                    : `rgba(255, 255, 255, 0.1)`,
-                  borderColor: isOpen 
-                    ? "rgba(255, 255, 255, 0.3)" 
-                    : "rgba(255, 255, 255, 0.2)"
+                  background: isOpen ? `rgba(255, 255, 255, 0.15)` : `rgba(255, 255, 255, 0.1)`,
+                  borderColor: isOpen ? 'rgba(255, 255, 255, 0.3)' : 'rgba(255, 255, 255, 0.2)',
                 }}
                 transition={{ duration: 0.3 }}
               />
@@ -248,7 +236,7 @@ export default function Navbar() {
                 transition={{
                   duration: 10,
                   repeat: Infinity,
-                  ease: "linear",
+                  ease: 'linear',
                 }}
               >
                 {[...Array(4)].map((_, i) => (
@@ -256,8 +244,8 @@ export default function Navbar() {
                     key={i}
                     className="absolute w-0.5 h-0.5 bg-white/50 rounded-full"
                     style={{
-                      top: `${30 + Math.sin(i * Math.PI / 2) * 25}%`,
-                      left: `${50 + Math.cos(i * Math.PI / 2) * 30}%`,
+                      top: `${30 + Math.sin((i * Math.PI) / 2) * 25}%`,
+                      left: `${50 + Math.cos((i * Math.PI) / 2) * 30}%`,
                     }}
                     animate={{
                       scale: [0.3, 0.8, 0.3],
@@ -289,10 +277,10 @@ export default function Navbar() {
                 transition={{
                   duration: 3,
                   repeat: Infinity,
-                  ease: "easeInOut",
+                  ease: 'easeInOut',
                 }}
               />
-              
+
               {/* Hamburger lines with 3D effect */}
               <div className="absolute inset-0 flex flex-col items-center justify-center space-y-1 z-10">
                 {/* Top line */}
@@ -302,13 +290,10 @@ export default function Navbar() {
                     background: 'rgba(255, 255, 255, 0.9)',
                     boxShadow: '0 1px 2px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3)',
                   }}
-                  animate={isOpen 
-                    ? { rotate: 45, y: 6 } 
-                    : { rotate: 0, y: 0 }
-                  }
-                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  animate={isOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
+                  transition={{ duration: 0.3, ease: 'easeInOut' }}
                 />
-                
+
                 {/* Middle line */}
                 <motion.div
                   className="w-5 h-0.5 rounded-full"
@@ -316,13 +301,14 @@ export default function Navbar() {
                     background: 'rgba(255, 255, 255, 0.8)',
                     boxShadow: '0 1px 2px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.2)',
                   }}
-                  animate={isOpen 
-                    ? { opacity: 0, scale: 0, rotate: 180 } 
-                    : { opacity: 1, scale: 1, rotate: 0 }
+                  animate={
+                    isOpen
+                      ? { opacity: 0, scale: 0, rotate: 180 }
+                      : { opacity: 1, scale: 1, rotate: 0 }
                   }
-                  transition={{ duration: 0.2, ease: "easeInOut" }}
+                  transition={{ duration: 0.2, ease: 'easeInOut' }}
                 />
-                
+
                 {/* Bottom line */}
                 <motion.div
                   className="w-5 h-0.5 rounded-full"
@@ -330,14 +316,11 @@ export default function Navbar() {
                     background: 'rgba(255, 255, 255, 0.9)',
                     boxShadow: '0 1px 2px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3)',
                   }}
-                  animate={isOpen 
-                    ? { rotate: -45, y: -6 } 
-                    : { rotate: 0, y: 0 }
-                  }
-                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  animate={isOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
+                  transition={{ duration: 0.3, ease: 'easeInOut' }}
                 />
               </div>
-              
+
               {/* Click ripple effect */}
               <motion.div
                 className="absolute inset-0 rounded-full"
@@ -367,13 +350,11 @@ export default function Navbar() {
               <Link
                 href="/home"
                 className={`relative block px-3 py-2 rounded transition-all duration-150 ease-out transform will-change-transform ${
-                  isActive("/home") 
-                    ? "text-pink-400" 
-                    : "text-white hover:text-white/80"
+                  isActive('/home') ? 'text-pink-500 font-bold' : 'text-white hover:text-white/80 hover:bg-white/10'
                 }`}
                 onClick={() => setIsOpen(false)}
               >
-                {isActive("/home") && (
+                {isActive('/home') && (
                   <div className="absolute inset-0 bg-pink-400/10 rounded -z-10" />
                 )}
                 Home
@@ -382,13 +363,13 @@ export default function Navbar() {
                 href="/services"
                 scroll={false}
                 className={`relative block px-3 py-2 rounded transition-all duration-150 ease-out transform will-change-transform ${
-                  isActive("/services") 
-                    ? "text-pink-400" 
-                    : "text-white hover:text-white/80"
+                  isActive('/services')
+                    ? 'text-pink-500 font-bold'
+                    : 'text-white hover:text-white/80 hover:bg-white/10'
                 }`}
                 onClick={() => setIsOpen(false)}
               >
-                {isActive("/services") && (
+                {isActive('/services') && (
                   <div className="absolute inset-0 bg-pink-400/10 rounded -z-10" />
                 )}
                 Services
@@ -396,13 +377,13 @@ export default function Navbar() {
               <Link
                 href="/portfolio"
                 className={`relative block px-3 py-2 rounded transition-all duration-150 ease-out transform will-change-transform ${
-                  isActive("/portfolio") 
-                    ? "text-pink-400" 
-                    : "text-white hover:text-white/80"
+                  isActive('/portfolio')
+                    ? 'text-pink-500 font-bold'
+                    : 'text-white hover:text-white/80 hover:bg-white/10'
                 }`}
                 onClick={() => setIsOpen(false)}
               >
-                {isActive("/portfolio") && (
+                {isActive('/portfolio') && (
                   <div className="absolute inset-0 bg-pink-400/10 rounded -z-10" />
                 )}
                 Portfolio
@@ -410,13 +391,11 @@ export default function Navbar() {
               <Link
                 href="/about"
                 className={`relative block px-3 py-2 rounded transition-all duration-150 ease-out transform will-change-transform ${
-                  isActive("/about") 
-                    ? "text-pink-400" 
-                    : "text-white hover:text-white/80"
+                  isActive('/about') ? 'text-pink-500 font-bold' : 'text-white hover:text-white/80 hover:bg-white/10'
                 }`}
                 onClick={() => setIsOpen(false)}
               >
-                {isActive("/about") && (
+                {isActive('/about') && (
                   <div className="absolute inset-0 bg-pink-400/10 rounded -z-10" />
                 )}
                 About
@@ -424,13 +403,13 @@ export default function Navbar() {
               <Link
                 href="/pricing"
                 className={`relative block px-3 py-2 rounded transition-all duration-150 ease-out transform will-change-transform ${
-                  isActive("/pricing") 
-                    ? "text-pink-400" 
-                    : "text-white hover:text-white/80"
+                  isActive('/pricing')
+                    ? 'text-pink-500 font-bold'
+                    : 'text-white hover:text-white/80 hover:bg-white/10'
                 }`}
                 onClick={() => setIsOpen(false)}
               >
-                {isActive("/pricing") && (
+                {isActive('/pricing') && (
                   <div className="absolute inset-0 bg-pink-400/10 rounded -z-10" />
                 )}
                 Pricing
@@ -438,23 +417,23 @@ export default function Navbar() {
               <Link
                 href="/contact"
                 className={`relative block px-3 py-2 rounded transition-all duration-150 ease-out transform will-change-transform ${
-                  isActive("/contact") 
-                    ? "text-pink-400" 
-                    : "text-white hover:text-white/80"
+                  isActive('/contact')
+                    ? 'text-pink-500 font-bold'
+                    : 'text-white hover:text-white/80 hover:bg-white/10'
                 }`}
                 onClick={() => setIsOpen(false)}
               >
-                {isActive("/contact") && (
+                {isActive('/contact') && (
                   <div className="absolute inset-0 bg-pink-400/10 rounded -z-10" />
                 )}
                 Contact
               </Link>
               <Link
                 href="/schedule"
-                className="block px-3 py-2 bg-robinhood text-black hover:bg-robinhood-90 rounded-lg transition-all duration-150 ease-out transform will-change-transform font-medium border border-black/30 hover:border-black/60"
+                className="block w-30 px-3 py-2 bg-robinhood text-black hover:bg-robinhood-90 rounded-lg transition-all duration-150 ease-out transform will-change-transform font-medium border border-black/30 hover:border-black/60"
                 onClick={() => setIsOpen(false)}
               >
-                Schedule
+                Let&apos;s talk
               </Link>
             </div>
           </motion.div>

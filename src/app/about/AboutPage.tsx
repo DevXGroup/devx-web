@@ -9,6 +9,7 @@ import BlurText from '@/components/BlurText'
 import TextPressure from '@/components/TextPressure'
 import RunningLineAnimation from '@/components/RunningLineAnimation'
 import ShapeBlur from '@/components/ShapeBlur'
+import OrgChart from '@/components/OrgChart'
 
 // Enhanced animation variants for better performance
 const fadeInUpVariants = {
@@ -311,9 +312,9 @@ export default function AboutPage() {
   if (!mounted) return null
 
   return (
-    <div className="min-h-screen bg-[#000B14]">
+    <div className="min-h-screen bg-[#000B14] pt-24">
       {/* Hero Section */}
-      <section className="pt-32 pb-20 relative overflow-hidden">
+      <section className="pt-2 pb-8 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-[#0a0a1a] to-black"></div>
 
         {/* Enhanced animated background elements */}
@@ -356,69 +357,7 @@ export default function AboutPage() {
         <div className="container mx-auto px-4 relative">
           <div className="max-w-5xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <AnimatedSection>
-                <h1 className="sr-only">About Us</h1>
-                <div className="flex items-center justify-center w-full mb-8">
-                  <div
-                    style={{
-                      position: 'relative',
-                      height: '120px',
-                      width: '420px',
-                      padding: '0 20px',
-                      marginRight: '30px',
-                    }}
-                  >
-                    <TextPressure
-                      text="About  Us  "
-                      flex={true}
-                      alpha={false}
-                      stroke={false}
-                      width={true}
-                      weight={true}
-                      italic={false}
-                      textColor="#CFB53B"
-                      strokeColor="#FFFFFF"
-                      minFontSize={36}
-                    />
-                  </div>
-                </div>
-                <p
-                  className="text-lg md:text-xl text-foreground/90 mb-8 leading-relaxed font-['IBM_Plex_Sans'] mt-6"
-                  style={{
-                    letterSpacing: '0.025em',
-                    fontWeight: '400',
-                  }}
-                >
-                  We are a senior engineering team trusted by growth‑stage companies for complex and
-                  time‑sensitive projects. We ship production‑ready software with clear milestones,
-                  ownership, and post‑launch support.
-                </p>
-                <div className="flex flex-wrap gap-4">
-                  <a
-                    href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-robinhood text-black hover:bg-robinhood-90 px-6 py-3 rounded-lg transition-colors font-medium border border-black/30"
-                    onClick={(e) => {
-                      window.open(
-                        'https://calendly.com/a-sheikhizadeh/devx-group-llc-representative',
-                        '_blank'
-                      )
-                      e.preventDefault()
-                    }}
-                  >
-                    Schedule a Strategy Call
-                  </a>
-                  <Link
-                    href="/portfolio"
-                    className="bg-transparent text-white hover:bg-white/10 px-6 py-3 rounded-lg transition-colors font-medium border border-white/30"
-                  >
-                    See Our Work
-                  </Link>
-                </div>
-              </AnimatedSection>
-
-              <AnimatedSection delay={0.2} className="relative">
+              <AnimatedSection delay={0.2} className="relative lg:order-1">
                 <div className="relative h-[400px] w-full rounded-2xl overflow-hidden">
                   {/* Background image with ShapeBlur effect applied as mask */}
                   <div className="absolute inset-0">
@@ -455,17 +394,79 @@ export default function AboutPage() {
                           fill="currentColor"
                           viewBox="0 0 20 20"
                         >
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                         </svg>
                       ))}
                     </div>
-                    <p className="text-white text-sm italic font-medium leading-relaxed">
-                      &ldquo;Our partnership with DevX Group has driven our company to be a leader
-                      in online channels. We recommend them for any business looking to have an
-                      active online presence creatively.&rdquo;
+                    <p className="text-white mb-2 font-light leading-relaxed text-sm">
+                      &quot;DevX Team delivered exceptional results on our complex IoT project. Their expertise and attention to detail made the difference.&quot;
                     </p>
-                    <div className="mt-3 text-[#4CD787] text-sm font-medium">— Lazurd Inc CEO</div>
+                    <p className="text-[#CFB53B] text-xs font-semibold">
+                      Sarah Johnson, CTO at TechCorp
+                    </p>
                   </div>
+                </div>
+              </AnimatedSection>
+
+              <AnimatedSection className="lg:order-2">
+                <h1 className="sr-only">About Us</h1>
+                <div className="flex items-center justify-end w-full mb-4">
+                  <div
+                    style={{
+                      position: 'relative',
+                      height: '100px',
+                      width: '420px',
+                      padding: '0 20px',
+                      marginLeft: '30px',
+                    }}
+                  >
+                    <TextPressure
+                      text="About  Us  "
+                      flex={true}
+                      alpha={false}
+                      stroke={false}
+                      width={true}
+                      weight={true}
+                      italic={false}
+                      textColor="#CFB53B"
+                      strokeColor="#FFFFFF"
+                      minFontSize={32}
+                    />
+                  </div>
+                </div>
+                <p
+                  className="text-lg md:text-xl text-foreground/90 mb-8 leading-relaxed font-['IBM_Plex_Sans'] mt-2"
+                  style={{
+                    letterSpacing: '0.025em',
+                    fontWeight: '400',
+                  }}
+                >
+                  We are a senior engineering team trusted by growth‑stage companies for complex and
+                  time‑sensitive projects. We ship production‑ready software with clear milestones,
+                  ownership, and post‑launch support.
+                </p>
+                <div className="flex flex-wrap gap-4">
+                  <a
+                    href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-robinhood text-black hover:bg-robinhood-90 px-6 py-3 rounded-lg transition-colors font-medium border border-black/30"
+                    onClick={(e) => {
+                      window.open(
+                        'https://calendly.com/a-sheikhizadeh/devx-group-llc-representative',
+                        '_blank'
+                      )
+                      e.preventDefault()
+                    }}
+                  >
+                    Schedule a Strategy Call
+                  </a>
+                  <Link
+                    href="/portfolio"
+                    className="bg-transparent text-white hover:bg-white/10 px-6 py-3 rounded-lg transition-colors font-medium border border-white/30"
+                  >
+                    See Our Work
+                  </Link>
                 </div>
               </AnimatedSection>
             </div>
@@ -474,13 +475,13 @@ export default function AboutPage() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-20 relative">
+      <section className="pt-8 pb-16 relative">
         <div className="container mx-auto px-4">
           <AnimatedSection className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#CFB53B]">Our Impact</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#CFB53B]">Our Impact</h2>
               <p
-                className="text-lg md:text-xl text-foreground/90 max-w-2xl mx-auto leading-relaxed font-['IBM_Plex_Sans'] mt-4"
+                className="text-lg md:text-xl text-foreground/90 font-light max-w-2xl mx-auto leading-relaxed font-['IBM_Plex_Sans'] mt-6"
                 style={{
                   letterSpacing: '0.025em',
                   fontWeight: '400',
@@ -502,12 +503,12 @@ export default function AboutPage() {
       </section>
 
       {/* How We Work Section */}
-      <section className="py-20 relative">
+      <section className="pt-8 pb-16 relative">
         <div className="container mx-auto px-4">
           <AnimatedSection className="max-w-5xl mx-auto text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#CFB53B]">How We Work</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#CFB53B]">How We Work</h2>
             <p
-              className="text-lg md:text-xl text-foreground/90 max-w-3xl mx-auto leading-relaxed font-['IBM_Plex_Sans'] mt-4"
+              className="text-lg md:text-xl text-foreground/90 font-light max-w-3xl mx-auto leading-relaxed font-['IBM_Plex_Sans'] mt-6"
               style={{ letterSpacing: '0.025em', fontWeight: '400' }}
             >
               A simple, reliable process that keeps you in control and delivers outcomes on time.
@@ -593,7 +594,7 @@ export default function AboutPage() {
                 <div
                   style={{
                     position: 'relative',
-                    height: '120px',
+                    height: '100px',
                     width: '400px',
                     padding: '0 20px',
                     marginRight: '30px',
@@ -609,7 +610,7 @@ export default function AboutPage() {
                     italic={false}
                     textColor="#CFB53B"
                     strokeColor="#FFFFFF"
-                    minFontSize={36}
+                    minFontSize={32}
                   />
                 </div>
               </div>
@@ -617,7 +618,7 @@ export default function AboutPage() {
 
             <AnimatedSection delay={0.5}>
               <p
-                className="text-lg md:text-xl text-foreground/90 max-w-2xl mx-auto leading-relaxed font-['IBM_Plex_Sans'] mt-6"
+                className="text-lg md:text-xl text-foreground/90 font-light max-w-2xl mx-auto leading-relaxed font-['IBM_Plex_Sans'] mt-6"
                 style={{
                   letterSpacing: '0.025em',
                   fontWeight: '400',
@@ -769,13 +770,13 @@ export default function AboutPage() {
       {/* Our Values Section */}
       <section
         id="our-values"
-        className="py-20 relative bg-gradient-to-b from-transparent via-[#0a0a1a] to-transparent"
+        className="pt-8 pb-16 relative bg-gradient-to-b from-transparent via-[#0a0a1a] to-transparent"
       >
         <div className="container mx-auto px-4">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#CFB53B]">Our Values</h2>
             <p
-              className="text-lg md:text-xl text-foreground/90 leading-relaxed font-['IBM_Plex_Sans'] mt-4"
+              className="text-lg md:text-xl text-foreground/90 font-light leading-relaxed font-['IBM_Plex_Sans'] mt-6"
               style={{
                 letterSpacing: '0.025em',
                 fontWeight: '400',
@@ -828,7 +829,7 @@ export default function AboutPage() {
       </section>
 
       {/* Vision & Mission Section */}
-      <section className="py-20 relative">
+      <section className="pt-8 pb-16 relative">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <AnimatedSection className="bg-black/30 backdrop-blur-sm p-8 rounded-xl border border-white/10 relative overflow-hidden">
@@ -836,7 +837,7 @@ export default function AboutPage() {
               <div className="relative z-10">
                 <h3 className="text-2xl font-semibold mb-6 text-[#4CD787]">Our Vision</h3>
                 <p
-                  className="text-lg md:text-xl text-foreground/90 leading-relaxed font-['IBM_Plex_Sans'] mt-4"
+                  className="text-lg md:text-xl text-foreground/90 font-light leading-relaxed font-['IBM_Plex_Sans'] mt-6"
                   style={{
                     letterSpacing: '0.025em',
                     fontWeight: '400',
@@ -857,7 +858,7 @@ export default function AboutPage() {
               <div className="relative z-10">
                 <h3 className="text-2xl font-semibold mb-6 text-[#4CD787]">Our Mission</h3>
                 <p
-                  className="text-lg md:text-xl text-foreground/90 leading-relaxed font-['IBM_Plex_Sans'] mt-4"
+                  className="text-lg md:text-xl text-foreground/90 font-light leading-relaxed font-['IBM_Plex_Sans'] mt-6"
                   style={{
                     letterSpacing: '0.025em',
                     fontWeight: '400',
@@ -869,72 +870,6 @@ export default function AboutPage() {
                 </p>
               </div>
             </AnimatedSection>
-          </div>
-        </div>
-      </section>
-
-      {/* Team Section */}
-      <section className="py-20 relative">
-        <div className="container mx-auto px-4">
-          <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#CFB53B]">Our Leadership</h2>
-            <p
-              className="text-lg md:text-xl text-foreground/90 leading-relaxed font-['IBM_Plex_Sans'] mt-4"
-              style={{
-                letterSpacing: '0.025em',
-                fontWeight: '400',
-              }}
-            >
-              Meet the experienced professionals who lead our team and drive our success.
-            </p>
-          </AnimatedSection>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {/* Leadership Card for Max Sheikhizadeh */}
-            <div>
-              <TeamMemberCard
-                name="Max Sheikhizadeh"
-                role="Mission Commander & Founder"
-                image="/images/about/ceo-headshot.png"
-                delay={0.1}
-              />
-              <div className="mt-4 text-foreground/80 text-sm">
-                15+ years of experience at Amazon, Viasat, Qualcomm, and high‑growth startups. Led
-                core teams delivering innovative features for Amazon’s e‑commerce platforms.
-                Combines deep engineering expertise with collaborative leadership to drive team
-                growth and consistent success.
-                <a
-                  href="https://www.linkedin.com/in/max-sheikhizadeh-7847a68/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[#4CD787] text-sm hover:underline mt-2 inline-block"
-                >
-                  LinkedIn ›
-                </a>
-              </div>
-            </div>
-            {/* Leadership Card for Milaad Sheikhizadeh */}
-            <div>
-              <TeamMemberCard
-                name="Milaad Sheikhizadeh"
-                role="General Manager"
-                image="/images/about/cto-headshot.png"
-                delay={0.2}
-              />
-              <div className="mt-4 text-foreground/80 text-sm">
-                General Manager with a background in business studies at USD and sales experience at
-                Sunrun. Known for brilliance in sales and marketing, and a bright, effective
-                approach to management.
-                <a
-                  href="https://www.linkedin.com/in/milaad-sheikhizadeh-b086392a8/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[#4CD787] text-sm hover:underline mt-2 inline-block"
-                >
-                  LinkedIn ›
-                </a>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -954,8 +889,97 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* Team Section */}
+      <section className="pt-8 pb-16 relative">
+        <div className="container mx-auto px-4">
+          <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#CFB53B]">Our Team Structure</h2>
+            <p
+              className="text-lg md:text-xl text-foreground/90 font-light leading-relaxed font-['IBM_Plex_Sans'] mt-6"
+              style={{
+                letterSpacing: '0.025em',
+                fontWeight: '400',
+              }}
+            >
+              Meet our leadership team and discover how our 23-member organization delivers exceptional results.
+            </p>
+          </AnimatedSection>
+
+          <OrgChart className="mb-12" />
+
+          {/* Leadership Details */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-4xl mx-auto mt-16">
+            {/* Max Sheikhizadeh Details */}
+            <div className="bg-black/30 backdrop-blur-sm p-6 rounded-xl border border-white/10">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-[#4CD787]">
+                  <Image
+                    src="/images/about/max-headshot.png"
+                    alt="Max Sheikhizadeh"
+                    width={64}
+                    height={64}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-white">Max Sheikhizadeh</h3>
+                  <p className="text-[#4CD787]">Mission Commander & Founder</p>
+                </div>
+              </div>
+              <p className="text-foreground/80 text-sm leading-relaxed mb-3">
+                15+ years of experience at Amazon, Viasat, Qualcomm, and high‑growth startups. Led
+                core teams delivering innovative features for Amazon's e‑commerce platforms.
+                Combines deep engineering expertise with collaborative leadership to drive team
+                growth and consistent success.
+              </p>
+              <a
+                href="https://www.linkedin.com/in/max-sheikhizadeh-7847a68/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#4CD787] text-sm hover:underline inline-block"
+              >
+                LinkedIn ›
+              </a>
+            </div>
+
+            {/* Milaad Sheikhizadeh Details */}
+            <div className="bg-black/30 backdrop-blur-sm p-6 rounded-xl border border-white/10">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-[#CFB53B]">
+                  <Image
+                    src="/images/about/milaad-headshot.png"
+                    alt="Milaad Sheikhizadeh"
+                    width={64}
+                    height={64}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-white">Milaad Sheikhizadeh</h3>
+                  <p className="text-[#CFB53B]">General Manager</p>
+                </div>
+              </div>
+              <p className="text-foreground/80 text-sm leading-relaxed mb-3">
+                General Manager with a background in business studies at USD and sales experience at
+                Sunrun. Known for brilliance in sales and marketing, and a bright, effective
+                approach to management.
+              </p>
+              <a
+                href="https://www.linkedin.com/in/milaad-sheikhizadeh-b086392a8/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#CFB53B] text-sm hover:underline inline-block"
+              >
+                LinkedIn ›
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
       {/* CTA Section */}
-      <section className="py-20 relative">
+      <section className="pt-8 pb-16 relative">
         <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a1a] via-[#4CD787]/5 to-[#0a0a1a]"></div>
         <div className="container mx-auto px-4 relative">
           <AnimatedSection className="bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-8 md:p-12 max-w-4xl mx-auto text-center">

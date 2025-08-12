@@ -71,30 +71,30 @@ export default function PlanetDivider() {
     let planetSize, planetMargin, containerWidth, containerHeight
     
     if (isMobile) {
-      // Mobile: Use screen width percentage for better centering
-      planetSize = Math.min(width * 0.9, 350) // 90% of screen width, max 350px
+      // Mobile: Use screen width percentage for better centering, larger max size
+      planetSize = Math.min(width * 1.1, 450) // 110% of screen width, max 450px
       planetMargin = -planetSize / 2 // Perfect centering
       containerWidth = width
-      containerHeight = Math.min(width * 0.5, 200)
+      containerHeight = Math.min(width * 0.6, 280)
     } else if (isTablet) {
-      planetSize = 400
-      planetMargin = -200
-      containerWidth = 500
-      containerHeight = 250
+      planetSize = 600 // Increased from 400
+      planetMargin = -300 // Adjusted for new size
+      containerWidth = 700
+      containerHeight = 350
     } else {
-      planetSize = 500
-      planetMargin = -250
-      containerWidth = 600
-      containerHeight = 300
+      planetSize = 800 // Increased from 500
+      planetMargin = -400 // Adjusted for new size
+      containerWidth = 900
+      containerHeight = 450
     }
     
     return {
-      glowRadius: getResponsiveValue(60, 70, 80),
-      glowRadius2: getResponsiveValue(120, 140, 160),
-      shadowSize: getResponsiveValue(15, 18, 20),
-      blurAmount: getResponsiveValue(1.5, 1.8, 2),
-      planetShadow: getResponsiveValue(40, 50, 60),
-      planetGlow: getResponsiveValue(150, 175, 200),
+      glowRadius: getResponsiveValue(80, 100, 120), // Increased proportionally
+      glowRadius2: getResponsiveValue(160, 200, 240), // Increased proportionally
+      shadowSize: getResponsiveValue(20, 25, 30), // Increased proportionally
+      blurAmount: getResponsiveValue(2, 2.5, 3), // Increased proportionally
+      planetShadow: getResponsiveValue(60, 75, 90), // Increased proportionally
+      planetGlow: getResponsiveValue(200, 250, 300), // Increased proportionally
       // Pixel-based sizing for better control
       planetMaxWidth: planetSize,
       planetMarginLeft: planetMargin,

@@ -1,7 +1,7 @@
-"use client"
+'use client'
 
-import { useState, useEffect, useRef } from "react"
-import { motion, useReducedMotion, useInView } from "framer-motion"
+import { useState, useEffect, useRef } from 'react'
+import { motion, useReducedMotion, useInView } from 'framer-motion'
 import {
   Phone,
   Mail,
@@ -15,10 +15,11 @@ import {
   Calendar,
   Send,
   User,
-  MessageCircle
-} from "lucide-react"
-import BlurText from "@/components/BlurText"
-import TextPressure from "@/components/TextPressure"
+  MessageCircle,
+} from 'lucide-react'
+import BlurText from '@/components/BlurText'
+import TextPressure from '@/components/TextPressure'
+import Lightning from '@/components/Lightning'
 
 // Enhanced animation variants
 const fadeInUpVariants = {
@@ -28,9 +29,9 @@ const fadeInUpVariants = {
     y: 0,
     transition: {
       duration: 0.6,
-      ease: [0.22, 1, 0.36, 1]
-    }
-  }
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
 }
 
 const containerVariants = {
@@ -39,28 +40,28 @@ const containerVariants = {
     opacity: 1,
     transition: {
       staggerChildren: 0.1,
-      delayChildren: 0.2
-    }
-  }
+      delayChildren: 0.2,
+    },
+  },
 }
 
 const buttonVariants = {
   rest: { scale: 1 },
-  hover: { 
+  hover: {
     scale: 1.02,
-    transition: { duration: 0.2 }
+    transition: { duration: 0.2 },
   },
-  tap: { scale: 0.98 }
+  tap: { scale: 0.98 },
 }
 
 // Enhanced AnimatedGradientText component with better animation
-const AnimatedGradientText = ({ children, className = "" }) => (
+const AnimatedGradientText = ({ children, className = '' }) => (
   <span
     className={`bg-clip-text text-transparent inline-block ${className}`}
     style={{
-      backgroundImage: "linear-gradient(-45deg, #4CD787, #CFB53B, #9d4edd, #4834D4)",
-      backgroundSize: "300% 300%",
-      animation: "gradient-animation 6s ease infinite",
+      backgroundImage: 'linear-gradient(-45deg, #4CD787, #CFB53B, #9d4edd, #4834D4)',
+      backgroundSize: '300% 300%',
+      animation: 'gradient-animation 6s ease infinite',
     }}
   >
     {children}
@@ -69,9 +70,9 @@ const AnimatedGradientText = ({ children, className = "" }) => (
 
 export default function ContactPage() {
   const [formState, setFormState] = useState({
-    name: "",
-    email: "",
-    message: "",
+    name: '',
+    email: '',
+    message: '',
   })
 
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -85,9 +86,9 @@ export default function ContactPage() {
   // Initialize Calendly widget when component mounts
   useEffect(() => {
     // Add the keyframes animation to the document if it doesn't exist
-    if (!document.getElementById("gradient-animation-style")) {
-      const style = document.createElement("style")
-      style.id = "gradient-animation-style"
+    if (!document.getElementById('gradient-animation-style')) {
+      const style = document.createElement('style')
+      style.id = 'gradient-animation-style'
       style.innerHTML = `
       @keyframes gradient-animation {
         0% { background-position: 0% 50%; }
@@ -100,7 +101,7 @@ export default function ContactPage() {
 
     return () => {
       // Clean up
-      const style = document.getElementById("gradient-animation-style")
+      const style = document.getElementById('gradient-animation-style')
       if (style) {
         document.head.removeChild(style)
       }
@@ -110,8 +111,8 @@ export default function ContactPage() {
   useEffect(() => {
     // Add Calendly script if it doesn't exist
     if (!document.querySelector('script[src*="calendly.com"]')) {
-      const script = document.createElement("script")
-      script.src = "https://assets.calendly.com/assets/external/widget.js"
+      const script = document.createElement('script')
+      script.src = 'https://assets.calendly.com/assets/external/widget.js'
       script.async = true
       script.onload = () => {
         setCalendarLoaded(true)
@@ -131,8 +132,8 @@ export default function ContactPage() {
                 prefill: {},
                 utm: {},
                 styles: {
-                  height: '1000px'
-                }
+                  height: '1000px',
+                },
               })
             }
           }
@@ -161,22 +162,23 @@ export default function ContactPage() {
 
   const validateForm = () => {
     const errors = {}
-    if (!formState.name.trim()) errors.name = "Name is required"
-    if (!formState.email.trim()) errors.email = "Email is required"
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formState.email)) errors.email = "Invalid email format"
-    if (!formState.message.trim()) errors.message = "Message is required"
+    if (!formState.name.trim()) errors.name = 'Name is required'
+    if (!formState.email.trim()) errors.email = 'Email is required'
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formState.email))
+      errors.email = 'Invalid email format'
+    if (!formState.message.trim()) errors.message = 'Message is required'
     return errors
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    
+
     const errors = validateForm()
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors)
       return
     }
-    
+
     setIsSubmitting(true)
     setFormErrors({})
 
@@ -187,17 +189,28 @@ export default function ContactPage() {
 
       // Reset form after showing success message
       setTimeout(() => {
-        setFormState({ name: "", email: "", message: "" })
+        setFormState({ name: '', email: '', message: '' })
         setIsSubmitted(false)
       }, 3000)
     }, 1500)
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Hero Section with Animated Background */}
-      <section className="relative pt-32 pb-20 overflow-hidden">
+    <div className="min-h-screen bg-background pt-24">
+      {/* Hero Section with Lightning Background */}
+      <section className="relative pt-2 pb-8 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-[#0a0a1a] to-black" />
+
+        {/* Lightning Effect Background */}
+        <div className="absolute inset-0 opacity-30">
+          <Lightning 
+            hue={120}
+            xOffset={0}
+            speed={0.8}
+            intensity={0.6}
+            size={1.2}
+          />
+        </div>
 
         {/* Animated gradient orbs */}
         <div className="absolute inset-0 overflow-hidden">
@@ -207,7 +220,7 @@ export default function ContactPage() {
               opacity: [0.4, 0.6, 0.4],
               scale: [1, 1.1, 1],
             }}
-            transition={{ duration: 8, repeat: Number.POSITIVE_INFINITY, repeatType: "reverse" }}
+            transition={{ duration: 8, repeat: Number.POSITIVE_INFINITY, repeatType: 'reverse' }}
             className="absolute w-[600px] h-[600px] bg-gradient-to-r from-[#4CD787]/10 to-[#4834D4]/10 rounded-full blur-3xl -top-48 -left-24"
           />
           <motion.div
@@ -216,7 +229,12 @@ export default function ContactPage() {
               opacity: [0.3, 0.5, 0.3],
               scale: [1, 1.2, 1],
             }}
-            transition={{ duration: 10, repeat: Number.POSITIVE_INFINITY, repeatType: "reverse", delay: 1 }}
+            transition={{
+              duration: 10,
+              repeat: Number.POSITIVE_INFINITY,
+              repeatType: 'reverse',
+              delay: 1,
+            }}
             className="absolute w-[500px] h-[500px] bg-gradient-to-l from-[#4834D4]/10 to-[#4CD787]/10 rounded-full blur-3xl top-96 -right-24"
           />
         </div>
@@ -228,11 +246,19 @@ export default function ContactPage() {
             transition={{ duration: 0.8 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <div className="flex flex-col items-center">
-              <div className="flex items-center justify-center w-full mb-8">
-                <div style={{position: 'relative', height: '120px', width: '300px', padding: '0 20px', marginRight: '30px'}}>
+            <div className="flex flex-col items-center mt-9 py-9">
+              <div className="flex items-center justify-center w-full">
+                <div
+                  style={{
+                    position: 'relative',
+                    height: '100px',
+                    width: '400px',
+                    padding: '0 20px',
+                    marginRight: '30px',
+                  }}
+                >
                   <TextPressure
-                    text="Contact  "
+                    text="Contact&nbsp;US  "
                     flex={true}
                     alpha={false}
                     stroke={false}
@@ -241,15 +267,19 @@ export default function ContactPage() {
                     italic={false}
                     textColor="#4CD787"
                     strokeColor="#FFFFFF"
-                    minFontSize={36}
+                    minFontSize={32}
                   />
                 </div>
               </div>
-              <p className="text-lg md:text-xl text-foreground/90 font-light max-w-2xl text-center leading-relaxed font-['IBM_Plex_Sans'] mt-6" style={{
-                letterSpacing: '0.025em',
-                fontWeight: '400'
-              }}>
-                Ready to deploy the elite unit? Contact our command center to discuss your mission requirements and objectives.
+              <p
+                className="text-lg md:text-xl text-foreground/90 font-light max-w-2xl text-center mb-6 leading-relaxed font-['IBM_Plex_Sans'] mt-2"
+                style={{
+                  letterSpacing: '0.025em',
+                  fontWeight: '400',
+                }}
+              >
+                Ready to deploy the elite unit? Contact our command center to discuss your mission
+                requirements and objectives.
               </p>
             </div>
           </motion.div>
@@ -257,7 +287,7 @@ export default function ContactPage() {
       </section>
 
       {/* Main Contact Section */}
-      <section className="py-20 relative">
+      <section className="pt-8 pb-20 relative">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
             {/* Contact Information Card */}
@@ -270,10 +300,13 @@ export default function ContactPage() {
               <div className="space-y-8">
                 <div>
                   <h2 className="text-2xl font-bold mb-6 text-white">Contact Information</h2>
-                  <p className="text-lg md:text-xl text-foreground/90 mb-8 leading-relaxed font-['IBM_Plex_Sans'] mt-4" style={{
-                    letterSpacing: '0.025em',
-                    fontWeight: '400'
-                  }}>
+                  <p
+                    className="text-lg md:text-xl text-foreground/90 font-light mb-8 leading-relaxed font-['IBM_Plex_Sans'] mt-6"
+                    style={{
+                      letterSpacing: '0.025em',
+                      fontWeight: '400',
+                    }}
+                  >
                     Fill out the form and our team will get back to you within 24 hours.
                   </p>
                 </div>
@@ -296,7 +329,9 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-semibold text-foreground text-lg">Email</h3>
                     <p className="text-foreground/70">devxgroupllc@gmail.com</p>
-                    <p className="text-foreground/50 text-sm mt-1">We&apos;ll respond as quickly as possible</p>
+                    <p className="text-foreground/50 text-sm mt-1">
+                      We&apos;ll respond as quickly as possible
+                    </p>
                   </div>
                 </div>
 
@@ -367,7 +402,7 @@ export default function ContactPage() {
               ref={formRef}
               variants={fadeInUpVariants}
               initial="hidden"
-              animate={isFormInView ? "visible" : "hidden"}
+              animate={isFormInView ? 'visible' : 'hidden'}
               className="lg:col-span-3 bg-black/40 backdrop-blur-sm p-8 md:p-10 rounded-2xl border border-white/10 relative overflow-hidden"
             >
               {/* Background gradient */}
@@ -385,13 +420,18 @@ export default function ContactPage() {
                   >
                     <CheckCircle className="w-16 h-16 text-[#4CD787] mx-auto mb-4" />
                     <h3 className="text-xl font-semibold text-white mb-2">Message Sent!</h3>
-                    <p className="text-foreground/70">Thank you for reaching out. We&apos;ll get back to you shortly.</p>
+                    <p className="text-foreground/70">
+                      Thank you for reaching out. We&apos;ll get back to you shortly.
+                    </p>
                   </motion.div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <label htmlFor="name" className="block text-sm font-medium text-foreground/80 mb-2 flex items-center gap-2">
+                        <label
+                          htmlFor="name"
+                          className="block text-sm font-medium text-foreground/80 mb-2 flex items-center gap-2"
+                        >
                           <User className="w-4 h-4" />
                           Your Name
                         </label>
@@ -401,7 +441,9 @@ export default function ContactPage() {
                           name="name"
                           value={formState.name}
                           onChange={handleChange}
-                          className={`w-full px-4 py-3 bg-white/5 border ${formErrors.name ? 'border-red-500' : 'border-white/10'} rounded-lg focus:outline-none focus:border-[#4CD787] text-foreground shadow-inner transition-colors duration-300`}
+                          className={`w-full px-4 py-3 bg-white/5 border ${
+                            formErrors.name ? 'border-red-500' : 'border-white/10'
+                          } rounded-lg focus:outline-none focus:border-[#4CD787] text-foreground shadow-inner transition-colors duration-300`}
                           placeholder="Enter your full name"
                           required
                         />
@@ -416,7 +458,10 @@ export default function ContactPage() {
                         )}
                       </div>
                       <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-foreground/80 mb-2 flex items-center gap-2">
+                        <label
+                          htmlFor="email"
+                          className="block text-sm font-medium text-foreground/80 mb-2 flex items-center gap-2"
+                        >
                           <Mail className="w-4 h-4" />
                           Email Address
                         </label>
@@ -426,7 +471,9 @@ export default function ContactPage() {
                           name="email"
                           value={formState.email}
                           onChange={handleChange}
-                          className={`w-full px-4 py-3 bg-white/5 border ${formErrors.email ? 'border-red-500' : 'border-white/10'} rounded-lg focus:outline-none focus:border-[#4CD787] text-foreground shadow-inner transition-colors duration-300`}
+                          className={`w-full px-4 py-3 bg-white/5 border ${
+                            formErrors.email ? 'border-red-500' : 'border-white/10'
+                          } rounded-lg focus:outline-none focus:border-[#4CD787] text-foreground shadow-inner transition-colors duration-300`}
                           placeholder="your@email.com"
                           required
                         />
@@ -443,7 +490,10 @@ export default function ContactPage() {
                     </div>
 
                     <div>
-                      <label htmlFor="message" className="block text-sm font-medium text-foreground/80 mb-2 flex items-center gap-2">
+                      <label
+                        htmlFor="message"
+                        className="block text-sm font-medium text-foreground/80 mb-2 flex items-center gap-2"
+                      >
                         <MessageCircle className="w-4 h-4" />
                         Your Message
                       </label>
@@ -453,7 +503,9 @@ export default function ContactPage() {
                         value={formState.message}
                         onChange={handleChange}
                         rows={6}
-                        className={`w-full px-4 py-3 bg-white/5 border ${formErrors.message ? 'border-red-500' : 'border-white/10'} rounded-lg focus:outline-none focus:border-[#4CD787] text-foreground shadow-inner transition-colors duration-300 resize-none`}
+                        className={`w-full px-4 py-3 bg-white/5 border ${
+                          formErrors.message ? 'border-red-500' : 'border-white/10'
+                        } rounded-lg focus:outline-none focus:border-[#4CD787] text-foreground shadow-inner transition-colors duration-300 resize-none`}
                         placeholder="Tell us about your project, timeline, and requirements..."
                         required
                       ></textarea>
@@ -474,8 +526,8 @@ export default function ContactPage() {
                         disabled={isSubmitting}
                         variants={buttonVariants}
                         initial="rest"
-                        whileHover={shouldReduceMotion ? {} : "hover"}
-                        whileTap={shouldReduceMotion ? {} : "tap"}
+                        whileHover={shouldReduceMotion ? {} : 'hover'}
+                        whileTap={shouldReduceMotion ? {} : 'tap'}
                         className="group relative overflow-hidden bg-gradient-to-r from-[#4CD787] to-[#3CC76D] hover:from-[#3CC76D] hover:to-[#4CD787] text-black px-8 py-3 rounded-lg font-medium transition-all duration-300 flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         <span className="relative z-10 flex items-center">
@@ -483,7 +535,11 @@ export default function ContactPage() {
                             <>
                               <motion.div
                                 animate={{ rotate: 360 }}
-                                transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                                transition={{
+                                  duration: 1,
+                                  repeat: Number.POSITIVE_INFINITY,
+                                  ease: 'linear',
+                                }}
                                 className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full mr-2"
                               />
                               Sending...
@@ -491,7 +547,11 @@ export default function ContactPage() {
                           ) : (
                             <>
                               Send Message
-                              <Send className={`ml-2 w-5 h-5 transition-transform duration-300 ${isSubmitting ? "" : "group-hover:translate-x-1"}`} />
+                              <Send
+                                className={`ml-2 w-5 h-5 transition-transform duration-300 ${
+                                  isSubmitting ? '' : 'group-hover:translate-x-1'
+                                }`}
+                              />
                             </>
                           )}
                         </span>
@@ -516,11 +576,15 @@ export default function ContactPage() {
             className="text-center max-w-3xl mx-auto mb-12"
           >
             <h2 className="text-3xl font-bold mb-6 text-[#CFB53B]">Schedule a Consultation</h2>
-            <p className="text-lg md:text-xl text-foreground/90 mb-8 leading-relaxed font-['IBM_Plex_Sans'] mt-4" style={{
-              letterSpacing: '0.025em',
-              fontWeight: '400'
-            }}>
-              Book a time that works for you using our online scheduling tool. No back-and-forth emails needed.
+            <p
+              className="text-lg md:text-xl text-foreground/90 font-light mb-8 leading-relaxed font-['IBM_Plex_Sans'] mt-6"
+              style={{
+                letterSpacing: '0.025em',
+                fontWeight: '400',
+              }}
+            >
+              Book a time that works for you using our online scheduling tool. No back-and-forth
+              emails needed.
             </p>
           </motion.div>
 
@@ -529,16 +593,16 @@ export default function ContactPage() {
               className="calendly-inline-widget"
               data-calendly-theme="dark"
               data-url="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?background_color=000000&text_color=ffffff&primary_color=4CD787&hide_gdpr_banner=1"
-              style={{ 
-                minWidth: "320px", 
-                height: "1000px",
-                backgroundColor: "#000000",
-                border: "none",
-                borderRadius: "12px",
-                overflow: "hidden"
+              style={{
+                minWidth: '320px',
+                height: '1000px',
+                backgroundColor: '#000000',
+                border: 'none',
+                borderRadius: '12px',
+                overflow: 'hidden',
               }}
             ></div>
-            
+
             {/* Enhanced dark mode enforcement */}
             <style jsx global>{`
               /* Force dark theme for entire Calendly widget */
@@ -548,19 +612,19 @@ export default function ContactPage() {
                 border-radius: 12px;
                 overflow: hidden;
               }
-              
+
               .calendly-inline-widget iframe {
                 background-color: #000000 !important;
                 border-radius: 12px;
                 filter: none !important;
               }
-              
+
               /* Override Calendly's default white theme */
               .calendly-inline-widget * {
                 background-color: transparent !important;
                 color: inherit !important;
               }
-              
+
               /* Specific overrides for common Calendly elements */
               .calendly-popup-content,
               .calendly-overlay,
@@ -570,12 +634,12 @@ export default function ContactPage() {
                 background-color: #000000 !important;
                 color: #ffffff !important;
               }
-              
+
               /* Try to force dark mode through data attributes */
-              .calendly-inline-widget[data-calendly-theme="dark"] {
+              .calendly-inline-widget[data-calendly-theme='dark'] {
                 background-color: #000000 !important;
               }
-              
+
               /* Additional fallback for stubborn elements */
               .calendly-inline-widget > div,
               .calendly-inline-widget iframe body {
@@ -603,13 +667,18 @@ export default function ContactPage() {
             className="text-center max-w-3xl mx-auto mb-16"
           >
             <h2 className="text-3xl font-bold mb-6 text-[#CFB53B]">Frequently Asked Questions</h2>
-            <p className="text-lg md:text-xl text-foreground/90 leading-relaxed font-['IBM_Plex_Sans'] mt-4" style={{
-              letterSpacing: '0.025em',
-              fontWeight: '400'
-            }}>Find quick answers to common questions about our services and process.</p>
+            <p
+              className="text-lg md:text-xl text-foreground/90 font-light leading-relaxed font-['IBM_Plex_Sans'] mt-6"
+              style={{
+                letterSpacing: '0.025em',
+                fontWeight: '400',
+              }}
+            >
+              Find quick answers to common questions about our services and process.
+            </p>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto"
             variants={containerVariants}
             initial="hidden"
@@ -621,10 +690,12 @@ export default function ContactPage() {
               className="bg-black/30 p-6 rounded-xl border border-white/10 hover:border-[#4CD787]/30 transition-colors duration-300 group"
               whileHover={shouldReduceMotion ? {} : { y: -4 }}
             >
-              <h3 className="text-xl font-semibold mb-3 text-[#4CD787] group-hover:text-white transition-colors duration-300">What is your typical response time?</h3>
+              <h3 className="text-xl font-semibold mb-3 text-[#4CD787] group-hover:text-white transition-colors duration-300">
+                What is your typical response time?
+              </h3>
               <p className="text-foreground/70 group-hover:text-white/80 transition-colors duration-300">
-                We typically respond to all inquiries within 24 hours during business days. For urgent matters, we
-                prioritize faster response times.
+                We typically respond to all inquiries within 24 hours during business days. For
+                urgent matters, we prioritize faster response times.
               </p>
             </motion.div>
 
@@ -633,10 +704,12 @@ export default function ContactPage() {
               className="bg-black/30 p-6 rounded-xl border border-white/10 hover:border-[#4CD787]/30 transition-colors duration-300 group"
               whileHover={shouldReduceMotion ? {} : { y: -4 }}
             >
-              <h3 className="text-xl font-semibold mb-3 text-[#4CD787] group-hover:text-white transition-colors duration-300">Do you work with international clients?</h3>
+              <h3 className="text-xl font-semibold mb-3 text-[#4CD787] group-hover:text-white transition-colors duration-300">
+                Do you work with international clients?
+              </h3>
               <p className="text-foreground/70 group-hover:text-white/80 transition-colors duration-300">
-                Yes, we work with clients worldwide. Our team is experienced in remote collaboration and can accommodate
-                different time zones.
+                Yes, we work with clients worldwide. Our team is experienced in remote collaboration
+                and can accommodate different time zones.
               </p>
             </motion.div>
 
@@ -649,8 +722,8 @@ export default function ContactPage() {
                 What information should I provide for a quote?
               </h3>
               <p className="text-foreground/70 group-hover:text-white/80 transition-colors duration-300">
-                To provide an accurate quote, we need details about your project scope, timeline, technical
-                requirements, and any specific features you need.
+                To provide an accurate quote, we need details about your project scope, timeline,
+                technical requirements, and any specific features you need.
               </p>
             </motion.div>
 
@@ -659,10 +732,12 @@ export default function ContactPage() {
               className="bg-black/30 p-6 rounded-xl border border-white/10 hover:border-[#4CD787]/30 transition-colors duration-300 group"
               whileHover={shouldReduceMotion ? {} : { y: -4 }}
             >
-              <h3 className="text-xl font-semibold mb-3 text-[#4CD787] group-hover:text-white transition-colors duration-300">How do you handle project revisions?</h3>
+              <h3 className="text-xl font-semibold mb-3 text-[#4CD787] group-hover:text-white transition-colors duration-300">
+                How do you handle project revisions?
+              </h3>
               <p className="text-foreground/70 group-hover:text-white/80 transition-colors duration-300">
-                We include revision rounds in our project plans. The number of revisions depends on your package, but
-                we&apos;re always flexible to ensure your satisfaction.
+                We include revision rounds in our project plans. The number of revisions depends on
+                your package, but we&apos;re always flexible to ensure your satisfaction.
               </p>
             </motion.div>
           </motion.div>

@@ -72,11 +72,15 @@ const TextPressure: React.FC<TextPressureProps> = ({
     window.addEventListener('touchmove', handleTouchMove, { passive: false })
 
     if (containerRef.current) {
-      const { left, top, width, height } = containerRef.current.getBoundingClientRect()
-      mouseRef.current.x = left + width / 2
-      mouseRef.current.y = top + height / 2
-      cursorRef.current.x = mouseRef.current.x
-      cursorRef.current.y = mouseRef.current.y
+      try {
+        const { left, top, width, height } = containerRef.current.getBoundingClientRect()
+        mouseRef.current.x = left + width / 2
+        mouseRef.current.y = top + height / 2
+        cursorRef.current.x = mouseRef.current.x
+        cursorRef.current.y = mouseRef.current.y
+      } catch (error) {
+        console.warn('TextPressure: Could not get container bounds', error)
+      }
     }
 
     return () => {
@@ -88,7 +92,14 @@ const TextPressure: React.FC<TextPressureProps> = ({
   const setSize = useCallback(() => {
     if (!containerRef.current || !titleRef.current) return
 
-    const { width: containerW, height: containerH } = containerRef.current.getBoundingClientRect()
+    let containerW = 300, containerH = 100
+    try {
+      const rect = containerRef.current.getBoundingClientRect()
+      containerW = rect.width
+      containerH = rect.height
+    } catch (error) {
+      console.warn('TextPressure: Could not get container dimensions', error)
+    }
 
     let newFontSize = containerW / (chars.length / 2)
     newFontSize = Math.max(newFontSize, minFontSize)
@@ -99,12 +110,15 @@ const TextPressure: React.FC<TextPressureProps> = ({
 
     requestAnimationFrame(() => {
       if (!titleRef.current) return
-      const textRect = titleRef.current.getBoundingClientRect()
-
-      if (scale && textRect.height > 0) {
-        const yRatio = containerH / textRect.height
-        setScaleY(yRatio)
-        setLineHeight(yRatio)
+      try {
+        const textRect = titleRef.current.getBoundingClientRect()
+        if (scale && textRect.height > 0) {
+          const yRatio = containerH / textRect.height
+          setScaleY(yRatio)
+          setLineHeight(yRatio)
+        }
+      } catch (error) {
+        console.warn('TextPressure: Could not get title dimensions', error)
       }
     })
   }, [chars.length, minFontSize, scale])
@@ -122,13 +136,25 @@ const TextPressure: React.FC<TextPressureProps> = ({
       mouseRef.current.y += (cursorRef.current.y - mouseRef.current.y) / 15
 
       if (titleRef.current) {
-        const titleRect = titleRef.current.getBoundingClientRect()
+        let titleRect = { width: 300, height: 100, x: 0, y: 0 }
+        try {
+          titleRect = titleRef.current.getBoundingClientRect()
+        } catch (error) {
+          console.warn('TextPressure: Could not get title rect for animation', error)
+        }
         const maxDist = titleRect.width / 2
 
         spansRef.current.forEach((span) => {
           if (!span) return
 
-          const rect = span.getBoundingClientRect()
+          let rect = { x: 0, y: 0, width: 20, height: 20 }
+          try {
+            rect = span.getBoundingClientRect()
+          } catch (error) {
+            console.warn('TextPressure: Could not get span rect', error)
+            return
+          }
+
           const charCenter = {
             x: rect.x + rect.width / 2,
             y: rect.y + rect.height / 2,

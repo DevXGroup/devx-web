@@ -195,7 +195,28 @@ const FloatingParticle = ({ delay = 0, size = 4, color = '#4CD787' }) => (
   />
 )
 
-function PricingCard({ plan, index, isYearly }) {
+interface PricingPlan {
+  name: string
+  subtitle: string
+  price: string
+  priceUnit: string
+  originalPrice: string
+  description: string
+  icon: any // You might want to define a more specific type for the icon component
+  popular: boolean
+  color: string
+  gradient: string
+  features: string[]
+  included: string[]
+}
+
+interface PricingCardProps {
+  plan: PricingPlan
+  index: number
+  isYearly: boolean
+}
+
+function PricingCard({ plan, index, isYearly }: PricingCardProps) {
   const shouldReduceMotion = useReducedMotion()
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-50px' })
@@ -352,7 +373,7 @@ function PricingCard({ plan, index, isYearly }) {
             Core Features
           </h4>
           <ul className="space-y-2">
-            {plan.features.slice(0, 5).map((feature, featureIndex) => (
+            {plan.features.slice(0, 5).map((feature: string, featureIndex: number) => (
               <motion.li
                 key={feature}
                 className="flex items-start text-xs text-white/80 group-hover:text-white transition-colors duration-300"
@@ -382,7 +403,7 @@ function PricingCard({ plan, index, isYearly }) {
             style={{ color: plan.color }}
           >
             <ArrowRight className="w-3 h-3" />
-            What&apos;s Included
+            What's Included
           </h4>
           <motion.ul
             className="space-y-1.5 text-xs text-white/60"
@@ -390,7 +411,7 @@ function PricingCard({ plan, index, isYearly }) {
             animate={{ height: 'auto', opacity: 1 }}
             transition={{ delay: 0.5, duration: 0.5 }}
           >
-            {plan.included.slice(0, 3).map((item, itemIndex) => (
+            {plan.included.slice(0, 3).map((item: string, itemIndex: number) => (
               <motion.li
                 key={item}
                 className="flex items-start leading-relaxed group-hover:text-white/80 transition-colors duration-300"
@@ -453,7 +474,7 @@ export default function PricingPage() {
   const [isYearly, setIsYearly] = useState(false)
 
   return (
-    <div className="min-h-screen bg-black relative overflow-hidden">
+    <div className="min-h-screen bg-black relative overflow-hidden pt-24">
       {/* Animated background */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900/50 to-black" />
@@ -507,7 +528,7 @@ export default function PricingPage() {
       </div>
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 text-center">
+      <section className="relative pt-2 pb-8 text-center  mt-9 py-9">
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
             variants={containerVariants}
@@ -515,9 +536,17 @@ export default function PricingPage() {
             animate="visible"
             className="max-w-4xl mx-auto"
           >
-            <motion.div variants={fadeInUpVariants} className="mb-8">
-              <div className="flex items-center justify-center w-full mb-8">
-                <div style={{position: 'relative', height: '120px', width: '300px', padding: '0 20px', marginRight: '30px'}}>
+            <motion.div variants={fadeInUpVariants}>
+              <div className="flex items-center justify-center w-full">
+                <div
+                  style={{
+                    position: 'relative',
+                    height: '100px',
+                    width: '300px',
+                    padding: '0 20px',
+                    marginRight: '30px',
+                  }}
+                >
                   <TextPressure
                     text="Pricing  "
                     flex={true}
@@ -528,7 +557,7 @@ export default function PricingPage() {
                     italic={false}
                     textColor="#FFFFFF"
                     strokeColor="#FFFFFF"
-                    minFontSize={36}
+                    minFontSize={39}
                   />
                 </div>
               </div>
@@ -539,7 +568,7 @@ export default function PricingPage() {
               className="text-lg md:text-xl text-white/90 font-light mb-8 leading-relaxed max-w-3xl mx-auto font-['IBM_Plex_Sans'] mt-6"
               style={{
                 letterSpacing: '0.025em',
-                fontWeight: '400'
+                fontWeight: '400',
               }}
             >
               Transparent, competitive hourly rates with no hidden fees.
@@ -599,16 +628,19 @@ export default function PricingPage() {
               transition={{ duration: 0.3 }}
             >
               <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-                Need Something
+                Need Something{' '}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4CD787] to-[#CFB53B]">
                   Custom
                 </span>
                 ?
               </h2>
-              <p className="text-lg md:text-xl text-white/90 font-light mb-8 leading-relaxed font-['IBM_Plex_Sans'] mt-4" style={{
-                letterSpacing: '0.025em',
-                fontWeight: '400'
-              }}>
+              <p
+                className="text-lg md:text-xl text-white/90 font-light mb-8 leading-relaxed font-['IBM_Plex_Sans'] mt-6"
+                style={{
+                  letterSpacing: '0.025em',
+                  fontWeight: '400',
+                }}
+              >
                 Every project is unique. Let&apos;s discuss your specific requirements and create a
                 tailored solution that perfectly fits your vision and budget.
               </p>
