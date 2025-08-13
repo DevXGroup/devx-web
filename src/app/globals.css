@@ -1010,6 +1010,16 @@ html.is-touching {
   overflow: hidden;
 }
 
+/* Hide scrollbars while maintaining functionality */
+.horizontal-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.horizontal-scroll {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+
 html.is-touching .animation-heavy {
   animation-duration: calc(var(--animation-duration, 1s) * 1.5);
 }
