@@ -1,125 +1,133 @@
-"use client"
-import { useRef, useEffect, useState, useCallback } from "react"
-import { motion, useMotionValue, animate } from "framer-motion"
-import Image from "next/image"
+'use client'
+import { useRef, useEffect, useState, useCallback } from 'react'
+import { motion, useMotionValue, animate } from 'framer-motion'
+import Image from 'next/image'
 
 const originalCaseStudies = [
   {
-    image: "/analytics-dashboard.png",
-    title: "Enterprise Analytics Platform",
+    image: '/analytics-dashboard.png',
+    title: 'Enterprise Analytics Platform',
     description:
-      "Developed a scalable analytics dashboard for a Fortune 500 company, improving data insights and decision-making by 30%.",
-    tags: ["AI/ML", "React", "Python", "AWS"],
-    results: "40% increase in data processing efficiency",
-    link: "/portfolio/analytics-platform",
+      'Developed a scalable analytics dashboard for a Fortune 500 company, improving data insights and decision-making by 30%.',
+    tags: ['AI/ML', 'React', 'Python', 'AWS'],
+    results: '40% increase in data processing efficiency',
+    link: '/portfolio/analytics-platform',
   },
   {
-    image: "/fleet-management-tracking.png",
-    title: "Real-time Fleet Management",
+    image: '/fleet-management-tracking.png',
+    title: 'Real-time Fleet Management',
     description:
-      "Built a real-time GPS tracking and management system for a logistics firm, reducing operational costs by 15% and improving delivery efficiency.",
-    tags: ["IoT", "React Native", "Node.js", "MongoDB"],
-    results: "60% reduction in operational costs",
-    link: "/portfolio/fleet-management",
+      'Built a real-time GPS tracking and management system for a logistics firm, reducing operational costs by 15% and improving delivery efficiency.',
+    tags: ['IoT', 'React Native', 'Node.js', 'MongoDB'],
+    results: '60% reduction in operational costs',
+    link: '/portfolio/fleet-management',
   },
   {
-    image: "/modern-ecommerce-interface.png",
-    title: "E-commerce Platform Revamp",
+    image: '/modern-ecommerce-interface.png',
+    title: 'E-commerce Platform Revamp',
     description:
-      "Redesigned and re-platformed an existing e-commerce site, leading to a 25% increase in conversion rates and a smoother user experience.",
-    tags: ["E-commerce", "Next.js", "Stripe", "PostgreSQL"],
-    results: "150% increase in conversion rates",
-    link: "/portfolio/ecommerce-revamp",
+      'Redesigned and re-platformed an existing e-commerce site, leading to a 25% increase in conversion rates and a smoother user experience.',
+    tags: ['E-commerce', 'Next.js', 'Stripe', 'PostgreSQL'],
+    results: '150% increase in conversion rates',
+    link: '/portfolio/ecommerce-revamp',
   },
   {
-    image: "/ai-chatbot.png",
-    title: "AI-Powered Customer Support",
+    image: '/ai-chatbot.png',
+    title: 'AI-Powered Customer Support',
     description:
-      "Implemented an AI chatbot solution for a SaaS company, automating 60% of customer inquiries and enhancing support team productivity.",
-    tags: ["AI/ML", "NLP", "Python", "OpenAI"],
-    results: "80% reduction in response time",
-    link: "/portfolio/ai-chatbot",
+      'Implemented an AI chatbot solution for a SaaS company, automating 60% of customer inquiries and enhancing support team productivity.',
+    tags: ['AI/ML', 'NLP', 'Python', 'OpenAI'],
+    results: '80% reduction in response time',
+    link: '/portfolio/ai-chatbot',
   },
   {
-    image: "/telemedicine-app.png",
-    title: "Telemedicine Mobile App",
+    image: '/telemedicine-app.png',
+    title: 'Telemedicine Mobile App',
     description:
-      "A secure telemedicine application enabling remote consultations, prescription management, and health monitoring with HIPAA compliance.",
-    tags: ["Healthcare", "React Native", "WebRTC", "FHIR"],
-    results: "300% increase in patient engagement",
-    link: "/portfolio/telemedicine",
+      'A secure telemedicine application enabling remote consultations, prescription management, and health monitoring with HIPAA compliance.',
+    tags: ['Healthcare', 'React Native', 'WebRTC', 'FHIR'],
+    results: '300% increase in patient engagement',
+    link: '/portfolio/telemedicine',
   },
   {
-    image: "/images/portfolio/previews/chatfly-preview.webp",
-    title: "ChatFly AI Platform",
+    image: '/images/portfolio/previews/chatfly-preview.webp',
+    title: 'ChatFly AI Platform',
     description:
-      "Built a comprehensive AI-powered communication platform combining GPT and DALL-E technologies for chatbots, text processing, and creative content generation.",
-    tags: ["AI/ML", "GPT", "DALL-E", "No-Code"],
-    results: "Reduced customer service costs by 60% for enterprise clients while improving response time by 75%",
-    link: "/portfolio/chatfly",
+      'Built a comprehensive AI-powered communication platform combining GPT and DALL-E technologies for chatbots, text processing, and creative content generation.',
+    tags: ['AI/ML', 'GPT', 'DALL-E', 'No-Code'],
+    results:
+      'Reduced customer service costs by 60% for enterprise clients while improving response time by 75%',
+    link: '/portfolio/chatfly',
   },
   {
-    image: "/images/portfolio/previews/joyful-preview.webp",
-    title: "Joyful - Smart Confectionery Platform",
+    image: '/images/portfolio/previews/joyful-preview.webp',
+    title: 'Joyful - Smart Confectionery Platform',
     description:
-      "AI-powered e-commerce platform for custom cakes and confectionery with advanced product customization features and same-day delivery across Qatar.",
-    tags: ["E-commerce", "AI", "AR/VR", "Customization"],
-    results: "Transformed traditional bakery into digital-first business, increasing revenue by 200% in first year",
-    link: "/portfolio/joyful",
+      'AI-powered e-commerce platform for custom cakes and confectionery with advanced product customization features and same-day delivery across Qatar.',
+    tags: ['E-commerce', 'AI', 'AR/VR', 'Customization'],
+    results:
+      'Transformed traditional bakery into digital-first business, increasing revenue by 200% in first year',
+    link: '/portfolio/joyful',
   },
   {
-    image: "/images/portfolio/previews/lawazm-preview.webp",
-    title: "Lawazm - Enterprise E-commerce Platform",
+    image: '/images/portfolio/previews/lawazm-preview.webp',
+    title: 'Lawazm - Enterprise E-commerce Platform',
     description:
-      "Large-scale e-commerce platform with 5,000+ products, serving Kuwait and Middle East markets with 25+ years of trading experience digitized.",
-    tags: ["E-commerce", "Enterprise", "Multi-vendor", "Logistics"],
-    results: "Increased client revenue by 300% and expanded market reach across 6 Middle Eastern countries",
-    link: "/portfolio/lawazm",
+      'Large-scale e-commerce platform with 5,000+ products, serving Kuwait and Middle East markets with 25+ years of trading experience digitized.',
+    tags: ['E-commerce', 'Enterprise', 'Multi-vendor', 'Logistics'],
+    results:
+      'Increased client revenue by 300% and expanded market reach across 6 Middle Eastern countries',
+    link: '/portfolio/lawazm',
   },
   {
-    image: "/images/portfolio/previews/joyjoy-preview.webp",
-    title: "JoyJoy - AI-Powered Wellness App",
+    image: '/images/portfolio/previews/joyjoy-preview.webp',
+    title: 'JoyJoy - AI-Powered Wellness App',
     description:
-      "Daily motivation app with AI companion, transforming mental wellness for thousands of users globally with personalized affirmations and progress tracking.",
-    tags: ["Wellness", "AI", "Mobile App", "Health"],
-    results: "Helped users achieve 40% improvement in daily mood scores and 60% increase in positive habit formation",
-    link: "/portfolio/joyjoy",
+      'Daily motivation app with AI companion, transforming mental wellness for thousands of users globally with personalized affirmations and progress tracking.',
+    tags: ['Wellness', 'AI', 'Mobile App', 'Health'],
+    results:
+      'Helped users achieve 40% improvement in daily mood scores and 60% increase in positive habit formation',
+    link: '/portfolio/joyjoy',
   },
   {
-    image: "/images/portfolio/previews/letspass-preview.webp",
-    title: "LetsPass - Advanced EdTech Platform",
+    image: '/images/portfolio/previews/letspass-preview.webp',
+    title: 'LetsPass - Advanced EdTech Platform',
     description:
-      "Comprehensive online education platform with AI-powered learning paths, interactive assessments, and digital certification systems.",
-    tags: ["EdTech", "AI", "Learning Analytics", "Certification"],
-    results: "Improved learning outcomes by 45% and reduced training costs by 60% for corporate clients",
-    link: "/portfolio/letspass",
+      'Comprehensive online education platform with AI-powered learning paths, interactive assessments, and digital certification systems.',
+    tags: ['EdTech', 'AI', 'Learning Analytics', 'Certification'],
+    results:
+      'Improved learning outcomes by 45% and reduced training costs by 60% for corporate clients',
+    link: '/portfolio/letspass',
   },
   {
-    image: "/images/portfolio/previews/lazurd-preview.webp",
-    title: "Lazurd - Luxury Brand Digital Experience",
+    image: '/images/portfolio/previews/lazurd-preview.webp',
+    title: 'Lazurd - Luxury Brand Digital Experience',
     description:
-      "Premium luxury platform for home-cooked meals and chocolates, achieving top charts in Kuwait through exceptional design and user experience.",
-    tags: ["Luxury", "Premium UI", "Brand Experience", "Kuwait"],
-    results: "Established luxury digital presence, increased brand value by 400% and premium sales by 250%",
-    link: "/portfolio/lazurd",
+      'Premium luxury platform for home-cooked meals and chocolates, achieving top charts in Kuwait through exceptional design and user experience.',
+    tags: ['Luxury', 'Premium UI', 'Brand Experience', 'Kuwait'],
+    results:
+      'Established luxury digital presence, increased brand value by 400% and premium sales by 250%',
+    link: '/portfolio/lazurd',
   },
   {
-    image: "/images/portfolio/previews/zahra-farm-preview.webp",
-    title: "Zahra Farm - AgriTech Innovation Platform",
+    image: '/images/portfolio/previews/zahra-farm-preview.webp',
+    title: 'Zahra Farm - AgriTech Innovation Platform',
     description:
-      "Revolutionary agricultural platform combining IoT sensors, organic farming, and eco-tourism experiences with smart irrigation and crop monitoring.",
-    tags: ["AgriTech", "IoT", "Smart Farming", "Sustainability"],
-    results: "Transformed traditional farming into smart agriculture, reducing water usage by 35% while increasing yields",
-    link: "/portfolio/zahrafarm",
+      'Revolutionary agricultural platform combining IoT sensors, organic farming, and eco-tourism experiences with smart irrigation and crop monitoring.',
+    tags: ['AgriTech', 'IoT', 'Smart Farming', 'Sustainability'],
+    results:
+      'Transformed traditional farming into smart agriculture, reducing water usage by 35% while increasing yields',
+    link: '/portfolio/zahrafarm',
   },
   {
-    image: "/images/portfolio/previews/i-love-food-ilf-preview.webp",
-    title: "I Love Food - AI Nutrition Platform",
+    image: '/images/portfolio/previews/i-love-food-ilf-preview.webp',
+    title: 'I Love Food - AI Nutrition Platform',
     description:
-      "Intelligent health and fitness app with AI meal planning, computer vision food recognition, and personalized nutrition recommendations.",
-    tags: ["Health", "AI", "Computer Vision", "Nutrition"],
-    results: "Helped users achieve 65% better nutrition adherence and 50% more effective weight management",
-    link: "/portfolio/i-love-food",
+      'Intelligent health and fitness app with AI meal planning, computer vision food recognition, and personalized nutrition recommendations.',
+    tags: ['Health', 'AI', 'Computer Vision', 'Nutrition'],
+    results:
+      'Helped users achieve 65% better nutrition adherence and 50% more effective weight management',
+    link: '/portfolio/i-love-food',
   },
 ]
 
@@ -133,35 +141,51 @@ export default function HorizontalScroll() {
   const [singleSetWidth, setSingleSetWidth] = useState(0)
   const animationRef = useRef<any>(null)
 
+  const normalizeX = (value: number) => {
+    let v = value
+    while (v <= -singleSetWidth) v += singleSetWidth
+    while (v > 0) v -= singleSetWidth
+    return v
+  }
+
   useEffect(() => {
     const calculateWidth = () => {
       const cardWidth = window.innerWidth >= 768 ? 320 : 280
       const gap = 32
-      const calculatedWidth = originalCaseStudies.length * cardWidth + (originalCaseStudies.length - 1) * gap
+      const calculatedWidth =
+        originalCaseStudies.length * cardWidth + (originalCaseStudies.length - 1) * gap
       setSingleSetWidth(calculatedWidth)
     }
 
     calculateWidth()
-    window.addEventListener("resize", calculateWidth)
-    return () => window.removeEventListener("resize", calculateWidth)
+    window.addEventListener('resize', calculateWidth)
+    return () => window.removeEventListener('resize', calculateWidth)
   }, [])
 
   const startAutoScroll = useCallback(() => {
     if (singleSetWidth === 0) return
 
     if (animationRef.current) {
-      animationRef.current.stop()
+      cancelAnimationFrame(animationRef.current)
     }
 
-    animationRef.current = animate(x, x.get() - singleSetWidth, {
-      duration: singleSetWidth / 40,
-      ease: "linear",
-      repeat: Number.POSITIVE_INFINITY,
-      repeatType: "loop",
-      onRepeat: () => {
-        x.set(0)
-      },
-    })
+    const scrollSpeed = 2 // pixels per frame (increased for visibility)
+
+    const animateScroll = () => {
+      const currentX = x.get()
+      const newX = currentX - scrollSpeed
+
+      // Wrap seamlessly instead of snapping back to 0
+      if (newX <= -singleSetWidth) {
+        x.set(newX + singleSetWidth)
+      } else {
+        x.set(newX)
+      }
+
+      animationRef.current = requestAnimationFrame(animateScroll)
+    }
+
+    animationRef.current = requestAnimationFrame(animateScroll)
   }, [singleSetWidth, x])
 
   useEffect(() => {
@@ -170,23 +194,22 @@ export default function HorizontalScroll() {
     }
     return () => {
       if (animationRef.current) {
-        animationRef.current.stop()
+        cancelAnimationFrame(animationRef.current)
       }
     }
   }, [singleSetWidth, startAutoScroll])
 
   const handleDragStart = () => {
     if (animationRef.current) {
-      animationRef.current.stop()
+      cancelAnimationFrame(animationRef.current)
     }
   }
 
   const handleDragEnd = () => {
     const currentX = x.get()
-    const remainder = currentX % singleSetWidth
-    const snappedX = remainder > 0 ? remainder - singleSetWidth : remainder
-    x.set(snappedX)
 
+    let normalizedX = normalizeX(currentX)
+    x.set(normalizedX)
     startAutoScroll()
   }
 
@@ -195,11 +218,13 @@ export default function HorizontalScroll() {
       <div className="w-full">
         <div ref={containerRef} className="relative w-full overflow-x-hidden">
           <motion.div
-            style={{ x }}
             ref={scrollContentRef}
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
             drag="x"
+            dragMomentum={true}
+            whileTap={{ cursor: 'grabbing' }}
+            dragConstraints={singleSetWidth > 0 ? { left: -singleSetWidth, right: 0 } : undefined}
             dragElastic={0.4}
             dragTransition={{
               bounceStiffness: 1000,
@@ -210,32 +235,61 @@ export default function HorizontalScroll() {
               max: 2000,
             }}
             className="flex flex-nowrap gap-8 py-8 cursor-grab active:cursor-grabbing"
+            style={{
+              x,
+              willChange: 'transform',
+              WebkitUserSelect: 'none',
+              userSelect: 'none',
+              touchAction: 'none',
+              WebkitTouchCallout: 'none',
+              pointerEvents: 'auto',
+              position: 'relative',
+              zIndex: 10,
+            }}
           >
             {caseStudies.map((study, index) => (
               <motion.div
                 key={index}
-                className="flex-shrink-0 w-[280px] md:w-[320px] h-[500px] bg-black/40 backdrop-blur-md rounded-xl border border-white/20 hover:border-[#4CD787]/40 flex flex-col transition-all duration-300 hover:shadow-[0_8px_32px_rgba(76,215,135,0.15)]"
+                className="flex-shrink-0 w-[280px] md:w-[320px] h-[500px] bg-black/40 backdrop-blur-md rounded-xl border border-white/20 hover:border-[#4CD787]/40 flex flex-col transition-all duration-300 hover:shadow-[0_8px_32px_rgba(76,215,135,0.15)] cursor-grab active:cursor-grabbing select-none"
+                style={{
+                  pointerEvents: 'auto',
+                  WebkitUserSelect: 'none',
+                  userSelect: 'none',
+                  touchAction: 'inherit',
+                }}
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.05 }}
                 transition={{ duration: 0.5, delay: (index % 6) * 0.03 }}
                 whileHover={{
                   scale: 1.02,
-                  transition: { duration: 0.2 }
+                  transition: { duration: 0.2 },
                 }}
               >
                 <div className="p-4 h-full flex flex-col">
                   <div className="relative w-full h-[140px] rounded-lg mb-3 overflow-hidden border border-white/10 bg-gray-900/50">
                     <Image
-                      src={study.image || "/placeholder.svg"}
+                      src={study.image || '/placeholder.svg'}
                       alt={study.title}
                       fill
-                      className="object-cover object-center"
+                      className="object-cover object-center pointer-events-none select-none"
                       sizes="(max-width: 768px) 280px, 320px"
+                      quality={100}
+                      priority={index < 6}
+                      style={{
+                        objectFit: 'cover',
+                        objectPosition: 'center',
+                        imageRendering: 'crisp-edges',
+                      }}
+                      draggable={false}
                     />
                   </div>
-                  <h3 className="text-lg font-bold text-white mb-2 leading-tight font-mono">{study.title}</h3>
-                  <p className="text-white/80 text-sm mb-3 leading-relaxed font-sans line-clamp-3">{study.description}</p>
+                  <h3 className="text-lg font-bold text-white mb-2 leading-tight font-mono">
+                    {study.title}
+                  </h3>
+                  <p className="text-white/80 text-sm mb-3 leading-relaxed font-sans line-clamp-3">
+                    {study.description}
+                  </p>
 
                   {/* Tech Stack Bubbles */}
                   <div className="flex flex-wrap gap-1.5 mb-3">
@@ -252,7 +306,7 @@ export default function HorizontalScroll() {
                   {/* Results - at bottom */}
                   <div className="mt-auto pt-2 border-t border-white/10">
                     <div className="text-sm text-white/90">
-                      <span className="font-semibold text-[#4CD787]">Results:</span> 
+                      <span className="font-semibold text-[#4CD787]">Results:</span>
                       <span className="font-medium ml-1">{study.results}</span>
                     </div>
                   </div>

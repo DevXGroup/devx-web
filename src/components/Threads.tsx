@@ -138,11 +138,26 @@ const Threads: React.FC<ThreadsProps> = ({
     if (!containerRef.current) return
     const container = containerRef.current
 
-    const renderer = new Renderer({ alpha: true })
+    // Clear any existing canvas to prevent conflicts
+    while (container.firstChild) {
+      container.removeChild(container.firstChild)
+    }
+
+    const renderer = new Renderer({ 
+      alpha: true,
+      preserveDrawingBuffer: true,
+      failIfMajorPerformanceCaveat: false
+    })
     const gl = renderer.gl
     gl.clearColor(0, 0, 0, 0)
     gl.enable(gl.BLEND)
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
+    
+    // Set canvas properties with conditional mouse interaction
+    gl.canvas.style.pointerEvents = enableMouseInteraction ? 'auto' : 'none'
+    gl.canvas.style.isolation = 'isolate'
+    gl.canvas.style.willChange = 'transform'
+    
     container.appendChild(gl.canvas)
 
     const geometry = new Triangle(gl)
@@ -209,15 +224,31 @@ const Threads: React.FC<ThreadsProps> = ({
     animationFrameId.current = requestAnimationFrame(update)
 
     return () => {
-      if (animationFrameId.current) cancelAnimationFrame(animationFrameId.current)
+      if (animationFrameId.current) {
+        cancelAnimationFrame(animationFrameId.current)
+        animationFrameId.current = undefined
+      }
+      
       window.removeEventListener('resize', resize)
 
       if (enableMouseInteraction) {
         container.removeEventListener('mousemove', handleMouseMove)
         container.removeEventListener('mouseleave', handleMouseLeave)
       }
-      if (container.contains(gl.canvas)) container.removeChild(gl.canvas)
-      gl.getExtension('WEBGL_lose_context')?.loseContext()
+      
+      // Proper WebGL cleanup to prevent interference with other WebGL contexts
+      try {
+        if (mesh) mesh.program.gl.deleteProgram(mesh.program.program)
+        if (gl.canvas && container.contains(gl.canvas)) {
+          container.removeChild(gl.canvas)
+        }
+        const loseContextExt = gl.getExtension('WEBGL_lose_context')
+        if (loseContextExt) {
+          loseContextExt.loseContext()
+        }
+      } catch (error) {
+        console.warn('WebGL cleanup warning:', error)
+      }
     }
   }, [color, amplitude, distance, enableMouseInteraction])
 
@@ -230,7 +261,12 @@ const Threads: React.FC<ThreadsProps> = ({
         willChange: 'transform',
         backfaceVisibility: 'hidden',
         WebkitBackfaceVisibility: 'hidden',
+        pointerEvents: enableMouseInteraction ? 'auto' : 'none',
+        zIndex: 10,
+        contain: 'layout style paint',
       }}
+      aria-hidden="true"
+      role="presentation"
       {...rest}
     />
   )
