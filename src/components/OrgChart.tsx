@@ -23,7 +23,7 @@ const teamMembers: TeamMember[] = [
     id: 'max',
     name: 'Max Sheikhizadeh',
     title: 'CEO/CTO & Founder',
-    image: '/images/about/max-headshot.png',
+    image: '/images/about/max-headshot.jpg',
     bio: '15+ years of experience at Amazon, Viasat, Qualcomm, and high-growth startups. Led core teams delivering innovative features for Amazon e-commerce platforms. Combines deep engineering expertise with collaborative leadership to drive team growth and consistent success.',
     linkedIn: 'https://www.linkedin.com/in/max-sheikhizadeh-7847a68/'
   },
@@ -31,7 +31,7 @@ const teamMembers: TeamMember[] = [
     id: 'milaad',
     name: 'Milaad Sheikhizadeh',
     title: 'General Manager',
-    image: '/images/about/milaad-headshot.png',
+    image: '/images/about/milaad-headshot.jpg',
     bio: 'General Manager with a background in business studies at USD and sales experience at Sunrun. Known for brilliance in sales and marketing, and a bright, effective approach to management.',
     linkedIn: 'https://www.linkedin.com/in/milaad-sheikhizadeh-b086392a8/'
   }
@@ -48,26 +48,6 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
     visible: { opacity: 1, y: 0 }
   }
 
-  const drawLine = {
-    hidden: { pathLength: 0, opacity: 0 },
-    visible: { 
-      pathLength: 1, 
-      opacity: 1,
-      transition: { duration: 1.5, ease: "easeInOut" }
-    }
-  }
-
-  const shineLine = {
-    hidden: { pathLength: 0, opacity: 0 },
-    visible: {
-      pathLength: 1,
-      opacity: [0, 1, 0],
-      transition: {
-        pathLength: { duration: 1.5, ease: "easeInOut" },
-        opacity: { duration: 2, repeat: Infinity, repeatType: "loop", ease: "easeInOut" }
-      }
-    }
-  }
 
   const modalVariants = {
     hidden: { opacity: 0, scale: 0.8 },
@@ -81,7 +61,7 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
         <div className="max-w-6xl mx-auto">
           {/* Leadership Level - Top Row */}
           <motion.div 
-            className="flex flex-col sm:flex-row justify-center gap-8 sm:gap-20 mb-16"
+            className="flex flex-col sm:flex-row justify-center gap-8 sm:gap-20 mb-16 relative z-10"
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
             variants={{
@@ -94,13 +74,13 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
             {/* Max Sheikhizadeh */}
             <motion.div 
               variants={fadeInUp}
-              className="text-center group relative bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 cursor-pointer hover:border-[#4CD787]/50 transition-colors"
+              className="text-center group relative bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 cursor-pointer hover:border-[#4CD787]/50 transition-colors w-full max-w-[280px] mx-auto min-h-[320px] flex flex-col justify-between"
               onClick={() => setSelectedMember(teamMembers[0])}
             >
               <div className="relative mb-4">
                 <div className="w-32 h-32 sm:w-40 sm:h-40 mx-auto rounded-2xl overflow-hidden border-3 border-[#4CD787] shadow-2xl">
                   <Image
-                    src="/images/about/max-headshot.png"
+                    src="/images/about/max-headshot.jpg"
                     alt="Max Sheikhizadeh"
                     width={160}
                     height={160}
@@ -108,24 +88,26 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
                   />
                 </div>
               </div>
-              <h3 className="font-bold text-white text-xl mb-2">Max Sheikhizadeh</h3>
-              <p className="text-[#4CD787] text-sm font-medium mb-3">CEO/CTO & Founder</p>
-              <button className="bg-[#4CD787]/20 hover:bg-[#4CD787]/30 text-[#4CD787] px-4 py-2 rounded-lg text-sm font-medium transition-colors border border-[#4CD787]/30">
-                <User className="w-4 h-4 inline mr-2" />
-                Short Bio
-              </button>
+              <div>
+                <h3 className="font-bold text-white text-xl mb-2">Max Sheikhizadeh</h3>
+                <p className="text-[#4CD787] text-sm font-medium mb-3">CEO/CTO & Founder</p>
+                <button className="bg-[#4CD787]/20 hover:bg-[#4CD787]/30 text-[#4CD787] px-4 py-2 rounded-lg text-sm font-medium transition-colors border border-[#4CD787]/30">
+                  <User className="w-4 h-4 inline mr-2" />
+                  Short Bio
+                </button>
+              </div>
             </motion.div>
 
             {/* Milaad Sheikhizadeh */}
             <motion.div 
               variants={fadeInUp}
-              className="text-center group relative bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 cursor-pointer hover:border-[#CFB53B]/50 transition-colors"
+              className="text-center group relative bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 cursor-pointer hover:border-[#FFD700]/50 transition-colors w-full max-w-[280px] mx-auto min-h-[320px] flex flex-col justify-between"
               onClick={() => setSelectedMember(teamMembers[1])}
             >
               <div className="relative mb-4">
-                <div className="w-32 h-32 sm:w-40 sm:h-40 mx-auto rounded-2xl overflow-hidden border-3 border-[#CFB53B] shadow-2xl">
+                <div className="w-32 h-32 sm:w-40 sm:h-40 mx-auto rounded-2xl overflow-hidden border-3 border-[#FFD700] shadow-2xl">
                   <Image
-                    src="/images/about/milaad-headshot.png"
+                    src="/images/about/milaad-headshot.jpg"
                     alt="Milaad Sheikhizadeh"
                     width={160}
                     height={160}
@@ -133,218 +115,27 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
                   />
                 </div>
               </div>
-              <h3 className="font-bold text-white text-xl mb-2">Milaad Sheikhizadeh</h3>
-              <p className="text-[#CFB53B] text-sm font-medium mb-3">General Manager</p>
-              <button className="bg-[#CFB53B]/20 hover:bg-[#CFB53B]/30 text-[#CFB53B] px-4 py-2 rounded-lg text-sm font-medium transition-colors border border-[#CFB53B]/30">
-                <User className="w-4 h-4 inline mr-2" />
-                Short Bio
-              </button>
+              <div>
+                <h3 className="font-bold text-white text-xl mb-2">Milaad Sheikhizadeh</h3>
+                <p className="text-[#FFD700] text-sm font-medium mb-3">General Manager</p>
+                <button className="bg-[#FFD700]/20 hover:bg-[#FFD700]/30 text-[#FFD700] px-4 py-2 rounded-lg text-sm font-medium transition-colors border border-[#FFD700]/30">
+                  <User className="w-4 h-4 inline mr-2" />
+                  Short Bio
+                </button>
+              </div>
             </motion.div>
           </motion.div>
 
-          {/* Animated Connecting Lines SVG */}
-          <div className="relative mb-16">
-            <svg className="w-full h-48 sm:h-64 absolute top-0 left-0" viewBox="0 0 1200 240" fill="none">
-              {/* Horizontal line connecting the leaders */}
-              <motion.path
-                d="M400 40 L800 40"
-                stroke="url(#gradient1)"
-                strokeWidth="4"
-                strokeLinecap="round"
-                initial="hidden"
-                animate={isInView ? "visible" : "hidden"}
-                variants={drawLine}
-                transition={{ delay: 1 }}
-              />
-              
-              {/* Shining line effect on leadership connection */}
-              <motion.path
-                d="M400 40 L800 40"
-                stroke="url(#shineGradient)"
-                strokeWidth="6"
-                strokeLinecap="round"
-                initial="hidden"
-                animate={isInView ? "visible" : "hidden"}
-                variants={shineLine}
-                transition={{ delay: 1.5 }}
-              />
-              
-              {/* Vertical line down from center of leadership */}
-              <motion.path
-                d="M600 40 L600 120"
-                stroke="url(#gradient2)"
-                strokeWidth="4"
-                strokeLinecap="round"
-                initial="hidden"
-                animate={isInView ? "visible" : "hidden"}
-                variants={drawLine}
-                transition={{ delay: 1.8 }}
-              />
-              
-              {/* Horizontal line connecting all managers */}
-              <motion.path
-                d="M300 120 L900 120"
-                stroke="url(#gradient3)"
-                strokeWidth="4"
-                strokeLinecap="round"
-                initial="hidden"
-                animate={isInView ? "visible" : "hidden"}
-                variants={drawLine}
-                transition={{ delay: 2.2 }}
-              />
-              
-              {/* Shining line effect for managers */}
-              <motion.path
-                d="M300 120 L900 120"
-                stroke="url(#shineGradient2)"
-                strokeWidth="6"
-                strokeLinecap="round"
-                initial="hidden"
-                animate={isInView ? "visible" : "hidden"}
-                variants={shineLine}
-                transition={{ delay: 2.8 }}
-              />
-              
-              {/* Vertical lines from managers level down */}
-              <motion.path
-                d="M375 120 L375 160"
-                stroke="#4CD787"
-                strokeWidth="3"
-                strokeLinecap="round"
-                initial="hidden"
-                animate={isInView ? "visible" : "hidden"}
-                variants={drawLine}
-                transition={{ delay: 2.5 }}
-              />
-              <motion.path
-                d="M525 120 L525 160"
-                stroke="#CFB53B"
-                strokeWidth="3"
-                strokeLinecap="round"
-                initial="hidden"
-                animate={isInView ? "visible" : "hidden"}
-                variants={drawLine}
-                transition={{ delay: 2.6 }}
-              />
-              <motion.path
-                d="M675 120 L675 160"
-                stroke="#4834D4"
-                strokeWidth="3"
-                strokeLinecap="round"
-                initial="hidden"
-                animate={isInView ? "visible" : "hidden"}
-                variants={drawLine}
-                transition={{ delay: 2.7 }}
-              />
-              <motion.path
-                d="M825 120 L825 160"
-                stroke="#9d4edd"
-                strokeWidth="3"
-                strokeLinecap="round"
-                initial="hidden"
-                animate={isInView ? "visible" : "hidden"}
-                variants={drawLine}
-                transition={{ delay: 2.8 }}
-              />
-              
-              {/* Horizontal line collecting from managers to developers */}
-              <motion.path
-                d="M375 160 L825 160"
-                stroke="url(#gradient4)"
-                strokeWidth="3"
-                strokeLinecap="round"
-                initial="hidden"
-                animate={isInView ? "visible" : "hidden"}
-                variants={drawLine}
-                transition={{ delay: 3.0 }}
-              />
-              
-              {/* Final vertical line to developers */}
-              <motion.path
-                d="M600 160 L600 200"
-                stroke="url(#gradient5)"
-                strokeWidth="4"
-                strokeLinecap="round"
-                initial="hidden"
-                animate={isInView ? "visible" : "hidden"}
-                variants={drawLine}
-                transition={{ delay: 3.2 }}
-              />
-              
-              {/* Shining effect on final developer connection */}
-              <motion.path
-                d="M600 160 L600 200"
-                stroke="url(#shineGradient3)"
-                strokeWidth="6"
-                strokeLinecap="round"
-                initial="hidden"
-                animate={isInView ? "visible" : "hidden"}
-                variants={shineLine}
-                transition={{ delay: 3.5 }}
-              />
-
-              <defs>
-                <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#4CD787" />
-                  <stop offset="100%" stopColor="#CFB53B" />
-                </linearGradient>
-                <linearGradient id="gradient2" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#4CD787" />
-                  <stop offset="100%" stopColor="#4834D4" />
-                </linearGradient>
-                <linearGradient id="gradient3" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#4CD787" />
-                  <stop offset="25%" stopColor="#CFB53B" />
-                  <stop offset="50%" stopColor="#4834D4" />
-                  <stop offset="75%" stopColor="#9d4edd" />
-                  <stop offset="100%" stopColor="#4CD787" />
-                </linearGradient>
-                <linearGradient id="gradient4" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#4CD787" />
-                  <stop offset="33%" stopColor="#CFB53B" />
-                  <stop offset="66%" stopColor="#4834D4" />
-                  <stop offset="100%" stopColor="#9d4edd" />
-                </linearGradient>
-                <linearGradient id="gradient5" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#4834D4" />
-                  <stop offset="100%" stopColor="#9d4edd" />
-                </linearGradient>
-                
-                {/* Shining gradients */}
-                <linearGradient id="shineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="transparent" />
-                  <stop offset="45%" stopColor="transparent" />
-                  <stop offset="50%" stopColor="#ffffff" stopOpacity="0.9" />
-                  <stop offset="55%" stopColor="transparent" />
-                  <stop offset="100%" stopColor="transparent" />
-                </linearGradient>
-                <linearGradient id="shineGradient2" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="transparent" />
-                  <stop offset="45%" stopColor="transparent" />
-                  <stop offset="50%" stopColor="#ffffff" stopOpacity="0.9" />
-                  <stop offset="55%" stopColor="transparent" />
-                  <stop offset="100%" stopColor="transparent" />
-                </linearGradient>
-                <linearGradient id="shineGradient3" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="transparent" />
-                  <stop offset="45%" stopColor="transparent" />
-                  <stop offset="50%" stopColor="#ffffff" stopOpacity="0.9" />
-                  <stop offset="55%" stopColor="transparent" />
-                  <stop offset="100%" stopColor="transparent" />
-                </linearGradient>
-              </defs>
-            </svg>
-          </div>
 
           {/* Management Level */}
           <motion.div 
-            className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-16 mt-48"
+            className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-16 relative z-10"
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
             variants={{
               hidden: {},
               visible: {
-                transition: { staggerChildren: 0.15, delayChildren: 2.8 }
+                transition: { staggerChildren: 0.15, delayChildren: 0.8 }
               }
             }}
           >
@@ -365,8 +156,8 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
               variants={fadeInUp}
               className="text-center bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10"
             >
-              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-[#CFB53B]/20 to-[#CFB53B]/40 rounded-xl flex items-center justify-center border border-[#CFB53B]/30">
-                <Calendar className="w-6 h-6 text-[#CFB53B]" />
+              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-[#FFD700]/20 to-[#FFD700]/40 rounded-xl flex items-center justify-center border border-[#FFD700]/30">
+                <Calendar className="w-6 h-6 text-[#FFD700]" />
               </div>
               <h4 className="text-white text-base font-semibold mb-1">Overseas</h4>
               <h4 className="text-white text-base font-semibold mb-2">Projects Manager</h4>
@@ -398,32 +189,49 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
 
           {/* Developers Team Level */}
           <motion.div 
-            className="text-center bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 max-w-2xl mx-auto"
+            className="text-center bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 max-w-3xl mx-auto"
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
             variants={fadeInUp}
-            transition={{ delay: 3.2 }}
+            transition={{ delay: 1.2 }}
           >
-            <div className="flex justify-center items-center gap-3 mb-6">
-              {[...Array(5)].map((_, i) => (
+            {/* Professional developer grid representation */}
+            <div className="grid grid-cols-5 gap-3 mb-6 max-w-lg mx-auto">
+              {[...Array(15)].map((_, i) => (
                 <motion.div
                   key={i}
-                  className="w-12 h-12 bg-gradient-to-br from-[#9d4edd]/30 to-[#9d4edd]/60 rounded-full flex items-center justify-center border-2 border-[#9d4edd]/50"
-                  animate={shouldReduceMotion ? {} : { 
-                    scale: [1, 1.1, 1],
-                    rotate: [0, 360, 0] 
-                  }}
+                  className="w-10 h-10 bg-gradient-to-br from-[#9d4edd]/20 to-[#9d4edd]/40 rounded-lg flex items-center justify-center border border-[#9d4edd]/30 group hover:border-[#9d4edd]/70 transition-colors"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
                   transition={{ 
-                    duration: 3, 
-                    repeat: Infinity, 
-                    delay: i * 0.3 + 3.5 
+                    delay: 1.5 + (i * 0.1),
+                    duration: 0.4,
+                    ease: "easeOut"
                   }}
+                  whileHover={shouldReduceMotion ? {} : { scale: 1.1 }}
                 >
-                  <Users className="w-5 h-5 text-[#9d4edd]" />
+                  <div className="w-2 h-2 bg-[#9d4edd] rounded-full group-hover:bg-white transition-colors"></div>
                 </motion.div>
               ))}
             </div>
-            <h4 className="text-white text-2xl font-bold mb-2">15+ Senior Devs</h4>
+            
+            <motion.h4 
+              className="text-white text-2xl font-bold mb-2"
+              initial={{ opacity: 0, y: 10 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+              transition={{ delay: 3.0 }}
+            >
+              15+ Senior Developers
+            </motion.h4>
+            
+            <motion.p 
+              className="text-white/60 text-sm"
+              initial={{ opacity: 0 }}
+              animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+              transition={{ delay: 3.2 }}
+            >
+              Specialized in Full-Stack, AI/ML, IoT, and Mobile Development
+            </motion.p>
           </motion.div>
 
           {/* Team Stats */}
@@ -431,7 +239,7 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
             className="text-center mt-12 p-8 bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10"
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ delay: 3.8, duration: 0.6 }}
+            transition={{ delay: 1.8, duration: 0.6 }}
           >
             <div className="flex justify-center items-center gap-8 text-sm">
               <div className="text-center">
@@ -440,7 +248,7 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
               </div>
               <div className="w-px h-12 bg-white/20"></div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-[#CFB53B] mb-1">2</div>
+                <div className="text-3xl font-bold text-[#FFD700] mb-1">2</div>
                 <div className="text-white/80 font-medium">Leadership</div>
               </div>
               <div className="w-px h-12 bg-white/20"></div>
@@ -483,7 +291,7 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
               <div className="flex flex-col md:flex-row gap-6">
                 <div className="flex-shrink-0">
                   <div className={`w-32 h-32 rounded-2xl overflow-hidden border-3 shadow-2xl ${
-                    selectedMember.id === 'max' ? 'border-[#4CD787]' : 'border-[#CFB53B]'
+                    selectedMember.id === 'max' ? 'border-[#4CD787]' : 'border-[#FFD700]'
                   }`}>
                     <Image
                       src={selectedMember.image}
@@ -498,7 +306,7 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
                 <div className="flex-1">
                   <h3 className="text-2xl font-bold text-white mb-2">{selectedMember.name}</h3>
                   <p className={`text-lg font-medium mb-4 ${
-                    selectedMember.id === 'max' ? 'text-[#4CD787]' : 'text-[#CFB53B]'
+                    selectedMember.id === 'max' ? 'text-[#4CD787]' : 'text-[#FFD700]'
                   }`}>
                     {selectedMember.title}
                   </p>
@@ -514,7 +322,7 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
                       className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                         selectedMember.id === 'max' 
                           ? 'bg-[#4CD787]/20 hover:bg-[#4CD787]/30 text-[#4CD787] border border-[#4CD787]/30'
-                          : 'bg-[#CFB53B]/20 hover:bg-[#CFB53B]/30 text-[#CFB53B] border border-[#CFB53B]/30'
+                          : 'bg-[#FFD700]/20 hover:bg-[#FFD700]/30 text-[#FFD700] border border-[#FFD700]/30'
                       }`}
                     >
                       LinkedIn ›
