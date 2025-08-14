@@ -24,7 +24,7 @@ interface ParticleFieldProps {
 export default function ParticleField({ 
   className = "", 
   particleCount = 50,
-  colors = ["#4CD787", "#4834D4", "#CFB53B", "#9d4edd"]
+  colors = ["#4CD787", "#4834D4", "#FFD700", "#9d4edd"]
 }: ParticleFieldProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const animationRef = useRef<number>()

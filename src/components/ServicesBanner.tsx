@@ -53,7 +53,7 @@ const services = [
     description:
       "Create engaging mobile experiences for your users. We develop native and cross-platform mobile applications that deliver exceptional performance.",
     features: ["iOS Development", "Android Development", "Cross-platform Solutions", "Mobile App Strategy"],
-    color: "#CFB53B",
+    color: "#FFD700",
   },
   {
     icon: Database,
@@ -85,7 +85,7 @@ const services = [
     description:
       "Transform your business with modern digital solutions. We help you embrace new technologies and optimize your digital presence.",
     features: ["Digital Strategy Consulting", "Process Automation", "Technology Migration", "Digital Innovation"],
-    color: "#CFB53B",
+    color: "#FFD700",
   },
   {
     icon: Cpu,
@@ -438,7 +438,7 @@ export default function ServicesBanner() {
             repeatType: "loop",
             ease: "linear",
           }}
-          className="absolute left-1/3 w-[30px] h-[800px] bg-gradient-to-t from-[#CFB53B]/0 via-[#CFB53B]/15 to-[#CFB53B]/0"
+          className="absolute left-1/3 w-[30px] h-[800px] bg-gradient-to-t from-[#FFD700]/0 via-[#FFD700]/15 to-[#FFD700]/0"
           style={{ transform: "rotate(-30deg)" }}
         />
 

@@ -202,7 +202,7 @@ export default function DevelopmentTools() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="text-2xl md:text-3xl font-bold mb-4 font-['IBM_Plex_Mono'] text-center relative after:content-[''] after:absolute after:w-24 after:h-1 after:bg-[#CFB53B]/30 after:bottom-[-20px] after:left-1/2 after:-translate-x-1/2"
+            className="text-2xl md:text-3xl font-bold mb-4 font-['IBM_Plex_Mono'] text-center relative after:content-[''] after:absolute after:w-24 after:h-1 after:bg-[#FFD700]/30 after:bottom-[-20px] after:left-1/2 after:-translate-x-1/2"
           >
             <AnimatedGradientText>DevX Development Tools</AnimatedGradientText>
           </motion.h3>

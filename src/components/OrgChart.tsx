@@ -4,6 +4,7 @@ import { motion, useReducedMotion, useInView, AnimatePresence } from 'framer-mot
 import { useRef, useState } from 'react'
 import Image from 'next/image'
 import { Users, Calendar, Cpu, X, User } from 'lucide-react'
+import RippleGrid from './RippleGrid'
 
 interface TeamMember {
   id: string
@@ -189,49 +190,48 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
 
           {/* Developers Team Level */}
           <motion.div 
-            className="text-center bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 max-w-3xl mx-auto"
+            className="text-center bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 max-w-3xl mx-auto relative overflow-hidden"
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
             variants={fadeInUp}
             transition={{ delay: 1.2 }}
           >
-            {/* Professional developer grid representation */}
-            <div className="grid grid-cols-5 gap-3 mb-6 max-w-lg mx-auto">
-              {[...Array(15)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  className="w-10 h-10 bg-gradient-to-br from-[#9d4edd]/20 to-[#9d4edd]/40 rounded-lg flex items-center justify-center border border-[#9d4edd]/30 group hover:border-[#9d4edd]/70 transition-colors"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
-                  transition={{ 
-                    delay: 1.5 + (i * 0.1),
-                    duration: 0.4,
-                    ease: "easeOut"
-                  }}
-                  whileHover={shouldReduceMotion ? {} : { scale: 1.1 }}
-                >
-                  <div className="w-2 h-2 bg-[#9d4edd] rounded-full group-hover:bg-white transition-colors"></div>
-                </motion.div>
-              ))}
+            {/* RippleGrid animation background */}
+            <div className="absolute inset-0 w-full h-full">
+              <RippleGrid
+                gridColor="#9d4edd"
+                rippleIntensity={0.03}
+                gridSize={8.0}
+                gridThickness={20.0}
+                fadeDistance={1.2}
+                vignetteStrength={1.5}
+                glowIntensity={0.15}
+                opacity={0.6}
+                mouseInteraction={true}
+                mouseInteractionRadius={0.8}
+              />
             </div>
             
-            <motion.h4 
-              className="text-white text-2xl font-bold mb-2"
-              initial={{ opacity: 0, y: 10 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-              transition={{ delay: 3.0 }}
-            >
-              15+ Senior Developers
-            </motion.h4>
-            
-            <motion.p 
-              className="text-white/60 text-sm"
-              initial={{ opacity: 0 }}
-              animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-              transition={{ delay: 3.2 }}
-            >
-              Specialized in Full-Stack, AI/ML, IoT, and Mobile Development
-            </motion.p>
+            {/* Content overlay */}
+            <div className="relative z-10">
+              <motion.h4 
+                className="text-white text-2xl font-bold mb-2"
+                initial={{ opacity: 0, y: 10 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+                transition={{ delay: 1.5 }}
+              >
+                15+ Senior Developers
+              </motion.h4>
+              
+              <motion.p 
+                className="text-white/80 text-sm"
+                initial={{ opacity: 0 }}
+                animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+                transition={{ delay: 1.7 }}
+              >
+                Specialized in Full-Stack, AI/ML, IoT, and Mobile Development
+              </motion.p>
+            </div>
           </motion.div>
 
           {/* Team Stats */}

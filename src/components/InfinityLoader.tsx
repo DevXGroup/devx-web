@@ -197,7 +197,7 @@ function InfinityMesh() {
 
       <mesh ref={ray5Ref} position={[0, 0, -2]} rotation={[0, 0, -Math.PI / 6]}>
         <planeGeometry args={[50, 0.5]} /> {/* Thinner width */}
-        <LightBeamMaterial color="#CFB53B" opacity={0.07} />
+        <LightBeamMaterial color="#FFD700" opacity={0.07} />
       </mesh>
     </group>
   )

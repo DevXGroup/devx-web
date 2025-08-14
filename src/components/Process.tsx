@@ -36,7 +36,7 @@ const processes = [
     title: "Test",
     description: "Relax while we ensure everything works flawlessly across all devices.",
     shapeVariation: 0,
-    color: "#CFB53B",
+    color: "#FFD700",
     useFullCard: true,
   },
   {

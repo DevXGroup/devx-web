@@ -709,7 +709,7 @@ export default function EntryPage() {
     <div className="fixed inset-0 bg-black overflow-hidden">
       <StarField />
       <LetterGlitch
-        glitchColors={['#4CD787', '#CFB53B', '#9d4edd', '#4834D4', '#00ff41', '#008f11']}
+        glitchColors={['#4CD787', '#FFD700', '#9d4edd', '#4834D4', '#00ff41', '#008f11']}
         glitchSpeed={50}
         centerVignette={true}
         outerVignette={false}

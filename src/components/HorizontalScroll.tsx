@@ -240,7 +240,7 @@ export default function HorizontalScroll() {
               willChange: 'transform',
               WebkitUserSelect: 'none',
               userSelect: 'none',
-              touchAction: 'none',
+              touchAction: 'pan-y pinch-zoom',
               WebkitTouchCallout: 'none',
               pointerEvents: 'auto',
               position: 'relative',
@@ -255,7 +255,7 @@ export default function HorizontalScroll() {
                   pointerEvents: 'auto',
                   WebkitUserSelect: 'none',
                   userSelect: 'none',
-                  touchAction: 'inherit',
+                  touchAction: 'pan-y',
                 }}
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
