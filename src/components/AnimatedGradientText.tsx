@@ -41,7 +41,7 @@ export const AnimatedGradientText = ({ children, className = "" }: AnimatedGradi
       data-gradient-text
       className={`bg-clip-text text-transparent inline-block ${className}`}
       style={{
-        backgroundImage: "linear-gradient(-45deg, #4CD787, #CFB53B, #9d4edd, #4834D4)",
+        backgroundImage: "linear-gradient(-45deg, #4CD787, #FFD700, #9d4edd, #4834D4)",
         backgroundSize: "300% 300%",
         animation: "gradient-animation 6s ease infinite",
       }}

@@ -60,7 +60,7 @@ export default function MorphingShapes({ className = "" }: MorphingShapesProps) 
         ease: "easeInOut",
         delay: 5
       },
-      color: "#CFB53B",
+      color: "#FFD700",
       size: "w-20 h-20"
     },
     {
@@ -102,7 +102,7 @@ export default function MorphingShapes({ className = "" }: MorphingShapesProps) 
       <motion.div
         className="absolute w-32 h-32 rounded-full opacity-10"
         style={{
-          background: "conic-gradient(from 0deg, #4CD787, #4834D4, #CFB53B, #9d4edd, #4CD787)",
+          background: "conic-gradient(from 0deg, #4CD787, #4834D4, #FFD700, #9d4edd, #4CD787)",
           filter: "blur(20px)"
         }}
         initial={{ x: "50%", y: "50%", scale: 1 }}

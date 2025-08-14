@@ -32,7 +32,7 @@ const services = [
     icon: Smartphone,
     name: "Mobile Apps",
     description: "Create engaging mobile experiences with native and cross-platform applications.",
-    color: "#CFB53B",
+    color: "#FFD700",
     features: ["iOS Development", "Android Development", "Cross-platform Solutions", "Mobile App Strategy"],
   },
   {
@@ -60,7 +60,7 @@ const services = [
     icon: Rocket,
     name: "Digital Transformation",
     description: "Transform your business with modern digital solutions.",
-    color: "#CFB53B",
+    color: "#FFD700",
     features: ["Digital Strategy", "Process Automation", "Technology Migration", "Digital Innovation"],
   },
   {

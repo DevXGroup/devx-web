@@ -129,7 +129,7 @@ function ModernCube(props) {
   // Cube face data
   const faces = [
     { position: [0, 0, 1.51], rotation: [0, 0, 0], text: "Custom Software", color: "#4CD787" },
-    { position: [0, 0, -1.51], rotation: [0, Math.PI, 0], text: "Expert Solutions", color: "#CFB53B" },
+    { position: [0, 0, -1.51], rotation: [0, Math.PI, 0], text: "Expert Solutions", color: "#FFD700" },
     { position: [1.51, 0, 0], rotation: [0, Math.PI / 2, 0], text: "Fast Results", color: "#9d4edd" },
     { position: [-1.51, 0, 0], rotation: [0, -Math.PI / 2, 0], text: "Competitive Rates", color: "#4834D4" },
     { position: [0, 1.51, 0], rotation: [-Math.PI / 2, 0, 0], text: "Bring Your Vision", color: "#ff6b6b" },
@@ -276,7 +276,7 @@ export default function RotatingCube() {
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} intensity={1} color="#ffffff" />
         <pointLight position={[-10, -10, -10]} intensity={0.5} color="#4CD787" />
-        <spotLight position={[5, 5, 5]} angle={0.15} penumbra={1} intensity={0.5} color="#CFB53B" />
+        <spotLight position={[5, 5, 5]} angle={0.15} penumbra={1} intensity={0.5} color="#FFD700" />
 
         {/* Environment map for reflections */}
         <Environment preset="night" />

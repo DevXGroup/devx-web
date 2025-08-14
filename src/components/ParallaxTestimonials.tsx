@@ -1,32 +1,32 @@
-"use client"
+'use client'
 
-import { useRef, useState, useEffect } from "react"
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
-import Image from "next/image"
-import { Quote } from "lucide-react"
-import EnhancedInfinityLoader from "./EnhancedInfinityLoader"
+import { useRef, useState, useEffect } from 'react'
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
+import Image from 'next/image'
+import { Quote } from 'lucide-react'
+import EnhancedInfinityLoader from './EnhancedInfinityLoader'
 
 const testimonials = [
   {
     quote:
-      "Our partnership with Dev Group has driven our company to be a leader in online channels. We recommend them for any business looking to have an active online presence creatively.",
-    author: "Lazurd Inc CEO",
-    position: "CEO, Lazurd Inc",
-    logo: "/abstract-tech-logo.png",
+      'DevX Group has been assisting our company for the past three years in developing and implementing new and customized solutions utilizing cutting-edge technologies. Their dedication to precision and discipline ensures that great solutions are delivered with minimal redesign. We strongly recommend them to knowledgeable clients seeking a highly productive and solution-focused team.',
+    author: 'Chamrosh Inc Founder/CEO',
+    position: 'Founder/CEO, Chamrosh Inc',
+    logo: '/innovative-company-logo.png',
   },
   {
     quote:
-      "DevX Group has been assisting our company for the past three years in developing and implementing new and customized solutions utilizing cutting-edge technologies. Their dedication to precision and discipline ensures that great solutions are delivered with minimal redesign. We strongly recommend them to knowledgeable clients seeking a highly productive and solution-focused team.",
-    author: "Chamrosh Inc Founder/CEO",
-    position: "Founder/CEO, Chamrosh Inc",
-    logo: "/innovative-company-logo.png",
+      'Our partnership with Dev Group has driven our company to be a leader in online channels. We recommend them for any business looking to have an active online presence creatively.',
+    author: 'Lazurd Inc CEO',
+    position: 'CEO, Lazurd Inc',
+    logo: '/abstract-tech-logo.png',
   },
   {
     quote:
       "The DevX Group team showed high professionalism handling our project, starting with collecting all the required data to precisely understand our operations' needs, to providing a clear approach and an accurate timeline for the completion of the project, and very transparent payables (even explained the ones that might occur in the future). We had great communication with the team; they were very responsive, punctual, and on time, and they have always provided us with feedback and recommendations from a professional point of view. I'm very pleased and satisfied with our collaboration; I see it will last many years. I would HIGHLY RECOMMEND them for anyone seeking a professional partner!",
-    author: "Lawazm Inc CEO",
-    position: "CEO, Lawazm Inc",
-    logo: "/generic-mobile-logo.png",
+    author: 'Lawazm Inc CEO',
+    position: 'CEO, Lawazm Inc',
+    logo: '/generic-mobile-logo.png',
   },
 ]
 
@@ -49,19 +49,19 @@ export default function ParallaxTestimonials() {
 
   useEffect(() => {
     setIsClient(true)
-    
+
     const checkIsMobile = () => {
       setIsMobile(window.innerWidth < 768)
     }
-    
+
     checkIsMobile()
     window.addEventListener('resize', checkIsMobile)
-    
+
     return () => window.removeEventListener('resize', checkIsMobile)
   }, [])
 
   return (
-    <section className="relative py-24 overflow-hidden bg-gradient-to-b from-black via-purple-900/10 to-black">
+    <section className="relative py-0 mt-[-103px] overflow-hidden bg-gradient-to-b from-black via-purple-900/10 to-black">
       {/* Background elements */}
       <div className="absolute inset-0 pointer-events-none">
         <motion.div
@@ -73,11 +73,11 @@ export default function ParallaxTestimonials() {
           transition={{
             duration: 8,
             repeat: Number.POSITIVE_INFINITY,
-            repeatType: "reverse",
+            repeatType: 'reverse',
           }}
         />
         <motion.div
-          className="absolute bottom-0 right-1/4 w-64 h-64 rounded-full bg-[#CFB53B]/10 blur-3xl"
+          className="absolute bottom-0 right-1/4 w-64 h-64 rounded-full bg-[#FFD700]/10 blur-3xl"
           animate={{
             y: [0, -30, 0],
             opacity: [0.3, 0.5, 0.3],
@@ -85,7 +85,7 @@ export default function ParallaxTestimonials() {
           transition={{
             duration: 8,
             repeat: Number.POSITIVE_INFINITY,
-            repeatType: "reverse",
+            repeatType: 'reverse',
             delay: 2,
           }}
         />
@@ -98,14 +98,14 @@ export default function ParallaxTestimonials() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 1, ease: "easeOut" }}
+          transition={{ duration: 1, ease: 'easeOut' }}
           className="flex justify-center mb-12 -mt-8 sm:-mt-12 md:-mt-16 relative z-50"
           style={{
             scale: infinityScale,
             opacity: infinityOpacity,
           }}
         >
-          <EnhancedInfinityLoader scrollThreshold={0.25} baseScale={0.3} maxScale={2.5} />
+          <EnhancedInfinityLoader scrollThreshold={0.25} baseScale={0.3} maxScale={3} />
         </motion.div>
 
         <motion.div
@@ -115,13 +115,19 @@ export default function ParallaxTestimonials() {
           transition={{ duration: 0.8 }}
           className="text-center max-w-3xl mx-auto mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#CFB53B]">What Our Clients Say</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#FFD700]">
+            What Our Clients Say
+          </h2>
           <p className="text-lg text-foreground/80 font-light">
-            Don&apos;t just take our word for it. Here&apos;s what our clients have to say about working with us.
+            Don&apos;t just take our word for it. Here&apos;s what our clients have to say about
+            working with us.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-16 max-w-6xl mx-auto" ref={containerRef}>
+        <div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-16 max-w-6xl mx-auto"
+          ref={containerRef}
+        >
           {testimonials.map((testimonial, index) => (
             <TestimonialCard
               key={index}
@@ -143,24 +149,34 @@ export default function ParallaxTestimonials() {
 }
 
 interface TestimonialCardProps {
-  testimonial: any;
-  index: number;
-  containerRef: React.RefObject<HTMLDivElement>;
-  isHovered: boolean;
-  onHover: () => void;
-  onLeave: () => void;
-  allHovered: boolean;
-  isMobile: boolean;
-  isClient: boolean;
+  testimonial: any
+  index: number
+  containerRef: React.RefObject<HTMLDivElement>
+  isHovered: boolean
+  onHover: () => void
+  onLeave: () => void
+  allHovered: boolean
+  isMobile: boolean
+  isClient: boolean
 }
 
-function TestimonialCard({ testimonial, index, containerRef, isHovered, onHover, onLeave, allHovered, isMobile, isClient }: TestimonialCardProps) {
+function TestimonialCard({
+  testimonial,
+  index,
+  containerRef,
+  isHovered,
+  onHover,
+  onLeave,
+  allHovered,
+  isMobile,
+  isClient,
+}: TestimonialCardProps) {
   const cardRef = useRef(null)
 
   // Always call useScroll to maintain hooks order
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start end", "end start"],
+    offset: ['start end', 'end start'],
   })
 
   // Disable parallax effect for better alignment
@@ -174,7 +190,7 @@ function TestimonialCard({ testimonial, index, containerRef, isHovered, onHover,
       return {
         zIndex: 20,
         scale: 1.02,
-        boxShadow: "0 10px 20px rgba(0, 0, 0, 0.15)",
+        boxShadow: '0 10px 20px rgba(0, 0, 0, 0.15)',
       }
     } else {
       return {
@@ -198,7 +214,7 @@ function TestimonialCard({ testimonial, index, containerRef, isHovered, onHover,
       transition={{
         duration: 0.6,
         delay: index * 0.1,
-        type: "spring",
+        type: 'spring',
         stiffness: 300,
         damping: 25,
       }}
@@ -209,7 +225,7 @@ function TestimonialCard({ testimonial, index, containerRef, isHovered, onHover,
       {/* Company logo */}
       <div className="mb-6 h-8 relative z-10">
         <Image
-          src={testimonial.logo || "/placeholder.svg"}
+          src={testimonial.logo || '/placeholder.svg'}
           alt="Company logo"
           width={120}
           height={40}
@@ -226,14 +242,15 @@ function TestimonialCard({ testimonial, index, containerRef, isHovered, onHover,
       <div className="flex items-center mt-auto relative z-10">
         <div className="w-12 h-12 rounded-full mr-4 shadow-md flex items-center justify-center relative">
           {/* Gradient background based on index */}
-          <div 
+          <div
             className="absolute inset-0 rounded-full"
             style={{
-              background: index % 3 === 0 
-                ? 'linear-gradient(135deg, #4CD787, #66E6A4)' 
-                : index % 3 === 1 
-                ? 'linear-gradient(135deg, #CFB53B, #E6D055)' 
-                : 'linear-gradient(135deg, #9d4edd, #B766F0)'
+              background:
+                index % 3 === 0
+                  ? 'linear-gradient(135deg, #4CD787, #66E6A4)'
+                  : index % 3 === 1
+                  ? 'linear-gradient(135deg, #FFD700, #E6D055)'
+                  : 'linear-gradient(135deg, #9d4edd, #B766F0)',
             }}
           />
           {/* Initial letter */}
@@ -241,14 +258,10 @@ function TestimonialCard({ testimonial, index, containerRef, isHovered, onHover,
             {testimonial.author.charAt(0)}
           </span>
           {/* Subtle glow effect */}
-          <div 
+          <div
             className="absolute inset-0 rounded-full opacity-30 blur-sm"
             style={{
-              background: index % 3 === 0 
-                ? '#4CD787' 
-                : index % 3 === 1 
-                ? '#CFB53B' 
-                : '#9d4edd'
+              background: index % 3 === 0 ? '#4CD787' : index % 3 === 1 ? '#FFD700' : '#9d4edd',
             }}
           />
         </div>
@@ -278,9 +291,9 @@ function TestimonialCard({ testimonial, index, containerRef, isHovered, onHover,
       <motion.div
         className="absolute bottom-0 left-0 right-0 h-1 rounded-b-xl"
         style={{
-          background: index % 3 === 0 ? "#4CD787" : index % 3 === 1 ? "#CFB53B" : "#9d4edd",
+          background: index % 3 === 0 ? '#4CD787' : index % 3 === 1 ? '#FFD700' : '#9d4edd',
         }}
-        animate={isHovered ? { height: "2px" } : { height: "1px" }}
+        animate={isHovered ? { height: '2px' } : { height: '1px' }}
       />
 
       {/* Glow effect on hover */}
@@ -292,7 +305,13 @@ function TestimonialCard({ testimonial, index, containerRef, isHovered, onHover,
             exit={{ opacity: 0 }}
             className="absolute inset-0 rounded-xl z-0"
             style={{
-              boxShadow: `0 0 20px ${index % 3 === 0 ? "rgba(76, 215, 135, 0.3)" : index % 3 === 1 ? "rgba(207, 181, 59, 0.3)" : "rgba(157, 78, 221, 0.3)"}`,
+              boxShadow: `0 0 20px ${
+                index % 3 === 0
+                  ? 'rgba(76, 215, 135, 0.3)'
+                  : index % 3 === 1
+                  ? 'rgba(207, 181, 59, 0.3)'
+                  : 'rgba(157, 78, 221, 0.3)'
+              }`,
             }}
           />
         )}
@@ -300,5 +319,3 @@ function TestimonialCard({ testimonial, index, containerRef, isHovered, onHover,
     </motion.div>
   )
 }
-
-

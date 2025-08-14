@@ -39,7 +39,7 @@ export default function Technologies() {
           transition={{ duration: 0.8 }}
           className="text-center mb-20"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#CFB53B] font-['IBM_Plex_Mono']">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#FFD700] font-['IBM_Plex_Mono']">
             Technologies Mastered
           </h2>
           <p className="text-lg text-foreground/80 max-w-2xl mx-auto font-['IBM_Plex_Mono'] font-light">

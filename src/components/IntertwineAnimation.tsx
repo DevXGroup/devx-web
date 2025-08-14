@@ -113,11 +113,11 @@ export default function IntertwineAnimation({
         <defs>
           <linearGradient id="intertwineGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#4CD787" />
-            <stop offset="50%" stopColor="#CFB53B" />
+            <stop offset="50%" stopColor="#FFD700" />
             <stop offset="100%" stopColor="#4834D4" />
           </linearGradient>
           <linearGradient id="intertwineGradient2" x1="0%" y1="100%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#CFB53B" />
+            <stop offset="0%" stopColor="#FFD700" />
             <stop offset="50%" stopColor="#9d4edd" />
             <stop offset="100%" stopColor="#4CD787" />
           </linearGradient>
@@ -252,7 +252,7 @@ export default function IntertwineAnimation({
 
             <motion.circle
               r="3"
-              fill="#CFB53B"
+              fill="#FFD700"
               filter="url(#intertwineGlow2)"
               initial={{ opacity: 0 }}
               animate={{ opacity: [0, 1, 0] }}

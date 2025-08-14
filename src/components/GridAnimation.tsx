@@ -65,7 +65,7 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
           ) {
             // Enhanced hover effect with glow
             ctx.fillStyle = hoverFillColor;
-            ctx.shadowColor = typeof borderColor === 'string' ? borderColor : '#CFB53B';
+            ctx.shadowColor = typeof borderColor === 'string' ? borderColor : '#FFD700';
             ctx.shadowBlur = 8;
             ctx.fillRect(squareX, squareY, squareSize, squareSize);
             ctx.shadowBlur = 0;

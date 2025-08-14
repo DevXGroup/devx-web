@@ -24,7 +24,7 @@ interface SquaresProps {
 const Squares: React.FC<SquaresProps> = ({
   className = '',
   squareCount = 25,
-  colors = ['#4CD787', '#4834D4', '#CFB53B', '#9d4edd'],
+  colors = ['#4CD787', '#4834D4', '#FFD700', '#9d4edd'],
   minSize = 15,
   maxSize = 45,
   speed = 0.3,

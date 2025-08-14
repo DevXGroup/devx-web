@@ -144,7 +144,7 @@ export default function MetallicHelixAnimation({
               <stop offset="0%" stopColor="#F8F8F8" />
               <stop offset="10%" stopColor="#4CD787" />
               <stop offset="25%" stopColor="#C0C0C0" />
-              <stop offset="40%" stopColor="#CFB53B" />
+              <stop offset="40%" stopColor="#FFD700" />
               <stop offset="55%" stopColor="#E0E0E0" />
               <stop offset="70%" stopColor="#4834D4" />
               <stop offset="85%" stopColor="#BEBEBE" />
@@ -155,7 +155,7 @@ export default function MetallicHelixAnimation({
               <stop offset="0%" stopColor="#FFFFFF" />
               <stop offset="15%" stopColor="#9d4edd" />
               <stop offset="30%" stopColor="#E0E0E0" />
-              <stop offset="45%" stopColor="#CFB53B" />
+              <stop offset="45%" stopColor="#FFD700" />
               <stop offset="60%" stopColor="#C0C0C0" />
               <stop offset="75%" stopColor="#4CD787" />
               <stop offset="90%" stopColor="#F8F8F8" />
@@ -166,14 +166,14 @@ export default function MetallicHelixAnimation({
             <radialGradient id="ropeHighlight1" cx="25%" cy="25%" r="75%">
               <stop offset="0%" stopColor="#FFFFFF" stopOpacity="1" />
               <stop offset="30%" stopColor="#4CD787" stopOpacity="0.8" />
-              <stop offset="70%" stopColor="#CFB53B" stopOpacity="0.4" />
+              <stop offset="70%" stopColor="#FFD700" stopOpacity="0.4" />
               <stop offset="100%" stopColor="#4834D4" stopOpacity="0.1" />
             </radialGradient>
             
             <radialGradient id="ropeHighlight2" cx="75%" cy="25%" r="75%">
               <stop offset="0%" stopColor="#FFFFFF" stopOpacity="1" />
               <stop offset="30%" stopColor="#9d4edd" stopOpacity="0.8" />
-              <stop offset="70%" stopColor="#CFB53B" stopOpacity="0.4" />
+              <stop offset="70%" stopColor="#FFD700" stopOpacity="0.4" />
               <stop offset="100%" stopColor="#4CD787" stopOpacity="0.1" />
             </radialGradient>
 
@@ -203,7 +203,7 @@ export default function MetallicHelixAnimation({
               <stop offset="0%" stopColor="#4CD787" stopOpacity="0">
                 <animate attributeName="stop-opacity" values="0;1;0" dur="3s" repeatCount="indefinite" />
               </stop>
-              <stop offset="50%" stopColor="#CFB53B" stopOpacity="0.8">
+              <stop offset="50%" stopColor="#FFD700" stopOpacity="0.8">
                 <animate attributeName="stop-opacity" values="0.3;1;0.3" dur="3s" repeatCount="indefinite" begin="0.5s" />
               </stop>
               <stop offset="100%" stopColor="#4834D4" stopOpacity="0">
@@ -448,7 +448,7 @@ export default function MetallicHelixAnimation({
               cx={width/2 - 80}
               cy={height/2}
               r="5"
-              fill="#CFB53B"
+              fill="#FFD700"
               opacity={0.7}
               animate={{ 
                 scale: [1, 1.5, 1],
