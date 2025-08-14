@@ -59,7 +59,7 @@ const AnimatedGradientText = ({ children, className = '' }) => (
   <span
     className={`bg-clip-text text-transparent inline-block ${className}`}
     style={{
-      backgroundImage: 'linear-gradient(-45deg, #4CD787, #CFB53B, #9d4edd, #4834D4)',
+      backgroundImage: 'linear-gradient(-45deg, #4CD787, #FFD700, #9d4edd, #4834D4)',
       backgroundSize: '300% 300%',
       animation: 'gradient-animation 6s ease infinite',
     }}
@@ -317,7 +317,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-foreground text-lg">Phone</h3>
-                    <p className="text-foreground/70">+1 (858) 519-8343</p>
+                    <p className="text-foreground/70">+1 (442) 544-0591</p>
                     <p className="text-foreground/50 text-sm mt-1">Mon-Fri from 8am to 5pm PST</p>
                   </div>
                 </div>
@@ -506,9 +506,21 @@ export default function ContactPage() {
                         className={`w-full px-4 py-3 bg-white/5 border ${
                           formErrors.message ? 'border-red-500' : 'border-white/10'
                         } rounded-lg focus:outline-none focus:border-[#4CD787] text-foreground shadow-inner transition-colors duration-300 resize-none`}
-                        placeholder="Tell us about your project, timeline, and requirements..."
+                        placeholder="Tell us about your project requirements, timeline, and budget..."
                         required
                       ></textarea>
+                      
+                      {/* Example helper text */}
+                      <div className="mt-2 text-xs text-foreground/50 italic">
+                        <span className="font-medium text-foreground/70">Example:</span>
+                        <br />
+                        "Hi, I'm looking to build a custom e-commerce platform for my business.
+                        <br />
+                        I need features like inventory management, payment processing, and customer analytics.
+                        <br />
+                        My timeline is 3-4 months and my budget is around $50,000."
+                      </div>
+                      
                       {formErrors.message && (
                         <motion.p
                           initial={{ opacity: 0, y: -10 }}
@@ -575,7 +587,7 @@ export default function ContactPage() {
             transition={{ duration: 0.8 }}
             className="text-center max-w-3xl mx-auto mb-12"
           >
-            <h2 className="text-3xl font-bold mb-6 text-[#CFB53B]">Schedule a Consultation</h2>
+            <h2 className="text-3xl font-bold mb-6 text-[#FFD700]">Schedule a Consultation</h2>
             <p
               className="text-lg md:text-xl text-foreground/90 font-light mb-8 leading-relaxed font-['IBM_Plex_Sans'] mt-6"
               style={{
@@ -666,7 +678,7 @@ export default function ContactPage() {
             transition={{ duration: 0.8 }}
             className="text-center max-w-3xl mx-auto mb-16"
           >
-            <h2 className="text-3xl font-bold mb-6 text-[#CFB53B]">Frequently Asked Questions</h2>
+            <h2 className="text-3xl font-bold mb-6 text-[#FFD700]">Frequently Asked Questions</h2>
             <p
               className="text-lg md:text-xl text-foreground/90 font-light leading-relaxed font-['IBM_Plex_Sans'] mt-6"
               style={{

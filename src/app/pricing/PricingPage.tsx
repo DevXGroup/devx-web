@@ -116,8 +116,8 @@ const pricingPlans = [
       'Perfect for growing businesses that need comprehensive solutions and dedicated support',
     icon: Zap,
     popular: true,
-    color: '#CFB53B',
-    gradient: 'from-[#CFB53B]/20 via-[#CFB53B]/10 to-transparent',
+    color: '#FFD700',
+    gradient: 'from-[#FFD700]/20 via-[#FFD700]/10 to-transparent',
     features: [
       'Advanced custom development',
       'Dedicated project manager',
@@ -232,7 +232,7 @@ function PricingCard({ plan, index, isYearly }: PricingCardProps) {
       whileHover={shouldReduceMotion ? {} : 'hover'}
       className={`relative bg-black/40 backdrop-blur-xl rounded-2xl border ${
         plan.popular
-          ? 'border-[#CFB53B] ring-2 ring-[#CFB53B]/30 shadow-2xl shadow-[#CFB53B]/20'
+          ? 'border-[#FFD700] ring-2 ring-[#FFD700]/30 shadow-2xl shadow-[#FFD700]/20'
           : 'border-white/10'
       } flex flex-col h-full group transition-all duration-500 overflow-hidden perspective-1000`}
       onHoverStart={() => setIsHovered(true)}
@@ -245,7 +245,7 @@ function PricingCard({ plan, index, isYearly }: PricingCardProps) {
       {plan.popular && (
         <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30">
           <motion.div
-            className="bg-gradient-to-r from-[#CFB53B] to-[#E6D055] text-black px-4 py-1.5 rounded-full text-xs font-bold shadow-lg flex items-center gap-1.5"
+            className="bg-gradient-to-r from-[#FFD700] to-[#E6D055] text-black px-4 py-1.5 rounded-full text-xs font-bold shadow-lg flex items-center gap-1.5"
             animate={{
               y: [0, -1, 0],
             }}
@@ -293,7 +293,7 @@ function PricingCard({ plan, index, isYearly }: PricingCardProps) {
       {plan.popular && (
         <>
           <motion.div
-            className="absolute top-4 right-4 w-2 h-2 bg-[#CFB53B] rounded-full"
+            className="absolute top-4 right-4 w-2 h-2 bg-[#FFD700] rounded-full"
             variants={sparkleVariants}
             initial="hidden"
             animate="visible"
@@ -321,7 +321,7 @@ function PricingCard({ plan, index, isYearly }: PricingCardProps) {
             <IconComponent className="w-6 h-6" style={{ color: plan.color }} />
           </motion.div>
           <div>
-            <h3 className="text-xl font-bold text-white group-hover:text-[#CFB53B] transition-colors duration-300">
+            <h3 className="text-xl font-bold text-white group-hover:text-[#FFD700] transition-colors duration-300">
               {plan.name}
             </h3>
             <p className="text-xs font-medium" style={{ color: plan.color }}>
@@ -445,7 +445,7 @@ function PricingCard({ plan, index, isYearly }: PricingCardProps) {
               transition-all duration-300 relative overflow-hidden group/button
               ${
                 plan.popular
-                  ? 'bg-gradient-to-r from-[#CFB53B] to-[#E6D055] text-black shadow-lg shadow-[#CFB53B]/30 hover:shadow-xl hover:shadow-[#CFB53B]/40'
+                  ? 'bg-gradient-to-r from-[#FFD700] to-[#E6D055] text-black shadow-lg shadow-[#FFD700]/30 hover:shadow-xl hover:shadow-[#FFD700]/40'
                   : 'bg-white/10 text-white border border-white/20 hover:bg-white/20 hover:border-white/40'
               }
             `}
@@ -485,7 +485,7 @@ export default function PricingPage() {
             key={i}
             delay={i * 0.5}
             size={Math.random() * 6 + 2}
-            color={['#4CD787', '#CFB53B', '#9d4edd'][i % 3]}
+            color={['#4CD787', '#FFD700', '#9d4edd'][i % 3]}
           />
         ))}
 
@@ -508,7 +508,7 @@ export default function PricingPage() {
           }}
         />
         <motion.div
-          className="absolute w-[500px] h-[500px] bg-[#CFB53B]/10 rounded-full blur-3xl"
+          className="absolute w-[500px] h-[500px] bg-[#FFD700]/10 rounded-full blur-3xl"
           animate={{
             x: [100, -100, 100],
             y: [50, -50, 50],
@@ -584,7 +584,7 @@ export default function PricingPage() {
                 <Star className="w-4 h-4 fill-current" />
                 No Setup Fees
               </div>
-              <div className="flex items-center gap-2 bg-[#CFB53B]/10 text-[#CFB53B] px-6 py-3 rounded-full text-sm font-medium backdrop-blur-sm border border-[#CFB53B]/20">
+              <div className="flex items-center gap-2 bg-[#FFD700]/10 text-[#FFD700] px-6 py-3 rounded-full text-sm font-medium backdrop-blur-sm border border-[#FFD700]/20">
                 <Shield className="w-4 h-4" />
                 100% Satisfaction Guarantee
               </div>
@@ -629,7 +629,7 @@ export default function PricingPage() {
             >
               <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
                 Need Something{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4CD787] to-[#CFB53B]">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4CD787] to-[#FFD700]">
                   Custom
                 </span>
                 ?
