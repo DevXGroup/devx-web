@@ -413,7 +413,7 @@ export const categoryColors = {
   'AI/Communication': '#9d4edd',
   'Mobile App/Wellness': '#4CD787',
   'E-commerce/Household': '#4834D4',
-  'E-commerce/Confectionery': '#CFB53B',
+  'E-commerce/Confectionery': '#FFD700',
   'Luxury/Food': '#ff6b6b',
   'Education/E-learning': '#00D2FF',
   'Agriculture/IoT': '#4CD787',
