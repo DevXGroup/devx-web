@@ -144,7 +144,7 @@ const services = [
       'Cross-platform Solutions',
       'Mobile App Strategy',
     ],
-    color: '#CFB53B',
+    color: '#FFD700',
   },
   {
     icon: Database,
@@ -200,7 +200,7 @@ const services = [
       'Technology Migration',
       'Digital Innovation',
     ],
-    color: '#CFB53B',
+    color: '#FFD700',
   },
   {
     icon: Cpu,
@@ -625,7 +625,7 @@ function ProjectCard({ project, index }) {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: index * 0.1 + 0.3 }}
           >
-            <span className="bg-gradient-to-r from-[#4CD787] to-[#CFB53B] text-black px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg backdrop-blur-sm">
+            <span className="bg-gradient-to-r from-[#4CD787] to-[#FFD700] text-black px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg backdrop-blur-sm">
               {project.category}
             </span>
           </motion.div>
@@ -667,7 +667,7 @@ function ProjectCard({ project, index }) {
               {project.tags.map((tag, tagIndex) => (
                 <motion.span
                   key={tag}
-                  className="px-3 py-1.5 bg-gradient-to-r from-[#4CD787]/20 to-[#CFB53B]/20 text-[#4CD787] border border-[#4CD787]/30 text-xs font-medium rounded-full group-hover:bg-gradient-to-r group-hover:from-[#4CD787]/30 group-hover:to-[#CFB53B]/30 group-hover:border-[#4CD787]/50 transition-all duration-300 backdrop-blur-sm"
+                  className="px-3 py-1.5 bg-gradient-to-r from-[#4CD787]/20 to-[#FFD700]/20 text-[#4CD787] border border-[#4CD787]/30 text-xs font-medium rounded-full group-hover:bg-gradient-to-r group-hover:from-[#4CD787]/30 group-hover:to-[#FFD700]/30 group-hover:border-[#4CD787]/50 transition-all duration-300 backdrop-blur-sm"
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
                   transition={{ delay: index * 0.1 + 0.7 + tagIndex * 0.05 }}
@@ -828,7 +828,7 @@ export default function PortfolioPage() {
               <GridAnimation
                 direction="diagonal"
                 speed={0.16}
-                borderColor="#CFB53B"
+                borderColor="#FFD700"
                 squareSize={20}
                 hoverFillColor="rgba(207, 181, 59, 0.3)"
               />
@@ -1081,7 +1081,7 @@ export default function PortfolioPage() {
                       <GridAnimation
                         direction="diagonal"
                         speed={0.16}
-                        borderColor="#CFB53B"
+                        borderColor="#FFD700"
                         squareSize={20}
                         hoverFillColor="rgba(207, 181, 59, 0.3)"
                       />
@@ -1194,7 +1194,7 @@ export default function PortfolioPage() {
             transition={{ duration: 0.8 }}
             className="text-center max-w-3xl mx-auto"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#CFB53B]">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#FFD700]">
               Ready to Build Your Next Project?
             </h2>
             <p className="text-lg md:text-xl text-foreground/90 font-light mb-8 leading-relaxed font-['IBM_Plex_Sans'] mt-4" style={{

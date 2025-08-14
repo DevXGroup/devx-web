@@ -91,7 +91,7 @@ const services = [
       'App Store Optimization',
       'Mobile-First UI/UX Design',
     ],
-    color: '#CFB53B',
+    color: '#FFD700',
   },
   {
     icon: Cpu,
@@ -285,8 +285,8 @@ export default function ServicesPage() {
                     position: 'relative',
                     height: '100px',
                     width: '320px',
-                    padding: '0 20px',
-                    marginRight: '30px',
+                    padding: '0',
+                    marginRight: '0px',
                   }}
                 >
                   <TextPressure
@@ -297,7 +297,7 @@ export default function ServicesPage() {
                     width={true}
                     weight={true}
                     italic={false}
-                    textColor="#CFB53B"
+                    textColor="#FFD700"
                     strokeColor="#FFFFFF"
                     minFontSize={59}
                   />
@@ -327,7 +327,14 @@ export default function ServicesPage() {
             <div className="flex justify-center items-center mb-16 text-center">
               <BlurText
                 text="The DevX Edge"
-                className="text-3xl md:text-4xl lg:text-5xl font-bold text-center text-[#CFB53B] mt-10 tracking-wide"
+                className="text-4xl md:text-5xl lg:text-6xl font-light text-center text-[#FFD700] mt-10 tracking-wide italic"
+                style={{
+                  fontFamily: 'Georgia, "Times New Roman", Times, serif',
+                  fontStyle: 'italic',
+                  fontWeight: '300',
+                  textShadow: '0 4px 8px rgba(207, 181, 59, 0.3), 0 2px 4px rgba(0, 0, 0, 0.5)',
+                  letterSpacing: '0.02em'
+                }}
                 delay={120}
                 animateBy="words"
                 direction="top"
@@ -344,11 +351,13 @@ export default function ServicesPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="bg-black/40 backdrop-blur-sm p-6 rounded-xl border border-white/10 hover:border-[#4CD787]/30 hover:bg-black/50 transition-all duration-300 group cursor-pointer pointer-events-auto relative overflow-hidden"
+                  className="bg-black/60 md:bg-black/30 backdrop-blur-md md:backdrop-blur-sm p-6 rounded-xl border border-white/20 md:border-white/10 hover:border-white/30 transition-all duration-300 group cursor-pointer pointer-events-auto relative overflow-hidden"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
+                  onMouseEnter={() => {}} // Required for hover effects
+                  onMouseLeave={() => {}} // Required for hover effects
                 >
-                  <h3 className="text-xl font-semibold text-[#CFB53B] mb-2 transition-colors duration-300 relative z-10">
+                  <h3 className="text-xl font-semibold text-[#FFD700] mb-2 transition-colors duration-300 relative z-10">
                     {prop.title}
                   </h3>
                   <p
@@ -358,19 +367,17 @@ export default function ServicesPage() {
                     {prop.description}
                   </p>
 
-                  {/* Pink running shining line effect around card border on hover */}
+                  {/* Running shining line effect on hover - matching ServiceCard style */}
                   <motion.div
-                    className="absolute inset-[-2px] overflow-visible rounded-xl pointer-events-none z-0"
+                    className="absolute inset-0 overflow-hidden rounded-xl pointer-events-none z-0"
                     initial={{ opacity: 0 }}
                     whileHover={{ opacity: 1 }}
                     transition={{ duration: 0.3 }}
                   >
-                    {/* Top line */}
                     <motion.div
-                      className="absolute w-full h-[3px] bg-gradient-to-r from-transparent via-pink-400 to-transparent -top-[2px] left-0"
+                      className="absolute w-full h-[2px] bg-gradient-to-r from-transparent via-white to-transparent top-0"
                       style={{
-                        boxShadow: '0 0 8px #ec4899, 0 0 16px rgba(236,72,153,0.6)',
-                        borderRadius: '2px',
+                        boxShadow: '0 0 6px #FFD700, 0 0 12px rgba(207, 181, 59, 0.4)',
                       }}
                       initial={{ x: '-100%' }}
                       whileHover={{
@@ -382,12 +389,10 @@ export default function ServicesPage() {
                         ease: 'linear',
                       }}
                     />
-                    {/* Right line */}
                     <motion.div
-                      className="absolute w-[3px] h-full bg-gradient-to-b from-transparent via-pink-400 to-transparent -right-[2px] top-0"
+                      className="absolute w-[2px] h-full bg-gradient-to-b from-transparent via-white to-transparent right-0"
                       style={{
-                        boxShadow: '0 0 8px #ec4899, 0 0 16px rgba(236,72,153,0.6)',
-                        borderRadius: '2px',
+                        boxShadow: '0 0 6px #FFD700, 0 0 12px rgba(207, 181, 59, 0.4)',
                       }}
                       initial={{ y: '-100%' }}
                       whileHover={{
@@ -400,12 +405,10 @@ export default function ServicesPage() {
                         delay: 0.375,
                       }}
                     />
-                    {/* Bottom line */}
                     <motion.div
-                      className="absolute w-full h-[3px] bg-gradient-to-r from-transparent via-pink-400 to-transparent -bottom-[2px] left-0"
+                      className="absolute w-full h-[2px] bg-gradient-to-r from-transparent via-white to-transparent bottom-0"
                       style={{
-                        boxShadow: '0 0 8px #ec4899, 0 0 16px rgba(236,72,153,0.6)',
-                        borderRadius: '2px',
+                        boxShadow: '0 0 6px #FFD700, 0 0 12px rgba(207, 181, 59, 0.4)',
                       }}
                       initial={{ x: '100%' }}
                       whileHover={{
@@ -418,12 +421,10 @@ export default function ServicesPage() {
                         delay: 0.75,
                       }}
                     />
-                    {/* Left line */}
                     <motion.div
-                      className="absolute w-[3px] h-full bg-gradient-to-b from-transparent via-pink-400 to-transparent -left-[2px] top-0"
+                      className="absolute w-[2px] h-full bg-gradient-to-b from-transparent via-white to-transparent left-0"
                       style={{
-                        boxShadow: '0 0 8px #ec4899, 0 0 16px rgba(236,72,153,0.6)',
-                        borderRadius: '2px',
+                        boxShadow: '0 0 6px #FFD700, 0 0 12px rgba(207, 181, 59, 0.4)',
                       }}
                       initial={{ y: '100%' }}
                       whileHover={{
@@ -437,6 +438,17 @@ export default function ServicesPage() {
                       }}
                     />
                   </motion.div>
+
+                  {/* Enhanced background effect on hover */}
+                  <div
+                    className="absolute inset-0 bg-gradient-to-tr rounded-xl z-0"
+                    style={{
+                      background:
+                        'radial-gradient(circle at center, #FFD70020 0%, transparent 70%)',
+                      opacity: 0,
+                      transition: 'opacity 0.4s ease',
+                    }}
+                  />
                 </motion.div>
               ))}
             </div>
@@ -447,7 +459,7 @@ export default function ServicesPage() {
       {/* Scroll Velocity Animation */}
       <section
         ref={velocityRef}
-        className="relative overflow-hidden pt-12 pb-20 md:pt-16 md:pb-24 lg:pt-20 lg:pb-28"
+        className="relative overflow-hidden pt-6 pb-12 md:pt-8 md:pb-16 lg:pt-10 lg:pb-20"
       >
         <motion.div
           initial={{ opacity: 0 }}
@@ -504,7 +516,7 @@ export default function ServicesPage() {
 
       {/* Services Grid with Apple-style reveal */}
       <AppleScrollSection>
-        <section className="section-padding relative services-section">
+        <section className="section-padding relative services-section pt-8 md:pt-12">
           <div className="container mx-auto px-4 ">
             <div className="w-full flex justify-center">
               <motion.h2
@@ -515,7 +527,7 @@ export default function ServicesPage() {
                   transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
                 }}
                 viewport={{ once: true, amount: 0.2 }}
-                className="lg:text-7xl md:text-6xl sm:text-5xl xs:text-6xl font-bold mb-28 mt-0 text-center text-[#CFB53B]"
+                className="text-5xl lg:text-7xl md:text-6xl sm:text-5xl xs:text-6xl font-bold mb-28 mt-0 text-center text-[#FFD700]"
                 style={{
                   textShadow: '0 2px 4px rgba(0,0,0,0.5)',
                   WebkitTextStroke: '1px rgba(0,0,0,0.3)',
@@ -605,7 +617,7 @@ export default function ServicesPage() {
               className="text-center max-w-3xl mx-auto px-4"
             >
               <motion.h2
-                className="text-3xl md:text-4xl font-bold mb-6 text-[#CFB53B]"
+                className="text-3xl md:text-4xl font-bold mb-6 text-[#FFD700]"
                 style={{
                   textShadow: '0 2px 4px rgba(0,0,0,0.5)',
                   WebkitTextStroke: '1px rgba(0,0,0,0.3)',
