@@ -60,6 +60,7 @@ module.exports = {
           foreground: "hsl(var(--card-foreground))",
         },
         robinhood: "#ccff00",
+        "theme-gold": "#FFD700",
       },
       scale: {
         '120': '1.2',
