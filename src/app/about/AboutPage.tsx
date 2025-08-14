@@ -4,11 +4,12 @@ import { motion, useReducedMotion, useInView } from 'framer-motion'
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Check, Users, Zap, Award, Globe, Shield } from 'lucide-react'
+import { Check, Users, Zap, Award, Globe, Shield, Heart, Lock, UserCheck, Sparkles, Lightbulb, Star } from 'lucide-react'
 import BlurText from '@/components/BlurText'
 import TextPressure from '@/components/TextPressure'
 import RunningLineAnimation from '@/components/RunningLineAnimation'
 import ShapeBlur from '@/components/ShapeBlur'
+import RippleGrid from '@/components/RippleGrid'
 import OrgChart from '@/components/OrgChart'
 
 // Enhanced animation variants for better performance
@@ -111,11 +112,12 @@ const TeamMemberCard = ({ name, role, image, delay = 0 }) => {
   )
 }
 
-// Enhanced value card component with running shine animation
+// Clean value card component with simple border animation
 const ValueCard = ({ icon: Icon, title, description, delay = 0 }) => {
   const shouldReduceMotion = useReducedMotion()
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true })
+  const [isCardHovered, setIsCardHovered] = useState(false)
 
   return (
     <motion.div
@@ -124,87 +126,138 @@ const ValueCard = ({ icon: Icon, title, description, delay = 0 }) => {
       initial="hidden"
       animate={isInView ? 'visible' : 'hidden'}
       transition={{ ...fadeInUpVariants.visible.transition, delay: shouldReduceMotion ? 0 : delay }}
-      className="bg-black/30 backdrop-blur-sm p-6 rounded-xl border border-white/10 hover:border-[#4CD787]/30 transition-all duration-300 group cursor-pointer relative overflow-hidden"
+      className="bg-black/30 backdrop-blur-sm p-6 rounded-xl border border-white/10 hover:border-[#4CD787] transition-all duration-300 group cursor-pointer relative"
+      onMouseEnter={() => setIsCardHovered(true)}
+      onMouseLeave={() => setIsCardHovered(false)}
       whileHover={
         shouldReduceMotion
           ? {}
           : {
               scale: 1.02,
-              boxShadow: '0 10px 30px rgba(76, 215, 135, 0.1)',
-              borderColor: 'rgba(76, 215, 135, 0.3)',
+              y: -4,
             }
       }
     >
-      {/* Running shine line animation */}
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        <motion.div
-          className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-[#4CD787] to-transparent"
-          initial={{ x: '-100%' }}
-          whileHover={{
-            x: '200%',
-            transition: {
-              duration: 1.5,
-              ease: 'easeInOut',
-              repeat: Number.POSITIVE_INFINITY,
-              repeatDelay: 0.5,
-            },
-          }}
-        />
-        <motion.div
-          className="absolute bottom-0 right-0 w-full h-0.5 bg-gradient-to-r from-transparent via-[#CFB53B] to-transparent"
-          initial={{ x: '100%' }}
-          whileHover={{
-            x: '-200%',
-            transition: {
-              duration: 1.5,
-              ease: 'easeInOut',
-              repeat: Number.POSITIVE_INFINITY,
-              repeatDelay: 0.5,
-              delay: 0.3,
-            },
-          }}
-        />
-        <motion.div
-          className="absolute top-0 left-0 h-full w-0.5 bg-gradient-to-b from-transparent via-[#4834D4] to-transparent"
-          initial={{ y: '-100%' }}
-          whileHover={{
-            y: '200%',
-            transition: {
-              duration: 1.5,
-              ease: 'easeInOut',
-              repeat: Number.POSITIVE_INFINITY,
-              repeatDelay: 0.5,
-              delay: 0.6,
-            },
-          }}
-        />
-        <motion.div
-          className="absolute top-0 right-0 h-full w-0.5 bg-gradient-to-b from-transparent via-[#9d4edd] to-transparent"
-          initial={{ y: '100%' }}
-          whileHover={{
-            y: '-200%',
-            transition: {
-              duration: 1.5,
-              ease: 'easeInOut',
-              repeat: Number.POSITIVE_INFINITY,
-              repeatDelay: 0.5,
-              delay: 0.9,
-            },
-          }}
-        />
-      </div>
+      {/* Clean animated border */}
+      <div className="absolute inset-0 rounded-xl border-2 border-transparent group-hover:border-[#4CD787] transition-all duration-300 opacity-0 group-hover:opacity-100"></div>
 
       <motion.div
-        className="w-12 h-12 rounded-full bg-[#4CD787]/10 flex items-center justify-center mb-4 group-hover:bg-[#4CD787]/20 transition-colors relative z-10"
-        whileHover={shouldReduceMotion ? {} : { rotate: 360, scale: 1.1 }}
-        transition={{ duration: 0.6, ease: 'easeInOut' }}
+        className="w-12 h-12 rounded-full bg-[#4CD787]/10 flex items-center justify-center mb-4 group-hover:bg-[#4CD787]/20 transition-colors relative overflow-hidden"
+        animate={isCardHovered && !shouldReduceMotion ? { scale: 1.15, rotate: 5 } : { scale: 1, rotate: 0 }}
+        transition={{ duration: 0.4, ease: 'easeInOut' }}
       >
-        <Icon className="w-6 h-6 text-[#4CD787]" />
+        {/* Glowing background effect */}
+        <motion.div
+          className="absolute inset-0 rounded-full bg-gradient-to-r from-[#4CD787]/20 to-[#4834D4]/20"
+          animate={isCardHovered ? { scale: 1.2, opacity: 1 } : { scale: 0.8, opacity: 0 }}
+          transition={{ duration: 0.5 }}
+        />
+        
+        {/* Rotating border */}
+        <motion.div
+          className="absolute inset-0 rounded-full border-2 border-[#4CD787]/30"
+          animate={{
+            rotate: isCardHovered ? 360 : 0,
+            opacity: isCardHovered ? 1 : 0
+          }}
+          transition={{
+            rotate: { duration: 3, repeat: isCardHovered ? Infinity : 0, ease: 'linear' },
+            opacity: { duration: 0.3 }
+          }}
+        />
+        
+        {/* Icon with enhanced animations */}
+        <motion.div
+          animate={isCardHovered && !shouldReduceMotion ? {
+            y: [-2, 2, -2],
+          } : { y: 0 }}
+          transition={{
+            duration: isCardHovered ? 1.5 : 0.3,
+            repeat: isCardHovered ? Infinity : 0,
+            ease: 'easeInOut'
+          }}
+        >
+          <Icon className="w-6 h-6 text-[#4CD787] relative z-10 drop-shadow-lg" />
+        </motion.div>
+        
+        {/* Running flashing border effect */}
+        <motion.div
+          className="absolute inset-0 rounded-full overflow-hidden"
+          animate={{ opacity: isCardHovered ? 1 : 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          {/* Top border */}
+          <motion.div
+            className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-[#FFD700] to-transparent"
+            style={{
+              boxShadow: '0 0 8px #FFD700, 0 0 16px rgba(207, 181, 59, 0.6)',
+            }}
+            animate={{
+              x: ['-100%', '100%'],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: 'linear',
+            }}
+          />
+          
+          {/* Right border */}
+          <motion.div
+            className="absolute top-0 right-0 w-0.5 h-full bg-gradient-to-b from-transparent via-[#FFD700] to-transparent"
+            style={{
+              boxShadow: '0 0 8px #FFD700, 0 0 16px rgba(207, 181, 59, 0.6)',
+            }}
+            animate={{
+              y: ['-100%', '100%'],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: 'linear',
+              delay: 0.5,
+            }}
+          />
+          
+          {/* Bottom border */}
+          <motion.div
+            className="absolute bottom-0 right-0 w-full h-0.5 bg-gradient-to-l from-transparent via-[#C0C0C0] to-transparent"
+            style={{
+              boxShadow: '0 0 8px #C0C0C0, 0 0 16px rgba(192, 192, 192, 0.6)',
+            }}
+            animate={{
+              x: ['100%', '-100%'],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: 'linear',
+              delay: 1,
+            }}
+          />
+          
+          {/* Left border */}
+          <motion.div
+            className="absolute bottom-0 left-0 w-0.5 h-full bg-gradient-to-t from-transparent via-[#C0C0C0] to-transparent"
+            style={{
+              boxShadow: '0 0 8px #C0C0C0, 0 0 16px rgba(192, 192, 192, 0.6)',
+            }}
+            animate={{
+              y: ['100%', '-100%'],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: 'linear',
+              delay: 1.5,
+            }}
+          />
+        </motion.div>
       </motion.div>
-      <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-[#4CD787] transition-colors duration-300 relative z-10">
+      <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-[#4CD787] transition-colors duration-300">
         {title}
       </h3>
-      <p className="text-foreground/70 text-sm group-hover:text-white/80 transition-colors duration-300 relative z-10">
+      <p className="text-foreground/70 text-sm group-hover:text-white/80 transition-colors duration-300">
         {description}
       </p>
     </motion.div>
@@ -293,9 +346,6 @@ const StatCounter = ({ number, label, delay = 0 }) => {
           {label}
         </div>
 
-        {/* Animated particles */}
-        <div className="absolute top-2 right-2 w-2 h-2 bg-[#4CD787] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-pulse"></div>
-        <div className="absolute bottom-2 left-2 w-1 h-1 bg-[#4834D4] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-ping"></div>
       </div>
     </motion.div>
   )
@@ -316,6 +366,22 @@ export default function AboutPage() {
       {/* Hero Section */}
       <section className="pt-2 pb-8 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-[#0a0a1a] to-black"></div>
+        
+        {/* RippleGrid Background */}
+        <div className="absolute inset-0 opacity-30">
+          <RippleGrid
+            gridColor="#4CD787"
+            rippleIntensity={0.08}
+            gridSize={12}
+            gridThickness={8}
+            fadeDistance={1.8}
+            vignetteStrength={1.5}
+            glowIntensity={0.15}
+            opacity={0.7}
+            mouseInteraction={true}
+            mouseInteractionRadius={1.5}
+          />
+        </div>
 
         {/* Enhanced animated background elements */}
         <div className="absolute inset-0 overflow-hidden">
@@ -355,87 +421,36 @@ export default function AboutPage() {
         </div>
 
         <div className="container mx-auto px-4 relative">
-          <div className="max-w-5xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <AnimatedSection delay={0.2} className="relative lg:order-1">
-                <div className="relative h-[400px] w-full rounded-2xl overflow-hidden">
-                  {/* Background image with ShapeBlur effect applied as mask */}
-                  <div className="absolute inset-0">
-                    <Image
-                      src="/images/about/testimonial-background.png"
-                      alt="DevX Team"
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                      priority={true}
-                    />
-                    {/* ShapeBlur effect that creates animated mask on the image */}
-                    <div className="absolute inset-0 mix-blend-multiply">
-                      <ShapeBlur
-                        className="w-full h-full"
-                        variation={0}
-                        shapeSize={1.2}
-                        roundness={0.4}
-                        borderSize={0.05}
-                        circleSize={0.3}
-                        circleEdge={0.5}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Enhanced testimonial overlay with better visibility */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
-                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-black/60 backdrop-blur-sm">
-                    <div className="flex gap-2 mb-3">
-                      {[...Array(5)].map((_, i) => (
-                        <svg
-                          key={i}
-                          className="w-5 h-5 text-[#CFB53B]"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
-                      ))}
-                    </div>
-                    <p className="text-white mb-2 font-light leading-relaxed text-sm">
-                      &quot;DevX Team delivered exceptional results on our complex IoT project. Their expertise and attention to detail made the difference.&quot;
-                    </p>
-                    <p className="text-[#CFB53B] text-xs font-semibold">
-                      Sarah Johnson, CTO at TechCorp
-                    </p>
-                  </div>
-                </div>
-              </AnimatedSection>
-
-              <AnimatedSection className="lg:order-2">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              {/* Title and content - Left side */}
+              <AnimatedSection className="lg:order-1">
                 <h1 className="sr-only">About Us</h1>
-                <div className="flex items-center justify-end w-full mb-4">
+                <div className="mb-6">
                   <div
                     style={{
                       position: 'relative',
                       height: '100px',
                       width: '420px',
-                      padding: '0 20px',
-                      marginLeft: '30px',
+                      padding: '0 0px',
                     }}
                   >
                     <TextPressure
-                      text="About  Us  "
+                      text="About&nbsp;Us&nbsp; "
                       flex={true}
                       alpha={false}
                       stroke={false}
                       width={true}
                       weight={true}
                       italic={false}
-                      textColor="#CFB53B"
+                      textColor="#FFD700"
                       strokeColor="#FFFFFF"
                       minFontSize={32}
                     />
                   </div>
                 </div>
                 <p
-                  className="text-lg md:text-xl text-foreground/90 mb-8 leading-relaxed font-['IBM_Plex_Sans'] mt-2"
+                  className="text-lg md:text-xl text-foreground/90 mb-8 leading-relaxed font-['IBM_Plex_Sans']"
                   style={{
                     letterSpacing: '0.025em',
                     fontWeight: '400',
@@ -469,6 +484,59 @@ export default function AboutPage() {
                   </Link>
                 </div>
               </AnimatedSection>
+
+              {/* Image - Right side */}
+              <AnimatedSection delay={0.2} className="relative lg:order-2">
+                <div className="relative h-[400px] w-full rounded-2xl overflow-hidden">
+                  {/* Background image with ShapeBlur effect applied as mask */}
+                  <div className="absolute inset-0">
+                    <Image
+                      src="/images/about/testimonial-background.png"
+                      alt="DevX Team"
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      priority={true}
+                    />
+                    {/* ShapeBlur effect that creates animated mask on the image */}
+                    <div className="absolute inset-0 mix-blend-multiply">
+                      <ShapeBlur
+                        className="w-full h-full"
+                        variation={0}
+                        shapeSize={1.2}
+                        roundness={0.4}
+                        borderSize={0.05}
+                        circleSize={0.3}
+                        circleEdge={0.5}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Enhanced testimonial overlay with better visibility */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-black/60 backdrop-blur-sm">
+                    <div className="flex gap-2 mb-3">
+                      {[...Array(5)].map((_, i) => (
+                        <svg
+                          key={i}
+                          className="w-5 h-5 text-[#FFD700]"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                      ))}
+                    </div>
+                    <p className="text-white mb-2 font-light leading-relaxed text-sm">
+                      &quot;DevX Team delivered exceptional results on our complex IoT project.
+                      Their expertise and attention to detail made the difference.&quot;
+                    </p>
+                    <p className="text-[#FFD700] text-xs font-semibold">
+                      Sarah Johnson, CTO at TechCorp
+                    </p>
+                  </div>
+                </div>
+              </AnimatedSection>
             </div>
           </div>
         </div>
@@ -479,7 +547,7 @@ export default function AboutPage() {
         <div className="container mx-auto px-4">
           <AnimatedSection className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#CFB53B]">Our Impact</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#FFD700]">Our Impact</h2>
               <p
                 className="text-lg md:text-xl text-foreground/90 font-light max-w-2xl mx-auto leading-relaxed font-['IBM_Plex_Sans'] mt-6"
                 style={{
@@ -506,7 +574,7 @@ export default function AboutPage() {
       <section className="pt-8 pb-16 relative">
         <div className="container mx-auto px-4">
           <AnimatedSection className="max-w-5xl mx-auto text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#CFB53B]">How We Work</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#FFD700]">How We Work</h2>
             <p
               className="text-lg md:text-xl text-foreground/90 font-light max-w-3xl mx-auto leading-relaxed font-['IBM_Plex_Sans'] mt-6"
               style={{ letterSpacing: '0.025em', fontWeight: '400' }}
@@ -556,138 +624,101 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Our Story Section - Stunning Redesign */}
-      <section className="py-32 relative overflow-hidden">
-        {/* Animated Background */}
+      {/* Our Story Section - Redesigned */}
+      <section className="py-20 relative overflow-hidden">
+        {/* Simplified Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a1a] via-[#1a0a2a] to-[#0a1a0a]" />
 
-        {/* Floating particles */}
-        <div className="absolute inset-0">
-          {[...Array(20)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-1 h-1 bg-[#4CD787] rounded-full opacity-30"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-              }}
-              animate={{
-                y: [0, -100, 0],
-                opacity: [0.3, 0.8, 0.3],
-                scale: [1, 1.5, 1],
-              }}
-              transition={{
-                duration: 6 + Math.random() * 4,
-                repeat: Infinity,
-                delay: Math.random() * 2,
-                ease: 'easeInOut',
-              }}
-            />
-          ))}
-        </div>
-
         <div className="container mx-auto px-4 relative z-10">
-          {/* Header with TextTrail Animation */}
-          <div className="text-center mb-20 relative z-10">
-            <div className="relative inline-block w-full">
-              <div className="flex items-center justify-center w-full">
-                <div
-                  style={{
-                    position: 'relative',
-                    height: '100px',
-                    width: '400px',
-                    padding: '0 20px',
-                    marginRight: '30px',
-                  }}
-                >
-                  <TextPressure
-                    text="Our Story  "
-                    flex={true}
-                    alpha={false}
-                    stroke={false}
-                    width={true}
-                    weight={true}
-                    italic={false}
-                    textColor="#CFB53B"
-                    strokeColor="#FFFFFF"
-                    minFontSize={32}
-                  />
-                </div>
+          {/* Header */}
+          <div className="text-center mb-16">
+            <div className="flex items-center justify-center w-full mb-6">
+              <div
+                style={{
+                  position: 'relative',
+                  height: '80px',
+                  width: '360px',
+                  padding: '0',
+                }}
+              >
+                <TextPressure
+                  text="Our&nbsp;Story&nbsp; "
+                  flex={true}
+                  alpha={false}
+                  stroke={false}
+                  width={true}
+                  weight={true}
+                  italic={false}
+                  textColor="#FFD700"
+                  strokeColor="#FFFFFF"
+                  minFontSize={28}
+                />
               </div>
             </div>
 
-            <AnimatedSection delay={0.5}>
-              <p
-                className="text-lg md:text-xl text-foreground/90 font-light max-w-2xl mx-auto leading-relaxed font-['IBM_Plex_Sans'] mt-6"
-                style={{
-                  letterSpacing: '0.025em',
-                  fontWeight: '400',
-                }}
-              >
-                DevX Group LLC was founded with a simple mission: to deliver exceptional software
-                solutions that drive real business results.
+            <AnimatedSection delay={0.2}>
+              <p className="text-lg md:text-xl text-foreground/90 font-light max-w-2xl mx-auto leading-relaxed font-['IBM_Plex_Sans']">
+                Founded with a simple mission: deliver exceptional software solutions that drive
+                real business results.
               </p>
             </AnimatedSection>
           </div>
 
-          {/* Main Content with Enhanced Layout */}
-          <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-20 items-center">
+          {/* Main Content with Better Layout */}
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-16 items-center">
               {/* Text Content */}
-              <div className="order-2 xl:order-1 relative">
-                <div className="relative bg-gradient-to-br from-black/40 to-black/20 backdrop-blur-sm p-8 md:p-12 rounded-3xl border border-white/10">
-                  {/* Animated corner decorations */}
-                  <div className="absolute top-0 left-0 w-20 h-20 border-l-2 border-t-2 border-[#4CD787] rounded-tl-3xl opacity-50" />
-                  <div className="absolute bottom-0 right-0 w-20 h-20 border-r-2 border-b-2 border-[#CFB53B] rounded-br-3xl opacity-50" />
-
-                  <div className="space-y-8 text-foreground/90 relative z-10">
+              <div className="order-2 xl:order-1">
+                <div className="bg-black/30 backdrop-blur-sm p-8 rounded-2xl border border-white/10">
+                  <div className="space-y-6 text-foreground/90">
                     <AnimatedSection delay={0.3}>
-                      <div className="relative">
-                        <div className="absolute -left-4 top-0 w-1 h-full bg-gradient-to-b from-[#4CD787] to-[#CFB53B] rounded-full" />
-                        <p className="text-lg leading-relaxed pl-8">
-                          We are not a typical development agency. We are a specialized senior team
-                          for complex and time‑sensitive projects. Every member of our team is
-                          hand‑selected for their skills, proven track record, and ability to
-                          execute under pressure.
-                        </p>
-                      </div>
+                      <p className="text-base md:text-lg leading-relaxed">
+                        We are not a typical development agency. We are a specialized senior team
+                        for complex and time-sensitive projects. Every member is hand-selected for
+                        their skills, proven track record, and ability to execute under pressure.
+                      </p>
                     </AnimatedSection>
 
                     <AnimatedSection delay={0.4}>
-                      <div className="relative">
-                        <div className="absolute -left-4 top-0 w-1 h-full bg-gradient-to-b from-[#CFB53B] to-[#4834D4] rounded-full" />
-                        <div className="pl-8">
-                          <h4 className="text-xl font-semibold text-[#4CD787] mb-4">
-                            Our Three Core Principles:
-                          </h4>
-                          <div className="space-y-4">
+                      <div>
+                        <h4 className="text-lg font-semibold text-[#4CD787] mb-3">
+                          Our Three Core Principles:
+                        </h4>
+                        <div className="space-y-3">
+                          <div className="flex gap-3">
+                            <span className="text-[#4CD787] font-bold text-lg">1.</span>
                             <div>
-                              <h5 className="font-semibold text-white mb-2">
-                                1. Vetted Experts Only
+                              <h5 className="font-semibold text-white text-sm mb-1">
+                                Vetted Experts Only
                               </h5>
-                              <p className="text-lg leading-relaxed">
+                              <p className="text-sm leading-relaxed">
                                 No junior developers, no learning on your dime. Our team consists
                                 solely of senior-level professionals with 5+ years of proven
                                 experience.
                               </p>
                             </div>
+                          </div>
+                          <div className="flex gap-3">
+                            <span className="text-[#FFD700] font-bold text-lg">2.</span>
                             <div>
-                              <h5 className="font-semibold text-white mb-2">
-                                2. Precision & Efficiency
+                              <h5 className="font-semibold text-white text-sm mb-1">
+                                Precision & Efficiency
                               </h5>
-                              <p className="text-lg leading-relaxed">
+                              <p className="text-sm leading-relaxed">
                                 We move fast without breaking things. Every line of code, every
                                 decision, every deliverable is executed with military precision.
                               </p>
                             </div>
+                          </div>
+                          <div className="flex gap-3">
+                            <span className="text-[#4834D4] font-bold text-lg">3.</span>
                             <div>
-                              <h5 className="font-semibold text-white mb-2">
-                                3. No Project Left Behind
+                              <h5 className="font-semibold text-white text-sm mb-1">
+                                No Project Left Behind
                               </h5>
-                              <p className="text-lg leading-relaxed">
-                                When we take on your project, it gets completed. Period. We
-                                don&apos;t abandon missions, and we don&apos;t leave clients
-                                hanging.
+                              <p className="text-sm leading-relaxed">
+                                When we take on your project, it gets completed. Period. We don't
+                                abandon missions, and we don't leave clients hanging.
                               </p>
                             </div>
                           </div>
@@ -696,16 +727,11 @@ export default function AboutPage() {
                     </AnimatedSection>
 
                     <AnimatedSection delay={0.5}>
-                      <div className="relative">
-                        <div className="absolute -left-4 top-0 w-1 h-full bg-gradient-to-b from-[#4834D4] to-[#9d4edd] rounded-full" />
-                        <p className="text-lg leading-relaxed pl-8">
-                          Whether you need rapid MVP development, complex system integrations, or
-                          rescue operations for failing projects, we deploy the right specialists
-                          for your specific mission. Our California-based command ensures adherence
-                          to the highest standards while our distributed team enables 24/7
-                          execution.
-                        </p>
-                      </div>
+                      <p className="text-base md:text-lg leading-relaxed">
+                        Whether you need rapid MVP development, complex system integrations, or
+                        rescue operations for failing projects, we deploy the right specialists for
+                        your specific mission.
+                      </p>
                     </AnimatedSection>
                   </div>
                 </div>
@@ -713,13 +739,13 @@ export default function AboutPage() {
 
               {/* Image with Running Line Animation */}
               <div className="order-1 xl:order-2">
-                <AnimatedSection delay={0.6}>
+                <AnimatedSection delay={0.3}>
                   <div className="relative group">
                     {/* Main image container */}
-                    <div className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl">
+                    <div className="relative aspect-video rounded-2xl overflow-hidden shadow-xl">
                       <Image
                         src="/images/about/devx-office.jpg"
-                        alt="DevX Group Office"
+                        alt="DevX Group LLC Headquarters - San Diego, California"
                         fill
                         className="object-cover transition-transform duration-700 group-hover:scale-105"
                         sizes="(max-width: 768px) 100vw, 50vw"
@@ -729,36 +755,20 @@ export default function AboutPage() {
                       {/* Running line animation around image */}
                       <RunningLineAnimation color="#4CD787" duration={4} />
 
-                      {/* Overlay gradient */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      {/* Small headquarters info card */}
+                      <motion.div
+                        className="absolute bottom-4 right-4 bg-black/40 backdrop-blur-sm text-white p-3 rounded-lg shadow-lg border border-white/20 max-w-[200px]"
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.5, duration: 0.6 }}
+                        whileHover={{ scale: 1.05 }}
+                      >
+                        <div className="text-center">
+                          <p className="font-semibold text-sm text-[#4CD787]">Headquarters</p>
+                          <p className="text-xs opacity-90">San Diego, CA</p>
+                        </div>
+                      </motion.div>
                     </div>
-
-                    {/* Floating stats cards */}
-                    <motion.div
-                      className="absolute -top-8 -left-8 bg-[#4CD787] text-black p-4 rounded-2xl shadow-2xl"
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.8, duration: 0.6 }}
-                      whileHover={{ scale: 1.05, rotate: 2 }}
-                    >
-                      <p className="font-bold text-lg">Founded</p>
-                      <p className="text-sm">2024</p>
-                    </motion.div>
-
-                    <motion.div
-                      className="absolute -bottom-8 -right-8 bg-[#CFB53B] text-black p-4 rounded-2xl shadow-2xl"
-                      initial={{ opacity: 0, y: -20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 1.0, duration: 0.6 }}
-                      whileHover={{ scale: 1.05, rotate: -2 }}
-                    >
-                      <p className="font-bold text-lg">San Diego</p>
-                      <p className="text-sm">California</p>
-                    </motion.div>
-
-                    {/* Decorative elements */}
-                    <div className="absolute -top-16 -right-16 w-32 h-32 bg-gradient-to-br from-[#4CD787]/20 to-[#CFB53B]/20 rounded-full blur-xl" />
-                    <div className="absolute -bottom-16 -left-16 w-24 h-24 bg-gradient-to-br from-[#4834D4]/20 to-[#9d4edd]/20 rounded-full blur-xl" />
                   </div>
                 </AnimatedSection>
               </div>
@@ -774,7 +784,7 @@ export default function AboutPage() {
       >
         <div className="container mx-auto px-4">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#CFB53B]">Our Values</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#FFD700]">Our Values</h2>
             <p
               className="text-lg md:text-xl text-foreground/90 font-light leading-relaxed font-['IBM_Plex_Sans'] mt-6"
               style={{
@@ -789,19 +799,19 @@ export default function AboutPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <ValueCard
-              icon={Users}
+              icon={Heart}
               title="Customer Obsession"
               description="Our customers are always first in everything we do. We provide support after delivery and build long-term relationships."
               delay={0.1}
             />
             <ValueCard
               icon={Shield}
-              title="Responsible & Accountable"
-              description="We build long-term relationships and operate under U.S. standards."
+              title="Security & Compliance First"
+              description="We implement everything with enterprise-grade security in mind, preventing XSS, phishing, SQL injection, cross-site scripting, CSRF attacks, and data breaches. OWASP compliance, secure coding practices, and U.S. standards guide every line of code."
               delay={0.2}
             />
             <ValueCard
-              icon={Check}
+              icon={UserCheck}
               title="Vetted Professionals"
               description="Our team is a handpicked group of vetted software development experts, chosen for their skill and efficiency."
               delay={0.3}
@@ -813,13 +823,13 @@ export default function AboutPage() {
               delay={0.4}
             />
             <ValueCard
-              icon={Zap}
+              icon={Lightbulb}
               title="Inventors & Simplifiers"
               description="We prioritize streamlined solutions that ensure rapid delivery while supporting long-term maintainability."
               delay={0.5}
             />
             <ValueCard
-              icon={Award}
+              icon={Star}
               title="Highest Standards"
               description="We leverage cutting-edge technology and adhere to the best practices to deliver exceptional customer satisfaction."
               delay={0.6}
@@ -828,63 +838,82 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Vision & Mission Section */}
-      <section className="pt-8 pb-16 relative">
+      {/* Delivery Ownership Section */}
+      <section className="py-16 relative">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <AnimatedSection className="bg-black/30 backdrop-blur-sm p-8 rounded-xl border border-white/10 relative overflow-hidden">
-              <div className="absolute -top-24 -right-24 w-64 h-64 bg-[#4CD787]/10 rounded-full blur-3xl z-0"></div>
-              <div className="relative z-10">
-                <h3 className="text-2xl font-semibold mb-6 text-[#4CD787]">Our Vision</h3>
-                <p
-                  className="text-lg md:text-xl text-foreground/90 font-light leading-relaxed font-['IBM_Plex_Sans'] mt-6"
-                  style={{
-                    letterSpacing: '0.025em',
-                    fontWeight: '400',
-                  }}
-                >
-                  To revolutionize software development by delivering innovative, efficient, and
-                  scalable solutions that empower businesses worldwide to thrive in a digital-first
-                  future.
-                </p>
-              </div>
-            </AnimatedSection>
+          <AnimatedSection className="text-center max-w-3xl mx-auto mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#FFD700] font-['IBM_Plex_Mono']">
+              Delivery Ownership
+            </h2>
+            <p className="text-lg md:text-xl text-foreground/90 font-light leading-relaxed font-['IBM_Plex_Sans']">
+              Your project success is our responsibility. We stand behind our commitments.
+            </p>
+          </AnimatedSection>
 
-            <AnimatedSection
-              className="bg-black/30 backdrop-blur-sm p-8 rounded-xl border border-white/10 relative overflow-hidden"
-              delay={0.2}
-            >
-              <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-[#4834D4]/10 rounded-full blur-3xl z-0"></div>
-              <div className="relative z-10">
-                <h3 className="text-2xl font-semibold mb-6 text-[#4CD787]">Our Mission</h3>
-                <p
-                  className="text-lg md:text-xl text-foreground/90 font-light leading-relaxed font-['IBM_Plex_Sans'] mt-6"
-                  style={{
-                    letterSpacing: '0.025em',
-                    fontWeight: '400',
-                  }}
-                >
-                  We aim to simplify the software development journey through a streamlined,
-                  results-first process, from free consultation to seamless onboarding and rapid
-                  delivery, ensuring exceptional quality, adaptability, and long-term success.
+          <div className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-2xl p-8 max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="flex items-start gap-3">
+                <div className="w-2 h-2 bg-[#4CD787] rounded-full mt-2 flex-shrink-0"></div>
+                <p className="text-foreground/90">
+                  Fixed scope with milestone reviews and progress transparency
                 </p>
               </div>
-            </AnimatedSection>
+              <div className="flex items-start gap-3">
+                <div className="w-2 h-2 bg-[#FFD700] rounded-full mt-2 flex-shrink-0"></div>
+                <p className="text-foreground/90">NDA by default and U.S.-based contracting</p>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="w-2 h-2 bg-[#4834D4] rounded-full mt-2 flex-shrink-0"></div>
+                <p className="text-foreground/90">
+                  Code ownership transfer with documentation at acceptance
+                </p>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="w-2 h-2 bg-[#9d4edd] rounded-full mt-2 flex-shrink-0"></div>
+                <p className="text-foreground/90">Stabilization support for 30 days post-launch</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Delivery Ownership Assurance */}
-      <section className="py-12 relative">
+      {/* Vision & Mission Section */}
+      <section className="py-16 relative">
         <div className="container mx-auto px-4">
-          <div className="bg-black/35 backdrop-blur-sm border border-white/10 rounded-2xl p-6 md:p-8 max-w-5xl mx-auto">
-            <h3 className="text-2xl font-semibold mb-4 text-[#4CD787]">Delivery Ownership</h3>
-            <ul className="list-disc pl-5 space-y-2 text-foreground/90">
-              <li>Fixed scope with milestone reviews and progress transparency.</li>
-              <li>NDA by default and U.S.-based contracting.</li>
-              <li>Code ownership transfer with documentation at acceptance.</li>
-              <li>Stabilization support for 30 days post‑launch.</li>
-            </ul>
+          <AnimatedSection className="text-center max-w-3xl mx-auto mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#FFD700] font-['IBM_Plex_Mono']">
+              Our Purpose
+            </h2>
+            <p className="text-lg md:text-xl text-foreground/90 font-light leading-relaxed font-['IBM_Plex_Sans']">
+              Driven by vision, guided by mission, committed to excellence.
+            </p>
+          </AnimatedSection>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            <AnimatedSection className="bg-black/30 backdrop-blur-sm p-8 rounded-xl border border-white/10 hover:border-[#4CD787]/30 transition-colors duration-300">
+              <h3 className="text-2xl font-bold mb-4 text-[#4CD787] font-['IBM_Plex_Mono']">
+                Our Vision
+              </h3>
+              <p className="text-base md:text-lg text-foreground/90 leading-relaxed font-['IBM_Plex_Sans']">
+                To revolutionize software development by delivering innovative, efficient, and
+                scalable solutions that empower businesses worldwide to thrive in a digital-first
+                future.
+              </p>
+            </AnimatedSection>
+
+            <AnimatedSection
+              className="bg-black/30 backdrop-blur-sm p-8 rounded-xl border border-white/10 hover:border-[#FFD700]/30 transition-colors duration-300"
+              delay={0.2}
+            >
+              <h3 className="text-2xl font-bold mb-4 text-[#FFD700] font-['IBM_Plex_Mono']">
+                Our Mission
+              </h3>
+              <p className="text-base md:text-lg text-foreground/90 leading-relaxed font-['IBM_Plex_Sans']">
+                To simplify the software development journey through a streamlined, results-first
+                process, ensuring exceptional quality, adaptability, and long-term success for every
+                client.
+              </p>
+            </AnimatedSection>
           </div>
         </div>
       </section>
@@ -893,7 +922,9 @@ export default function AboutPage() {
       <section className="pt-8 pb-16 relative">
         <div className="container mx-auto px-4">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#CFB53B]">Our Team Structure</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#FFD700]">
+              Our Team Structure
+            </h2>
             <p
               className="text-lg md:text-xl text-foreground/90 font-light leading-relaxed font-['IBM_Plex_Sans'] mt-6"
               style={{
@@ -901,14 +932,14 @@ export default function AboutPage() {
                 fontWeight: '400',
               }}
             >
-              Meet our leadership team and discover how our 23-member organization delivers exceptional results.
+              Meet our leadership team and discover how our 23-member organization delivers
+              exceptional results.
             </p>
           </AnimatedSection>
 
           <OrgChart className="mb-12" />
         </div>
       </section>
-
 
       {/* CTA Section */}
       <section className="pt-8 pb-16 relative">
@@ -966,6 +997,9 @@ export default function AboutPage() {
           </AnimatedSection>
         </div>
       </section>
+
+      {/* Gradient transition to footer */}
+      <div className="h-32 bg-gradient-to-b from-[#000B14] to-black"></div>
     </div>
   )
 }
