@@ -39,15 +39,13 @@ import {
   Cpu,
   X,
 } from 'lucide-react'
-import TextPressure from '@/components/TextPressure'
-import ParticleField from '@/components/ParticleField'
-import MagneticCard from '@/components/MagneticCard'
-import LetterGlitch from '@/components/LetterGlitch'
-import DotGrid from '@/components/DotGrid'
-import Squares from '@/components/Squares'
-import Waves from '@/components/Waves'
-import WavesNew from '@/components/WavesNew'
-import GridAnimation from '@/components/GridAnimation'
+import TextPressure from '@animations/TextPressure'
+import ParticleField from '@animations/ParticleField'
+import LetterGlitch from '@animations/LetterGlitch'
+import DotGrid from '@sections/DotGrid'
+import Waves from '@animations/Waves'
+import WavesNew from '@animations/WavesNew'
+import GridAnimation from '@animations/GridAnimation'
 import EnhancedProjectCard from '@/components/portfolio/EnhancedProjectCard'
 import ProjectDetailModal from '@/components/portfolio/ProjectDetailModal'
 import { portfolioProjects, ProjectData } from '@/data/portfolioProjects'
@@ -92,7 +90,7 @@ const cardHoverVariants = {
 const services = [
   {
     icon: Code2,
-    title: 'Custom',
+    title: 'Apps',
     fullTitle: 'Custom Software Development',
     description:
       'We create tailored software solutions that perfectly align with your business needs. From web applications to enterprise systems, we deliver scalable and efficient solutions.',
@@ -106,7 +104,7 @@ const services = [
   },
   {
     icon: Brain,
-    title: 'AI',
+    title: 'AI/ML',
     fullTitle: 'AI & Machine Learning',
     description:
       'Harness the power of artificial intelligence to transform your business. We develop intelligent solutions that automate processes and provide valuable insights.',
@@ -148,7 +146,7 @@ const services = [
   },
   {
     icon: Database,
-    title: 'Database',
+    title: 'Data',
     fullTitle: 'Database Solutions',
     description:
       'Design and implement robust database solutions that ensure data integrity and optimal performance. We help you manage and analyze your data effectively.',
@@ -204,8 +202,8 @@ const services = [
   },
   {
     icon: Cpu,
-    title: 'Hardware',
-    fullTitle: 'Hardware IoT Design',
+    title: 'IoT',
+    fullTitle: 'IoT & Embedded Systems',
     description:
       'Bridge the physical and digital worlds with our IoT hardware design expertise. We create custom connected devices and systems that collect, analyze, and act on real-world data.',
     features: [
@@ -219,13 +217,13 @@ const services = [
 ]
 
 // Service Modal Component
-const ServiceModal = ({ service, isOpen, onClose, clickPosition }) => {
+const ServiceModal = ({ service, isOpen, onClose, clickPosition }: { service: any; isOpen: boolean; onClose: () => void; clickPosition: any }) => {
   if (!service) return null
 
   const Icon = service.icon
 
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       {isOpen && (
         <>
           <motion.div
@@ -238,93 +236,95 @@ const ServiceModal = ({ service, isOpen, onClose, clickPosition }) => {
               onClose()
             }}
           />
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8">
-            <motion.div
-              initial={{
-                opacity: 0,
-                scale: 0,
-                x: clickPosition ? clickPosition.x - window.innerWidth / 2 : 0,
-                y: clickPosition ? clickPosition.y - window.innerHeight / 2 : 0,
-                borderRadius: '100%',
-              }}
-              animate={{
-                opacity: 1,
-                scale: 1,
-                x: 0,
-                y: 0,
-                borderRadius: '12px',
-              }}
-              exit={{
-                opacity: 0,
-                scale: 0,
-                x: clickPosition ? clickPosition.x - window.innerWidth / 2 : 0,
-                y: clickPosition ? clickPosition.y - window.innerHeight / 2 : 0,
-                borderRadius: '100%',
-              }}
-              transition={{
-                type: 'spring',
-                damping: 25,
-                opacity: { duration: 0.2 },
-                scale: { duration: 0.4 },
-                borderRadius: { duration: 0.4 },
-              }}
-              className="bg-black/80 backdrop-blur-md border border-white/10 rounded-xl max-w-2xl w-full max-h-[90vh] overflow-auto p-6 relative"
-            >
-              <button
-                onClick={onClose}
-                className="absolute top-4 right-4 p-1 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+          <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-8 pointer-events-none">
+            <div className="pointer-events-auto">
+              <motion.div
+                initial={{
+                  opacity: 0,
+                  scale: 0,
+                  x: clickPosition ? clickPosition.x - window.innerWidth / 2 : 0,
+                  y: clickPosition ? clickPosition.y - window.innerHeight / 2 : 0,
+                  borderRadius: '100%',
+                }}
+                animate={{
+                  opacity: 1,
+                  scale: 1,
+                  x: 0,
+                  y: 0,
+                  borderRadius: '12px',
+                }}
+                exit={{
+                  opacity: 0,
+                  scale: 0,
+                  x: clickPosition ? clickPosition.x - window.innerWidth / 2 : 0,
+                  y: clickPosition ? clickPosition.y - window.innerHeight / 2 : 0,
+                  borderRadius: '100%',
+                }}
+                transition={{
+                  type: 'spring',
+                  damping: 25,
+                  opacity: { duration: 0.2 },
+                  scale: { duration: 0.4 },
+                  borderRadius: { duration: 0.4 },
+                }}
+                className="bg-black/80 backdrop-blur-md border border-white/10 rounded-xl max-w-2xl w-full max-h-[90vh] overflow-auto p-6 relative"
               >
-                <X className="w-5 h-5" />
-              </button>
-
-              <div className="flex items-center mb-6">
-                <div
-                  className="w-12 h-12 rounded-full flex items-center justify-center mr-4"
-                  style={{ backgroundColor: service.color }}
-                >
-                  <Icon className="w-6 h-6 text-black" />
-                </div>
-                <h2 className="text-2xl font-bold" style={{ color: service.color }}>
-                  {service.fullTitle}
-                </h2>
-              </div>
-
-              <div className="mb-6">
-                <p className="text-white/90 mb-4">{service.description}</p>
-                <h3 className="text-lg font-semibold mb-3" style={{ color: service.color }}>
-                  Key Benefits
-                </h3>
-                <ul className="space-y-2">
-                  {service.features.map((feature) => (
-                    <li key={feature} className="flex items-center">
-                      <div
-                        className="w-2 h-2 rounded-full mr-3"
-                        style={{ backgroundColor: service.color }}
-                      />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="flex justify-between mt-8 pt-4 border-t border-white/10">
                 <button
-                  className="px-5 py-2 rounded-lg text-black font-medium transition-all"
-                  style={{ backgroundColor: service.color }}
                   onClick={onClose}
+                  className="absolute top-4 right-4 p-1 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
                 >
-                  Close
+                  <X className="w-5 h-5" />
                 </button>
-                <a
-                  href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-5 py-2 rounded-lg bg-robinhood text-black font-medium transition-all hover:bg-robinhood/90"
-                >
-                  Schedule a Strategy Call
-                </a>
-              </div>
-            </motion.div>
+
+                <div className="flex items-center mb-6">
+                  <div
+                    className="w-12 h-12 rounded-full flex items-center justify-center mr-4"
+                    style={{ backgroundColor: service.color }}
+                  >
+                    <Icon className="w-6 h-6 text-black" />
+                  </div>
+                  <h2 className="text-2xl font-bold" style={{ color: service.color }}>
+                    {service.fullTitle}
+                  </h2>
+                </div>
+
+                <div className="mb-6">
+                  <p className="text-white/90 mb-4">{service.description}</p>
+                  <h3 className="text-lg font-semibold mb-3" style={{ color: service.color }}>
+                    Key Benefits
+                  </h3>
+                  <ul className="space-y-2">
+                    {service.features.map((feature: any) => (
+                      <li key={feature} className="flex items-center">
+                        <div
+                          className="w-2 h-2 rounded-full mr-3"
+                          style={{ backgroundColor: service.color }}
+                        />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="flex justify-between mt-8 pt-4 border-t border-white/10">
+                  <button
+                    className="px-5 py-2 rounded-lg text-black font-medium transition-all"
+                    style={{ backgroundColor: service.color }}
+                    onClick={onClose}
+                  >
+                    Close
+                  </button>
+                  <a
+                    href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-5 py-2 rounded-lg bg-robinhood text-black font-medium transition-all hover:bg-robinhood/90"
+                  >
+                    Schedule a Strategy Call
+                  </a>
+                </div>
+              </motion.div>
+            </div>
           </div>
         </>
       )}
@@ -515,7 +515,7 @@ const oldProjects = [
 ]
 
 // Circular Service Icon Component
-function ServiceIcon({ service, index, onClick }) {
+function ServiceIcon({ service, index, onClick }: { service: any; index: number; onClick: (service: any, position: any) => void }) {
   const shouldReduceMotion = useReducedMotion()
 
   return (
@@ -525,7 +525,7 @@ function ServiceIcon({ service, index, onClick }) {
         e.preventDefault()
         onClick(service, e)
       }}
-      className="relative group service-icon-container"
+      className="relative group service-icon-container cursor-pointer"
       initial={{ opacity: 0, scale: 0 }}
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
@@ -535,12 +535,40 @@ function ServiceIcon({ service, index, onClick }) {
         type: 'spring',
         damping: 20,
       }}
-      whileHover={shouldReduceMotion ? {} : { scale: 1.08 }}
+      whileHover={
+        shouldReduceMotion
+          ? {}
+          : {
+              scale: 1.15,
+              y: -8,
+              transition: { duration: 0.3, ease: 'easeOut' },
+            }
+      }
       whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
     >
+      {/* Hover glow effect */}
       <motion.div
-        className="w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center relative overflow-hidden"
-        style={{ backgroundColor: service.color }}
+        className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100"
+        style={{
+          background: `radial-gradient(circle, ${service.color}40 0%, transparent 70%)`,
+          filter: 'blur(20px)',
+          scale: 1.5,
+        }}
+        initial={{ opacity: 0 }}
+        whileHover={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+      />
+
+      <motion.div
+        className="w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center relative overflow-hidden transition-all duration-300 group-hover:shadow-lg"
+        style={{
+          backgroundColor: service.color,
+          boxShadow: `0 0 0 0 ${service.color}40`,
+        }}
+        whileHover={{
+          boxShadow: `0 10px 30px ${service.color}60, 0 0 0 4px ${service.color}30`,
+          transition: { duration: 0.3 },
+        }}
       >
         {/* Shine effect */}
         <motion.div
@@ -561,7 +589,20 @@ function ServiceIcon({ service, index, onClick }) {
           }}
         />
 
-        <service.icon className="w-8 h-8 md:w-10 md:h-10 text-black relative z-10" />
+        {/* Icon with hover animation */}
+        <motion.div
+          whileHover={
+            shouldReduceMotion
+              ? {}
+              : {
+                  rotate: [0, -10, 10, 0],
+                  scale: 1.1,
+                  transition: { duration: 0.6, ease: 'easeInOut' },
+                }
+          }
+        >
+          <service.icon className="w-8 h-8 md:w-10 md:h-10 text-black relative z-10 group-hover:text-black transition-colors duration-300" />
+        </motion.div>
 
         {/* Enhanced reflection with gradient */}
         <div
@@ -570,23 +611,43 @@ function ServiceIcon({ service, index, onClick }) {
             background: `linear-gradient(to bottom, rgba(255,255,255,0.2), transparent)`,
           }}
         />
+
+        {/* Pulse ring on hover */}
+        <motion.div
+          className="absolute inset-0 rounded-full border-2 opacity-0 group-hover:opacity-100"
+          style={{ borderColor: service.color }}
+          initial={{ scale: 1, opacity: 0 }}
+          whileHover={{
+            scale: [1, 1.2, 1.4],
+            opacity: [0, 0.6, 0],
+            transition: {
+              duration: 1.5,
+              repeat: Infinity,
+              ease: 'easeOut',
+            },
+          }}
+        />
       </motion.div>
 
-      {/* Title below icon */}
-      <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs font-medium whitespace-nowrap text-center">
+      {/* Title below icon with hover effect */}
+      <motion.div
+        className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs font-medium whitespace-nowrap text-center text-white/70 group-hover:text-white transition-colors duration-300"
+        whileHover={{ y: -2, transition: { duration: 0.2 } }}
+        style={{ color: 'rgba(255, 255, 255, 0.7)' }}
+      >
         {service.title}
-      </div>
+      </motion.div>
     </motion.button>
   )
 }
 
-function ProjectCard({ project, index }) {
+function ProjectCard({ project, index }: { project: any; index: number }) {
   const shouldReduceMotion = useReducedMotion()
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-50px' })
 
   return (
-    <MagneticCard intensity={0.2} className="h-full">
+    <div className="h-full">
       <motion.div
         ref={ref}
         variants={cardHoverVariants}
@@ -664,7 +725,7 @@ function ProjectCard({ project, index }) {
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
               transition={{ delay: index * 0.1 + 0.6 }}
             >
-              {project.tags.map((tag, tagIndex) => (
+              {project.tags.map((tag: any, tagIndex: number) => (
                 <motion.span
                   key={tag}
                   className="px-3 py-1.5 bg-gradient-to-r from-[#4CD787]/20 to-[#FFD700]/20 text-[#4CD787] border border-[#4CD787]/30 text-xs font-medium rounded-full group-hover:bg-gradient-to-r group-hover:from-[#4CD787]/30 group-hover:to-[#FFD700]/30 group-hover:border-[#4CD787]/50 transition-all duration-300 backdrop-blur-sm"
@@ -679,7 +740,7 @@ function ProjectCard({ project, index }) {
           </div>
         </div>
       </motion.div>
-    </MagneticCard>
+    </div>
   )
 }
 
@@ -701,10 +762,11 @@ export default function PortfolioPage() {
   )
 
   // Function to open modal with service details
-  const handleServiceClick = (service, event) => {
+  const handleServiceClick = (service: any, event: any) => {
     if (event) {
-      const x = event.clientX
-      const y = event.clientY
+      const rect = event.currentTarget.getBoundingClientRect()
+      const x = rect.left + rect.width / 2
+      const y = rect.top + rect.height / 2
       setClickPosition({ x, y })
     } else {
       setClickPosition({ x: window.innerWidth / 2, y: window.innerHeight / 2 })
@@ -967,11 +1029,10 @@ export default function PortfolioPage() {
                 className="text-lg md:text-xl text-foreground/90 font-light max-w-2xl mb-4 sm:mb-8 lg:-mt-12 leading-relaxed font-['IBM_Plex_Sans'] mt-6"
                 style={{
                   letterSpacing: '0.025em',
-                  fontWeight: '400'
+                  fontWeight: '400',
                 }}
               >
-                Explore our diverse range of projects showcasing our expertise in software
-                development and innovation.
+                Selected work across web, mobile, AI, and cloud. Real products, real outcomes.
               </motion.p>
 
               {/* New Waves Animation */}
@@ -994,7 +1055,7 @@ export default function PortfolioPage() {
               </motion.div>
 
               {/* Mobile Squares Grid - Only visible on small screens */}
-              <motion.div 
+              <motion.div
                 variants={fadeInUpVariants}
                 className="lg:hidden flex flex-wrap justify-center gap-6 -mt-20 mb-8"
               >
@@ -1166,9 +1227,9 @@ export default function PortfolioPage() {
                   ease: [0.22, 1, 0.36, 1],
                 }}
               >
-                <EnhancedProjectCard 
-                  project={project} 
-                  index={index} 
+                <EnhancedProjectCard
+                  project={project}
+                  index={index}
                   onViewDetails={handleViewProjectDetails}
                 />
               </motion.div>
@@ -1197,10 +1258,13 @@ export default function PortfolioPage() {
             <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#FFD700]">
               Ready to Build Your Next Project?
             </h2>
-            <p className="text-lg md:text-xl text-foreground/90 font-light mb-8 leading-relaxed font-['IBM_Plex_Sans'] mt-4" style={{
-              letterSpacing: '0.025em',
-              fontWeight: '400'
-            }}>
+            <p
+              className="text-lg md:text-xl text-foreground/90 font-light mb-8 leading-relaxed font-['IBM_Plex_Sans'] mt-4"
+              style={{
+                letterSpacing: '0.025em',
+                fontWeight: '400',
+              }}
+            >
               Let&apos;s collaborate to bring your ideas to life with our expertise in cutting-edge
               technologies.
             </p>
@@ -1223,10 +1287,18 @@ export default function PortfolioPage() {
       </section>
 
       {/* Services Icons Section - moved from ServicesPage */}
-      <section className="py-16 relative">
+      <section className="py-16 relative z-50">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-900/10 to-black" />
 
         <div className="container mx-auto px-4 relative">
+          <div className="text-center mb-8">
+            <h3 className="text-3xl md:text-4xl font-bold mb-6 text-[#FFD700]">
+              Services we deliver
+            </h3>
+            <p className="text-white/70 mt-2">
+              We can build and ship across these areas. See the Services page for details.
+            </p>
+          </div>
           {/* Circular Service Icons */}
           <div className="flex flex-wrap justify-center gap-8 md:gap-12 lg:gap-16 relative z-10">
             {services.map((service, index) => (

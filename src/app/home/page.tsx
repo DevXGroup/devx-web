@@ -1,7 +1,7 @@
-import Hero from '@/components/Hero'
-import Features from '@/components/Features'
-import Process from '@/components/Process'
-import DevelopmentTools from '@/components/DevelopmentTools'
+import Hero from '@sections/Hero'
+import Features from '@sections/Features'
+import Process from '@sections/Process'
+import DevelopmentTools from '@sections/DevelopmentTools'
 
 export default function Home() {
   return (

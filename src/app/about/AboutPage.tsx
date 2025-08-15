@@ -4,13 +4,25 @@ import { motion, useReducedMotion, useInView } from 'framer-motion'
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Check, Users, Zap, Award, Globe, Shield, Heart, Lock, UserCheck, Sparkles, Lightbulb, Star } from 'lucide-react'
-import BlurText from '@/components/BlurText'
-import TextPressure from '@/components/TextPressure'
-import RunningLineAnimation from '@/components/RunningLineAnimation'
-import ShapeBlur from '@/components/ShapeBlur'
-import RippleGrid from '@/components/RippleGrid'
-import OrgChart from '@/components/OrgChart'
+import {
+  Check,
+  Users,
+  Zap,
+  Award,
+  Globe,
+  Shield,
+  Heart,
+  Lock,
+  UserCheck,
+  Sparkles,
+  Lightbulb,
+  Star,
+} from 'lucide-react'
+import BlurText from '@/components/animations/BlurText'
+import TextPressure from '@/components/animations/TextPressure'
+import RunningLineAnimation from '@/components/animations/RunningLineAnimation'
+import ShapeBlur from '@/components/animations/ShapeBlur'
+import OrgChart from '@/components/sections/OrgChart'
 
 // Enhanced animation variants for better performance
 const fadeInUpVariants = {
@@ -49,7 +61,7 @@ const cardHoverVariants = {
 }
 
 // Enhanced animated section component for reuse
-const AnimatedSection = ({ children, className = '', delay = 0 }) => {
+const AnimatedSection = ({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) => {
   const shouldReduceMotion = useReducedMotion()
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
@@ -69,7 +81,7 @@ const AnimatedSection = ({ children, className = '', delay = 0 }) => {
 }
 
 // Enhanced team member card component
-const TeamMemberCard = ({ name, role, image, delay = 0 }) => {
+const TeamMemberCard = ({ name, role, image, delay = 0 }: { name: string; role: string; image: string; delay?: number }) => {
   const shouldReduceMotion = useReducedMotion()
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true })
@@ -113,7 +125,7 @@ const TeamMemberCard = ({ name, role, image, delay = 0 }) => {
 }
 
 // Clean value card component with simple border animation
-const ValueCard = ({ icon: Icon, title, description, delay = 0 }) => {
+const ValueCard = ({ icon: Icon, title, description, delay = 0 }: { icon: any; title: string; description: string; delay?: number }) => {
   const shouldReduceMotion = useReducedMotion()
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true })
@@ -141,123 +153,36 @@ const ValueCard = ({ icon: Icon, title, description, delay = 0 }) => {
       {/* Clean animated border */}
       <div className="absolute inset-0 rounded-xl border-2 border-transparent group-hover:border-[#4CD787] transition-all duration-300 opacity-0 group-hover:opacity-100"></div>
 
-      <motion.div
-        className="w-12 h-12 rounded-full bg-[#4CD787]/10 flex items-center justify-center mb-4 group-hover:bg-[#4CD787]/20 transition-colors relative overflow-hidden"
-        animate={isCardHovered && !shouldReduceMotion ? { scale: 1.15, rotate: 5 } : { scale: 1, rotate: 0 }}
-        transition={{ duration: 0.4, ease: 'easeInOut' }}
+      {/* Header with icon and title in a clean row */}
+      <div className="flex items-center gap-4 mb-5">
+        <motion.div
+          className="w-12 h-12 rounded-full bg-[#4CD787]/10 flex items-center justify-center group-hover:bg-[#4CD787]/20 transition-colors relative overflow-hidden flex-shrink-0"
+          animate={
+            isCardHovered && !shouldReduceMotion
+              ? { scale: 1.05 }
+              : { scale: 1 }
+          }
+          transition={{ duration: 0.3, ease: 'easeOut' }}
+        >
+          {/* Simplified background effect */}
+          <motion.div
+            className="absolute inset-0 rounded-full bg-gradient-to-r from-[#4CD787]/20 to-[#4834D4]/20"
+            animate={isCardHovered ? { scale: 1.1, opacity: 1 } : { scale: 0.9, opacity: 0 }}
+            transition={{ duration: 0.4 }}
+          />
+
+          {/* Icon with minimal animation to avoid fuzziness */}
+          <Icon className="w-6 h-6 text-[#4CD787] relative z-10" />
+        </motion.div>
+
+        <h3 className="text-xl font-semibold text-white group-hover:text-[#4CD787] transition-colors duration-300 flex-1 font-['IBM_Plex_Sans']">
+          {title}
+        </h3>
+      </div>
+      <p 
+        className="text-white/70 text-sm group-hover:text-white/85 transition-colors duration-300 leading-relaxed font-['IBM_Plex_Sans'] font-light"
+        style={{ letterSpacing: '0.02em' }}
       >
-        {/* Glowing background effect */}
-        <motion.div
-          className="absolute inset-0 rounded-full bg-gradient-to-r from-[#4CD787]/20 to-[#4834D4]/20"
-          animate={isCardHovered ? { scale: 1.2, opacity: 1 } : { scale: 0.8, opacity: 0 }}
-          transition={{ duration: 0.5 }}
-        />
-        
-        {/* Rotating border */}
-        <motion.div
-          className="absolute inset-0 rounded-full border-2 border-[#4CD787]/30"
-          animate={{
-            rotate: isCardHovered ? 360 : 0,
-            opacity: isCardHovered ? 1 : 0
-          }}
-          transition={{
-            rotate: { duration: 3, repeat: isCardHovered ? Infinity : 0, ease: 'linear' },
-            opacity: { duration: 0.3 }
-          }}
-        />
-        
-        {/* Icon with enhanced animations */}
-        <motion.div
-          animate={isCardHovered && !shouldReduceMotion ? {
-            y: [-2, 2, -2],
-          } : { y: 0 }}
-          transition={{
-            duration: isCardHovered ? 1.5 : 0.3,
-            repeat: isCardHovered ? Infinity : 0,
-            ease: 'easeInOut'
-          }}
-        >
-          <Icon className="w-6 h-6 text-[#4CD787] relative z-10 drop-shadow-lg" />
-        </motion.div>
-        
-        {/* Running flashing border effect */}
-        <motion.div
-          className="absolute inset-0 rounded-full overflow-hidden"
-          animate={{ opacity: isCardHovered ? 1 : 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          {/* Top border */}
-          <motion.div
-            className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-[#FFD700] to-transparent"
-            style={{
-              boxShadow: '0 0 8px #FFD700, 0 0 16px rgba(207, 181, 59, 0.6)',
-            }}
-            animate={{
-              x: ['-100%', '100%'],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: 'linear',
-            }}
-          />
-          
-          {/* Right border */}
-          <motion.div
-            className="absolute top-0 right-0 w-0.5 h-full bg-gradient-to-b from-transparent via-[#FFD700] to-transparent"
-            style={{
-              boxShadow: '0 0 8px #FFD700, 0 0 16px rgba(207, 181, 59, 0.6)',
-            }}
-            animate={{
-              y: ['-100%', '100%'],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: 'linear',
-              delay: 0.5,
-            }}
-          />
-          
-          {/* Bottom border */}
-          <motion.div
-            className="absolute bottom-0 right-0 w-full h-0.5 bg-gradient-to-l from-transparent via-[#C0C0C0] to-transparent"
-            style={{
-              boxShadow: '0 0 8px #C0C0C0, 0 0 16px rgba(192, 192, 192, 0.6)',
-            }}
-            animate={{
-              x: ['100%', '-100%'],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: 'linear',
-              delay: 1,
-            }}
-          />
-          
-          {/* Left border */}
-          <motion.div
-            className="absolute bottom-0 left-0 w-0.5 h-full bg-gradient-to-t from-transparent via-[#C0C0C0] to-transparent"
-            style={{
-              boxShadow: '0 0 8px #C0C0C0, 0 0 16px rgba(192, 192, 192, 0.6)',
-            }}
-            animate={{
-              y: ['100%', '-100%'],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: 'linear',
-              delay: 1.5,
-            }}
-          />
-        </motion.div>
-      </motion.div>
-      <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-[#4CD787] transition-colors duration-300">
-        {title}
-      </h3>
-      <p className="text-foreground/70 text-sm group-hover:text-white/80 transition-colors duration-300">
         {description}
       </p>
     </motion.div>
@@ -265,12 +190,12 @@ const ValueCard = ({ icon: Icon, title, description, delay = 0 }) => {
 }
 
 // Enhanced stat counter with animation
-const StatCounter = ({ number, label, delay = 0 }) => {
+const StatCounter = ({ number, label, delay = 0 }: { number: string | number; label: string; delay?: number }) => {
   const [count, setCount] = useState(0)
   const countRef = useRef(null)
   const shouldReduceMotion = useReducedMotion()
-  const isInView = useInView(countRef, { once: false, threshold: 0.5, margin: '-50px' })
-  const targetNumber = useMemo(() => Number.parseInt(number.replace(/\D/g, '')), [number])
+  const isInView = useInView(countRef, { once: false, margin: '-50px' })
+  const targetNumber = useMemo(() => Number.parseInt(String(number).replace(/\D/g, '')), [number])
 
   const animateCount = useCallback(() => {
     if (shouldReduceMotion) {
@@ -303,6 +228,7 @@ const StatCounter = ({ number, label, delay = 0 }) => {
     } else {
       // Reset count when not in view
       setCount(0)
+      return undefined
     }
   }, [isInView, animateCount])
 
@@ -331,9 +257,9 @@ const StatCounter = ({ number, label, delay = 0 }) => {
         >
           {/* Glowing text effect */}
           <span className="relative">
-            {number.includes('+') ? `${count}+` : count}
+            {String(number).includes('+') ? `${count}+` : count}
             <span className="absolute inset-0 text-[#4CD787] opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur-sm">
-              {number.includes('+') ? `${count}+` : count}
+              {String(number).includes('+') ? `${count}+` : count}
             </span>
           </span>
         </motion.div>
@@ -345,7 +271,6 @@ const StatCounter = ({ number, label, delay = 0 }) => {
         <div className="text-sm md:text-base text-white/80 font-['IBM_Plex_Mono'] font-medium group-hover:text-white transition-colors duration-300 uppercase tracking-wide">
           {label}
         </div>
-
       </div>
     </motion.div>
   )
@@ -365,23 +290,8 @@ export default function AboutPage() {
     <div className="min-h-screen bg-[#000B14] pt-24">
       {/* Hero Section */}
       <section className="pt-2 pb-8 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-[#0a0a1a] to-black"></div>
-        
-        {/* RippleGrid Background */}
-        <div className="absolute inset-0 opacity-30">
-          <RippleGrid
-            gridColor="#4CD787"
-            rippleIntensity={0.08}
-            gridSize={12}
-            gridThickness={8}
-            fadeDistance={1.8}
-            vignetteStrength={1.5}
-            glowIntensity={0.15}
-            opacity={0.7}
-            mouseInteraction={true}
-            mouseInteractionRadius={1.5}
-          />
-        </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-[#000B14] via-[#0a0a1a] to-[#000B14]"></div>
+
 
         {/* Enhanced animated background elements */}
         <div className="absolute inset-0 overflow-hidden">
@@ -717,8 +627,8 @@ export default function AboutPage() {
                                 No Project Left Behind
                               </h5>
                               <p className="text-sm leading-relaxed">
-                                When we take on your project, it gets completed. Period. We don't
-                                abandon missions, and we don't leave clients hanging.
+                                When we take on your project, it gets completed. Period. We don&apos;t
+                                abandon missions, and we don&apos;t leave clients hanging.
                               </p>
                             </div>
                           </div>

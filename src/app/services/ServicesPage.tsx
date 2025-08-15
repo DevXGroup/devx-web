@@ -11,20 +11,19 @@ import {
 import { Code2, Cloud, Brain, Smartphone, Cpu, Bot } from 'lucide-react'
 // import Link from 'next/link'
 import { useRef, useState, useEffect } from 'react'
-import HorizontalScroll from '@/components/HorizontalScroll'
-import ParallaxTestimonials from '@/components/ParallaxTestimonials'
-// import dynamic from 'next/dynamic'
-import TrueFocus from '@/components/TrueFocus'
-import BlurText from '@/components/BlurText'
-import TextPressure from '@/components/TextPressure'
+import TrueFocus from '@/components/animations/TrueFocus'
+import BlurText from '@/components/animations/BlurText'
+import TextPressure from '@/components/animations/TextPressure'
 
 // Import the newly separated components
 import ServiceCard from '@/components/services/ServiceCard'
 import AppleScrollSection from '@/components/services/AppleScrollSection'
-import ScrollVelocityText from '@/components/ScrollVelocityText'
+import ScrollVelocityText from '@/components/animations/ScrollVelocityText'
+import HorizontalScroll from '@/components/HorizontalScroll'
+import ParallaxTestimonials from '@/components/ParallaxTestimonials'
 
-import HyperSpeed from '@/components/HyperSpeed'
-import ClientOnly from '@/components/ClientOnly'
+import HyperSpeed from '@/components/animations/HyperSpeed'
+import ClientOnly from '@/components/layout/ClientOnly'
 
 // Define services array here, as it's specific to this page's cards
 const services = [
@@ -325,9 +324,7 @@ export default function ServicesPage() {
             className="w-full max-w-5xl mt-8 mb-8 relative z-20 pointer-events-auto"
           >
             <div className="flex justify-center items-center mb-16 text-center">
-              <BlurText
-                text="The DevX Edge"
-                className="text-4xl md:text-5xl lg:text-6xl font-light text-center text-[#FFD700] mt-10 tracking-wide italic"
+              <div
                 style={{
                   fontFamily: 'Georgia, "Times New Roman", Times, serif',
                   fontStyle: 'italic',
@@ -335,13 +332,18 @@ export default function ServicesPage() {
                   textShadow: '0 4px 8px rgba(207, 181, 59, 0.3), 0 2px 4px rgba(0, 0, 0, 0.5)',
                   letterSpacing: '0.02em'
                 }}
-                delay={120}
-                animateBy="words"
-                direction="top"
-                animationFrom={{ opacity: 0, y: 70 }}
-                animationTo={[{ opacity: 1, y: 0 }]}
-                onAnimationComplete={() => {}}
-              />
+              >
+                <BlurText
+                  text="The DevX Edge"
+                  className="text-4xl md:text-5xl lg:text-6xl font-light text-center text-[#FFD700] mt-10 tracking-wide italic"
+                  delay={120}
+                  animateBy="words"
+                  direction="top"
+                  animationFrom={{ opacity: 0, y: 70 }}
+                  animationTo={[{ opacity: 1, y: 0 }]}
+                  onAnimationComplete={() => {}}
+                />
+              </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 px-6 md:px-8 lg:px-16 relative z-20">
               {valueProps.map((prop, index) => (

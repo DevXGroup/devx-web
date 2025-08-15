@@ -1,4 +1,4 @@
-import EntryPage from '@/components/EntryPage'
+import EntryPage from '@sections/EntryPage'
 
 export default function Home() {
   return <EntryPage />
