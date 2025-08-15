@@ -17,9 +17,9 @@ import {
   User,
   MessageCircle,
 } from 'lucide-react'
-import BlurText from '@/components/BlurText'
-import TextPressure from '@/components/TextPressure'
-import Lightning from '@/components/Lightning'
+import BlurText from '@/components/animations/BlurText'
+import TextPressure from '@/components/animations/TextPressure'
+import Lightning from '@/components/animations/Lightning'
 
 // Enhanced animation variants
 const fadeInUpVariants = {
@@ -55,7 +55,7 @@ const buttonVariants = {
 }
 
 // Enhanced AnimatedGradientText component with better animation
-const AnimatedGradientText = ({ children, className = '' }) => (
+const AnimatedGradientText = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
   <span
     className={`bg-clip-text text-transparent inline-block ${className}`}
     style={{
@@ -119,14 +119,11 @@ export default function ContactPage() {
 
         // Initialize Calendly with dark mode
         setTimeout(() => {
-          if (window.Calendly) {
-            const widget = document.querySelector('.calendly-inline-widget')
+          if ((window as any).Calendly) {
+            const widget = document.querySelector('.calendly-inline-widget') as HTMLElement
             if (widget) {
-              // Clear any existing content
-              widget.innerHTML = ''
-
               // Initialize with dark mode settings using proper URL parameters
-              window.Calendly.initInlineWidget({
+              (window as any).Calendly.initInlineWidget({
                 url: 'https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?background_color=000000&text_color=ffffff&primary_color=4CD787&hide_gdpr_banner=1',
                 parentElement: widget,
                 prefill: {},
@@ -148,20 +145,24 @@ export default function ContactPage() {
           document.body.removeChild(existingScript)
         }
       }
+    } else {
+      // Script already exists, set calendar as loaded
+      setCalendarLoaded(true)
+      return undefined
     }
   }, [])
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormState((prev) => ({ ...prev, [name]: value }))
     // Clear errors when user starts typing
-    if (formErrors[name]) {
+    if ((formErrors as any)[name]) {
       setFormErrors((prev) => ({ ...prev, [name]: null }))
     }
   }
 
   const validateForm = () => {
-    const errors = {}
+    const errors: any = {}
     if (!formState.name.trim()) errors.name = 'Name is required'
     if (!formState.email.trim()) errors.email = 'Email is required'
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formState.email))
@@ -170,7 +171,7 @@ export default function ContactPage() {
     return errors
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
     const errors = validateForm()
@@ -442,18 +443,18 @@ export default function ContactPage() {
                           value={formState.name}
                           onChange={handleChange}
                           className={`w-full px-4 py-3 bg-white/5 border ${
-                            formErrors.name ? 'border-red-500' : 'border-white/10'
+                            (formErrors as any).name ? 'border-red-500' : 'border-white/10'
                           } rounded-lg focus:outline-none focus:border-[#4CD787] text-foreground shadow-inner transition-colors duration-300`}
                           placeholder="Enter your full name"
                           required
                         />
-                        {formErrors.name && (
+                        {(formErrors as any).name && (
                           <motion.p
                             initial={{ opacity: 0, y: -10 }}
                             animate={{ opacity: 1, y: 0 }}
                             className="text-red-400 text-sm mt-1"
                           >
-                            {formErrors.name}
+                            {(formErrors as any).name}
                           </motion.p>
                         )}
                       </div>
@@ -472,18 +473,18 @@ export default function ContactPage() {
                           value={formState.email}
                           onChange={handleChange}
                           className={`w-full px-4 py-3 bg-white/5 border ${
-                            formErrors.email ? 'border-red-500' : 'border-white/10'
+                            (formErrors as any).email ? 'border-red-500' : 'border-white/10'
                           } rounded-lg focus:outline-none focus:border-[#4CD787] text-foreground shadow-inner transition-colors duration-300`}
                           placeholder="your@email.com"
                           required
                         />
-                        {formErrors.email && (
+                        {(formErrors as any).email && (
                           <motion.p
                             initial={{ opacity: 0, y: -10 }}
                             animate={{ opacity: 1, y: 0 }}
                             className="text-red-400 text-sm mt-1"
                           >
-                            {formErrors.email}
+                            {(formErrors as any).email}
                           </motion.p>
                         )}
                       </div>
@@ -504,7 +505,7 @@ export default function ContactPage() {
                         onChange={handleChange}
                         rows={6}
                         className={`w-full px-4 py-3 bg-white/5 border ${
-                          formErrors.message ? 'border-red-500' : 'border-white/10'
+                          (formErrors as any).message ? 'border-red-500' : 'border-white/10'
                         } rounded-lg focus:outline-none focus:border-[#4CD787] text-foreground shadow-inner transition-colors duration-300 resize-none`}
                         placeholder="Tell us about your project requirements, timeline, and budget..."
                         required
@@ -514,20 +515,20 @@ export default function ContactPage() {
                       <div className="mt-2 text-xs text-foreground/50 italic">
                         <span className="font-medium text-foreground/70">Example:</span>
                         <br />
-                        "Hi, I'm looking to build a custom e-commerce platform for my business.
+                        &quot;Hi, I&apos;m looking to build a custom e-commerce platform for my business.
                         <br />
                         I need features like inventory management, payment processing, and customer analytics.
                         <br />
-                        My timeline is 3-4 months and my budget is around $50,000."
+                        My timeline is 3-4 months and my budget is around $50,000.&quot;
                       </div>
                       
-                      {formErrors.message && (
+                      {(formErrors as any).message && (
                         <motion.p
                           initial={{ opacity: 0, y: -10 }}
                           animate={{ opacity: 1, y: 0 }}
                           className="text-red-400 text-sm mt-1"
                         >
-                          {formErrors.message}
+                          {(formErrors as any).message}
                         </motion.p>
                       )}
                     </div>

@@ -4,8 +4,8 @@ import { motion, useReducedMotion, useInView, AnimatePresence } from 'framer-mot
 import { Check, Star, Zap, Users, Shield, ArrowRight, Sparkles, Target, Crown } from 'lucide-react'
 import Link from 'next/link'
 import { useRef, useState, useEffect } from 'react'
-import BlurText from '@/components/BlurText'
-import TextPressure from '@/components/TextPressure'
+import BlurText from '@animations/BlurText'
+import TextPressure from '@animations/TextPressure'
 
 // Enhanced animation variants
 const fadeInUpVariants = {
@@ -403,7 +403,7 @@ function PricingCard({ plan, index, isYearly }: PricingCardProps) {
             style={{ color: plan.color }}
           >
             <ArrowRight className="w-3 h-3" />
-            What's Included
+            What&apos;s Included
           </h4>
           <motion.ul
             className="space-y-1.5 text-xs text-white/60"

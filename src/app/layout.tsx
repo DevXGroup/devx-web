@@ -2,8 +2,9 @@ import type React from 'react'
 import './globals.css'
 import type { Metadata } from 'next'
 import { IBM_Plex_Mono, IBM_Plex_Sans } from 'next/font/google'
-import ConditionalLayout from '@/components/ConditionalLayout'
-import { BrowserCompatibilityDetector } from '@/components/BrowserCompatibilityDetector'
+import ConditionalLayout from '@layout/ConditionalLayout'
+import { BrowserCompatibilityDetector } from '@layout/BrowserCompatibilityDetector'
+import ErrorBoundary from '@layout/ErrorBoundary'
 
 // Configure IBM Plex Mono with all weights
 const ibmPlexMono = IBM_Plex_Mono({
@@ -37,7 +38,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${ibmPlexMono.variable} ${ibmPlexSans.variable} dark`}>
       <body className="bg-black text-white font-sans">
         <BrowserCompatibilityDetector />
-        <ConditionalLayout>{children}</ConditionalLayout>
+        <ErrorBoundary>
+          <ConditionalLayout>{children}</ConditionalLayout>
+        </ErrorBoundary>
       </body>
     </html>
   )
