@@ -2,11 +2,10 @@
 module.exports = {
   darkMode: ["class"],
   content: [
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-    "./app/**/*.{ts,tsx}",
+    "./src/pages/**/*.{ts,tsx}",
+    "./src/components/**/*.{ts,tsx}",
+    "./src/app/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
-    "*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     container: {
@@ -61,6 +60,9 @@ module.exports = {
         },
         robinhood: "#ccff00",
         "theme-gold": "#FFD700",
+        "theme-green": "#4CD787",
+        "theme-purple": "#9d4edd",
+        "theme-blue": "#4834D4",
       },
       scale: {
         '120': '1.2',
