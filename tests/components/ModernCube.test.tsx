@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { renderWithProviders, setupIntersectionObserverMock } from '../test-utils'
-import ModernCube3D from '@/components/ModernCube'
+import ModernCube3D from '@3d/ModernCube'
 
 // Mock @react-three/fiber and @react-three/drei
 jest.mock('@react-three/fiber', () => ({
