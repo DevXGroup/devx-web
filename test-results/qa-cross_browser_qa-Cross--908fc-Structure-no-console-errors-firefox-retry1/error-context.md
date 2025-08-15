@@ -1,0 +1,171 @@
+# Page snapshot
+
+```yaml
+- navigation:
+  - link "DevX Logo":
+    - /url: /home
+    - img "DevX Logo"
+  - link "Home":
+    - /url: /home
+  - link "Services":
+    - /url: /services
+  - link "Portfolio":
+    - /url: /portfolio
+  - link "About":
+    - /url: /about
+  - link "Pricing":
+    - /url: /pricing
+  - link "Contact":
+    - /url: /contact
+  - link "Let's Talk":
+    - /url: https://calendly.com/a-sheikhizadeh/devx-group-llc-representative
+- main:
+  - heading "About Us" [level=1]
+  - heading "A b o u t U s" [level=1]
+  - paragraph: We are a senior engineering team trusted by growth‑stage companies for complex and time‑sensitive projects. We ship production‑ready software with clear milestones, ownership, and post‑launch support.
+  - link "Schedule a Strategy Call":
+    - /url: https://calendly.com/a-sheikhizadeh/devx-group-llc-representative
+  - link "See Our Work":
+    - /url: /portfolio
+  - img "DevX Team"
+  - img
+  - img
+  - img
+  - img
+  - img
+  - paragraph: "\"DevX Team delivered exceptional results on our complex IoT project. Their expertise and attention to detail made the difference.\""
+  - paragraph: Sarah Johnson, CTO at TechCorp
+  - heading "Our Impact" [level=2]
+  - paragraph: Numbers that reflect our commitment to excellence and the trust our clients place in us.
+  - text: 74+ 74+ Happy Clients 15+ 15+ Years Experience 148+ 148+ Projects Completed 23 23 Team Members
+  - paragraph: Totals verified internally.
+  - heading "How We Work" [level=2]
+  - paragraph: A simple, reliable process that keeps you in control and delivers outcomes on time.
+  - img
+  - heading "Discovery" [level=3]
+  - paragraph: We align on goals, constraints, and success metrics in a focused call.
+  - img
+  - heading "Solution Proposal" [level=3]
+  - paragraph: Clear milestones, scope, and ownership, with timeline and dependencies.
+  - img
+  - heading "Build & Reviews" [level=3]
+  - paragraph: Weekly demos, no surprises. We optimize for reliability and maintainability.
+  - img
+  - heading "Delivery & Support" [level=3]
+  - paragraph: Handover, documentation, and stabilization support after launch.
+  - heading "O u r S t o r y" [level=1]
+  - paragraph: "Founded with a simple mission: deliver exceptional software solutions that drive real business results."
+  - paragraph: We are not a typical development agency. We are a specialized senior team for complex and time-sensitive projects. Every member is hand-selected for their skills, proven track record, and ability to execute under pressure.
+  - heading "Our Three Core Principles:" [level=4]
+  - text: "1."
+  - heading "Vetted Experts Only" [level=5]
+  - paragraph: No junior developers, no learning on your dime. Our team consists solely of senior-level professionals with 5+ years of proven experience.
+  - text: "2."
+  - heading "Precision & Efficiency" [level=5]
+  - paragraph: We move fast without breaking things. Every line of code, every decision, every deliverable is executed with military precision.
+  - text: "3."
+  - heading "No Project Left Behind" [level=5]
+  - paragraph: When we take on your project, it gets completed. Period. We don't abandon missions, and we don't leave clients hanging.
+  - paragraph: Whether you need rapid MVP development, complex system integrations, or rescue operations for failing projects, we deploy the right specialists for your specific mission.
+  - img "DevX Group LLC Headquarters - San Diego, California"
+  - paragraph: Headquarters
+  - paragraph: San Diego, CA
+  - heading "Our Values" [level=2]
+  - paragraph: Our core values guide everything we do and define how we work with our clients and each other.
+  - img
+  - heading "Customer Obsession" [level=3]
+  - paragraph: Our customers are always first in everything we do. We provide support after delivery and build long-term relationships.
+  - img
+  - heading "Security & Compliance First" [level=3]
+  - paragraph: We implement everything with enterprise-grade security in mind, preventing XSS, phishing, SQL injection, cross-site scripting, CSRF attacks, and data breaches. OWASP compliance, secure coding practices, and U.S. standards guide every line of code.
+  - img
+  - heading "Vetted Professionals" [level=3]
+  - paragraph: Our team is a handpicked group of vetted software development experts, chosen for their skill and efficiency.
+  - img
+  - heading "Versatile and Adaptable" [level=3]
+  - paragraph: We embrace remote work to enable rapid execution and provide seamless, global services ensuring flexibility.
+  - img
+  - heading "Inventors & Simplifiers" [level=3]
+  - paragraph: We prioritize streamlined solutions that ensure rapid delivery while supporting long-term maintainability.
+  - img
+  - heading "Highest Standards" [level=3]
+  - paragraph: We leverage cutting-edge technology and adhere to the best practices to deliver exceptional customer satisfaction.
+  - heading "Delivery Ownership" [level=2]
+  - paragraph: Your project success is our responsibility. We stand behind our commitments.
+  - paragraph: Fixed scope with milestone reviews and progress transparency
+  - paragraph: NDA by default and U.S.-based contracting
+  - paragraph: Code ownership transfer with documentation at acceptance
+  - paragraph: Stabilization support for 30 days post-launch
+  - heading "Our Purpose" [level=2]
+  - paragraph: Driven by vision, guided by mission, committed to excellence.
+  - heading "Our Vision" [level=3]
+  - paragraph: To revolutionize software development by delivering innovative, efficient, and scalable solutions that empower businesses worldwide to thrive in a digital-first future.
+  - heading "Our Mission" [level=3]
+  - paragraph: To simplify the software development journey through a streamlined, results-first process, ensuring exceptional quality, adaptability, and long-term success for every client.
+  - heading "Our Team Structure" [level=2]
+  - paragraph: Meet our leadership team and discover how our 23-member organization delivers exceptional results.
+  - img "Max Sheikhizadeh"
+  - heading "Max Sheikhizadeh" [level=3]
+  - paragraph: CEO/CTO & Founder
+  - button "Short Bio":
+    - img
+    - text: Short Bio
+  - img "Milaad Sheikhizadeh"
+  - heading "Milaad Sheikhizadeh" [level=3]
+  - paragraph: General Manager
+  - button "Short Bio":
+    - img
+    - text: Short Bio
+  - img
+  - heading "Overseas" [level=4]
+  - heading "Logistic Manager" [level=4]
+  - img
+  - heading "Overseas" [level=4]
+  - heading "Projects Manager" [level=4]
+  - img
+  - heading "Project" [level=4]
+  - heading "Manager" [level=4]
+  - img
+  - heading "Designer" [level=4]
+  - heading "15+ Senior Developers" [level=4]
+  - paragraph: Specialized in Full-Stack, AI/ML, IoT, and Mobile Development
+  - text: 23 Total Team 2 Leadership 18 Specialists
+  - link "Discover why clients choose us":
+    - /url: "#our-values"
+  - heading "Ready to Start Your Project?" [level=2]
+  - paragraph: Let's discuss how we can help you achieve your goals with our expert software development services.
+  - link "Schedule a Strategy Call":
+    - /url: https://calendly.com/a-sheikhizadeh/devx-group-llc-representative
+  - link "See Our Work":
+    - /url: /portfolio
+- contentinfo:
+  - link "DevX Logo":
+    - /url: /
+    - img "DevX Logo"
+  - paragraph: Connect with us on social media to explore our portfolio and discover our latest projects and exciting announcements.
+  - link:
+    - /url: "#"
+    - img
+  - link:
+    - /url: "#"
+    - img
+  - link:
+    - /url: "#"
+    - img
+  - link:
+    - /url: "#"
+    - img
+  - heading "Contact Us" [level=3]
+  - paragraph: "Voice Message: 858-519-8343"
+  - paragraph: "email: devxgroupllc[at]gmail.com"
+  - paragraph: Free initial consultation
+  - paragraph: for a quick Q&A & alignment schedule your appointment
+  - heading "Achieve Today" [level=3]
+  - paragraph: Get in touch with us*
+  - textbox "Enter your email address here"
+  - paragraph: Quick message*
+  - textbox "Ask a quick question"
+  - button "Send message"
+  - paragraph: © 2025. All rights reserved.
+- alert
+```
