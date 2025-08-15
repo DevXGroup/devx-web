@@ -4,7 +4,7 @@ import { useRef, useState, useEffect } from 'react'
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import { Quote } from 'lucide-react'
-import EnhancedInfinityLoader from './EnhancedInfinityLoader'
+import EnhancedInfinityLoader from '@/components/3d/EnhancedInfinityLoader'
 
 const testimonials = [
   {

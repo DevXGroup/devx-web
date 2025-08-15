@@ -14,11 +14,34 @@ We are a hand-selected group of elite professionals chosen not just for technica
 
 Whether you're a startup turning vision into product or an established firm needing high-caliber problem solvers, we step in and get it done. Seamlessly. Relentlessly. Exceptionally.
 
-📍 Learn more: [www.devxgroup.com](https://www.devxgroup.com)
+📍 Learn more: [www.devxgroup.io](https://www.devxgroup.io)
 
 ---
 
 ## 🚀 Project Overview
+
+```
+devx-web/
+├── src/
+│   ├── app/                # Next.js App Router pages
+│   │   ├── home/, about/, services/, portfolio/, etc.
+│   │   ├── layout.tsx      # Global fonts, BrowserCompatibilityDetector, ConditionalLayout
+│   │   └── page.tsx        # Entry point when no path is provided
+│   ├── common/             # Shared layout pieces (Navbar, Footer)
+│   ├── components/         # Reusable/animated components (Hero, ModernCube, etc.)
+│   │   └── ui/             # Shadcn-style primitives (Button, Input, Toast, …)
+│   ├── hooks/              # Client-side hooks (backdrop filter support, smooth scroll, etc.)
+│   ├── lib/                # Utilities (cn function for class merging)
+│   ├── data/               # Static data (e.g., portfolioProjects.ts)
+│   └── styles/             # Global CSS (typography.css)
+├── tests/                  # Jest + Testing Library tests
+├── public/                 # Static assets (images, logos)
+├── hooks/, helper/         # Supporting hooks/scripts outside `src/`
+├── tailwind.config.js      # Tailwind theme extensions
+├── tsconfig.json           # TypeScript configuration with strict mode
+├── next.config.{mjs,cjs}   # Next.js build/runtime settings
+└── README.md               # Project overview and setup
+```
 
 This repository contains the frontend for the **DevX web experience**, including:
 
@@ -47,4 +70,68 @@ This repository contains the frontend for the **DevX web experience**, including
 git clone https://github.com/DevXGroup/devx-web.git
 cd devx-web
 pnpm install
-pnpm dev
+pnpm dev        # launches dev server on port 3002
+pnpm test       # run Jest tests
+pnpm lint       # run ESLint/Prettier
+```
+
+### Key Concepts & Patterns
+
+1. **Next.js App Router**
+
+   - Pages live in `src/app/**/page.tsx` with optional nested directories for routes like `/home`, `/services`, etc.
+   - `src/app/layout.tsx` sets up global fonts and wraps content in `ConditionalLayout`, which inserts the navigation and footer on all routes except `/`.
+
+2. **Component Organization**
+
+   - `src/common` holds shared layout components (Navbar, Footer).
+   - `src/components` contains feature-rich components (hero animations, parallax sections, 3D elements) and a `ui` subfolder of headless UI primitives derived from Shadcn.
+   - Many heavy or browser-specific components are loaded with `next/dynamic` and gated behind `ClientOnly` to avoid server/client mismatches.
+
+3. **Styling & Utilities**
+
+   - Tailwind CSS is the primary styling mechanism; custom colors, fonts, and animations are configured in `tailwind.config.js`.
+   - The `cn` utility (in `src/lib/utils.ts`) merges Tailwind class strings.
+   - Global typography rules reside in `src/styles/typography.css`.
+
+4. **Custom Hooks**
+
+   - `src/hooks` and root-level hooks provide reusable logic, e.g., detecting backdrop-filter support, responding to motion preferences, building a toast system, or gating rendering to the client.
+
+5. **Testing**
+
+   - Jest and Testing Library are configured via `jest.config.js` and `jest.setup.js`.
+   - Tests live under `tests/`, with helpers in `tests/test-utils.ts` that mock Next.js router, IntersectionObserver, etc.
+
+6. **Helper Scripts**
+
+   - The `helper` directory contains scripts for managing assets (e.g., downloading portfolio images) and a standalone `utils.ts` for non-app code.
+
+7. **Guidelines & Documentation**
+   - `CONTENT_GUIDELINES.md`: writing style (clear, 8th-grade reading level, no marketing fluff).
+   - `CRUSH.md`: commands and coding conventions (Tailwind usage, TypeScript strictness).
+   - `PORTFOLIO_CONSISTENCY_CHECK.md` and `SUGGESTED_CHANGES.md`: notes on content consistency and suggested UI improvements.
+
+### Next Steps for Deepening Understanding
+
+- **Explore the App Router**
+
+  - Start with `src/app/home/page.tsx` to see how major sections (Hero, Features, Process, DevelopmentTools) come together.
+  - Look at `ConditionalLayout` and `BrowserCompatibilityDetector` for global app behavior.
+
+- **Understand Components & Animations**
+
+  - Study `src/components/Hero.tsx` (Framer Motion, dynamic imports, text animations).
+  - Explore `src/components/services/` and `src/components/portfolio/` for feature-specific UI.
+  - Review 3D examples like `ModernCube.tsx` or `RotatingCube.tsx` using React Three Fiber.
+
+- **Learn Custom Hooks**
+
+  - `use-backdrop-filter-support.ts`, `use-reduced-motion.ts`, `use-safari-detection.ts`, etc., show how environment-specific logic is encapsulated.
+
+- **Check Testing Practices**
+
+  - `tests/components/ModernCube.test.tsx` and `ParallaxTestimonials.test.tsx` demonstrate component testing with mocked libraries and helpers.
+
+- **Follow Guidelines**
+  - Adhere to the style and content rules in `CRUSH.md` and `CONTENT_GUIDELINES.md` when adding code or copy.
