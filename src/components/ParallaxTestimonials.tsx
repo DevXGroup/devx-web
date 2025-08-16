@@ -34,6 +34,7 @@ export default function ParallaxTestimonials() {
   const containerRef = useRef(null)
   const infinityRef = useRef(null)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null)
   const [isMobile, setIsMobile] = useState(false)
   const [isClient, setIsClient] = useState(false)
 
@@ -91,7 +92,7 @@ export default function ParallaxTestimonials() {
         />
       </div>
 
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 py-28">
         {/* Infinity Animation */}
         <motion.div
           ref={infinityRef}
@@ -99,7 +100,7 @@ export default function ParallaxTestimonials() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 1, ease: 'easeOut' }}
-          className="flex justify-center mb-12 -mt-8 sm:-mt-12 md:-mt-16 relative z-50"
+          className="flex justify-center sm:-mt-12 md:-mt-16 relative z-50"
           style={{
             scale: infinityScale,
             opacity: infinityOpacity,
@@ -113,9 +114,9 @@ export default function ParallaxTestimonials() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: false, amount: 0.2 }}
           transition={{ duration: 0.8 }}
-          className="text-center max-w-3xl mx-auto mb-16"
+          className="text-center max-w-3xl mx-auto mb-16 mt-28"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#FFD700]">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-purple-400">
             What Our Clients Say
           </h2>
           <p className="text-lg text-foreground/80 font-light">
@@ -140,6 +141,8 @@ export default function ParallaxTestimonials() {
               allHovered={hoveredIndex !== null}
               isMobile={isMobile}
               isClient={isClient}
+              isExpanded={expandedIndex === index}
+              onExpand={() => setExpandedIndex(expandedIndex === index ? null : index)}
             />
           ))}
         </div>
@@ -158,6 +161,8 @@ interface TestimonialCardProps {
   allHovered: boolean
   isMobile: boolean
   isClient: boolean
+  isExpanded: boolean
+  onExpand: () => void
 }
 
 function TestimonialCard({
@@ -170,8 +175,12 @@ function TestimonialCard({
   allHovered,
   isMobile,
   isClient,
+  isExpanded,
+  onExpand,
 }: TestimonialCardProps) {
   const cardRef = useRef(null)
+  const TRUNCATE_LENGTH = 250
+  const isTruncated = testimonial.quote.length > TRUNCATE_LENGTH
 
   // Always call useScroll to maintain hooks order
   const { scrollYProgress } = useScroll({
@@ -207,7 +216,7 @@ function TestimonialCard({
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: false, amount: 0.1 }}
-      className="bg-black/50 backdrop-blur-sm p-6 md:p-8 rounded-xl border border-white/10 flex flex-col h-full min-h-[400px] relative group shadow-lg overflow-hidden"
+      className="bg-white/10 backdrop-blur-lg p-6 md:p-8 rounded-xl border border-white/10 flex flex-col h-full min-h-[420px] relative group shadow-lg overflow-hidden"
       onMouseEnter={isMobile ? undefined : onHover}
       onMouseLeave={isMobile ? undefined : onLeave}
       animate={isMobile ? {} : getPositionStyles()}
@@ -220,23 +229,23 @@ function TestimonialCard({
       }}
     >
       {/* Quote icon - reduced opacity */}
-      <Quote className="w-10 h-10 text-[#4CD787]/20 absolute top-6 right-6" />
-
-      {/* Company logo */}
-      <div className="mb-6 h-8 relative z-10">
-        <Image
-          src={testimonial.logo || '/placeholder.svg'}
-          alt="Company logo"
-          width={120}
-          height={40}
-          className="object-contain h-full"
-        />
-      </div>
+      <Quote className="w-10 h-10 text-purple-400/40 absolute top-6 right-6" />
 
       {/* Quote */}
-      <p className="text-white/90 italic mb-8 flex-grow relative z-10 text-base leading-relaxed break-words hyphens-auto overflow-wrap-break-word">
-        &ldquo;{testimonial.quote}&rdquo;
-      </p>
+      <div className="flex-grow relative z-10 mb-8 pt-12">
+        <p className="text-white/90 italic text-base leading-relaxed break-words hyphens-auto overflow-wrap-break-word">
+          &ldquo;
+          {isExpanded || !isTruncated
+            ? testimonial.quote
+            : `${testimonial.quote.substring(0, TRUNCATE_LENGTH)}...`}
+          &rdquo;
+        </p>
+        {isTruncated && (
+          <button onClick={onExpand} className="text-purple-300 hover:underline mt-4 font-semibold">
+            {isExpanded ? 'Show less' : 'Read more'}
+          </button>
+        )}
+      </div>
 
       {/* Author */}
       <div className="flex items-center mt-auto relative z-10">
@@ -247,10 +256,10 @@ function TestimonialCard({
             style={{
               background:
                 index % 3 === 0
-                  ? 'linear-gradient(135deg, #4CD787, #66E6A4)'
+                  ? 'linear-gradient(135deg, #a855f7, #c084fc)'
                   : index % 3 === 1
-                  ? 'linear-gradient(135deg, #FFD700, #E6D055)'
-                  : 'linear-gradient(135deg, #9d4edd, #B766F0)',
+                  ? 'linear-gradient(135deg, #9333ea, #a855f7)'
+                  : 'linear-gradient(135deg, #7e22ce, #9333ea)',
             }}
           />
           {/* Initial letter */}
@@ -261,7 +270,7 @@ function TestimonialCard({
           <div
             className="absolute inset-0 rounded-full opacity-30 blur-sm"
             style={{
-              background: index % 3 === 0 ? '#4CD787' : index % 3 === 1 ? '#FFD700' : '#9d4edd',
+              background: index % 3 === 0 ? '#a855f7' : index % 3 === 1 ? '#9333ea' : '#7e22ce',
             }}
           />
         </div>
@@ -275,13 +284,13 @@ function TestimonialCard({
       <motion.div
         className="absolute inset-0 rounded-xl z-0"
         style={{
-          background: `linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.4) 100%)`,
+          background: `linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)`,
           boxShadow: `inset 0 1px 1px rgba(255,255,255,0.1)`,
         }}
         animate={
           isHovered
             ? {
-                background: `linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.5) 100%)`,
+                background: `linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.1) 100%)`,
               }
             : {}
         }
@@ -291,7 +300,7 @@ function TestimonialCard({
       <motion.div
         className="absolute bottom-0 left-0 right-0 h-1 rounded-b-xl"
         style={{
-          background: index % 3 === 0 ? '#4CD787' : index % 3 === 1 ? '#FFD700' : '#9d4edd',
+          background: index % 3 === 0 ? '#a855f7' : index % 3 === 1 ? '#9333ea' : '#7e22ce',
         }}
         animate={isHovered ? { height: '2px' } : { height: '1px' }}
       />
@@ -307,10 +316,10 @@ function TestimonialCard({
             style={{
               boxShadow: `0 0 20px ${
                 index % 3 === 0
-                  ? 'rgba(76, 215, 135, 0.3)'
+                  ? 'rgba(168, 85, 247, 0.3)'
                   : index % 3 === 1
-                  ? 'rgba(207, 181, 59, 0.3)'
-                  : 'rgba(157, 78, 221, 0.3)'
+                  ? 'rgba(147, 51, 234, 0.3)'
+                  : 'rgba(126, 34, 206, 0.3)'
               }`,
             }}
           />
