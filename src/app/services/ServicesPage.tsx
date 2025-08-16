@@ -330,7 +330,7 @@ export default function ServicesPage() {
                   fontStyle: 'italic',
                   fontWeight: '300',
                   textShadow: '0 4px 8px rgba(207, 181, 59, 0.3), 0 2px 4px rgba(0, 0, 0, 0.5)',
-                  letterSpacing: '0.02em'
+                  letterSpacing: '0.02em',
                 }}
               >
                 <BlurText
