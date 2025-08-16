@@ -3,10 +3,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { Facebook, Instagram, Linkedin, Twitter } from 'lucide-react'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Button } from '@/components/ui/button'
 import Threads from '@animations/Threads'
+import FooterContactForm from '@/components/FooterContactForm'
 
 export default function Footer() {
   return (
@@ -18,11 +16,11 @@ export default function Footer() {
         </div>
       </div>
 
-      <footer className="bg-background text-foreground py-16 relative">
+      <footer className="bg-background text-foreground py-20 relative">
         {/* Background Pattern */}
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
 
-        <div className="container mx-auto px-4 relative">
+        <div className="container mx-auto px-4 relative z-20">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {/* Company Info */}
             <div className="flex flex-col">
@@ -79,32 +77,10 @@ export default function Footer() {
             </div>
 
             {/* Contact Form */}
-            <div>
-              <h3 className="text-base font-bold mb-4">Achieve Today</h3>
-              <form className="space-y-3">
-                <div>
-                  <p className="mb-1 text-sm">Get in touch with us*</p>
-                  <Input
-                    type="email"
-                    placeholder="Enter your email address here"
-                    className="bg-secondary border-secondary text-secondary-foreground placeholder:text-muted-foreground text-sm"
-                  />
-                </div>
-                <div>
-                  <p className="mb-1 text-sm">Quick message*</p>
-                  <Textarea
-                    placeholder="Ask a quick question"
-                    className="bg-secondary border-secondary text-secondary-foreground placeholder:text-muted-foreground min-h-[80px] text-sm"
-                  />
-                </div>
-                <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 text-sm">
-                  Send message
-                </Button>
-              </form>
-            </div>
+            <FooterContactForm />
           </div>
 
-          <div className="mt-8 border-t border-border py-4 flex justify-center items-center">
+          <div className="mt-10 -mb-16 border-t border-border pt-4 flex justify-center items-center">
             <p className="text-xs text-muted-foreground">© 2025. All rights reserved.</p>
           </div>
         </div>

@@ -1,0 +1,128 @@
+'use client'
+
+import { useState } from 'react'
+import { motion } from 'framer-motion'
+import { CheckCircle } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Button } from '@/components/ui/button'
+
+export default function FooterContactForm() {
+  const [formState, setFormState] = useState({
+    email: '',
+    message: '',
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [formErrors, setFormErrors] = useState<{ email?: string; message?: string }>({})
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setFormState((prev) => ({ ...prev, [name]: value }))
+    if (formErrors[name as keyof typeof formErrors]) {
+      setFormErrors((prev) => ({ ...prev, [name]: undefined }))
+    }
+  }
+
+  const validateForm = () => {
+    const errors: { email?: string; message?: string } = {}
+    if (!formState.email.trim()) {
+      errors.email = 'Email is required'
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formState.email)) {
+      errors.email = 'Invalid email format'
+    }
+    if (!formState.message.trim()) {
+      errors.message = 'Message is required'
+    }
+    return errors
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    const errors = validateForm()
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors)
+      return
+    }
+    setIsSubmitting(true)
+    setFormErrors({})
+    setTimeout(() => {
+      setIsSubmitting(false)
+      setIsSubmitted(true)
+      setTimeout(() => {
+        setFormState({ email: '', message: '' })
+        setIsSubmitted(false)
+      }, 3000)
+    }, 1500)
+  }
+
+  return (
+    <div>
+      <h3 className="text-base font-bold mb-4">Achieve Today</h3>
+      {isSubmitted ? (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-[#4CD787]/20 border border-[#4CD787]/30 rounded-lg p-6 text-center"
+        >
+          <CheckCircle className="w-12 h-12 text-[#4CD787] mx-auto mb-3" />
+          <h3 className="text-lg font-semibold text-white mb-1">Message Sent!</h3>
+          <p className="text-foreground/70 text-sm">We'll be in touch shortly.</p>
+        </motion.div>
+      ) : (
+        <form onSubmit={handleSubmit} className="space-y-3">
+          <div>
+            <p className="mb-1 text-sm">Get in touch with us*</p>
+            <Input
+              type="email"
+              name="email"
+              value={formState.email}
+              onChange={handleChange}
+              placeholder="Enter your email address here"
+              className={`bg-secondary border ${
+                formErrors.email ? 'border-red-500' : 'border-secondary'
+              } text-secondary-foreground placeholder:text-muted-foreground text-sm`}
+            />
+            {formErrors.email && (
+              <motion.p
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-red-400 text-xs mt-1"
+              >
+                {formErrors.email}
+              </motion.p>
+            )}
+          </div>
+          <div>
+            <p className="mb-1 text-sm">Quick message*</p>
+            <Textarea
+              name="message"
+              value={formState.message}
+              onChange={handleChange}
+              placeholder="Ask a quick question"
+              className={`bg-secondary border ${
+                formErrors.message ? 'border-red-500' : 'border-secondary'
+              } text-secondary-foreground placeholder:text-muted-foreground min-h-[80px] text-sm`}
+            />
+            {formErrors.message && (
+              <motion.p
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-red-400 text-xs mt-1"
+              >
+                {formErrors.message}
+              </motion.p>
+            )}
+          </div>
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full bg-primary text-primary-foreground hover:bg-primary/90 text-sm"
+          >
+            {isSubmitting ? 'Sending...' : 'Send message'}
+          </Button>
+        </form>
+      )}
+    </div>
+  )
+}
