@@ -7,9 +7,8 @@ import {
   Mail,
   MapPin,
   Linkedin,
-  Twitter,
   Instagram,
-  Facebook,
+  Youtube,
   ArrowRight,
   CheckCircle,
   Calendar,
@@ -20,6 +19,8 @@ import {
 import BlurText from '@/components/animations/BlurText'
 import TextPressure from '@/components/animations/TextPressure'
 import Lightning from '@/components/animations/Lightning'
+import Orb from '@/components/animations/Orb'
+import Confetti from '@/components/animations/Confetti'
 
 // Enhanced animation variants
 const fadeInUpVariants = {
@@ -79,6 +80,10 @@ export default function ContactPage() {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [calendarLoaded, setCalendarLoaded] = useState(false)
   const [formErrors, setFormErrors] = useState({})
+  const [isTyping, setIsTyping] = useState(false)
+  const [typingIntensity, setTypingIntensity] = useState(0)
+  const [showConfetti, setShowConfetti] = useState(false)
+  const [confettiOrigin, setConfettiOrigin] = useState({ x: 0, y: 0 })
   const shouldReduceMotion = useReducedMotion()
   const formRef = useRef(null)
   const isFormInView = useInView(formRef, { once: true })
@@ -155,6 +160,17 @@ export default function ContactPage() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormState((prev) => ({ ...prev, [name]: value }))
+    
+    // Typing detection for animation
+    setIsTyping(true)
+    setTypingIntensity(Math.min(value.length / 50, 1)) // Intensity based on text length
+    
+    // Clear typing state after user stops typing
+    setTimeout(() => {
+      setIsTyping(false)
+      setTypingIntensity(0)
+    }, 1500)
+    
     // Clear errors when user starts typing
     if ((formErrors as any)[name]) {
       setFormErrors((prev) => ({ ...prev, [name]: null }))
@@ -180,6 +196,17 @@ export default function ContactPage() {
       return
     }
 
+    // Capture button position for confetti
+    const button = e.target as HTMLFormElement
+    const submitButton = button.querySelector('button[type="submit"]') as HTMLButtonElement
+    if (submitButton) {
+      const rect = submitButton.getBoundingClientRect()
+      setConfettiOrigin({
+        x: rect.left + rect.width / 2,
+        y: rect.top + rect.height / 2 - 30 // Slightly above button
+      })
+    }
+
     setIsSubmitting(true)
     setFormErrors({})
 
@@ -187,6 +214,7 @@ export default function ContactPage() {
     setTimeout(() => {
       setIsSubmitting(false)
       setIsSubmitted(true)
+      setShowConfetti(true) // Trigger confetti animation
 
       // Reset form after showing success message
       setTimeout(() => {
@@ -198,6 +226,15 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-background pt-24">
+      {/* Confetti Animation */}
+      <Confetti 
+        isActive={showConfetti} 
+        onComplete={() => setShowConfetti(false)}
+        duration={3000}
+        particleCount={60}
+        originX={confettiOrigin.x}
+        originY={confettiOrigin.y}
+      />
       {/* Hero Section with Lightning Background */}
       <section className="relative pt-2 pb-8 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-[#0a0a1a] to-black" />
@@ -318,7 +355,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-foreground text-lg">Phone</h3>
-                    <p className="text-foreground/70">+1 (442) 544-0591</p>
+                    <p className="text-foreground/70">+1 (442)544-0591</p>
                     <p className="text-foreground/50 text-sm mt-1">Mon-Fri from 8am to 5pm PST</p>
                   </div>
                 </div>
@@ -329,7 +366,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-foreground text-lg">Email</h3>
-                    <p className="text-foreground/70">devxgroupllc@gmail.com</p>
+                    <p className="text-foreground/70">support@devxgroup.io</p>
                     <p className="text-foreground/50 text-sm mt-1">
                       We&apos;ll respond as quickly as possible
                     </p>
@@ -373,13 +410,13 @@ export default function ContactPage() {
                       href="#"
                       className="w-10 h-10 rounded-full bg-white/5 hover:bg-[#4CD787]/20 flex items-center justify-center transition-colors duration-300"
                     >
-                      <Linkedin className="w-5 h-5 text-[#4CD787]" />
+                      <Youtube className="w-5 h-5 text-[#4CD787]" />
                     </a>
                     <a
                       href="#"
                       className="w-10 h-10 rounded-full bg-white/5 hover:bg-[#4CD787]/20 flex items-center justify-center transition-colors duration-300"
                     >
-                      <Twitter className="w-5 h-5 text-[#4CD787]" />
+                      <Linkedin className="w-5 h-5 text-[#4CD787]" />
                     </a>
                     <a
                       href="#"
@@ -391,7 +428,9 @@ export default function ContactPage() {
                       href="#"
                       className="w-10 h-10 rounded-full bg-white/5 hover:bg-[#4CD787]/20 flex items-center justify-center transition-colors duration-300"
                     >
-                      <Facebook className="w-5 h-5 text-[#4CD787]" />
+                      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                      </svg>
                     </a>
                   </div>
                 </div>
@@ -520,6 +559,16 @@ export default function ContactPage() {
                         I need features like inventory management, payment processing, and customer analytics.
                         <br />
                         My timeline is 3-4 months and my budget is around $50,000.&quot;
+                      </div>
+                      
+                      {/* WebGL Orb Animation - positioned below example */}
+                      <div className="relative mt-4 h-32 w-full opacity-70" style={{ mixBlendMode: 'normal' }}>
+                        <Orb 
+                          hue={isTyping ? 35 : 130} // Brighter gold when typing (35°), Vibrant green when idle (130°)
+                          hoverIntensity={isTyping ? Math.min(typingIntensity * 1.5, 1.0) : 0.15} // Higher intensity
+                          rotateOnHover={true}
+                          forceHoverState={isTyping} // Force hover state when typing
+                        />
                       </div>
                       
                       {(formErrors as any).message && (
