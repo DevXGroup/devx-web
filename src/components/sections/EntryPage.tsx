@@ -708,10 +708,10 @@ export default function EntryPage() {
     if (animationComplete) {
       // Start collapse animation immediately
       setIsCollapsing(true)
-      // Navigate after collapse animation completes
+      // Navigate slightly before shutter finishes to ensure home page loads
       setTimeout(() => {
         router.push('/home')
-      }, 400)
+      }, 350) // Start navigation 50ms before shutter finishes
     }
   }, [animationComplete, router])
 
@@ -779,6 +779,7 @@ export default function EntryPage() {
         animate={{ height: isCollapsing ? '50vh' : 0 }}
         transition={{ duration: 0.4, ease: 'easeInOut' }}
       />
+
     </div>
   )
 }
