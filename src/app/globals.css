@@ -2,6 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Prevent navbar flash on home page - hide immediately */
+[data-page="home"] {
+  opacity: 0 !important;
+}
+
+[data-page="home"].loaded {
+  opacity: 1 !important;
+  transition: opacity 0.1s ease-in;
+}
+
+/* Hide navbar during home page transition */
+.navbar-hidden {
+  display: none !important;
+}
+
+/* Hide navbar on home page by default - overridden by JS when ready */
+body:has(main[data-page="home"]) nav,
+body:has(main[data-page="home"]) .navbar-container {
+  display: none !important;
+}
+
+body:has(main[data-page="home"].navbar-ready) nav,
+body:has(main[data-page="home"].navbar-ready) .navbar-container {
+  display: block !important;
+}
+
 /* Portfolio Page Animations */
 @keyframes float {
   0%, 100% {
