@@ -563,6 +563,54 @@ export default function ServicesPage() {
         </section>
       </AppleScrollSection>
 
+
+      {/* Case Studies with Horizontal Scroll */}
+      <AppleScrollSection delay={0.4}>
+        <section className="section-padding relative services-section case-studies-section mt-10">
+          {' '}
+          {/* Responsive top margin for better spacing */}
+          <div className="container mx-auto px-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{
+                opacity: 1,
+                y: 0,
+                transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
+              }}
+              viewport={{ once: true, amount: 0.2 }}
+              className="title-margin text-center"
+            >
+              <TrueFocus sentence="Case Studies" />
+              <motion.p
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{
+                  opacity: 1,
+                  y: 0,
+                  transition: { delay: 0.3, duration: 0.6 },
+                }}
+                viewport={{ once: true, amount: 0.2 }}
+                className="text-lg md:text-xl text-white/90 font-light mt-10 max-w-2xl mx-auto font-['IBM_Plex_Sans'] leading-relaxed"
+                style={{
+                  textShadow: '0 2px 6px rgba(0,0,0,0.8)',
+                  letterSpacing: '0.025em',
+                  fontWeight: '400',
+                }}
+              >
+                Proven results backed by analytics data from 6 months to 1 year implementations
+              </motion.p>
+            </motion.div>
+          </div>
+          <HorizontalScroll />
+        </section>
+      </AppleScrollSection>
+
+      {/* Testimonials with Parallax - Consistent spacing */}
+      <AppleScrollSection delay={0.5} className="section-margin">
+        <ClientOnly>
+          <ParallaxTestimonials />
+        </ClientOnly>
+      </AppleScrollSection>
+
       {/* CTA Section with Apple-style reveal */}
       <AppleScrollSection delay={0.2}>
         <section className="section-padding relative services-section">
@@ -675,53 +723,6 @@ export default function ServicesPage() {
             </motion.div>
           </div>
         </section>
-      </AppleScrollSection>
-
-      {/* Case Studies with Horizontal Scroll */}
-      <AppleScrollSection delay={0.4}>
-        <section className="section-padding relative services-section case-studies-section mt-10">
-          {' '}
-          {/* Responsive top margin for better spacing */}
-          <div className="container mx-auto px-4">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{
-                opacity: 1,
-                y: 0,
-                transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
-              }}
-              viewport={{ once: true, amount: 0.2 }}
-              className="title-margin text-center"
-            >
-              <TrueFocus sentence="Case Studies" />
-              <motion.p
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{
-                  opacity: 1,
-                  y: 0,
-                  transition: { delay: 0.3, duration: 0.6 },
-                }}
-                viewport={{ once: true, amount: 0.2 }}
-                className="text-lg md:text-xl text-white/90 font-light mt-10 max-w-2xl mx-auto font-['IBM_Plex_Sans'] leading-relaxed"
-                style={{
-                  textShadow: '0 2px 6px rgba(0,0,0,0.8)',
-                  letterSpacing: '0.025em',
-                  fontWeight: '400',
-                }}
-              >
-                Proven results backed by analytics data from 6 months to 1 year implementations
-              </motion.p>
-            </motion.div>
-          </div>
-          <HorizontalScroll />
-        </section>
-      </AppleScrollSection>
-
-      {/* Testimonials with Parallax - Consistent spacing */}
-      <AppleScrollSection delay={0.5} className="section-margin">
-        <ClientOnly>
-          <ParallaxTestimonials />
-        </ClientOnly>
       </AppleScrollSection>
     </div>
   )
