@@ -5,6 +5,7 @@ import { IBM_Plex_Mono, IBM_Plex_Sans } from 'next/font/google'
 import ConditionalLayout from '@layout/ConditionalLayout'
 import { BrowserCompatibilityDetector } from '@layout/BrowserCompatibilityDetector'
 import ErrorBoundary from '@layout/ErrorBoundary'
+import GlobalTransition from '@/components/transitions/GlobalTransition'
 
 // Configure IBM Plex Mono with all weights
 const ibmPlexMono = IBM_Plex_Mono({
@@ -40,6 +41,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <BrowserCompatibilityDetector />
         <ErrorBoundary>
           <ConditionalLayout>{children}</ConditionalLayout>
+          <GlobalTransition />
         </ErrorBoundary>
       </body>
     </html>
