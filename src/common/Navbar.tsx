@@ -65,6 +65,70 @@ export default function Navbar() {
 
   const isActive = (path: string) => pathname === path
 
+  // Get the active page color based on current pathname
+  const getActiveColor = (path: string) => {
+    if (!isActive(path)) return null
+    
+    switch (path) {
+      case '/home':
+        return {
+          text: 'text-pink-500',
+          bg: 'bg-pink-400/10',
+          shadow: 'shadow-pink-500/30',
+          indicator: 'bg-gradient-to-b from-pink-500 to-transparent'
+        }
+      case '/services':
+        return {
+          text: 'text-purple-400',
+          bg: 'bg-purple-400/10',
+          shadow: 'shadow-purple-400/30',
+          indicator: 'bg-gradient-to-b from-purple-400 to-transparent'
+        }
+      case '/services/creative-animation':
+        return {
+          text: 'text-yellow-400',
+          bg: 'bg-yellow-400/10',
+          shadow: 'shadow-yellow-400/30',
+          indicator: 'bg-gradient-to-b from-yellow-400 to-transparent'
+        }
+      case '/portfolio':
+        return {
+          text: 'text-blue-400',
+          bg: 'bg-blue-400/10',
+          shadow: 'shadow-blue-400/30',
+          indicator: 'bg-gradient-to-b from-blue-400 to-transparent'
+        }
+      case '/about':
+        return {
+          text: 'text-green-400',
+          bg: 'bg-green-400/10',
+          shadow: 'shadow-green-400/30',
+          indicator: 'bg-gradient-to-b from-green-400 to-transparent'
+        }
+      case '/pricing':
+        return {
+          text: 'text-orange-400',
+          bg: 'bg-orange-400/10',
+          shadow: 'shadow-orange-400/30',
+          indicator: 'bg-gradient-to-b from-orange-400 to-transparent'
+        }
+      case '/contact':
+        return {
+          text: 'text-rose-400',
+          bg: 'bg-rose-400/10',
+          shadow: 'shadow-rose-400/30',
+          indicator: 'bg-gradient-to-b from-rose-400 to-transparent'
+        }
+      default:
+        return {
+          text: 'text-pink-500',
+          bg: 'bg-pink-400/10',
+          shadow: 'shadow-pink-500/30',
+          indicator: 'bg-gradient-to-b from-pink-500 to-transparent'
+        }
+    }
+  }
+
   // Determine background opacity based on backdrop-filter support
   const bgOpacity = supportsBackdropFilter ? 0.5 : 0.85
   const scrolledBgStyle = {
@@ -95,351 +159,373 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Desktop Menu - switch to mobile earlier to prevent cutoff */}
-          <div className="hidden lg:flex items-center space-x-8 font-['IBM_Plex_Mono'] font-large">
+          {/* Desktop Menu - centered and spaced properly */}
+          <div className="hidden lg:flex items-center justify-center flex-1 space-x-8 font-['IBM_Plex_Mono'] font-large">
             <Link
               href="/home"
-              className={`relative px-2 py-1 rounded transition-all duration-150 ease-out transform will-change-transform antialiased ${
-                isActive('/home') ? 'text-pink-500 font-bold' : 'text-white hover:text-white/80 hover:bg-white/10'
+              className={`relative px-3 py-1 rounded transition-all duration-150 ease-out transform will-change-transform antialiased ${
+                isActive('/home') ? getActiveColor('/home')?.text + ' font-bold' : 'text-white hover:text-white/80 hover:bg-white/10'
               }`}
               style={{ textShadow: '0 0 1px rgba(255, 255, 255, 0.3)' }}
             >
               {isActive('/home') && (
-                <div className="absolute inset-0 bg-pink-400/10 rounded -z-10" />
+                <>
+                  <div className={`absolute inset-0 ${getActiveColor('/home')?.bg} rounded -z-10`} />
+                  <div className={`absolute left-1/2 transform -translate-x-1/2 ${getActiveColor('/home')?.indicator} z-[-1]`} 
+                       style={{ 
+                         width: '100%', 
+                         height: '80px',
+                         top: '-80px'
+                       }} />
+                </>
               )}
               Home
             </Link>
             <Link
               href="/services"
               scroll={false}
-              className={`relative px-2 py-1 rounded transition-all duration-150 ease-out transform will-change-transform antialiased ${
-                isActive('/services') ? 'text-pink-500 font-bold' : 'text-white hover:text-white/80 hover:bg-white/10'
+              className={`relative px-3 py-1 rounded transition-all duration-150 ease-out transform will-change-transform antialiased ${
+                isActive('/services') ? getActiveColor('/services')?.text + ' font-bold' : 'text-white hover:text-white/80 hover:bg-white/10'
               }`}
               style={{ textShadow: '0 0 1px rgba(255, 255, 255, 0.3)' }}
             >
               {isActive('/services') && (
-                <div className="absolute inset-0 bg-pink-400/10 rounded -z-10" />
+                <>
+                  <div className={`absolute inset-0 ${getActiveColor('/services')?.bg} rounded -z-10`} />
+                  <div className={`absolute left-1/2 transform -translate-x-1/2 ${getActiveColor('/services')?.indicator} z-[-1]`} 
+                       style={{ 
+                         width: '100%', 
+                         height: '80px',
+                         top: '-80px'
+                       }} />
+                </>
               )}
               Services
             </Link>
             <Link
               href="/portfolio"
-              className={`relative px-2 py-1 rounded transition-all duration-150 ease-out transform will-change-transform antialiased ${
+              className={`relative px-3 py-1 rounded transition-all duration-150 ease-out transform will-change-transform antialiased ${
                 isActive('/portfolio')
-                  ? 'text-pink-500 font-bold'
+                  ? getActiveColor('/portfolio')?.text + ' font-bold'
                   : 'text-white hover:text-white/80 hover:bg-white/10'
               }`}
               style={{ textShadow: '0 0 1px rgba(255, 255, 255, 0.3)' }}
             >
               {isActive('/portfolio') && (
-                <div className="absolute inset-0 bg-pink-400/10 rounded -z-10" />
+                <>
+                  <div className={`absolute inset-0 ${getActiveColor('/portfolio')?.bg} rounded -z-10`} />
+                  <div className={`absolute left-1/2 transform -translate-x-1/2 ${getActiveColor('/portfolio')?.indicator} z-[-1]`} 
+                       style={{ 
+                         width: '100%', 
+                         height: '80px',
+                         top: '-80px'
+                       }} />
+                </>
               )}
               Portfolio
             </Link>
             <Link
               href="/about"
-              className={`relative px-2 py-1 rounded transition-all duration-150 ease-out transform will-change-transform antialiased ${
-                isActive('/about') ? 'text-pink-500 font-bold' : 'text-white hover:text-white/80 hover:bg-white/10'
+              className={`relative px-3 py-1 rounded transition-all duration-150 ease-out transform will-change-transform antialiased ${
+                isActive('/about') ? getActiveColor('/about')?.text + ' font-bold' : 'text-white hover:text-white/80 hover:bg-white/10'
               }`}
               style={{ textShadow: '0 0 1px rgba(255, 255, 255, 0.3)' }}
             >
               {isActive('/about') && (
-                <div className="absolute inset-0 bg-pink-400/10 rounded -z-10" />
+                <>
+                  <div className={`absolute inset-0 ${getActiveColor('/about')?.bg} rounded -z-10`} />
+                  <div className={`absolute left-1/2 transform -translate-x-1/2 ${getActiveColor('/about')?.indicator} z-[-1]`} 
+                       style={{ 
+                         width: '100%', 
+                         height: '80px',
+                         top: '-80px'
+                       }} />
+                </>
               )}
               About
             </Link>
             <Link
               href="/pricing"
-              className={`relative px-2 py-1 rounded transition-all duration-150 ease-out transform will-change-transform antialiased ${
-                isActive('/pricing') ? 'text-pink-500 font-bold' : 'text-white hover:text-white/80 hover:bg-white/10'
+              className={`relative px-3 py-1 rounded transition-all duration-150 ease-out transform will-change-transform antialiased ${
+                isActive('/pricing') ? getActiveColor('/pricing')?.text + ' font-bold' : 'text-white hover:text-white/80 hover:bg-white/10'
               }`}
               style={{ textShadow: '0 0 1px rgba(255, 255, 255, 0.3)' }}
             >
               {isActive('/pricing') && (
-                <div className="absolute inset-0 bg-pink-400/10 rounded -z-10" />
+                <>
+                  <div className={`absolute inset-0 ${getActiveColor('/pricing')?.bg} rounded -z-10`} />
+                  <div className={`absolute left-1/2 transform -translate-x-1/2 ${getActiveColor('/pricing')?.indicator} z-[-1]`} 
+                       style={{ 
+                         width: '100%', 
+                         height: '80px',
+                         top: '-80px'
+                       }} />
+                </>
               )}
               Pricing
             </Link>
             <Link
               href="/contact"
-              className={`relative px-2 py-1 rounded transition-all duration-150 ease-out transform will-change-transform antialiased ${
-                isActive('/contact') ? 'text-pink-500 font-bold' : 'text-white hover:text-white/80 hover:bg-white/10'
+              className={`relative px-3 py-1 rounded transition-all duration-150 ease-out transform will-change-transform antialiased ${
+                isActive('/contact') ? getActiveColor('/contact')?.text + ' font-bold' : 'text-white hover:text-white/80 hover:bg-white/10'
               }`}
               style={{ textShadow: '0 0 1px rgba(255, 255, 255, 0.3)' }}
             >
               {isActive('/contact') && (
-                <div className="absolute inset-0 bg-pink-400/10 rounded -z-10" />
+                <>
+                  <div className={`absolute inset-0 ${getActiveColor('/contact')?.bg} rounded -z-10`} />
+                  <div className={`absolute left-1/2 transform -translate-x-1/2 ${getActiveColor('/contact')?.indicator} z-[-1]`} 
+                       style={{ 
+                         width: '100%', 
+                         height: '80px',
+                         top: '-80px'
+                       }} />
+                </>
               )}
               Contact
             </Link>
-            <a
+            <motion.a
               href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-robinhood text-black hover:bg-robinhood-90 px-6 py-2 rounded-lg transition-all duration-150 ease-out transform hover:scale-105 will-change-transform font-medium border border-black/30 hover:border-black/60"
+              className="bg-robinhood text-black hover:bg-robinhood-90 px-6 py-2 rounded-lg transition-all duration-300 ease-out font-medium border border-black/30 hover:border-black/60 relative overflow-hidden"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              Let&apos;s Talk
-            </a>
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-theme-green to-theme-gold opacity-0"
+                whileHover={{ opacity: 0.2 }}
+                transition={{ duration: 0.3 }}
+              />
+              <span className="relative z-10">Let&apos;s Talk</span>
+            </motion.a>
           </div>
 
-          {/* Mobile Menu Button - 3D Floating Sphere */}
+          {/* Mobile Menu Button - Clean Hamburger Lines */}
           <div className="lg:hidden flex items-center z-[10000]">
             <motion.button
               ref={hamburgerButtonRef}
               onClick={() => setIsOpen(!isOpen)}
-              className="relative w-10 h-10 rounded-full overflow-hidden group"
+              className="relative p-3 group"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               aria-label="Toggle menu"
-              animate={{
-                x: [-4, 4, -4, 4, -4],
-                y: [-0.5, 0.5, -0.5, 0.5, -0.5],
-                rotateY: [0, 2, 0, -2, 0],
-                rotateX: [0, 0.5, 0, -0.5, 0],
-              }}
-              transition={{
-                duration: 8,
-                repeat: Infinity,
-                ease: 'easeInOut',
-                type: 'tween',
-              }}
-              style={{
-                filter:
-                  'drop-shadow(0 4px 8px rgba(0,0,0,0.3)) drop-shadow(0 2px 4px rgba(0,0,0,0.2))',
-              }}
             >
-              {/* Glass Base */}
-              <motion.div
-                className="absolute inset-0 rounded-full"
-                style={{
-                  background: `rgba(255, 255, 255, 0.1)`,
-                  backdropFilter: supportsBackdropFilter ? 'blur(10px)' : 'none',
-                  WebkitBackdropFilter: supportsBackdropFilter ? 'blur(10px)' : 'none',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  boxShadow: `
-                    inset 0 1px 0 rgba(255, 255, 255, 0.3),
-                    inset 0 -1px 0 rgba(0, 0, 0, 0.1),
-                    0 4px 8px rgba(0, 0, 0, 0.1),
-                    0 0 0 1px rgba(255, 255, 255, 0.05)
-                  `,
-                }}
-                animate={{
-                  background: isOpen ? `rgba(255, 255, 255, 0.15)` : `rgba(255, 255, 255, 0.1)`,
-                  borderColor: isOpen ? 'rgba(255, 255, 255, 0.3)' : 'rgba(255, 255, 255, 0.2)',
-                }}
-                transition={{ duration: 0.3 }}
-              />
-
-              {/* Floating particles around sphere */}
-              <motion.div
-                className="absolute inset-0 rounded-full"
-                animate={{
-                  rotate: 360,
-                }}
-                transition={{
-                  duration: 10,
-                  repeat: Infinity,
-                  ease: 'linear',
-                }}
-              >
-                {[...Array(4)].map((_, i) => (
-                  <motion.div
-                    key={i}
-                    className="absolute w-0.5 h-0.5 bg-white/50 rounded-full"
-                    style={{
-                      top: `${30 + Math.sin((i * Math.PI) / 2) * 25}%`,
-                      left: `${50 + Math.cos((i * Math.PI) / 2) * 30}%`,
-                    }}
-                    animate={{
-                      scale: [0.3, 0.8, 0.3],
-                      opacity: [0.2, 0.6, 0.2],
-                    }}
-                    transition={{
-                      duration: 2.5 + i * 0.5,
-                      repeat: Infinity,
-                      delay: i * 0.3,
-                    }}
-                  />
-                ))}
-              </motion.div>
-
-              {/* Glass glow effect */}
-              <motion.div
-                className="absolute inset-0 rounded-full"
-                style={{
-                  background: `radial-gradient(circle, 
-                    rgba(255, 255, 255, 0.1) 0%, 
-                    rgba(255, 255, 255, 0.05) 50%, 
-                    transparent 70%)`,
-                  filter: 'blur(1px)',
-                }}
-                animate={{
-                  scale: [1, 1.1, 1],
-                  opacity: [0.3, 0.6, 0.3],
-                }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: 'easeInOut',
-                }}
-              />
-
-              {/* Hamburger lines with 3D effect */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center space-y-1 z-10">
-                {/* Top line */}
+              {/* Hamburger lines */}
+              <div className="flex flex-col items-center justify-center space-y-1.5">
+                {/* Top line - shortest */}
                 <motion.div
-                  className="w-5 h-0.5 rounded-full"
+                  className="rounded-full"
                   style={{
-                    background: 'rgba(255, 255, 255, 0.9)',
-                    boxShadow: '0 1px 2px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3)',
+                    width: '16px',
+                    height: '2px',
+                    background: 'white',
                   }}
-                  animate={isOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
+                  animate={isOpen ? { rotate: 45, y: 8, width: '24px' } : { rotate: 0, y: 0, width: '16px' }}
+                  whileHover={{
+                    background: [
+                      'white',
+                      '#4CD787', // theme-green
+                      '#CFB53B', // theme-gold
+                      '#9d4edd', // theme-purple
+                      '#4834D4', // theme-blue
+                      'white'
+                    ],
+                    transition: { 
+                      duration: 1.5, 
+                      repeat: Infinity,
+                      ease: 'easeInOut'
+                    }
+                  }}
                   transition={{ duration: 0.3, ease: 'easeInOut' }}
                 />
 
-                {/* Middle line */}
+                {/* Middle line - medium */}
                 <motion.div
-                  className="w-5 h-0.5 rounded-full"
+                  className="rounded-full"
                   style={{
-                    background: 'rgba(255, 255, 255, 0.8)',
-                    boxShadow: '0 1px 2px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.2)',
+                    width: '20px',
+                    height: '2px',
+                    background: 'white',
                   }}
                   animate={
                     isOpen
                       ? { opacity: 0, scale: 0, rotate: 180 }
                       : { opacity: 1, scale: 1, rotate: 0 }
                   }
+                  whileHover={{
+                    background: [
+                      'white',
+                      '#CFB53B', // theme-gold
+                      '#9d4edd', // theme-purple
+                      '#4834D4', // theme-blue
+                      '#4CD787', // theme-green
+                      'white'
+                    ],
+                    transition: { 
+                      duration: 1.5, 
+                      repeat: Infinity,
+                      ease: 'easeInOut',
+                      delay: 0.3 // Stagger the animation
+                    }
+                  }}
                   transition={{ duration: 0.2, ease: 'easeInOut' }}
                 />
 
-                {/* Bottom line */}
+                {/* Bottom line - longest */}
                 <motion.div
-                  className="w-5 h-0.5 rounded-full"
+                  className="rounded-full"
                   style={{
-                    background: 'rgba(255, 255, 255, 0.9)',
-                    boxShadow: '0 1px 2px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3)',
+                    width: '24px',
+                    height: '2px',
+                    background: 'white',
                   }}
-                  animate={isOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
+                  animate={isOpen ? { rotate: -45, y: -8, width: '24px' } : { rotate: 0, y: 0, width: '24px' }}
+                  whileHover={{
+                    background: [
+                      'white',
+                      '#9d4edd', // theme-purple
+                      '#4834D4', // theme-blue
+                      '#4CD787', // theme-green
+                      '#CFB53B', // theme-gold
+                      'white'
+                    ],
+                    transition: { 
+                      duration: 1.5, 
+                      repeat: Infinity,
+                      ease: 'easeInOut',
+                      delay: 0.6 // Stagger the animation
+                    }
+                  }}
                   transition={{ duration: 0.3, ease: 'easeInOut' }}
                 />
               </div>
-
-              {/* Click ripple effect */}
-              <motion.div
-                className="absolute inset-0 rounded-full"
-                style={{
-                  background: 'radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 60%)',
-                }}
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 0, opacity: 0 }}
-                whileTap={{ scale: 1.8, opacity: [0, 1, 0] }}
-                transition={{ duration: 0.4 }}
-              />
             </motion.button>
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu - Full Height with Gradient Bottom */}
         {isOpen && (
           <motion.div
             ref={mobileMenuRef}
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="lg:hidden"
-            style={scrolledBgStyle}
+            exit={{ opacity: 0, y: -50 }}
+            className="lg:hidden fixed top-0 left-0 w-full h-screen z-[9998] flex flex-col"
+            style={{
+              background: `
+                radial-gradient(circle at 20% 80%, rgba(120, 80, 160, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 120, 200, 0.2) 0%, transparent 50%),
+                linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(20, 20, 30, 0.95) 70%, transparent 100%)
+              `,
+              backdropFilter: supportsBackdropFilter ? 'blur(20px)' : 'none',
+              WebkitBackdropFilter: supportsBackdropFilter ? 'blur(20px)' : 'none',
+            }}
           >
-            <div className="px-2 pt-2 pb-3 space-y-1 font-['IBM_Plex_Mono'] font-light text-center">
-              <Link
-                href="/home"
-                className={`relative block px-3 py-2 rounded transition-all duration-150 ease-out transform will-change-transform ${
-                  isActive('/home') ? 'text-pink-500 font-bold' : 'text-white hover:text-white/80 hover:bg-white/10'
-                }`}
-                onClick={() => setIsOpen(false)}
+            {/* Grainy overlay */}
+            <div 
+              className="absolute inset-0 opacity-20"
+              style={{
+                backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+                backgroundSize: '128px 128px',
+              }}
+            />
+            
+            {/* Top spacing to avoid navbar overlap */}
+            <div className="h-20 flex-shrink-0" />
+            
+            <div className="relative flex-1 flex flex-col justify-center px-6 space-y-6 font-['IBM_Plex_Mono']">
+              {[
+                { href: '/home', label: 'Home' },
+                { href: '/services', label: 'Services', scroll: false },
+                { href: '/portfolio', label: 'Portfolio' },
+                { href: '/about', label: 'About' },
+                { href: '/pricing', label: 'Pricing' },
+                { href: '/contact', label: 'Contact' },
+              ].map((item, index) => (
+                <motion.div
+                  key={item.href}
+                  initial={{ opacity: 0, x: -30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1, duration: 0.3 }}
+                >
+                  <Link
+                    href={item.href}
+                    scroll={item.scroll ?? true}
+                    className={`relative block text-2xl font-light tracking-wide transition-all duration-300 ease-out group ${
+                      isActive(item.href) 
+                        ? getActiveColor(item.href)?.text + ' font-medium' 
+                        : 'text-white hover:text-theme-green'
+                    }`}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {/* Hover background effect */}
+                    <motion.div
+                      className="absolute -inset-x-4 -inset-y-2 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      style={{
+                        background: 'linear-gradient(90deg, rgba(76, 215, 135, 0.1) 0%, rgba(76, 215, 135, 0.05) 100%)',
+                        border: '1px solid rgba(76, 215, 135, 0.2)',
+                      }}
+                    />
+                    
+                    {/* Active state background */}
+                    {isActive(item.href) && (
+                      <motion.div
+                        className="absolute -inset-x-4 -inset-y-2 rounded-xl"
+                        style={{
+                          background: `linear-gradient(90deg, ${getActiveColor(item.href)?.bg?.replace('bg-', 'rgba(')} 0%, transparent 100%)`,
+                          border: `1px solid ${getActiveColor(item.href)?.text?.replace('text-', 'rgba(')}`,
+                        }}
+                        layoutId="activeMenuItem"
+                      />
+                    )}
+                    
+                    {/* Text with hover animation */}
+                    <span className="relative z-10 block group-hover:translate-x-2 transition-transform duration-300">
+                      {item.label}
+                    </span>
+                    
+                    {/* Decorative line */}
+                    <motion.div
+                      className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-theme-green to-transparent"
+                      initial={{ width: 0 }}
+                      whileHover={{ width: '100%' }}
+                      transition={{ duration: 0.3 }}
+                    />
+                  </Link>
+                </motion.div>
+              ))}
+              
+              {/* CTA Button */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.8, duration: 0.3 }}
+                className="pt-8 mt-8 border-t border-white/20"
               >
-                {isActive('/home') && (
-                  <div className="absolute inset-0 bg-pink-400/10 rounded -z-10" />
-                )}
-                Home
-              </Link>
-              <Link
-                href="/services"
-                scroll={false}
-                className={`relative block px-3 py-2 rounded transition-all duration-150 ease-out transform will-change-transform ${
-                  isActive('/services')
-                    ? 'text-pink-500 font-bold'
-                    : 'text-white hover:text-white/80 hover:bg-white/10'
-                }`}
-                onClick={() => setIsOpen(false)}
-              >
-                {isActive('/services') && (
-                  <div className="absolute inset-0 bg-pink-400/10 rounded -z-10" />
-                )}
-                Services
-              </Link>
-              <Link
-                href="/portfolio"
-                className={`relative block px-3 py-2 rounded transition-all duration-150 ease-out transform will-change-transform ${
-                  isActive('/portfolio')
-                    ? 'text-pink-500 font-bold'
-                    : 'text-white hover:text-white/80 hover:bg-white/10'
-                }`}
-                onClick={() => setIsOpen(false)}
-              >
-                {isActive('/portfolio') && (
-                  <div className="absolute inset-0 bg-pink-400/10 rounded -z-10" />
-                )}
-                Portfolio
-              </Link>
-              <Link
-                href="/about"
-                className={`relative block px-3 py-2 rounded transition-all duration-150 ease-out transform will-change-transform ${
-                  isActive('/about') ? 'text-pink-500 font-bold' : 'text-white hover:text-white/80 hover:bg-white/10'
-                }`}
-                onClick={() => setIsOpen(false)}
-              >
-                {isActive('/about') && (
-                  <div className="absolute inset-0 bg-pink-400/10 rounded -z-10" />
-                )}
-                About
-              </Link>
-              <Link
-                href="/pricing"
-                className={`relative block px-3 py-2 rounded transition-all duration-150 ease-out transform will-change-transform ${
-                  isActive('/pricing')
-                    ? 'text-pink-500 font-bold'
-                    : 'text-white hover:text-white/80 hover:bg-white/10'
-                }`}
-                onClick={() => setIsOpen(false)}
-              >
-                {isActive('/pricing') && (
-                  <div className="absolute inset-0 bg-pink-400/10 rounded -z-10" />
-                )}
-                Pricing
-              </Link>
-              <Link
-                href="/contact"
-                className={`relative block px-3 py-2 rounded transition-all duration-150 ease-out transform will-change-transform ${
-                  isActive('/contact')
-                    ? 'text-pink-500 font-bold'
-                    : 'text-white hover:text-white/80 hover:bg-white/10'
-                }`}
-                onClick={() => setIsOpen(false)}
-              >
-                {isActive('/contact') && (
-                  <div className="absolute inset-0 bg-pink-400/10 rounded -z-10" />
-                )}
-                Contact
-              </Link>
-              <a
-                href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block w-30 px-3 py-2 bg-robinhood text-black hover:bg-robinhood-90 rounded-lg transition-all duration-150 ease-out transform will-change-transform font-medium border border-black/30 hover:border-black/60"
-                onClick={() => setIsOpen(false)}
-              >
-                Let&apos;s talk
-              </a>
+                <motion.a
+                  href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-center text-xl font-medium bg-robinhood text-black px-6 py-4 rounded-xl transition-all duration-300 ease-out border border-black/30 relative overflow-hidden"
+                  onClick={() => setIsOpen(false)}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-theme-green to-theme-gold opacity-0"
+                    whileHover={{ opacity: 0.3 }}
+                    transition={{ duration: 0.3 }}
+                  />
+                  <motion.div
+                    className="absolute inset-0 bg-robinhood-90"
+                    whileHover={{ opacity: 1 }}
+                    initial={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                  />
+                  <span className="relative z-10">Let&apos;s Talk</span>
+                </motion.a>
+              </motion.div>
             </div>
           </motion.div>
         )}
