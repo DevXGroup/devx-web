@@ -2,6 +2,7 @@
 
 import { useRef, useState, useMemo, useEffect } from "react"
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
+import * as THREE from "three"
 import { MeshStandardMaterial, Vector3, MathUtils, AdditiveBlending } from "three"
 import { Edges, OrbitControls, Text, Float, Environment, Sparkles, RoundedBox } from "@react-three/drei"
 import CubeFallback from "./CubeFallback"
@@ -78,8 +79,8 @@ function GlowingEdges({ color = "#4CD787", thickness = 0.02, glow = 0.5 }) {
   )
 }
 
-function ModernCube(props) {
-  const mesh = useRef()
+function ModernCube(props: any) {
+  const mesh = useRef<THREE.Mesh>(null)
   const [hovered, setHover] = useState(false)
   const [clicked, setClicked] = useState(false)
   const [activeFace, setActiveFace] = useState(null)
@@ -137,14 +138,14 @@ function ModernCube(props) {
   ]
 
   // Handle face click
-  const handleFaceClick = (index) => {
+  const handleFaceClick = (index: any) => {
     setActiveFace(index === activeFace ? null : index)
     setAutoRotate(index === activeFace)
     setClicked(true)
 
     // If a face is activated, rotate to face it
     if (index !== activeFace && mesh.current) {
-      const targetPosition = new Vector3(...faces[index].position).normalize().multiplyScalar(5)
+      const targetPosition = new Vector3(...(faces[index]?.position || [0, 0, 0])).normalize().multiplyScalar(5)
       // We'll use this position in the animation frame
     }
   }
@@ -154,7 +155,7 @@ function ModernCube(props) {
     if (!mesh.current) return
 
     // Wobble effect
-    mesh.current.position.y = Math.sin(state.clock.getElapsedTime()) * 0.05
+    if (mesh.current) mesh.current.position.y = Math.sin(state.clock.getElapsedTime()) * 0.05
 
     // Auto-rotation when not interacting
     if (autoRotate && !hovered) {
@@ -164,7 +165,7 @@ function ModernCube(props) {
 
     // If a face is active, smoothly rotate to face it
     if (activeFace !== null && !hovered) {
-      const targetPosition = new Vector3(...faces[activeFace].position).normalize().multiplyScalar(0.1)
+      const targetPosition = new Vector3(...(faces[activeFace]?.position || [0, 0, 0])).normalize().multiplyScalar(0.1)
       mesh.current.rotation.x = MathUtils.lerp(
         mesh.current.rotation.x,
         Math.atan2(targetPosition.y, targetPosition.z),
@@ -200,7 +201,7 @@ function ModernCube(props) {
           <Edges
             scale={1.01}
             threshold={15}
-            color={hovered ? "#ffffff" : activeFace !== null ? faces[activeFace].color : "#FFD700"}
+            color={hovered ? "#ffffff" : activeFace !== null ? faces[activeFace]?.color || "#FFD700" : "#FFD700"}
           />
 
           {/* Interactive faces */}
@@ -220,10 +221,10 @@ function ModernCube(props) {
       </Float>
 
       {/* Particle effects */}
-      <ParticleTrail count={isMobile ? 100 : 200} color={activeFace !== null ? faces[activeFace].color : "#4CD787"} />
+      <ParticleTrail count={isMobile ? 100 : 200} color={activeFace !== null ? faces[activeFace]?.color || "#4CD787" : "#4CD787"} />
 
       {/* Glowing edges effect */}
-      <GlowingEdges color={activeFace !== null ? faces[activeFace].color : "#4CD787"} glow={hovered ? 0.7 : 0.3} />
+      <GlowingEdges color={activeFace !== null ? faces[activeFace]?.color || "#4CD787" : "#4CD787"} glow={hovered ? 0.7 : 0.3} />
     </group>
   )
 }
@@ -232,7 +233,7 @@ export default function ModernCube3D() {
   const [mounted, setMounted] = useState(false)
   const [isSafari, setIsSafari] = useState(false)
   const [webGLFailed, setWebGLFailed] = useState(false)
-  const canvasRef = useRef()
+  const canvasRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setMounted(true)

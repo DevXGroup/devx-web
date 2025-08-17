@@ -310,9 +310,8 @@ function RefinedBlobMaterial({ scrollY }: { scrollY: number }) {
       float glow = sin(uTime * 0.15) * 0.5 + 0.5;
       color += glow * 0.02 * baseColor; // Increased pulse glow
       
-      // Very smooth opacity transitions
-      float opacity = (0.02 + fresnel * 0.025 + scrollGlow * 0.003) * uOpacityFactor * (1.0 - uScrollFactor * 0.08);
-      opacity = mix(opacity, opacity * 1.08, edgeMask); // Increased edge opacity
+      // Make blob shade invisible - set opacity to 0
+      float opacity = 0.0;
       
       gl_FragColor = vec4(color, opacity);
     }
