@@ -159,7 +159,9 @@ export const ScrollVelocity: React.FC<ScrollVelocityProps> = ({
             x,
             fontFamily: "'Inter', 'Helvetica Neue', sans-serif",
             fontWeight: 700,
-            ...scrollerStyle,
+            ...(scrollerStyle && Object.fromEntries(
+              Object.entries(scrollerStyle).filter(([, value]) => value !== undefined)
+            )),
           }}
         >
           {spans}
@@ -173,17 +175,17 @@ export const ScrollVelocity: React.FC<ScrollVelocityProps> = ({
       {texts.map((text: string, index: number) => (
         <VelocityText
           key={index}
-          className={className}
           baseVelocity={index % 2 !== 0 ? -velocity : velocity}
-          scrollContainerRef={scrollContainerRef}
           damping={damping}
           stiffness={stiffness}
           numCopies={numCopies}
           velocityMapping={velocityMapping}
-          parallaxClassName={parallaxClassName}
-          scrollerClassName={scrollerClassName}
-          parallaxStyle={parallaxStyle}
-          scrollerStyle={scrollerStyle}
+          {...(className && { className })}
+          {...(scrollContainerRef && { scrollContainerRef })}
+          {...(parallaxClassName && { parallaxClassName })}
+          {...(scrollerClassName && { scrollerClassName })}
+          {...(parallaxStyle && { parallaxStyle })}
+          {...(scrollerStyle && { scrollerStyle })}
         >
           {text}&nbsp;
         </VelocityText>

@@ -73,7 +73,7 @@ const services = [
 ]
 
 export default function ServiceShowcase3D() {
-  const [selectedService, setSelectedService] = useState(null)
+  const [selectedService, setSelectedService] = useState<number | null>(null)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -99,7 +99,6 @@ export default function ServiceShowcase3D() {
               style={{
                 boxShadow: selectedService === index ? `0 0 15px ${service.color}40` : "none",
                 borderColor: selectedService === index ? service.color : "transparent",
-                ringColor: service.color,
               }}
               onClick={() => setSelectedService(selectedService === index ? null : index)}
             >
@@ -131,7 +130,7 @@ export default function ServiceShowcase3D() {
           transition={{ duration: 0.3 }}
           className="mt-8 overflow-hidden"
         >
-          {selectedService !== null && (
+          {selectedService !== null && services[selectedService] && (
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
               <div className="flex items-center gap-4 mb-4">
                 <div
@@ -150,13 +149,13 @@ export default function ServiceShowcase3D() {
               <div className="mb-6">
                 <h4 className="text-white/90 font-medium mb-2">Key Features:</h4>
                 <div className="flex flex-wrap gap-2">
-                  {services[selectedService].features.map((feature) => (
+                  {services[selectedService]?.features.map((feature) => (
                     <span
                       key={feature}
                       className="px-3 py-1 text-sm rounded-full"
                       style={{
-                        backgroundColor: `${services[selectedService].color}20`,
-                        color: services[selectedService].color,
+                        backgroundColor: `${services[selectedService]?.color || '#4CD787'}20`,
+                        color: services[selectedService]?.color || '#4CD787',
                       }}
                     >
                       {feature}

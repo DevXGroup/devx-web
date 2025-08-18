@@ -3,6 +3,28 @@
 import { useEffect, useRef, useState, createElement } from "react";
 import { gsap } from "gsap";
 
+interface TextTypeProps {
+  text: string | string[];
+  as?: React.ElementType;
+  typingSpeed?: number;
+  initialDelay?: number;
+  pauseDuration?: number;
+  deletingSpeed?: number;
+  loop?: boolean;
+  className?: string;
+  showCursor?: boolean;
+  hideCursorWhileTyping?: boolean;
+  cursorCharacter?: string;
+  cursorClassName?: string;
+  cursorBlinkDuration?: number;
+  textColors?: string[];
+  variableSpeed?: { min: number; max: number } | boolean;
+  onSentenceComplete?: (text: string, index: number) => void;
+  startOnVisible?: boolean;
+  reverseMode?: boolean;
+  [key: string]: any;
+}
+
 const TextType = ({
   text,
   as: Component = "div",
@@ -23,7 +45,7 @@ const TextType = ({
   startOnVisible = false,
   reverseMode = false,
   ...props
-}) => {
+}: TextTypeProps) => {
   const [displayedText, setDisplayedText] = useState("");
   const [currentCharIndex, setCurrentCharIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -35,7 +57,7 @@ const TextType = ({
   const textArray = Array.isArray(text) ? text : [text];
 
   const getRandomSpeed = () => {
-    if (!variableSpeed) return typingSpeed;
+    if (!variableSpeed || typeof variableSpeed === 'boolean') return typingSpeed;
     const { min, max } = variableSpeed;
     return Math.random() * (max - min) + min;
   };
@@ -79,9 +101,9 @@ const TextType = ({
   useEffect(() => {
     if (!isVisible) return;
 
-    let timeout;
+    let timeout: NodeJS.Timeout;
 
-    const currentText = textArray[currentTextIndex];
+    const currentText = textArray[currentTextIndex] || '';
     const processedText = reverseMode
       ? currentText.split("").reverse().join("")
       : currentText;
@@ -95,7 +117,7 @@ const TextType = ({
           }
 
           if (onSentenceComplete) {
-            onSentenceComplete(textArray[currentTextIndex], currentTextIndex);
+            onSentenceComplete(textArray[currentTextIndex] || '', currentTextIndex);
           }
 
           setCurrentTextIndex((prev) => (prev + 1) % textArray.length);
@@ -152,7 +174,7 @@ const TextType = ({
 
   const shouldHideCursor =
     hideCursorWhileTyping &&
-    (currentCharIndex < textArray[currentTextIndex].length || isDeleting);
+    (currentCharIndex < (textArray[currentTextIndex]?.length || 0) || isDeleting);
 
   return createElement(
     Component,

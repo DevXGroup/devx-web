@@ -86,8 +86,11 @@ export default function ParticleAnimation({ color = "#4CD787", density = 50, spe
         ctx.clearRect(0, 0, canvas.width, canvas.height)
 
         for (let i = 0; i < particles.length; i++) {
-          particles[i].update()
-          particles[i].draw()
+          const particle = particles[i]
+          if (particle) {
+            particle.update()
+            particle.draw()
+          }
         }
       }
 

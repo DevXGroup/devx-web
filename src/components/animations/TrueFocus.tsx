@@ -49,6 +49,7 @@ const TrueFocus: React.FC<TrueFocusProps> = ({
 
       return () => clearInterval(interval)
     }
+    return undefined
   }, [manualMode, animationDuration, pauseBetweenAnimations, words.length])
 
   useEffect(() => {
@@ -86,7 +87,7 @@ const TrueFocus: React.FC<TrueFocusProps> = ({
         return (
           <span
             key={index}
-            ref={(el) => (wordRefs.current[index] = el)}
+            ref={(el) => { wordRefs.current[index] = el }}
             className="relative text-3xl md:text-4xl lg:text-5xl font-black cursor-pointer text-[#FFD700]" // Adjusted font size and color
             style={
               {
@@ -124,7 +125,7 @@ const TrueFocus: React.FC<TrueFocusProps> = ({
           {
             "--border-color": borderColor,
             "--glow-color": glowColor,
-          } as React.CSSProperties
+          } as any
         }
       >
         <span

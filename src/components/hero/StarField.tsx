@@ -106,8 +106,8 @@ function SimpleStarLayer({
       const alphaAttribute = mesh.current.geometry.getAttribute('alpha')
 
       for (let i = 0; i < count; i++) {
-        const phase = twinklePhases[i]
-        const speed = twinkleSpeeds[i]
+        const phase = twinklePhases[i] ?? 0
+        const speed = twinkleSpeeds[i] ?? 0
         const time = state.clock.getElapsedTime() * speed + phase
 
         // Enhanced twinkling with multiple wave patterns for more realistic effect
@@ -134,20 +134,10 @@ function SimpleStarLayer({
   return (
     <points ref={mesh}>
       <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          count={count}
-          array={positions}
-          itemSize={3}
-        />
-        <bufferAttribute attach="attributes-color" count={count} array={starColors} itemSize={3} />
-        <bufferAttribute
-          attach="attributes-alpha"
-          count={count}
-          array={new Float32Array(count).fill(0.7)}
-          itemSize={1}
-        />
-        <bufferAttribute attach="attributes-size" count={count} array={starSizes} itemSize={1} />
+        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+        <bufferAttribute attach="attributes-color" args={[starColors, 3]} />
+        <bufferAttribute attach="attributes-alpha" args={[new Float32Array(count).fill(0.7), 1]} />
+        <bufferAttribute attach="attributes-size" args={[starSizes, 1]} />
       </bufferGeometry>
       <shaderMaterial
         transparent
@@ -227,15 +217,18 @@ function BrightStarsLayer({
           (Math.random() - 0.5) * spread,
           (Math.random() - 0.5) * spread,
           (Math.random() - 0.5) * 25 - 12,
-        ],
+        ] as [number, number, number],
         brightness,
         size,
         twinkleSpeed: 0.2 + Math.random() * 0.8,
         twinklePhase: Math.random() * Math.PI * 2,
         spikeRotation: Math.random() * Math.PI * 2,
         spikeRotationSpeed: 0.1 + Math.random() * 0.3,
-        color:
-          Math.random() < 0.8 ? [1, 1, 1] : Math.random() < 0.5 ? [0.9, 0.95, 1] : [1, 0.95, 0.85], // White, blue-white, or yellow-white
+        color: (Math.random() < 0.8
+          ? [1, 1, 1]
+          : Math.random() < 0.5
+          ? [0.9, 0.95, 1]
+          : [1, 0.95, 0.85]) as [number, number, number], // White, blue-white, or yellow-white
       })
     }
     return data
@@ -321,18 +314,8 @@ function BrightStar({
       {/* Star core - circular using points */}
       <points ref={starRef}>
         <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            count={1}
-            array={new Float32Array([0, 0, 0])}
-            itemSize={3}
-          />
-          <bufferAttribute
-            attach="attributes-size"
-            count={1}
-            array={new Float32Array([size * 20])}
-            itemSize={1}
-          />
+          <bufferAttribute attach="attributes-position" args={[new Float32Array([0, 0, 0]), 3]} />
+          <bufferAttribute attach="attributes-size" args={[new Float32Array([size * 20]), 1]} />
         </bufferGeometry>
         <shaderMaterial
           transparent

@@ -64,8 +64,10 @@ const TextPressure: React.FC<TextPressureProps> = ({
     }
     const handleTouchMove = (e: TouchEvent) => {
       const t = e.touches[0]
-      cursorRef.current.x = t.clientX
-      cursorRef.current.y = t.clientY
+      if (t) {
+        cursorRef.current.x = t.clientX
+        cursorRef.current.y = t.clientY
+      }
     }
 
     window.addEventListener('mousemove', handleMouseMove)

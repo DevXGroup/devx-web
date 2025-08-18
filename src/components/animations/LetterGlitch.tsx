@@ -97,11 +97,11 @@ const LetterGlitch = ({
   const getRandomChar = () => {
     return lettersAndSymbols[
       Math.floor(Math.random() * lettersAndSymbols.length)
-    ];
+    ] || 'A';
   };
 
   const getRandomColor = () => {
-    return glitchColors[Math.floor(Math.random() * glitchColors.length)];
+    return glitchColors[Math.floor(Math.random() * glitchColors.length)] || '#00ff00';
   };
 
   const hexToRgb = (hex: string) => {
@@ -111,7 +111,7 @@ const LetterGlitch = ({
     });
 
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result
+    return result && result[1] && result[2] && result[3]
       ? {
           r: parseInt(result[1], 16),
           g: parseInt(result[2], 16),
@@ -238,16 +238,17 @@ const LetterGlitch = ({
         index = Math.floor(Math.random() * letters.current.length);
       }
       
-      if (!letters.current[index]) continue;
+      const letter = letters.current[index];
+      if (!letter) continue;
 
-      letters.current[index].char = getRandomChar();
-      letters.current[index].targetColor = getRandomColor();
+      letter.char = getRandomChar();
+      letter.targetColor = getRandomColor();
 
       if (!smooth) {
-        letters.current[index].color = letters.current[index].targetColor;
-        letters.current[index].colorProgress = 1;
+        letter.color = letter.targetColor;
+        letter.colorProgress = 1;
       } else {
-        letters.current[index].colorProgress = 0;
+        letter.colorProgress = 0;
       }
     }
   };

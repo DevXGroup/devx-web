@@ -57,7 +57,7 @@ export default function ParticleField({
       vy: (Math.random() - 0.5) * 0.5,
       size: Math.random() * 2 + 1,
       opacity: Math.random() * 0.5 + 0.2,
-      color: colors[Math.floor(Math.random() * colors.length)],
+      color: colors[Math.floor(Math.random() * colors.length)] || '#4CD787',
       life: 0,
       maxLife: Math.random() * 200 + 100
     })
@@ -104,6 +104,7 @@ export default function ParticleField({
       particlesRef.current.forEach((particle, i) => {
         for (let j = i + 1; j < particlesRef.current.length; j++) {
           const other = particlesRef.current[j]
+          if (!other) continue
           const dx = particle.x - other.x
           const dy = particle.y - other.y
           const distance = Math.sqrt(dx * dx + dy * dy)

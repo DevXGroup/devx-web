@@ -416,7 +416,11 @@ function random(base: number | [number, number]): number {
 
 function pickRandom<T>(arr: T | T[]): T {
   if (Array.isArray(arr)) {
-    return arr[Math.floor(Math.random() * arr.length)]
+    if (arr.length === 0) {
+      throw new Error('Cannot pick from empty array')
+    }
+    const randomIndex = Math.floor(Math.random() * arr.length)
+    return arr[randomIndex]!
   }
   return arr
 }
@@ -1248,7 +1252,10 @@ const Hyperspeed: FC<HyperspeedProps> = ({ effectOptions = {}, startOnScroll = f
 
     const options = { ...mergedOptions }
     if (typeof options.distortion === 'string') {
-      options.distortion = distortions[options.distortion]
+      const distortionValue = distortions[options.distortion]
+      if (distortionValue) {
+        options.distortion = distortionValue
+      }
     }
 
     try {

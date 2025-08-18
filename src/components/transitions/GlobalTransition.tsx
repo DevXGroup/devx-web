@@ -24,6 +24,7 @@ export default function GlobalTransition() {
     } else {
       setIsTransitioning(false)
     }
+    return undefined
   }, [pathname])
 
   if (reduceMotion) {
