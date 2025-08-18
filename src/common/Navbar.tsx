@@ -18,10 +18,11 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10)
+      setIsScrolled(window.scrollY > 0) // Changed from 10 to 0 for immediate activation
     }
 
-    // Initial check on mount
+    // Initial check on mount - set to true initially for contact page effect
+    setIsScrolled(true)
     handleScroll()
 
     window.addEventListener('scroll', handleScroll, { passive: true })
@@ -404,7 +405,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Mobile Menu - Full Height with Gradient Bottom */}
+        {/* Mobile Menu - Full Height with Grayish Grainy Background */}
         {isOpen && (
           <motion.div
             ref={mobileMenuRef}
@@ -414,20 +415,19 @@ export default function Navbar() {
             className="lg:hidden fixed top-0 left-0 w-full h-screen z-[9998] flex flex-col"
             style={{
               background: `
-                radial-gradient(circle at 20% 80%, rgba(120, 80, 160, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 120, 200, 0.2) 0%, transparent 50%),
-                linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(20, 20, 30, 0.95) 70%, transparent 100%)
+                linear-gradient(135deg, rgba(40, 40, 45, 0.95) 0%, rgba(30, 30, 35, 0.95) 50%, rgba(25, 25, 30, 0.95) 100%)
               `,
               backdropFilter: supportsBackdropFilter ? 'blur(20px)' : 'none',
               WebkitBackdropFilter: supportsBackdropFilter ? 'blur(20px)' : 'none',
             }}
           >
-            {/* Grainy overlay */}
+            {/* Enhanced grainy texture overlay */}
             <div 
-              className="absolute inset-0 opacity-20"
+              className="absolute inset-0 opacity-40"
               style={{
-                backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-                backgroundSize: '128px 128px',
+                backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' fill='%23ffffff'/%3E%3C/svg%3E")`,
+                backgroundSize: '200px 200px',
+                mixBlendMode: 'overlay',
               }}
             />
             
@@ -436,17 +436,27 @@ export default function Navbar() {
             
             <div className="relative flex-1 flex flex-col justify-center px-6 space-y-6 font-['IBM_Plex_Mono']">
               {[
-                { href: '/home', label: 'Home' },
-                { href: '/services', label: 'Services', scroll: false },
-                { href: '/portfolio', label: 'Portfolio' },
-                { href: '/about', label: 'About' },
-                { href: '/pricing', label: 'Pricing' },
-                { href: '/contact', label: 'Contact' },
+                { href: '/home', label: 'Home', group: 'main' },
+                { href: '/services', label: 'Services', scroll: false, group: 'main' },
+                { href: '/portfolio', label: 'Portfolio', group: 'main' },
+                { href: '/about', label: 'About', group: 'company' },
+                { href: '/pricing', label: 'Pricing', group: 'company' },
+                { href: '/contact', label: 'Contact', group: 'company' },
               ].map((item, index) => (
-                <motion.div
-                  key={item.href}
-                  initial={{ opacity: 0, x: -30 }}
-                  animate={{ opacity: 1, x: 0 }}
+                <div key={item.href}>
+                  {/* Add separator line before About (company section) */}
+                  {item.href === '/about' && (
+                    <div className="flex items-center my-4 -mx-2">
+                      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+                      <div className="px-3 text-xs text-white/60 font-light tracking-wider uppercase">
+                        Company
+                      </div>
+                      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+                    </div>
+                  )}
+                  <motion.div
+                    initial={{ opacity: 0, x: -30 }}
+                    animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.1, duration: 0.3 }}
                 >
                   <Link
@@ -459,14 +469,65 @@ export default function Navbar() {
                     }`}
                     onClick={() => setIsOpen(false)}
                   >
-                    {/* Hover background effect */}
+                    {/* Cosmic Supernova Hover Effect - Black and White */}
                     <motion.div
-                      className="absolute -inset-x-4 -inset-y-2 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      className="absolute -inset-x-6 -inset-y-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500 overflow-hidden"
                       style={{
-                        background: 'linear-gradient(90deg, rgba(76, 215, 135, 0.1) 0%, rgba(76, 215, 135, 0.05) 100%)',
-                        border: '1px solid rgba(76, 215, 135, 0.2)',
+                        background: 'radial-gradient(circle at center, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 30%, rgba(0, 0, 0, 0.2) 70%, rgba(0, 0, 0, 0.4) 100%)',
+                        border: '1px solid rgba(255, 255, 255, 0.3)',
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='supernovaFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='3.2' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='1 1 1 0 0 1 1 1 0 0 1 1 1 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23supernovaFilter)' fill='%23ffffff' opacity='0.2'/%3E%3C/svg%3E")`,
+                        backgroundSize: '120px 120px',
+                        backgroundBlendMode: 'overlay',
+                        boxShadow: 'inset 0 0 20px rgba(255, 255, 255, 0.1), 0 0 30px rgba(255, 255, 255, 0.05)',
                       }}
-                    />
+                    >
+                      {/* Central bright core */}
+                      <motion.div
+                        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-white rounded-full opacity-0 group-hover:opacity-80"
+                        animate={{
+                          scale: [1, 1.5, 1],
+                          opacity: [0.6, 1, 0.6],
+                        }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          ease: "easeInOut"
+                        }}
+                        style={{
+                          boxShadow: '0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.4), 0 0 30px rgba(255, 255, 255, 0.2)',
+                        }}
+                      />
+                      
+                      {/* Expanding energy rings */}
+                      <motion.div
+                        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border border-white/20 rounded-full opacity-0 group-hover:opacity-60"
+                        animate={{
+                          scale: [0, 3],
+                          opacity: [0.6, 0],
+                        }}
+                        transition={{
+                          duration: 1.5,
+                          repeat: Infinity,
+                          ease: "easeOut"
+                        }}
+                        style={{ width: '20px', height: '20px' }}
+                      />
+                      
+                      <motion.div
+                        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border border-white/10 rounded-full opacity-0 group-hover:opacity-40"
+                        animate={{
+                          scale: [0, 5],
+                          opacity: [0.4, 0],
+                        }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          ease: "easeOut",
+                          delay: 0.3
+                        }}
+                        style={{ width: '20px', height: '20px' }}
+                      />
+                    </motion.div>
                     
                     {/* Active state background */}
                     {isActive(item.href) && (
@@ -493,15 +554,25 @@ export default function Navbar() {
                       transition={{ duration: 0.3 }}
                     />
                   </Link>
-                </motion.div>
+                  </motion.div>
+                </div>
               ))}
               
+              {/* Separator before CTA */}
+              <div className="flex items-center my-6 -mx-2">
+                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+                <div className="px-3 text-xs text-white/60 font-light tracking-wider uppercase">
+                  Get Started
+                </div>
+                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+              </div>
+
               {/* CTA Button */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.8, duration: 0.3 }}
-                className="pt-8 mt-8 border-t border-white/20"
+                className="pt-4"
               >
                 <motion.a
                   href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative"

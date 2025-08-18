@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import { Component, type ErrorInfo, type ReactNode } from "react"
+import { Component, type ErrorInfo, type ReactNode } from 'react'
 
 interface Props {
   children: ReactNode
@@ -23,8 +23,8 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error("Uncaught error:", error, errorInfo)
-    
+    console.error('Uncaught error:', error, errorInfo)
+
     // In production, you might want to log this to an error reporting service
     if (process.env.NODE_ENV === 'production') {
       // Log to error reporting service here
@@ -38,7 +38,7 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   private resetError = () => {
-    this.setState({ hasError: false, eventId: undefined })
+    this.setState({ hasError: false, eventId: '' })
   }
 
   public render() {
@@ -67,9 +67,7 @@ class ErrorBoundary extends Component<Props, State> {
                 </button>
               </div>
               {this.state.eventId && (
-                <p className="text-xs text-gray-500 mt-4">
-                  Error ID: {this.state.eventId}
-                </p>
+                <p className="text-xs text-gray-500 mt-4">Error ID: {this.state.eventId}</p>
               )}
             </div>
           </div>

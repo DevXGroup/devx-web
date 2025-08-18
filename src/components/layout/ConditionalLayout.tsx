@@ -1,27 +1,32 @@
-"use client"
+'use client'
 
-import { usePathname } from "next/navigation"
-import { useState, useEffect } from "react"
-import Navbar from "@/common/Navbar"
-import Footer from "@/common/Footer"
-import ScrollToTop from "@layout/ScrollToTop"
+import { usePathname } from 'next/navigation'
+import { useState, useEffect } from 'react'
+import Navbar from '@/common/Navbar'
+import Footer from '@/common/Footer'
+import ScrollToTop from '@layout/ScrollToTop'
 
 export default function ConditionalLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const isEntryPage = pathname === "/"
-  const [navbarClass, setNavbarClass] = useState(pathname === "/home" ? "navbar-hidden" : "")
+  const isEntryPage = pathname === '/'
+  const [navbarClass, setNavbarClass] = useState(pathname === '/home' ? 'navbar-hidden' : '')
 
   useEffect(() => {
-    if (pathname === "/home") {
+    let timer: ReturnType<typeof setTimeout> | undefined
+
+    if (pathname === '/home') {
       // Hide navbar immediately with CSS
-      setNavbarClass("navbar-hidden")
+      setNavbarClass('navbar-hidden')
       // Show navbar after transition
-      const timer = setTimeout(() => {
-        setNavbarClass("")
+      timer = setTimeout(() => {
+        setNavbarClass('')
       }, 500)
-      return () => clearTimeout(timer)
     } else {
-      setNavbarClass("")
+      setNavbarClass('')
+    }
+
+    return () => {
+      if (timer) clearTimeout(timer)
     }
   }, [pathname])
 
