@@ -244,7 +244,9 @@ export default function DevelopmentTools() {
 
   // Handle AI tool clicks (for now just log, later can be expanded)
   const handleAIToolClick = useCallback((index: number) => {
-    console.log(`AI Tool clicked: ${aiTools[index].name}`)
+    const tool = aiTools[index]
+    if (!tool) return
+    console.log(`AI Tool clicked: ${tool.name}`)
     // Future: Could show AI tool info or integrate into main cycle
   }, [])
 
@@ -517,7 +519,7 @@ export default function DevelopmentTools() {
           {/* ============ Orbiting Icons ============ */}
           {/* z-[85] - Below center but above AI tools */}
           <StaticIconsOrbit
-            tools={tools}
+            toolList={tools}
             activeIndex={activeIndex}
             onIconClick={handleIconClick}
             transitioning={transitioning}
@@ -703,13 +705,13 @@ function TransitionPlanet({
  * Static Icons orbit - no rotation animation
  */
 function StaticIconsOrbit({
-  tools,
+  toolList,
   activeIndex,
   onIconClick,
   transitioning,
   transitionData,
 }: {
-  tools: typeof tools
+  toolList: typeof tools
   activeIndex: number
   onIconClick: (index: number) => void
   transitioning?: boolean
@@ -737,13 +739,13 @@ function StaticIconsOrbit({
 
   return (
     <div className="absolute z-[85] top-[50%] sm:top-[55%] md:top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2">
-      {tools.map((tool, i) => {
+      {toolList.map((tool, i) => {
         if (i === activeIndex) return null
 
         // Hide the orbiting circle if it's currently transitioning
         if (transitioning && transitionData?.tool.name === tool.name) return null
 
-        const angle = (i * 360) / tools.length
+        const angle = (i * 360) / toolList.length
         const radian = (angle * Math.PI) / 180
 
         // Calculate position using trigonometry for precise placement

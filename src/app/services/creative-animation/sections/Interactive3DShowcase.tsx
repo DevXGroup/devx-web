@@ -33,12 +33,13 @@ const Interactive3DShowcase = () => {
     const canvas = canvasRef.current
     const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
     if (!gl) return
+    const webglContext = gl as WebGLRenderingContext
 
     // Set canvas size
     const updateCanvasSize = () => {
       canvas.width = canvas.offsetWidth * window.devicePixelRatio
       canvas.height = canvas.offsetHeight * window.devicePixelRatio
-      gl.viewport(0, 0, canvas.width, canvas.height)
+      webglContext.viewport(0, 0, canvas.width, canvas.height)
     }
     updateCanvasSize()
     window.addEventListener('resize', updateCanvasSize)
@@ -136,62 +137,62 @@ const Interactive3DShowcase = () => {
     }
 
     // Create shaders
-    const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource)
-    const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource)
+    const vertexShader = createShader(webglContext, webglContext.VERTEX_SHADER, vertexShaderSource)
+    const fragmentShader = createShader(webglContext, webglContext.FRAGMENT_SHADER, fragmentShaderSource)
     
     if (!vertexShader || !fragmentShader) return
 
     // Create program
-    const program = gl.createProgram()
+    const program = webglContext.createProgram()
     if (!program) return
     
-    gl.attachShader(program, vertexShader)
-    gl.attachShader(program, fragmentShader)
-    gl.linkProgram(program)
+    webglContext.attachShader(program, vertexShader)
+    webglContext.attachShader(program, fragmentShader)
+    webglContext.linkProgram(program)
     
-    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-      console.error('Program linking error:', gl.getProgramInfoLog(program))
+    if (!webglContext.getProgramParameter(program, webglContext.LINK_STATUS)) {
+      console.error('Program linking error:', webglContext.getProgramInfoLog(program))
       return
     }
 
     // Get attribute and uniform locations
-    const positionLocation = gl.getAttribLocation(program, 'a_position')
-    const resolutionLocation = gl.getUniformLocation(program, 'u_resolution')
-    const mouseLocation = gl.getUniformLocation(program, 'u_mouse')
-    const timeLocation = gl.getUniformLocation(program, 'u_time')
+    const positionLocation = webglContext.getAttribLocation(program, 'a_position')
+    const resolutionLocation = webglContext.getUniformLocation(program, 'u_resolution')
+    const mouseLocation = webglContext.getUniformLocation(program, 'u_mouse')
+    const timeLocation = webglContext.getUniformLocation(program, 'u_time')
 
     // Create buffer
-    const positionBuffer = gl.createBuffer()
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer)
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+    const positionBuffer = webglContext.createBuffer()
+    webglContext.bindBuffer(webglContext.ARRAY_BUFFER, positionBuffer)
+    webglContext.bufferData(webglContext.ARRAY_BUFFER, new Float32Array([
       0, 0,
       canvas.width, 0,
       0, canvas.height,
       0, canvas.height,
       canvas.width, 0,
       canvas.width, canvas.height,
-    ]), gl.STATIC_DRAW)
+    ]), webglContext.STATIC_DRAW)
 
     let startTime = Date.now()
     let animationId: number
 
     const render = () => {
-      if (!gl || !program) return
+      if (!webglContext || !program) return
 
-      gl.clearColor(0, 0, 0, 1)
-      gl.clear(gl.COLOR_BUFFER_BIT)
+      webglContext.clearColor(0, 0, 0, 1)
+      webglContext.clear(webglContext.COLOR_BUFFER_BIT)
       
-      gl.useProgram(program)
+      webglContext.useProgram(program)
       
-      gl.enableVertexAttribArray(positionLocation)
-      gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer)
-      gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0)
+      webglContext.enableVertexAttribArray(positionLocation)
+      webglContext.bindBuffer(webglContext.ARRAY_BUFFER, positionBuffer)
+      webglContext.vertexAttribPointer(positionLocation, 2, webglContext.FLOAT, false, 0, 0)
       
-      gl.uniform2f(resolutionLocation, canvas.width, canvas.height)
-      gl.uniform2f(mouseLocation, mousePos.x, mousePos.y)
-      gl.uniform1f(timeLocation, Date.now() - startTime)
+      webglContext.uniform2f(resolutionLocation, canvas.width, canvas.height)
+      webglContext.uniform2f(mouseLocation, mousePos.x, mousePos.y)
+      webglContext.uniform1f(timeLocation, Date.now() - startTime)
       
-      gl.drawArrays(gl.TRIANGLES, 0, 6)
+      webglContext.drawArrays(webglContext.TRIANGLES, 0, 6)
       
       animationId = requestAnimationFrame(render)
     }

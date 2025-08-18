@@ -18,6 +18,60 @@ const ScrollTriggeredShowcase = () => {
   const y = useTransform(scrollYProgress, [0, 1], [100, -100])
   const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0])
   const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1, 1.2])
+  
+  // Additional transforms for features and floating elements
+  const progressWidth = useTransform(scrollYProgress, [0, 1], ['0%', '100%'])
+  const backgroundGradient = useTransform(
+    scrollYProgress,
+    [0, 0.5, 1],
+    [
+      'radial-gradient(circle at 20% 20%, rgba(157, 78, 221, 0.3) 0%, transparent 50%)',
+      'radial-gradient(circle at 50% 50%, rgba(139, 69, 19, 0.3) 0%, transparent 50%)',
+      'radial-gradient(circle at 80% 80%, rgba(76, 215, 135, 0.3) 0%, transparent 50%)'
+    ]
+  )
+  
+  // Feature card transforms
+  const featureY0 = useTransform(scrollYProgress, [0, 1], [0, 0])
+  const featureY1 = useTransform(scrollYProgress, [0, 1], [0, -20])
+  const featureY2 = useTransform(scrollYProgress, [0, 1], [0, -40])
+  
+  // Floating element transforms - create them outside of callback
+  const float0Y = useTransform(scrollYProgress, [0, 1], [0, -200])
+  const float0Rotate = useTransform(scrollYProgress, [0, 1], [0, 360])
+  const float0Scale = useTransform(scrollYProgress, [0, 0.5, 1], [0, 1, 0])
+  const float1Y = useTransform(scrollYProgress, [0, 1], [0, 200])
+  const float1Rotate = useTransform(scrollYProgress, [0, 1], [0, -360])
+  const float1Scale = useTransform(scrollYProgress, [0, 0.5, 1], [0, 1, 0])
+  const float2Y = useTransform(scrollYProgress, [0, 1], [0, -200])
+  const float2Rotate = useTransform(scrollYProgress, [0, 1], [0, 360])
+  const float2Scale = useTransform(scrollYProgress, [0, 0.5, 1], [0, 1, 0])
+  const float3Y = useTransform(scrollYProgress, [0, 1], [0, 200])
+  const float3Rotate = useTransform(scrollYProgress, [0, 1], [0, -360])
+  const float3Scale = useTransform(scrollYProgress, [0, 0.5, 1], [0, 1, 0])
+  const float4Y = useTransform(scrollYProgress, [0, 1], [0, -200])
+  const float4Rotate = useTransform(scrollYProgress, [0, 1], [0, 360])
+  const float4Scale = useTransform(scrollYProgress, [0, 0.5, 1], [0, 1, 0])
+  const float5Y = useTransform(scrollYProgress, [0, 1], [0, 200])
+  const float5Rotate = useTransform(scrollYProgress, [0, 1], [0, -360])
+  const float5Scale = useTransform(scrollYProgress, [0, 0.5, 1], [0, 1, 0])
+  const float6Y = useTransform(scrollYProgress, [0, 1], [0, -200])
+  const float6Rotate = useTransform(scrollYProgress, [0, 1], [0, 360])
+  const float6Scale = useTransform(scrollYProgress, [0, 0.5, 1], [0, 1, 0])
+  const float7Y = useTransform(scrollYProgress, [0, 1], [0, 200])
+  const float7Rotate = useTransform(scrollYProgress, [0, 1], [0, -360])
+  const float7Scale = useTransform(scrollYProgress, [0, 0.5, 1], [0, 1, 0])
+  
+  const floatingElements = [
+    { y: float0Y, rotate: float0Rotate, scale: float0Scale },
+    { y: float1Y, rotate: float1Rotate, scale: float1Scale },
+    { y: float2Y, rotate: float2Rotate, scale: float2Scale },
+    { y: float3Y, rotate: float3Rotate, scale: float3Scale },
+    { y: float4Y, rotate: float4Rotate, scale: float4Scale },
+    { y: float5Y, rotate: float5Rotate, scale: float5Scale },
+    { y: float6Y, rotate: float6Rotate, scale: float6Scale },
+    { y: float7Y, rotate: float7Rotate, scale: float7Scale }
+  ]
 
   // Particle system
   useEffect(() => {
@@ -57,7 +111,7 @@ const ScrollTriggeredShowcase = () => {
         this.maxLife = Math.random() * 60 + 60
         
         const colors = ['#4CD787', '#9d4edd', '#4834D4', '#FFD700', '#ff6b6b']
-        this.color = colors[Math.floor(Math.random() * colors.length)]
+        this.color = colors[Math.floor(Math.random() * colors.length)] || '#4CD787'
         this.opacity = 1
       }
 
@@ -209,7 +263,7 @@ const ScrollTriggeredShowcase = () => {
                 <motion.div
                   className="absolute top-0 left-0 h-full bg-gradient-to-r from-purple-400 to-pink-400 rounded-full"
                   style={{ 
-                    width: useTransform(scrollYProgress, [0, 1], ['0%', '100%'])
+                    width: progressWidth
                   }}
                 />
               </div>
@@ -240,14 +294,16 @@ const ScrollTriggeredShowcase = () => {
                   icon: '⏱️',
                   progress: scrollYProgress
                 }
-              ].map((feature, index) => (
+              ].map((feature, index) => {
+                const featureYTransforms = [featureY0, featureY1, featureY2];
+                return (
                 <motion.div
                   key={feature.title}
                   variants={itemVariants}
                   className="bg-white/5 backdrop-blur-lg rounded-xl p-6 border border-white/10 relative overflow-hidden"
                   whileHover={{ scale: 1.05, y: -10 }}
                   style={{
-                    y: useTransform(scrollYProgress, [0, 1], [0, index * -20])
+                    y: featureYTransforms[index] || featureY0
                   }}
                 >
                   <div className="text-4xl mb-4">{feature.icon}</div>
@@ -259,29 +315,34 @@ const ScrollTriggeredShowcase = () => {
                     <motion.div
                       className="bg-gradient-to-r from-purple-400 to-pink-400 h-2 rounded-full"
                       style={{
-                        width: useTransform(scrollYProgress, [0, 1], ['0%', '100%'])
+                        width: progressWidth
                       }}
                     />
                   </div>
                 </motion.div>
-              ))}
+                )
+              })}
             </motion.div>
 
             {/* Floating elements that react to scroll */}
             <div className="relative">
-              {[...Array(8)].map((_, i) => (
+              {[...Array(8)].map((_, i) => {
+                const element = floatingElements[i]
+                if (!element) return null
+                return (
                 <motion.div
                   key={i}
                   className="absolute w-8 h-8 bg-gradient-to-r from-purple-400/30 to-pink-400/30 rounded-full"
                   style={{
                     left: `${10 + (i * 10)}%`,
                     top: `${Math.sin(i) * 100}px`,
-                    y: useTransform(scrollYProgress, [0, 1], [0, (i % 2 === 0 ? -200 : 200)]),
-                    rotate: useTransform(scrollYProgress, [0, 1], [0, 360 * (i % 2 === 0 ? 1 : -1)]),
-                    scale: useTransform(scrollYProgress, [0, 0.5, 1], [0, 1, 0])
+                    y: element.y,
+                    rotate: element.rotate,
+                    scale: element.scale
                   }}
                 />
-              ))}
+                )
+              })}
             </div>
           </div>
         </motion.div>
@@ -291,15 +352,7 @@ const ScrollTriggeredShowcase = () => {
       <motion.div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: useTransform(
-            scrollYProgress,
-            [0, 0.5, 1],
-            [
-              'radial-gradient(circle at 20% 20%, rgba(157, 78, 221, 0.3) 0%, transparent 50%)',
-              'radial-gradient(circle at 50% 50%, rgba(139, 69, 19, 0.3) 0%, transparent 50%)',
-              'radial-gradient(circle at 80% 80%, rgba(255, 20, 147, 0.3) 0%, transparent 50%)'
-            ]
-          )
+          background: backgroundGradient
         }}
       />
     </section>

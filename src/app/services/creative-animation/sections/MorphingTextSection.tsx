@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useMemo } from 'react'
 import { motion, useAnimation, useInView } from 'framer-motion'
 
 const MorphingTextSection = () => {
@@ -8,16 +8,13 @@ const MorphingTextSection = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const isInView = useInView(sectionRef, { once: false, amount: 0.3 })
   const controls = useAnimation()
-  
+
   const [currentWordIndex, setCurrentWordIndex] = useState(0)
-  
-  const morphingWords = [
-    'TRANSFORM',
-    'INNOVATE', 
-    'CAPTIVATE',
-    'INSPIRE',
-    'CREATE'
-  ]
+
+  const morphingWords = useMemo(
+    () => ['TRANSFORM', 'INNOVATE', 'CAPTIVATE', 'INSPIRE', 'CREATE'],
+    []
+  )
 
   // Canvas text morphing effect
   useEffect(() => {
@@ -40,31 +37,33 @@ const MorphingTextSection = () => {
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
-      
+
       // Create gradient text effect
       const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0)
       gradient.addColorStop(0, '#ff6b6b')
       gradient.addColorStop(0.3, '#4ecdc4')
       gradient.addColorStop(0.6, '#45b7d1')
       gradient.addColorStop(1, '#96ceb4')
-      
+
       ctx.fillStyle = gradient
       ctx.font = 'bold 60px IBM Plex Mono'
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
-      
+
       const currentWord = morphingWords[currentWordIndex]
+      if (!currentWord) return
+
       const centerX = canvas.width / 2
       const centerY = canvas.height / 2
-      
+
       // Add wave distortion effect
       const waveOffset = Math.sin(time * 0.02) * 20
-      
+
       // Draw each letter with individual animation
       currentWord.split('').forEach((letter, index) => {
         const letterX = centerX + (index - currentWord.length / 2) * 45
         const letterY = centerY + Math.sin(time * 0.03 + index * 0.5) * waveOffset
-        
+
         ctx.save()
         ctx.translate(letterX, letterY)
         ctx.rotate(Math.sin(time * 0.02 + index * 0.3) * 0.1)
@@ -72,7 +71,7 @@ const MorphingTextSection = () => {
         ctx.fillText(letter, 0, 0)
         ctx.restore()
       })
-      
+
       time++
       animationId = requestAnimationFrame(animate)
     }
@@ -89,7 +88,7 @@ const MorphingTextSection = () => {
       clearInterval(wordInterval)
       window.removeEventListener('resize', updateCanvasSize)
     }
-  }, [isInView, currentWordIndex])
+  }, [isInView, currentWordIndex, morphingWords])
 
   // Trigger animations when in view
   useEffect(() => {
@@ -104,9 +103,9 @@ const MorphingTextSection = () => {
       opacity: 1,
       transition: {
         staggerChildren: 0.3,
-        delayChildren: 0.2
-      }
-    }
+        delayChildren: 0.2,
+      },
+    },
   }
 
   const itemVariants = {
@@ -116,14 +115,14 @@ const MorphingTextSection = () => {
       y: 0,
       transition: {
         duration: 0.8,
-        ease: [0.22, 1, 0.36, 1]
-      }
-    }
+        ease: [0.22, 1, 0.36, 1],
+      },
+    },
   }
 
   return (
-    <section 
-      ref={sectionRef} 
+    <section
+      ref={sectionRef}
       className="min-h-screen bg-gradient-to-br from-black via-purple-900/20 to-black relative overflow-hidden flex items-center justify-center"
     >
       {/* Animated background particles */}
@@ -167,10 +166,7 @@ const MorphingTextSection = () => {
           </motion.h2>
 
           {/* Canvas for morphing text */}
-          <motion.div
-            variants={itemVariants}
-            className="relative mb-12"
-          >
+          <motion.div variants={itemVariants} className="relative mb-12">
             <canvas
               ref={canvasRef}
               className="w-full max-w-4xl mx-auto"
@@ -179,34 +175,31 @@ const MorphingTextSection = () => {
           </motion.div>
 
           {/* Description */}
-          <motion.div
-            variants={itemVariants}
-            className="max-w-2xl mx-auto"
-          >
+          <motion.div variants={itemVariants} className="max-w-2xl mx-auto">
             <p className="text-white/70 text-lg leading-relaxed mb-8 font-light">
-              Experience the power of dynamic typography that responds to user interaction, 
-              creating memorable brand moments through liquid text transformations and 
-              real-time visual effects.
+              Experience the power of dynamic typography that responds to user interaction, creating
+              memorable brand moments through liquid text transformations and real-time visual
+              effects.
             </p>
-            
+
             {/* Feature highlights */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
               {[
                 {
                   title: 'Liquid Morphing',
                   description: 'Smooth transitions between different text states',
-                  icon: '🌊'
+                  icon: '🌊',
                 },
                 {
                   title: 'Interactive Response',
                   description: 'Text that reacts to mouse movement and scroll',
-                  icon: '⚡'
+                  icon: '⚡',
                 },
                 {
                   title: 'Brand Integration',
                   description: 'Custom animations that reflect your brand identity',
-                  icon: '🎨'
-                }
+                  icon: '🎨',
+                },
               ].map((feature, index) => (
                 <motion.div
                   key={feature.title}
