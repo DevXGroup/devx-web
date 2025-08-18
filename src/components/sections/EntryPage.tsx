@@ -2,8 +2,54 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { motion } from 'framer-motion'
+import { motion, MotionStyle } from 'framer-motion'
 import { useReducedMotion } from '@/hooks/use-reduced-motion'
+
+type RGB = { r: number; g: number; b: number }
+
+type Letter = {
+  char: string
+  color: string
+  targetColor: string
+  colorProgress: number
+}
+
+type Grid = { columns: number; rows: number }
+
+interface LetterGlitchProps {
+  glitchColors?: string[]
+  glitchSpeed?: number
+  centerVignette?: boolean
+  outerVignette?: boolean
+  smooth?: boolean
+}
+
+type RevealDirection = 'start' | 'end' | 'center'
+
+interface DecryptedTextProps
+  extends Omit<
+    React.HTMLAttributes<HTMLHeadingElement>,
+    | 'style'
+    | 'onAnimationStart'
+    | 'onAnimationComplete'
+    | 'onAnimationIteration'
+    | 'onDragStart'
+    | 'onDragEnd'
+  > {
+  text: string
+  speed?: number
+  maxIterations?: number
+  sequential?: boolean
+  revealDirection?: RevealDirection
+  useOriginalCharsOnly?: boolean
+  characters?: string
+  className?: string
+  parentClassName?: string
+  encryptedClassName?: string
+  animateOn?: 'view' | 'manual'
+  onComplete?: () => void
+  style?: MotionStyle
+}
 
 // Concentrated Letter Glitch Background Effect
 const LetterGlitch = ({
@@ -12,13 +58,13 @@ const LetterGlitch = ({
   centerVignette = true,
   outerVignette = false,
   smooth = true,
-}) => {
-  const canvasRef = useRef(null)
-  const animationRef = useRef(null)
-  const letters = useRef([])
-  const grid = useRef({ columns: 0, rows: 0 })
-  const context = useRef(null)
-  const lastGlitchTime = useRef(Date.now())
+}: LetterGlitchProps) => {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null)
+  const animationRef = useRef<number | null>(null)
+  const letters = useRef<Letter[]>([])
+  const grid = useRef<Grid>({ columns: 0, rows: 0 })
+  const context = useRef<CanvasRenderingContext2D | null>(null)
+  const lastGlitchTime = useRef<number>(Date.now())
 
   const fontSize = 15
   const charWidth = 10
@@ -85,33 +131,39 @@ const LetterGlitch = ({
     '9',
     '?',
     '/',
-  ]
+  ] as const
 
-  const getRandomChar = () => {
-    return lettersAndSymbols[Math.floor(Math.random() * lettersAndSymbols.length)]
+  const getRandomChar = (): string => {
+    const idx = Math.floor(Math.random() * lettersAndSymbols.length)
+    return lettersAndSymbols[idx] ?? 'A'
   }
 
-  const getRandomColor = () => {
-    return glitchColors[Math.floor(Math.random() * glitchColors.length)]
+  const getRandomColor = (): string => {
+    const idx = Math.floor(Math.random() * glitchColors.length)
+    return glitchColors[idx] ?? '#00ff41'
   }
 
-  const hexToRgb = (hex) => {
+  const hexToRgb = (hex: string): RGB | null => {
     const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i
-    hex = hex.replace(shorthandRegex, (m, r, g, b) => {
+    hex = hex.replace(shorthandRegex, (_m: string, r: string, g: string, b: string): string => {
       return r + r + g + g + b + b
     })
 
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
-    return result
-      ? {
-          r: parseInt(result[1], 16),
-          g: parseInt(result[2], 16),
-          b: parseInt(result[3], 16),
-        }
-      : null
+    if (!result) return null
+
+    const rHex = result[1] ?? '00'
+    const gHex = result[2] ?? '00'
+    const bHex = result[3] ?? '00'
+
+    return {
+      r: parseInt(rHex, 16),
+      g: parseInt(gHex, 16),
+      b: parseInt(bHex, 16),
+    }
   }
 
-  const interpolateColor = (start, end, factor) => {
+  const interpolateColor = (start: RGB, end: RGB, factor: number): string => {
     const result = {
       r: Math.round(start.r + (end.r - start.r) * factor),
       g: Math.round(start.g + (end.g - start.g) * factor),
@@ -120,13 +172,13 @@ const LetterGlitch = ({
     return `rgb(${result.r}, ${result.g}, ${result.b})`
   }
 
-  const calculateGrid = (width, height) => {
+  const calculateGrid = (width: number, height: number): Grid => {
     const columns = Math.ceil(width / charWidth)
     const rows = Math.ceil(height / charHeight)
     return { columns, rows }
   }
 
-  const initializeLetters = (columns, rows) => {
+  const initializeLetters = (columns: number, rows: number): void => {
     grid.current = { columns, rows }
     const totalLetters = columns * rows
     letters.current = Array.from({ length: totalLetters }, () => ({
@@ -144,7 +196,7 @@ const LetterGlitch = ({
       const parent = canvas.parentElement
       if (!parent) return
 
-      const dpr = typeof window !== 'undefined' ? (window.devicePixelRatio || 1) : 1
+      const dpr = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1
       const rect = parent.getBoundingClientRect()
 
       if (rect.width <= 0 || rect.height <= 0) return
@@ -171,8 +223,8 @@ const LetterGlitch = ({
   const drawLetters = () => {
     try {
       if (!context.current || letters.current.length === 0 || !canvasRef.current) return
-      const ctx = context.current
-      const rect = canvasRef.current.getBoundingClientRect()
+      const ctx = context.current as CanvasRenderingContext2D
+      const rect = (canvasRef.current as HTMLCanvasElement).getBoundingClientRect()
       const { width, height } = rect
 
       if (width <= 0 || height <= 0) return
@@ -181,7 +233,7 @@ const LetterGlitch = ({
       ctx.font = `${fontSize}px monospace`
       ctx.textBaseline = 'top'
 
-      letters.current.forEach((letter, index) => {
+      letters.current.forEach((letter: Letter, index: number) => {
         const x = (index % grid.current.columns) * charWidth
         const y = Math.floor(index / grid.current.columns) * charHeight
         // Dim the background letters to make text more prominent
@@ -196,13 +248,13 @@ const LetterGlitch = ({
     }
   }
 
-  const updateLetters = () => {
+  const updateLetters = (): void => {
     if (!letters.current || letters.current.length === 0) return
 
-    const updateCount = Math.max(1, Math.floor(letters.current.length * 0.05))
+    const updateCount: number = Math.max(1, Math.floor(letters.current.length * 0.05))
 
     for (let i = 0; i < updateCount; i++) {
-      const index = Math.floor(Math.random() * letters.current.length)
+      const index: number = Math.floor(Math.random() * letters.current.length)
       if (!letters.current[index]) continue
 
       letters.current[index].char = getRandomChar()
@@ -219,7 +271,7 @@ const LetterGlitch = ({
 
   const handleSmoothTransitions = () => {
     let needsRedraw = false
-    letters.current.forEach((letter) => {
+    letters.current.forEach((letter: Letter) => {
       if (letter.colorProgress < 1) {
         letter.colorProgress += 0.05
         if (letter.colorProgress > 1) letter.colorProgress = 1
@@ -256,50 +308,55 @@ const LetterGlitch = ({
   }
 
   useEffect(() => {
+    let resizeTimeout: ReturnType<typeof setTimeout> | undefined
+    let handleResize: (() => void) | undefined
+
     try {
       const canvas = canvasRef.current
-      if (!canvas) return
+      if (canvas) {
+        context.current = canvas.getContext('2d')
+        if (context.current) {
+          resizeCanvas()
+          animate()
 
-      context.current = canvas.getContext('2d')
-      if (!context.current) return
-
-      resizeCanvas()
-      animate()
-
-      let resizeTimeout
-
-      const handleResize = () => {
-        try {
-          clearTimeout(resizeTimeout)
-          resizeTimeout = setTimeout(() => {
-            if (animationRef.current && typeof window !== 'undefined') {
-              cancelAnimationFrame(animationRef.current)
+          handleResize = () => {
+            try {
+              if (resizeTimeout) clearTimeout(resizeTimeout)
+              resizeTimeout = setTimeout(() => {
+                if (animationRef.current && typeof window !== 'undefined') {
+                  cancelAnimationFrame(animationRef.current)
+                }
+                resizeCanvas()
+                animate()
+              }, 100)
+            } catch (error) {
+              console.warn('Resize handler error:', error)
             }
-            resizeCanvas()
-            animate()
-          }, 100)
-        } catch (error) {
-          console.warn('Resize handler error:', error)
+          }
+
+          if (typeof window !== 'undefined') {
+            window.addEventListener('resize', handleResize)
+          }
         }
       }
+    } catch (error) {
+      console.warn('Canvas initialization error:', error)
+    }
 
-      if (typeof window !== 'undefined') {
-        window.addEventListener('resize', handleResize)
-      }
-
-      return () => {
+    return () => {
+      try {
         if (animationRef.current && typeof window !== 'undefined') {
           cancelAnimationFrame(animationRef.current)
         }
-        if (typeof window !== 'undefined') {
+        if (typeof window !== 'undefined' && handleResize) {
           window.removeEventListener('resize', handleResize)
         }
         if (resizeTimeout) {
           clearTimeout(resizeTimeout)
         }
+      } catch (error) {
+        console.warn('Cleanup error:', error)
       }
-    } catch (error) {
-      console.warn('Canvas initialization error:', error)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [glitchSpeed, smooth])
@@ -331,20 +388,21 @@ function DecryptedText({
   encryptedClassName = '',
   animateOn = 'view',
   onComplete,
+  style,
   ...props
-}) {
-  const [displayText, setDisplayText] = useState(text)
-  const [isAnimating, setIsAnimating] = useState(false)
-  const [isScrambling, setIsScrambling] = useState(false)
-  const [revealedIndices, setRevealedIndices] = useState(new Set())
-  const [hasAnimated, setHasAnimated] = useState(false)
-  const containerRef = useRef(null)
+}: DecryptedTextProps) {
+  const [displayText, setDisplayText] = useState<string>(text)
+  const [isAnimating, setIsAnimating] = useState<boolean>(false)
+  const [isScrambling, setIsScrambling] = useState<boolean>(false)
+  const [revealedIndices, setRevealedIndices] = useState<Set<number>>(new Set())
+  const [hasAnimated, setHasAnimated] = useState<boolean>(false)
+  const containerRef = useRef<HTMLHeadingElement | null>(null)
 
   useEffect(() => {
-    let interval
+    let interval: ReturnType<typeof setInterval>
     let currentIteration = 0
 
-    const getNextIndex = (revealedSet) => {
+    const getNextIndex = (revealedSet: Set<number>): number => {
       const textLength = text.length
       switch (revealDirection) {
         case 'start':
@@ -373,7 +431,7 @@ function DecryptedText({
       ? Array.from(new Set(text.split(''))).filter((char) => char !== ' ')
       : characters.split('')
 
-    const shuffleText = (originalText, currentRevealed) => {
+    const shuffleText = (originalText: string, currentRevealed: Set<number>): string => {
       if (useOriginalCharsOnly) {
         const positions = originalText.split('').map((char, i) => ({
           char,
@@ -388,7 +446,12 @@ function DecryptedText({
 
         for (let i = nonSpaceChars.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1))
-          ;[nonSpaceChars[i], nonSpaceChars[j]] = [nonSpaceChars[j], nonSpaceChars[i]]
+          const temp = nonSpaceChars[i]
+          const temp2 = nonSpaceChars[j]
+          if (temp !== undefined && temp2 !== undefined) {
+            nonSpaceChars[i] = temp2
+            nonSpaceChars[j] = temp
+          }
         }
 
         let charIndex = 0
@@ -396,7 +459,7 @@ function DecryptedText({
           .map((p) => {
             if (p.isSpace) return ' '
             if (p.isRevealed) return originalText[p.index]
-            return nonSpaceChars[charIndex++]
+            return nonSpaceChars[charIndex++] ?? ''
           })
           .join('')
       } else {
@@ -405,7 +468,7 @@ function DecryptedText({
           .map((char, i) => {
             if (char === ' ') return ' '
             if (currentRevealed.has(i)) return originalText[i]
-            return availableChars[Math.floor(Math.random() * availableChars.length)]
+            return availableChars[Math.floor(Math.random() * availableChars.length)] ?? ''
           })
           .join('')
       }
@@ -461,8 +524,8 @@ function DecryptedText({
   useEffect(() => {
     if (animateOn !== 'view') return
 
-    const observerCallback = (entries) => {
-      entries.forEach((entry) => {
+    const observerCallback = (entries: IntersectionObserverEntry[]): void => {
+      entries.forEach((entry: IntersectionObserverEntry) => {
         if (entry.isIntersecting && !hasAnimated) {
           setIsAnimating(true)
           setHasAnimated(true)
@@ -503,11 +566,12 @@ function DecryptedText({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          ...style,
         }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        {...props}
+        {...(props as any)}
       >
         <span className="sr-only">{text}</span>
         <motion.span
@@ -724,6 +788,7 @@ export default function EntryPage() {
 
       return () => clearTimeout(timer)
     }
+    return undefined
   }, [reduceMotion, mounted, router])
 
   if (!mounted) {
@@ -779,7 +844,6 @@ export default function EntryPage() {
         animate={{ height: isCollapsing ? '50vh' : 0 }}
         transition={{ duration: 0.4, ease: 'easeInOut' }}
       />
-
     </div>
   )
 }

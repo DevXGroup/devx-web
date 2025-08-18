@@ -36,7 +36,7 @@ const FloatingElementsSection = () => {
         vx: (Math.random() - 0.5) * 2,
         vy: (Math.random() - 0.5) * 2,
         size: Math.random() * 40 + 20,
-        color: colors[Math.floor(Math.random() * colors.length)],
+        color: colors[Math.floor(Math.random() * colors.length)] || '#4CD787',
         mass: Math.random() * 5 + 1,
         attraction: Math.random() * 0.0001 + 0.00005
       })
@@ -57,12 +57,14 @@ const FloatingElementsSection = () => {
       }
     }
 
-    if (containerRef.current) {
-      containerRef.current.addEventListener('mousemove', handleMouseMove)
-      return () => {
-        if (containerRef.current) {
-          containerRef.current.removeEventListener('mousemove', handleMouseMove)
-        }
+    const currentContainer = containerRef.current
+    if (currentContainer) {
+      currentContainer.addEventListener('mousemove', handleMouseMove)
+    }
+
+    return () => {
+      if (currentContainer) {
+        currentContainer.removeEventListener('mousemove', handleMouseMove)
       }
     }
   }, [])

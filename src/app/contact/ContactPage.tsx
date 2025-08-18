@@ -15,10 +15,68 @@ import {
   Send,
   User,
   MessageCircle,
+  X,
 } from 'lucide-react'
 import BlurText from '@/components/animations/BlurText'
 import TextPressure from '@/components/animations/TextPressure'
 import Lightning from '@/components/animations/Lightning'
+
+// Always Visible Lightning with Natural Fade
+const IntermittentLightning = ({
+  hue,
+  xOffset,
+  speed,
+  intensity,
+  size,
+}: {
+  hue: number
+  xOffset: number
+  speed: number
+  intensity: number
+  size: number
+}) => {
+  const [lightningIntensity, setLightningIntensity] = useState(1.0) // Start at full brightness
+
+  useEffect(() => {
+    const createLightningCycle = () => {
+      // Flash at full brightness
+      setLightningIntensity(1.0) // 100% intensity
+
+      // Hold the brightness briefly
+      setTimeout(() => {
+        // Fade down to dim level
+        setLightningIntensity(0.02) // 2% intensity
+
+        // Wait for next cycle - exactly 5 seconds
+        setTimeout(createLightningCycle, 5000) // 5 second delay
+      }, 500) // Hold bright for 0.5 seconds
+    }
+
+    // Start the cycle after initial delay
+    const timer = setTimeout(createLightningCycle, 2000)
+
+    return () => clearTimeout(timer)
+  }, [])
+
+  return (
+    <motion.div
+      className="w-full h-full"
+      animate={{
+        opacity: lightningIntensity,
+        scale: lightningIntensity > 0.8 ? [1, 1.01, 1] : 1,
+      }}
+      transition={{
+        opacity: {
+          duration: lightningIntensity > 0.5 ? 0.1 : 2.0,
+          ease: lightningIntensity > 0.5 ? 'linear' : 'easeOut',
+        },
+        scale: { duration: 0.15, ease: 'easeOut' },
+      }}
+    >
+      <Lightning hue={hue} xOffset={xOffset} speed={speed} intensity={intensity} size={size} />
+    </motion.div>
+  )
+}
 import Orb from '@/components/animations/Orb'
 import Confetti from '@/components/animations/Confetti'
 
@@ -56,7 +114,13 @@ const buttonVariants = {
 }
 
 // Enhanced AnimatedGradientText component with better animation
-const AnimatedGradientText = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
+const AnimatedGradientText = ({
+  children,
+  className = '',
+}: {
+  children: React.ReactNode
+  className?: string
+}) => (
   <span
     className={`bg-clip-text text-transparent inline-block ${className}`}
     style={{
@@ -82,8 +146,10 @@ export default function ContactPage() {
   const [formErrors, setFormErrors] = useState({})
   const [isTyping, setIsTyping] = useState(false)
   const [typingIntensity, setTypingIntensity] = useState(0)
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const [showConfetti, setShowConfetti] = useState(false)
   const [confettiOrigin, setConfettiOrigin] = useState({ x: 0, y: 0 })
+  const [showExampleModal, setShowExampleModal] = useState(false)
   const shouldReduceMotion = useReducedMotion()
   const formRef = useRef(null)
   const isFormInView = useInView(formRef, { once: true })
@@ -105,7 +171,11 @@ export default function ContactPage() {
     }
 
     return () => {
-      // Clean up
+      // Clean up typing timeout
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current)
+      }
+      // Clean up style
       const style = document.getElementById('gradient-animation-style')
       if (style) {
         document.head.removeChild(style)
@@ -128,7 +198,7 @@ export default function ContactPage() {
             const widget = document.querySelector('.calendly-inline-widget') as HTMLElement
             if (widget) {
               // Initialize with dark mode settings using proper URL parameters
-              (window as any).Calendly.initInlineWidget({
+              ;(window as any).Calendly.initInlineWidget({
                 url: 'https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?background_color=000000&text_color=ffffff&primary_color=4CD787&hide_gdpr_banner=1',
                 parentElement: widget,
                 prefill: {},
@@ -160,17 +230,26 @@ export default function ContactPage() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormState((prev) => ({ ...prev, [name]: value }))
-    
-    // Typing detection for animation
-    setIsTyping(true)
-    setTypingIntensity(Math.min(value.length / 50, 1)) // Intensity based on text length
-    
-    // Clear typing state after user stops typing
-    setTimeout(() => {
+
+    // Debounced typing detection to prevent rapid state changes
+    if (!isTyping) {
+      setIsTyping(true)
+    }
+
+    // Update intensity smoothly without rapid changes
+    setTypingIntensity(Math.min(value.length / 20, 1.2))
+
+    // Clear any existing timeout
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current)
+    }
+
+    // Set new timeout with reduced delay for more responsive animation
+    typingTimeoutRef.current = setTimeout(() => {
       setIsTyping(false)
       setTypingIntensity(0)
-    }, 1500)
-    
+    }, 1200) // Reduced delay for quicker response
+
     // Clear errors when user starts typing
     if ((formErrors as any)[name]) {
       setFormErrors((prev) => ({ ...prev, [name]: null }))
@@ -203,7 +282,7 @@ export default function ContactPage() {
       const rect = submitButton.getBoundingClientRect()
       setConfettiOrigin({
         x: rect.left + rect.width / 2,
-        y: rect.top + rect.height / 2 - 30 // Slightly above button
+        y: rect.top + rect.height / 2 - 30, // Slightly above button
       })
     }
 
@@ -225,30 +304,27 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background pt-24">
+    <div className="min-h-screen bg-background">
       {/* Confetti Animation */}
-      <Confetti 
-        isActive={showConfetti} 
+      <Confetti
+        isActive={showConfetti}
         onComplete={() => setShowConfetti(false)}
         duration={3000}
         particleCount={60}
         originX={confettiOrigin.x}
         originY={confettiOrigin.y}
       />
-      {/* Hero Section with Lightning Background */}
-      <section className="relative pt-2 pb-8 overflow-hidden">
+      {/* Hero Section with Lightning Background - Reduced height */}
+      <section className="relative pt-0 pb-8 overflow-hidden h-[60vh]">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-[#0a0a1a] to-black" />
 
-        {/* Lightning Effect Background */}
-        <div className="absolute inset-0 opacity-30">
-          <Lightning 
-            hue={120}
-            xOffset={0}
-            speed={0.8}
-            intensity={0.6}
-            size={1.2}
-          />
+        {/* Lightning Effect Background - Natural thunderstorm, centered */}
+        <div className="absolute -top-24 left-0 right-0 bottom-0 opacity-75 w-full">
+          <IntermittentLightning hue={200} xOffset={0} speed={0.8} intensity={0.9} size={1.6} />
         </div>
+
+        {/* Bottom fade-out overlay */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none z-10" />
 
         {/* Animated gradient orbs */}
         <div className="absolute inset-0 overflow-hidden">
@@ -277,14 +353,14 @@ export default function ContactPage() {
           />
         </div>
 
-        <div className="relative container mx-auto px-4">
+        <div className="relative container mx-auto px-4 pt-24">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <div className="flex flex-col items-center mt-9 py-9">
+            <div className="flex flex-col items-center mt-8 py-6">
               <div className="flex items-center justify-center w-full">
                 <div
                   style={{
@@ -310,14 +386,15 @@ export default function ContactPage() {
                 </div>
               </div>
               <p
-                className="text-lg md:text-xl text-foreground/90 font-light max-w-2xl text-center mb-6 leading-relaxed font-['IBM_Plex_Sans'] mt-2"
+                className="text-lg md:text-xl text-foreground/90 font-light max-w-2xl text-center mb-5 leading-relaxed font-['IBM_Plex_Sans'] -mt-4"
                 style={{
                   letterSpacing: '0.025em',
                   fontWeight: '400',
                 }}
               >
-                Ready to deploy the elite unit? Contact our command center to discuss your mission
-                requirements and objectives.
+                <span className="text-4xl font-sans">Ready to deploy the elite unit?</span>
+                <br />
+                Contact us to discuss your mission requirements and objectives.
               </p>
             </div>
           </motion.div>
@@ -325,7 +402,7 @@ export default function ContactPage() {
       </section>
 
       {/* Main Contact Section */}
-      <section className="pt-8 pb-20 relative">
+      <section className="pt-0 pb-20 relative -mt-8">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
             {/* Contact Information Card */}
@@ -429,7 +506,7 @@ export default function ContactPage() {
                       className="w-10 h-10 rounded-full bg-white/5 hover:bg-[#4CD787]/20 flex items-center justify-center transition-colors duration-300"
                     >
                       <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                       </svg>
                     </a>
                   </div>
@@ -529,7 +606,7 @@ export default function ContactPage() {
                       </div>
                     </div>
 
-                    <div>
+                    <div className="relative">
                       <label
                         htmlFor="message"
                         className="block text-sm font-medium text-foreground/80 mb-2 flex items-center gap-2"
@@ -537,40 +614,65 @@ export default function ContactPage() {
                         <MessageCircle className="w-4 h-4" />
                         Your Message
                       </label>
-                      <textarea
-                        id="message"
-                        name="message"
-                        value={formState.message}
-                        onChange={handleChange}
-                        rows={6}
-                        className={`w-full px-4 py-3 bg-white/5 border ${
-                          (formErrors as any).message ? 'border-red-500' : 'border-white/10'
-                        } rounded-lg focus:outline-none focus:border-[#4CD787] text-foreground shadow-inner transition-colors duration-300 resize-none`}
-                        placeholder="Tell us about your project requirements, timeline, and budget..."
-                        required
-                      ></textarea>
-                      
-                      {/* Example helper text */}
-                      <div className="mt-2 text-xs text-foreground/50 italic">
-                        <span className="font-medium text-foreground/70">Example:</span>
-                        <br />
-                        &quot;Hi, I&apos;m looking to build a custom e-commerce platform for my business.
-                        <br />
-                        I need features like inventory management, payment processing, and customer analytics.
-                        <br />
-                        My timeline is 3-4 months and my budget is around $50,000.&quot;
+
+                      {/* WebGL Orb Animation - centered in textarea, larger size */}
+                      <div
+                        className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                        style={{ zIndex: 1, top: '2rem', bottom: '3rem' }}
+                      >
+                        <div
+                          className="w-48 h-48 opacity-30 rounded-full overflow-hidden mt-12"
+                          style={{
+                            background: 'transparent',
+                            isolation: 'isolate',
+                            willChange: 'transform',
+                            backfaceVisibility: 'hidden',
+                          }}
+                        >
+                          <div
+                            className="w-full h-full"
+                            style={{
+                              contain: 'strict',
+                              transform: 'translateZ(0)',
+                            }}
+                          >
+                            <Orb
+                              hue={isTyping ? 35 : 130}
+                              hoverIntensity={
+                                isTyping ? Math.min(typingIntensity * 2.5, 1.0) : 0.15
+                              }
+                              rotateOnHover={true}
+                              forceHoverState={isTyping}
+                            />
+                          </div>
+                        </div>
                       </div>
-                      
-                      {/* WebGL Orb Animation - positioned below example */}
-                      <div className="relative mt-4 h-32 w-full opacity-70" style={{ mixBlendMode: 'normal' }}>
-                        <Orb 
-                          hue={isTyping ? 35 : 130} // Brighter gold when typing (35°), Vibrant green when idle (130°)
-                          hoverIntensity={isTyping ? Math.min(typingIntensity * 1.5, 1.0) : 0.15} // Higher intensity
-                          rotateOnHover={true}
-                          forceHoverState={isTyping} // Force hover state when typing
-                        />
+
+                      <div className="relative" style={{ zIndex: 2 }}>
+                        <textarea
+                          id="message"
+                          name="message"
+                          value={formState.message}
+                          onChange={handleChange}
+                          rows={6}
+                          className={`w-full px-4 py-3 pr-20 bg-white/15 backdrop-blur-lg border ${
+                            (formErrors as any).message ? 'border-red-500' : 'border-white/30'
+                          } rounded-lg focus:outline-none focus:border-[#4CD787] text-foreground shadow-inner transition-colors duration-300 resize-none`}
+                          placeholder="Tell us about your project requirements, timeline, and budget..."
+                          required
+                          style={{ paddingBottom: '3rem' }}
+                        ></textarea>
+
+                        {/* Example Button - Bottom Right */}
+                        <button
+                          type="button"
+                          onClick={() => setShowExampleModal(true)}
+                          className="absolute bottom-3 right-3 px-3 py-1 text-xs bg-white/10 hover:bg-white/20 border border-white/20 rounded-md text-foreground/70 hover:text-foreground transition-all duration-200 backdrop-blur-sm"
+                        >
+                          Example
+                        </button>
                       </div>
-                      
+
                       {(formErrors as any).message && (
                         <motion.p
                           initial={{ opacity: 0, y: -10 }}
@@ -805,6 +907,76 @@ export default function ContactPage() {
           </motion.div>
         </div>
       </section>
+
+      {/* Example Modal */}
+      {showExampleModal && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[10000] p-4"
+          onClick={() => setShowExampleModal(false)}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            className="bg-black/80 backdrop-blur-lg border border-white/20 rounded-xl p-6 max-w-lg w-full mx-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-white">Message Example</h3>
+              <button
+                onClick={() => setShowExampleModal(false)}
+                className="text-foreground/60 hover:text-foreground transition-colors p-1"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="bg-white/5 rounded-lg p-4 text-sm text-foreground/80 leading-relaxed">
+              <p className="mb-3">
+                <span className="text-[#4CD787] font-medium">Subject:</span> Custom E-commerce
+                Platform Development
+              </p>
+              <p className="mb-4">
+                "Hi there! I'm looking to build a custom e-commerce platform for my growing
+                business.
+              </p>
+              <p className="mb-4">
+                <span className="text-[#FFD700] font-medium">Key Requirements:</span>
+                <br />
+                • Inventory management system
+                <br />
+                • Payment processing (Stripe/PayPal)
+                <br />
+                • Customer analytics dashboard
+                <br />
+                • Mobile-responsive design
+                <br />• SEO optimization
+              </p>
+              <p className="mb-4">
+                <span className="text-[#4CD787] font-medium">Timeline:</span> 3-4 months
+                <br />
+                <span className="text-[#4CD787] font-medium">Budget:</span> $45,000 - $55,000
+              </p>
+              <p>
+                I'd love to discuss this project further and see how DevX Group can help bring this
+                vision to life. Looking forward to hearing from you!"
+              </p>
+            </div>
+
+            <div className="mt-4 flex justify-end">
+              <button
+                onClick={() => setShowExampleModal(false)}
+                className="px-4 py-2 bg-[#4CD787] hover:bg-[#3CC76D] text-black rounded-lg transition-colors duration-200 font-medium"
+              >
+                Got it!
+              </button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
     </div>
   )
 }

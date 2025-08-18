@@ -224,7 +224,7 @@ export default function HorizontalScroll() {
             drag="x"
             dragMomentum={true}
             whileTap={{ cursor: 'grabbing' }}
-            dragConstraints={singleSetWidth > 0 ? { left: -singleSetWidth, right: 0 } : undefined}
+            dragConstraints={singleSetWidth > 0 ? { left: -singleSetWidth, right: 0 } : false}
             dragElastic={0.4}
             dragTransition={{
               bounceStiffness: 1000,

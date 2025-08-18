@@ -13,7 +13,7 @@ const sdlcSteps = [
   { name: "Maintenance", icon: Settings },
 ]
 
-const AnimatedIcon = ({ Icon, isActive, isComplete, progress }) => {
+const AnimatedIcon = ({ Icon, isActive, isComplete, progress }: { Icon: any, isActive: boolean, isComplete: boolean, progress: number }) => {
   return (
     <div className="relative">
       <svg className="w-16 h-16 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -51,7 +51,7 @@ const AnimatedIcon = ({ Icon, isActive, isComplete, progress }) => {
   )
 }
 
-const ConnectingLine = ({ currentStep, progress, totalSteps }) => {
+const ConnectingLine = ({ currentStep, progress, totalSteps }: { currentStep: number, progress: number, totalSteps: number }) => {
   const lineProgress = (currentStep + progress) / (totalSteps - 1)
   return (
     <div className="absolute top-1/2 left-0 right-0 h-0.5 transform -translate-y-[14px] overflow-hidden">

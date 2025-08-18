@@ -40,7 +40,7 @@ const ExplosiveCTASection = () => {
         vy: Math.sin(angle) * velocity,
         life: 0,
         maxLife: Math.random() * 60 + 40,
-        color: colors[Math.floor(Math.random() * colors.length)],
+        color: colors[Math.floor(Math.random() * colors.length)] || '#4CD787',
         size: Math.random() * 4 + 2
       })
     }
@@ -210,7 +210,7 @@ const ExplosiveCTASection = () => {
             className="text-white/70 text-xl leading-relaxed mb-12 max-w-2xl mx-auto"
           >
             Transform your vision into explosive visual experiences that captivate, 
-            engage, and convert. Let's create something extraordinary together.
+            engage, and convert. Let&apos;s create something extraordinary together.
           </motion.p>
 
           {/* CTA Buttons */}

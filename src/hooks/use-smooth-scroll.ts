@@ -1,8 +1,10 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 
 export function useSmoothScroll() {
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  
   useEffect(() => {
     // Store the original scroll position
     let lastScrollTop = window.pageYOffset || document.documentElement.scrollTop
@@ -26,12 +28,12 @@ export function useSmoothScroll() {
           document.body.classList.add("is-scrolling")
 
           // Clear any existing timeout
-          if (window.smoothScrollTimeout) {
-            clearTimeout(window.smoothScrollTimeout)
+          if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current)
           }
 
           // Set a timeout to remove the scrolling class
-          window.smoothScrollTimeout = setTimeout(() => {
+          timeoutRef.current = setTimeout(() => {
             document.body.classList.remove("is-scrolling")
             document.body.classList.remove("is-scrolling-up")
             document.body.classList.remove("is-scrolling-down")
@@ -51,8 +53,8 @@ export function useSmoothScroll() {
     // Clean up
     return () => {
       window.removeEventListener("scroll", handleScroll)
-      if (window.smoothScrollTimeout) {
-        clearTimeout(window.smoothScrollTimeout)
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
       }
     }
   }, [])

@@ -1422,6 +1422,7 @@ function SplashCursor({
     const handleMouseDown = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
       const pointer = pointers[0];
+      if (!pointer) return;
       const posX = scaleByPixelRatio(e.clientX - rect.left);
       const posY = scaleByPixelRatio(e.clientY - rect.top);
       updatePointerDownData(pointer, -1, posX, posY);
@@ -1431,6 +1432,7 @@ function SplashCursor({
     const handleMouseMove = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
       const pointer = pointers[0];
+      if (!pointer) return;
       const posX = scaleByPixelRatio(e.clientX - rect.left);
       const posY = scaleByPixelRatio(e.clientY - rect.top);
       const color = pointer.color;
@@ -1442,10 +1444,13 @@ function SplashCursor({
       const rect = canvas.getBoundingClientRect();
       const touches = e.targetTouches;
       const pointer = pointers[0];
+      if (!pointer) return;
       for (let i = 0; i < touches.length; i++) {
-        const posX = scaleByPixelRatio(touches[i].clientX - rect.left);
-        const posY = scaleByPixelRatio(touches[i].clientY - rect.top);
-        updatePointerDownData(pointer, touches[i].identifier, posX, posY);
+        const touch = touches[i];
+        if (!touch) continue;
+        const posX = scaleByPixelRatio(touch.clientX - rect.left);
+        const posY = scaleByPixelRatio(touch.clientY - rect.top);
+        updatePointerDownData(pointer, touch.identifier, posX, posY);
         clickSplat(pointer);
       }
     };
@@ -1455,9 +1460,12 @@ function SplashCursor({
       const rect = canvas.getBoundingClientRect();
       const touches = e.targetTouches;
       const pointer = pointers[0];
+      if (!pointer) return;
       for (let i = 0; i < touches.length; i++) {
-        const posX = scaleByPixelRatio(touches[i].clientX - rect.left);
-        const posY = scaleByPixelRatio(touches[i].clientY - rect.top);
+        const touch = touches[i];
+        if (!touch) continue;
+        const posX = scaleByPixelRatio(touch.clientX - rect.left);
+        const posY = scaleByPixelRatio(touch.clientY - rect.top);
         updatePointerMoveData(pointer, posX, posY, pointer.color);
       }
     };
@@ -1465,6 +1473,7 @@ function SplashCursor({
     const handleTouchEnd = (e: TouchEvent) => {
       const touches = e.changedTouches;
       const pointer = pointers[0];
+      if (!pointer) return;
       for (let i = 0; i < touches.length; i++) {
         updatePointerUpData(pointer);
       }
@@ -1518,8 +1527,9 @@ export default function FluidCursorSection() {
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
+      (entries) => {
+        const entry = entries[0];
+        if (entry && entry.isIntersecting) {
           setIsVisible(true);
         }
       },

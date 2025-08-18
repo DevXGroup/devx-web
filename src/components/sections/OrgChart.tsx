@@ -74,7 +74,7 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
             <motion.div 
               variants={fadeInUp}
               className="text-center group relative bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 cursor-pointer hover:border-[#4CD787]/50 transition-colors w-full max-w-[240px] mx-auto min-h-[260px] flex flex-col justify-between"
-              onClick={() => setSelectedMember(teamMembers[0])}
+              onClick={() => teamMembers[0] && setSelectedMember(teamMembers[0])}
             >
               <div className="relative mb-3">
                 <div className="w-20 h-20 mx-auto rounded-xl overflow-hidden border-2 border-[#4CD787] shadow-lg">
@@ -101,7 +101,7 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
             <motion.div 
               variants={fadeInUp}
               className="text-center group relative bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 cursor-pointer hover:border-[#FFD700]/50 transition-colors w-full max-w-[240px] mx-auto min-h-[260px] flex flex-col justify-between"
-              onClick={() => setSelectedMember(teamMembers[1])}
+              onClick={() => teamMembers[1] && setSelectedMember(teamMembers[1])}
             >
               <div className="relative mb-3">
                 <div className="w-20 h-20 mx-auto rounded-xl overflow-hidden border-2 border-[#FFD700] shadow-lg">
