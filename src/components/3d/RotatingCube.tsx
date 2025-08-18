@@ -2,13 +2,23 @@
 
 import { useRef, useState, useMemo, useEffect } from "react"
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
-import { MeshStandardMaterial, Vector3, MathUtils, AdditiveBlending } from "three"
+import { MeshStandardMaterial, Vector3, MathUtils, AdditiveBlending, Mesh } from "three"
 import { Edges, OrbitControls, Text, Float, Environment, Sparkles, RoundedBox } from "@react-three/drei"
 import CubeFallback from "./CubeFallback"
 
+interface CubeFaceProps {
+  position: [number, number, number]
+  rotation: [number, number, number]
+  text: string
+  color: string
+  onClick: (index: number) => void
+  isActive: boolean
+  index: number
+}
+
 // Interactive cube face component
-function CubeFace({ position, rotation, text, color, onClick, isActive, index }) {
-  const meshRef = useRef()
+function CubeFace({ position, rotation, text, color, onClick, isActive, index }: CubeFaceProps) {
+  const meshRef = useRef<Mesh>(null)
   const [hovered, setHovered] = useState(false)
 
   // Pulsing animation for the active face
@@ -78,11 +88,11 @@ function GlowingEdges({ color = "#4CD787", thickness = 0.02, glow = 0.5 }) {
   )
 }
 
-function ModernCube(props) {
-  const mesh = useRef()
+function ModernCube() {
+  const mesh = useRef<Mesh>(null)
   const [hovered, setHover] = useState(false)
   const [clicked, setClicked] = useState(false)
-  const [activeFace, setActiveFace] = useState(null)
+  const [activeFace, setActiveFace] = useState<number | null>(null)
   const [autoRotate, setAutoRotate] = useState(true)
   const { viewport } = useThree()
   const isMobile = viewport.width < 5
@@ -137,13 +147,13 @@ function ModernCube(props) {
   ]
 
   // Handle face click
-  const handleFaceClick = (index) => {
+  const handleFaceClick = (index: number) => {
     setActiveFace(index === activeFace ? null : index)
     setAutoRotate(index === activeFace)
     setClicked(true)
 
     // If a face is activated, rotate to face it
-    if (index !== activeFace && mesh.current) {
+    if (index !== activeFace && mesh.current && faces[index]) {
       const targetPosition = new Vector3(...faces[index].position).normalize().multiplyScalar(5)
       // We'll use this position in the animation frame
     }
@@ -163,7 +173,7 @@ function ModernCube(props) {
     }
 
     // If a face is active, smoothly rotate to face it
-    if (activeFace !== null && !hovered) {
+    if (activeFace !== null && !hovered && faces[activeFace]) {
       const targetPosition = new Vector3(...faces[activeFace].position).normalize().multiplyScalar(0.1)
       mesh.current.rotation.x = MathUtils.lerp(
         mesh.current.rotation.x,
@@ -179,7 +189,7 @@ function ModernCube(props) {
   })
 
   return (
-    <group {...props}>
+    <group>
       {/* Main cube */}
       <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.5} enabled={!clicked && autoRotate}>
         <mesh
@@ -200,7 +210,7 @@ function ModernCube(props) {
           <Edges
             scale={1.01}
             threshold={15}
-            color={hovered ? "#ffffff" : activeFace !== null ? faces[activeFace].color : "#FFD700"}
+            color={hovered ? "#ffffff" : activeFace !== null && faces[activeFace] ? faces[activeFace].color : "#FFD700"}
           />
 
           {/* Interactive faces */}
@@ -208,8 +218,8 @@ function ModernCube(props) {
             <CubeFace
               key={index}
               index={index}
-              position={face.position}
-              rotation={face.rotation}
+              position={face.position as [number, number, number]}
+              rotation={face.rotation as [number, number, number]}
               text={face.text}
               color={face.color}
               onClick={handleFaceClick}
@@ -220,10 +230,10 @@ function ModernCube(props) {
       </Float>
 
       {/* Particle effects */}
-      <ParticleTrail count={isMobile ? 100 : 200} color={activeFace !== null ? faces[activeFace].color : "#4CD787"} />
+      <ParticleTrail count={isMobile ? 100 : 200} color={activeFace !== null && faces[activeFace] ? faces[activeFace].color : "#4CD787"} />
 
       {/* Glowing edges effect */}
-      <GlowingEdges color={activeFace !== null ? faces[activeFace].color : "#4CD787"} glow={hovered ? 0.7 : 0.3} />
+      <GlowingEdges color={activeFace !== null && faces[activeFace] ? faces[activeFace].color : "#4CD787"} glow={hovered ? 0.7 : 0.3} />
     </group>
   )
 }
@@ -232,7 +242,7 @@ export default function RotatingCube() {
   const [mounted, setMounted] = useState(false)
   const [isSafari, setIsSafari] = useState(false)
   const [webGLFailed, setWebGLFailed] = useState(false)
-  const canvasRef = useRef()
+  const canvasRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setMounted(true)
@@ -282,7 +292,7 @@ export default function RotatingCube() {
         <Environment preset="night" />
 
         {/* Main cube component */}
-        <ModernCube position={[0, 0, 0]} />
+        <ModernCube />
 
         {/* Controls */}
         <OrbitControls

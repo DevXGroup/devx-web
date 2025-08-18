@@ -27,7 +27,14 @@ interface ConfettiProps {
   originY?: number
 }
 
-const Confetti = ({ isActive, onComplete, duration = 3000, particleCount = 50, originX, originY }: ConfettiProps) => {
+const Confetti = ({
+  isActive,
+  onComplete,
+  duration = 3000,
+  particleCount = 50,
+  originX,
+  originY,
+}: ConfettiProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const particlesRef = useRef<ConfettiPiece[]>([])
   const animationFrameRef = useRef<number>()
@@ -68,11 +75,11 @@ const Confetti = ({ isActive, onComplete, duration = 3000, particleCount = 50, o
           vy: -(Math.random() * 12 + 8), // Upward velocity
           rotation: Math.random() * 360,
           rotationSpeed: (Math.random() - 0.5) * 10,
-          color: colors[Math.floor(Math.random() * colors.length)],
+          color: colors[Math.floor(Math.random() * colors.length)] || '#4CD787',
           size: Math.random() * 8 + 4,
-          shape: shapes[Math.floor(Math.random() * shapes.length)],
+          shape: shapes[Math.floor(Math.random() * shapes.length)] || 'circle',
           life: 0,
-          gravity: Math.random() * 0.3 + 0.2
+          gravity: Math.random() * 0.3 + 0.2,
         })
       }
       particlesRef.current = newParticles
@@ -107,7 +114,7 @@ const Confetti = ({ isActive, onComplete, duration = 3000, particleCount = 50, o
         ctx.save()
         ctx.translate(particle.x, particle.y)
         ctx.rotate((particle.rotation * Math.PI) / 180)
-        
+
         // Fade out over time
         const fadeProgress = elapsed / duration
         ctx.globalAlpha = Math.max(0, 1 - fadeProgress * 0.8)
@@ -122,11 +129,11 @@ const Confetti = ({ isActive, onComplete, duration = 3000, particleCount = 50, o
             ctx.arc(0, 0, particle.size / 2, 0, Math.PI * 2)
             ctx.fill()
             break
-          
+
           case 'square':
             ctx.fillRect(-particle.size / 2, -particle.size / 2, particle.size, particle.size)
             break
-          
+
           case 'triangle':
             ctx.beginPath()
             ctx.moveTo(0, -particle.size / 2)
@@ -143,9 +150,10 @@ const Confetti = ({ isActive, onComplete, duration = 3000, particleCount = 50, o
       // Filter out particles that are off-screen
       for (let i = particles.length - 1; i >= 0; i--) {
         const particle = particles[i]
-        if (particle.y > canvas.height + 100 || 
-            particle.x < -100 || 
-            particle.x > canvas.width + 100) {
+        if (
+          particle &&
+          (particle.y > canvas.height + 100 || particle.x < -100 || particle.x > canvas.width + 100)
+        ) {
           particles.splice(i, 1)
         }
       }
@@ -160,7 +168,7 @@ const Confetti = ({ isActive, onComplete, duration = 3000, particleCount = 50, o
         cancelAnimationFrame(animationFrameRef.current)
       }
     }
-  }, [isActive, duration, particleCount, onComplete])
+  }, [isActive, duration, particleCount, onComplete, originX, originY])
 
   if (!isActive) return null
 
@@ -172,12 +180,8 @@ const Confetti = ({ isActive, onComplete, duration = 3000, particleCount = 50, o
         exit={{ opacity: 0 }}
         className="fixed inset-0 pointer-events-none z-50"
       >
-        <canvas
-          ref={canvasRef}
-          className="w-full h-full"
-          style={{ pointerEvents: 'none' }}
-        />
-        
+        <canvas ref={canvasRef} className="w-full h-full" style={{ pointerEvents: 'none' }} />
+
         {/* Additional celebration elements */}
         <div className="absolute inset-0">
           {/* Radial burst effect */}
@@ -189,11 +193,11 @@ const Confetti = ({ isActive, onComplete, duration = 3000, particleCount = 50, o
             }}
             initial={{ scale: 0, opacity: 1 }}
             animate={{ scale: 3, opacity: 0 }}
-            transition={{ duration: 1, ease: "easeOut" }}
+            transition={{ duration: 1, ease: 'easeOut' }}
           >
             <div className="w-32 h-32 border-4 border-[#FFD700] rounded-full"></div>
           </motion.div>
-          
+
           {/* Success message burst */}
           <motion.div
             className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"

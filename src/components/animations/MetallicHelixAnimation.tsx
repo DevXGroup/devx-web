@@ -131,7 +131,7 @@ export default function MetallicHelixAnimation({
             height: `${height}px`,
             shapeRendering: "geometricPrecision",
             textRendering: "geometricPrecision",
-            imageRendering: "optimizeQuality",
+            imageRendering: "auto" as const,
             WebkitTransform: "translateZ(0)",
             transform: "translateZ(0)",
             WebkitBackfaceVisibility: "hidden",

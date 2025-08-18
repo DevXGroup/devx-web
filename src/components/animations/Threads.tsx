@@ -145,8 +145,7 @@ const Threads: React.FC<ThreadsProps> = ({
 
     const renderer = new Renderer({ 
       alpha: true,
-      preserveDrawingBuffer: true,
-      failIfMajorPerformanceCaveat: false
+      preserveDrawingBuffer: true
     })
     const gl = renderer.gl
     gl.clearColor(0, 0, 0, 0)
@@ -208,10 +207,14 @@ const Threads: React.FC<ThreadsProps> = ({
     function update(t: number) {
       if (enableMouseInteraction) {
         const smoothing = 0.05
-        currentMouse[0] += smoothing * (targetMouse[0] - currentMouse[0])
-        currentMouse[1] += smoothing * (targetMouse[1] - currentMouse[1])
-        program.uniforms.uMouse.value[0] = currentMouse[0]
-        program.uniforms.uMouse.value[1] = currentMouse[1]
+        if (currentMouse[0] !== undefined && targetMouse[0] !== undefined) {
+          currentMouse[0] += smoothing * (targetMouse[0] - currentMouse[0])
+        }
+        if (currentMouse[1] !== undefined && targetMouse[1] !== undefined) {
+          currentMouse[1] += smoothing * (targetMouse[1] - currentMouse[1])
+        }
+        program.uniforms.uMouse.value[0] = currentMouse[0] || 0.5
+        program.uniforms.uMouse.value[1] = currentMouse[1] || 0.5
       } else {
         program.uniforms.uMouse.value[0] = 0.5
         program.uniforms.uMouse.value[1] = 0.5
