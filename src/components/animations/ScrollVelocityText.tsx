@@ -49,10 +49,10 @@ export default function ScrollVelocityText({
   baseVelocity = 50, // Reduced default speed
   className = "",
   scrollContainerRef,
-  damping = 50,
-  stiffness = 400,
+  damping = 30,
+  stiffness = 300,
   numCopies = 4,
-  velocityMapping = { input: [0, 1000], output: [0, 2] }, // Reduced output range
+  velocityMapping = { input: [0, 1000], output: [0, 1.5] }, // Further reduced output range
 }: ScrollVelocityTextProps) {
   const baseX = useMotionValue(0)
   const scrollOptions = scrollContainerRef
@@ -88,14 +88,21 @@ export default function ScrollVelocityText({
   const directionFactor = useRef<number>(1)
   useAnimationFrame((t, delta) => {
     let moveBy = directionFactor.current * baseVelocity * (delta / 1000)
-
-    if (velocityFactor.get() < 0) {
-      directionFactor.current = -1
-    } else if (velocityFactor.get() > 0) {
-      directionFactor.current = 1
+    
+    // Get current velocity factor
+    const currentVelocity = velocityFactor.get()
+    
+    // Smooth direction changes to prevent stuttering
+    if (Math.abs(currentVelocity) > 0.1) {
+      if (currentVelocity < 0) {
+        directionFactor.current = -1
+      } else if (currentVelocity > 0) {
+        directionFactor.current = 1
+      }
     }
 
-    moveBy += directionFactor.current * moveBy * velocityFactor.get()
+    // Apply velocity factor more smoothly
+    moveBy += moveBy * Math.abs(currentVelocity)
     baseX.set(baseX.get() + moveBy)
   })
 
