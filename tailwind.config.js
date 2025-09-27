@@ -18,7 +18,6 @@ module.exports = {
     extend: {
       screens: {
         'xs': '475px',
-        'max-xs': {'max': '474px'},
       },
       fontFamily: {
         mono: ["var(--font-ibm-plex-mono)", "ui-monospace", "SF Mono", "monospace"],

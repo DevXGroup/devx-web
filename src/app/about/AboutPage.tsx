@@ -21,6 +21,7 @@ import {
 import BlurText from '@/components/animations/BlurText'
 import TextPressure from '@/components/animations/TextPressure'
 import ShapeBlur from '@/components/animations/ShapeBlur'
+import CardSwap, { Card } from '@/components/animations/CardSwap'
 import OrgChart from '@/components/sections/OrgChart'
 
 // Enhanced animation variants for better performance
@@ -341,7 +342,7 @@ export default function AboutPage() {
           />
         </div>
 
-        <div className="container mx-auto px-4 relative">
+        <div className="container mx-auto px-[21px] relative">
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               {/* Title and content - Left side */}
@@ -465,7 +466,7 @@ export default function AboutPage() {
 
       {/* Stats Section */}
       <section className="pt-8 pb-16 relative">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-[21px]">
           <AnimatedSection className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#FFD700]">Our Impact</h2>
@@ -493,7 +494,7 @@ export default function AboutPage() {
 
       {/* How We Work Section */}
       <section className="pt-8 pb-16 relative">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-[21px]">
           <AnimatedSection className="max-w-5xl mx-auto text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#FFD700]">How We Work</h2>
             <p
@@ -504,43 +505,115 @@ export default function AboutPage() {
             </p>
           </AnimatedSection>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-black/30 backdrop-blur-sm p-6 rounded-xl border border-white/10">
-              <div className="flex items-center gap-3 mb-3">
-                <Users className="w-5 h-5 text-[#4CD787]" />
-                <h3 className="font-semibold text-white">Discovery</h3>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left side - Text content */}
+            <AnimatedSection className="space-y-6">
+              <div className="space-y-4">
+                <div className="flex items-start gap-4">
+                  <div className="w-8 h-8 rounded-full bg-[#4CD787]/20 flex items-center justify-center flex-shrink-0 mt-1">
+                    <span className="text-[#4CD787] font-bold text-sm">1</span>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-white mb-2">Discovery & Planning</h3>
+                    <p className="text-foreground/80 text-sm leading-relaxed">
+                      We align on goals, constraints, and success metrics in a focused strategy
+                      call.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="w-8 h-8 rounded-full bg-[#FFD700]/20 flex items-center justify-center flex-shrink-0 mt-1">
+                    <span className="text-[#FFD700] font-bold text-sm">2</span>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-white mb-2">Solution Proposal</h3>
+                    <p className="text-foreground/80 text-sm leading-relaxed">
+                      Clear milestones, scope, and ownership, with timeline and dependencies.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="w-8 h-8 rounded-full bg-[#4834D4]/20 flex items-center justify-center flex-shrink-0 mt-1">
+                    <span className="text-[#4834D4] font-bold text-sm">3</span>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-white mb-2">Build & Reviews</h3>
+                    <p className="text-foreground/80 text-sm leading-relaxed">
+                      Weekly demos, no surprises. We optimize for reliability and maintainability.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="w-8 h-8 rounded-full bg-[#9d4edd]/20 flex items-center justify-center flex-shrink-0 mt-1">
+                    <span className="text-[#9d4edd] font-bold text-sm">4</span>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-white mb-2">Delivery & Support</h3>
+                    <p className="text-foreground/80 text-sm leading-relaxed">
+                      Handover, documentation, and stabilization support after launch.
+                    </p>
+                  </div>
+                </div>
               </div>
-              <p className="text-foreground/80 text-sm">
-                We align on goals, constraints, and success metrics in a focused call.
-              </p>
-            </div>
-            <div className="bg-black/30 backdrop-blur-sm p-6 rounded-xl border border-white/10">
-              <div className="flex items-center gap-3 mb-3">
-                <Globe className="w-5 h-5 text-[#4CD787]" />
-                <h3 className="font-semibold text-white">Solution Proposal</h3>
-              </div>
-              <p className="text-foreground/80 text-sm">
-                Clear milestones, scope, and ownership, with timeline and dependencies.
-              </p>
-            </div>
-            <div className="bg-black/30 backdrop-blur-sm p-6 rounded-xl border border-white/10">
-              <div className="flex items-center gap-3 mb-3">
-                <Zap className="w-5 h-5 text-[#4CD787]" />
-                <h3 className="font-semibold text-white">Build & Reviews</h3>
-              </div>
-              <p className="text-foreground/80 text-sm">
-                Weekly demos, no surprises. We optimize for reliability and maintainability.
-              </p>
-            </div>
-            <div className="bg-black/30 backdrop-blur-sm p-6 rounded-xl border border-white/10">
-              <div className="flex items-center gap-3 mb-3">
-                <Check className="w-5 h-5 text-[#4CD787]" />
-                <h3 className="font-semibold text-white">Delivery & Support</h3>
-              </div>
-              <p className="text-foreground/80 text-sm">
-                Handover, documentation, and stabilization support after launch.
-              </p>
-            </div>
+            </AnimatedSection>
+
+            {/* Right side - CardSwap */}
+            <AnimatedSection delay={0.2} className="relative h-[400px] lg:h-[500px]">
+              <CardSwap
+                width={420}
+                height={280}
+                cardDistance={80}
+                verticalDistance={60}
+                delay={4000}
+                pauseOnHover={true}
+                easing="elastic"
+                onCardClick={(idx) => console.log(`Process step ${idx + 1} clicked`)}
+              >
+                <Card className="bg-gradient-to-br from-black/80 to-black/60 border-[#4CD787]/30 backdrop-blur-sm p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <Users className="w-6 h-6 text-[#4CD787]" />
+                    <h3 className="font-semibold text-white text-lg">Discovery</h3>
+                  </div>
+                  <p className="text-foreground/90 text-sm leading-relaxed">
+                    We align on goals, constraints, and success metrics in a focused call.
+                  </p>
+                  <div className="mt-4 w-12 h-1 bg-gradient-to-r from-[#4CD787] to-[#4CD787]/50 rounded-full"></div>
+                </Card>
+
+                <Card className="bg-gradient-to-br from-black/80 to-black/60 border-[#FFD700]/30 backdrop-blur-sm p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <Globe className="w-6 h-6 text-[#FFD700]" />
+                    <h3 className="font-semibold text-white text-lg">Solution Proposal</h3>
+                  </div>
+                  <p className="text-foreground/90 text-sm leading-relaxed">
+                    Clear milestones, scope, and ownership, with timeline and dependencies.
+                  </p>
+                  <div className="mt-4 w-12 h-1 bg-gradient-to-r from-[#FFD700] to-[#FFD700]/50 rounded-full"></div>
+                </Card>
+
+                <Card className="bg-gradient-to-br from-black/80 to-black/60 border-[#4834D4]/30 backdrop-blur-sm p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <Zap className="w-6 h-6 text-[#4834D4]" />
+                    <h3 className="font-semibold text-white text-lg">Build & Reviews</h3>
+                  </div>
+                  <p className="text-foreground/90 text-sm leading-relaxed">
+                    Weekly demos, no surprises. We optimize for reliability and maintainability.
+                  </p>
+                  <div className="mt-4 w-12 h-1 bg-gradient-to-r from-[#4834D4] to-[#4834D4]/50 rounded-full"></div>
+                </Card>
+
+                <Card className="bg-gradient-to-br from-black/80 to-black/60 border-[#9d4edd]/30 backdrop-blur-sm p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <Check className="w-6 h-6 text-[#9d4edd]" />
+                    <h3 className="font-semibold text-white text-lg">Delivery & Support</h3>
+                  </div>
+                  <p className="text-foreground/90 text-sm leading-relaxed">
+                    Handover, documentation, and stabilization support after launch.
+                  </p>
+                  <div className="mt-4 w-12 h-1 bg-gradient-to-r from-[#9d4edd] to-[#9d4edd]/50 rounded-full"></div>
+                </Card>
+              </CardSwap>
+            </AnimatedSection>
           </div>
         </div>
       </section>
@@ -550,7 +623,7 @@ export default function AboutPage() {
         id="our-values"
         className="pt-8 pb-16 relative bg-gradient-to-b from-transparent via-[#0a0a1a] to-transparent"
       >
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-[21px]">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#FFD700]">Our Values</h2>
             <p
@@ -608,7 +681,7 @@ export default function AboutPage() {
 
       {/* Delivery Ownership Section */}
       <section className="py-16 relative">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-[21px]">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#FFD700] font-['IBM_Plex_Mono']">
               Delivery Ownership
@@ -647,7 +720,7 @@ export default function AboutPage() {
 
       {/* Vision & Mission Section */}
       <section className="py-16 relative">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-[21px]">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#FFD700] font-['IBM_Plex_Mono']">
               Our Purpose
@@ -688,7 +761,7 @@ export default function AboutPage() {
 
       {/* Team Section */}
       <section className="pt-8 pb-16 relative">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-[21px]">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#FFD700]">
               Our Team Structure
@@ -712,7 +785,7 @@ export default function AboutPage() {
       {/* CTA Section */}
       <section className="pt-8 pb-16 relative">
         <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a1a] via-[#4CD787]/5 to-[#0a0a1a]"></div>
-        <div className="container mx-auto px-4 relative">
+        <div className="container mx-auto px-[21px] relative">
           <AnimatedSection className="bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-8 md:p-12 max-w-4xl mx-auto text-center">
             <a
               href="#our-values"
