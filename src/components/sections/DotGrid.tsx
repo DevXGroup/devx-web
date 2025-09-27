@@ -104,12 +104,40 @@ const DotGrid = ({
     return p
   }, [dotSize])
 
+  const retryCountRef = useRef(0)
+  const MAX_RETRIES = 10
+
   const buildGrid = useCallback(() => {
     const wrap = wrapperRef.current
     const canvas = canvasRef.current
     if (!wrap || !canvas) return
 
     const { width, height } = wrap.getBoundingClientRect()
+
+    // Debug logging (remove in production)
+    if (process.env.NODE_ENV === 'development') {
+      console.log('DotGrid buildGrid called:', { width, height })
+    }
+
+    // If container hasn't been sized yet, wait for next frame (with retry limit)
+    if (width === 0 || height === 0) {
+      if (retryCountRef.current < MAX_RETRIES) {
+        if (process.env.NODE_ENV === 'development') {
+          console.log('DotGrid container not sized yet, retrying...', retryCountRef.current + 1)
+        }
+        retryCountRef.current++
+        setTimeout(() => requestAnimationFrame(buildGrid), 50) // Add small delay
+        return
+      } else {
+        // Use fallback dimensions if retries exceeded
+        if (process.env.NODE_ENV === 'development') {
+          console.log('DotGrid max retries reached, using fallback dimensions')
+        }
+      }
+    } else {
+      // Reset retry count on successful measurement
+      retryCountRef.current = 0
+    }
 
     // Use minimum dimensions for stability
     const finalWidth = Math.max(width || 100, 100)
@@ -208,8 +236,20 @@ const DotGrid = ({
   }, [proximity, baseColor, activeRgb, baseRgb, circlePath])
 
   useEffect(() => {
-    // Initial grid build
+    // Use multiple strategies to ensure proper initialization
+    let timeouts: NodeJS.Timeout[] = []
+    
+    // Immediate attempt
     buildGrid()
+    
+    // Progressive delays to catch different initialization phases
+    const delays = [50, 150, 300, 500, 800]
+    delays.forEach(delay => {
+      const timeout = setTimeout(() => {
+        buildGrid()
+      }, delay)
+      timeouts.push(timeout)
+    })
 
     // Keep existing ResizeObserver logic
     let ro = null
@@ -279,6 +319,7 @@ const DotGrid = ({
     const stopWatchdog = startSizingWatchdog()
 
     return () => {
+      timeouts.forEach(timeout => clearTimeout(timeout))
       if (ro) ro.disconnect()
       else if (typeof window !== 'undefined' && resizeHandlerRef.current) {
         ;(
@@ -417,22 +458,34 @@ const DotGrid = ({
       }
     }
 
-    const throttledMove = throttle(onMove, 16)
-    if (typeof window !== 'undefined') {
-      window.addEventListener('mousemove', throttledMove as unknown as EventListener, {
-        passive: true,
-      })
+    const onMouseLeave = () => {
+      // Reset all dots to their original positions when mouse leaves
+      for (const dot of dotsRef.current) {
+        dot.xOffset = 0
+        dot.yOffset = 0
+        dot._animating = false
+      }
+      // Reset pointer position outside canvas
+      pointerRef.current.x = -1000
+      pointerRef.current.y = -1000
     }
+
+    const throttledMove = throttle(onMove, 16)
     const canvas = canvasRef.current
     if (canvas) {
+      canvas.addEventListener('mousemove', throttledMove as unknown as EventListener, {
+        passive: true,
+      })
+      canvas.addEventListener('mouseleave', onMouseLeave, {
+        passive: true,
+      })
       canvas.addEventListener('click', onClick as unknown as EventListener)
     }
 
     return () => {
-      if (typeof window !== 'undefined') {
-        window.removeEventListener('mousemove', throttledMove as unknown as EventListener)
-      }
       if (canvas) {
+        canvas.removeEventListener('mousemove', throttledMove as unknown as EventListener)
+        canvas.removeEventListener('mouseleave', onMouseLeave)
         canvas.removeEventListener('click', onClick as unknown as EventListener)
       }
     }

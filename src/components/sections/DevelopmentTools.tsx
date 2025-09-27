@@ -239,7 +239,7 @@ export default function DevelopmentTools() {
         setIsManual(false)
       }, 3000) // Resume after 3 seconds
     },
-    [isManual, activeIndex, transitioning]
+    [activeIndex, transitioning]
   )
 
   // Handle AI tool clicks (for now just log, later can be expanded)

@@ -37,7 +37,7 @@ const Confetti = ({
 }: ConfettiProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const particlesRef = useRef<ConfettiPiece[]>([])
-  const animationFrameRef = useRef<number>()
+  const animationFrameRef = useRef<number | undefined>(undefined)
   const startTimeRef = useRef<number>(0)
 
   useEffect(() => {
@@ -64,22 +64,22 @@ const Confetti = ({
 
       for (let i = 0; i < particleCount; i++) {
         // Start from provided coordinates or default to center-bottom
-        const startX = (originX ?? window.innerWidth / 2) + (Math.random() - 0.5) * 100
+        const startX = (originX ?? window.innerWidth / 2) + (Math.random() - 0.5) * 50
         const startY = (originY ?? window.innerHeight * 0.8) - 20 // Slightly above the button
 
         newParticles.push({
           id: i,
           x: startX,
           y: startY,
-          vx: (Math.random() - 0.5) * 15, // Horizontal spread
-          vy: -(Math.random() * 12 + 8), // Upward velocity
+          vx: (Math.random() - 0.5) * 18, // More horizontal spread
+          vy: -(Math.random() * 15 + 10), // More upward velocity
           rotation: Math.random() * 360,
-          rotationSpeed: (Math.random() - 0.5) * 10,
+          rotationSpeed: (Math.random() - 0.5) * 12,
           color: colors[Math.floor(Math.random() * colors.length)] || '#4CD787',
-          size: Math.random() * 8 + 4,
+          size: Math.random() * 4 + 2, // Smaller particles (2-6 instead of 4-12)
           shape: shapes[Math.floor(Math.random() * shapes.length)] || 'circle',
           life: 0,
-          gravity: Math.random() * 0.3 + 0.2,
+          gravity: Math.random() * 0.25 + 0.15,
         })
       }
       particlesRef.current = newParticles
@@ -182,35 +182,6 @@ const Confetti = ({
       >
         <canvas ref={canvasRef} className="w-full h-full" style={{ pointerEvents: 'none' }} />
 
-        {/* Additional celebration elements */}
-        <div className="absolute inset-0">
-          {/* Radial burst effect */}
-          <motion.div
-            className="absolute transform -translate-x-1/2 -translate-y-1/2"
-            style={{
-              left: originX ?? '50%',
-              top: originY ?? '80%',
-            }}
-            initial={{ scale: 0, opacity: 1 }}
-            animate={{ scale: 3, opacity: 0 }}
-            transition={{ duration: 1, ease: 'easeOut' }}
-          >
-            <div className="w-32 h-32 border-4 border-[#FFD700] rounded-full"></div>
-          </motion.div>
-
-          {/* Success message burst */}
-          <motion.div
-            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-            initial={{ scale: 0, opacity: 0, y: 100 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0, opacity: 0, y: -50 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <div className="bg-gradient-to-r from-[#4CD787] to-[#FFD700] text-black px-6 py-3 rounded-full font-bold text-lg shadow-2xl">
-              🎉 Message Sent! 🎉
-            </div>
-          </motion.div>
-        </div>
       </motion.div>
     </AnimatePresence>
   )

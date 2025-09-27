@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { motion, useReducedMotion, useInView } from 'framer-motion'
+import Link from 'next/link'
 import {
   Phone,
   Mail,
@@ -86,10 +87,6 @@ const fadeInUpVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: {
-      duration: 0.6,
-      ease: [0.22, 1, 0.36, 1],
-    },
   },
 }
 
@@ -97,10 +94,6 @@ const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2,
-    },
   },
 }
 
@@ -108,7 +101,6 @@ const buttonVariants = {
   rest: { scale: 1 },
   hover: {
     scale: 1.02,
-    transition: { duration: 0.2 },
   },
   tap: { scale: 0.98 },
 }
@@ -138,6 +130,7 @@ export default function ContactPage() {
     name: '',
     email: '',
     message: '',
+    agreeToTerms: false,
   })
 
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -248,9 +241,19 @@ export default function ContactPage() {
     typingTimeoutRef.current = setTimeout(() => {
       setIsTyping(false)
       setTypingIntensity(0)
-    }, 1200) // Reduced delay for quicker response
+    }, 400) // Very quick response
 
     // Clear errors when user starts typing
+    if ((formErrors as any)[name]) {
+      setFormErrors((prev) => ({ ...prev, [name]: null }))
+    }
+  }
+
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = e.target
+    setFormState((prev) => ({ ...prev, [name]: checked }))
+    
+    // Clear errors when user checks the box
     if ((formErrors as any)[name]) {
       setFormErrors((prev) => ({ ...prev, [name]: null }))
     }
@@ -293,13 +296,18 @@ export default function ContactPage() {
     setTimeout(() => {
       setIsSubmitting(false)
       setIsSubmitted(true)
-      setShowConfetti(true) // Trigger confetti animation
+
+      // Only trigger confetti if not already shown to prevent double animation
+      if (!showConfetti) {
+        setShowConfetti(true)
+      }
 
       // Reset form after showing success message
       setTimeout(() => {
-        setFormState({ name: '', email: '', message: '' })
-        setIsSubmitted(false)
-      }, 3000)
+        setFormState({ name: '', email: '', message: '', agreeToTerms: false })
+      }, 2000) // Keep form usable
+
+      // Success message stays persistent until page refresh - no auto-reset
     }, 1500)
   }
 
@@ -310,7 +318,7 @@ export default function ContactPage() {
         isActive={showConfetti}
         onComplete={() => setShowConfetti(false)}
         duration={3000}
-        particleCount={60}
+        particleCount={120}
         originX={confettiOrigin.x}
         originY={confettiOrigin.y}
       />
@@ -360,7 +368,7 @@ export default function ContactPage() {
             transition={{ duration: 0.8 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <div className="flex flex-col items-center mt-8 py-6">
+            <div className="flex flex-col items-center mt-8 py-12">
               <div className="flex items-center justify-center w-full">
                 <div
                   style={{
@@ -372,7 +380,7 @@ export default function ContactPage() {
                   }}
                 >
                   <TextPressure
-                    text="Contact&nbsp;US  "
+                    text="Contact&nbsp;Us  "
                     flex={true}
                     alpha={false}
                     stroke={false}
@@ -386,14 +394,12 @@ export default function ContactPage() {
                 </div>
               </div>
               <p
-                className="text-lg md:text-xl text-foreground/90 font-light max-w-2xl text-center mb-5 leading-relaxed font-['IBM_Plex_Sans'] -mt-4"
+                className="text-lg md:text-xl text-foreground/90 font-light max-w-2xl text-center mb-5 leading-relaxed font-['IBM_Plex_Sans']"
                 style={{
                   letterSpacing: '0.025em',
                   fontWeight: '400',
                 }}
               >
-                <span className="text-4xl font-sans">Ready to deploy the elite unit?</span>
-                <br />
                 Contact us to discuss your mission requirements and objectives.
               </p>
             </div>
@@ -402,7 +408,7 @@ export default function ContactPage() {
       </section>
 
       {/* Main Contact Section */}
-      <section className="pt-0 pb-20 relative -mt-8">
+      <section className="pt-16 pb-20 relative -mt-8">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
             {/* Contact Information Card */}
@@ -455,9 +461,23 @@ export default function ContactPage() {
                     <MapPin className="w-5 h-5 text-[#4CD787]" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground text-lg">Location</h3>
-                    <p className="text-foreground/70">San Diego, California</p>
-                    <p className="text-foreground/50 text-sm mt-1">Serving clients worldwide</p>
+                    <h3 className="font-semibold text-foreground text-lg">Locations</h3>
+                    <p className="text-foreground/70">
+                      San Diego, California{' '}
+                      <span className="text-foreground/50 text-sm">(Headquarters)</span>
+                    </p>
+                    <span className="text-foreground/30 flex justify-left ml-7">{'|'}</span>
+                    <p className="text-foreground/30">
+                      Kuwait City, Kuwait{' '}
+                      <span className="text-foreground/30 text-sm">
+                        (Development Partner Location)
+                      </span>
+                    </p>
+                    <p className="text-foreground/50 text-sm mt-2">
+                      <span className="text-[#4CD787] font-medium">
+                        Serving clients globally through local and remote teams
+                      </span>
+                    </p>
                   </div>
                 </div>
 
@@ -529,19 +549,7 @@ export default function ContactPage() {
               <div className="relative z-10">
                 <h2 className="text-2xl font-bold mb-6 text-white">Send us a message</h2>
 
-                {isSubmitted ? (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="bg-[#4CD787]/20 border border-[#4CD787]/30 rounded-lg p-6 text-center"
-                  >
-                    <CheckCircle className="w-16 h-16 text-[#4CD787] mx-auto mb-4" />
-                    <h3 className="text-xl font-semibold text-white mb-2">Message Sent!</h3>
-                    <p className="text-foreground/70">
-                      Thank you for reaching out. We&apos;ll get back to you shortly.
-                    </p>
-                  </motion.div>
-                ) : (
+                <div className="space-y-6">
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
@@ -615,62 +623,66 @@ export default function ContactPage() {
                         Your Message
                       </label>
 
-                      {/* WebGL Orb Animation - centered in textarea, larger size */}
-                      <div
-                        className="absolute inset-0 flex items-center justify-center pointer-events-none"
-                        style={{ zIndex: 1, top: '2rem', bottom: '3rem' }}
-                      >
-                        <div
-                          className="w-48 h-48 opacity-30 rounded-full overflow-hidden mt-12"
-                          style={{
-                            background: 'transparent',
-                            isolation: 'isolate',
-                            willChange: 'transform',
-                            backfaceVisibility: 'hidden',
-                          }}
-                        >
+                      <div className="flex gap-3">
+                        {/* Main textarea column */}
+                        <div className="flex-1 relative">
+                          {/* WebGL Orb Animation - centered in textarea, larger size */}
                           <div
-                            className="w-full h-full"
-                            style={{
-                              contain: 'strict',
-                              transform: 'translateZ(0)',
-                            }}
+                            className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                            style={{ zIndex: 1 }}
                           >
-                            <Orb
-                              hue={isTyping ? 35 : 130}
-                              hoverIntensity={
-                                isTyping ? Math.min(typingIntensity * 2.5, 1.0) : 0.15
-                              }
-                              rotateOnHover={true}
-                              forceHoverState={isTyping}
-                            />
+                            <div
+                              className="w-40 h-40 opacity-30 rounded-full overflow-hidden"
+                              style={{
+                                background: 'transparent',
+                                isolation: 'isolate',
+                                willChange: 'transform',
+                                backfaceVisibility: 'hidden',
+                              }}
+                            >
+                              <div
+                                className="w-full h-full"
+                                style={{
+                                  contain: 'strict',
+                                  transform: 'translateZ(0)',
+                                }}
+                              >
+                                <Orb
+                                  hue={isTyping ? 35 : 130}
+                                  hoverIntensity={
+                                    isTyping ? Math.min(typingIntensity * 2.5, 1.0) : 0.15
+                                  }
+                                  rotateOnHover={true}
+                                  forceHoverState={isTyping}
+                                />
+                              </div>
+                            </div>
+                          </div>
+
+                          <textarea
+                            id="message"
+                            name="message"
+                            value={formState.message}
+                            onChange={handleChange}
+                            rows={16}
+                            className={`w-full px-4 py-3 bg-white/15 backdrop-blur-lg border ${
+                              (formErrors as any).message ? 'border-red-500' : 'border-white/30'
+                            } rounded-lg focus:outline-none focus:border-[#4CD787] text-foreground shadow-inner transition-colors duration-300 resize-none placeholder:text-foreground/40 placeholder:font-light relative z-10`}
+                            placeholder="Tell us about your project requirements, timeline, and budget..."
+                            required
+                          ></textarea>
+
+                          {/* Example button column */}
+                          <div className="w-20 justify-right pt-2">
+                            <button
+                              type="button"
+                              onClick={() => setShowExampleModal(true)}
+                              className="px-3 py-2 text-xs bg-white/10 hover:bg-white/20 border border-white/20 rounded-md text-foreground/70 hover:text-foreground transition-all duration-200 backdrop-blur-sm"
+                            >
+                              Example
+                            </button>
                           </div>
                         </div>
-                      </div>
-
-                      <div className="relative" style={{ zIndex: 2 }}>
-                        <textarea
-                          id="message"
-                          name="message"
-                          value={formState.message}
-                          onChange={handleChange}
-                          rows={6}
-                          className={`w-full px-4 py-3 pr-20 bg-white/15 backdrop-blur-lg border ${
-                            (formErrors as any).message ? 'border-red-500' : 'border-white/30'
-                          } rounded-lg focus:outline-none focus:border-[#4CD787] text-foreground shadow-inner transition-colors duration-300 resize-none`}
-                          placeholder="Tell us about your project requirements, timeline, and budget..."
-                          required
-                          style={{ paddingBottom: '3rem' }}
-                        ></textarea>
-
-                        {/* Example Button - Bottom Right */}
-                        <button
-                          type="button"
-                          onClick={() => setShowExampleModal(true)}
-                          className="absolute bottom-3 right-3 px-3 py-1 text-xs bg-white/10 hover:bg-white/20 border border-white/20 rounded-md text-foreground/70 hover:text-foreground transition-all duration-200 backdrop-blur-sm"
-                        >
-                          Example
-                        </button>
                       </div>
 
                       {(formErrors as any).message && (
@@ -684,7 +696,27 @@ export default function ContactPage() {
                       )}
                     </div>
 
-                    <div className="flex justify-end">
+
+                    <div className="flex justify-between items-center">
+                      {/* Success Message */}
+                      <div className="flex-1 mr-4">
+                        {isSubmitted && (
+                          <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            className="flex items-center gap-2 text-[#4CD787]"
+                          >
+                            <CheckCircle className="w-5 h-5" />
+                            <div className="text-sm">
+                              <span className="font-semibold">Thank you for your message!</span>
+                              <br />
+                              <span className="text-foreground/70">Please allow 24hrs for follow up email.</span>
+                            </div>
+                          </motion.div>
+                        )}
+                      </div>
+
+                      {/* Submit Button */}
                       <motion.button
                         type="submit"
                         disabled={isSubmitting}
@@ -692,7 +724,7 @@ export default function ContactPage() {
                         initial="rest"
                         whileHover={shouldReduceMotion ? {} : 'hover'}
                         whileTap={shouldReduceMotion ? {} : 'tap'}
-                        className="group relative overflow-hidden bg-gradient-to-r from-[#4CD787] to-[#3CC76D] hover:from-[#3CC76D] hover:to-[#4CD787] text-black px-8 py-3 rounded-lg font-medium transition-all duration-300 flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="group relative overflow-hidden bg-gradient-to-r from-[#4CD787] to-[#3CC76D] hover:from-[#3CC76D] hover:to-[#4CD787] text-black px-8 py-3 rounded-lg font-medium transition-all duration-300 flex items-center disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
                       >
                         <span className="relative z-10 flex items-center">
                           {isSubmitting ? (
@@ -708,6 +740,11 @@ export default function ContactPage() {
                               />
                               Sending...
                             </>
+                          ) : isSubmitted ? (
+                            <>
+                              <CheckCircle className="w-5 h-5 mr-2" />
+                              Message Sent!
+                            </>
                           ) : (
                             <>
                               Send Message
@@ -722,7 +759,7 @@ export default function ContactPage() {
                       </motion.button>
                     </div>
                   </form>
-                )}
+                </div>
               </div>
             </motion.div>
           </div>
@@ -739,7 +776,9 @@ export default function ContactPage() {
             transition={{ duration: 0.8 }}
             className="text-center max-w-3xl mx-auto mb-12"
           >
-            <h2 className="text-3xl font-bold mb-6 text-[#FFD700]">Schedule a Consultation</h2>
+            <h2 className="text-3xl font-bold mb-6 text-[#FFD700]">
+              Schedule your free Consultation
+            </h2>
             <p
               className="text-lg md:text-xl text-foreground/90 font-light mb-8 leading-relaxed font-['IBM_Plex_Sans'] mt-6"
               style={{
@@ -940,7 +979,7 @@ export default function ContactPage() {
                 Platform Development
               </p>
               <p className="mb-4">
-                "Hi there! I'm looking to build a custom e-commerce platform for my growing
+                &quot;Hi there! I&apos;m looking to build a custom e-commerce platform for my growing
                 business.
               </p>
               <p className="mb-4">
@@ -961,8 +1000,8 @@ export default function ContactPage() {
                 <span className="text-[#4CD787] font-medium">Budget:</span> $45,000 - $55,000
               </p>
               <p>
-                I'd love to discuss this project further and see how DevX Group can help bring this
-                vision to life. Looking forward to hearing from you!"
+                I&apos;d love to discuss this project further and see how DevX Group can help bring this
+                vision to life. Looking forward to hearing from you!&quot;
               </p>
             </div>
 

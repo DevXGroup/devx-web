@@ -1,0 +1,33 @@
+# DevX Group LLC - Robots.txt
+# https://devxgroup.io
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://devxgroup.io/sitemap.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
+
+# Allow access to important pages
+Allow: /about
+Allow: /services
+Allow: /portfolio
+Allow: /pricing
+Allow: /contact
+Allow: /privacy
+Allow: /terms
+
+# Allow CSS and JS files for better crawling
+Allow: /_next/static/
+Allow: /favicon.ico
+Allow: /logo.png
+Allow: /images/
+
+# Disallow admin or sensitive areas (if they exist in future)
+# Disallow: /admin/
+# Disallow: /api/
+
+# Host directive (preferred domain)
+Host: https://devxgroup.io

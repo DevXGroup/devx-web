@@ -22,17 +22,34 @@ const FloatingElementsSection = () => {
   const controls = useAnimation()
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
   const [elements, setElements] = useState<FloatingElement[]>([])
+  const [containerSize, setContainerSize] = useState({ width: 800, height: 600 })
+
+  // Update container size on resize
+  useEffect(() => {
+    const updateContainerSize = () => {
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect()
+        setContainerSize({ width: rect.width, height: rect.height })
+      }
+    }
+
+    updateContainerSize()
+    window.addEventListener('resize', updateContainerSize)
+    return () => window.removeEventListener('resize', updateContainerSize)
+  }, [])
 
   // Initialize floating elements
   useEffect(() => {
+    if (containerSize.width === 0 || containerSize.height === 0) return
+
     const initialElements: FloatingElement[] = []
     const colors = ['#4CD787', '#9d4edd', '#4834D4', '#FFD700', '#ff6b6b', '#4ecdc4']
     
     for (let i = 0; i < 12; i++) {
       initialElements.push({
         id: i,
-        x: Math.random() * 800,
-        y: Math.random() * 600,
+        x: Math.random() * containerSize.width,
+        y: Math.random() * containerSize.height,
         vx: (Math.random() - 0.5) * 2,
         vy: (Math.random() - 0.5) * 2,
         size: Math.random() * 40 + 20,
@@ -43,7 +60,7 @@ const FloatingElementsSection = () => {
     }
     
     setElements(initialElements)
-  }, [])
+  }, [containerSize])
 
   // Mouse tracking
   useEffect(() => {
@@ -69,68 +86,74 @@ const FloatingElementsSection = () => {
     }
   }, [])
 
-  // Physics simulation
+  // Physics simulation with performance optimization
   useEffect(() => {
-    if (!isInView || elements.length === 0) return
+    if (!isInView || elements.length === 0 || containerSize.width === 0) return
 
     let animationId: number
+    let lastTime = 0
+    const targetFPS = 60
+    const frameTime = 1000 / targetFPS
 
-    const animate = () => {
-      setElements(prevElements => 
-        prevElements.map(element => {
-          let { x, y, vx, vy } = element
-          
-          // Mouse attraction
-          const dx = mousePos.x - x
-          const dy = mousePos.y - y
-          const distance = Math.sqrt(dx * dx + dy * dy)
-          
-          if (distance > 0) {
-            const force = element.attraction * element.mass / (distance * distance)
-            const angle = Math.atan2(dy, dx)
-            vx += Math.cos(angle) * force * 100
-            vy += Math.sin(angle) * force * 100
-          }
+    const animate = (currentTime: number) => {
+      if (currentTime - lastTime >= frameTime) {
+        setElements(prevElements => 
+          prevElements.map(element => {
+            let { x, y, vx, vy } = element
+            
+            // Mouse attraction
+            const dx = mousePos.x - x
+            const dy = mousePos.y - y
+            const distance = Math.sqrt(dx * dx + dy * dy)
+            
+            if (distance > 0) {
+              const force = element.attraction * element.mass / (distance * distance)
+              const angle = Math.atan2(dy, dx)
+              vx += Math.cos(angle) * force * 100
+              vy += Math.sin(angle) * force * 100
+            }
 
-          // Apply velocity
-          x += vx
-          y += vy
+            // Apply velocity
+            x += vx
+            y += vy
 
-          // Friction
-          vx *= 0.99
-          vy *= 0.99
+            // Friction
+            vx *= 0.99
+            vy *= 0.99
 
-          // Boundary collision with bounce
-          if (x <= element.size / 2) {
-            x = element.size / 2
-            vx = Math.abs(vx) * 0.8
-          }
-          if (x >= 800 - element.size / 2) {
-            x = 800 - element.size / 2
-            vx = -Math.abs(vx) * 0.8
-          }
-          if (y <= element.size / 2) {
-            y = element.size / 2
-            vy = Math.abs(vy) * 0.8
-          }
-          if (y >= 600 - element.size / 2) {
-            y = 600 - element.size / 2
-            vy = -Math.abs(vy) * 0.8
-          }
+            // Boundary collision with bounce (using dynamic container size)
+            if (x <= element.size / 2) {
+              x = element.size / 2
+              vx = Math.abs(vx) * 0.8
+            }
+            if (x >= containerSize.width - element.size / 2) {
+              x = containerSize.width - element.size / 2
+              vx = -Math.abs(vx) * 0.8
+            }
+            if (y <= element.size / 2) {
+              y = element.size / 2
+              vy = Math.abs(vy) * 0.8
+            }
+            if (y >= containerSize.height - element.size / 2) {
+              y = containerSize.height - element.size / 2
+              vy = -Math.abs(vy) * 0.8
+            }
 
-          return { ...element, x, y, vx, vy }
-        })
-      )
+            return { ...element, x, y, vx, vy }
+          })
+        )
+        lastTime = currentTime
+      }
 
       animationId = requestAnimationFrame(animate)
     }
 
-    animate()
+    animationId = requestAnimationFrame(animate)
 
     return () => {
       cancelAnimationFrame(animationId)
     }
-  }, [isInView, mousePos, elements.length])
+  }, [isInView, mousePos, elements.length, containerSize])
 
   useEffect(() => {
     if (isInView) {
@@ -142,10 +165,6 @@ const FloatingElementsSection = () => {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2
-      }
     }
   }
 
@@ -154,10 +173,6 @@ const FloatingElementsSection = () => {
     visible: {
       opacity: 1,
       y: 0,
-      transition: {
-        duration: 0.8,
-        ease: [0.22, 1, 0.36, 1]
-      }
     }
   }
 

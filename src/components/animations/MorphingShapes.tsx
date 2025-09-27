@@ -21,8 +21,7 @@ export default function MorphingShapes({ className = "" }: MorphingShapesProps) 
       },
       transition: {
         duration: 20,
-        repeat: Infinity,
-        ease: "easeInOut"
+        repeat: Infinity
       },
       color: "#4CD787",
       size: "w-16 h-16"
@@ -39,7 +38,6 @@ export default function MorphingShapes({ className = "" }: MorphingShapesProps) 
       transition: {
         duration: 25,
         repeat: Infinity,
-        ease: "easeInOut",
         delay: 2
       },
       color: "#4834D4",
@@ -57,7 +55,6 @@ export default function MorphingShapes({ className = "" }: MorphingShapesProps) 
       transition: {
         duration: 30,
         repeat: Infinity,
-        ease: "easeInOut",
         delay: 5
       },
       color: "#FFD700",
@@ -75,7 +72,6 @@ export default function MorphingShapes({ className = "" }: MorphingShapesProps) 
       transition: {
         duration: 18,
         repeat: Infinity,
-        ease: "easeInOut",
         delay: 7
       },
       color: "#9d4edd",
@@ -115,8 +111,7 @@ export default function MorphingShapes({ className = "" }: MorphingShapesProps) 
         transition={{
           duration: 40,
           repeat: Infinity,
-          ease: "easeInOut"
-        }}
+          }}
       />
     </div>
   )

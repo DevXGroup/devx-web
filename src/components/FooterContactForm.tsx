@@ -117,7 +117,7 @@ export default function FooterContactForm() {
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-primary text-primary-foreground hover:bg-primary/90 text-sm"
+            className="w-full bg-[#4CD787] text-black hover:bg-[#4CD787]/90 text-sm font-medium transition-colors duration-200"
           >
             {isSubmitting ? 'Sending...' : 'Send message'}
           </Button>

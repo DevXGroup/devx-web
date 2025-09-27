@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
+import { useEffect, useState } from 'react'
 import {
   X,
   ExternalLink,
@@ -27,7 +28,35 @@ interface ProjectDetailModalProps {
 }
 
 const ProjectDetailModal = ({ project, isOpen, onClose }: ProjectDetailModalProps) => {
-  if (!project) return null
+  const [isMounted, setIsMounted] = useState(false)
+
+  // Always call all hooks first - before any conditional returns
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  // Handle ESC key dismiss - always call this hook
+  useEffect(() => {
+    const handleEscKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && isOpen) {
+        onClose()
+      }
+    }
+
+    if (isOpen && isMounted) {
+      document.addEventListener('keydown', handleEscKey)
+      // Prevent body scroll when modal is open
+      document.body.style.overflow = 'hidden'
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscKey)
+      document.body.style.overflow = 'unset'
+    }
+  }, [isOpen, onClose, isMounted])
+
+  // Now we can do conditional returns after all hooks are called
+  if (!project || !isOpen || !isMounted) return null
 
   const categoryColor = categoryColors[project.category as keyof typeof categoryColors] || '#4CD787'
 
@@ -41,20 +70,11 @@ const ProjectDetailModal = ({ project, isOpen, onClose }: ProjectDetailModalProp
       opacity: 1,
       scale: 1,
       y: 0,
-      transition: {
-        type: 'spring',
-        damping: 25,
-        stiffness: 300,
-        duration: 0.5,
-      },
     },
     exit: {
       opacity: 0,
       scale: 0.8,
       y: 100,
-      transition: {
-        duration: 0.3,
-      },
     },
   }
 
@@ -63,10 +83,6 @@ const ProjectDetailModal = ({ project, isOpen, onClose }: ProjectDetailModalProp
     visible: {
       opacity: 1,
       y: 0,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
     },
   }
 
@@ -79,17 +95,31 @@ const ProjectDetailModal = ({ project, isOpen, onClose }: ProjectDetailModalProp
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Backdrop */}
+          {/* Backdrop - Enhanced Dismiss */}
           <motion.div
-            className="fixed inset-0 bg-black/80 backdrop-blur-md z-50"
+            className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 cursor-pointer"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={onClose}
+            onClick={(e) => {
+              // Only close if clicking the backdrop, not the modal content
+              if (e.target === e.currentTarget) {
+                onClose()
+              }
+            }}
+            title="Click to close modal"
           />
 
-          {/* Modal */}
-          <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-20">
+          {/* Modal Container */}
+          <div 
+            className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-20"
+            onClick={(e) => {
+              // Close modal when clicking outside the modal content
+              if (e.target === e.currentTarget) {
+                onClose()
+              }
+            }}
+          >
             <motion.div
               variants={modalVariants}
               initial="hidden"
@@ -98,8 +128,8 @@ const ProjectDetailModal = ({ project, isOpen, onClose }: ProjectDetailModalProp
               className="relative w-full max-w-6xl max-h-[90vh] bg-black/90 backdrop-blur-xl border border-white/20 rounded-3xl overflow-y-auto"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Header */}
-              <div className="relative h-80 overflow-hidden">
+                {/* Header */}
+                <div className="relative h-80 overflow-hidden">
                 <Image
                   src={project.images.banner}
                   alt={project.title}
@@ -108,18 +138,23 @@ const ProjectDetailModal = ({ project, isOpen, onClose }: ProjectDetailModalProp
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
 
-                {/* Close Button */}
+                {/* Sticky Close Button - Always visible at top right */}
                 <motion.button
                   onClick={onClose}
-                  className="absolute top-6 right-6 p-2 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white hover:bg-black/60 transition-colors"
-                  whileHover={{ scale: 1.1 }}
+                  className="fixed top-4 right-4 p-3 rounded-full bg-black/80 backdrop-blur-md border border-white/30 text-white hover:bg-red-600/80 transition-all duration-300 z-[100] shadow-2xl"
+                  whileHover={{ 
+                    scale: 1.1,
+                    backgroundColor: 'rgba(239, 68, 68, 0.8)',
+                    borderColor: 'rgba(239, 68, 68, 0.6)'
+                  }}
                   whileTap={{ scale: 0.9 }}
+                  title="Close modal (ESC key or click outside)"
                 >
-                  <X size={20} />
+                  <X size={20} strokeWidth={2} />
                 </motion.button>
 
                 {/* Category & Status */}
-                <div className="absolute top-6 left-6 flex items-center gap-3">
+                <div className="absolute top-6 left-6 flex flex-wrap items-center gap-3 max-w-[60%]">
                   <motion.div
                     className="px-4 py-2 rounded-full backdrop-blur-md border"
                     style={{
@@ -132,13 +167,25 @@ const ProjectDetailModal = ({ project, isOpen, onClose }: ProjectDetailModalProp
                     <span className="font-semibold">{project.category}</span>
                   </motion.div>
 
-                  {project.metrics?.marketPosition?.includes('#1') && (
+                  {project.metrics?.performance && (
                     <motion.div
-                      className="flex items-center gap-2 px-3 py-2 rounded-full bg-yellow-500/20 border border-yellow-500/40 backdrop-blur-md"
+                      className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 border border-white/30 backdrop-blur-md shadow-lg"
+                      whileHover={{ scale: 1.05, backgroundColor: 'rgba(255, 255, 255, 1)' }}
+                    >
+                      <TrendingUp size={16} className="text-gray-800" />
+                      <span className="text-sm font-bold text-gray-800">
+                        {project.metrics.performance}
+                      </span>
+                    </motion.div>
+                  )}
+
+                  {project.metrics?.marketPosition && (
+                    <motion.div
+                      className="flex items-center gap-2 px-3 py-2 rounded-full bg-blue-500/20 border border-blue-500/40 backdrop-blur-md"
                       whileHover={{ scale: 1.05 }}
                     >
-                      <Award size={16} className="text-yellow-400" />
-                      <span className="text-sm font-semibold text-yellow-400">#1 Position</span>
+                      <Award size={16} className="text-blue-400" />
+                      <span className="text-sm font-semibold text-blue-400">{project.metrics.marketPosition}</span>
                     </motion.div>
                   )}
                 </div>

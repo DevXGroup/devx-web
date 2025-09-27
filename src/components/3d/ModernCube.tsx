@@ -9,7 +9,7 @@ import CubeFallback from "./CubeFallback"
 
 // Interactive cube face component
 function CubeFace({ position, rotation, text, color, onClick, isActive, index }: any) {
-  const meshRef = useRef<any>()
+  const meshRef = useRef<any>(null)
   const [hovered, setHovered] = useState(false)
 
   // Pulsing animation for the active face

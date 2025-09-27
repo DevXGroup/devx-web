@@ -31,7 +31,7 @@ const testimonials = [
 ]
 
 export default function ParallaxTestimonials() {
-  const containerRef = useRef(null)
+  const containerRef = useRef<HTMLDivElement | null>(null)
   const infinityRef = useRef(null)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null)
@@ -39,14 +39,18 @@ export default function ParallaxTestimonials() {
   const [isClient, setIsClient] = useState(false)
 
   // Scroll progress tracking for infinity animation
-  const { scrollYProgress: infinityScrollProgress } = useScroll({
-    target: infinityRef,
-    offset: ['start 0.8', 'end 0.2'],
-  })
+  const { scrollYProgress: infinityScrollProgress } = useScroll(
+    isClient && infinityRef.current
+      ? {
+          target: infinityRef,
+          offset: ['start 0.8', 'end 0.2'],
+        }
+      : {}
+  )
 
   // Apple-style scaling effect for infinity animation
-  const infinityScale = useTransform(infinityScrollProgress, [0, 0.5, 1], [1, 1.4, 2])
-  const infinityOpacity = useTransform(infinityScrollProgress, [0, 0.4, 1], [1, 0.8, 0.3])
+  const infinityScale = useTransform(infinityScrollProgress || 0, [0, 0.5, 1], [1, 1.4, 2])
+  const infinityOpacity = useTransform(infinityScrollProgress || 0, [0, 0.4, 1], [1, 0.8, 0.3])
 
   useEffect(() => {
     setIsClient(true)
@@ -154,7 +158,7 @@ export default function ParallaxTestimonials() {
 interface TestimonialCardProps {
   testimonial: any
   index: number
-  containerRef: React.RefObject<HTMLDivElement>
+  containerRef: React.RefObject<HTMLElement | null>
   isHovered: boolean
   onHover: () => void
   onLeave: () => void
@@ -184,7 +188,7 @@ function TestimonialCard({
 
   // Always call useScroll to maintain hooks order
   const { scrollYProgress } = useScroll({
-    target: containerRef,
+    target: containerRef as React.RefObject<HTMLElement>,
     offset: ['start end', 'end start'],
   })
 

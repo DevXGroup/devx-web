@@ -1,5 +1,5 @@
 'use client'
-import { useRef, useEffect, useState, useCallback } from 'react'
+import React, { useRef, useEffect, useState, useCallback } from 'react'
 import { motion, useMotionValue, animate } from 'framer-motion'
 import Image from 'next/image'
 
@@ -139,6 +139,7 @@ export default function HorizontalScroll() {
   const scrollContentRef = useRef(null)
   const x = useMotionValue(0)
   const [singleSetWidth, setSingleSetWidth] = useState(0)
+  const [isDragging, setIsDragging] = useState(false)
   const animationRef = useRef<any>(null)
 
   const normalizeX = (value: number) => {
@@ -200,12 +201,14 @@ export default function HorizontalScroll() {
   }, [singleSetWidth, startAutoScroll])
 
   const handleDragStart = () => {
+    setIsDragging(true)
     if (animationRef.current) {
       cancelAnimationFrame(animationRef.current)
     }
   }
 
   const handleDragEnd = () => {
+    setIsDragging(false)
     const currentX = x.get()
 
     let normalizedX = normalizeX(currentX)
@@ -213,10 +216,31 @@ export default function HorizontalScroll() {
     startAutoScroll()
   }
 
+  const handleWheel = useCallback((e: React.WheelEvent<HTMLDivElement>) => {
+    const absX = Math.abs(e.deltaX)
+    const absY = Math.abs(e.deltaY)
+
+    // Let vertical scroll bubble to page
+    if (absY >= absX) return
+
+    e.preventDefault()
+    const dx = absX > 0 ? e.deltaX : e.shiftKey ? e.deltaY : 0
+    if (containerRef.current) {
+      ;(containerRef.current as HTMLDivElement).scrollBy({ left: dx, behavior: 'auto' })
+    }
+  }, [])
+
   return (
     <section className="py-20 relative w-full overflow-hidden">
       <div className="w-full">
-        <div ref={containerRef} className="relative w-full overflow-x-hidden">
+        <div
+          ref={containerRef}
+          onWheel={handleWheel}
+          className="relative w-full overflow-x-hidden overscroll-x-contain scroll-smooth"
+          style={{ touchAction: 'pan-y' }}
+          role="region"
+          aria-label="Case studies carousel"
+        >
           <motion.div
             ref={scrollContentRef}
             onDragStart={handleDragStart}
@@ -240,7 +264,7 @@ export default function HorizontalScroll() {
               willChange: 'transform',
               WebkitUserSelect: 'none',
               userSelect: 'none',
-              touchAction: 'pan-y pinch-zoom',
+              touchAction: isDragging ? 'pan-x' : 'auto',
               WebkitTouchCallout: 'none',
               pointerEvents: 'auto',
               position: 'relative',
@@ -255,7 +279,7 @@ export default function HorizontalScroll() {
                   pointerEvents: 'auto',
                   WebkitUserSelect: 'none',
                   userSelect: 'none',
-                  touchAction: 'pan-y',
+                  touchAction: 'manipulation',
                 }}
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}

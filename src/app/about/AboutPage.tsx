@@ -1,7 +1,7 @@
 'use client'
 
 import { motion, useReducedMotion, useInView } from 'framer-motion'
-import { useEffect, useState, useRef, useCallback, useMemo } from 'react'
+import { useRef, useCallback, useMemo, useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import {
@@ -20,7 +20,6 @@ import {
 } from 'lucide-react'
 import BlurText from '@/components/animations/BlurText'
 import TextPressure from '@/components/animations/TextPressure'
-import RunningLineAnimation from '@/components/animations/RunningLineAnimation'
 import ShapeBlur from '@/components/animations/ShapeBlur'
 import OrgChart from '@/components/sections/OrgChart'
 
@@ -30,10 +29,6 @@ const fadeInUpVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: {
-      duration: 0.6,
-      ease: [0.22, 1, 0.36, 1],
-    },
   },
 }
 
@@ -41,10 +36,6 @@ const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2,
-    },
   },
 }
 
@@ -53,15 +44,19 @@ const cardHoverVariants = {
   hover: {
     scale: 1.02,
     y: -8,
-    transition: {
-      duration: 0.3,
-      ease: 'easeInOut',
-    },
   },
 }
 
 // Enhanced animated section component for reuse
-const AnimatedSection = ({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) => {
+const AnimatedSection = ({
+  children,
+  className = '',
+  delay = 0,
+}: {
+  children: React.ReactNode
+  className?: string
+  delay?: number
+}) => {
   const shouldReduceMotion = useReducedMotion()
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
@@ -72,7 +67,7 @@ const AnimatedSection = ({ children, className = '', delay = 0 }: { children: Re
       variants={fadeInUpVariants}
       initial="hidden"
       animate={isInView ? 'visible' : 'hidden'}
-      transition={{ ...fadeInUpVariants.visible.transition, delay: shouldReduceMotion ? 0 : delay }}
+      transition={{ duration: 0.6, delay: shouldReduceMotion ? 0 : delay }}
       className={className}
     >
       {children}
@@ -81,7 +76,17 @@ const AnimatedSection = ({ children, className = '', delay = 0 }: { children: Re
 }
 
 // Enhanced team member card component
-const TeamMemberCard = ({ name, role, image, delay = 0 }: { name: string; role: string; image: string; delay?: number }) => {
+const TeamMemberCard = ({
+  name,
+  role,
+  image,
+  delay = 0,
+}: {
+  name: string
+  role: string
+  image: string
+  delay?: number
+}) => {
   const shouldReduceMotion = useReducedMotion()
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true })
@@ -92,7 +97,7 @@ const TeamMemberCard = ({ name, role, image, delay = 0 }: { name: string; role: 
       variants={cardHoverVariants}
       initial="hidden"
       animate={isInView ? 'visible' : 'hidden'}
-      transition={{ ...fadeInUpVariants.visible.transition, delay: shouldReduceMotion ? 0 : delay }}
+      transition={{ duration: 0.6, delay: shouldReduceMotion ? 0 : delay }}
       className="group cursor-pointer"
       whileHover={shouldReduceMotion ? {} : 'hover'}
     >
@@ -125,7 +130,17 @@ const TeamMemberCard = ({ name, role, image, delay = 0 }: { name: string; role: 
 }
 
 // Clean value card component with simple border animation
-const ValueCard = ({ icon: Icon, title, description, delay = 0 }: { icon: any; title: string; description: string; delay?: number }) => {
+const ValueCard = ({
+  icon: Icon,
+  title,
+  description,
+  delay = 0,
+}: {
+  icon: any
+  title: string
+  description: string
+  delay?: number
+}) => {
   const shouldReduceMotion = useReducedMotion()
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true })
@@ -137,7 +152,7 @@ const ValueCard = ({ icon: Icon, title, description, delay = 0 }: { icon: any; t
       variants={fadeInUpVariants}
       initial="hidden"
       animate={isInView ? 'visible' : 'hidden'}
-      transition={{ ...fadeInUpVariants.visible.transition, delay: shouldReduceMotion ? 0 : delay }}
+      transition={{ duration: 0.6, delay: shouldReduceMotion ? 0 : delay }}
       className="bg-black/30 backdrop-blur-sm p-6 rounded-xl border border-white/10 hover:border-[#4CD787] transition-all duration-300 group cursor-pointer relative"
       onMouseEnter={() => setIsCardHovered(true)}
       onMouseLeave={() => setIsCardHovered(false)}
@@ -157,11 +172,7 @@ const ValueCard = ({ icon: Icon, title, description, delay = 0 }: { icon: any; t
       <div className="flex items-center gap-4 mb-5">
         <motion.div
           className="w-12 h-12 rounded-full bg-[#4CD787]/10 flex items-center justify-center group-hover:bg-[#4CD787]/20 transition-colors relative overflow-hidden flex-shrink-0"
-          animate={
-            isCardHovered && !shouldReduceMotion
-              ? { scale: 1.05 }
-              : { scale: 1 }
-          }
+          animate={isCardHovered && !shouldReduceMotion ? { scale: 1.05 } : { scale: 1 }}
           transition={{ duration: 0.3, ease: 'easeOut' }}
         >
           {/* Simplified background effect */}
@@ -179,7 +190,7 @@ const ValueCard = ({ icon: Icon, title, description, delay = 0 }: { icon: any; t
           {title}
         </h3>
       </div>
-      <p 
+      <p
         className="text-white/70 text-sm group-hover:text-white/85 transition-colors duration-300 leading-relaxed font-['IBM_Plex_Sans'] font-light"
         style={{ letterSpacing: '0.02em' }}
       >
@@ -190,7 +201,15 @@ const ValueCard = ({ icon: Icon, title, description, delay = 0 }: { icon: any; t
 }
 
 // Enhanced stat counter with animation
-const StatCounter = ({ number, label, delay = 0 }: { number: string | number; label: string; delay?: number }) => {
+const StatCounter = ({
+  number,
+  label,
+  delay = 0,
+}: {
+  number: string | number
+  label: string
+  delay?: number
+}) => {
   const [count, setCount] = useState(0)
   const countRef = useRef(null)
   const shouldReduceMotion = useReducedMotion()
@@ -238,7 +257,7 @@ const StatCounter = ({ number, label, delay = 0 }: { number: string | number; la
       variants={fadeInUpVariants}
       initial="hidden"
       animate={isInView ? 'visible' : 'hidden'}
-      transition={{ ...fadeInUpVariants.visible.transition, delay: shouldReduceMotion ? 0 : delay }}
+      transition={{ duration: 0.6, delay: shouldReduceMotion ? 0 : delay }}
       className="relative group cursor-pointer"
       whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
     >
@@ -277,21 +296,13 @@ const StatCounter = ({ number, label, delay = 0 }: { number: string | number; la
 }
 
 export default function AboutPage() {
-  const [mounted, setMounted] = useState(false)
   const shouldReduceMotion = useReducedMotion()
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  if (!mounted) return null
 
   return (
     <div className="min-h-screen bg-[#000B14] pt-24">
       {/* Hero Section */}
       <section className="pt-2 pb-8 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-[#000B14] via-[#0a0a1a] to-[#000B14]"></div>
-
 
         {/* Enhanced animated background elements */}
         <div className="absolute inset-0 overflow-hidden">
@@ -375,7 +386,7 @@ export default function AboutPage() {
                     href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="bg-robinhood text-black hover:bg-robinhood-90 px-6 py-3 rounded-lg transition-colors font-medium border border-black/30"
+                    className="bg-robinhood text-black hover:bg-white hover:text-black px-6 py-3 rounded-lg transition-colors font-medium border-2 border-robinhood shadow-lg"
                     onClick={(e) => {
                       window.open(
                         'https://calendly.com/a-sheikhizadeh/devx-group-llc-representative',
@@ -529,159 +540,6 @@ export default function AboutPage() {
               <p className="text-foreground/80 text-sm">
                 Handover, documentation, and stabilization support after launch.
               </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Our Story Section - Redesigned */}
-      <section className="py-20 relative overflow-hidden">
-        {/* Simplified Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a1a] via-[#1a0a2a] to-[#0a1a0a]" />
-
-        <div className="container mx-auto px-4 relative z-10">
-          {/* Header */}
-          <div className="text-center mb-16">
-            <div className="flex items-center justify-center w-full mb-6">
-              <div
-                style={{
-                  position: 'relative',
-                  height: '80px',
-                  width: '360px',
-                  padding: '0',
-                }}
-              >
-                <TextPressure
-                  text="Our&nbsp;Story&nbsp; "
-                  flex={true}
-                  alpha={false}
-                  stroke={false}
-                  width={true}
-                  weight={true}
-                  italic={false}
-                  textColor="#FFD700"
-                  strokeColor="#FFFFFF"
-                  minFontSize={28}
-                />
-              </div>
-            </div>
-
-            <AnimatedSection delay={0.2}>
-              <p className="text-lg md:text-xl text-foreground/90 font-light max-w-2xl mx-auto leading-relaxed font-['IBM_Plex_Sans']">
-                Founded with a simple mission: deliver exceptional software solutions that drive
-                real business results.
-              </p>
-            </AnimatedSection>
-          </div>
-
-          {/* Main Content with Better Layout */}
-          <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-16 items-center">
-              {/* Text Content */}
-              <div className="order-2 xl:order-1">
-                <div className="bg-black/30 backdrop-blur-sm p-8 rounded-2xl border border-white/10">
-                  <div className="space-y-6 text-foreground/90">
-                    <AnimatedSection delay={0.3}>
-                      <p className="text-base md:text-lg leading-relaxed">
-                        We are not a typical development agency. We are a specialized senior team
-                        for complex and time-sensitive projects. Every member is hand-selected for
-                        their skills, proven track record, and ability to execute under pressure.
-                      </p>
-                    </AnimatedSection>
-
-                    <AnimatedSection delay={0.4}>
-                      <div>
-                        <h4 className="text-lg font-semibold text-[#4CD787] mb-3">
-                          Our Three Core Principles:
-                        </h4>
-                        <div className="space-y-3">
-                          <div className="flex gap-3">
-                            <span className="text-[#4CD787] font-bold text-lg">1.</span>
-                            <div>
-                              <h5 className="font-semibold text-white text-sm mb-1">
-                                Vetted Experts Only
-                              </h5>
-                              <p className="text-sm leading-relaxed">
-                                No junior developers, no learning on your dime. Our team consists
-                                solely of senior-level professionals with 5+ years of proven
-                                experience.
-                              </p>
-                            </div>
-                          </div>
-                          <div className="flex gap-3">
-                            <span className="text-[#FFD700] font-bold text-lg">2.</span>
-                            <div>
-                              <h5 className="font-semibold text-white text-sm mb-1">
-                                Precision & Efficiency
-                              </h5>
-                              <p className="text-sm leading-relaxed">
-                                We move fast without breaking things. Every line of code, every
-                                decision, every deliverable is executed with military precision.
-                              </p>
-                            </div>
-                          </div>
-                          <div className="flex gap-3">
-                            <span className="text-[#4834D4] font-bold text-lg">3.</span>
-                            <div>
-                              <h5 className="font-semibold text-white text-sm mb-1">
-                                No Project Left Behind
-                              </h5>
-                              <p className="text-sm leading-relaxed">
-                                When we take on your project, it gets completed. Period. We don&apos;t
-                                abandon missions, and we don&apos;t leave clients hanging.
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </AnimatedSection>
-
-                    <AnimatedSection delay={0.5}>
-                      <p className="text-base md:text-lg leading-relaxed">
-                        Whether you need rapid MVP development, complex system integrations, or
-                        rescue operations for failing projects, we deploy the right specialists for
-                        your specific mission.
-                      </p>
-                    </AnimatedSection>
-                  </div>
-                </div>
-              </div>
-
-              {/* Image with Running Line Animation */}
-              <div className="order-1 xl:order-2">
-                <AnimatedSection delay={0.3}>
-                  <div className="relative group">
-                    {/* Main image container */}
-                    <div className="relative aspect-video rounded-2xl overflow-hidden shadow-xl">
-                      <Image
-                        src="/images/about/devx-office.jpg"
-                        alt="DevX Group LLC Headquarters - San Diego, California"
-                        fill
-                        className="object-cover transition-transform duration-700 group-hover:scale-105"
-                        sizes="(max-width: 768px) 100vw, 50vw"
-                        priority={false}
-                      />
-
-                      {/* Running line animation around image */}
-                      <RunningLineAnimation color="#4CD787" duration={4} />
-
-                      {/* Small headquarters info card */}
-                      <motion.div
-                        className="absolute bottom-4 right-4 bg-black/40 backdrop-blur-sm text-white p-3 rounded-lg shadow-lg border border-white/20 max-w-[200px]"
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.5, duration: 0.6 }}
-                        whileHover={{ scale: 1.05 }}
-                      >
-                        <div className="text-center">
-                          <p className="font-semibold text-sm text-[#4CD787]">Headquarters</p>
-                          <p className="text-xs opacity-90">San Diego, CA</p>
-                        </div>
-                      </motion.div>
-                    </div>
-                  </div>
-                </AnimatedSection>
-              </div>
             </div>
           </div>
         </div>
@@ -886,7 +744,7 @@ export default function AboutPage() {
                 href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-robinhood text-black hover:bg-robinhood-90 px-8 py-3 rounded-lg transition-colors font-medium border border-black/30"
+                className="bg-robinhood text-black hover:bg-white hover:text-black px-8 py-3 rounded-lg transition-colors font-medium border-2 border-robinhood shadow-lg"
                 onClick={(e) => {
                   window.open(
                     'https://calendly.com/a-sheikhizadeh/devx-group-llc-representative',
