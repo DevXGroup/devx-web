@@ -23,7 +23,7 @@ interface MorphingSphere3DProps {
 const MorphingSphere3D = ({ isTyping = false, typingIntensity = 0 }: MorphingSphere3DProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [particles, setParticles] = useState<Particle[]>([])
-  const animationFrameRef = useRef<number>()
+  const animationFrameRef = useRef<number | undefined>(undefined)
   const timeRef = useRef(0)
 
   useEffect(() => {

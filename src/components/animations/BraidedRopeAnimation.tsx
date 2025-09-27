@@ -268,7 +268,7 @@ function BraidedRopeMesh({
   isMobile,
   isTablet,
 }: {
-  containerRef: React.RefObject<HTMLDivElement>
+  containerRef: React.RefObject<HTMLDivElement | null>
   isMobile: boolean
   isTablet: boolean
 }) {

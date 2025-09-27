@@ -341,13 +341,21 @@ const LetterGlitch = ({
     const timeout2 = setTimeout(initCanvas, 300);
     const timeout3 = setTimeout(initCanvas, 500);
 
-    // Mouse event handlers
+    // Mouse event handlers with better reliability
     const handleMouseMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      mousePosition.current = {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top
-      };
+      try {
+        const rect = canvas.getBoundingClientRect();
+        mousePosition.current = {
+          x: e.clientX - rect.left,
+          y: e.clientY - rect.top
+        };
+        // Ensure we're hovering when mouse moves
+        if (!isHovering.current) {
+          isHovering.current = true;
+        }
+      } catch (error) {
+        console.warn('Error in mouse move handler:', error);
+      }
     };
 
     const handleMouseEnter = () => {
@@ -359,14 +367,47 @@ const LetterGlitch = ({
       mousePosition.current = { x: -1, y: -1 };
     };
 
+    // Also add mouse events to parent container for better coverage
+    const handleParentMouseEnter = () => {
+      isHovering.current = true;
+    };
+
+    const handleParentMouseLeave = () => {
+      isHovering.current = false;
+      mousePosition.current = { x: -1, y: -1 };
+    };
+
+    const handleParentMouseMove = (e: MouseEvent) => {
+      try {
+        const rect = canvas.getBoundingClientRect();
+        mousePosition.current = {
+          x: e.clientX - rect.left,
+          y: e.clientY - rect.top
+        };
+        isHovering.current = true;
+      } catch (error) {
+        console.warn('Error in parent mouse move handler:', error);
+      }
+    };
+
     // Simple resize handler without debouncing
     const handleResize = () => {
       initCanvas();
     };
 
-    canvas.addEventListener('mousemove', handleMouseMove);
-    canvas.addEventListener('mouseenter', handleMouseEnter);
-    canvas.addEventListener('mouseleave', handleMouseLeave);
+    // Add events to both canvas and parent for better reliability
+    const parent = canvas.parentElement;
+    
+    canvas.addEventListener('mousemove', handleMouseMove, { passive: true });
+    canvas.addEventListener('mouseenter', handleMouseEnter, { passive: true });
+    canvas.addEventListener('mouseleave', handleMouseLeave, { passive: true });
+    
+    if (parent) {
+      parent.addEventListener('mouseenter', handleParentMouseEnter, { passive: true });
+      parent.addEventListener('mouseleave', handleParentMouseLeave, { passive: true });
+      parent.addEventListener('mousemove', handleParentMouseMove, { passive: true });
+    }
+    
     window.addEventListener("resize", handleResize);
 
     return () => {
@@ -379,28 +420,51 @@ const LetterGlitch = ({
       canvas.removeEventListener('mousemove', handleMouseMove);
       canvas.removeEventListener('mouseenter', handleMouseEnter);
       canvas.removeEventListener('mouseleave', handleMouseLeave);
+      
+      if (parent) {
+        parent.removeEventListener('mouseenter', handleParentMouseEnter);
+        parent.removeEventListener('mouseleave', handleParentMouseLeave);
+        parent.removeEventListener('mousemove', handleParentMouseMove);
+      }
+      
       window.removeEventListener("resize", handleResize);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [glitchSpeed, smooth]);
 
   return (
-    <div className="relative w-full h-full bg-black overflow-hidden">
+    <div 
+      className="relative w-full h-full bg-black overflow-hidden"
+      style={{ 
+        pointerEvents: 'auto',
+        cursor: 'none',
+        zIndex: 1
+      }}
+    >
       <canvas 
         ref={canvasRef} 
         className="absolute inset-0 w-full h-full block"
-        style={{ width: '100%', height: '100%', minWidth: '50px', minHeight: '50px' }}
+        style={{ 
+          width: '100%', 
+          height: '100%', 
+          minWidth: '50px', 
+          minHeight: '50px',
+          pointerEvents: 'auto',
+          zIndex: 2
+        }}
         // Add fallback text if canvas fails
         aria-label="Animated Glitch Background"
       />
       {outerVignette && (
         <div
           className="absolute top-0 left-0 w-full h-full pointer-events-none bg-[radial-gradient(circle,_rgba(0,0,0,0)_60%,_rgba(0,0,0,1)_100%)]"
+          style={{ zIndex: 3 }}
         ></div>
       )}
       {centerVignette && (
         <div
           className="absolute top-0 left-0 w-full h-full pointer-events-none bg-[radial-gradient(circle,_rgba(0,0,0,0.8)_0%,_rgba(0,0,0,0)_60%)]"
+          style={{ zIndex: 3 }}
         ></div>
       )}
     </div>

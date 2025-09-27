@@ -28,7 +28,7 @@ const processes = [
     title: "Build",
     description: "Watch your idea come to life with clean, fast, and scalable code.",
     shapeVariation: 0,
-    color: "#4834D4",
+    color: "#8B5CF6",
     useFullCard: true,
   },
   {
@@ -105,11 +105,12 @@ export default function Process() {
       <motion.div style={{ opacity, y }} className="relative container mx-auto px-4">
         <div className="text-center">
           <div className="flex flex-col items-center">
-            <AnimatedGradientText className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-center font-['IBM_Plex_Mono']">
+            <AnimatedGradientText className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-center font-['IBM_Plex_Mono']">
               How it works
             </AnimatedGradientText>
             <p className="text-lg md:text-xl text-foreground/80 max-w-3xl mx-auto font-['IBM_Plex_Mono'] font-light mb-16 px-4">
-              Simple steps to bring your software vision to life — from idea to launch in record time.
+              Simple steps to bring your software vision to life<br />
+              from idea to launch in record time.
             </p>
           </div>
         </div>
@@ -131,7 +132,6 @@ export default function Process() {
               whileHover={{
                 scale: 1.02,
                 y: -8,
-                transition: { duration: 0.4, ease: [0.23, 1, 0.32, 1] }
               }}
               whileTap={{ scale: 0.98 }}
               className="group relative bg-black/50 backdrop-blur-sm p-6 sm:p-8 md:p-10 rounded-xl border border-white/10 flex flex-col items-start text-left overflow-hidden cursor-pointer"
@@ -286,15 +286,16 @@ export default function Process() {
                     />
                     
                     <motion.div
-                      whileHover={{ 
+                      whileHover={{
                         scale: 1.2,
                         rotateY: 180,
                       }}
                       transition={{ duration: 0.6, ease: "backOut" }}
+                      className="pointer-events-none"
                     >
-                      <process.icon 
-                        className="w-6 h-6 transition-all duration-300 relative z-10" 
-                        style={{ 
+                      <process.icon
+                        className="w-6 h-6 transition-all duration-300 relative z-10 pointer-events-none"
+                        style={{
                           color: process.color,
                           filter: `drop-shadow(0 0 4px ${process.color}80)`
                         }}

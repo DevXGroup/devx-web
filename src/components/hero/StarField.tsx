@@ -13,9 +13,9 @@ export default function EnhancedStarfield({
   return (
     <>
       {/* Enhanced twinkling background stars */}
-      <SimpleStarLayer count={1800} viewport={viewport} />
+      <SimpleStarLayer count={600} viewport={viewport} />
       {/* Bright stars with diffraction spikes */}
-      <BrightStarsLayer count={50} viewport={viewport} />
+      <BrightStarsLayer count={20} viewport={viewport} />
     </>
   )
 }

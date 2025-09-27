@@ -24,22 +24,23 @@ Whether you're a startup turning vision into product or an established firm need
 devx-web/
 ├── src/
 │   ├── app/                # Next.js App Router pages
-│   │   ├── home/, about/, services/, portfolio/, etc.
+│   │   ├── home/, about/, contact/, portfolio/, pricing/, privacy/, terms/, services/creative-animation/
 │   │   ├── layout.tsx      # Global fonts, BrowserCompatibilityDetector, ConditionalLayout
 │   │   └── page.tsx        # Entry point when no path is provided
 │   ├── common/             # Shared layout pieces (Navbar, Footer)
-│   ├── components/         # Reusable/animated components (Hero, ModernCube, etc.)
-│   │   └── ui/             # Shadcn-style primitives (Button, Input, Toast, …)
+│   ├── components/         # Reusable components: 3d/, animations/, sections/, services/, portfolio/, layout/, effects/, planet/, transitions/, ui/
 │   ├── hooks/              # Client-side hooks (backdrop filter support, smooth scroll, etc.)
 │   ├── lib/                # Utilities (cn function for class merging)
 │   ├── data/               # Static data (e.g., portfolioProjects.ts)
-│   └── styles/             # Global CSS (typography.css)
-├── tests/                  # Jest + Testing Library tests
-├── public/                 # Static assets (images, logos)
-├── hooks/, helper/         # Supporting hooks/scripts outside `src/`
+│   ├── styles/             # Global CSS (typography.css)
+│   ├── types/              # Type declarations (e.g., css.d.ts)
+│   └── dev-features/       # Dev-only pages and feature playgrounds
+├── tests/                  # Jest unit tests; Playwright specs (integration/, qa/, audit/) + artifacts/
+├── public/                 # Static assets (images, logos, robots.txt, sitemap.xml)
+├── hooks/, helper/, scripts/ # Supporting hooks/utilities outside `src/`
 ├── tailwind.config.js      # Tailwind theme extensions
 ├── tsconfig.json           # TypeScript configuration with strict mode
-├── next.config.{mjs,cjs}   # Next.js build/runtime settings
+├── next.config.mjs         # Next.js build/runtime settings
 └── README.md               # Project overview and setup
 ```
 
@@ -102,15 +103,14 @@ pnpm lint       # run ESLint/Prettier
 
    - Jest and Testing Library are configured via `jest.config.js` and `jest.setup.js`.
    - Tests live under `tests/`, with helpers in `tests/test-utils.ts` that mock Next.js router, IntersectionObserver, etc.
+   - Playwright specs live in `tests/integration/`, `tests/qa/`, and `tests/audit/` (artifacts in `tests/audit/artifacts/`). Configure Playwright separately from Jest.
 
 6. **Helper Scripts**
 
    - The `helper` directory contains scripts for managing assets (e.g., downloading portfolio images) and a standalone `utils.ts` for non-app code.
 
 7. **Guidelines & Documentation**
-   - `CONTENT_GUIDELINES.md`: writing style (clear, 8th-grade reading level, no marketing fluff).
-   - `CRUSH.md`: commands and coding conventions (Tailwind usage, TypeScript strictness).
-   - `PORTFOLIO_CONSISTENCY_CHECK.md` and `SUGGESTED_CHANGES.md`: notes on content consistency and suggested UI improvements.
+   - Internal engineering and content guidelines are maintained privately.
 
 ### Next Steps for Deepening Understanding
 
@@ -121,9 +121,9 @@ pnpm lint       # run ESLint/Prettier
 
 - **Understand Components & Animations**
 
-  - Study `src/components/Hero.tsx` (Framer Motion, dynamic imports, text animations).
+  - Study `src/components/sections/Hero.tsx` (Framer Motion, dynamic imports, text animations).
   - Explore `src/components/services/` and `src/components/portfolio/` for feature-specific UI.
-  - Review 3D examples like `ModernCube.tsx` or `RotatingCube.tsx` using React Three Fiber.
+  - Review 3D examples like `src/components/3d/ModernCube.tsx` or `src/components/3d/RotatingCube.tsx` using React Three Fiber.
 
 - **Learn Custom Hooks**
 
@@ -134,4 +134,4 @@ pnpm lint       # run ESLint/Prettier
   - `tests/components/ModernCube.test.tsx` and `ParallaxTestimonials.test.tsx` demonstrate component testing with mocked libraries and helpers.
 
 - **Follow Guidelines**
-  - Adhere to the style and content rules in `CRUSH.md` and `CONTENT_GUIDELINES.md` when adding code or copy.
+  - Follow internal guidelines maintained privately for content and engineering practices.

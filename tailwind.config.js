@@ -21,8 +21,8 @@ module.exports = {
         'max-xs': {'max': '474px'},
       },
       fontFamily: {
-        mono: ["var(--font-ibm-plex-mono)", "monospace"],
-        sans: ["var(--font-ibm-plex-sans)", "sans-serif"],
+        mono: ["var(--font-ibm-plex-mono)", "ui-monospace", "SF Mono", "monospace"],
+        sans: ["var(--font-ibm-plex-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -73,17 +73,28 @@ module.exports = {
         sm: "calc(var(--radius) - 4px)",
       },
       animation: {
-        'star-movement-bottom': 'star-movement-bottom linear infinite alternate',
-        'star-movement-top': 'star-movement-top linear infinite alternate',
+        'star-movement-bottom': 'star-movement-bottom linear infinite',
+        'star-movement-top': 'star-movement-top linear infinite',
+        'shine': 'shine 5s linear infinite',
       },
       keyframes: {
         'star-movement-bottom': {
-          '0%': { transform: 'translate(0%, 0%)', opacity: '1' },
-          '100%': { transform: 'translate(-100%, 0%)', opacity: '0' },
+          '0%': { transform: 'translate(200%, 0%) scale(0.8)', opacity: '0.3' },
+          '25%': { transform: 'translate(100%, -20%) scale(1)', opacity: '1' },
+          '50%': { transform: 'translate(0%, -40%) scale(1.2)', opacity: '1' },
+          '75%': { transform: 'translate(-100%, -20%) scale(1)', opacity: '1' },
+          '100%': { transform: 'translate(-200%, 0%) scale(0.8)', opacity: '0.3' },
         },
         'star-movement-top': {
-          '0%': { transform: 'translate(0%, 0%)', opacity: '1' },
-          '100%': { transform: 'translate(100%, 0%)', opacity: '0' },
+          '0%': { transform: 'translate(-200%, 0%) scale(0.8)', opacity: '0.3' },
+          '25%': { transform: 'translate(-100%, 20%) scale(1)', opacity: '1' },
+          '50%': { transform: 'translate(0%, 40%) scale(1.2)', opacity: '1' },
+          '75%': { transform: 'translate(100%, 20%) scale(1)', opacity: '1' },
+          '100%': { transform: 'translate(200%, 0%) scale(0.8)', opacity: '0.3' },
+        },
+        'shine': {
+          '0%': { 'background-position': '100%' },
+          '100%': { 'background-position': '-100%' },
         },
       },
     },

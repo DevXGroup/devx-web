@@ -275,6 +275,20 @@ export default function PlanetDivider() {
           opacity: opacity * 0.4,
         })}
       />
+      <style jsx>{`
+        .planet-glow-effect {
+          will-change: transform, opacity;
+          filter: drop-shadow(0 0 60px rgba(76, 215, 135, 0.25)) drop-shadow(0 0 110px rgba(76, 215, 135, 0.18)) drop-shadow(0 0 160px rgba(76, 215, 135, 0.12));
+          -webkit-filter: drop-shadow(0 0 60px rgba(76, 215, 135, 0.25)) drop-shadow(0 0 110px rgba(76, 215, 135, 0.18)) drop-shadow(0 0 160px rgba(76, 215, 135, 0.12));
+        }
+
+        @supports (-webkit-overflow-scrolling: touch) {
+          .planet-glow-effect {
+            filter: drop-shadow(0 0 45px rgba(76, 215, 135, 0.28)) drop-shadow(0 0 90px rgba(157, 78, 221, 0.18)) drop-shadow(0 0 140px rgba(76, 215, 135, 0.14));
+            -webkit-filter: drop-shadow(0 0 45px rgba(76, 215, 135, 0.28)) drop-shadow(0 0 90px rgba(157, 78, 221, 0.18)) drop-shadow(0 0 140px rgba(76, 215, 135, 0.14));
+          }
+        }
+      `}</style>
     </div>
   )
 }

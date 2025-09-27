@@ -167,7 +167,7 @@ export default function ServiceShowcase3D() {
               <div className="flex justify-center">
                 <Link
                   href="/contact"
-                  className="inline-block bg-robinhood text-black hover:bg-robinhood-90 px-6 py-2 rounded-lg text-sm font-medium transition-all duration-300 hover:shadow-[0_5px_15px_rgba(204,255,0,0.3)]"
+                  className="inline-block bg-robinhood text-black hover:bg-white hover:text-black px-6 py-2 rounded-lg text-sm font-medium transition-all duration-300 border-2 border-robinhood shadow-lg hover:shadow-[0_5px_15px_rgba(204,255,0,0.3)]"
                 >
                   Get Started
                 </Link>

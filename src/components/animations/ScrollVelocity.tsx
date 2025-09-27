@@ -47,7 +47,7 @@ interface ScrollVelocityProps {
   scrollerStyle?: React.CSSProperties
 }
 
-function useElementWidth(ref: React.RefObject<HTMLElement>): number {
+function useElementWidth(ref: React.RefObject<HTMLElement | null>): number {
   const [width, setWidth] = useState(0)
 
   useLayoutEffect(() => {

@@ -27,7 +27,7 @@ export default function ParticleField({
   colors = ["#4CD787", "#4834D4", "#FFD700", "#9d4edd"]
 }: ParticleFieldProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const animationRef = useRef<number>()
+  const animationRef = useRef<number | undefined>(undefined)
   const particlesRef = useRef<Particle[]>([])
   const mouseRef = useRef({ x: 0, y: 0 })
   const shouldReduceMotion = useReducedMotion()

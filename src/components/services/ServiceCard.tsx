@@ -10,6 +10,7 @@ interface ServiceCardProps {
     icon: LucideIcon
     title: string
     description: string
+    outcome?: string
     features: string[]
     color: string
   }
@@ -89,6 +90,15 @@ export default function ServiceCard({ service, index }: ServiceCardProps) {
       >
         {service.description}
       </p>
+
+      {service.outcome && (
+        <div
+          className="mb-4 sm:mb-6 relative z-10 p-3 rounded-lg border border-white/10 bg-white/5"
+        >
+          <p className="text-sm font-semibold text-[#4CD787] mb-1">What you get:</p>
+          <p className="text-sm text-white/90">{service.outcome}</p>
+        </div>
+      )}
 
       <ul className="space-y-3 relative z-10">
         {service.features.map((feature, i) => (

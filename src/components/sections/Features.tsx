@@ -45,10 +45,6 @@ const cardVariants = {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: {
-      duration: 0.6,
-      ease: [0.22, 1, 0.36, 1],
-    },
   },
 }
 
@@ -93,15 +89,17 @@ function StepAnimation({
         isActive ? 'text-black' : 'text-black/40'
       }`}
     >
-      {/* Step Circle - Simple lamp effect */}
+      {/* Step Circle - Enhanced hover effects with bright borders */}
       <motion.div
-        className={`w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-lg md:text-xl font-bold font-['IBM_Plex_Mono'] transition-all duration-700 ease-in-out ${
+        className={`w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-lg md:text-xl font-bold font-['IBM_Plex_Mono'] transition-all duration-300 ease-in-out cursor-pointer group relative ${
           isActive
-            ? 'bg-black text-white shadow-lg shadow-black/30'
-            : 'bg-black/20 text-black/50 border-2 border-black/30'
+            ? 'bg-black text-white shadow-lg shadow-black/30 border-2 border-[#ccff00]'
+            : 'bg-black/20 text-black/60 border-2 border-black/30 hover:border-[#ccff00] hover:bg-black/30 hover:text-black hover:shadow-lg hover:shadow-[#ccff00]/20'
         }`}
-        whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
-        whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
+        whileHover={
+          shouldReduceMotion ? {} : { scale: 1.08, boxShadow: '0 8px 32px rgba(204, 255, 0, 0.3)' }
+        }
+        whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
       >
         {step}
       </motion.div>
@@ -132,7 +130,7 @@ function Card({
   return (
     <motion.div
       variants={cardVariants}
-      className="bg-[#1a2e00]/90 p-8 md:p-10 rounded-2xl flex flex-col items-start text-left shadow-lg w-full h-full hover:bg-[#1a2e00]/95 transition-colors duration-300 group"
+      className="bg-[#1a2e00]/90 p-4 sm:p-6 md:p-8 lg:p-10 rounded-2xl flex flex-col items-start text-left shadow-lg w-full h-full hover:bg-[#1a2e00]/95 transition-colors duration-300 group border border-transparent hover:border-[#ccff00]/20 mx-auto max-w-full overflow-hidden"
       whileHover={
         shouldReduceMotion
           ? {}
@@ -142,19 +140,19 @@ function Card({
             }
       }
     >
-      <div className="flex items-start mb-6">
+      <div className="flex items-start gap-4 md:gap-6 w-full">
         <motion.div
-          className="bg-[#ccff00]/90 rounded-full w-16 h-16 flex items-center justify-center mr-4 aspect-square shrink-0 group-hover:bg-[#ccff00] transition-colors duration-300"
+          className="bg-[#ccff00]/90 rounded-full w-12 h-12 md:w-16 md:h-16 flex items-center justify-center aspect-square shrink-0 group-hover:bg-[#ccff00] transition-colors duration-300"
           whileHover={shouldReduceMotion ? {} : { rotate: 360 }}
           transition={{ duration: 0.6, ease: 'easeInOut' }}
         >
-          <Icon className="w-8 h-8 text-black" />
+          <Icon className="w-6 h-6 md:w-8 md:h-8 text-black pointer-events-none" />
         </motion.div>
-        <div>
-          <h3 className="text-xl md:text-2xl font-bold text-[#ccff00] font-['IBM_Plex_Mono'] mb-2 group-hover:text-white transition-colors duration-300">
+        <div className="flex-1 min-w-0">
+          <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-[#ccff00] font-['IBM_Plex_Mono'] mb-3 md:mb-4 group-hover:text-white transition-colors duration-300 leading-tight break-words">
             {title}
           </h3>
-          <p className="text-white/80 font-['IBM_Plex_Mono'] text-base group-hover:text-white/90 transition-colors duration-300">
+          <p className="text-white/80 font-['IBM_Plex_Sans'] text-sm md:text-base group-hover:text-white/90 transition-colors duration-300 leading-relaxed break-words">
             {description}
           </p>
         </div>
@@ -177,31 +175,66 @@ function WhyUsCard({
   return (
     <motion.div
       variants={cardVariants}
-      className="bg-black/80 p-8 md:p-10 rounded-2xl flex flex-col items-start text-left shadow-lg w-full h-full hover:bg-black/90 transition-colors duration-300 group backdrop-blur-sm"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
       whileHover={
         shouldReduceMotion
           ? {}
           : {
+              scale: 1.02,
               y: -8,
-              boxShadow: '0 25px 50px rgba(204, 255, 0, 0.15)',
             }
       }
+      whileTap={{ scale: 0.98 }}
+      className="group relative bg-black/80 backdrop-blur-sm p-4 sm:p-6 md:p-8 rounded-xl border border-white/10 flex flex-col items-center text-center overflow-hidden cursor-pointer hover:bg-black/90 transition-all duration-300 min-h-[280px] sm:min-h-[300px] w-full max-w-full"
     >
-      <div className="flex items-center mb-6">
+      {/* Content */}
+      <div className="relative z-10 flex flex-col items-center h-full">
+        {/* Icon */}
         <motion.div
-          className="w-16 h-16 mr-4 flex items-center justify-center bg-robinhood rounded-full aspect-square shrink-0 group-hover:bg-robinhood/90 transition-colors duration-300"
-          whileHover={shouldReduceMotion ? {} : { scale: 1.1, rotate: -5 }}
-          transition={{ duration: 0.3, ease: 'easeInOut' }}
+          className="w-12 h-12 rounded-full flex items-center justify-center mb-6 relative overflow-hidden aspect-square shrink-0"
+          whileHover={{
+            boxShadow: `0 0 25px rgba(204, 255, 0, 0.6)`,
+          }}
+          transition={{ duration: 0.4 }}
+          style={{
+            backgroundColor: '#ccff00',
+            border: `2px solid #ccff00`,
+          }}
         >
-          <Icon className="w-8 h-8 text-black" />
+          <motion.div
+            whileHover={{
+              scale: 1.2,
+              rotateY: 180,
+            }}
+            transition={{ duration: 0.6, ease: 'backOut' }}
+            className="pointer-events-none"
+          >
+            <Icon className="w-6 h-6 transition-all duration-300 relative z-10 text-black pointer-events-none" />
+          </motion.div>
         </motion.div>
-        <h3 className="text-xl md:text-2xl font-bold text-robinhood font-['IBM_Plex_Mono'] group-hover:text-white transition-colors duration-300">
+
+        {/* Title */}
+        <motion.h3
+          className="text-base sm:text-lg md:text-xl font-bold font-['IBM_Plex_Mono'] text-[#ccff00] group-hover:text-white transition-colors duration-300 mb-4 break-words text-center px-2"
+          whileHover={{
+            scale: 1.05,
+            textShadow: `0 0 15px rgba(204, 255, 0, 0.8)`,
+          }}
+          transition={{ duration: 0.3 }}
+        >
           {title}
-        </h3>
+        </motion.h3>
+
+        {/* Description */}
+        <motion.p
+          className="text-white/85 font-['IBM_Plex_Sans'] text-sm sm:text-base leading-relaxed group-hover:text-white/95 transition-colors duration-500 text-center max-w-full break-words px-2"
+          style={{ lineHeight: '1.7' }}
+        >
+          {description}
+        </motion.p>
       </div>
-      <p className="text-white/80 font-['IBM_Plex_Mono'] text-base group-hover:text-white/90 transition-colors duration-300">
-        {description}
-      </p>
     </motion.div>
   )
 }
@@ -211,17 +244,21 @@ export default function Features() {
   const [isClient, setIsClient] = useState(false)
 
   // Always call useScroll to maintain hooks order
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start end', 'end start'],
-  })
+  const { scrollYProgress } = useScroll(
+    isClient && containerRef.current
+      ? {
+          target: containerRef,
+          offset: ['start end', 'end start'],
+        }
+      : {}
+  )
 
   useEffect(() => {
     setIsClient(true)
   }, [])
 
-  const opacity = useTransform(scrollYProgress, [0, 0.2], [0, 1])
-  const y = useTransform(scrollYProgress, [0, 0.2], [100, 0])
+  const opacity = useTransform(scrollYProgress || 0, [0, 0.05], [0, 1])
+  const y = useTransform(scrollYProgress || 0, [0, 0.05], [100, 0])
 
   const [currentStep, setCurrentStep] = useState(0)
   const steps = ['Talk to us', 'Plan together', 'Build something great']
@@ -254,7 +291,7 @@ export default function Features() {
   return (
     <section
       ref={containerRef}
-      className="relative py-28 md:py-32 overflow-hidden bg-robinhood w-full"
+      className="relative py-16 md:py-20 overflow-hidden bg-robinhood w-full"
     >
       {/* Black falling stars */}
       <BlackFallingStars />
@@ -271,10 +308,10 @@ export default function Features() {
         className="relative container mx-auto px-4 z-10 max-w-6xl"
       >
         {/* Hero Section */}
-        <div className="text-center mb-24 md:mb-28">
+        <div className="text-center mb-12 md:mb-16">
           {/* Fixed title visibility with inline styles */}
           <h2
-            className="text-4xl md:text-5xl lg:text-6xl font-bold mb-10 font-['IBM_Plex_Mono'] text-black"
+            className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 font-['IBM_Plex_Mono'] text-black"
             style={{
               textShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
               WebkitTextStroke: '1px rgba(0, 0, 0, 0.3)',
@@ -286,7 +323,7 @@ export default function Features() {
 
         {/* Cards Section */}
         <motion.div
-          className="grid md:grid-cols-2 gap-6 md:gap-8 mb-16 md:mb-20 max-w-5xl mx-auto"
+          className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-16 md:mb-20 max-w-5xl mx-auto px-4 sm:px-6"
           variants={containerVariants}
         >
           <Card
@@ -308,9 +345,10 @@ export default function Features() {
             className="h-12 sm:h-16 flex items-center justify-center"
           >
             <span
-              className="text-2xl sm:text-4xl md:text-5xl font-normal font-black text-black"
+              className="text-2xl sm:text-4xl md:text-5xl font-black text-black"
               style={{
                 marginRight: '13px',
+                fontWeight: 'bolder',
               }}
             >
               Creative
@@ -350,56 +388,71 @@ export default function Features() {
         </div>
 
         {/* Why Us Section */}
-        <div id="why-devx-section" className="text-center mb-24 md:mb-28">
+        <div id="why-devx-section" className="text-center mb-16 md:mb-20">
           {/* Fixed title visibility with inline styles */}
           <h2
-            className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 font-['IBM_Plex_Mono'] text-black pb-3"
+            className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 font-['IBM_Plex_Mono'] text-black pb-3"
             style={{
               textShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
               WebkitTextStroke: '1px rgba(0, 0, 0, 0.3)',
             }}
           >
-            Why choose DevX?
+            Why Choose Us?
           </h2>
           <div className="max-w-3xl mx-auto mb-16">
             <p className="text-black/80 text-lg md:text-xl mb-4 font-['IBM_Plex_Mono']">
-              Finding a dependable long-term tech team is hard.
-            </p>
-            <p className="text-black text-lg md:text-xl font-['IBM_Plex_Mono']">
-              We made it simple — and built to scale with you.
+              Trusted U.S. company with worldwide senior developers, proven track record, and
+              full-stack expertise across industries.
             </p>
           </div>
 
           <motion.div
-            className="grid md:grid-cols-3 gap-8 md:gap-10 max-w-6xl mx-auto px-4"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 md:gap-10 max-w-6xl mx-auto px-4 sm:px-6"
             variants={containerVariants}
           >
             <WhyUsCard
               icon={Flag}
-              title="USA Based"
-              description="Based in San Diego, USA — operating with top-tier industry standards"
+              title="Global Excellence"
+              description="Headquarters in the U.S. with senior developers worldwide, ensuring accountability with round-the-clock progress."
             />
             <WhyUsCard
               icon={Search}
-              title="Hand-Picked Team"
-              description="Vetted experts, hand-picked for precision, speed, and trust"
+              title="Proven Success"
+              description="Hundreds of projects delivered across fintech, healthcare, retail, and SaaS — experience that reduces risk."
             />
             <WhyUsCard
               icon={Layers}
-              title="Full Stack Expertise"
-              description="Experts in modern and legacy stacks — from MVP to enterprise-scale systems"
+              title="Full-Stack Expertise"
+              description="From UI/UX design to cloud deployment, our senior engineers cover the full stack with efficiency and precision."
             />
           </motion.div>
 
           {/* Added link to About page */}
-          <div className="mt-12 text-center">
-            <Link
-              href="/about#our-values"
-              className="inline-flex items-center gap-2 bg-[#8A4FFF]/20 hover:bg-[#8A4FFF]/30 hover:border-[#1a2e00] hover:border-2 text-[#1a2e00] border border-[#8A4FFF]/50 px-6 py-3 rounded-lg text-sm font-medium transition-all"
+          <div className="mt-16 text-center">
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ duration: 0.2 }}
+              className="relative inline-block"
             >
-              Explore more reasons to choose us
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+              {/* Animated star border effect */}
+              <div className="absolute inset-0 rounded-xl overflow-hidden">
+                <div
+                  className="absolute w-[200%] h-[200%] -top-[50%] -left-[50%] animate-spin opacity-60"
+                  style={{
+                    background: `conic-gradient(from 0deg, transparent, #ccff00, transparent, #ccff00, transparent)`,
+                    animationDuration: '3s',
+                  }}
+                />
+              </div>
+              <Link
+                href="/about#our-values"
+                className="group relative inline-flex items-center gap-3 bg-black/90 hover:bg-black text-[#ccff00] hover:text-white px-8 py-4 rounded-xl text-base font-semibold font-['IBM_Plex_Mono'] transition-all duration-300 backdrop-blur-sm border border-[#ccff00]/20 hover:border-[#ccff00]/40 hover:shadow-lg hover:shadow-[#ccff00]/20 z-10"
+              >
+                Explore more reasons to choose us
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+              </Link>
+            </motion.div>
           </div>
         </div>
 

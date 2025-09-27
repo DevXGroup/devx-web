@@ -6,9 +6,10 @@ import {
   useInView,
   useScroll,
   useTransform,
+  useMotionValue,
   AnimatePresence,
 } from 'framer-motion'
-import { Code2, Cloud, Brain, Smartphone, Cpu, Bot } from 'lucide-react'
+import { Code2, Cloud, Brain, Smartphone, Cpu, Bot, Monitor } from 'lucide-react'
 // import Link from 'next/link'
 import { useRef, useState, useEffect } from 'react'
 import TrueFocus from '@/components/animations/TrueFocus'
@@ -31,7 +32,8 @@ const services = [
     icon: Code2,
     title: 'Custom Software Development',
     description:
-      'We build custom software that fits your exact needs. Get web apps, mobile apps, and systems that grow with your business.',
+      'We build custom software that fits your exact needs. Get web applications, mobile applications, and systems that grow with your business.',
+    outcome: 'Custom software that scales with your business and automates manual processes',
     features: [
       'Full-stack Web Applications',
       'Enterprise System Integration',
@@ -41,10 +43,39 @@ const services = [
     color: '#4CD787',
   },
   {
+    icon: Smartphone,
+    title: 'Mobile Application Development',
+    description:
+      'Build mobile applications your users will love. We create fast, easy-to-use applications for iPhone and Android that keep people coming back.',
+    outcome: 'High-performing mobile applications that increase user engagement and revenue',
+    features: [
+      'Native iOS & Android Development',
+      'React Native & Flutter',
+      'Application Store Optimization',
+      'Mobile-First UI/UX Design',
+    ],
+    color: '#FFD700',
+  },
+  {
+    icon: Monitor,
+    title: 'Desktop Application Development',
+    description:
+      'Write code once and deploy everywhere. Build native desktop applications for Windows, macOS, and Linux using modern cross-platform technologies.',
+    outcome: 'Cross-platform desktop solutions that work seamlessly across all operating systems',
+    features: [
+      'Cross-Platform Desktop Applications (Electron)',
+      'Progressive Web Applications (PWA)',
+      'Browser Extensions & Add-ons',
+      'Native Performance Optimization',
+    ],
+    color: '#00D2FF',
+  },
+  {
     icon: Brain,
     title: 'AI & Machine Learning',
     description:
       'Use AI to automate tasks and make better decisions. We build smart systems that learn from your data and help you work faster.',
+    outcome: 'AI-powered systems that make intelligent decisions and predict future trends',
     features: [
       'Predictive Analytics & Forecasting',
       'Natural Language Processing',
@@ -58,19 +89,21 @@ const services = [
     title: 'AI Agents & Workflow Automation',
     description:
       'Let AI handle repetitive work so your team can focus on what matters. We create automation that works 24/7 and gets smarter over time.',
+    outcome: 'Automated workflows that reduce manual work by 70% and eliminate human error',
     features: [
       'Intelligent Process Automation',
       'Custom AI Assistant Development',
       'Workflow Orchestration',
       'Decision Engine Integration',
     ],
-    color: '#00D2FF',
+    color: '#CFB53B',
   },
   {
     icon: Cloud,
     title: 'Cloud Solutions',
     description:
-      'Move your apps to the cloud for better reliability and lower costs. We set up secure systems that handle more users without slowing down.',
+      'Move your applications to the cloud for better reliability and lower costs. We set up secure systems that handle more users without slowing down.',
+    outcome: 'Scalable cloud infrastructure that reduces costs by 50% and improves reliability',
     features: [
       'Multi-Cloud Architecture',
       'Serverless & Microservices',
@@ -80,28 +113,16 @@ const services = [
     color: '#4834D4',
   },
   {
-    icon: Smartphone,
-    title: 'Mobile App Development',
-    description:
-      'Build mobile apps your users will love. We create fast, easy-to-use apps for iPhone and Android that keep people coming back.',
-    features: [
-      'Native iOS & Android Development',
-      'React Native & Flutter',
-      'App Store Optimization',
-      'Mobile-First UI/UX Design',
-    ],
-    color: '#FFD700',
-  },
-  {
     icon: Cpu,
-    title: 'IoT Hardware & Edge Computing',
+    title: 'IoT & Smart Automation',
     description:
-      'Connect devices and sensors to collect data automatically. We build IoT systems that monitor your business and send alerts when needed.',
+      'Complete home and office automation solutions. From smart lighting to voice-controlled environments using Google Assistant and Alexa integration.',
+    outcome: 'Smart automation systems that enhance comfort and reduce energy costs by 30%',
     features: [
-      'Custom IoT Device Development',
-      'Edge AI & Real-time Processing',
-      'Sensor Integration & Networking',
-      'Industrial IoT Solutions',
+      'Smart Home Automation Systems',
+      'Raspberry Pi & Arduino Solutions',
+      'Voice Control (Google/Alexa)',
+      'Custom Electronic Installations',
     ],
     color: '#ff6b6b',
   },
@@ -113,35 +134,42 @@ const valueProps = [
     title: 'Fast Delivery',
     description:
       'Start your project today and see results in days, not months. We get you up and running quickly.',
+    proofPoint: 'Average MVP delivery in 6-8 weeks, 40% faster than industry standard'
   },
   {
     title: 'Reliable Results',
     description:
       "We deliver what we promise on time. You'll see real improvements in your business.",
+    proofPoint: '98% on-time delivery rate across 50+ projects completed'
   },
   {
     title: 'Clear Pricing',
     description: "No hidden costs or surprises. You'll know exactly what you pay before we start.",
+    proofPoint: 'Fixed-price projects with 0% cost overruns in the last 2 years'
   },
   {
     title: 'Long-term Support',
     description: 'We stick around after launch. Get ongoing help and advice when you need it.',
+    proofPoint: '90% client retention rate with ongoing support relationships'
   },
   {
     title: 'Experienced Team',
     description:
       "Work with skilled developers, designers, and project managers who know what they're doing.",
+    proofPoint: '15+ years combined experience with 100+ successful deployments'
   },
   {
     title: 'Modern AI Tools',
     description:
       'Use the latest AI technology to automate work and improve your business processes.',
+    proofPoint: 'AI implementations reducing operational costs by 60% on average'
   },
 ]
 
 export default function ServicesPage() {
   // Existing state variables
   const [activeSection, setActiveSection] = useState(null)
+  const [isMounted, setIsMounted] = useState(false)
   const heroRef = useRef(null)
   const valuePropsRef = useRef(null)
   const velocityRef = useRef(null)
@@ -153,17 +181,13 @@ export default function ServicesPage() {
   const [isMobile, setIsMobile] = useState(false)
   const [isTablet, setIsTablet] = useState(false)
 
-  // Simplified scroll progress tracking - only for hero section
-  const { scrollYProgress: heroScrollProgress } = useScroll({
-    target: heroRef,
-    offset: ['start start', 'end start'],
-  })
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
-  // Scroll progress tracking for velocity animation
-  const { scrollYProgress: velocityScrollProgress } = useScroll({
-    target: velocityRef,
-    offset: ['start 0.8', 'end 0.2'],
-  })
+  // Disable scroll-linked animations until after hydration
+  const heroScrollProgress = useMotionValue(0)
+  const velocityScrollProgress = useMotionValue(0)
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -179,13 +203,11 @@ export default function ServicesPage() {
     }
   }, [])
 
-  // Simplified transform values - removed complex scroll-based transforms
-  const titleY = useTransform(heroScrollProgress, [0, 1], [0, -30])
-  const titleScale = useTransform(heroScrollProgress, [0, 1], [1, 0.95])
-
-  // Apple-style scaling effect for velocity animation
-  const velocityScale = useTransform(velocityScrollProgress, [0, 0.5, 1], [1, 1.8, 3])
-  const velocityOpacity = useTransform(velocityScrollProgress, [0, 0.4, 1], [1, 0.8, 0.3])
+  // Static values for transforms to avoid hydration issues
+  const titleY = 0
+  const titleScale = 1
+  const velocityScale = 1
+  const velocityOpacity = 1
 
   useEffect(() => {
     // Detect Safari
@@ -226,10 +248,6 @@ export default function ServicesPage() {
     visible: {
       opacity: 1,
       y: 0,
-      transition: {
-        duration: 0.8,
-        ease: 'easeOut',
-      },
     },
   }
 
@@ -247,15 +265,18 @@ export default function ServicesPage() {
         {/* HyperSpeed Animation - Positioned above DevX Edge title */}
         <ClientOnly>
           <div
-            className="absolute left-0 right-0 w-full h-[280px] overflow-hidden pointer-events-none select-none"
+            className="absolute left-0 right-0 w-full h-[390px] overflow-hidden pointer-events-none select-none"
             aria-hidden="true"
             style={{
-              top: '76px',
+              top: '36px',
               zIndex: 1,
               pointerEvents: 'none',
               userSelect: 'none',
               touchAction: 'none',
               isolation: 'isolate',
+              background: 'linear-gradient(to bottom, transparent 0%, transparent 70%, black 100%)',
+              maskImage: 'linear-gradient(to bottom, white 0%, white 70%, transparent 100%)',
+              WebkitMaskImage: 'linear-gradient(to bottom, white 0%, white 70%, transparent 100%)',
             }}
           >
             <HyperSpeed />
@@ -321,9 +342,9 @@ export default function ServicesPage() {
           {/* Value Propositions with Apple-style reveal */}
           <div
             ref={valuePropsRef}
-            className="w-full max-w-5xl mt-8 mb-8 relative z-20 pointer-events-auto"
+            className="w-full max-w-5xl mb-8 relative z-20 pointer-events-auto"
           >
-            <div className="flex justify-center items-center mb-16 text-center">
+            <div className="flex justify-center items-center mb-16 text-center mt-24">
               <div
                 style={{
                   fontFamily: 'Georgia, "Times New Roman", Times, serif',
@@ -335,7 +356,7 @@ export default function ServicesPage() {
               >
                 <BlurText
                   text="The DevX Edge"
-                  className="text-4xl md:text-5xl lg:text-6xl font-light text-center text-[#FFD700] mt-10 tracking-wide italic"
+                  className="text-2xl md:text-3xl lg:text-3xl font-light text-center text-[#FFD700] mt-10 tracking-wide italic"
                   delay={120}
                   animateBy="words"
                   direction="top"
@@ -363,11 +384,16 @@ export default function ServicesPage() {
                     {prop.title}
                   </h3>
                   <p
-                    className="text-white/90 text-sm transition-colors duration-300 font-['IBM_Plex_Sans'] font-medium relative z-10"
+                    className="text-white/90 text-sm transition-colors duration-300 font-['IBM_Plex_Sans'] font-medium relative z-10 mb-3"
                     style={{ textShadow: '0 1px 4px rgba(0,0,0,0.7)', letterSpacing: '0.025em' }}
                   >
                     {prop.description}
                   </p>
+                  {prop.proofPoint && (
+                    <p className="text-[#4CD787] text-xs font-semibold transition-colors duration-300 relative z-10">
+                      ✓ {prop.proofPoint}
+                    </p>
+                  )}
 
                   {/* Running shining line effect on hover - matching ServiceCard style */}
                   <motion.div
@@ -461,7 +487,7 @@ export default function ServicesPage() {
       {/* Scroll Velocity Animation */}
       <section
         ref={velocityRef}
-        className="relative overflow-hidden pt-6 pb-12 md:pt-8 md:pb-16 lg:pt-10 lg:pb-20"
+        className="relative overflow-hidden pt-0 pb-0 md:pt-0 md:pb-1 lg:pt-0 lg:pb-0"
       >
         <motion.div
           initial={{ opacity: 0 }}
@@ -489,14 +515,14 @@ export default function ServicesPage() {
             >
               <ScrollVelocityText
                 baseVelocity={70}
-                className="text-5xl font-extrabold text-[#383e7b71] leading-tight h-[57px]"
+                className="text-7xl font-extrabold text-[#383e7b71] leading-tight h-[87px]"
                 damping={30}
                 stiffness={600}
                 velocityMapping={{ input: [0, 1000], output: [0, 6] }}
               >
                 {[
-                  ' Custom Software  •  AI Solutions  •  Mobile Apps  •  Cloud Infrastructure  • ',
-                  ' IoT Development  •  Workflow Automation  •  Digital Transformation  • ',
+                  ' Custom Software  •  Mobile Applications  •  Desktop Applications  •  AI Solutions  •  Cloud Infrastructure  • ',
+                  ' Smart Automation  •  IoT Development  •  Workflow Automation  •  Digital Transformation  • ',
                 ]}
               </ScrollVelocityText>
               <ScrollVelocityText
@@ -516,27 +542,79 @@ export default function ServicesPage() {
         </motion.div>
       </section>
 
+      {/* Case Studies with Horizontal Scroll */}
+      <AppleScrollSection delay={0.4}>
+        <section className="section-padding relative services-section case-studies-section mt-10">
+          {' '}
+          {/* Responsive top margin for better spacing */}
+          <div className="container mx-auto px-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              viewport={{ once: true, amount: 0.2 }}
+              className="title-margin text-center"
+            >
+              <TrueFocus sentence="Case Studies" />
+              <motion.p
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                transition={{ delay: 0.3, duration: 0.6 }}
+                viewport={{ once: true, amount: 0.2 }}
+                className="text-lg md:text-xl text-white/90 font-light mt-10 max-w-2xl mx-auto font-['IBM_Plex_Sans'] leading-relaxed"
+                style={{
+                  textShadow: '0 2px 6px rgba(0,0,0,0.8)',
+                  letterSpacing: '0.025em',
+                  fontWeight: '400',
+                }}
+              >
+                Proven results backed by analytics data from 6 months to 1 year implementations
+              </motion.p>
+            </motion.div>
+          </div>
+          <HorizontalScroll />
+        </section>
+      </AppleScrollSection>
+
       {/* Services Grid with Apple-style reveal */}
       <AppleScrollSection>
         <section className="section-padding relative services-section pt-8 md:pt-12">
           <div className="container mx-auto px-4 ">
-            <div className="w-full flex justify-center">
-              <motion.h2
+            <div className="w-full flex justify-center mb-28">
+              <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{
                   opacity: 1,
                   y: 0,
-                  transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
                 }}
+                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                 viewport={{ once: true, amount: 0.2 }}
-                className="text-5xl lg:text-7xl md:text-6xl sm:text-5xl xs:text-6xl font-bold mb-28 mt-0 text-center text-[#FFD700]"
                 style={{
-                  textShadow: '0 2px 4px rgba(0,0,0,0.5)',
-                  WebkitTextStroke: '1px rgba(0,0,0,0.3)',
+                  position: 'relative',
+                  height: '100px',
+                  width: '420px',
+                  padding: '0 0px',
                 }}
               >
-                Expertise
-              </motion.h2>
+                <TextPressure
+                  text="Expertise&nbsp; "
+                  flex={true}
+                  alpha={false}
+                  stroke={false}
+                  width={true}
+                  weight={true}
+                  italic={false}
+                  textColor="#FFD700"
+                  strokeColor="#FFFFFF"
+                  minFontSize={32}
+                />
+              </motion.div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 px-2 md:px-8 lg:px-16 relative z-10">
@@ -560,47 +638,6 @@ export default function ServicesPage() {
               ))}
             </div>
           </div>
-        </section>
-      </AppleScrollSection>
-
-
-      {/* Case Studies with Horizontal Scroll */}
-      <AppleScrollSection delay={0.4}>
-        <section className="section-padding relative services-section case-studies-section mt-10">
-          {' '}
-          {/* Responsive top margin for better spacing */}
-          <div className="container mx-auto px-4">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{
-                opacity: 1,
-                y: 0,
-                transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
-              }}
-              viewport={{ once: true, amount: 0.2 }}
-              className="title-margin text-center"
-            >
-              <TrueFocus sentence="Case Studies" />
-              <motion.p
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{
-                  opacity: 1,
-                  y: 0,
-                  transition: { delay: 0.3, duration: 0.6 },
-                }}
-                viewport={{ once: true, amount: 0.2 }}
-                className="text-lg md:text-xl text-white/90 font-light mt-10 max-w-2xl mx-auto font-['IBM_Plex_Sans'] leading-relaxed"
-                style={{
-                  textShadow: '0 2px 6px rgba(0,0,0,0.8)',
-                  letterSpacing: '0.025em',
-                  fontWeight: '400',
-                }}
-              >
-                Proven results backed by analytics data from 6 months to 1 year implementations
-              </motion.p>
-            </motion.div>
-          </div>
-          <HorizontalScroll />
         </section>
       </AppleScrollSection>
 
@@ -708,7 +745,7 @@ export default function ServicesPage() {
                     href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-block bg-robinhood text-black px-8 py-3 rounded-lg font-medium border border-black/30 transition-all duration-300"
+                    className="inline-block bg-robinhood text-black hover:bg-white hover:text-black px-8 py-3 rounded-lg font-medium border-2 border-robinhood shadow-lg transition-all duration-300"
                   >
                     <span className="relative z-10">Schedule a Strategy Call</span>
                     <motion.span

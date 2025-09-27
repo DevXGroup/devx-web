@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect, Page } from '@playwright/test'
 
 // Pages to test and human-readable names
 const pages = [
@@ -14,7 +14,7 @@ const viewports = [
 ]
 
 // Utility injected into the page to gather first-paint measurements
-async function injectFirstPaintLogger(page) {
+async function injectFirstPaintLogger(page: Page) {
   await page.addInitScript(() => {
     // Mark as hard refresh via cache busting
     (window as any).__AUDIT__ = { started: Date.now() }
@@ -31,7 +31,7 @@ async function injectFirstPaintLogger(page) {
           // matrix(a, b, c, d, tx, ty) => scaleX=a, scaleY=d
           const m = transform.match(/matrix\(([^)]*)\)/)
           if (m) {
-            const parts = m[1].split(',').map((s) => parseFloat(s.trim()))
+            const parts = m[1].split(',').map((s: string) => parseFloat(s.trim()))
             if (parts.length >= 4) {
               const scaleX = parts[0]
               const scaleY = parts[3]

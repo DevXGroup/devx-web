@@ -1,20 +1,20 @@
-import { test, expect } from '@playwright/test'
+import { test, expect, Page, Locator, ConsoleMessage } from '@playwright/test'
 
-async function waitForNoConsoleErrors(page) {
+async function waitForNoConsoleErrors(page: Page) {
   const errors: string[] = []
-  page.on('console', msg => {
+  page.on('console', (msg: ConsoleMessage) => {
     if (msg.type() === 'error') {
       errors.push(msg.text())
     }
   })
-  page.on('pageerror', err => {
+  page.on('pageerror', (err: Error) => {
     errors.push(err.message || String(err))
   })
   // small settle time after navigation will be awaited by caller
   return errors
 }
 
-async function expectCanvasMatchesParentFromLocator(locator: import('@playwright/test').Locator) {
+async function expectCanvasMatchesParentFromLocator(locator: Locator) {
   const sizes = await locator.evaluate((canvas: HTMLCanvasElement) => {
     const parent = canvas.parentElement as HTMLElement
     return {
@@ -28,7 +28,7 @@ async function expectCanvasMatchesParentFromLocator(locator: import('@playwright
   expect(sizes.ch).toBe(sizes.ph)
 }
 
-async function expectWebGLCanvasAnimatingFromLocator(locator: import('@playwright/test').Locator, page: import('@playwright/test').Page) {
+async function expectWebGLCanvasAnimatingFromLocator(locator: Locator, page: Page) {
   // Sample a few pixels over time using WebGL readPixels; expect at least one pixel to change
   const samples1 = await locator.evaluate((canvas: HTMLCanvasElement) => {
     const gl = (canvas.getContext('webgl') || canvas.getContext('webgl2')) as WebGLRenderingContext | WebGL2RenderingContext | null
@@ -45,7 +45,7 @@ async function expectWebGLCanvasAnimatingFromLocator(locator: import('@playwrigh
     for (const [x, y] of points) {
       // Flip Y for WebGL coordinate system
       gl.readPixels(x, h - y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, buf)
-      out.push([buf[0], buf[1], buf[2], buf[3]])
+      out.push([buf[0]!, buf[1]!, buf[2]!, buf[3]!])
     }
     return out
   })
@@ -68,14 +68,14 @@ async function expectWebGLCanvasAnimatingFromLocator(locator: import('@playwrigh
     const buf = new Uint8Array(4)
     for (const [x, y] of points) {
       gl.readPixels(x, h - y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, buf)
-      out.push([buf[0], buf[1], buf[2], buf[3]])
+      out.push([buf[0]!, buf[1]!, buf[2]!, buf[3]!])
     }
     return out
   })
 
   expect(samples2).not.toBeNull()
 
-  let changed = (samples1 as number[][]).some((px, i) => px.some((c, j) => c !== (samples2 as number[][])[i][j]))
+  let changed = (samples1 as number[][]).some((px, i) => px.some((c, j) => c !== (samples2 as number[][])[i]?.[j]))
 
   if (!changed) {
     // Try to stimulate mouse interaction and sample again
@@ -97,12 +97,12 @@ async function expectWebGLCanvasAnimatingFromLocator(locator: import('@playwrigh
         const buf = new Uint8Array(4)
         for (const [x, y] of points) {
           gl.readPixels(x, h - y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, buf)
-          out.push([buf[0], buf[1], buf[2], buf[3]])
+          out.push([buf[0]!, buf[1]!, buf[2]!, buf[3]!])
         }
         return out
       })
       if (samples3) {
-        changed = (samples1 as number[][]).some((px, i) => px.some((c, j) => c !== (samples3 as number[][])[i][j]))
+        changed = (samples1 as number[][]).some((px, i) => px.some((c, j) => c !== (samples3 as number[][])[i]?.[j]))
       }
     }
   }

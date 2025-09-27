@@ -9,23 +9,38 @@ export default function GlobalTransition() {
   const pathname = usePathname()
   const reduceMotion = useReducedMotion()
   const [isTransitioning, setIsTransitioning] = useState(false)
+  const [previousPath, setPreviousPath] = useState<string | null>(null)
+  const [hasShownEntryTransition, setHasShownEntryTransition] = useState(false)
 
   useEffect(() => {
-    // Only show transition when navigating TO /home FROM root
-    if (pathname === '/home') {
+    // Only show transition when navigating TO /home FROM root entry page (/) 
+    // and only if we haven't shown the entry transition yet
+    if (pathname === '/home' && previousPath === '/' && !hasShownEntryTransition) {
       setIsTransitioning(true)
+      setHasShownEntryTransition(true)
+
+      // Simple navbar hiding during transition
+      document.body.classList.add('navbar-hidden')
 
       // Remove the overlay after animation completes
       const timer = setTimeout(() => {
         setIsTransitioning(false)
-      }, 3600)
+        document.body.classList.remove('navbar-hidden')
+      }, 3000)
 
-      return () => clearTimeout(timer)
+      return () => {
+        clearTimeout(timer)
+        document.body.classList.remove('navbar-hidden')
+      }
     } else {
       setIsTransitioning(false)
+      document.body.classList.remove('navbar-hidden')
     }
+
+    // Update previous path for next navigation
+    setPreviousPath(pathname)
     return undefined
-  }, [pathname])
+  }, [pathname, previousPath, hasShownEntryTransition])
 
   if (reduceMotion) {
     return null
@@ -39,9 +54,9 @@ export default function GlobalTransition() {
           style={{ zIndex: 999999 }}
           initial={{ opacity: 1 }}
           exit={{ opacity: 1 }}
-          transition={{ duration: 0.7 }}
+          transition={{ duration: 3.0 }}
         >
-          {/* Visible black circle that slides down from top */}
+          {/* Visible circular slide down from top */}
           <motion.div
             className="rounded-full bg-black"
             style={{
@@ -49,17 +64,17 @@ export default function GlobalTransition() {
               zIndex: 999999,
             }}
             initial={{
-              width: '400vmax',
-              height: '400vmax',
-              y: '-100vmax',
+              width: '150vw',
+              height: '150vw',
+              y: '-75vw',
             }}
             animate={{
               y: '150vh',
             }}
             transition={{
-              duration: 1.9,
+              duration: 4.3,
               delay: 0,
-              ease: 'easeInOut',
+              ease: [0.25, 0.46, 0.45, 0.94],
             }}
             onAnimationComplete={() => setIsTransitioning(false)}
           />

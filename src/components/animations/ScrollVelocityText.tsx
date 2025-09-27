@@ -124,13 +124,27 @@ export default function ScrollVelocityText({
   }
 
   return (
-    <div className={`w-full overflow-hidden ${className}`}>
+    <div className={`w-full overflow-hidden relative ${className}`}>
       <motion.div
         className="flex whitespace-nowrap items-center"
         style={{ x }}
       >
         {spans}
       </motion.div>
+      {/* Left fade-out gradient */}
+      <div 
+        className="absolute top-0 left-0 w-32 md:w-48 lg:w-64 h-full pointer-events-none z-10"
+        style={{
+          background: 'linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 20%, rgba(0,0,0,0.4) 60%, transparent 100%)'
+        }}
+      />
+      {/* Right fade-out gradient */}
+      <div 
+        className="absolute top-0 right-0 w-32 md:w-48 lg:w-64 h-full pointer-events-none z-10"
+        style={{
+          background: 'linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 20%, rgba(0,0,0,0.4) 60%, transparent 100%)'
+        }}
+      />
     </div>
   )
 }

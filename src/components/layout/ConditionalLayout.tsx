@@ -4,7 +4,6 @@ import { usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import Navbar from '@/common/Navbar'
 import Footer from '@/common/Footer'
-import ScrollToTop from '@layout/ScrollToTop'
 
 export default function ConditionalLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -35,13 +34,12 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
   }
 
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <div className={navbarClass}>
         <Navbar />
       </div>
-      <main className="min-h-screen">{children}</main>
+      <main className="flex-1">{children}</main>
       <Footer />
-      <ScrollToTop />
-    </>
+    </div>
   )
 }

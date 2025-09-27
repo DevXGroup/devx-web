@@ -54,7 +54,7 @@ interface DecryptedTextProps
 // Concentrated Letter Glitch Background Effect
 const LetterGlitch = ({
   glitchColors = ['#00ff41', '#008f11', '#004d0a'],
-  glitchSpeed = 50,
+  glitchSpeed = 500,
   centerVignette = true,
   outerVignette = false,
   smooth = true,
@@ -196,10 +196,13 @@ const LetterGlitch = ({
       const parent = canvas.parentElement
       if (!parent) return
 
-      const dpr = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1
       const rect = parent.getBoundingClientRect()
-
       if (rect.width <= 0 || rect.height <= 0) return
+
+      // Reduce pixel ratio on mobile for performance
+      const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+      const dpr = typeof window !== 'undefined' ?
+        (isMobile ? Math.min(window.devicePixelRatio || 1, 2) : window.devicePixelRatio || 1) : 1
 
       canvas.width = rect.width * dpr
       canvas.height = rect.height * dpr
@@ -251,7 +254,10 @@ const LetterGlitch = ({
   const updateLetters = (): void => {
     if (!letters.current || letters.current.length === 0) return
 
-    const updateCount: number = Math.max(1, Math.floor(letters.current.length * 0.05))
+    // Reduce update frequency on mobile for better performance
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+    const updatePercentage = isMobile ? 0.02 : 0.05
+    const updateCount: number = Math.max(1, Math.floor(letters.current.length * updatePercentage))
 
     for (let i = 0; i < updateCount; i++) {
       const index: number = Math.floor(Math.random() * letters.current.length)
@@ -328,7 +334,7 @@ const LetterGlitch = ({
                 }
                 resizeCanvas()
                 animate()
-              }, 100)
+              }, 200) // Increased debounce delay for mobile performance
             } catch (error) {
               console.warn('Resize handler error:', error)
             }
@@ -556,7 +562,7 @@ function DecryptedText({
     <div className="relative z-10 flex items-center justify-center min-h-[80px]">
       <motion.h1
         ref={containerRef}
-        className="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-mono text-center"
+        className="text-lg md:text-xl lg:text-2xl xl:text-3xl font-mono text-center"
         style={{
           fontFamily: "'IBM Plex Mono', 'SF Pro Display', 'Helvetica Neue', sans-serif",
           fontWeight: 600,
@@ -606,7 +612,7 @@ function DecryptedText({
 
 // Enhanced star field component with more realistic distribution
 function StarField() {
-  const stars = Array.from({ length: 300 }, (_, i) => ({
+  const stars = Array.from({ length: 150 }, (_, i) => ({
     id: i,
     x: Math.random() * 100,
     y: Math.random() * 100,
@@ -719,7 +725,7 @@ function AnimatedInfinity({ onComplete }: { onComplete: () => void }) {
               initial={{ pathLength: 0, opacity: 0 }}
               animate={{ pathLength: 1, opacity: 1 }}
               transition={{
-                duration: 2,
+                duration: 1.5,
                 ease: 'easeInOut',
                 onComplete: handleDrawingComplete,
               }}
@@ -744,7 +750,7 @@ function AnimatedInfinity({ onComplete }: { onComplete: () => void }) {
           >
             <DecryptedText
               text="DevX Group LLC"
-              speed={60}
+              speed={70}
               sequential={true}
               revealDirection="start"
               animateOn="view"
@@ -772,10 +778,10 @@ export default function EntryPage() {
     if (animationComplete) {
       // Start collapse animation immediately
       setIsCollapsing(true)
-      // Navigate slightly before shutter finishes to ensure home page loads
+      // Navigate right as shutter completes for seamless transition
       setTimeout(() => {
         router.push('/home')
-      }, 350) // Start navigation 50ms before shutter finishes
+      }, 400) // Exactly when shutter finishes (400ms)
     }
   }, [animationComplete, router])
 

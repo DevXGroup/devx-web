@@ -1,36 +1,75 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
-/* Prevent navbar flash on home page - hide immediately */
-[data-page="home"] {
-  opacity: 0 !important;
+/* Critical: Prevent white flash on refresh and navigation */
+html {
+  background-color: #000000 !important;
+}
+body {
+  background-color: #000000 !important;
+  color: #ffffff !important;
 }
 
-[data-page="home"].loaded {
+/* Prevent white flash during navigation */
+#__next,
+main,
+[data-nextjs-scroll-focus-boundary] {
+  background-color: #000000 !important;
+}
+
+/* Force black background on all page transitions */
+html::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000000;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Prevent navbar flash on home page - hide immediately */
+[data-page='home'] {
+  opacity: 0 !important;
+  background-color: #000000 !important;
+}
+
+[data-page='home'].loaded {
   opacity: 1 !important;
-  transition: opacity 0.1s ease-in;
+  transition: opacity 1.9s ease-in;
+  background-color: #000000 !important;
+}
+
+/* Force black background on home route before hydration */
+body:has(main[data-page='home']),
+html:has(main[data-page='home']) {
+  background-color: #000000 !important;
 }
 
 /* Hide navbar during home page transition */
-.navbar-hidden {
+.navbar-hidden nav,
+.navbar-hidden .navbar-container {
   display: none !important;
 }
 
 /* Hide navbar on home page by default - overridden by JS when ready */
-body:has(main[data-page="home"]) nav,
-body:has(main[data-page="home"]) .navbar-container {
+body:has(main[data-page='home']) nav,
+body:has(main[data-page='home']) .navbar-container {
   display: none !important;
 }
 
-body:has(main[data-page="home"].navbar-ready) nav,
-body:has(main[data-page="home"].navbar-ready) .navbar-container {
+body:has(main[data-page='home'].navbar-ready) nav,
+body:has(main[data-page='home'].navbar-ready) .navbar-container {
   display: block !important;
 }
 
 /* Portfolio Page Animations */
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) translateX(0px);
   }
   25% {
@@ -72,7 +111,7 @@ body:has(main[data-page="home"].navbar-ready) .navbar-container {
     --robinhood-green: #ccff00;
     --navbar-blur-bg: rgba(0, 0, 0, 0.5);
     --navbar-no-blur-bg: rgba(0, 0, 0, 0.85);
-    
+
     /* Unified spacing system for cross-browser consistency */
     --section-padding-y: 4rem;
     --section-padding-y-md: 5rem;
@@ -87,13 +126,24 @@ body:has(main[data-page="home"].navbar-ready) .navbar-container {
 
 @layer base {
   * {
-    @apply border-border;
+    border-color: hsl(217.2 32.6% 17.5%);
   }
+  
+  /* Force black background immediately - before hydration */
+  html {
+    background-color: #000000 !important;
+  }
+  
   body {
-    @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
-    background-color: #000000;
-    color: #ffffff;
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+    transition: none !important;
+  }
+
+  /* Ensure Next.js root container has black background */
+  body > div {
+    background-color: #000000 !important;
   }
 
   /* Apply IBM Plex Mono to headings, buttons, tags, and feature highlights */
@@ -130,27 +180,10 @@ body:has(main[data-page="home"].navbar-ready) .navbar-container {
   h1.font-normal {
     font-weight: 400;
     -webkit-font-smoothing: subpixel-antialiased;
-    font-feature-settings: "kern", "liga", "clig", "calt";
+    font-feature-settings: 'kern', 'liga', 'clig', 'calt';
   }
 
-  /* Reduced hero title sizes (40% smaller) */
-  @screen lg {
-    .hero-title {
-      font-size: 3rem !important;
-    }
-  }
-  
-  @screen xl {
-    .hero-title {
-      font-size: 3.6rem !important;
-    }
-  }
-  
-  @screen 2xl {
-    .hero-title {
-      font-size: 4.2rem !important;
-    }
-  }
+  /* Let utility classes handle responsive sizing */
 }
 
 /* True Focus effect from reactbits.dev */
@@ -190,7 +223,15 @@ body:has(main[data-page="home"].navbar-ready) .navbar-container {
 .chrome-shine {
   position: relative;
   color: black;
-  background-image: linear-gradient(-70deg, #222 0%, #444 20%, #fff 45%, #fff 50%, #444 80%, #222 100%);
+  background-image: linear-gradient(
+    -70deg,
+    #222 0%,
+    #444 20%,
+    #fff 45%,
+    #fff 50%,
+    #444 80%,
+    #222 100%
+  );
   background-size: 200% 100%;
   background-clip: text;
   -webkit-background-clip: text;
@@ -378,7 +419,7 @@ html.is-firefox .navbar-blur {
 }
 
 .nav-link::after {
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   bottom: 0;
@@ -423,11 +464,58 @@ html.is-firefox .navbar-blur {
   }
 }
 
-/* Hero heading glow effect */
+/* Hero heading glow effect - Enhanced cloud-like shadow */
 .text-glow-hero {
-  text-shadow: 0 0 1px rgba(255, 255, 255, 0.5), 0 0 4px rgba(76, 215, 135, 0.3), 0 0 8px rgba(76, 215, 135, 0.2), 0 0
-    12px rgba(76, 215, 135, 0.1);
   letter-spacing: 0.02em;
+  filter: contrast(1.1) brightness(1.05);
+  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Responsive adjustments for hero title - balanced sizes */
+@media (max-width: 640px) {
+  .hero-title {
+    font-size: 2rem !important; /* Mobile size */
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+  }
+}
+
+@media (max-width: 475px) {
+  .hero-title {
+    font-size: 1.8rem !important; /* Small mobile size */
+    line-height: 1.3;
+    word-spacing: 0.05em;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem !important; /* Large mobile/small tablet */
+    line-height: 1.15;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1023px) {
+  .hero-title {
+    font-size: 3rem !important; /* Tablet size */
+    line-height: 1.1;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .hero-title {
+    font-size: 3.5rem !important; /* Desktop size */
+    line-height: 1.1;
+  }
+}
+
+@media (min-width: 1280px) {
+  .hero-title {
+    font-size: 4rem !important; /* Large desktop */
+    line-height: 1.05;
+  }
 }
 
 /* Enhance the existing text-glow class for consistency */
@@ -452,7 +540,7 @@ html.no-backdrop-filter .glass-effect {
 }
 
 .crossed-a::after {
-  content: "";
+  content: '';
   position: absolute;
   width: 100%;
   height: 2px;
@@ -469,8 +557,23 @@ html.no-backdrop-filter .glass-effect {
   white-space: nowrap;
   visibility: visible !important; /* Force visibility in Safari */
   color: var(--robinhood-green);
+  max-width: 100%;
+  text-overflow: ellipsis;
 }
 
+/* Responsive typewriter adjustments */
+@media (max-width: 640px) {
+  .typewriter-text {
+    font-size: clamp(1rem, 4vw, 1.25rem);
+    max-width: calc(100vw - 2rem);
+  }
+}
+
+@media (max-width: 768px) {
+  .typewriter-text {
+    max-width: calc(100vw - 3rem);
+  }
+}
 
 @keyframes gradient-x {
   0% {
@@ -607,21 +710,21 @@ html.no-backdrop-filter .glass-effect {
     --title-margin-bottom: 3rem;
     --title-margin-bottom-md: 4rem;
   }
-  
+
   /* Safari animation fixes */
   .safari-animation-fix {
     transform: translateZ(0);
     -webkit-transform: translateZ(0);
     will-change: transform;
   }
-  
+
   /* Safari hydration flash prevention */
   .safari-hydration-fix {
     visibility: hidden;
     animation: safari-fade-in 0.3s ease-in forwards;
     animation-delay: 0.8s;
   }
-  
+
   @keyframes safari-fade-in {
     from {
       visibility: hidden;
@@ -632,7 +735,7 @@ html.no-backdrop-filter .glass-effect {
       opacity: 1;
     }
   }
-  
+
   /* Safari scroll velocity text fix */
   .scroll-velocity-safari {
     transform: translateZ(0);
@@ -640,24 +743,24 @@ html.no-backdrop-filter .glass-effect {
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
   }
-  
+
   /* Force uniform spacing in Safari */
   .services-section {
     padding-top: var(--section-padding-y) !important;
     padding-bottom: var(--section-padding-y) !important;
   }
-  
+
   @media (min-width: 768px) {
     .services-section {
       padding-top: var(--section-padding-y-md) !important;
       padding-bottom: var(--section-padding-y-md) !important;
     }
   }
-  
+
   .services-title {
     margin-bottom: var(--title-margin-bottom) !important;
   }
-  
+
   @media (min-width: 768px) {
     .services-title {
       margin-bottom: var(--title-margin-bottom-md) !important;
@@ -730,7 +833,7 @@ html.no-backdrop-filter .glass-effect {
 
 /* Gradient text animation */
 .animate-gradient-text {
-  background-image: linear-gradient(-45deg, #4cd787, #FFD700, #9d4edd, #4834d4);
+  background-image: linear-gradient(-45deg, #4cd787, #ffd700, #9d4edd, #4834d4);
   background-size: 300% 300%;
   animation: gradient-animation 6s ease infinite;
   -webkit-animation: gradient-animation 6s ease infinite;
@@ -741,7 +844,7 @@ html.no-backdrop-filter .glass-effect {
 
 /* BlurText compatible gradient animation */
 .blur-text-gradient {
-  background-image: linear-gradient(-45deg, #4cd787, #FFD700, #9d4edd, #4834d4);
+  background-image: linear-gradient(-45deg, #4cd787, #ffd700, #9d4edd, #4834d4);
   background-size: 300% 300%;
   animation: gradient-animation 6s ease infinite;
   -webkit-animation: gradient-animation 6s ease infinite;
@@ -809,7 +912,7 @@ html.no-backdrop-filter .glass-effect {
 
 .is-scrolling .animate-pulse,
 .is-scrolling .animate-bounce,
-.is-scrolling [style*="animation"] {
+.is-scrolling [style*='animation'] {
   animation-play-state: paused !important;
 }
 
@@ -823,7 +926,7 @@ html.no-backdrop-filter .glass-effect {
 /* Pause animations during scrolling */
 .is-scrolling .animate-pulse,
 .is-scrolling .animate-bounce,
-.is-scrolling [style*="animation"] {
+.is-scrolling [style*='animation'] {
   animation-play-state: paused !important;
 }
 
@@ -863,6 +966,27 @@ html.no-backdrop-filter .glass-effect {
   animation: scrollXReverse 30s linear infinite;
   transform: translateZ(0);
   will-change: transform;
+}
+
+/* Bouncing ball animation */
+@keyframes bounceAnimation {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-15px) scale(1.1);
+  }
+}
+
+.bounce-animation {
+  animation: bounceAnimation 1.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+  animation-delay: 0.5s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bounce-animation {
+    animation: none;
+  }
 }
 
 /* Enhance scrolling behavior for touch devices */
@@ -991,10 +1115,11 @@ html.no-backdrop-filter .glass-effect {
   transform: translateY(0);
 }
 
-/* Ensure smooth scrolling */
+/* Disable smooth scrolling to prevent scroll-up on refresh */
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
   height: 100%;
+  scroll-restoration: manual;
 }
 
 body {
@@ -1072,9 +1197,9 @@ html.is-touching .animation-heavy {
   button,
   a.button,
   .button,
-  [role="button"],
-  input[type="button"],
-  input[type="submit"] {
+  [role='button'],
+  input[type='button'],
+  input[type='submit'] {
     min-height: 44px;
     min-width: 44px;
     padding: 10px 16px;
@@ -1132,8 +1257,10 @@ html.is-touching .animation-heavy {
 
 /* Planet glow effect using filter: drop-shadow for better Safari compatibility */
 .planet-glow-effect {
-  filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.2)) drop-shadow(0 0 50px rgba(255, 255, 255, 0.1));
-  -webkit-filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.2)) drop-shadow(0 0 50px rgba(255, 255, 255, 0.1));
+  filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.2))
+    drop-shadow(0 0 50px rgba(255, 255, 255, 0.1));
+  -webkit-filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.2))
+    drop-shadow(0 0 50px rgba(255, 255, 255, 0.1));
   animation: planet-edge-glow 4s infinite ease-in-out;
   transform: translateZ(0); /* Force GPU acceleration */
 }
@@ -1141,12 +1268,16 @@ html.is-touching .animation-heavy {
 @keyframes planet-edge-glow {
   0%,
   100% {
-    filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.2)) drop-shadow(0 0 50px rgba(255, 255, 255, 0.1));
-    -webkit-filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.2)) drop-shadow(0 0 50px rgba(255, 255, 255, 0.1));
+    filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.2))
+      drop-shadow(0 0 50px rgba(255, 255, 255, 0.1));
+    -webkit-filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.2))
+      drop-shadow(0 0 50px rgba(255, 255, 255, 0.1));
   }
   50% {
-    filter: drop-shadow(0 0 38px rgba(255, 255, 255, 0.3)) drop-shadow(0 0 75px rgba(255, 255, 255, 0.15));
-    -webkit-filter: drop-shadow(0 0 38px rgba(255, 255, 255, 0.3)) drop-shadow(0 0 75px rgba(255, 255, 255, 0.15));
+    filter: drop-shadow(0 0 38px rgba(255, 255, 255, 0.3))
+      drop-shadow(0 0 75px rgba(255, 255, 255, 0.15));
+    -webkit-filter: drop-shadow(0 0 38px rgba(255, 255, 255, 0.3))
+      drop-shadow(0 0 75px rgba(255, 255, 255, 0.15));
   }
 }
 
@@ -1295,4 +1426,40 @@ a.button,
   width: 100%;
   overflow: hidden;
   position: relative;
+}
+
+/* React Bits StarBorder Animations */
+.animate-star-movement-bottom {
+  animation: star-movement-bottom linear infinite alternate;
+}
+
+.animate-star-movement-top {
+  animation: star-movement-top linear infinite alternate;
+}
+
+@keyframes star-movement-bottom {
+  0% {
+    transform: translate(0%, 0%);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-100%, 0%);
+    opacity: 0;
+  }
+}
+
+@keyframes star-movement-top {
+  0% {
+    transform: translate(0%, 0%);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(100%, 0%);
+    opacity: 0;
+  }
+}
+
+/* StarBorder hover effects */
+.star-border-hover:hover > div:last-child {
+  color: #ccff00 !important;
 }

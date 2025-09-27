@@ -69,6 +69,7 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
                 transition: { staggerChildren: 0.2, delayChildren: 0.3 }
               }
             }}
+            id="leadership-row"
           >
             {/* Max Sheikhizadeh */}
             <motion.div 
@@ -76,13 +77,13 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
               className="text-center group relative bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 cursor-pointer hover:border-[#4CD787]/50 transition-colors w-full max-w-[240px] mx-auto min-h-[260px] flex flex-col justify-between"
               onClick={() => teamMembers[0] && setSelectedMember(teamMembers[0])}
             >
-              <div className="relative mb-3">
-                <div className="w-20 h-20 mx-auto rounded-xl overflow-hidden border-2 border-[#4CD787] shadow-lg">
+              <div className="relative mb-4">
+                <div className="w-28 h-28 mx-auto rounded-xl overflow-hidden border-2 border-[#4CD787] shadow-lg">
                   <Image
                     src="/images/about/max-headshot.jpg"
                     alt="Max Sheikhizadeh"
-                    width={80}
-                    height={80}
+                    width={112}
+                    height={112}
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -103,13 +104,13 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
               className="text-center group relative bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 cursor-pointer hover:border-[#FFD700]/50 transition-colors w-full max-w-[240px] mx-auto min-h-[260px] flex flex-col justify-between"
               onClick={() => teamMembers[1] && setSelectedMember(teamMembers[1])}
             >
-              <div className="relative mb-3">
-                <div className="w-20 h-20 mx-auto rounded-xl overflow-hidden border-2 border-[#FFD700] shadow-lg">
+              <div className="relative mb-4">
+                <div className="w-28 h-28 mx-auto rounded-xl overflow-hidden border-2 border-[#FFD700] shadow-lg">
                   <Image
                     src="/images/about/milaad-headshot.jpg"
                     alt="Milaad Sheikhizadeh"
-                    width={80}
-                    height={80}
+                    width={112}
+                    height={112}
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -125,57 +126,84 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
             </motion.div>
           </motion.div>
 
-          {/* Enhanced Connecting Lines Structure */}
-          {/* Step 1: Connect Max and Milaad together with horizontal line - positioned to connect to bottom of cards */}
-          <div className="flex justify-center -mb-2 relative -mt-2">
-            <motion.div 
-              className="h-0.5 w-60 bg-gradient-to-r from-[#4CD787]/40 via-[#4CD787]/60 to-[#FFD700]/40"
-              initial={{ opacity: 0, scaleX: 0 }}
-              animate={isInView ? { opacity: 1, scaleX: 1 } : { opacity: 0, scaleX: 0 }}
-              transition={{ delay: 0.6, duration: 0.6 }}
-            />
-          </div>
-
-          {/* Step 2: Single vertical line down from center */}
-          <div className="flex justify-center mb-4">
-            <motion.div 
-              className="w-0.5 h-16 bg-gradient-to-b from-[#4CD787]/60 to-[#4CD787]/40"
-              initial={{ opacity: 0, scaleY: 0 }}
-              animate={isInView ? { opacity: 1, scaleY: 1 } : { opacity: 0, scaleY: 0 }}
-              transition={{ delay: 0.8, duration: 0.5 }}
-            />
-          </div>
-
-          {/* Step 3: Horizontal line spanning to departments */}
-          <div className="flex justify-center mb-4">
-            <motion.div 
-              className="h-0.5 w-96 bg-gradient-to-r from-transparent via-[#4CD787]/50 to-transparent"
-              initial={{ opacity: 0, scaleX: 0 }}
-              animate={isInView ? { opacity: 1, scaleX: 1 } : { opacity: 0, scaleX: 0 }}
-              transition={{ delay: 1.0, duration: 0.6 }}
-            />
-          </div>
-
-          {/* Step 4: Three vertical lines to departments - positioned to connect to top of management cards */}
-          <div className="flex justify-center -mb-2">
-            <div className="grid grid-cols-3 gap-12 w-96">
-              {[0, 1, 2].map((index) => (
+          {/* Centered Connecting Lines Structure */}
+          {/* Step 1: Vertical lines positioned exactly under center of leadership cards */}
+          <div className="relative -mt-2 mb-4">
+            {/* Use exact same layout as leadership cards to ensure perfect alignment */}
+            <div className="flex flex-col sm:flex-row justify-center gap-6 sm:gap-12">
+              {/* Max's line - positioned to match his card center exactly */}
+              <div className="flex justify-center w-full max-w-[240px] mx-auto">
                 <motion.div 
-                  key={index}
-                  className="flex justify-center"
+                  className="w-0.5 h-16 bg-gradient-to-b from-[#4CD787]/60 to-[#4CD787]/40"
                   initial={{ opacity: 0, scaleY: 0 }}
                   animate={isInView ? { opacity: 1, scaleY: 1 } : { opacity: 0, scaleY: 0 }}
-                  transition={{ delay: 1.2 + index * 0.1, duration: 0.4 }}
-                >
-                  <div className="w-0.5 h-12 bg-gradient-to-b from-[#4CD787]/50 to-[#4CD787]/20" />
-                </motion.div>
-              ))}
+                  transition={{ delay: 0.6, duration: 0.5 }}
+                />
+              </div>
+              {/* Milaad's line - positioned to match his card center exactly */}
+              <div className="flex justify-center w-full max-w-[240px] mx-auto">
+                <motion.div 
+                  className="w-0.5 h-16 bg-gradient-to-b from-[#FFD700]/60 to-[#FFD700]/40"
+                  initial={{ opacity: 0, scaleY: 0 }}
+                  animate={isInView ? { opacity: 1, scaleY: 1 } : { opacity: 0, scaleY: 0 }}
+                  transition={{ delay: 0.7, duration: 0.5 }}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Step 2: Extended horizontal line connecting leadership */}
+          <div className="flex justify-center mb-6">
+            <motion.div 
+              className="h-0.5 w-48 sm:w-64 md:w-80 lg:w-96 bg-gradient-to-r from-transparent via-[#4CD787]/60 to-transparent"
+              initial={{ opacity: 0, scaleX: 0 }}
+              animate={isInView ? { opacity: 1, scaleX: 1 } : { opacity: 0, scaleX: 0 }}
+              transition={{ delay: 0.8, duration: 0.6 }}
+            />
+          </div>
+
+          {/* Step 3: Single vertical line down to management */}
+          <div className="flex justify-center mb-6">
+            <motion.div 
+              className="w-0.5 h-20 bg-gradient-to-b from-[#4CD787]/60 to-[#4CD787]/40"
+              initial={{ opacity: 0, scaleY: 0 }}
+              animate={isInView ? { opacity: 1, scaleY: 1 } : { opacity: 0, scaleY: 0 }}
+              transition={{ delay: 1.0, duration: 0.5 }}
+            />
+          </div>
+
+          {/* Step 4: Extended horizontal line to management positions */}
+          <div className="flex justify-center mb-4">
+            <motion.div 
+              className="h-0.5 w-80 sm:w-96 lg:w-[28rem] xl:w-[32rem] bg-gradient-to-r from-transparent via-[#4CD787]/50 to-transparent"
+              initial={{ opacity: 0, scaleX: 0 }}
+              animate={isInView ? { opacity: 1, scaleX: 1 } : { opacity: 0, scaleX: 0 }}
+              transition={{ delay: 1.2, duration: 0.6 }}
+            />
+          </div>
+
+          {/* Step 5: Four vertical lines to management cards - centered under each card */}
+          <div className="flex justify-center -mb-2">
+            <div className="w-full max-w-5xl px-4">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                {[0, 1, 2, 3].map((index) => (
+                  <motion.div 
+                    key={index}
+                    className="flex justify-center"
+                    initial={{ opacity: 0, scaleY: 0 }}
+                    animate={isInView ? { opacity: 1, scaleY: 1 } : { opacity: 0, scaleY: 0 }}
+                    transition={{ delay: 1.4 + index * 0.1, duration: 0.4 }}
+                  >
+                    <div className="w-0.5 h-14 bg-gradient-to-b from-[#4CD787]/50 to-[#4CD787]/20" />
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </div>
 
           {/* Management Level */}
           <motion.div 
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4 relative z-10 -mt-2"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-4 relative z-10 -mt-2"
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
             variants={{
@@ -196,6 +224,18 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
               </div>
               <h4 className="text-white text-sm font-semibold mb-1">Overseas</h4>
               <h4 className="text-white text-sm font-semibold">Logistic Manager</h4>
+            </motion.div>
+
+            {/* Technical Lead */}
+            {/* TODO: Add photo placeholder - replace icon with Image component when photos are available */}
+            <motion.div 
+              variants={fadeInUp}
+              className="text-center bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:border-[#4834D4]/30 transition-colors"
+            >
+              <div className="w-12 h-12 mx-auto mb-3 bg-gradient-to-br from-[#4834D4]/20 to-[#4834D4]/40 rounded-lg flex items-center justify-center border border-[#4834D4]/30">
+                <Cpu className="w-4 h-4 text-[#4834D4]" />
+              </div>
+              <h4 className="text-white text-sm font-semibold">Technical Lead</h4>
             </motion.div>
 
             {/* Project Managers (Consolidated) */}
@@ -224,38 +264,40 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
             </motion.div>
           </motion.div>
 
-          {/* Connecting lines from departments to developers */}
-          {/* Step 5: Three vertical lines down from departments - connect to bottom of management cards */}
+          {/* Connecting lines from management to developers */}
+          {/* Step 6: Four vertical lines down from center of management cards */}
           <div className="flex justify-center -mb-2 relative -mt-2">
-            <div className="grid grid-cols-3 gap-12 w-96">
-              {[0, 1, 2].map((index) => (
-                <motion.div 
-                  key={index}
-                  className="flex justify-center"
-                  initial={{ opacity: 0, scaleY: 0 }}
-                  animate={isInView ? { opacity: 1, scaleY: 1 } : { opacity: 0, scaleY: 0 }}
-                  transition={{ delay: 1.8 + index * 0.1, duration: 0.4 }}
-                >
-                  <div className="w-0.5 h-8 bg-gradient-to-b from-[#4CD787]/40 to-[#4CD787]/20" />
-                </motion.div>
-              ))}
+            <div className="w-full max-w-5xl px-4">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                {[0, 1, 2, 3].map((index) => (
+                  <motion.div 
+                    key={index}
+                    className="flex justify-center"
+                    initial={{ opacity: 0, scaleY: 0 }}
+                    animate={isInView ? { opacity: 1, scaleY: 1 } : { opacity: 0, scaleY: 0 }}
+                    transition={{ delay: 1.8 + index * 0.1, duration: 0.4 }}
+                  >
+                    <div className="w-0.5 h-12 bg-gradient-to-b from-[#4CD787]/40 to-[#4CD787]/20" />
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* Step 6: Horizontal line converging to center */}
-          <div className="flex justify-center mb-4">
+          {/* Step 7: Horizontal line converging to center - shorter to avoid crossing */}
+          <div className="flex justify-center mb-6">
             <motion.div 
-              className="h-0.5 w-96 bg-gradient-to-r from-transparent via-[#4CD787]/40 to-transparent"
+              className="h-0.5 w-64 sm:w-80 lg:w-96 bg-gradient-to-r from-transparent via-[#4CD787]/40 to-transparent"
               initial={{ opacity: 0, scaleX: 0 }}
               animate={isInView ? { opacity: 1, scaleX: 1 } : { opacity: 0, scaleX: 0 }}
               transition={{ delay: 2.2, duration: 0.6 }}
             />
           </div>
 
-          {/* Step 7: Final vertical line to developers - connect to top of developers card */}
+          {/* Step 8: Final vertical line to developers */}
           <div className="flex justify-center -mb-2">
             <motion.div 
-              className="w-0.5 h-12 bg-gradient-to-b from-[#4CD787]/40 to-[#4CD787]/20"
+              className="w-0.5 h-16 bg-gradient-to-b from-[#4CD787]/40 to-[#4CD787]/20"
               initial={{ opacity: 0, scaleY: 0 }}
               animate={isInView ? { opacity: 1, scaleY: 1 } : { opacity: 0, scaleY: 0 }}
               transition={{ delay: 2.4, duration: 0.5 }}
@@ -308,8 +350,13 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
               </div>
               <div className="w-px h-8 bg-white/20"></div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-[#4834D4] mb-1">18</div>
-                <div className="text-white/80 font-medium text-xs">Specialists</div>
+                <div className="text-2xl font-bold text-[#4834D4] mb-1">4</div>
+                <div className="text-white/80 font-medium text-xs">Management</div>
+              </div>
+              <div className="w-px h-8 bg-white/20"></div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-[#9d4edd] mb-1">17</div>
+                <div className="text-white/80 font-medium text-xs">Developers</div>
               </div>
             </div>
           </motion.div>

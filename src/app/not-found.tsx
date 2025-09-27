@@ -62,7 +62,7 @@ export default function NotFound() {
           <FuzzyText
             fontSize="clamp(4rem, 12vw, 12rem)"
             fontWeight={900}
-            fontFamily="'IBM Plex Mono', monospace"
+            fontFamily="var(--font-ibm-plex-mono)"
             color="#ec4899"
             baseIntensity={0.3}
             hoverIntensity={0.8}
@@ -76,7 +76,7 @@ export default function NotFound() {
           <FuzzyText
             fontSize="clamp(1.5rem, 4vw, 3rem)"
             fontWeight={600}
-            fontFamily="'IBM Plex Sans', sans-serif"
+            fontFamily="var(--font-ibm-plex-sans)"
             color="#a855f7"
             baseIntensity={0.15}
             hoverIntensity={0.4}
@@ -87,7 +87,7 @@ export default function NotFound() {
 
         {/* Description */}
         <motion.p
-          className="text-white/70 text-lg md:text-xl max-w-md mx-auto font-['IBM_Plex_Sans'] leading-relaxed"
+          className="text-white/70 text-lg md:text-xl max-w-md mx-auto font-sans leading-relaxed"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.8 }}
@@ -104,14 +104,14 @@ export default function NotFound() {
         >
           <Link
             href="/home"
-            className="bg-pink-500 hover:bg-pink-600 text-white px-8 py-3 rounded-lg transition-all duration-200 transform hover:scale-105 font-['IBM_Plex_Mono'] font-medium shadow-lg hover:shadow-pink-500/25"
+            className="bg-pink-500 hover:bg-pink-600 text-white px-8 py-3 rounded-lg transition-all duration-200 transform hover:scale-105 font-mono font-medium shadow-lg hover:shadow-pink-500/25"
           >
             ← Back to Home
           </Link>
           
           <Link
             href="/contact"
-            className="border border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-black px-8 py-3 rounded-lg transition-all duration-200 transform hover:scale-105 font-['IBM_Plex_Mono'] font-medium"
+            className="border border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-black px-8 py-3 rounded-lg transition-all duration-200 transform hover:scale-105 font-mono font-medium"
           >
             Report Issue
           </Link>

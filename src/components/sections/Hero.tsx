@@ -3,10 +3,12 @@
 import { useEffect, useCallback } from 'react'
 import { motion, useReducedMotion, useAnimation } from 'framer-motion'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import ClientOnly from '@layout/ClientOnly'
 import dynamic from 'next/dynamic'
 import StarBorder from '@animations/StarBorder'
 import TextType from '@animations/TextType'
+import ShinyText from '@/components/ui/ShinyText'
 
 // Dynamically import components that use browser APIs with better loading states
 const DynamicHeroBackground = dynamic(() => import('../hero/HeroBackground'), {
@@ -26,14 +28,7 @@ const DynamicShootingStars = dynamic(() => import('../hero/ShootingStars'), {
   loading: () => <div className="absolute inset-0 opacity-50" />,
 })
 
-const subheaders = [
-  'Rapid MVP Development',
-  'AI-Powered Automation',
-  'Scalable Cloud Solutions',
-  'Engaging Mobile Apps',
-  'IoT & Hardware Integration',
-  'Stunning UI/UX Design',
-]
+const subheaders = ['Stunning UI/UX', 'Rapid MVP Launches', 'AI Automation']
 
 // Enhanced animation variants for better performance
 const containerVariants = {
@@ -73,9 +68,9 @@ export default function Hero() {
   const shouldReduceMotion = useReducedMotion()
   const controls = useAnimation()
 
-  // Function to navigate to the "Our Values" section in the About page
-  const navigateToOurValues = useCallback(() => {
-    router.push('/about#our-values')
+  // Function to navigate to the portfolio page
+  const navigateToPortfolio = useCallback(() => {
+    router.push('/portfolio')
   }, [router])
 
   // Trigger entrance animation
@@ -102,34 +97,75 @@ export default function Hero() {
 
       {/* Content */}
       <motion.div
-        className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-30 pt-16 sm:pt-20 w-full"
+        className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-30 w-full py-20 sm:py-24 lg:py-32"
         variants={containerVariants}
         initial="hidden"
         animate={controls}
       >
-        <div className="text-center mx-auto max-w-full px-4">
+        <div className="text-center mx-auto max-w-3xl px-4 sm:px-6 space-y-7 sm:space-y-9 pt-6 sm:pt-10">
           {/* Hero content wrapper - this div prevents movement on button hover */}
-          <div className="sm:mb-12">
+          <div className="space-y-5 sm:space-y-7">
             <motion.h1
               variants={itemVariants}
-              className="hero-title text-3xl xs:text-4xl sm:text-5xl md:text-7xl lg:text-[8rem] xl:text-[10rem] 2xl:text-[12rem] font-mono font-normal tracking-tight text-white sm:mb-6 leading-tight md:whitespace-nowrap text-glow-hero drop-shadow-[0_0_25px_rgba(255,255,255,0.8)] px-2 sm:px-0"
+              className="hero-title mx-auto flex flex-nowrap max-xs:flex-col items-center sm:items-baseline justify-center gap-2 sm:gap-4 text-center text-white font-mono font-bold tracking-tight whitespace-nowrap max-xs:whitespace-normal text-[clamp(2rem,4vw,2.5rem)] sm:text-[clamp(2.5rem,4.5vw,3rem)] lg:text-[clamp(3rem,4vw,3.5rem)] xl:text-[clamp(3.2rem,3.5vw,4rem)] leading-[1.1] sm:leading-[1.05] lg:max-w-[48rem] px-4 sm:px-6"
             >
-              Your Vision, <span style={{ color: '#ccff00' }}>Engineered.</span>
+              <span
+                className="inline-block"
+                style={{
+                  textShadow:
+                    '0 0 40px rgba(255,255,255,0.3), 0 0 80px rgba(255,255,255,0.2), 0 0 120px rgba(255,255,255,0.1)',
+                  filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.45))',
+                }}
+              >
+                Your Vision,
+              </span>
+              <span
+                className="inline-block"
+                style={{
+                  color: '#ccff00',
+                  textShadow:
+                    '0 0 40px rgba(204,255,0,0.4), 0 0 80px rgba(204,255,0,0.3), 0 0 120px rgba(204,255,0,0.2)',
+                  filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.45))',
+                }}
+              >
+                Engineered.
+              </span>
             </motion.h1>
 
-            <motion.p
-              variants={itemVariants}
-              className="text-lg sm:text-xl md:text-2xl text-white font-mono font-light mb-10 sm:mb-12 md:mb-16 px-2 sm:px-0 leading-relaxed mt-16"
-            >
-              elite software development team.
-              <br />
-              build, launch, and scale your vision.
-            </motion.p>
+            <motion.div variants={itemVariants} className="text-center max-w-2xl mx-auto space-y-5">
+              <p className="text-base sm:text-lg md:text-xl text-white font-sans font-light leading-relaxed">
+                Elite software team shipping polished software at startup speed.
+              </p>
+              <div className="relative mx-auto w-full max-w-xl mt-10">
+                <div className="relative flex flex-wrap items-center justify-center gap-3 px-6 py-3 rounded-full border border-white/5 bg-white/5 backdrop-blur-sm">
+                  <Link
+                    href="/services"
+                    className="uppercase tracking-[0.18em] text-[0.68rem] sm:text-xs font-medium opacity-90 hover:opacity-100"
+                  >
+                    <ShinyText text="Elite Services" speed={4} delay={0} />
+                  </Link>
+                  <span className="text-gray-600 text-xs">•</span>
+                  <Link
+                    href="/portfolio"
+                    className="uppercase tracking-[0.18em] text-[0.68rem] sm:text-xs font-medium opacity-90 hover:opacity-100"
+                  >
+                    <ShinyText text="Proven Record" speed={5} delay={0.5} />
+                  </Link>
+                  <span className="text-gray-600 text-xs">•</span>
+                  <Link
+                    href="/pricing"
+                    className="uppercase tracking-[0.18em] text-[0.68rem] sm:text-xs font-medium opacity-90 hover:opacity-100"
+                  >
+                    <ShinyText text="Competitive Pricing" speed={6} delay={1} />
+                  </Link>
+                </div>
+              </div>
+            </motion.div>
           </div>
 
           <motion.div
             variants={itemVariants}
-            className="h-12 sm:h-16 mb-6 sm:mb-8 mt-8 sm:mt-12 md:mt-16 lg:h-auto lg:mb-0 lg:mt-0 lg:flex lg:justify-center lg:items-center lg:my-16 xl:my-20"
+            className="min-h-[3rem] sm:min-h-[3.5rem] md:min-h-[4rem] mt-8 sm:mt-10 md:mt-12 flex justify-center"
           >
             <TextType
               text={subheaders}
@@ -137,7 +173,7 @@ export default function Hero() {
               typingSpeed={shouldReduceMotion ? 40 : 80}
               deletingSpeed={shouldReduceMotion ? 25 : 50}
               pauseDuration={shouldReduceMotion ? 800 : 2000}
-              className="text-xl sm:text-2xl md:text-3xl font-mono text-robinhood typewriter-text px-2 sm:px-0"
+              className="text-lg sm:text-xl md:text-3xl font-mono text-[#ccff00] typewriter-text tracking-[0.08em]"
               showCursor={true}
               cursorCharacter="_"
               cursorClassName=""
@@ -147,7 +183,7 @@ export default function Hero() {
 
           <motion.div
             variants={itemVariants}
-            className="flex flex-wrap justify-center gap-4 relative z-50 mt-8 md:mt-12 lg:-mt-8 xl:-mt-12 transform lg:scale-110 xl:scale-120"
+            className="flex flex-row flex-wrap justify-center gap-4 sm:gap-5 relative z-50 mt-10 sm:mt-12"
           >
             <motion.div variants={buttonVariants} initial="rest" whileHover="hover" whileTap="tap">
               <StarBorder
@@ -157,17 +193,17 @@ export default function Hero() {
                 rel="noopener noreferrer"
                 color="#ccff00"
                 speed="3s"
-                className="font-mono font-bold text-xs text-white hover:text-robinhood"
+                className="font-mono font-semibold text-xs sm:text-sm text-white hover:text-robinhood px-6 py-3 transition-all duration-300"
               >
-                Schedule a Strategy Call
+                Book a Free Call
               </StarBorder>
             </motion.div>
             <motion.div variants={buttonVariants} initial="rest" whileHover="hover" whileTap="tap">
               <StarBorder
-                onClick={navigateToOurValues}
+                onClick={navigateToPortfolio}
                 color="#9d4edd"
                 speed="4s"
-                className="font-mono font-bold text-xs text-white hover:text-blue-500"
+                className="font-mono font-semibold text-xs sm:text-sm text-white hover:text-purple-300 px-6 py-3 transition-all duration-300"
               >
                 See Our Work
               </StarBorder>
@@ -182,6 +218,29 @@ export default function Hero() {
           <DynamicPlanetDivider />
         </div>
       </ClientOnly>
+      <style jsx>{`
+        .link-gradient {
+          background: linear-gradient(120deg, #4cd787, #9d4edd, #ccff00, #4cd787);
+          background-size: 250% 250%;
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+          -webkit-text-fill-color: transparent;
+          animation: linkGradient 8s ease-in-out infinite;
+        }
+
+        @keyframes linkGradient {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
+        }
+      `}</style>
     </section>
   )
 }

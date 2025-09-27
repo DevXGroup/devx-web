@@ -50,23 +50,27 @@ export default function EnhancedInfinityLoader({
     return () => window.removeEventListener('resize', updateScreenSize)
   }, [])
 
-  // Always call useScroll to maintain hooks order
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"],
-  })
+  // Hydration-safe scroll progress tracking
+  const { scrollYProgress } = useScroll(
+    mounted && containerRef.current
+      ? {
+          target: containerRef,
+          offset: ["start end", "end start"],
+        }
+      : {}
+  )
 
   // Simplified, smooth scaling that works consistently across devices
   const scale = useSpring(
     useTransform(
-      scrollYProgress,
+      scrollYProgress || 0,
       [0, scrollThreshold, 1 - scrollThreshold, 1],
       [baseScale, maxScale, maxScale, baseScale],
     ),
     { stiffness: 100, damping: 25, mass: 1 },
   )
 
-  const opacity = useSpring(useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0.3, 1, 1, 0.3]), {
+  const opacity = useSpring(useTransform(scrollYProgress || 0, [0, 0.2, 0.8, 1], [0.3, 1, 1, 0.3]), {
     stiffness: 120,
     damping: 20,
   })

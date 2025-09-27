@@ -9,6 +9,8 @@ const Interactive3DShowcase = () => {
   const isInView = useInView(sectionRef, { once: false, amount: 0.3 })
   const controls = useAnimation()
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
+  const [webglSupported, setWebglSupported] = useState<boolean | null>(null)
+  const [webglError, setWebglError] = useState<string | null>(null)
 
   // Mouse tracking
   useEffect(() => {
@@ -32,7 +34,14 @@ const Interactive3DShowcase = () => {
 
     const canvas = canvasRef.current
     const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
-    if (!gl) return
+    
+    if (!gl) {
+      setWebglSupported(false)
+      setWebglError('WebGL is not supported by your browser')
+      return
+    }
+    
+    setWebglSupported(true)
     const webglContext = gl as WebGLRenderingContext
 
     // Set canvas size
@@ -128,7 +137,9 @@ const Interactive3DShowcase = () => {
       gl.compileShader(shader)
       
       if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-        console.error('Shader compilation error:', gl.getShaderInfoLog(shader))
+        const error = gl.getShaderInfoLog(shader)
+        console.error('Shader compilation error:', error)
+        setWebglError(`Shader compilation failed: ${error}`)
         gl.deleteShader(shader)
         return null
       }
@@ -151,7 +162,9 @@ const Interactive3DShowcase = () => {
     webglContext.linkProgram(program)
     
     if (!webglContext.getProgramParameter(program, webglContext.LINK_STATUS)) {
-      console.error('Program linking error:', webglContext.getProgramInfoLog(program))
+      const error = webglContext.getProgramInfoLog(program)
+      console.error('Program linking error:', error)
+      setWebglError(`WebGL program linking failed: ${error}`)
       return
     }
 
@@ -215,10 +228,6 @@ const Interactive3DShowcase = () => {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.3
-      }
     }
   }
 
@@ -227,10 +236,6 @@ const Interactive3DShowcase = () => {
     visible: {
       opacity: 1,
       y: 0,
-      transition: {
-        duration: 0.8,
-        ease: [0.22, 1, 0.36, 1]
-      }
     }
   }
 
@@ -296,14 +301,39 @@ const Interactive3DShowcase = () => {
             className="relative"
           >
             <div className="relative w-full h-96 lg:h-[500px] rounded-2xl overflow-hidden border border-white/20">
-              <canvas
-                ref={canvasRef}
-                className="w-full h-full cursor-crosshair"
-                style={{ 
-                  background: 'linear-gradient(45deg, #1a1a2e, #16213e)',
-                  filter: 'drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5))'
-                }}
-              />
+              {webglSupported === false ? (
+                <div 
+                  className="w-full h-full flex flex-col items-center justify-center cursor-crosshair"
+                  style={{ 
+                    background: 'linear-gradient(45deg, #1a1a2e, #16213e)',
+                    filter: 'drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5))'
+                  }}
+                >
+                  <div className="text-center space-y-4 p-8">
+                    <div className="text-6xl mb-4">⚠️</div>
+                    <h3 className="text-white text-xl font-semibold mb-2">WebGL Not Supported</h3>
+                    <p className="text-white/70 text-sm max-w-md">
+                      Your browser doesn&apos;t support WebGL, which is required for this 3D experience.
+                      Try updating your browser or enabling hardware acceleration.
+                    </p>
+                    {webglError && (
+                      <details className="text-white/50 text-xs mt-4">
+                        <summary className="cursor-pointer">Technical Details</summary>
+                        <p className="mt-2 font-mono">{webglError}</p>
+                      </details>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <canvas
+                  ref={canvasRef}
+                  className="w-full h-full cursor-crosshair"
+                  style={{ 
+                    background: 'linear-gradient(45deg, #1a1a2e, #16213e)',
+                    filter: 'drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5))'
+                  }}
+                />
+              )}
               
               {/* Overlay instructions */}
               <div className="absolute bottom-4 left-4 text-white/60 text-sm font-mono">

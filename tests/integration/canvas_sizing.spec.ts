@@ -1,7 +1,7 @@
-import { test, expect } from '@playwright/test'
+import { test, expect, Page, ElementHandle } from '@playwright/test'
 
 // Helper: expect canvas/grid element to match its container's size
-async function expectChildCanvasMatchesContainer(page, containerSelector: string, childSelector?: string) {
+async function expectChildCanvasMatchesContainer(page: Page, containerSelector: string, childSelector?: string) {
   const size = await page.$eval(containerSelector, (el: HTMLElement) => ({
     w: el.clientWidth,
     h: el.clientHeight,
@@ -31,7 +31,7 @@ test.describe('First paint canvas/grid sizing', () => {
     expect(firstCanvas).not.toBeNull()
 
     const parent = await firstCanvas!.evaluateHandle((c: HTMLCanvasElement) => c.parentElement as HTMLElement)
-    const parentSelector = await parent.evaluate((el) => {
+    const parentSelector = await parent.evaluate((el: HTMLElement) => {
       el.setAttribute('data-test-parent', '1')
       return '[data-test-parent="1"]'
     })

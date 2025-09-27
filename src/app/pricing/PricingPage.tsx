@@ -1,10 +1,8 @@
 'use client'
 
-import { motion, useReducedMotion, useInView, AnimatePresence } from 'framer-motion'
+import { motion, useReducedMotion, useInView } from 'framer-motion'
 import { Check, Star, Zap, Users, Shield, ArrowRight, Sparkles, Target, Crown } from 'lucide-react'
-import Link from 'next/link'
-import { useRef, useState, useEffect } from 'react'
-import BlurText from '@animations/BlurText'
+import { useRef, useState } from 'react'
 import TextPressure from '@animations/TextPressure'
 
 // Enhanced animation variants
@@ -13,10 +11,6 @@ const fadeInUpVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: {
-      duration: 0.6,
-      ease: [0.22, 1, 0.36, 1],
-    },
   },
 }
 
@@ -24,10 +18,6 @@ const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.2,
-    },
   },
 }
 
@@ -43,10 +33,6 @@ const cardHoverVariants = {
     y: -12,
     rotateX: 5,
     rotateY: 2,
-    transition: {
-      duration: 0.4,
-      ease: [0.22, 1, 0.36, 1],
-    },
   },
 }
 
@@ -54,12 +40,6 @@ const shimmerVariants = {
   hidden: { x: '-100%' },
   visible: {
     x: '100%',
-    transition: {
-      duration: 1.5,
-      ease: 'easeInOut',
-      repeat: Infinity,
-      repeatDelay: 3,
-    },
   },
 }
 
@@ -68,11 +48,6 @@ const sparkleVariants = {
   visible: {
     scale: [0, 1, 0],
     rotate: [0, 180, 360],
-    transition: {
-      duration: 2,
-      repeat: Infinity,
-      repeatDelay: Math.random() * 3,
-    },
   },
 }
 
@@ -171,15 +146,31 @@ const pricingPlans = [
 ]
 
 // Animated background particles
-const FloatingParticle = ({ delay = 0, size = 4, color = '#4CD787' }) => (
+interface FloatingParticleConfig {
+  delay: number
+  size: string
+  color: string
+  left: string
+  top: string
+  duration: number
+}
+
+const FloatingParticle = ({
+  delay,
+  size,
+  color,
+  left,
+  top,
+  duration,
+}: FloatingParticleConfig) => (
   <motion.div
     className="absolute rounded-full opacity-20"
     style={{
       width: size,
       height: size,
       backgroundColor: color,
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
+      left,
+      top,
     }}
     animate={{
       y: [-20, 20, -20],
@@ -187,13 +178,30 @@ const FloatingParticle = ({ delay = 0, size = 4, color = '#4CD787' }) => (
       opacity: [0.2, 0.5, 0.2],
     }}
     transition={{
-      duration: 6 + Math.random() * 4,
+      duration,
       repeat: Infinity,
-      delay: delay,
+      delay,
       ease: 'easeInOut',
     }}
   />
 )
+const particleConfigurations: FloatingParticleConfig[] = [
+  { delay: 0, size: '6px', color: '#4CD787', left: '6%', top: '22%', duration: 7 },
+  { delay: 0.5, size: '8px', color: '#FFD700', left: '27%', top: '18%', duration: 8.5 },
+  { delay: 1, size: '9px', color: '#9d4edd', left: '52%', top: '72%', duration: 8 },
+  { delay: 1.5, size: '7px', color: '#4CD787', left: '74%', top: '24%', duration: 9 },
+  { delay: 2, size: '10px', color: '#FFD700', left: '43%', top: '12%', duration: 10 },
+  { delay: 2.5, size: '8px', color: '#9d4edd', left: '9%', top: '58%', duration: 7.5 },
+  { delay: 3, size: '11px', color: '#4CD787', left: '14%', top: '48%', duration: 9.5 },
+  { delay: 3.5, size: '7px', color: '#FFD700', left: '18%', top: '6%', duration: 8.2 },
+  { delay: 4, size: '9px', color: '#9d4edd', left: '59%', top: '62%', duration: 9.7 },
+  { delay: 4.5, size: '6px', color: '#4CD787', left: '33%', top: '82%', duration: 8.8 },
+  { delay: 5, size: '7px', color: '#FFD700', left: '8%', top: '76%', duration: 7.8 },
+  { delay: 5.5, size: '10px', color: '#9d4edd', left: '88%', top: '66%', duration: 9.3 },
+  { delay: 6, size: '8px', color: '#4CD787', left: '61%', top: '54%', duration: 8.9 },
+  { delay: 6.5, size: '6px', color: '#FFD700', left: '4%', top: '64%', duration: 8.4 },
+  { delay: 7, size: '9px', color: '#9d4edd', left: '46%', top: '8%', duration: 9.1 },
+]
 
 interface PricingPlan {
   name: string
@@ -234,34 +242,13 @@ function PricingCard({ plan, index, isYearly }: PricingCardProps) {
         plan.popular
           ? 'border-[#FFD700] ring-2 ring-[#FFD700]/30 shadow-2xl shadow-[#FFD700]/20'
           : 'border-white/10'
-      } flex flex-col h-full group transition-all duration-500 overflow-hidden perspective-1000`}
+      } flex flex-col group transition-all duration-500 overflow-hidden perspective-1000 h-full`}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
       style={{
         transformStyle: 'preserve-3d',
       }}
     >
-      {/* Popular badge with enhanced styling */}
-      {plan.popular && (
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30">
-          <motion.div
-            className="bg-gradient-to-r from-[#FFD700] to-[#E6D055] text-black px-4 py-1.5 rounded-full text-xs font-bold shadow-lg flex items-center gap-1.5"
-            animate={{
-              y: [0, -1, 0],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }}
-          >
-            <Sparkles className="w-3 h-3" />
-            Most Popular
-            <Sparkles className="w-3 h-3" />
-          </motion.div>
-        </div>
-      )}
-
       {/* Animated background gradient */}
       <motion.div
         className={`absolute inset-0 bg-gradient-to-br ${plan.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
@@ -308,9 +295,7 @@ function PricingCard({ plan, index, isYearly }: PricingCardProps) {
         </>
       )}
 
-      <div
-        className={`relative z-10 ${plan.popular ? 'pt-12 px-6 pb-6' : 'p-6'} h-full flex flex-col`}
-      >
+      <div className="relative z-10 p-6 flex flex-col h-full">
         {/* Header section */}
         <div className="flex items-center gap-3 mb-4">
           <motion.div
@@ -373,7 +358,7 @@ function PricingCard({ plan, index, isYearly }: PricingCardProps) {
             Core Features
           </h4>
           <ul className="space-y-2">
-            {plan.features.slice(0, 5).map((feature: string, featureIndex: number) => (
+            {plan.features.map((feature: string, featureIndex: number) => (
               <motion.li
                 key={feature}
                 className="flex items-start text-xs text-white/80 group-hover:text-white transition-colors duration-300"
@@ -388,11 +373,6 @@ function PricingCard({ plan, index, isYearly }: PricingCardProps) {
                 {feature}
               </motion.li>
             ))}
-            {plan.features.length > 5 && (
-              <li className="text-white/40 text-xs italic ml-5">
-                +{plan.features.length - 5} more features...
-              </li>
-            )}
           </ul>
         </div>
 
@@ -411,7 +391,7 @@ function PricingCard({ plan, index, isYearly }: PricingCardProps) {
             animate={{ height: 'auto', opacity: 1 }}
             transition={{ delay: 0.5, duration: 0.5 }}
           >
-            {plan.included.slice(0, 3).map((item: string, itemIndex: number) => (
+            {plan.included.map((item: string, itemIndex: number) => (
               <motion.li
                 key={item}
                 className="flex items-start leading-relaxed group-hover:text-white/80 transition-colors duration-300"
@@ -426,11 +406,6 @@ function PricingCard({ plan, index, isYearly }: PricingCardProps) {
                 {item}
               </motion.li>
             ))}
-            {plan.included.length > 3 && (
-              <li className="text-white/40 italic text-xs">
-                +{plan.included.length - 3} more features...
-              </li>
-            )}
           </motion.ul>
         </div>
 
@@ -480,12 +455,15 @@ export default function PricingPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900/50 to-black" />
 
         {/* Floating particles */}
-        {Array.from({ length: 15 }).map((_, i) => (
+        {particleConfigurations.map((config, i) => (
           <FloatingParticle
             key={i}
-            delay={i * 0.5}
-            size={Math.random() * 6 + 2}
-            color={['#4CD787', '#FFD700', '#9d4edd'][i % 3]}
+            delay={config.delay}
+            size={config.size}
+            color={config.color}
+            left={config.left}
+            top={config.top}
+            duration={config.duration}
           />
         ))}
 
@@ -528,7 +506,7 @@ export default function PricingPage() {
       </div>
 
       {/* Hero Section */}
-      <section className="relative pt-2 pb-8 text-center  mt-9 py-9">
+      <section className="relative pt-2 pb-8 text-center mt-9 py-9">
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
             variants={containerVariants}
@@ -544,11 +522,11 @@ export default function PricingPage() {
                     height: '100px',
                     width: '300px',
                     padding: '0 20px',
-                    marginRight: '30px',
+                    marginRight: '0px',
                   }}
                 >
                   <TextPressure
-                    text="Pricing  "
+                    text="&nbsp;Pricing&nbsp;"
                     flex={true}
                     alpha={false}
                     stroke={false}
@@ -597,15 +575,37 @@ export default function PricingPage() {
       <section className="relative py-12">
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto items-stretch"
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-100px' }}
           >
             {pricingPlans.map((plan, index) => (
-              <div key={plan.name} className="max-h-[650px]">
-                <PricingCard plan={plan} index={index} isYearly={isYearly} />
+              <div key={plan.name} className="relative flex flex-col h-full">
+                {/* Popular badge positioned above card */}
+                {plan.popular && (
+                  <div className="flex justify-center mb-4">
+                    <motion.div
+                      className="bg-gradient-to-r from-[#FFD700] to-[#E6D055] text-black px-4 py-1.5 rounded-full text-xs font-bold shadow-lg flex items-center gap-1.5"
+                      animate={{
+                        y: [0, -1, 0],
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: 'easeInOut',
+                      }}
+                    >
+                      <Sparkles className="w-3 h-3" />
+                      Most Popular
+                      <Sparkles className="w-3 h-3" />
+                    </motion.div>
+                  </div>
+                )}
+                <div className="flex-1">
+                  <PricingCard plan={plan} index={index} isYearly={isYearly} />
+                </div>
               </div>
             ))}
           </motion.div>
@@ -613,7 +613,7 @@ export default function PricingPage() {
       </section>
 
       {/* Enhanced CTA Section */}
-      <section className="relative py-20">
+      <section className="relative pt-20 pb-0">
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -677,6 +677,9 @@ export default function PricingPage() {
           </motion.div>
         </div>
       </section>
+
+      {/* Fade transition to footer */}
+      <div className="relative h-16 bg-gradient-to-b from-transparent via-black/20 to-black/60 pointer-events-none" />
     </div>
   )
 }
