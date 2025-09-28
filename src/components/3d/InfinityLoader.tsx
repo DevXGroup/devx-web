@@ -3,8 +3,9 @@
 import { useState } from "react"
 import { useRef, useEffect } from "react"
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
-import { Environment, PerspectiveCamera, MeshTransmissionMaterial } from "@react-three/drei"
+import { PerspectiveCamera, MeshTransmissionMaterial } from "@react-three/drei"
 import * as THREE from "three"
+import DevXEnvironment from "./DevXEnvironment"
 
 // Create an infinity curve using a parametric formula
 class InfinityCurve extends THREE.Curve<THREE.Vector3> {
@@ -215,7 +216,7 @@ export default function InfinityLoader() {
       <div className="w-full absolute left-0 right-0">
         <Canvas shadows dpr={[1, 2]}>
           <PerspectiveCamera makeDefault position={[0, 0, 6]} fov={40} />
-          <Environment preset="studio" />
+          <DevXEnvironment variant="studio" intensity={1.2} />
           <ambientLight intensity={0.5} />
           <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} castShadow color="#CCFF00" />
           <InfinityMesh />

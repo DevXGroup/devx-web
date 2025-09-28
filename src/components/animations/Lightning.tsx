@@ -175,24 +175,57 @@ const Lightning: React.FC<LightningProps> = ({
     const uSizeLocation = gl.getUniformLocation(program, "uSize");
 
     const startTime = performance.now();
+    let animationId: number | null = null;
+
     const render = () => {
-      resizeCanvas();
-      gl.viewport(0, 0, canvas.width, canvas.height);
-      gl.uniform2f(iResolutionLocation, canvas.width, canvas.height);
-      const currentTime = performance.now();
-      gl.uniform1f(iTimeLocation, (currentTime - startTime) / 1000.0);
-      gl.uniform1f(uHueLocation, hue);
-      gl.uniform1f(uXOffsetLocation, xOffset);
-      gl.uniform1f(uSpeedLocation, speed);
-      gl.uniform1f(uIntensityLocation, intensity);
-      gl.uniform1f(uSizeLocation, size);
-      gl.drawArrays(gl.TRIANGLES, 0, 6);
-      requestAnimationFrame(render);
+      try {
+        resizeCanvas();
+        gl.viewport(0, 0, canvas.width, canvas.height);
+
+        // Ensure program is still current (Safari safety check)
+        gl.useProgram(program);
+
+        // Check if uniform locations are valid before setting
+        if (iResolutionLocation !== null) {
+          gl.uniform2f(iResolutionLocation, canvas.width, canvas.height);
+        }
+        const currentTime = performance.now();
+        if (iTimeLocation !== null) {
+          gl.uniform1f(iTimeLocation, (currentTime - startTime) / 1000.0);
+        }
+        if (uHueLocation !== null) {
+          gl.uniform1f(uHueLocation, hue);
+        }
+        if (uXOffsetLocation !== null) {
+          gl.uniform1f(uXOffsetLocation, xOffset);
+        }
+        if (uSpeedLocation !== null) {
+          gl.uniform1f(uSpeedLocation, speed);
+        }
+        if (uIntensityLocation !== null) {
+          gl.uniform1f(uIntensityLocation, intensity);
+        }
+        if (uSizeLocation !== null) {
+          gl.uniform1f(uSizeLocation, size);
+        }
+
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
+        animationId = requestAnimationFrame(render);
+      } catch (error) {
+        console.warn('WebGL render error:', error);
+        // Stop animation on error to prevent console spam
+        if (animationId) {
+          cancelAnimationFrame(animationId);
+        }
+      }
     };
     requestAnimationFrame(render);
 
     return () => {
       window.removeEventListener("resize", resizeCanvas);
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
     };
   }, [hue, xOffset, speed, intensity, size]);
 

@@ -2,8 +2,9 @@
 
 import { useRef, useEffect, useState } from "react"
 import { Canvas, useFrame } from "@react-three/fiber"
-import { Environment, MeshTransmissionMaterial, PerspectiveCamera } from "@react-three/drei"
+import { MeshTransmissionMaterial, PerspectiveCamera } from "@react-three/drei"
 import { type Mesh, Shape } from "three"
+import DevXEnvironment from "./DevXEnvironment"
 
 function Arrow() {
   const meshRef = useRef<Mesh>(null!)
@@ -73,7 +74,7 @@ export default function Arrow3D() {
       {/* Increased height from h-40 to h-60 */}
       <Canvas>
         <PerspectiveCamera makeDefault position={[0, -6, 9]} /> {/* Adjusted camera position */}
-        <Environment preset="studio" />
+        <DevXEnvironment variant="studio" intensity={1.1} />
         <ambientLight intensity={0.5} />
         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} castShadow />
         <Arrow />

@@ -87,7 +87,9 @@ export default function ScrollVelocityText({
 
   const directionFactor = useRef<number>(1)
   useAnimationFrame((t, delta) => {
-    let moveBy = directionFactor.current * baseVelocity * (delta / 1000)
+    // Safari safety check: delta can be undefined
+    const safeDelta = delta || 16.67 // fallback to ~60fps (16.67ms per frame)
+    let moveBy = directionFactor.current * baseVelocity * (safeDelta / 1000)
     
     // Get current velocity factor
     const currentVelocity = velocityFactor.get()

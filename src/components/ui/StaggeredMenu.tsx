@@ -39,7 +39,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
   displaySocials = true,
   displayItemNumbering = true,
   className,
-  logoUrl = '/devx-logo.png',
+  logoUrl = '/images/logos/devx-logo.png',
   menuButtonColor = '#fff',
   openMenuButtonColor = '#fff',
   changeMenuColorOnOpen = true,
@@ -98,15 +98,18 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
         const offscreen = position === 'left' ? -100 : 100
         gsap.set(panel, { xPercent: offscreen })
 
-        // Ensure layers are properly positioned off-screen
+        // Ensure layers are properly positioned off-screen with immediate render
         if (preLayers.length) {
           gsap.set(preLayers, {
             xPercent: 100,
-            force3D: true
+            force3D: true,
+            immediateRender: true
           })
+          // Force reflow to ensure styles are applied
+          preLayers.forEach(layer => layer.offsetHeight)
           console.log('Initial layer setup complete:', preLayers.length, 'layers')
         }
-      }, 50)
+      }, 100)
 
       gsap.set(plusH, { transformOrigin: '50% 50%', rotate: 0 })
       gsap.set(plusV, { transformOrigin: '50% 50%', rotate: 90 })
@@ -130,9 +133,16 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
 
     console.log('buildOpenTimeline - Found layers:', layers.length)
 
-    // Set initial position for all layers
+    // Ensure layers are properly initialized before animation
     if (layers.length) {
-      gsap.set(layers, { xPercent: 100, force3D: true })
+      // Use a small delay to ensure proper initialization on first run
+      gsap.set(layers, {
+        xPercent: 100,
+        force3D: true,
+        immediateRender: true
+      })
+      // Force a reflow to ensure the styles are applied
+      layers.forEach(layer => layer.offsetHeight)
     }
 
     openTlRef.current?.kill()
@@ -172,7 +182,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
           xPercent: 0,
           duration: 0.4,
           ease: 'power3.out',
-          force3D: true
+          force3D: true,
         },
         i * 0.05
       )
@@ -180,7 +190,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
 
     const lastTime = layerStates.length ? (layerStates.length - 1) * 0.05 : 0
     const panelInsertTime = lastTime + (layerStates.length ? 0.1 : 0)
-    const panelDuration = 1.5
+    const panelDuration = 0.9
 
     tl.fromTo(
       panel,
@@ -198,7 +208,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
         {
           yPercent: 0,
           rotate: 0,
-          duration: 0.8,
+          duration: 0.5,
           ease: 'power2.out',
           stagger: { each: 0.1, from: 'start' },
         },
@@ -249,15 +259,22 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
   const playOpen = useCallback(() => {
     if (busyRef.current) return
     busyRef.current = true
-    const tl = buildOpenTimeline()
-    if (tl) {
-      tl.eventCallback('onComplete', () => {
+
+    // Add a small delay on first open to ensure layers are ready
+    const isFirstOpen = openTlRef.current === null
+    const delay = isFirstOpen ? 50 : 0
+
+    setTimeout(() => {
+      const tl = buildOpenTimeline()
+      if (tl) {
+        tl.eventCallback('onComplete', () => {
+          busyRef.current = false
+        })
+        tl.play(0)
+      } else {
         busyRef.current = false
-      })
-      tl.play(0)
-    } else {
-      busyRef.current = false
-    }
+      }
+    }, delay)
   }, [buildOpenTimeline])
 
   const playClose = useCallback(() => {
@@ -295,7 +312,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
 
         // Reset layers to initial hidden state
         gsap.set(layers, {
-          xPercent: 100
+          xPercent: 100,
         })
 
         busyRef.current = false
@@ -445,14 +462,23 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
           aria-hidden="true"
           style={{
             width: 'clamp(260px, 38vw, 420px)',
-            display: 'block'
+            display: 'block',
           }}
         >
           {(() => {
             const raw =
               colors && colors.length
                 ? colors.slice(0, 4)
-                : ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7', '#a8e6cf', '#ff8b94', '#b4a7d6']
+                : [
+                    '#ff6b6b',
+                    '#4ecdc4',
+                    '#45b7d1',
+                    '#96ceb4',
+                    '#ffeaa7',
+                    '#a8e6cf',
+                    '#ff8b94',
+                    '#b4a7d6',
+                  ]
             // Show all 4 layers for maximum visual impact
             const arr = raw.slice(0, 4)
             console.log('Creating layers with colors:', arr)
@@ -469,7 +495,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
                   backfaceVisibility: 'hidden',
                   WebkitBackfaceVisibility: 'hidden',
                   transform: 'translateZ(0)',
-                  WebkitTransform: 'translateZ(0)'
+                  WebkitTransform: 'translateZ(0)',
                 }}
               />
             ))
@@ -486,7 +512,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
               aria-label="Logo"
             >
               <Image
-                src={logoUrl || '/devx-logo.png'}
+                src={logoUrl || '/images/logos/devx-logo.png'}
                 alt="Logo"
                 className="sm-logo-img block h-8 w-auto object-contain"
                 draggable={false}

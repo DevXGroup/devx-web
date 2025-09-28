@@ -5,7 +5,7 @@ import Image from 'next/image'
 
 const originalCaseStudies = [
   {
-    image: '/analytics-dashboard.png',
+    image: '/images/services/analytics-dashboard.png',
     title: 'Enterprise Analytics Platform',
     description:
       'Developed a scalable analytics dashboard for a Fortune 500 company, improving data insights and decision-making by 30%.',
@@ -14,7 +14,7 @@ const originalCaseStudies = [
     link: '/portfolio/analytics-platform',
   },
   {
-    image: '/fleet-management-tracking.png',
+    image: '/images/services/fleet-management-tracking.png',
     title: 'Real-time Fleet Management',
     description:
       'Built a real-time GPS tracking and management system for a logistics firm, reducing operational costs by 15% and improving delivery efficiency.',
@@ -23,7 +23,7 @@ const originalCaseStudies = [
     link: '/portfolio/fleet-management',
   },
   {
-    image: '/modern-ecommerce-interface.png',
+    image: '/images/services/modern-ecommerce-interface.png',
     title: 'E-commerce Platform Revamp',
     description:
       'Redesigned and re-platformed an existing e-commerce site, leading to a 25% increase in conversion rates and a smoother user experience.',
@@ -32,7 +32,7 @@ const originalCaseStudies = [
     link: '/portfolio/ecommerce-revamp',
   },
   {
-    image: '/ai-chatbot.png',
+    image: '/images/services/ai-chatbot.png',
     title: 'AI-Powered Customer Support',
     description:
       'Implemented an AI chatbot solution for a SaaS company, automating 60% of customer inquiries and enhancing support team productivity.',
@@ -41,7 +41,7 @@ const originalCaseStudies = [
     link: '/portfolio/ai-chatbot',
   },
   {
-    image: '/telemedicine-app.png',
+    image: '/images/services/telemedicine-app.png',
     title: 'Telemedicine Mobile App',
     description:
       'A secure telemedicine application enabling remote consultations, prescription management, and health monitoring with HIPAA compliance.',
