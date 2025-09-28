@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Instagram, Linkedin, Youtube } from 'lucide-react'
@@ -7,15 +8,32 @@ import Threads from '@animations/Threads'
 import FooterContactForm from '@/components/FooterContactForm'
 
 export default function Footer() {
+  const [isSafari, setIsSafari] = useState(false)
+
+  useEffect(() => {
+    // Detect Safari browser
+    const isSafariBrowser = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+    setIsSafari(isSafariBrowser)
+  }, [])
+
   return (
     <>
       {/* Fade transition from above */}
       <div className="relative h-20 bg-gradient-to-b from-black/60 via-black/40 to-transparent pointer-events-none" />
 
       {/* Include the Threads effect touching the footer */}
-      <div className="w-full h-screen relative bg-transparent mb-[-220px] mt-[-240px]">
+      <div className="w-full h-screen relative bg-transparent mb-[-360px] mt-[-280px]">
         <div className="absolute inset-0 z-10">
-          <Threads color={[3, 2, 7]} amplitude={1} distance={0.1} enableMouseInteraction={true} />
+          {isSafari ? (
+            <Threads
+              color={[2, 1.5, 9]}
+              amplitude={0.8}
+              distance={0}
+              enableMouseInteraction={true}
+            />
+          ) : (
+            <Threads color={[3, 2, 7]} amplitude={1} distance={0.1} enableMouseInteraction={true} />
+          )}
         </div>
       </div>
 
@@ -23,7 +41,7 @@ export default function Footer() {
         {/* Background Pattern */}
         <div className="absolute inset-0 bg-[url('/images/patterns/grid.svg')] opacity-10"></div>
 
-        <div className="container mx-auto px-4 relative z-20 max-w-7xl">
+        <div className="container mx-auto relative z-20 max-w-full">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 lg:gap-12">
             {/* Company Info */}
             <div className="sm:col-span-2 lg:col-span-1 xl:col-span-1 flex flex-col">

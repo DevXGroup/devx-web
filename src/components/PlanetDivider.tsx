@@ -31,26 +31,61 @@ function Planet({ scrollY }: { scrollY: number }) {
 
   return (
     <>
-      {/* The main planet sphere */}
+      {/* The main planet sphere - now with a subtle dark glow instead of pure black */}
       <Sphere ref={planetRef} args={[2, 64, 64]} position={[0, -1.5, 0]} scale={[1, 0.3, 1]}>
-        <meshStandardMaterial color="#000000" roughness={0.7} metalness={0.2} />
+        <meshStandardMaterial
+          color="#0a0a0a"
+          roughness={0.8}
+          metalness={0.1}
+          emissive="#001122"
+          emissiveIntensity={0.1}
+        />
       </Sphere>
 
-      {/* The glow effect */}
+      {/* Inner glow effect */}
       <Sphere ref={glowRef} args={[2.05, 32, 32]} position={[0, -1.5, 0]} scale={[1, 0.3, 1]}>
-        <meshBasicMaterial color="#ffffff" transparent={true} opacity={0.1} side={THREE.BackSide} />
+        <meshBasicMaterial
+          color="#4CD787"
+          transparent={true}
+          opacity={0.15}
+          side={THREE.BackSide}
+          blending={THREE.AdditiveBlending}
+        />
       </Sphere>
 
-      {/* Additional outer glow */}
-      <Sphere args={[2.2, 32, 32]} position={[0, -1.5, 0]} scale={[1, 0.3, 1]}>
-        <meshBasicMaterial color="#ffffff" transparent={true} opacity={0.05} side={THREE.BackSide} />
+      {/* Middle glow layer */}
+      <Sphere args={[2.15, 32, 32]} position={[0, -1.5, 0]} scale={[1, 0.3, 1]}>
+        <meshBasicMaterial
+          color="#4CD787"
+          transparent={true}
+          opacity={0.1}
+          side={THREE.BackSide}
+          blending={THREE.AdditiveBlending}
+        />
+      </Sphere>
+
+      {/* Outer glow layer */}
+      <Sphere args={[2.3, 32, 32]} position={[0, -1.5, 0]} scale={[1, 0.3, 1]}>
+        <meshBasicMaterial
+          color="#4CD787"
+          transparent={true}
+          opacity={0.06}
+          side={THREE.BackSide}
+          blending={THREE.AdditiveBlending}
+        />
       </Sphere>
 
       {/* Subtle stars on the planet */}
-      {Array.from({ length: 50 }).map((_, i) => (
+      {Array.from({ length: 40 }).map((_, i) => (
         <mesh key={i} position={[(Math.random() - 0.5) * 3.8, -1.5 + Math.random() * 0.2, (Math.random() - 0.5) * 3.8]}>
-          <sphereGeometry args={[0.005 + Math.random() * 0.005, 8, 8]} />
-          <meshBasicMaterial color="#ffffff" transparent opacity={Math.random() * 0.5 + 0.3} />
+          <sphereGeometry args={[0.008 + Math.random() * 0.006, 8, 8]} />
+          <meshBasicMaterial
+            color="#4CD787"
+            transparent
+            opacity={Math.random() * 0.6 + 0.4}
+            emissive="#4CD787"
+            emissiveIntensity={0.2}
+          />
         </mesh>
       ))}
     </>
@@ -78,11 +113,20 @@ export default function PlanetDivider() {
         left: 0,
         width: "100%",
         height: "40vh",
+        background: "transparent",
       }}
     >
-      <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
-        <ambientLight intensity={0.2} />
-        <directionalLight position={[0, 5, 5]} intensity={0.5} />
+      <Canvas
+        camera={{ position: [0, 0, 5], fov: 45 }}
+        style={{ background: "transparent" }}
+        gl={{
+          alpha: true,
+          antialias: true,
+          powerPreference: "high-performance"
+        }}
+      >
+        <ambientLight intensity={0.3} />
+        <directionalLight position={[0, 5, 5]} intensity={0.7} />
         <Planet scrollY={scrollY} />
       </Canvas>
     </div>

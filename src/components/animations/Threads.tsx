@@ -117,7 +117,14 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     }
 
     float colorVal = 1.0 - line_strength;
-    fragColor = vec4(uColor * colorVal, colorVal);
+
+    // Normalize color values to prevent over-saturation in Safari
+    vec3 normalizedColor = normalize(uColor) * length(uColor) * 0.3;
+
+    // Apply gamma correction for consistent appearance across browsers
+    vec3 finalColor = pow(normalizedColor * colorVal, vec3(1.0/2.2));
+
+    fragColor = vec4(finalColor, colorVal);
 }
 
 void main() {
@@ -143,9 +150,12 @@ const Threads: React.FC<ThreadsProps> = ({
       container.removeChild(container.firstChild)
     }
 
-    const renderer = new Renderer({ 
+    const renderer = new Renderer({
       alpha: true,
-      preserveDrawingBuffer: true
+      preserveDrawingBuffer: true,
+      colorSpace: 'srgb',
+      // Force consistent color handling across browsers
+      premultipliedAlpha: false
     })
     const gl = renderer.gl
     gl.clearColor(0, 0, 0, 0)

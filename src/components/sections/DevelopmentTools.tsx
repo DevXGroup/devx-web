@@ -99,6 +99,7 @@ export default function DevelopmentTools() {
   const [activeIndex, setActiveIndex] = useState(0)
   const [isManual, setIsManual] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [isVisible, setIsVisible] = useState(false)
   const [transitioning, setTransitioning] = useState(false)
   const [transitionData, setTransitionData] = useState<{
     from: { x: number; y: number }
@@ -108,11 +109,32 @@ export default function DevelopmentTools() {
 
   const cycleRef = useRef<NodeJS.Timeout | null>(null)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
+  const sectionRef = useRef<HTMLDivElement>(null)
 
   // Handle mounting for hydration safety
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  // IntersectionObserver to detect when section is visible
+  useEffect(() => {
+    if (!sectionRef.current) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsVisible(entry.isIntersecting)
+        })
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '200px 0px 200px 0px' // Start animation well before fully visible
+      }
+    )
+
+    observer.observe(sectionRef.current)
+    return () => observer.disconnect()
+  }, [mounted])
 
   // Move stars generation to component level
   const stars = useMemo(() => {
@@ -129,7 +151,7 @@ export default function DevelopmentTools() {
     }))
   }, [])
 
-  // Automatic cycle with black hole transition animation
+  // Automatic cycle with black hole transition animation - only when visible
   useEffect(() => {
     // Clear any existing cycle timer first
     if (cycleRef.current) {
@@ -137,10 +159,17 @@ export default function DevelopmentTools() {
       cycleRef.current = null
     }
 
+    // Don't start cycle if not visible
+    if (!isVisible) {
+      return
+    }
+
     const runCycle = () => {
-      if (isManual || transitioning) {
-        // Keep the cycle alive while user interaction/transition is in progress
-        cycleRef.current = setTimeout(runCycle, 250)
+      if (isManual || transitioning || !isVisible) {
+        // Keep the cycle alive while user interaction/transition is in progress or when not visible
+        if (isVisible) {
+          cycleRef.current = setTimeout(runCycle, 250)
+        }
         return
       }
 
@@ -185,7 +214,7 @@ export default function DevelopmentTools() {
       if (cycleRef.current) clearTimeout(cycleRef.current)
       // Do not clear timerRef here, it controls resuming after manual clicks
     }
-  }, [isManual, activeIndex, transitioning])
+  }, [isManual, activeIndex, transitioning, isVisible])
 
   // User click => trigger transition animation
   const handleIconClick = useCallback(
@@ -287,7 +316,7 @@ export default function DevelopmentTools() {
   return (
     <LayoutGroup>
       {/* Optimized height for better spacing with extra bottom padding for tablets */}
-      <div className="relative w-full bg-black z-[150]">
+      <div ref={sectionRef} className="relative w-full bg-black z-[150]">
         {' '}
         {/* Reduced height and padding */}
         {/* Reduced number of stars and added glow effect */}
@@ -814,7 +843,9 @@ function AIToolsOrbit({
   const [rotation, setRotation] = useState(0)
   const [mounted, setMounted] = useState(false)
   const [radius, setRadius] = useState(380)
+  const [isVisible, setIsVisible] = useState(false)
   const orbitRef = useRef<HTMLDivElement>(null)
+  const animationRef = useRef<number | null>(null)
 
   // Set responsive radius for AI tools
   useEffect(() => {
@@ -835,8 +866,36 @@ function AIToolsOrbit({
     setMounted(true)
   }, [])
 
-  // Use useEffect to animate the rotation with motion blur
+  // IntersectionObserver to detect when component is visible
   useEffect(() => {
+    if (!orbitRef.current) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsVisible(entry.isIntersecting)
+        })
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '100px 0px 100px 0px' // Start animation slightly before fully visible
+      }
+    )
+
+    observer.observe(orbitRef.current)
+    return () => observer.disconnect()
+  }, [mounted])
+
+  // Use useEffect to animate the rotation with motion blur - only when visible
+  useEffect(() => {
+    if (!isVisible || !mounted) {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current)
+        animationRef.current = null
+      }
+      return
+    }
+
     let lastTime = performance.now()
     const rotationSpeed = 0.008 // slightly faster for more visible trail effect
 
@@ -845,12 +904,18 @@ function AIToolsOrbit({
       lastTime = time
 
       setRotation((prev) => (prev + rotationSpeed * deltaTime) % 360)
-      requestAnimationFrame(animate)
+      animationRef.current = requestAnimationFrame(animate)
     }
 
-    const animationFrame = requestAnimationFrame(animate)
-    return () => cancelAnimationFrame(animationFrame)
-  }, [mounted])
+    animationRef.current = requestAnimationFrame(animate)
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current)
+        animationRef.current = null
+      }
+    }
+  }, [mounted, isVisible])
 
   // Don't render until mounted to prevent hydration issues
   if (!mounted) {

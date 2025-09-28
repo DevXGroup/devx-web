@@ -264,6 +264,7 @@ export default function Features() {
   const steps = ['Talk to us', 'Plan together', 'Build something great']
 
   const [isMounted, setIsMounted] = useState(false)
+  const [isStepAnimationActive, setIsStepAnimationActive] = useState(false)
   const shouldReduceMotion = useReducedMotion()
   const isInView = useInView(containerRef, { once: true, margin: '-100px' })
 
@@ -280,13 +281,35 @@ export default function Features() {
     setIsMounted(true)
   }, [])
 
+  // IntersectionObserver for step animation
   useEffect(() => {
+    if (!containerRef.current) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsStepAnimationActive(entry.isIntersecting)
+        })
+      },
+      {
+        threshold: 0.3,
+        rootMargin: '100px 0px 100px 0px'
+      }
+    )
+
+    observer.observe(containerRef.current)
+    return () => observer.disconnect()
+  }, [isMounted])
+
+  useEffect(() => {
+    if (!isStepAnimationActive) return
+
     const timer = setInterval(() => {
       setCurrentStep((prevStep) => (prevStep + 1) % steps.length)
     }, animationTiming.stepInterval)
 
     return () => clearInterval(timer)
-  }, [animationTiming.stepInterval, steps.length])
+  }, [animationTiming.stepInterval, steps.length, isStepAnimationActive])
 
   return (
     <section
@@ -311,13 +334,15 @@ export default function Features() {
         <div className="text-center mb-12 md:mb-16">
           {/* Fixed title visibility with inline styles */}
           <h2
-            className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 font-['IBM_Plex_Mono'] text-black"
+            className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 font-['IBM_Plex_Mono'] text-black pb-3"
             style={{
               textShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
               WebkitTextStroke: '1px rgba(0, 0, 0, 0.3)',
             }}
           >
-            Hire elite developers, effortlessly.
+            Hire Elite Developers
+            <br />
+            effortlessly.
           </h2>
         </div>
 

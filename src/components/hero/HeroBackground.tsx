@@ -18,6 +18,7 @@ function Scene() {
   const { viewport } = useThree()
   const [scrollY, setScrollY] = useState(0)
   const [isClient, setIsClient] = useState(false)
+  const [isVisible, setIsVisible] = useState(false)
   const mounted = useRef(false)
 
   useEffect(() => {
@@ -53,32 +54,60 @@ function Scene() {
 
 export default function HeroBackground() {
   const [isMounted, setIsMounted] = useState(false)
+  const [shouldRender, setShouldRender] = useState(true)
+  const [isVisible, setIsVisible] = useState(false)
   const mounted = useRef(false)
+  const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (mounted.current) return
     mounted.current = true
+
+    // Check for reduced motion preference or low-end device
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const isLowPerformance = window.navigator.hardwareConcurrency <= 4
+
+    setShouldRender(!prefersReducedMotion && !isLowPerformance)
     setIsMounted(true)
   }, [])
 
-  if (!isMounted) {
+  // IntersectionObserver to detect when hero is visible
+  useEffect(() => {
+    if (!containerRef.current) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsVisible(entry.isIntersecting)
+        })
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '100px 0px 100px 0px'
+      }
+    )
+
+    observer.observe(containerRef.current)
+    return () => observer.disconnect()
+  }, [isMounted])
+
+  if (!isMounted || !shouldRender) {
     return (
-      <div className="absolute inset-0 w-full h-full bg-black">
-        <Canvas camera={{ position: [0, 0, 10], fov: 55 }}>
-          <color attach="background" args={["#000000"]} />
-          <ambientLight intensity={0.18} />
-          <pointLight position={[10, 10, 10]} intensity={1.0} />
-          <pointLight position={[-8, -5, 8]} intensity={0.6} color="#4cd787" />
-        </Canvas>
+      <div ref={containerRef} className="absolute inset-0 w-full h-full bg-black">
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 to-purple-900/10" />
       </div>
     )
   }
 
   return (
-    <div className="absolute inset-0 w-full h-full">
-      <Canvas camera={{ position: [0, 0, 10], fov: 55 }}>
-        <Scene />
-      </Canvas>
+    <div ref={containerRef} className="absolute inset-0 w-full h-full">
+      {isVisible ? (
+        <Canvas camera={{ position: [0, 0, 10], fov: 55 }}>
+          <Scene />
+        </Canvas>
+      ) : (
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 to-purple-900/10" />
+      )}
     </div>
   )
 }
