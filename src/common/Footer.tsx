@@ -21,7 +21,7 @@ export default function Footer() {
 
       <footer className="bg-background text-foreground relative mb-5">
         {/* Background Pattern */}
-        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
+        <div className="absolute inset-0 bg-[url('/images/patterns/grid.svg')] opacity-10"></div>
 
         <div className="container mx-auto px-4 relative z-20 max-w-7xl">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 lg:gap-12">
@@ -29,7 +29,7 @@ export default function Footer() {
             <div className="sm:col-span-2 lg:col-span-1 xl:col-span-1 flex flex-col">
               <Link href="/" className="inline-block mb-4">
                 <Image
-                  src="/devx-logo.png"
+                  src="/images/logos/devx-logo.png"
                   alt="DevX Logo"
                   width={180}
                   height={48}

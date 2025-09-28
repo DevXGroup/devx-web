@@ -3,8 +3,9 @@
 import { useRef, useState, useMemo, useEffect } from "react"
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
 import { MeshStandardMaterial, Vector3, MathUtils, AdditiveBlending, Mesh } from "three"
-import { Edges, OrbitControls, Text, Float, Environment, Sparkles, RoundedBox } from "@react-three/drei"
+import { Edges, OrbitControls, Text, Float, Sparkles, RoundedBox } from "@react-three/drei"
 import CubeFallback from "./CubeFallback"
+import DevXEnvironment from "./DevXEnvironment"
 
 interface CubeFaceProps {
   position: [number, number, number]
@@ -289,7 +290,7 @@ export default function RotatingCube() {
         <spotLight position={[5, 5, 5]} angle={0.15} penumbra={1} intensity={0.5} color="#FFD700" />
 
         {/* Environment map for reflections */}
-        <Environment preset="night" />
+        <DevXEnvironment variant="night" intensity={1} />
 
         {/* Main cube component */}
         <ModernCube />

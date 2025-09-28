@@ -2,8 +2,9 @@
 
 import { useRef, useEffect, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Environment, PerspectiveCamera } from '@react-three/drei'
+import { PerspectiveCamera } from '@react-three/drei'
 import { Vector3, Curve, TubeGeometry, type Mesh, SphereGeometry } from 'three'
+import DevXEnvironment from '@/components/3d/DevXEnvironment'
 
 interface BraidedRopeAnimationProps {
   className?: string
@@ -83,7 +84,7 @@ export default function BraidedRopeAnimation({ className = '' }: BraidedRopeAnim
             position={[0, 0, isMobile ? 8 : isTablet ? 7 : 6]}
             fov={isMobile ? 75 : isTablet ? 70 : 65}
           />
-          <Environment preset="studio" />
+          <DevXEnvironment variant="studio" intensity={1.1} />
           <ambientLight intensity={0.3} />
 
           <directionalLight

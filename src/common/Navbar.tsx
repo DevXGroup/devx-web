@@ -162,7 +162,7 @@ export default function Navbar() {
         <div className="flex justify-between items-center py-3">
           <Link href="/home">
             <Image
-              src="/devx-logo.png"
+              src="/images/logos/devx-logo.png"
               alt="DevX Logo"
               width={180}
               height={32}
@@ -344,7 +344,7 @@ export default function Navbar() {
               href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-robinhood text-black hover:bg-white hover:text-black px-6 py-2 rounded-lg transition-all duration-300 ease-out font-medium border-2 border-robinhood shadow-lg relative overflow-hidden"
+              className="bg-robinhood text-black hover:bg-white hover:text-black px-5 md:px-6 py-2 rounded-lg transition-all duration-300 ease-out font-medium border-2 border-robinhood shadow-lg relative overflow-hidden whitespace-nowrap text-sm md:text-base"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -489,7 +489,7 @@ export default function Navbar() {
             ]}
             displaySocials={true}
             displayItemNumbering={true}
-            logoUrl="/devx-logo.png"
+            logoUrl="/images/logos/devx-logo.png"
             menuButtonColor="#fff"
             openMenuButtonColor="#fff"
             accentColor="#4CD787"

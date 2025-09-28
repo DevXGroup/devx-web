@@ -9,11 +9,11 @@ import {
   Stars, 
   Float,
   Text3D,
-  Center,
-  Environment
+  Center
 } from '@react-three/drei'
 import * as THREE from 'three'
 import { motion, useScroll, useTransform } from 'framer-motion'
+import DevXEnvironment from '@/components/3d/DevXEnvironment'
 
 // Igloo-style animated planet component
 function AnimatedPlanet() {
@@ -203,7 +203,7 @@ function FloatingGeometry() {
 function Scene() {
   return (
     <>
-      <Environment preset="night" />
+      <DevXEnvironment variant="night" intensity={0.9} />
       <ambientLight intensity={0.2} />
       <directionalLight position={[10, 10, 5]} intensity={1} />
       <pointLight position={[-10, -10, -5]} intensity={0.5} color="#ccff00" />

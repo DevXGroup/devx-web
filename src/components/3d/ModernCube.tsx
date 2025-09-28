@@ -4,8 +4,9 @@ import { useRef, useState, useMemo, useEffect } from "react"
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
 import * as THREE from "three"
 import { MeshStandardMaterial, Vector3, MathUtils, AdditiveBlending } from "three"
-import { Edges, OrbitControls, Text, Float, Environment, Sparkles, RoundedBox } from "@react-three/drei"
+import { Edges, OrbitControls, Text, Float, Sparkles, RoundedBox } from "@react-three/drei"
 import CubeFallback from "./CubeFallback"
+import DevXEnvironment from "./DevXEnvironment"
 
 // Interactive cube face component
 function CubeFace({ position, rotation, text, color, onClick, isActive, index }: any) {
@@ -280,7 +281,7 @@ export default function ModernCube3D() {
         <spotLight position={[5, 5, 5]} angle={0.15} penumbra={1} intensity={0.5} color="#FFD700" />
 
         {/* Environment map for reflections */}
-        <Environment preset="night" />
+        <DevXEnvironment variant="night" intensity={1} />
 
         {/* Main cube component */}
         <ModernCube position={[0, 0, 0]} />

@@ -1,51 +1,37 @@
-'use client'
+import { Metadata } from 'next'
+import HomePageClient from './HomePageClient'
 
-import { useEffect, useState } from 'react'
-import Hero from '@sections/Hero'
-import Features from '@sections/Features'
-import Process from '@sections/Process'
-import DevelopmentTools from '@sections/DevelopmentTools'
+export const metadata: Metadata = {
+  title: 'DevX Group - Elite Software Development Team | Custom Applications & AI Solutions',
+  description: 'DevX Group delivers elite software development services including custom applications, AI/ML solutions, IoT hardware integration, and digital transformation. Build, launch, and scale your vision with our expert team.',
+  keywords: ['software development', 'custom applications', 'AI solutions', 'ML', 'IoT', 'digital transformation', 'web development', 'mobile apps', 'San Diego', 'elite developers'],
+  openGraph: {
+    title: 'DevX Group - Elite Software Development Team | Custom Applications & AI Solutions',
+    description: 'DevX Group delivers elite software development services including custom applications, AI/ML solutions, IoT hardware integration, and digital transformation.',
+    url: 'https://devxgroup.io/home',
+    siteName: 'DevX Group',
+    images: [
+      {
+        url: 'https://devxgroup.io/og-image-home.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'DevX Group - Elite Software Development Team',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'DevX Group - Elite Software Development Team',
+    description: 'Elite software development services including custom applications, AI/ML solutions, and digital transformation.',
+    images: ['https://devxgroup.io/twitter-image-home.jpg'],
+  },
+  alternates: {
+    canonical: 'https://devxgroup.io',
+  },
+}
 
 export default function Home() {
-  const [isLoaded, setIsLoaded] = useState(false)
-  const [navbarReady, setNavbarReady] = useState(false)
-
-  useEffect(() => {
-    // Prevent scroll restoration causing page to scroll up on refresh
-    if ('scrollRestoration' in history) {
-      history.scrollRestoration = 'manual'
-    }
-
-    // Ensure page starts at top
-    window.scrollTo(0, 0)
-
-    // Short delay to allow circle animation to start
-    const timer = setTimeout(() => {
-      setIsLoaded(true)
-    }, 200)
-
-    // Longer delay for navbar to appear
-    const navbarTimer = setTimeout(() => {
-      setNavbarReady(true)
-    }, 500)
-
-    return () => {
-      clearTimeout(timer)
-      clearTimeout(navbarTimer)
-    }
-  }, [])
-
-  return (
-    <main
-      data-page="home"
-      className={`flex min-h-screen flex-col items-center w-full bg-black ${
-        isLoaded ? 'loaded' : ''
-      } ${navbarReady ? 'navbar-ready' : ''}`}
-    >
-      <Hero />
-      <Features />
-      <Process />
-      <DevelopmentTools />
-    </main>
-  )
+  return <HomePageClient />
 }

@@ -193,25 +193,47 @@ const LetterGlitch = ({
     try {
       const canvas = canvasRef.current
       if (!canvas) return
-      const parent = canvas.parentElement
-      if (!parent) return
 
+      // Wait for element to be in DOM on Safari
+      if (!canvas.parentElement || !canvas.offsetParent) {
+        setTimeout(resizeCanvas, 100)
+        return
+      }
+
+      const parent = canvas.parentElement
       const rect = parent.getBoundingClientRect()
       if (rect.width <= 0 || rect.height <= 0) return
 
-      // Reduce pixel ratio on mobile for performance
+      // More conservative pixel ratio for Safari compatibility
       const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
-      const dpr = typeof window !== 'undefined' ?
-        (isMobile ? Math.min(window.devicePixelRatio || 1, 2) : window.devicePixelRatio || 1) : 1
+      const isSafari = typeof navigator !== 'undefined' && /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+      let dpr = 1
 
-      canvas.width = rect.width * dpr
-      canvas.height = rect.height * dpr
+      if (typeof window !== 'undefined') {
+        if (isSafari) {
+          dpr = Math.min(window.devicePixelRatio || 1, 1.5) // Limit for Safari
+        } else {
+          dpr = isMobile ? Math.min(window.devicePixelRatio || 1, 2) : window.devicePixelRatio || 1
+        }
+      }
 
-      canvas.style.width = `${rect.width}px`
-      canvas.style.height = `${rect.height}px`
+      // Set canvas size with error handling
+      try {
+        canvas.width = Math.floor(rect.width * dpr)
+        canvas.height = Math.floor(rect.height * dpr)
+        canvas.style.width = `${rect.width}px`
+        canvas.style.height = `${rect.height}px`
+      } catch (canvasError) {
+        console.warn('Canvas size error:', canvasError)
+        return
+      }
 
       if (context.current) {
-        context.current.setTransform(dpr, 0, 0, dpr, 0, 0)
+        try {
+          context.current.setTransform(dpr, 0, 0, dpr, 0, 0)
+        } catch (transformError) {
+          console.warn('Canvas transform error:', transformError)
+        }
       }
 
       const { columns, rows } = calculateGrid(rect.width, rect.height)
@@ -320,10 +342,30 @@ const LetterGlitch = ({
     try {
       const canvas = canvasRef.current
       if (canvas) {
-        context.current = canvas.getContext('2d')
+        // Try to get 2d context with fallback for Safari
+        let ctx: CanvasRenderingContext2D | null = null
+        try {
+          ctx = canvas.getContext('2d', {
+            alpha: true,
+            desynchronized: false,
+            colorSpace: 'srgb'
+          })
+        } catch (ctxError) {
+          console.warn('Context creation with options failed, trying basic:', ctxError)
+          ctx = canvas.getContext('2d')
+        }
+
+        context.current = ctx
+
         if (context.current) {
-          resizeCanvas()
-          animate()
+          // Safari-specific initialization delay
+          const isSafari = typeof navigator !== 'undefined' && /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+          const initDelay = isSafari ? 100 : 0
+
+          setTimeout(() => {
+            resizeCanvas()
+            animate()
+          }, initDelay)
 
           handleResize = () => {
             try {
@@ -334,7 +376,7 @@ const LetterGlitch = ({
                 }
                 resizeCanvas()
                 animate()
-              }, 200) // Increased debounce delay for mobile performance
+              }, isSafari ? 300 : 200) // Longer debounce for Safari
             } catch (error) {
               console.warn('Resize handler error:', error)
             }
@@ -368,8 +410,8 @@ const LetterGlitch = ({
   }, [glitchSpeed, smooth])
 
   return (
-    <div className="absolute inset-0 w-full h-full bg-black overflow-hidden">
-      <canvas ref={canvasRef} className="block w-full h-full" />
+    <div className="absolute inset-0 w-full h-full bg-black overflow-hidden" suppressHydrationWarning>
+      <canvas ref={canvasRef} className="block w-full h-full" suppressHydrationWarning />
       {outerVignette && (
         <div className="absolute top-0 left-0 w-full h-full pointer-events-none bg-[radial-gradient(circle,_rgba(0,0,0,0)_60%,_rgba(0,0,0,1)_100%)]"></div>
       )}
@@ -612,22 +654,45 @@ function DecryptedText({
 
 // Enhanced star field component with more realistic distribution
 function StarField() {
-  const stars = Array.from({ length: 150 }, (_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    size: Math.random() * 1.5 + 0.5,
-    opacity: Math.random() * 0.8 + 0.4,
-    duration: Math.random() * 2 + 1.5,
-    delay: Math.random() * 3,
-    twinkleIntensity: Math.random() * 0.6 + 0.4,
-    isFlashing: Math.random() < 0.3, // 30% of stars will have flashing effect
-    flashDuration: Math.random() * 3 + 2,
-    flashDelay: Math.random() * 5,
-  }))
+  const [stars, setStars] = useState<Array<{
+    id: number
+    x: number
+    y: number
+    size: number
+    opacity: number
+    duration: number
+    delay: number
+    twinkleIntensity: number
+    isFlashing: boolean
+    flashDuration: number
+    flashDelay: number
+  }>>([])
+
+  useEffect(() => {
+    // Generate stars on client side only to prevent hydration mismatch
+    const generatedStars = Array.from({ length: 150 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 1.5 + 0.5,
+      opacity: Math.random() * 0.8 + 0.4,
+      duration: Math.random() * 2 + 1.5,
+      delay: Math.random() * 3,
+      twinkleIntensity: Math.random() * 0.6 + 0.4,
+      isFlashing: Math.random() < 0.3, // 30% of stars will have flashing effect
+      flashDuration: Math.random() * 3 + 2,
+      flashDelay: Math.random() * 5,
+    }))
+    setStars(generatedStars)
+  }, [])
+
+  // Don't render anything until stars are generated
+  if (stars.length === 0) {
+    return <div className="absolute inset-0 overflow-hidden" suppressHydrationWarning />
+  }
 
   return (
-    <div className="absolute inset-0 overflow-hidden">
+    <div className="absolute inset-0 overflow-hidden" suppressHydrationWarning>
       {stars.map((star) => (
         <motion.div
           key={star.id}
@@ -767,15 +832,22 @@ export default function EntryPage() {
   const [mounted, setMounted] = useState(false)
   const [animationComplete, setAnimationComplete] = useState(false)
   const [isCollapsing, setIsCollapsing] = useState(false)
+  const [clientSide, setClientSide] = useState(false)
   const router = useRouter()
   const reduceMotion = useReducedMotion()
 
   useEffect(() => {
-    setMounted(true)
+    // Use a small delay to ensure DOM is fully ready in Safari
+    const timer = setTimeout(() => {
+      setMounted(true)
+      setClientSide(true)
+    }, 50)
+
+    return () => clearTimeout(timer)
   }, [])
 
   useEffect(() => {
-    if (animationComplete) {
+    if (animationComplete && mounted) {
       // Start collapse animation immediately
       setIsCollapsing(true)
       // Navigate right as shutter completes for seamless transition
@@ -783,7 +855,7 @@ export default function EntryPage() {
         router.push('/home')
       }, 400) // Exactly when shutter finishes (400ms)
     }
-  }, [animationComplete, router])
+  }, [animationComplete, router, mounted])
 
   // Skip animation if user prefers reduced motion
   useEffect(() => {
@@ -797,24 +869,25 @@ export default function EntryPage() {
     return undefined
   }, [reduceMotion, mounted, router])
 
-  if (!mounted) {
+  // Show consistent loading state during hydration - no conditional rendering
+  if (!mounted || !clientSide) {
     return (
-      <div className="fixed inset-0 bg-black flex items-center justify-center">
-        <div className="text-white text-xl">Loading...</div>
+      <div className="fixed inset-0 bg-black flex items-center justify-center" suppressHydrationWarning>
+        <div className="text-white text-xl font-mono">Loading...</div>
       </div>
     )
   }
 
   if (reduceMotion) {
     return (
-      <div className="fixed inset-0 bg-black flex items-center justify-center">
-        <div className="text-white text-xl">Loading...</div>
+      <div className="fixed inset-0 bg-black flex items-center justify-center" suppressHydrationWarning>
+        <div className="text-white text-xl font-mono">Loading...</div>
       </div>
     )
   }
 
   return (
-    <div className="fixed inset-0 bg-black overflow-hidden">
+    <div className="fixed inset-0 bg-black overflow-hidden" suppressHydrationWarning>
       <StarField />
       <LetterGlitch
         glitchColors={['#4CD787', '#FFD700', '#9d4edd', '#4834D4', '#00ff41', '#008f11']}

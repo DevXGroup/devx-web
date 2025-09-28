@@ -4,21 +4,7 @@ import { motion, useReducedMotion, useInView } from 'framer-motion'
 import { useRef, useCallback, useMemo, useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import {
-  Check,
-  Users,
-  Zap,
-  Award,
-  Globe,
-  Shield,
-  Heart,
-  Lock,
-  UserCheck,
-  Sparkles,
-  Lightbulb,
-  Star,
-} from 'lucide-react'
-import BlurText from '@/components/animations/BlurText'
+import { Check, Users, Zap, Globe, Shield, Heart, UserCheck, Lightbulb, Star } from 'lucide-react'
 import TextPressure from '@/components/animations/TextPressure'
 import ShapeBlur from '@/components/animations/ShapeBlur'
 import CardSwap, { Card } from '@/components/animations/CardSwap'
@@ -505,9 +491,10 @@ export default function AboutPage() {
             </p>
           </AnimatedSection>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center ml-[13px]">
             {/* Left side - Text content */}
-            <AnimatedSection className="space-y-6">
+
+            <AnimatedSection className="space-y-8">
               <div className="space-y-4">
                 <div className="flex items-start gap-4">
                   <div className="w-8 h-8 rounded-full bg-[#4CD787]/20 flex items-center justify-center flex-shrink-0 mt-1">
@@ -558,13 +545,13 @@ export default function AboutPage() {
             </AnimatedSection>
 
             {/* Right side - CardSwap */}
-            <AnimatedSection delay={0.2} className="relative h-[400px] lg:h-[500px]">
+            <AnimatedSection delay={0.2} className="relative h-[500px] lg:h-[600px]">
               <CardSwap
-                width={420}
-                height={280}
-                cardDistance={80}
+                width={490}
+                height={290}
+                cardDistance={66}
                 verticalDistance={60}
-                delay={4000}
+                delay={3000}
                 pauseOnHover={true}
                 easing="elastic"
                 onCardClick={(idx) => console.log(`Process step ${idx + 1} clicked`)}

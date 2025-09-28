@@ -2,8 +2,9 @@
 
 import { useRef, useEffect, useState } from "react"
 import { Canvas, useFrame } from "@react-three/fiber"
-import { Environment, PerspectiveCamera, MeshTransmissionMaterial } from "@react-three/drei"
+import { PerspectiveCamera, MeshTransmissionMaterial } from "@react-three/drei"
 import { Vector3, Curve, TubeGeometry, type Mesh, SphereGeometry } from "three"
+import DevXEnvironment from "@/components/3d/DevXEnvironment"
 
 interface DNAHelixAnimationProps {
   className?: string
@@ -54,7 +55,7 @@ export default function DNAHelixAnimation({ className = "" }: DNAHelixAnimationP
           camera={{ position: [8, 0, 12], fov: 45 }}
         >
           <PerspectiveCamera makeDefault position={[8, 0, 12]} />
-          <Environment preset="studio" />
+          <DevXEnvironment variant="studio" intensity={1.3} />
           <ambientLight intensity={0.3} />
           
           {/* Enhanced lighting for purple/gold metallic ropes */}

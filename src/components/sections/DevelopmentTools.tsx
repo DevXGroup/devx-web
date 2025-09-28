@@ -9,42 +9,42 @@ const tools = [
   {
     name: 'Laravel',
     description: "Quickly build secure web apps with Laravel's powerful features",
-    icon: 'https://laravel.com/img/logomark.min.svg',
+    icon: '/images/tech/laravel.svg',
   },
   {
     name: 'Figma',
     description: "Design & prototype collaboratively with Figma's robust toolset",
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg',
+    icon: '/images/tech/figma.svg',
   },
   {
     name: 'Angular',
     description: "Innovative enterprise solutions with Angular's robust framework",
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-original.svg',
+    icon: '/images/tech/angular.svg',
   },
   {
     name: 'React',
     description: 'Fast & dynamic user interfaces seamlessly built with React',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg',
+    icon: '/images/tech/react.svg',
   },
   {
     name: 'Flutter',
     description: 'Multi-platform apps for mobile, web, & desktop using Flutter',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg',
+    icon: '/images/tech/flutter.svg',
   },
   {
     name: '.NET',
     description: "Develop robust, scalable solutions with Microsoft's .NET platform",
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dot-net/dot-net-original.svg',
+    icon: '/images/tech/dotnet.svg',
   },
   {
     name: 'Adobe XD',
     description: 'Prototype and design beautiful UX with Adobe XD',
-    icon: 'https://upload.wikimedia.org/wikipedia/commons/c/c2/Adobe_XD_CC_icon.svg',
+    icon: '/images/tech/adobe-xd.svg',
   },
   {
     name: 'Magento',
     description: 'Build scalable e-commerce solutions with Magento ecosystem',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/magento/magento-original.svg',
+    icon: '/images/tech/magento.svg',
   },
 ]
 
@@ -53,42 +53,42 @@ const aiTools = [
   {
     name: 'TensorFlow',
     description: "Build and deploy ML models with Google's TensorFlow platform",
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg',
+    icon: '/images/tech/tensorflow.svg',
   },
   {
     name: 'PyTorch',
     description: 'Dynamic neural networks and deep learning with PyTorch',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg',
+    icon: '/images/tech/pytorch.svg',
   },
   {
     name: 'OpenAI',
     description: "Integrate powerful AI models with OpenAI's cutting-edge APIs",
-    icon: 'https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg',
+    icon: '/images/tech/openai.svg',
   },
   {
     name: 'Python',
     description: 'Versatile programming language for AI, web, and data science',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
+    icon: '/images/tech/python.svg',
   },
   {
     name: 'Node.js',
     description: 'Build scalable server-side applications with JavaScript runtime',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg',
+    icon: '/images/tech/nodejs.svg',
   },
   {
     name: 'Docker',
     description: 'Containerize applications for consistent deployment environments',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg',
+    icon: '/images/tech/docker.svg',
   },
   {
     name: 'AWS',
     description: 'Cloud computing services for scalable infrastructure solutions',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg',
+    icon: '/images/tech/aws.svg',
   },
   {
     name: 'MongoDB',
     description: 'NoSQL database for modern application development',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
+    icon: '/images/tech/mongodb.svg',
   },
 ]
 

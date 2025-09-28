@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Laravel logo">
+  <rect width="64" height="64" rx="14" fill="#1f1f1f"/>
+  <polygon fill="#FF2D20" points="12 14 26 20 26 36 12 30"/>
+  <polygon fill="#FF6B5A" points="26 20 38 14 52 20 40 26"/>
+  <polygon fill="#FF4C39" points="26 36 40 42 40 26 26 20"/>
+  <polygon fill="#FF2D20" points="40 26 52 20 52 40 40 46"/>
+</svg>

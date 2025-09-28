@@ -2,8 +2,9 @@
 
 import { useRef, useEffect, useState } from "react"
 import { Canvas, useFrame } from "@react-three/fiber"
-import { Environment, PerspectiveCamera, MeshTransmissionMaterial } from "@react-three/drei"
+import { PerspectiveCamera, MeshTransmissionMaterial } from "@react-three/drei"
 import { Vector3, Curve, TubeGeometry, type Mesh, SphereGeometry } from "three"
+import DevXEnvironment from "./DevXEnvironment"
 
 export default function InfinityLogo() {
   const [isMounted, setIsMounted] = useState(false)
@@ -49,7 +50,7 @@ export default function InfinityLogo() {
           onContextMenu={(e) => e.preventDefault()}
         >
           <PerspectiveCamera makeDefault position={[0, 0, 10]} />
-          <Environment preset="studio" />
+          <DevXEnvironment variant="studio" intensity={1.2} />
           <ambientLight intensity={0.5} />
           <directionalLight
             castShadow

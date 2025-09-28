@@ -12,21 +12,21 @@ const testimonials = [
       'DevX Group has been assisting our company for the past three years in developing and implementing new and customized solutions utilizing cutting-edge technologies. Their dedication to precision and discipline ensures that great solutions are delivered with minimal redesign. We strongly recommend them to knowledgeable clients seeking a highly productive and solution-focused team.',
     author: 'Chamrosh Inc Founder/CEO',
     position: 'Founder/CEO, Chamrosh Inc',
-    logo: '/innovative-company-logo.png',
+    logo: '/images/testimonials/innovative-company-logo.png',
   },
   {
     quote:
       'Our partnership with Dev Group has driven our company to be a leader in online channels. We recommend them for any business looking to have an active online presence creatively.',
     author: 'Lazurd Inc CEO',
     position: 'CEO, Lazurd Inc',
-    logo: '/abstract-tech-logo.png',
+    logo: '/images/testimonials/abstract-tech-logo.png',
   },
   {
     quote:
       "The DevX Group team showed high professionalism handling our project, starting with collecting all the required data to precisely understand our operations' needs, to providing a clear approach and an accurate timeline for the completion of the project, and very transparent payables (even explained the ones that might occur in the future). We had great communication with the team; they were very responsive, punctual, and on time, and they have always provided us with feedback and recommendations from a professional point of view. I'm very pleased and satisfied with our collaboration; I see it will last many years. I would HIGHLY RECOMMEND them for anyone seeking a professional partner!",
     author: 'Lawazm Inc CEO',
     position: 'CEO, Lawazm Inc',
-    logo: '/generic-mobile-logo.png',
+    logo: '/images/testimonials/generic-mobile-logo.png',
   },
 ]
 

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Angular logo">
+  <polygon fill="#DD0031" points="32 4 6 16 10 48 32 60 54 48 58 16"/>
+  <polygon fill="#C3002F" points="32 10 14 20 17 44 32 54 47 44 50 20"/>
+  <path fill="#FFFFFF" d="M32 18l12 28h-6.8l-1.8-5h-11l-1.8 5H16l12-28h4zm0 9.5L29 32h6l-3-4.5z"/>
+</svg>

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label=".NET logo">
+  <rect width="64" height="64" rx="14" fill="#1a1336"/>
+  <circle cx="32" cy="32" r="20" fill="#512BD4"/>
+  <text x="32" y="38" font-family="'Arial',sans-serif" font-size="18" font-weight="700" text-anchor="middle" fill="#FFFFFF">.NET</text>
+</svg>

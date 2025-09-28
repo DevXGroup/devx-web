@@ -2,7 +2,37 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Terms of Service | DevX Group LLC',
-  description: 'Terms of Service for DevX Group LLC - Understand the terms and conditions for using our software development services.',
+  description: 'Terms of Service for DevX Group LLC - Understand the terms and conditions for using our software development services and website.',
+  keywords: ['terms of service', 'terms and conditions', 'software development agreement', 'service terms', 'legal terms', 'user agreement'],
+  openGraph: {
+    title: 'Terms of Service | DevX Group LLC',
+    description: 'Terms of Service for DevX Group LLC - Understand the terms and conditions for using our software development services and website.',
+    url: 'https://devxgroup.io/terms',
+    siteName: 'DevX Group',
+    images: [
+      {
+        url: 'https://devxgroup.io/og-image-terms.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'DevX Group Terms of Service',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Terms of Service | DevX Group LLC',
+    description: 'Terms of Service for DevX Group LLC - Legal terms and conditions for our software development services.',
+    images: ['https://devxgroup.io/twitter-image-terms.jpg'],
+  },
+  alternates: {
+    canonical: 'https://devxgroup.io/terms',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function TermsPage() {

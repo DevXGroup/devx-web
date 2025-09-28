@@ -2,7 +2,37 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy | DevX Group LLC',
-  description: 'Privacy Policy for DevX Group LLC - Learn how we collect, use, and protect your personal information.',
+  description: 'Privacy Policy for DevX Group LLC - Learn how we collect, use, and protect your personal information in compliance with CCPA and privacy regulations.',
+  keywords: ['privacy policy', 'data protection', 'CCPA compliance', 'personal information', 'data security', 'california privacy rights'],
+  openGraph: {
+    title: 'Privacy Policy | DevX Group LLC',
+    description: 'Privacy Policy for DevX Group LLC - Learn how we collect, use, and protect your personal information in compliance with CCPA and privacy regulations.',
+    url: 'https://devxgroup.io/privacy',
+    siteName: 'DevX Group',
+    images: [
+      {
+        url: 'https://devxgroup.io/og-image-privacy.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'DevX Group Privacy Policy',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Privacy Policy | DevX Group LLC',
+    description: 'Privacy Policy for DevX Group LLC - CCPA compliant data protection and privacy practices.',
+    images: ['https://devxgroup.io/twitter-image-privacy.jpg'],
+  },
+  alternates: {
+    canonical: 'https://devxgroup.io/privacy',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function PrivacyPage() {
