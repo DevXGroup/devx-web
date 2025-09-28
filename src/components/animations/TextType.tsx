@@ -89,7 +89,7 @@ const TextType = ({
     if (showCursor && cursorRef.current) {
       gsap.set(cursorRef.current, { opacity: 1 });
       // Use simple CSS animation instead of GSAP for better performance
-      const cursor = cursorRef.current;
+      const cursor = cursorRef.current as HTMLElement;
       cursor.style.animation = `blink ${cursorBlinkDuration * 2}s infinite`;
     }
   }, [showCursor, cursorBlinkDuration]);

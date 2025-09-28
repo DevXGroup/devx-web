@@ -79,7 +79,7 @@ function Planet({ scrollY }: { scrollY: number }) {
       {Array.from({ length: 40 }).map((_, i) => (
         <mesh key={i} position={[(Math.random() - 0.5) * 3.8, -1.5 + Math.random() * 0.2, (Math.random() - 0.5) * 3.8]}>
           <sphereGeometry args={[0.008 + Math.random() * 0.006, 8, 8]} />
-          <meshBasicMaterial
+          <meshStandardMaterial
             color="#4CD787"
             transparent
             opacity={Math.random() * 0.6 + 0.4}
