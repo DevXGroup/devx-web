@@ -153,7 +153,6 @@ const Threads: React.FC<ThreadsProps> = ({
     const renderer = new Renderer({
       alpha: true,
       preserveDrawingBuffer: true,
-      colorSpace: 'srgb',
       // Force consistent color handling across browsers
       premultipliedAlpha: false
     })
