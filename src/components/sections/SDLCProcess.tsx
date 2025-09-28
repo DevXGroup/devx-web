@@ -1,7 +1,7 @@
 "use client"
 
 import { motion, useAnimation } from "framer-motion"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { FileSearch, Pencil, Code, TestTube, Rocket, Settings } from "lucide-react"
 
 const sdlcSteps = [
@@ -89,14 +89,38 @@ export default function SDLCProcess() {
   const [currentStep, setCurrentStep] = useState(0)
   const [progress, setProgress] = useState(0)
   const [completedSteps, setCompletedSteps] = useState(new Set())
+  const [isVisible, setIsVisible] = useState(false)
   const controls = useAnimation()
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  // IntersectionObserver to detect when component is visible
+  useEffect(() => {
+    if (!containerRef.current) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsVisible(entry.isIntersecting)
+        })
+      },
+      {
+        threshold: 0.3,
+        rootMargin: '50px 0px 50px 0px'
+      }
+    )
+
+    observer.observe(containerRef.current)
+    return () => observer.disconnect()
+  }, [])
 
   useEffect(() => {
+    if (!isVisible) return
+
     const animateProcess = async () => {
-      while (true) {
+      while (isVisible) {
         // Reset completed steps at start of cycle
         setCompletedSteps(new Set())
-        
+
         for (let i = 0; i < sdlcSteps.length; i++) {
           setCurrentStep(i)
           for (let p = 0; p <= 1; p += 0.01) {
@@ -121,11 +145,11 @@ export default function SDLCProcess() {
     }
 
     animateProcess()
-  }, [])
+  }, [isVisible])
 
   return (
     <>
-      <div className="relative mb-12 w-full px-4 md:px-16 py-8">
+      <div ref={containerRef} className="relative mb-12 w-full px-4 md:px-16 py-8">
         <ConnectingLine currentStep={currentStep} progress={progress} totalSteps={sdlcSteps.length} />
         <div className="flex justify-between items-center relative z-10">
           {sdlcSteps.map((step, index) => (

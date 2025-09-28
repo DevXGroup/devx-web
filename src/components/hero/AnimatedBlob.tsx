@@ -375,13 +375,14 @@ function RefinedBlob({
   const rotationFactor = useRef(0.2 + Math.random() * 0.15).current // Slower, more organic rotation
   const phaseOffset = useRef(Math.random() * Math.PI * 2).current
 
-  // Restored circular movement parameters
+  // Responsive circular movement parameters
   const circleCenter = useRef(new Vector3(position[0], position[1], position[2])).current
-  const circleRadius = useRef(1.0 + Math.random() * 1.0).current // Increased radius for wider circular movement
+  const viewportScale = Math.max(0.5, Math.min(2.0, viewport.width / 1200))
+  const circleRadius = useRef((0.8 + Math.random() * 1.0) * viewportScale).current // Responsive radius
   const originalPositionVector = useRef(
     new Vector3(originalPosition[0], originalPosition[1], originalPosition[2]),
   ).current
-  const circleSpeed = useRef(0.3 + Math.random() * 0.2).current // Increased speed of circular movement
+  const circleSpeed = useRef(0.4 + Math.random() * 0.3).current // Faster, more fluid circular movement
 
 
   useFrame((state) => {
@@ -390,10 +391,10 @@ function RefinedBlob({
       const scrollFactor = scrollY * 0.001 // Restored scroll influence
       const normalizedScrollFactor = Math.min(1.0, scrollY * 0.001)
 
-      // Restored convergence animation
-      const convergenceTime = state.clock.elapsedTime * 0.15 + index * 0.5
+      // Enhanced convergence animation for more fluid movement
+      const convergenceTime = state.clock.elapsedTime * 0.2 + index * 0.3
       const convergenceStrength = Math.sin(convergenceTime) * 0.5 + 0.5
-      const separationDistance = 3.0 * (1 - convergenceStrength)
+      const separationDistance = 2.5 * (1 - convergenceStrength)
 
       // Restored separation calculation
       const separationAngle = (index / 12) * Math.PI * 2
@@ -406,15 +407,35 @@ function RefinedBlob({
       const baseYOffset = Math.cos(angle * 0.7) * circleRadius * 0.7
       const baseZOffset = Math.sin(angle * 1.3) * circleRadius * 0.5
 
-      // Restored position calculation
-      const responsiveXOffset = viewport.width < 768 ? viewport.width * 0.1 : 0
-      groupRef.current.position.x = circleCenter.x + baseXOffset + separationX + responsiveXOffset
+      // Position calculation - keep blobs flowing on left side with responsive constraints
+      let leftBoundary, rightBoundary, responsiveXOffset
+
+      if (viewport.width < 768) {
+        // Mobile: tighter constraints
+        leftBoundary = -10
+        rightBoundary = -1.5
+        responsiveXOffset = -0.5
+      } else if (viewport.width < 1024) {
+        // Tablet: medium constraints
+        leftBoundary = -12
+        rightBoundary = -2
+        responsiveXOffset = -0.2
+      } else {
+        // Desktop: larger constraints but still left-focused
+        const scale = Math.max(1.0, Math.min(1.8, viewport.width / 1200))
+        leftBoundary = -15 * scale
+        rightBoundary = -2 * scale
+        responsiveXOffset = 0
+      }
+
+      const calculatedX = circleCenter.x + baseXOffset + separationX + responsiveXOffset
+      groupRef.current.position.x = Math.max(leftBoundary, Math.min(calculatedX, rightBoundary)) // Constrain to left side
       groupRef.current.position.y = circleCenter.y + baseYOffset + separationY
       groupRef.current.position.z = circleCenter.z + baseZOffset
 
-      // Restored vertical movement
-      const verticalMovement = ((Math.sin(time * 0.25) * 1.5 * viewport.height) / 10) * amplitudeFactor
-      const scrollInfluence = -scrollY * 0.006 * (1 + index * 0.15)
+      // Enhanced vertical movement for more fluid motion
+      const verticalMovement = ((Math.sin(time * 0.3) * 1.8 * viewport.height) / 12) * amplitudeFactor
+      const scrollInfluence = -scrollY * 0.005 * (1 + index * 0.1)
 
       groupRef.current.position.y += verticalMovement + scrollInfluence
 
@@ -434,6 +455,17 @@ function RefinedBlob({
       // Restored scroll-reactive scale
       const scrollScale = 1 + Math.sin(scrollFactor * 1.2) * 0.03
       groupRef.current.scale.set(scrollScale, scrollScale, scrollScale)
+
+      // Hide blobs when globe is fully visible (starts hiding around scroll 200, fully hidden by 400)
+      const globeVisibilityThreshold = 200
+      const globeFullyVisibleAt = 400
+      const blobOpacity = scrollY < globeVisibilityThreshold
+        ? 1
+        : scrollY > globeFullyVisibleAt
+          ? 0
+          : 1 - ((scrollY - globeVisibilityThreshold) / (globeFullyVisibleAt - globeVisibilityThreshold))
+
+      groupRef.current.visible = blobOpacity > 0.01
 
       // Restored particle system update
       if (particlesRef.current) {
@@ -529,13 +561,37 @@ export default function AnimatedBlob({
   scrollY: number
   viewport: { width: number; height: number }
 }) {
-  const blobCount = 30
+  const blobCount = 25
   const blobData = useRef(
     Array.from({ length: blobCount }, (_, index) => {
-      const size = 0.5 + Math.random() * 1.5
-      const xPos = -15 + Math.random() * 10
-      const yPos = -10 + Math.random() * 20
-      const zPos = -5 + Math.random() * 10
+      const size = 0.4 + Math.random() * 1.2
+
+      // Position blobs on the left side of the screen with responsive scaling
+      // Different scaling strategies for different screen sizes
+      let viewportScale
+      let leftBoundary, rightBoundary
+
+      if (viewport.width < 768) {
+        // Mobile: smaller, more concentrated area
+        viewportScale = 0.6
+        leftBoundary = -8 * viewportScale
+        rightBoundary = -3 * viewportScale
+      } else if (viewport.width < 1024) {
+        // Tablet: medium area
+        viewportScale = 0.8
+        leftBoundary = -10 * viewportScale
+        rightBoundary = -3.5 * viewportScale
+      } else {
+        // Desktop: larger area but still constrained to left
+        viewportScale = Math.max(1.0, Math.min(1.8, viewport.width / 1200))
+        leftBoundary = -12 * viewportScale
+        rightBoundary = -4 * viewportScale
+      }
+
+      const leftSideWidth = rightBoundary - leftBoundary // Width of left side area
+      const xPos = leftBoundary + Math.random() * leftSideWidth // Random position in left area
+      const yPos = -8 + Math.random() * 16 // Spread vertically within viewport
+      const zPos = -8 + Math.random() * 12 // Depth variation
 
       return {
         position: [xPos, yPos, zPos] as [number, number, number],

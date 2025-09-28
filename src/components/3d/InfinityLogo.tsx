@@ -8,6 +8,7 @@ import DevXEnvironment from "./DevXEnvironment"
 
 export default function InfinityLogo() {
   const [isMounted, setIsMounted] = useState(false)
+  const [isVisible, setIsVisible] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
 
   // Prevent scrolling when interacting with the canvas
@@ -32,6 +33,26 @@ export default function InfinityLogo() {
     setIsMounted(true)
   }, [])
 
+  // IntersectionObserver to detect when component is visible
+  useEffect(() => {
+    if (!containerRef.current) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsVisible(entry.isIntersecting)
+        })
+      },
+      {
+        threshold: 0.2,
+        rootMargin: '100px 0px 100px 0px'
+      }
+    )
+
+    observer.observe(containerRef.current)
+    return () => observer.disconnect()
+  }, [isMounted])
+
   if (!isMounted) return null
 
   return (
@@ -44,10 +65,11 @@ export default function InfinityLogo() {
           touchAction: "none",
         }}
       >
-        <Canvas 
-          shadows 
-          style={{ width: "100%", height: "100%" }} 
-          onContextMenu={(e) => e.preventDefault()}
+        {isVisible ? (
+          <Canvas
+            shadows
+            style={{ width: "100%", height: "100%" }}
+            onContextMenu={(e) => e.preventDefault()}
         >
           <PerspectiveCamera makeDefault position={[0, 0, 10]} />
           <DevXEnvironment variant="studio" intensity={1.2} />
@@ -65,6 +87,11 @@ export default function InfinityLogo() {
 
           <InfinityMesh />
         </Canvas>
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-gray-900 to-black flex items-center justify-center">
+            <div className="text-gray-400 text-sm">Loading 3D...</div>
+          </div>
+        )}
       </div>
     </div>
   )

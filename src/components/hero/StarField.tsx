@@ -1,8 +1,20 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { AdditiveBlending } from 'three'
+
+// Performance-based configuration
+const getPerformanceConfig = () => {
+  if (typeof window === 'undefined') return { updateFrequency: 1 }
+
+  // Simple performance detection
+  const isLowPerformance = window.navigator.hardwareConcurrency <= 4
+
+  return {
+    updateFrequency: isLowPerformance ? 3 : 1, // Update every 3rd frame on low-end devices
+  }
+}
 
 // Enhanced starfield with magical twinkling stars
 export default function EnhancedStarfield({
@@ -12,10 +24,10 @@ export default function EnhancedStarfield({
 }) {
   return (
     <>
-      {/* Enhanced twinkling background stars */}
-      <SimpleStarLayer count={600} viewport={viewport} />
-      {/* Bright stars with diffraction spikes */}
-      <BrightStarsLayer count={20} viewport={viewport} />
+      {/* Enhanced twinkling background stars - more density for hero */}
+      <SimpleStarLayer count={700} viewport={viewport} />
+      {/* Bright stars with diffraction spikes - more for hero */}
+      <BrightStarsLayer count={25} viewport={viewport} />
     </>
   )
 }
@@ -29,14 +41,23 @@ function SimpleStarLayer({
   viewport: { width: number; height: number }
 }) {
   const mesh = useRef<any>(null)
+  const performanceConfig = useMemo(() => getPerformanceConfig(), [])
+  const frameCounter = useRef(0)
 
   const positions = useRef(() => {
     const pos = new Float32Array(count * 3)
     for (let i = 0; i < count; i++) {
-      const spread = viewport.width > 768 ? 30 : 20
-      pos[i * 3] = (Math.random() - 0.5) * spread
-      pos[i * 3 + 1] = (Math.random() - 0.5) * spread
-      pos[i * 3 + 2] = (Math.random() - 0.5) * 20 - 10
+      // Better distribution for hero section - wider spread with more concentration in center
+      const spreadX = viewport.width > 768 ? 40 : 25
+      const spreadY = viewport.width > 768 ? 25 : 20
+
+      // Bias toward center with some randomness
+      const xBias = (Math.random() - 0.5) * 0.3
+      const yBias = (Math.random() - 0.5) * 0.2
+
+      pos[i * 3] = (Math.random() - 0.5 + xBias) * spreadX
+      pos[i * 3 + 1] = (Math.random() - 0.5 + yBias) * spreadY
+      pos[i * 3 + 2] = (Math.random() - 0.5) * 25 - 15
     }
     return pos
   }).current()
@@ -102,29 +123,32 @@ function SimpleStarLayer({
   }).current()
 
   useFrame((state) => {
+    frameCounter.current++
+
+    // Skip frames based on performance config
+    if (frameCounter.current % performanceConfig.updateFrequency !== 0) return
+
     if (mesh.current) {
       const alphaAttribute = mesh.current.geometry.getAttribute('alpha')
+      const time = state.clock.getElapsedTime()
 
-      for (let i = 0; i < count; i++) {
-        const phase = twinklePhases[i] ?? 0
-        const speed = twinkleSpeeds[i] ?? 0
-        const time = state.clock.getElapsedTime() * speed + phase
+      // Update more stars per frame for better twinkling effect
+      const updateCount = Math.min(count, 60) // Increased for more twinkling
+      const startIndex = (Math.floor(time * 10) * updateCount) % count
 
-        // Enhanced twinkling with multiple wave patterns for more realistic effect
-        const primaryTwinkle = (Math.sin(time) + 1) / 2
-        const secondaryTwinkle = (Math.sin(time * 1.7 + phase * 0.5) + 1) / 2
-        const tertiaryTwinkle = (Math.sin(time * 0.3 + phase * 1.2) + 1) / 2
+      for (let i = 0; i < updateCount; i++) {
+        const index = (startIndex + i) % count
+        const phase = twinklePhases[index] ?? 0
+        const speed = twinkleSpeeds[index] ?? 0
+        const adjustedTime = time * speed + phase
 
-        // Combine waves for complex twinkling pattern
-        const combinedTwinkle =
-          primaryTwinkle * 0.5 + secondaryTwinkle * 0.3 + tertiaryTwinkle * 0.2
+        // Enhanced twinkling calculation with more variation
+        const primaryTwinkle = (Math.sin(adjustedTime) + 1) / 2
+        const secondaryTwinkle = (Math.sin(adjustedTime * 1.7) + 1) / 2
+        const combinedTwinkle = primaryTwinkle * 0.7 + secondaryTwinkle * 0.3
+        const finalAlpha = 0.4 + combinedTwinkle * 0.6
 
-        // More dramatic alpha variation with occasional bright flashes
-        const baseAlpha = 0.4 + combinedTwinkle * 0.6
-        const flashChance = Math.random()
-        const finalAlpha = flashChance < 0.001 ? Math.min(1.0, baseAlpha + 0.4) : baseAlpha
-
-        alphaAttribute.setX(i, finalAlpha)
+        alphaAttribute.setX(index, finalAlpha)
       }
 
       alphaAttribute.needsUpdate = true
@@ -208,15 +232,20 @@ function BrightStarsLayer({
   const starData = useRef(() => {
     const data = []
     for (let i = 0; i < count; i++) {
-      const spread = viewport.width > 768 ? 35 : 25
-      const brightness = 0.3 + Math.random() * 0.7 // Vary brightness
-      const size = 0.1 + Math.random() * 0.15 // Larger sizes for bright stars
+      const spreadX = viewport.width > 768 ? 45 : 30
+      const spreadY = viewport.width > 768 ? 30 : 25
+      const brightness = 0.4 + Math.random() * 0.6 // Vary brightness
+      const size = 0.12 + Math.random() * 0.18 // Larger sizes for bright stars
+
+      // More concentrated distribution for bright stars
+      const xBias = (Math.random() - 0.5) * 0.4
+      const yBias = (Math.random() - 0.5) * 0.3
 
       data.push({
         position: [
-          (Math.random() - 0.5) * spread,
-          (Math.random() - 0.5) * spread,
-          (Math.random() - 0.5) * 25 - 12,
+          (Math.random() - 0.5 + xBias) * spreadX,
+          (Math.random() - 0.5 + yBias) * spreadY,
+          (Math.random() - 0.5) * 30 - 15,
         ] as [number, number, number],
         brightness,
         size,
@@ -282,29 +311,25 @@ function BrightStar({
     if (starRef.current && spikesRef.current) {
       const time = state.clock.elapsedTime * twinkleSpeed + twinklePhase
 
-      // Realistic atmospheric twinkling
+      // Simplified twinkling calculation
       const primaryTwinkle = (Math.sin(time) + 1) / 2
-      const secondaryTwinkle = (Math.sin(time * 1.3 + twinklePhase) + 1) / 2
-      const atmosphericTwinkle = (Math.sin(time * 0.7 + twinklePhase * 1.5) + 1) / 2
-
-      // Combine multiple twinkling frequencies like real atmospheric turbulence
-      const combinedTwinkle =
-        primaryTwinkle * 0.4 + secondaryTwinkle * 0.35 + atmosphericTwinkle * 0.25
-      const finalBrightness = brightness * (0.6 + combinedTwinkle * 0.4)
+      const finalBrightness = brightness * (0.7 + primaryTwinkle * 0.3)
 
       // Update star core brightness
       starRef.current.material.uniforms.uOpacity.value = finalBrightness
 
-      // Animate diffraction spikes
+      // Animate diffraction spikes with reduced frequency
       const spikeIntensity = finalBrightness * 0.8
       spikesRef.current.material.uniforms.uOpacity.value = spikeIntensity
 
-      // Slow rotation of spikes for realism (like atmospheric distortion)
-      spikesRef.current.rotation.z =
-        spikeRotation + state.clock.elapsedTime * spikeRotationSpeed * 0.1
+      // Slower rotation update
+      if (Math.floor(time * 2) % 3 === 0) {
+        spikesRef.current.rotation.z =
+          spikeRotation + state.clock.elapsedTime * spikeRotationSpeed * 0.05
+      }
 
-      // Scale variation with twinkling for spikes only
-      const scaleVariation = 1 + combinedTwinkle * 0.15
+      // Reduced scale variation
+      const scaleVariation = 1 + primaryTwinkle * 0.1
       spikesRef.current.scale.setScalar(size * scaleVariation * 1.2)
     }
   })

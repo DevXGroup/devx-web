@@ -87,37 +87,50 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
 
       if (!panel || !plusH || !plusV || !icon || !textInner) return
 
-      // Small delay to ensure layers are rendered
-      setTimeout(() => {
-        let preLayers: HTMLElement[] = []
-        if (preContainer) {
-          preLayers = Array.from(preContainer.querySelectorAll('.sm-prelayer')) as HTMLElement[]
-        }
-        preLayerElsRef.current = preLayers
+      const offscreen = position === 'left' ? -100 : 100
+      gsap.set(panel, { xPercent: offscreen })
 
-        const offscreen = position === 'left' ? -100 : 100
-        gsap.set(panel, { xPercent: offscreen })
-
-        // Ensure layers are properly positioned off-screen with immediate render
-        if (preLayers.length) {
-          gsap.set(preLayers, {
-            xPercent: 100,
-            force3D: true,
-            immediateRender: true
-          })
-          // Force reflow to ensure styles are applied
-          preLayers.forEach(layer => layer.offsetHeight)
-          console.log('Initial layer setup complete:', preLayers.length, 'layers')
-        }
-      }, 100)
-
+      // Initialize button styles immediately
       gsap.set(plusH, { transformOrigin: '50% 50%', rotate: 0 })
       gsap.set(plusV, { transformOrigin: '50% 50%', rotate: 90 })
       gsap.set(icon, { rotate: 0, transformOrigin: '50% 50%' })
-
       gsap.set(textInner, { yPercent: 0 })
 
       if (toggleBtnRef.current) gsap.set(toggleBtnRef.current, { color: menuButtonColor })
+
+      // Use a longer delay and ensure proper layer initialization
+      const initializeLayers = () => {
+        if (preContainer) {
+          const preLayers = Array.from(preContainer.querySelectorAll('.sm-prelayer')) as HTMLElement[]
+          preLayerElsRef.current = preLayers
+
+          if (preLayers.length) {
+            // Initialize layers with proper positioning
+            gsap.set(preLayers, {
+              xPercent: 100,
+              force3D: true,
+              immediateRender: true,
+              willChange: 'transform'
+            })
+
+            // Double force reflow to ensure styles are applied
+            preLayers.forEach(layer => {
+              layer.offsetHeight
+              layer.getBoundingClientRect()
+            })
+
+            // Verify layer positions are set correctly
+            const positions = preLayers.map(layer => gsap.getProperty(layer, 'xPercent'))
+            console.log('Layer initialization complete:', preLayers.length, 'layers with positions:', positions)
+          }
+        }
+      }
+
+      // Try immediate initialization first
+      initializeLayers()
+
+      // Backup with delayed initialization to handle any race conditions
+      setTimeout(initializeLayers, 150)
     })
     return () => ctx.revert()
   }, [menuButtonColor, position])
@@ -133,16 +146,29 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
 
     console.log('buildOpenTimeline - Found layers:', layers.length)
 
-    // Ensure layers are properly initialized before animation
+    // Ensure layers are properly initialized before animation with stronger guarantees
     if (layers.length) {
-      // Use a small delay to ensure proper initialization on first run
+      // Force a comprehensive reset to ensure layers start from the correct position
       gsap.set(layers, {
         xPercent: 100,
         force3D: true,
-        immediateRender: true
+        immediateRender: true,
+        willChange: 'transform',
+        backfaceVisibility: 'hidden',
+        WebkitBackfaceVisibility: 'hidden'
       })
-      // Force a reflow to ensure the styles are applied
-      layers.forEach(layer => layer.offsetHeight)
+
+      // Multiple reflow forces to ensure proper positioning
+      layers.forEach(layer => {
+        layer.offsetHeight
+        layer.getBoundingClientRect()
+        // Double check that the positioning took effect
+        const currentPos = gsap.getProperty(layer, 'xPercent')
+        if (currentPos !== 100) {
+          console.warn('Layer position not set correctly, retrying:', currentPos)
+          gsap.set(layer, { xPercent: 100, immediateRender: true })
+        }
+      })
     }
 
     openTlRef.current?.kill()
@@ -260,11 +286,10 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
     if (busyRef.current) return
     busyRef.current = true
 
-    // Add a small delay on first open to ensure layers are ready
+    // More robust first-time handling
     const isFirstOpen = openTlRef.current === null
-    const delay = isFirstOpen ? 50 : 0
 
-    setTimeout(() => {
+    const executeAnimation = () => {
       const tl = buildOpenTimeline()
       if (tl) {
         tl.eventCallback('onComplete', () => {
@@ -272,9 +297,29 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
         })
         tl.play(0)
       } else {
-        busyRef.current = false
+        console.warn('Failed to build timeline, retrying...')
+        // Retry once if timeline building fails
+        setTimeout(() => {
+          const retryTl = buildOpenTimeline()
+          if (retryTl) {
+            retryTl.eventCallback('onComplete', () => {
+              busyRef.current = false
+            })
+            retryTl.play(0)
+          } else {
+            busyRef.current = false
+          }
+        }, 100)
       }
-    }, delay)
+    }
+
+    if (isFirstOpen) {
+      // On first open, ensure DOM is fully ready and layers are initialized
+      setTimeout(executeAnimation, 100)
+    } else {
+      // Subsequent opens can be immediate
+      executeAnimation()
+    }
   }, [buildOpenTimeline])
 
   const playClose = useCallback(() => {

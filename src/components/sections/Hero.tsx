@@ -102,12 +102,12 @@ export default function Hero() {
         initial="hidden"
         animate={controls}
       >
-        <div className="text-center mx-auto max-w-3xl px-4 sm:px-6 space-y-7 sm:space-y-9 pt-6 sm:pt-10">
+        <div className="text-center mx-auto w-full px-[50px] space-y-7 sm:space-y-9 pt-6 sm:pt-10 flex flex-col items-center justify-center">
           {/* Hero content wrapper - this div prevents movement on button hover */}
           <div className="space-y-5 sm:space-y-7">
             <motion.h1
               variants={itemVariants}
-              className="hero-title mx-auto flex flex-nowrap max-xs:flex-col items-center sm:items-baseline justify-center gap-2 sm:gap-4 text-center text-white font-mono font-bold tracking-tight whitespace-nowrap max-xs:whitespace-normal text-[clamp(2rem,4vw,2.5rem)] sm:text-[clamp(2.5rem,4.5vw,3rem)] lg:text-[clamp(3rem,4vw,3.5rem)] xl:text-[clamp(3.2rem,3.5vw,4rem)] leading-[1.1] sm:leading-[1.05] lg:max-w-[48rem] px-4 sm:px-6"
+              className="hero-title mx-auto flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-center text-white font-mono font-bold tracking-tight text-[clamp(4rem,8vw,5rem)] sm:text-[clamp(5rem,9vw,6.5rem)] md:text-[clamp(6.5rem,10vw,8rem)] lg:text-[clamp(8rem,11vw,10rem)] xl:text-[clamp(9rem,12vw,12rem)] leading-[1.1] sm:leading-[1.05] w-full"
             >
               <span
                 className="inline-block"
@@ -132,29 +132,29 @@ export default function Hero() {
               </span>
             </motion.h1>
 
-            <motion.div variants={itemVariants} className="text-center max-w-2xl mx-auto space-y-5">
-              <p className="text-base sm:text-lg md:text-xl text-white font-sans font-light leading-relaxed">
+            <motion.div variants={itemVariants} className="text-center w-full mx-auto space-y-5">
+              <p className="text-xl sm:text-2xl md:text-2xl lg:text-3xl xl:text-3xl text-white font-sans font-light leading-relaxed text-center mx-auto">
                 Elite software team shipping polished software at startup speed.
               </p>
-              <div className="relative mx-auto w-full max-w-xl mt-10">
-                <div className="relative flex flex-wrap items-center justify-center gap-3 px-6 py-3 rounded-full border border-white/5 bg-white/5 backdrop-blur-sm">
+              <div className="relative mx-auto w-full mt-10 flex justify-center">
+                <div className="relative flex flex-wrap items-center justify-center gap-3 sm:gap-4 px-6 py-3 rounded-full border border-white/5 bg-white/5 backdrop-blur-sm">
                   <Link
                     href="/services"
-                    className="uppercase tracking-[0.18em] text-[0.68rem] sm:text-xs font-medium opacity-90 hover:opacity-100"
+                    className="uppercase tracking-[0.18em] text-base sm:text-lg md:text-lg lg:text-xl font-medium opacity-90 hover:opacity-100"
                   >
                     <ShinyText text="Elite Services" speed={4} delay={0} />
                   </Link>
-                  <span className="text-gray-600 text-xs">•</span>
+                  <span className="text-gray-600 text-base md:text-lg lg:text-xl">•</span>
                   <Link
                     href="/portfolio"
-                    className="uppercase tracking-[0.18em] text-[0.68rem] sm:text-xs font-medium opacity-90 hover:opacity-100"
+                    className="uppercase tracking-[0.18em] text-base sm:text-lg md:text-lg lg:text-xl font-medium opacity-90 hover:opacity-100"
                   >
                     <ShinyText text="Proven Record" speed={5} delay={0.5} />
                   </Link>
-                  <span className="text-gray-600 text-xs">•</span>
+                  <span className="text-gray-600 text-base md:text-lg lg:text-xl">•</span>
                   <Link
                     href="/pricing"
-                    className="uppercase tracking-[0.18em] text-[0.68rem] sm:text-xs font-medium opacity-90 hover:opacity-100"
+                    className="uppercase tracking-[0.18em] text-base sm:text-lg md:text-lg lg:text-xl font-medium opacity-90 hover:opacity-100"
                   >
                     <ShinyText text="Competitive Pricing" speed={6} delay={1} />
                   </Link>
@@ -165,7 +165,7 @@ export default function Hero() {
 
           <motion.div
             variants={itemVariants}
-            className="min-h-[3rem] sm:min-h-[3.5rem] md:min-h-[4rem] mt-8 sm:mt-10 md:mt-12 flex justify-center"
+            className="min-h-[4rem] sm:min-h-[5rem] md:min-h-[6rem] lg:min-h-[6rem] xl:min-h-[6rem] mt-8 sm:mt-10 md:mt-12 flex justify-center items-center w-full"
           >
             <TextType
               text={subheaders}
@@ -173,7 +173,7 @@ export default function Hero() {
               typingSpeed={shouldReduceMotion ? 40 : 80}
               deletingSpeed={shouldReduceMotion ? 25 : 50}
               pauseDuration={shouldReduceMotion ? 800 : 2000}
-              className="text-lg sm:text-xl md:text-3xl font-mono text-[#ccff00] typewriter-text tracking-[0.08em]"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-4xl font-mono text-[#ccff00] typewriter-text tracking-[0.08em] text-center mx-auto"
               showCursor={true}
               cursorCharacter="_"
               cursorClassName=""
@@ -193,7 +193,7 @@ export default function Hero() {
                 rel="noopener noreferrer"
                 color="#ccff00"
                 speed="3s"
-                className="font-mono font-semibold text-xs sm:text-sm text-white hover:text-robinhood px-6 py-3 transition-all duration-300"
+                className="font-mono font-semibold text-lg sm:text-xl md:text-xl lg:text-2xl text-white hover:text-robinhood px-6 py-3 transition-all duration-300"
               >
                 Book a Free Call
               </StarBorder>
@@ -201,9 +201,9 @@ export default function Hero() {
             <motion.div variants={buttonVariants} initial="rest" whileHover="hover" whileTap="tap">
               <StarBorder
                 onClick={navigateToPortfolio}
-                color="#9d4edd"
+                color="#efdedd"
                 speed="4s"
-                className="font-mono font-semibold text-xs sm:text-sm text-white hover:text-purple-300 px-6 py-3 transition-all duration-300"
+                className="font-mono font-semibold text-lg sm:text-xl md:text-xl lg:text-2xl text-white hover:text-purple-300 px-6 py-3 transition-all duration-300"
               >
                 See Our Work
               </StarBorder>

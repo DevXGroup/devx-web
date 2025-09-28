@@ -88,13 +88,9 @@ const TextType = ({
   useEffect(() => {
     if (showCursor && cursorRef.current) {
       gsap.set(cursorRef.current, { opacity: 1 });
-      gsap.to(cursorRef.current, {
-        opacity: 0,
-        duration: cursorBlinkDuration,
-        repeat: -1,
-        yoyo: true,
-        ease: "power2.inOut",
-      });
+      // Use simple CSS animation instead of GSAP for better performance
+      const cursor = cursorRef.current;
+      cursor.style.animation = `blink ${cursorBlinkDuration * 2}s infinite`;
     }
   }, [showCursor, cursorBlinkDuration]);
 
@@ -176,24 +172,34 @@ const TextType = ({
     hideCursorWhileTyping &&
     (currentCharIndex < (textArray[currentTextIndex]?.length || 0) || isDeleting);
 
-  return createElement(
-    Component,
-    {
-      ref: containerRef,
-      className: `inline-block whitespace-pre-wrap tracking-tight ${className}`,
-      ...props,
-    },
-    <span className="inline">
-      {displayedText}
-    </span>,
-    showCursor && (
-      <span
-        ref={cursorRef}
-        className={`ml-1 inline-block opacity-100 ${shouldHideCursor ? "hidden" : ""} ${cursorClassName}`}
-      >
-        {cursorCharacter}
-      </span>
-    )
+  return (
+    <>
+      <style jsx>{`
+        @keyframes blink {
+          0%, 50% { opacity: 1; }
+          51%, 100% { opacity: 0; }
+        }
+      `}</style>
+      {createElement(
+        Component,
+        {
+          ref: containerRef,
+          className: `inline-block whitespace-pre-wrap tracking-tight ${className}`,
+          ...props,
+        },
+        <span className="inline">
+          {displayedText}
+        </span>,
+        showCursor && (
+          <span
+            ref={cursorRef}
+            className={`ml-1 inline-block opacity-100 ${shouldHideCursor ? "hidden" : ""} ${cursorClassName}`}
+          >
+            {cursorCharacter}
+          </span>
+        )
+      )}
+    </>
   );
 };
 
