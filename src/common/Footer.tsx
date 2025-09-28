@@ -22,7 +22,7 @@ export default function Footer() {
       <div className="relative h-20 bg-gradient-to-b from-black/60 via-black/40 to-transparent pointer-events-none" />
 
       {/* Include the Threads effect touching the footer */}
-      <div className="w-full h-screen relative bg-transparent mb-[-360px] mt-[-280px]">
+      <div className="w-full h-screen relative bg-transparent mb-[-300px] mt-[-280px]">
         <div className="absolute inset-0 z-10">
           {isSafari ? (
             <Threads
