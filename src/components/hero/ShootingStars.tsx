@@ -18,8 +18,15 @@ export default function ShootingStars() {
       canvas.height = window.innerHeight
     }
 
+    // Throttled resize handler to prevent resize loops
+    let resizeTimeout: NodeJS.Timeout
+    const throttledResize = () => {
+      clearTimeout(resizeTimeout)
+      resizeTimeout = setTimeout(resizeCanvas, 150)
+    }
+
     resizeCanvas()
-    window.addEventListener("resize", resizeCanvas)
+    window.addEventListener("resize", throttledResize)
 
     // Star properties - REDUCED from 15 to 8
     const stars: {
@@ -119,7 +126,8 @@ export default function ShootingStars() {
     const animationId = requestAnimationFrame(animate)
 
     return () => {
-      window.removeEventListener("resize", resizeCanvas)
+      window.removeEventListener("resize", throttledResize)
+      clearTimeout(resizeTimeout)
       cancelAnimationFrame(animationId)
     }
   }, [])

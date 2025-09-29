@@ -135,7 +135,7 @@ export default function PlanetDivider() {
 
   return (
     <div
-      className={`relative w-full mx-auto pointer-events-none z-10`}
+      className={`relative w-full mx-auto pointer-events-none z-50`}
       style={{
         height: `${sizes.containerHeight}px`,
         background: 'transparent',
@@ -162,7 +162,8 @@ export default function PlanetDivider() {
             radial-gradient(circle at 35% 35%, rgba(58, 58, 58, 0.9) 0%, rgba(47, 47, 47, 0.8) 25%, rgba(37, 37, 37, 0.7) 50%, rgba(28, 28, 28, 0.6) 75%, rgba(18, 18, 18, 0.5) 100%),
             radial-gradient(ellipse 50% 60% at 30% 30%, rgba(60, 60, 60, 0.4) 0%, rgba(50, 50, 50, 0.3) 30%, rgba(40, 40, 40, 0.2) 55%, transparent 80%),
             radial-gradient(ellipse 40% 50% at 70% 60%, rgba(45, 45, 45, 0.3) 0%, rgba(35, 35, 35, 0.2) 35%, transparent 70%),
-            radial-gradient(ellipse 30% 40% at 40% 70%, rgba(30, 30, 30, 0.25) 0%, rgba(20, 20, 20, 0.15) 45%, transparent 75%)
+            radial-gradient(ellipse 30% 40% at 40% 70%, rgba(30, 30, 30, 0.25) 0%, rgba(20, 20, 20, 0.15) 45%, transparent 75%),
+            #3a3a3a
           `,
           boxShadow: `
             0 0 ${sizes.glowRadius}px rgba(76, 215, 135, ${0.06 + Math.sin(time * 0.02) * 0.015}),
@@ -172,7 +173,7 @@ export default function PlanetDivider() {
             inset ${Math.floor(sizes.shadowSize * 0.4)}px ${Math.floor(sizes.shadowSize * 0.4)}px ${Math.floor(sizes.shadowSize * 0.8)}px rgba(255, 255, 255, 0.02),
             inset -${Math.floor(sizes.shadowSize * 0.2)}px -${Math.floor(sizes.shadowSize * 0.2)}px ${Math.floor(sizes.shadowSize * 0.6)}px rgba(76, 215, 135, 0.015)
           `,
-          opacity: opacity,
+          opacity: 1,
         })}
       />
 
@@ -196,7 +197,7 @@ export default function PlanetDivider() {
             radial-gradient(ellipse 18% 24% at 85% 75%, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.25) 35%, rgba(0, 0, 0, 0.08) 65%, transparent 80%),
             radial-gradient(ellipse 10% 14% at 10% 45%, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 40%, rgba(0, 0, 0, 0.06) 70%, transparent 85%)
           `,
-          opacity: opacity,
+          opacity: 1,
         })}
       />
 
@@ -222,7 +223,7 @@ export default function PlanetDivider() {
             radial-gradient(ellipse 13% 18% at 5% 80%, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.4) 25%, rgba(0, 0, 0, 0.1) 45%, transparent 50%),
             radial-gradient(ellipse 7% 10% at 45% 10%, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 40%, transparent 70%)
           `,
-          opacity: opacity * 0.95,
+          opacity: 0.95,
         })}
       />
 
@@ -251,7 +252,7 @@ export default function PlanetDivider() {
             radial-gradient(ellipse 2% 3% at 50% 45%, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.1) 60%, transparent 90%),
             radial-gradient(ellipse 3% 4% at 75% 15%, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 50%, transparent 95%)
           `,
-          opacity: opacity * 0.9,
+          opacity: 0.9,
         })}
       />
 
@@ -278,7 +279,7 @@ export default function PlanetDivider() {
             radial-gradient(ellipse 1% 1% at 95% 45%, rgba(0, 0, 0, 0.28) 0%, rgba(0, 0, 0, 0.06) 70%, transparent 95%),
             radial-gradient(ellipse 1% 2% at 5% 55%, rgba(255, 255, 255, 0.035) 0%, rgba(255, 255, 255, 0.01) 65%, transparent 90%)
           `,
-          opacity: opacity * 0.85,
+          opacity: 0.85,
         })}
       />
 
@@ -298,7 +299,7 @@ export default function PlanetDivider() {
             rgba(76, 215, 135, ${0.03 + Math.sin(time * 0.06) * 0.01}) 78%, 
             rgba(76, 215, 135, ${0.05 + Math.sin(time * 0.05) * 0.015}) 88%, 
             transparent 100%)`,
-          opacity: opacity * 0.4,
+          opacity: 0.4,
         })}
       />
       <style jsx>{`

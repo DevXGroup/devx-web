@@ -107,7 +107,7 @@ export default function Hero() {
           <div className="space-y-5 sm:space-y-7">
             <motion.h1
               variants={itemVariants}
-              className="hero-title mx-auto flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-center text-white font-mono font-bold tracking-tight text-[clamp(4rem,8vw,5rem)] sm:text-[clamp(5rem,9vw,6.5rem)] md:text-[clamp(6.5rem,10vw,8rem)] lg:text-[clamp(8rem,11vw,10rem)] xl:text-[clamp(9rem,12vw,12rem)] leading-[1.1] sm:leading-[1.05] w-full"
+              className="hero-title mx-auto flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-center text-white font-mono font-bold tracking-tight w-full"
             >
               <span
                 className="inline-block"
@@ -133,30 +133,35 @@ export default function Hero() {
             </motion.h1>
 
             <motion.div variants={itemVariants} className="text-center w-full mx-auto space-y-5">
-              <p className="text-xl sm:text-2xl md:text-2xl lg:text-3xl xl:text-3xl text-white font-sans font-light leading-relaxed text-center mx-auto">
+              <p className="text-xl sm:text-2xl md:text-2xl lg:text-2xl xl:text-2xl text-white font-sans font-light leading-relaxed text-center mx-auto">
                 Elite software team shipping polished software at startup speed.
               </p>
               <div className="relative mx-auto w-full mt-10 flex justify-center">
                 <div className="relative flex flex-wrap items-center justify-center gap-3 sm:gap-4 px-6 py-3 rounded-full border border-white/5 bg-white/5 backdrop-blur-sm">
                   <Link
                     href="/services"
-                    className="uppercase tracking-[0.18em] text-base sm:text-lg md:text-lg lg:text-xl font-medium opacity-90 hover:opacity-100"
+                    className="uppercase tracking-[0.19em] text-base sm:text-lg md:text-lg lg:text-lg font-medium opacity-90 hover:opacity-100"
                   >
-                    <ShinyText text="Elite Services" speed={4} delay={0} />
+                    <ShinyText text="Elite Services" speed={3} delay={0.3} />
                   </Link>
-                  <span className="text-gray-600 text-base md:text-lg lg:text-xl">•</span>
+                  <span className="hidden sm:inline text-gray-600 text-base md:text-lg lg:text-lg">
+                    •
+                  </span>
                   <Link
                     href="/portfolio"
-                    className="uppercase tracking-[0.18em] text-base sm:text-lg md:text-lg lg:text-xl font-medium opacity-90 hover:opacity-100"
+                    className="uppercase tracking-[0.19em] text-base sm:text-lg md:text-lg lg:text-lg font-medium opacity-90 hover:opacity-100"
                   >
-                    <ShinyText text="Proven Record" speed={5} delay={0.5} />
+                    <ShinyText text="Proven Record" speed={5} delay={0.6} />
                   </Link>
-                  <span className="text-gray-600 text-base md:text-lg lg:text-xl">•</span>
+
+                  <span className="hidden md:inline text-gray-600 text-base md:text-lg lg:text-lg">
+                    •
+                  </span>
                   <Link
                     href="/pricing"
-                    className="uppercase tracking-[0.18em] text-base sm:text-lg md:text-lg lg:text-xl font-medium opacity-90 hover:opacity-100"
+                    className="uppercase tracking-[0.19em] text-base sm:text-lg md:text-lg lg:text-lg font-medium opacity-90 hover:opacity-100"
                   >
-                    <ShinyText text="Competitive Pricing" speed={6} delay={1} />
+                    <ShinyText text="Competitive Pricing" speed={7} delay={0.9} />
                   </Link>
                 </div>
               </div>
@@ -193,7 +198,7 @@ export default function Hero() {
                 rel="noopener noreferrer"
                 color="#ccff00"
                 speed="3s"
-                className="font-mono font-semibold text-lg sm:text-xl md:text-xl lg:text-2xl text-white hover:text-robinhood px-6 py-3 transition-all duration-300"
+                className="font-mono font-semibold text-lg sm:text-xl md:text-xl lg:text-2xl text-white hover:text-robinhood px-3 py-1 transition-all duration-300"
               >
                 Book a Free Call
               </StarBorder>
@@ -203,7 +208,7 @@ export default function Hero() {
                 onClick={navigateToPortfolio}
                 color="#efdedd"
                 speed="4s"
-                className="font-mono font-semibold text-lg sm:text-xl md:text-xl lg:text-2xl text-white hover:text-purple-300 px-6 py-3 transition-all duration-300"
+                className="font-mono font-semibold text-lg sm:text-xl md:text-xl lg:text-2xl text-white hover:text-purple-300 px-3 py-1 transition-all duration-300"
               >
                 See Our Work
               </StarBorder>
@@ -214,7 +219,7 @@ export default function Hero() {
 
       {/* Planet Divider at the bottom of hero - Only rendered on client */}
       <ClientOnly>
-        <div className="absolute bottom-0 left-0 w-full">
+        <div className="absolute bottom-0 left-0 w-full z-50">
           <DynamicPlanetDivider />
         </div>
       </ClientOnly>
