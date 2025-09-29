@@ -159,13 +159,13 @@ export default function Navbar() {
       style={isScrolled ? scrolledBgStyle : { backgroundColor: 'rgba(0, 0, 0, 0.1)' }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-3">
+        <div className="flex justify-between items-center py-[14px]">
           <Link href="/home">
             <Image
               src="/images/logos/devx-logo.png"
               alt="DevX Logo"
-              width={180}
-              height={32}
+              width={200}
+              height={36}
               priority
             />
           </Link>
@@ -471,7 +471,11 @@ export default function Navbar() {
         {/* StaggeredMenu - Always rendered but controlled by navbar state */}
         <div
           ref={mobileMenuRef}
-          className={`lg:hidden fixed top-0 left-0 w-full h-screen z-[9998] ${!isOpen ? 'hidden' : ''}`}
+          className="lg:hidden fixed top-0 left-0 w-full h-screen z-[9998]"
+          style={{
+            visibility: isOpen ? 'visible' : 'hidden',
+            pointerEvents: isOpen ? 'auto' : 'none'
+          }}
         >
           <StaggeredMenu
             position="right"

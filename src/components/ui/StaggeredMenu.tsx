@@ -85,16 +85,16 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
       const icon = iconRef.current
       const textInner = textInnerRef.current
 
-      if (!panel || !plusH || !plusV || !icon || !textInner) return
+      if (!panel) return
 
       const offscreen = position === 'left' ? -100 : 100
       gsap.set(panel, { xPercent: offscreen })
 
       // Initialize button styles immediately
-      gsap.set(plusH, { transformOrigin: '50% 50%', rotate: 0 })
-      gsap.set(plusV, { transformOrigin: '50% 50%', rotate: 90 })
-      gsap.set(icon, { rotate: 0, transformOrigin: '50% 50%' })
-      gsap.set(textInner, { yPercent: 0 })
+      if (plusH) gsap.set(plusH, { transformOrigin: '50% 50%', rotate: 0 })
+      if (plusV) gsap.set(plusV, { transformOrigin: '50% 50%', rotate: 90 })
+      if (icon) gsap.set(icon, { rotate: 0, transformOrigin: '50% 50%' })
+      if (textInner) gsap.set(textInner, { yPercent: 0 })
 
       if (toggleBtnRef.current) gsap.set(toggleBtnRef.current, { color: menuButtonColor })
 
@@ -110,7 +110,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
               xPercent: 100,
               force3D: true,
               immediateRender: true,
-              willChange: 'transform'
+              willChange: 'transform',
             })
 
             // Double force reflow to ensure styles are applied

@@ -139,9 +139,8 @@ export default function PlanetDivider() {
       style={{
         height: `${sizes.containerHeight}px`,
         background: 'transparent',
-        // Safari-specific optimizations for containment
+        // Safari-specific optimizations
         overflow: 'visible', // Ensure glow isn't clipped
-        contain: 'layout style', // Help with rendering performance
         // Ensure proper compositing layer
         transform: 'translateZ(0)',
         WebkitTransform: 'translateZ(0)',
@@ -173,7 +172,7 @@ export default function PlanetDivider() {
             inset ${Math.floor(sizes.shadowSize * 0.4)}px ${Math.floor(sizes.shadowSize * 0.4)}px ${Math.floor(sizes.shadowSize * 0.8)}px rgba(255, 255, 255, 0.02),
             inset -${Math.floor(sizes.shadowSize * 0.2)}px -${Math.floor(sizes.shadowSize * 0.2)}px ${Math.floor(sizes.shadowSize * 0.6)}px rgba(76, 215, 135, 0.015)
           `,
-          opacity: 1,
+          opacity: opacity,
         })}
       />
 
@@ -223,7 +222,7 @@ export default function PlanetDivider() {
             radial-gradient(ellipse 13% 18% at 5% 80%, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.4) 25%, rgba(0, 0, 0, 0.1) 45%, transparent 50%),
             radial-gradient(ellipse 7% 10% at 45% 10%, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 40%, transparent 70%)
           `,
-          opacity: 0.95,
+          opacity: opacity * 0.95,
         })}
       />
 
@@ -252,7 +251,7 @@ export default function PlanetDivider() {
             radial-gradient(ellipse 2% 3% at 50% 45%, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.1) 60%, transparent 90%),
             radial-gradient(ellipse 3% 4% at 75% 15%, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 50%, transparent 95%)
           `,
-          opacity: 0.9,
+          opacity: opacity * 0.9,
         })}
       />
 
@@ -279,7 +278,7 @@ export default function PlanetDivider() {
             radial-gradient(ellipse 1% 1% at 95% 45%, rgba(0, 0, 0, 0.28) 0%, rgba(0, 0, 0, 0.06) 70%, transparent 95%),
             radial-gradient(ellipse 1% 2% at 5% 55%, rgba(255, 255, 255, 0.035) 0%, rgba(255, 255, 255, 0.01) 65%, transparent 90%)
           `,
-          opacity: 0.85,
+          opacity: opacity * 0.85,
         })}
       />
 
@@ -299,7 +298,7 @@ export default function PlanetDivider() {
             rgba(76, 215, 135, ${0.03 + Math.sin(time * 0.06) * 0.01}) 78%, 
             rgba(76, 215, 135, ${0.05 + Math.sin(time * 0.05) * 0.015}) 88%, 
             transparent 100%)`,
-          opacity: 0.4,
+          opacity: opacity * 0.4,
         })}
       />
       <style jsx>{`
