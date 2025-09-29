@@ -1,7 +1,7 @@
 "use client"
 
-import { motion, useAnimation } from "framer-motion"
-import { useEffect, useState, useRef } from "react"
+import { animate, motion } from "framer-motion"
+import { useEffect, useRef, useState } from "react"
 import { FileSearch, Pencil, Code, TestTube, Rocket, Settings } from "lucide-react"
 
 const sdlcSteps = [
@@ -88,10 +88,22 @@ const ConnectingLine = ({ currentStep, progress, totalSteps }: { currentStep: nu
 export default function SDLCProcess() {
   const [currentStep, setCurrentStep] = useState(0)
   const [progress, setProgress] = useState(0)
-  const [completedSteps, setCompletedSteps] = useState(new Set())
+  const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set())
   const [isVisible, setIsVisible] = useState(false)
-  const controls = useAnimation()
   const containerRef = useRef<HTMLDivElement>(null)
+  const isVisibleRef = useRef(false)
+  const activeAnimationRef = useRef<ReturnType<typeof animate> | null>(null)
+  const cancelledRef = useRef(false)
+  const timeoutsRef = useRef<number[]>([])
+
+  const clearScheduledTimeouts = () => {
+    timeoutsRef.current.forEach((timeoutId) => window.clearTimeout(timeoutId))
+    timeoutsRef.current = []
+  }
+
+  useEffect(() => {
+    isVisibleRef.current = isVisible
+  }, [isVisible])
 
   // IntersectionObserver to detect when component is visible
   useEffect(() => {
@@ -114,37 +126,79 @@ export default function SDLCProcess() {
   }, [])
 
   useEffect(() => {
-    if (!isVisible) return
+    if (!isVisible) {
+      cancelledRef.current = true
+      activeAnimationRef.current?.stop()
+      activeAnimationRef.current = null
+      clearScheduledTimeouts()
+      return
+    }
 
-    const animateProcess = async () => {
-      while (isVisible) {
-        // Reset completed steps at start of cycle
+    cancelledRef.current = false
+
+    const wait = (ms: number) =>
+      new Promise<void>((resolve) => {
+        const id = window.setTimeout(resolve, ms)
+        timeoutsRef.current.push(id)
+      })
+
+    const animateProgress = (targetStep: number) =>
+      new Promise<void>((resolve) => {
+        // Stop any running animation before starting a fresh one
+        activeAnimationRef.current?.stop()
+
+        setCurrentStep(targetStep)
+        setProgress(0)
+
+        const controls = animate(0, 1, {
+          duration: targetStep === sdlcSteps.length - 1 ? 2.2 : 1.6,
+          ease: "easeInOut",
+          onUpdate: (value) => {
+            if (!cancelledRef.current) setProgress(value)
+          },
+          onComplete: () => {
+            if (!cancelledRef.current) {
+              setProgress(1)
+            }
+            resolve()
+          },
+        })
+
+        activeAnimationRef.current = controls
+      })
+
+    const runCycle = async () => {
+      while (isVisibleRef.current && !cancelledRef.current) {
         setCompletedSteps(new Set())
 
         for (let i = 0; i < sdlcSteps.length; i++) {
-          setCurrentStep(i)
-          for (let p = 0; p <= 1; p += 0.01) {
-            setProgress(p)
-            await new Promise((resolve) => setTimeout(resolve, 30))
-          }
-          
-          // Mark step as completed when progress reaches 1
-          setCompletedSteps(prev => new Set([...prev, i]))
-          
-          // Special case for maintenance (last step) - hold green state longer
-          if (i === sdlcSteps.length - 1) {
-            await new Promise((resolve) => setTimeout(resolve, 2000)) // Hold green state for 2 seconds
-          } else {
-            await new Promise((resolve) => setTimeout(resolve, 1000))
-          }
+          if (cancelledRef.current) return
+          await animateProgress(i)
+
+          if (cancelledRef.current) return
+          setCompletedSteps((prev) => {
+            const next = new Set(prev)
+            next.add(i)
+            return next
+          })
+
+          const holdDuration = i === sdlcSteps.length - 1 ? 2000 : 800
+          await wait(holdDuration)
         }
-        await new Promise((resolve) => setTimeout(resolve, 1000)) // 1 sec delay before restart
-        setCurrentStep(0)
-        setProgress(0)
+
+        if (cancelledRef.current) return
+        await wait(800)
       }
     }
 
-    animateProcess()
+    runCycle()
+
+    return () => {
+      cancelledRef.current = true
+      activeAnimationRef.current?.stop()
+      activeAnimationRef.current = null
+      clearScheduledTimeouts()
+    }
   }, [isVisible])
 
   return (

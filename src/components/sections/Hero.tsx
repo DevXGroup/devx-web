@@ -97,7 +97,7 @@ export default function Hero() {
 
       {/* Content */}
       <motion.div
-        className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-30 w-full py-20 sm:py-24 lg:py-32"
+        className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-[80] w-full py-20 sm:py-24 lg:py-32"
         variants={containerVariants}
         initial="hidden"
         animate={controls}
@@ -137,7 +137,7 @@ export default function Hero() {
                 Elite software team shipping polished software at startup speed.
               </p>
               <div className="relative mx-auto w-full mt-10 flex justify-center">
-                <div className="relative flex flex-wrap items-center justify-center gap-3 sm:gap-4 px-6 py-3 rounded-full border border-white/5 bg-white/5 backdrop-blur-sm">
+                <div className="relative flex flex-wrap items-center justify-center gap-3 sm:gap-4 px-6 py-3 rounded-full">
                   <Link
                     href="/services"
                     className="uppercase tracking-[0.19em] text-base sm:text-lg md:text-lg lg:text-lg font-medium opacity-90 hover:opacity-100"
@@ -188,9 +188,15 @@ export default function Hero() {
 
           <motion.div
             variants={itemVariants}
-            className="flex flex-row flex-wrap justify-center gap-4 sm:gap-5 relative z-50 mt-10 sm:mt-12"
+            className="flex flex-row flex-wrap justify-center gap-4 sm:gap-5 relative z-[120] mt-10 sm:mt-12"
           >
-            <motion.div variants={buttonVariants} initial="rest" whileHover="hover" whileTap="tap">
+            <motion.div
+              variants={buttonVariants}
+              initial="rest"
+              whileHover="hover"
+              whileTap="tap"
+              className="relative z-[130]"
+            >
               <StarBorder
                 as="a"
                 href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
@@ -198,17 +204,23 @@ export default function Hero() {
                 rel="noopener noreferrer"
                 color="#ccff00"
                 speed="3s"
-                className="font-mono font-semibold text-lg sm:text-xl md:text-xl lg:text-2xl text-white hover:text-robinhood px-3 py-1 transition-all duration-300"
+                className="font-mono font-semibold text-lg sm:text-xl md:text-xl lg:text-2xl px-3 py-1"
               >
                 Book a Free Call
               </StarBorder>
             </motion.div>
-            <motion.div variants={buttonVariants} initial="rest" whileHover="hover" whileTap="tap">
+            <motion.div
+              variants={buttonVariants}
+              initial="rest"
+              whileHover="hover"
+              whileTap="tap"
+              className="relative z-[130]"
+            >
               <StarBorder
                 onClick={navigateToPortfolio}
-                color="#efdedd"
+                color="#ccff00"
                 speed="4s"
-                className="font-mono font-semibold text-lg sm:text-xl md:text-xl lg:text-2xl text-white hover:text-purple-300 px-3 py-1 transition-all duration-300"
+                className="font-mono font-semibold text-lg sm:text-xl md:text-xl lg:text-2xl px-3 py-1"
               >
                 See Our Work
               </StarBorder>
