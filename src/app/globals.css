@@ -6,15 +6,11 @@
 html {
   background-color: #000000 !important;
   overflow-x: hidden;
-  /* Prevent layout shifts during resize */
-  contain: layout style paint;
 }
 body {
   background-color: #000000 !important;
   color: #ffffff !important;
   overflow-x: hidden;
-  /* Prevent layout shifts during resize */
-  contain: layout style paint;
 }
 
 /* Prevent white flash during navigation */
