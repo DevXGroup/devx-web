@@ -280,64 +280,6 @@ html.is-firefox .navbar-blur {
   background-color: var(--navbar-no-blur-bg);
 }
 
-/* Stars CSS - Pure CSS implementation */
-.stars-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  z-index: 20;
-  pointer-events: none;
-}
-
-.stars-layer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 20;
-}
-
-.stars-small {
-  background-image: radial-gradient(2px 2px at 20px 30px, #fff, rgba(0, 0, 0, 0)),
-    radial-gradient(2px 2px at 40px 70px, #fff, rgba(0, 0, 0, 0)),
-    radial-gradient(2px 2px at 50px 160px, #fff, rgba(0, 0, 0, 0)),
-    radial-gradient(2px 2px at 90px 40px, #fff, rgba(0, 0, 0, 0)),
-    radial-gradient(2px 2px at 130px 80px, #fff, rgba(0, 0, 0, 0)),
-    radial-gradient(2px 2px at 160px 120px, #fff, rgba(0, 0, 0, 0));
-  background-repeat: repeat;
-  background-size: 500px 500px;
-  animation: stars-animation 30s linear infinite;
-  -webkit-animation: stars-animation 30s linear infinite;
-}
-
-.stars-medium {
-  background-image: radial-gradient(3px 3px at 150px 180px, #fff, rgba(0, 0, 0, 0)),
-    radial-gradient(3px 3px at 300px 250px, #fff, rgba(0, 0, 0, 0)),
-    radial-gradient(3px 3px at 460px 380px, #fff, rgba(0, 0, 0, 0)),
-    radial-gradient(3px 3px at 600px 410px, #fff, rgba(0, 0, 0, 0));
-  background-repeat: repeat;
-  background-size: 700px 700px;
-  animation: stars-animation 40s linear infinite;
-  -webkit-animation: stars-animation 40s linear infinite;
-  animation-delay: -10s;
-  -webkit-animation-delay: -10s;
-}
-
-.stars-large {
-  background-image: radial-gradient(4px 4px at 220px 320px, #fff, rgba(0, 0, 0, 0)),
-    radial-gradient(4px 4px at 500px 450px, #fff, rgba(0, 0, 0, 0)),
-    radial-gradient(4px 4px at 700px 200px, #fff, rgba(0, 0, 0, 0));
-  background-repeat: repeat;
-  background-size: 900px 900px;
-  animation: stars-animation 50s linear infinite;
-  -webkit-animation: stars-animation 50s linear infinite;
-  animation-delay: -20s;
-  -webkit-animation-delay: -20s;
-}
 
 /* Black falling stars for Features section */
 .black-stars-container {
@@ -347,72 +289,70 @@ html.is-firefox .navbar-blur {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  z-index: 21;
+  z-index: 5;
   pointer-events: none;
+}
+
+.black-stars-from-hero {
+  top: -100vh;
+  height: calc(200vh + 100%);
 }
 
 .black-stars-layer {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 21;
+  inset: 0;
+  z-index: 5;
+  overflow: hidden;
 }
 
-.black-stars-small {
-  background-image: radial-gradient(circle 2px at 20px 30px, #000, rgba(0, 0, 0, 0)),
-    radial-gradient(circle 2px at 40px 70px, #000, rgba(0, 0, 0, 0)),
-    radial-gradient(circle 2px at 50px 160px, #000, rgba(0, 0, 0, 0)),
-    radial-gradient(circle 2px at 90px 40px, #000, rgba(0, 0, 0, 0)),
-    radial-gradient(circle 2px at 130px 80px, #000, rgba(0, 0, 0, 0)),
-    radial-gradient(circle 2px at 160px 120px, #000, rgba(0, 0, 0, 0));
-  background-repeat: repeat;
-  background-size: 500px 500px;
-  animation: black-stars-animation 25s linear infinite;
-  -webkit-animation: black-stars-animation 25s linear infinite;
+.black-star-dot {
+  position: absolute;
+  border-radius: 9999px;
+  background: rgba(0, 0, 0, var(--star-alpha, 0.7));
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
+  filter: none;
+  will-change: transform, opacity;
+  opacity: var(--star-opacity-end, 0.6);
+  transform: translate3d(0, var(--star-start, -240px), 0);
+  animation-name: black-star-fall;
+  animation-duration: var(--star-duration, 10s);
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+  -webkit-animation-name: black-star-fall;
+  -webkit-animation-duration: var(--star-duration, 10s);
+  -webkit-animation-timing-function: linear;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-fill-mode: forwards;
+  -webkit-animation-play-state: running;
 }
 
-.black-stars-medium {
-  background-image: radial-gradient(circle 3px at 150px 180px, #000, rgba(0, 0, 0, 0)),
-    radial-gradient(circle 3px at 300px 250px, #000, rgba(0, 0, 0, 0)),
-    radial-gradient(circle 3px at 460px 380px, #000, rgba(0, 0, 0, 0)),
-    radial-gradient(circle 3px at 600px 410px, #000, rgba(0, 0, 0, 0));
-  background-repeat: repeat;
-  background-size: 700px 700px;
-  animation: black-stars-animation 35s linear infinite;
-  -webkit-animation: black-stars-animation 35s linear infinite;
-  animation-delay: -8s;
-  -webkit-animation-delay: -8s;
-}
-
-.black-stars-large {
-  background-image: radial-gradient(circle 4px at 220px 320px, #000, rgba(0, 0, 0, 0)),
-    radial-gradient(circle 4px at 500px 450px, #000, rgba(0, 0, 0, 0)),
-    radial-gradient(circle 4px at 700px 200px, #000, rgba(0, 0, 0, 0));
-  background-repeat: repeat;
-  background-size: 900px 900px;
-  animation: black-stars-animation 45s linear infinite;
-  -webkit-animation: black-stars-animation 45s linear infinite;
-  animation-delay: -15s;
-  -webkit-animation-delay: -15s;
-}
-
-@keyframes black-stars-animation {
-  from {
-    transform: translateY(-700px);
+@keyframes black-star-fall {
+  0% {
+    transform: translate3d(var(--star-drift, 0px), var(--star-start, -240px), 0);
+    opacity: var(--star-opacity-start, 0.1);
   }
-  to {
-    transform: translateY(700px);
+  60% {
+    opacity: var(--star-opacity-end, 0.35);
+  }
+  100% {
+    transform: translate3d(calc(var(--star-drift, 0px) * 1.2), var(--star-end, 480px), 0);
+    opacity: 0;
   }
 }
 
-@-webkit-keyframes black-stars-animation {
-  from {
-    -webkit-transform: translateY(-700px);
+@-webkit-keyframes black-star-fall {
+  0% {
+    -webkit-transform: translate3d(var(--star-drift, 0px), var(--star-start, -240px), 0);
+    opacity: var(--star-opacity-start, 0.1);
   }
-  to {
-    -webkit-transform: translateY(700px);
+  60% {
+    opacity: var(--star-opacity-end, 0.35);
+  }
+  100% {
+    -webkit-transform: translate3d(calc(var(--star-drift, 0px) * 1.2), var(--star-end, 480px), 0);
+    opacity: 0;
   }
 }
 

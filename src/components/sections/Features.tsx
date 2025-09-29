@@ -7,8 +7,11 @@ import {
   useReducedMotion,
   useInView,
   useMotionValue,
+  useMotionValueEvent,
 } from 'framer-motion'
-import { useRef, useEffect, useState, useMemo } from 'react'
+import type { MotionValue } from 'framer-motion'
+import { useRef, useEffect, useState, useMemo, useCallback } from 'react'
+import type { CSSProperties } from 'react'
 import { Rocket, User, Layers, Search, Flag, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import RotatingText from '@animations/RotatingText'
@@ -60,13 +63,241 @@ const stepVariants = {
   },
 }
 
-// Black falling stars component - pure CSS implementation
-function BlackFallingStars() {
+// Parallax black falling stars background effect
+type StarConfig = {
+  id: string
+  x: number
+  y: number
+  size: number
+  floatDistance: number
+  duration: number
+  phase: number
+  startOffset: number
+  drift: number
+  colorAlpha: number
+}
+
+function StarDot({
+  star,
+  speedMultiplier,
+}: {
+  star: StarConfig
+  speedMultiplier: MotionValue<number>
+}) {
+  const elementRef = useRef<HTMLSpanElement | null>(null)
+
+  const applySpeed = useCallback(
+    (value: number) => {
+      const node = elementRef.current
+      if (!node) return
+      const clamped = Math.max(0.75, Math.min(value, 1.25))
+      const adjusted = star.duration / clamped
+      const durationValue = `${adjusted.toFixed(2)}s`
+      node.style.animationDuration = durationValue
+      node.style.webkitAnimationDuration = durationValue
+      node.style.setProperty('--star-duration', durationValue)
+      const delayValue = `-${(star.phase * adjusted).toFixed(2)}s`
+      node.style.animationDelay = delayValue
+      node.style.webkitAnimationDelay = delayValue
+    },
+    [star.duration, star.phase]
+  )
+
+  useEffect(() => {
+    applySpeed(speedMultiplier.get())
+  }, [applySpeed, speedMultiplier])
+
+  useMotionValueEvent(speedMultiplier, 'change', (value) => {
+    applySpeed(value)
+  })
+
+  // Check if this is a dark dot by looking at the star ID
+  const isDark = star.id.startsWith('dark-')
+
+  const [opacityStart, opacityEnd] = isDark
+    ? [0.7, 0.95]  // Dark dots are more visible
+    : star.size >= 4
+      ? [0.55, 0.8]   // large dots (4-5px)
+      : star.size >= 3
+        ? [0.5, 0.75]  // medium dots (3-4px)
+        : star.size >= 2
+          ? [0.45, 0.7] // small dots (2-3px)
+          : [0.4, 0.65]  // tiny dots (1-2px)
+
+  const style = {
+    left: `${star.x.toFixed(3)}%`,
+    top: `${star.y.toFixed(3)}%`,
+    width: star.size,
+    height: star.size,
+    opacity: opacityEnd,
+    animationDuration: `${star.duration.toFixed(2)}s`,
+    animationDelay: `-${(star.phase * star.duration).toFixed(2)}s`,
+    '--star-duration': `${star.duration.toFixed(2)}s`,
+    '--star-start': `${star.startOffset}px`,
+    '--star-end': `${(star.startOffset + star.floatDistance).toFixed(1)}px`,
+    '--star-drift': `${star.drift}px`,
+    '--star-opacity-start': opacityStart.toString(),
+    '--star-opacity-end': opacityEnd.toString(),
+    '--star-alpha': star.colorAlpha.toFixed(2),
+  } as CSSProperties & Record<string, string>
+
+  return <span ref={elementRef} className="black-star-dot" style={style} />
+}
+
+function BlackFallingStars({
+  scrollProgress,
+}: {
+  scrollProgress?: MotionValue<number> | null
+}) {
+  const fallbackProgress = useMotionValue(0)
+  const progress = scrollProgress ?? fallbackProgress
+
+  const tinyLayerY = useTransform(progress, [0, 1], [0, 100])
+  const smallLayerY = useTransform(progress, [0, 1], [0, 140])
+  const mediumLayerY = useTransform(progress, [0, 1], [0, 200])
+  const largeLayerY = useTransform(progress, [0, 1], [0, 260])
+  const darkLayerY = useTransform(progress, [0, 1], [0, 180])
+
+  const starLayers = useMemo(() => {
+    const toPercent = (value: number) => 0 + value * 100
+
+    const createStars = (
+      layerKey: string,
+      count: number,
+      sizeRange: [number, number],
+      floatRange: [number, number]
+    ): StarConfig[] => {
+      const positions: { x: number; y: number }[] = []
+      const minDistance = 6 // Minimum distance between dots (in percentage) - reduced for denser effect
+
+      // Generate well-distributed positions
+      const generatePosition = (attempt = 0): { x: number; y: number } => {
+        if (attempt > 50) {
+          // Fallback: use grid-based positioning
+          const gridX = positions.length % 10
+          const gridY = Math.floor(positions.length / 10)
+          return {
+            x: (gridX * 10 + (Math.random() * 8 + 1)) / 100,
+            y: (gridY * 10 + (Math.random() * 8 + 1)) / 100
+          }
+        }
+
+        const x = Math.random()
+        const y = Math.random()
+
+        // Check if this position is too close to existing ones
+        const tooClose = positions.some(pos => {
+          const distance = Math.sqrt(Math.pow((x - pos.x) * 100, 2) + Math.pow((y - pos.y) * 100, 2))
+          return distance < minDistance
+        })
+
+        if (tooClose) {
+          return generatePosition(attempt + 1)
+        }
+
+        return { x, y }
+      }
+
+      return Array.from({ length: count }, (_, index) => {
+        const position = generatePosition()
+        positions.push(position)
+
+        const [minSize, maxSize] = sizeRange
+        // Subtle size variation
+        const size = minSize + (index % (maxSize - minSize + 1))
+
+        const [minFloat, maxFloat] = floatRange
+        const baseDrop = minFloat + ((index * 19) % (maxFloat - minFloat + 1))
+        const startOffset = -(40 + ((index * 17) % 100)) // More subtle starting positions
+        const floatDistance = baseDrop + 360
+
+        // Varied speeds based on size - more subtle differences
+        const sizeSpeedFactor = size <= 2 ? 1.2 : size <= 3 ? 1.0 : 0.8
+        const baseDuration = (20 + ((index * 5) % 8)) * sizeSpeedFactor
+        const speedVariance = 0.8 + ((index * 13) % 40) / 100 // More controlled speed variation
+        const duration = baseDuration / speedVariance
+
+        const phase = ((index * 137) % 100) / 100
+        // Subtle horizontal drift
+        const drift = ((index * 23) % 30) - 15
+        // Make dark layer dots significantly darker
+        const colorAlpha = layerKey === 'dark'
+          ? 0.7 + ((index * 31) % 30) / 100  // Dark dots: 70-100% alpha
+          : 0.5 + ((index * 31) % 30) / 100  // Regular dots: 50-80% alpha
+
+        return {
+          id: `${layerKey}-${index}`,
+          x: toPercent(position.x),
+          y: toPercent(position.y),
+          size,
+          floatDistance,
+          duration,
+          phase,
+          startOffset,
+          drift,
+          colorAlpha,
+        }
+      })
+    }
+
+    return {
+      tiny: createStars('tiny', 45, [1, 2], [480, 680]),
+      small: createStars('small', 55, [2, 3], [520, 720]),
+      medium: createStars('medium', 35, [3, 4], [620, 820]),
+      large: createStars('large', 25, [4, 5], [700, 940]),
+      dark: createStars('dark', 30, [2, 4], [550, 750]), // New darker layer
+    }
+  }, [])
+
+  const speedMultiplier = useTransform(scrollProgress ?? fallbackProgress, (value) => 0.9 + value * 0.35)
+
   return (
-    <div className="black-stars-container">
-      <div className="black-stars-layer black-stars-small"></div>
-      <div className="black-stars-layer black-stars-medium"></div>
-      <div className="black-stars-layer black-stars-large"></div>
+    <div className="black-stars-container black-stars-from-hero" aria-hidden="true">
+      <motion.div className="black-stars-layer" style={{ y: tinyLayerY }}>
+        {starLayers.tiny.map((star) => (
+          <StarDot
+            key={star.id}
+            star={star}
+            speedMultiplier={speedMultiplier}
+          />
+        ))}
+      </motion.div>
+      <motion.div className="black-stars-layer" style={{ y: smallLayerY }}>
+        {starLayers.small.map((star) => (
+          <StarDot
+            key={star.id}
+            star={star}
+            speedMultiplier={speedMultiplier}
+          />
+        ))}
+      </motion.div>
+      <motion.div className="black-stars-layer" style={{ y: mediumLayerY }}>
+        {starLayers.medium.map((star) => (
+          <StarDot
+            key={star.id}
+            star={star}
+            speedMultiplier={speedMultiplier}
+          />
+        ))}
+      </motion.div>
+      <motion.div className="black-stars-layer" style={{ y: largeLayerY }}>
+        {starLayers.large.map((star) => (
+          <StarDot
+            key={star.id}
+            star={star}
+            speedMultiplier={speedMultiplier}
+          />
+        ))}
+      </motion.div>
+      <motion.div className="black-stars-layer" style={{ y: darkLayerY }}>
+        {starLayers.dark.map((star) => (
+          <StarDot
+            key={star.id}
+            star={star}
+            speedMultiplier={speedMultiplier}
+          />
+        ))}
+      </motion.div>
     </div>
   )
 }
@@ -317,7 +548,7 @@ export default function Features() {
       className="relative py-16 md:py-20 overflow-hidden bg-robinhood w-full"
     >
       {/* Black falling stars */}
-      <BlackFallingStars />
+      <BlackFallingStars scrollProgress={scrollYProgress} />
 
       {/* Main Content */}
       <motion.div
