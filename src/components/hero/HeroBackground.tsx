@@ -19,22 +19,37 @@ function Scene() {
   const [scrollY, setScrollY] = useState(0)
   const [isClient, setIsClient] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
+  const [isResizing, setIsResizing] = useState(false)
   const mounted = useRef(false)
+  const resizeTimeoutRef = useRef<NodeJS.Timeout>()
 
   useEffect(() => {
     if (mounted.current) return
     mounted.current = true
     setIsClient(true)
-    
+
     const handleScroll = () => {
-      setScrollY(window.scrollY)
+      if (!isResizing) {
+        setScrollY(window.scrollY)
+      }
+    }
+
+    const handleResize = () => {
+      setIsResizing(true)
+      clearTimeout(resizeTimeoutRef.current)
+      resizeTimeoutRef.current = setTimeout(() => {
+        setIsResizing(false)
+      }, 250)
     }
 
     window.addEventListener("scroll", handleScroll, { passive: true })
+    window.addEventListener("resize", handleResize, { passive: true })
     return () => {
       window.removeEventListener("scroll", handleScroll)
+      window.removeEventListener("resize", handleResize)
+      clearTimeout(resizeTimeoutRef.current)
     }
-  }, [])
+  }, [isResizing])
 
   return (
     <>
