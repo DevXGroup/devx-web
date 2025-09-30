@@ -127,9 +127,9 @@ function StarDot({
   const style = {
     left: `${star.x.toFixed(3)}%`,
     top: `${star.y.toFixed(3)}%`,
-    width: star.size,
-    height: star.size,
-    opacity: opacityEnd,
+    width: `${star.size}px`,
+    height: `${star.size}px`,
+    opacity: opacityEnd.toString(),
     animationDuration: `${star.duration.toFixed(2)}s`,
     animationDelay: `-${(star.phase * star.duration).toFixed(2)}s`,
     '--star-duration': `${star.duration.toFixed(2)}s`,
@@ -158,7 +158,23 @@ function BlackFallingStars({
   const largeLayerY = useTransform(progress, [0, 1], [0, 260])
   const darkLayerY = useTransform(progress, [0, 1], [0, 180])
 
+  const [isClient, setIsClient] = useState(false)
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
   const starLayers = useMemo(() => {
+    if (!isClient) {
+      // Return empty arrays on server to prevent hydration mismatch
+      return {
+        tiny: [],
+        small: [],
+        medium: [],
+        large: [],
+        dark: [],
+      }
+    }
     const toPercent = (value: number) => 0 + value * 100
 
     const createStars = (
@@ -247,7 +263,7 @@ function BlackFallingStars({
       large: createStars('large', 25, [4, 5], [700, 940]),
       dark: createStars('dark', 30, [2, 4], [550, 750]), // New darker layer
     }
-  }, [])
+  }, [isClient])
 
   const speedMultiplier = useTransform(scrollProgress ?? fallbackProgress, (value) => 0.9 + value * 0.35)
 

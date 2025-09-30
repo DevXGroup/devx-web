@@ -21,7 +21,7 @@ function Scene() {
   const [isVisible, setIsVisible] = useState(false)
   const [isResizing, setIsResizing] = useState(false)
   const mounted = useRef(false)
-  const resizeTimeoutRef = useRef<NodeJS.Timeout>()
+  const resizeTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined)
 
   useEffect(() => {
     if (mounted.current) return
