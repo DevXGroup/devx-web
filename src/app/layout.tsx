@@ -8,7 +8,7 @@ import ErrorBoundary from '@/components/layout/ErrorBoundary'
 import GlobalTransition from '@/components/transitions/GlobalTransition'
 import ScrollToTop from '@/components/layout/ScrollToTop'
 import StructuredData from '@/components/seo/StructuredData'
-import GoogleTagManager from '@/components/analytics/GoogleTagManager'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 // Configure IBM Plex Sans as primary body font
 const ibmPlexSans = IBM_Plex_Sans({
@@ -113,10 +113,28 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <StructuredData type="organization" />
         <StructuredData type="localBusiness" />
         <StructuredData type="website" />
+        {/* Google Tag Manager */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-TBDBXQWX');
+            `.trim()
+          }}
+        />
+        {/* End Google Tag Manager */}
       </head>
       <body className="bg-black text-white font-sans antialiased" style={{ backgroundColor: '#000000', transition: 'none' }} suppressHydrationWarning>
-        {/* Google Tag Manager */}
-        <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID || 'GTM-XXXXXXX'} />
+        {/* Google Tag Manager (noscript) */}
+        <noscript
+          dangerouslySetInnerHTML={{
+            __html: '<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TBDBXQWX" height="0" width="0" style="display:none;visibility:hidden"></iframe>'
+          }}
+        />
+        {/* End Google Tag Manager (noscript) */}
 
         <BrowserCompatibilityDetector />
         <ErrorBoundary>
@@ -126,6 +144,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <GlobalTransition />
           </div>
         </ErrorBoundary>
+        <SpeedInsights />
       </body>
     </html>
   )
