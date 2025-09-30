@@ -29,6 +29,12 @@ log/
 
 # local env files
 .env*.local
+.env.local
+.env
+
+# Sentry
+.sentryclirc
+sentry.properties
 
 # vercel
 .vercel
