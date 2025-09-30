@@ -49,7 +49,6 @@ const itemVariants = {
     y: 0,
     transition: {
       duration: 0.6,
-      ease: [0.22, 1, 0.36, 1], // Custom easing for smoother animation
     },
   },
 }
@@ -58,7 +57,7 @@ const buttonVariants = {
   rest: { scale: 1 },
   hover: {
     scale: 1.02,
-    transition: { duration: 0.3, ease: 'easeInOut' },
+    transition: { duration: 0.3 },
   },
   tap: { scale: 0.98 },
 }
@@ -107,7 +106,7 @@ export default function Hero() {
           <div className="space-y-5 sm:space-y-7">
             <motion.h1
               variants={itemVariants}
-              className="hero-title mx-auto flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-center text-white font-mono font-bold tracking-tight w-full"
+              className="hero-title mx-auto flex flex-nowrap items-center justify-center gap-2 sm:gap-3 md:gap-4 text-center text-white font-mono font-bold tracking-tight w-full whitespace-nowrap"
             >
               <span
                 className="inline-block"
@@ -133,8 +132,8 @@ export default function Hero() {
             </motion.h1>
 
             <motion.div variants={itemVariants} className="text-center w-full mx-auto space-y-5">
-              <p className="text-xl sm:text-2xl md:text-2xl lg:text-2xl xl:text-2xl text-white font-sans font-light leading-relaxed text-center mx-auto">
-                Elite software team shipping polished software at startup speed.
+              <p className="text-xl sm:text-2xl md:text-2xl lg:text-2xl xl:text-2xl text-white font-sans font-light leading-relaxed text-center mx-auto max-w-4xl">
+                Elite software team shipping polished software at&nbsp;startup&nbsp;speed.
               </p>
               <div className="relative mx-auto w-full mt-10 flex justify-center">
                 <div className="relative flex flex-wrap items-center justify-center gap-3 sm:gap-4 px-6 py-3 rounded-full">
@@ -170,7 +169,7 @@ export default function Hero() {
 
           <motion.div
             variants={itemVariants}
-            className="min-h-[4rem] sm:min-h-[5rem] md:min-h-[6rem] lg:min-h-[6rem] xl:min-h-[6rem] mt-8 sm:mt-10 md:mt-12 flex justify-center items-center w-full"
+            className="min-h-[3rem] sm:min-h-[3.5rem] md:min-h-[4rem] mt-3 sm:mt-4 md:mt-5 flex justify-center items-center w-full"
           >
             <TextType
               text={subheaders}
@@ -188,7 +187,7 @@ export default function Hero() {
 
           <motion.div
             variants={itemVariants}
-            className="flex flex-row flex-wrap justify-center gap-4 sm:gap-5 relative z-[120] mt-10 sm:mt-12"
+            className="flex flex-row flex-wrap justify-center gap-4 sm:gap-5 relative z-[120] mt-6 sm:mt-7"
           >
             <motion.div
               variants={buttonVariants}
