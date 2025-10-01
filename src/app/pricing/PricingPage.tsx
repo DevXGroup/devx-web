@@ -11,6 +11,9 @@ const fadeInUpVariants = {
   visible: {
     opacity: 1,
     y: 0,
+    transition: {
+      duration: 0.4,
+    },
   },
 }
 
@@ -18,6 +21,9 @@ const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
   },
 }
 
@@ -234,10 +240,10 @@ function PricingCard({ plan, index, isYearly }: PricingCardProps) {
   return (
     <motion.div
       ref={ref}
-      variants={cardHoverVariants}
-      initial="rest"
+      variants={fadeInUpVariants}
+      initial="hidden"
       animate={isInView ? 'visible' : 'hidden'}
-      whileHover={shouldReduceMotion ? {} : 'hover'}
+      whileHover={shouldReduceMotion ? {} : cardHoverVariants.hover}
       className={`relative bg-black/40 backdrop-blur-xl rounded-2xl border ${
         plan.popular
           ? 'border-[#FFD700] ring-2 ring-[#FFD700]/30 shadow-2xl shadow-[#FFD700]/20'

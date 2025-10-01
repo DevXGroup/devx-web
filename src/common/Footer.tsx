@@ -41,7 +41,7 @@ export default function Footer() {
         {/* Background Pattern */}
         <div className="absolute inset-0 bg-[url('/images/patterns/grid.svg')] opacity-10"></div>
 
-        <div className="container mx-auto relative z-20 max-w-full">
+        <div className="container mx-auto relative z-20 max-w-full px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 lg:gap-12">
             {/* Company Info */}
             <div className="sm:col-span-2 lg:col-span-1 xl:col-span-1 flex flex-col">
