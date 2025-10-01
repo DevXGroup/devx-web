@@ -141,8 +141,8 @@ const ProjectDetailModal = ({ project, isOpen, onClose }: ProjectDetailModalProp
                 {/* Sticky Close Button - Always visible at top right */}
                 <motion.button
                   onClick={onClose}
-                  className="fixed top-4 right-4 p-3 rounded-full bg-black/80 backdrop-blur-md border border-white/30 text-white hover:bg-red-600/80 transition-all duration-300 z-[100] shadow-2xl"
-                  whileHover={{ 
+                  className="sticky top-4 float-right mr-4 mt-4 p-3 rounded-full bg-black/80 backdrop-blur-md border border-white/30 text-white hover:bg-red-600/80 transition-all duration-300 z-[100] shadow-2xl"
+                  whileHover={{
                     scale: 1.1,
                     backgroundColor: 'rgba(239, 68, 68, 0.8)',
                     borderColor: 'rgba(239, 68, 68, 0.6)'
@@ -193,8 +193,7 @@ const ProjectDetailModal = ({ project, isOpen, onClose }: ProjectDetailModalProp
                 {/* Project Title */}
                 <div className="absolute bottom-6 left-6 right-6">
                   <motion.h2
-                    className="text-3xl lg:text-4xl font-bold text-white mb-4"
-                    style={{ color: categoryColor }}
+                    className="text-3xl lg:text-4xl font-bold text-white mb-4 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]"
                     variants={itemVariants}
                   >
                     {project.title}
@@ -475,10 +474,9 @@ const ProjectDetailModal = ({ project, isOpen, onClose }: ProjectDetailModalProp
                         href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300"
+                        className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300 text-black"
                         style={{
                           backgroundColor: categoryColor,
-                          color: 'white',
                         }}
                         whileHover={{
                           scale: 1.05,
