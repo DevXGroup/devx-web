@@ -28,7 +28,15 @@ const DynamicShootingStars = dynamic(() => import('../hero/ShootingStars'), {
   loading: () => <div className="absolute inset-0 opacity-50" />,
 })
 
-const subheaders = ['Stunning UI/UX', 'Rapid MVP Launches', 'AI Automation']
+const subheaders = [
+  'Stunning UI/UX',
+  'Rapid MVP Launches',
+  'SOC2-Ready Engineering',
+  'Full-Stack Engineering',
+  'Predictive Analytics',
+  'Scale with Confidence',
+  'AI Automation',
+]
 
 // Enhanced animation variants for better performance
 const containerVariants = {
