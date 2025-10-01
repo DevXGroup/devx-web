@@ -105,12 +105,12 @@ export default function PlanetDivider() {
     }
 
     return {
-      glowRadius: getResponsiveValue(50, 100, 120), // Reduced for mobile
-      glowRadius2: getResponsiveValue(100, 200, 240), // Reduced for mobile
-      shadowSize: getResponsiveValue(15, 25, 30), // Reduced for mobile
-      blurAmount: getResponsiveValue(1.5, 2.5, 3), // Reduced for mobile
-      planetShadow: getResponsiveValue(40, 75, 90), // Reduced for mobile
-      planetGlow: getResponsiveValue(120, 250, 300), // Reduced for mobile
+      glowRadius: getResponsiveValue(80, 100, 120), // Increased for mobile visibility
+      glowRadius2: getResponsiveValue(160, 200, 240), // Increased for mobile visibility
+      shadowSize: getResponsiveValue(15, 25, 30),
+      blurAmount: getResponsiveValue(1.5, 2.5, 3),
+      planetShadow: getResponsiveValue(40, 75, 90),
+      planetGlow: getResponsiveValue(200, 250, 300), // Increased for mobile visibility
       // Pixel-based sizing for better control
       planetMaxWidth: planetSize,
       planetMarginLeft: planetMargin,
@@ -122,7 +122,7 @@ export default function PlanetDivider() {
   const { position, opacity, scrollRotation, continuousRotation } = calculateVisibility()
   const sizes = getResponsiveSizes()
 
-  // Cross-browser compatible styles
+  // Cross-browser compatible styles with mobile-specific fixes
   const getCrossBrowserStyle = (transform: string, additionalStyles: any = {}) => ({
     WebkitTransform: transform,
     MozTransform: transform,
@@ -131,6 +131,14 @@ export default function PlanetDivider() {
     WebkitBorderRadius: '50%',
     MozBorderRadius: '50%',
     borderRadius: '50%',
+    // Force proper circle rendering on mobile
+    WebkitBackfaceVisibility: 'hidden',
+    backfaceVisibility: 'hidden',
+    WebkitPerspective: 1000,
+    perspective: 1000,
+    // Ensure smooth rendering
+    WebkitFontSmoothing: 'antialiased',
+    MozOsxFontSmoothing: 'grayscale',
     ...additionalStyles
   })
 

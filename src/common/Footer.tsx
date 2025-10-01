@@ -264,8 +264,8 @@ export default function Footer() {
 
           {/* Contact Info Bar */}
           <div className="mt-8 lg:mt-12 pt-6 lg:pt-8 border-t border-border">
-            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 lg:gap-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:flex lg:items-center gap-3 lg:gap-6 text-sm text-muted-foreground">
+            <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 lg:gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:flex lg:items-center gap-4 lg:gap-8 text-sm text-muted-foreground">
                 <a
                   href="tel:+14425440591"
                   className="flex items-center justify-center sm:justify-start gap-2 hover:text-[#4CD787] transition-colors"
@@ -320,7 +320,7 @@ export default function Footer() {
                   <span className="truncate">San Diego, California</span>
                 </span>
               </div>
-              <div className="flex flex-col sm:flex-row gap-3 lg:gap-4 text-sm border-t sm:border-t-0 pt-4 sm:pt-0 justify-center lg:justify-start">
+              <div className="flex flex-col sm:flex-row gap-4 lg:gap-6 text-sm border-t sm:border-t-0 pt-6 sm:pt-0 justify-center lg:justify-end lg:text-right">
                 <Link
                   href="/privacy"
                   className="text-muted-foreground hover:text-[#4CD787] transition-colors text-center lg:text-left"

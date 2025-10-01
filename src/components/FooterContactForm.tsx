@@ -58,7 +58,7 @@ export default function FooterContactForm() {
 
   return (
     <div>
-      <h3 className="text-base font-bold mb-4">Achieve Today</h3>
+      <h3 className="text-base font-bold mb-4">Get in touch</h3>
       {isSubmitted ? (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
@@ -72,7 +72,7 @@ export default function FooterContactForm() {
       ) : (
         <form onSubmit={handleSubmit} className="space-y-3">
           <div>
-            <p className="mb-1 text-sm">Get in touch with us*</p>
+            <p className="mb-1 text-sm">Email*</p>
             <Input
               type="email"
               name="email"
@@ -94,7 +94,7 @@ export default function FooterContactForm() {
             )}
           </div>
           <div>
-            <p className="mb-1 text-sm">Quick message*</p>
+            <p className="mb-1 text-sm">Message*</p>
             <Textarea
               name="message"
               value={formState.message}

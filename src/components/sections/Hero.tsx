@@ -82,6 +82,13 @@ export default function Hero() {
       {/* Animated Background */}
       <div className="absolute inset-0 tech-flow"></div>
 
+      {/* Starfield Background - Always visible, especially on mobile */}
+      <div className="absolute inset-0 pointer-events-none z-[1]">
+        <div className="stars-layer-1"></div>
+        <div className="stars-layer-2"></div>
+        <div className="stars-layer-3"></div>
+      </div>
+
       {/* 3D Background - Only rendered on client */}
       <ClientOnly>
         <div className="absolute inset-0 w-full h-full">
