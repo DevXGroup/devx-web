@@ -370,7 +370,7 @@ export default function ServicesPage() {
                 />
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 px-6 md:px-8 lg:px-16 relative z-20">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6 md:gap-8 lg:gap-10 xl:gap-12 px-6 md:px-8 lg:px-8 xl:px-12 max-w-7xl mx-auto relative z-20">
               {valueProps.map((prop, index) => (
                 <motion.div
                   key={prop.title}
@@ -378,23 +378,23 @@ export default function ServicesPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="bg-black/60 md:bg-black/30 backdrop-blur-md md:backdrop-blur-sm p-6 rounded-xl border border-white/20 md:border-white/10 hover:border-white/30 transition-all duration-300 group cursor-pointer pointer-events-auto relative overflow-hidden"
+                  className="bg-black/60 md:bg-black/30 backdrop-blur-md md:backdrop-blur-sm p-6 lg:p-8 rounded-xl border border-white/20 md:border-white/10 hover:border-white/30 transition-all duration-300 group cursor-pointer pointer-events-auto relative overflow-hidden"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onMouseEnter={() => {}} // Required for hover effects
                   onMouseLeave={() => {}} // Required for hover effects
                 >
-                  <h3 className="text-xl md:text-2xl font-semibold text-[#FFD700] mb-2 transition-colors duration-300 relative z-10">
+                  <h3 className="text-xl md:text-2xl lg:text-2xl font-semibold text-[#FFD700] mb-3 lg:mb-4 transition-colors duration-300 relative z-10">
                     {prop.title}
                   </h3>
                   <p
-                    className="text-white/90 text-base md:text-lg transition-colors duration-300 font-['IBM_Plex_Sans'] font-medium relative z-10 mb-3"
+                    className="text-white/90 text-base md:text-lg lg:text-xl transition-colors duration-300 font-['IBM_Plex_Sans'] font-medium relative z-10 mb-3 lg:mb-4 leading-relaxed"
                     style={{ textShadow: '0 1px 4px rgba(0,0,0,0.7)', letterSpacing: '0.025em' }}
                   >
                     {prop.description}
                   </p>
                   {prop.proofPoint && (
-                    <p className="text-[#4CD787] text-sm md:text-base font-semibold transition-colors duration-300 relative z-10">
+                    <p className="text-[#4CD787] text-sm md:text-base lg:text-lg font-semibold transition-colors duration-300 relative z-10">
                       ✓ {prop.proofPoint}
                     </p>
                   )}
