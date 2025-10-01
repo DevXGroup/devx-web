@@ -31,6 +31,7 @@ export default function GlobalTransition() {
         document.body.classList.remove('navbar-hidden')
       }
     }
+    return undefined
   }, [pathname, hasShownTransition])
 
   if (reduceMotion) {
