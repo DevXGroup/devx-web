@@ -126,9 +126,17 @@ const TextPressure: React.FC<TextPressureProps> = ({
   }, [chars.length, minFontSize, scale])
 
   useEffect(() => {
+    // Force immediate sizing on mount and after a short delay for Safari
     setSize()
+    const timeoutId = setTimeout(() => {
+      setSize()
+    }, 100)
+
     window.addEventListener('resize', setSize)
-    return () => window.removeEventListener('resize', setSize)
+    return () => {
+      window.removeEventListener('resize', setSize)
+      clearTimeout(timeoutId)
+    }
   }, [scale, text, setSize])
 
   useEffect(() => {
@@ -208,11 +216,18 @@ const TextPressure: React.FC<TextPressureProps> = ({
           -webkit-text-stroke-width: ${strokeWidth}px;
           -webkit-text-stroke-color: ${strokeColor};
         }
+        .text-pressure-title {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+          height: 100%;
+        }
       `}</style>
 
       <h1
         ref={titleRef}
-        className={`text-pressure-title ${className} ${flex ? 'flex justify-between' : ''} ${
+        className={`text-pressure-title ${className} ${
           stroke ? 'stroke' : ''
         } uppercase text-center`}
         style={{
@@ -220,7 +235,7 @@ const TextPressure: React.FC<TextPressureProps> = ({
           fontSize: fontSize,
           lineHeight,
           transform: `scale(1, ${scaleY})`,
-          transformOrigin: 'center top',
+          transformOrigin: 'center center',
           margin: 0,
           fontWeight: 100,
           color: stroke ? undefined : textColor,
