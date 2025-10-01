@@ -60,9 +60,11 @@ export default function Footer() {
               </p>
               <div className="flex space-x-4 mt-auto">
                 <Link
-                  href="#"
+                  href="https://www.youtube.com/channel/UC6Zqx3Bhwbberq_MEmlgpIw"
                   className="text-muted-foreground hover:text-[#4CD787] transition-colors p-2 hover:bg-white/5 rounded-md"
                   aria-label="YouTube"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <Youtube className="w-5 h-5" />
                 </Link>
