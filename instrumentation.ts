@@ -1,10 +1,15 @@
 export async function register() {
+  const dsn = process.env.NEXT_PUBLIC_SENTRY_DSN;
+
+  // Only initialize Sentry if DSN is provided
+  if (!dsn) return;
+
   if (process.env.NEXT_RUNTIME === "nodejs") {
     // Server-side instrumentation
     const Sentry = await import("@sentry/nextjs");
 
     Sentry.init({
-      dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
+      dsn,
       tracesSampleRate: 1.0,
       debug: process.env.NODE_ENV === "development",
 
@@ -28,7 +33,7 @@ export async function register() {
     const Sentry = await import("@sentry/nextjs");
 
     Sentry.init({
-      dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
+      dsn,
       tracesSampleRate: 1.0,
       debug: process.env.NODE_ENV === "development",
     });
@@ -44,6 +49,10 @@ export async function onRequestError(
     routeType: "render" | "route" | "action" | "middleware";
   }
 ) {
+  // Only capture errors if Sentry DSN is configured
+  if (!process.env.NEXT_PUBLIC_SENTRY_DSN) return;
+
   const Sentry = await import("@sentry/nextjs");
-  Sentry.captureRequestError(err, request, context);
+  // Cast request to any to avoid type issues with Sentry's RequestInfo type
+  Sentry.captureRequestError(err, request as any, context);
 }
