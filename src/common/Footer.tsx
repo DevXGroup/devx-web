@@ -266,7 +266,11 @@ export default function Footer() {
           <div className="mt-8 lg:mt-12 pt-6 lg:pt-8 border-t border-border">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 lg:gap-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:flex lg:items-center gap-3 lg:gap-6 text-sm text-muted-foreground">
-                <span className="flex items-center justify-center sm:justify-start gap-2">
+                <a
+                  href="tel:+14425440591"
+                  className="flex items-center justify-center sm:justify-start gap-2 hover:text-[#4CD787] transition-colors"
+                  aria-label="Call DevX Group at +1 (442) 544-0591"
+                >
                   <svg
                     className="w-4 h-4 text-muted-foreground"
                     viewBox="0 0 24 24"
@@ -278,9 +282,13 @@ export default function Footer() {
                       fill="currentColor"
                     />
                   </svg>
-                  <span className="truncate">+1 (442)544-0591</span>
-                </span>
-                <span className="flex items-center justify-center sm:justify-start gap-2">
+                  <span className="truncate">+1 (442) 544-0591</span>
+                </a>
+                <a
+                  href="mailto:support@devxgroup.io"
+                  className="flex items-center justify-center sm:justify-start gap-2 hover:text-[#4CD787] transition-colors"
+                  aria-label="Email DevX Group at support@devxgroup.io"
+                >
                   <svg
                     className="w-4 h-4 text-muted-foreground"
                     viewBox="0 0 1920 1920"
@@ -294,7 +302,7 @@ export default function Footer() {
                     />
                   </svg>
                   <span className="truncate">support@devxgroup.io</span>
-                </span>
+                </a>
                 <span className="flex items-center justify-center sm:justify-start sm:col-span-2 md:col-span-1 gap-2">
                   <svg
                     className="w-4 h-4 text-muted-foreground"

@@ -439,7 +439,13 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-foreground text-lg">Phone</h3>
-                    <p className="text-foreground/70">+1 (442)544-0591</p>
+                    <a
+                      href="tel:+14425440591"
+                      className="text-foreground/70 hover:text-[#4CD787] transition-colors duration-200 hover:underline"
+                      aria-label="Call DevX Group at +1 (442) 544-0591"
+                    >
+                      +1 (442) 544-0591
+                    </a>
                     <p className="text-foreground/50 text-sm mt-1">Mon-Fri from 8am to 5pm PST</p>
                   </div>
                 </div>
@@ -450,7 +456,13 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-foreground text-lg">Email</h3>
-                    <p className="text-foreground/70">support@devxgroup.io</p>
+                    <a
+                      href="mailto:support@devxgroup.io"
+                      className="text-foreground/70 hover:text-[#4CD787] transition-colors duration-200 hover:underline"
+                      aria-label="Email DevX Group at support@devxgroup.io"
+                    >
+                      support@devxgroup.io
+                    </a>
                     <p className="text-foreground/50 text-sm mt-1">
                       We&apos;ll respond as quickly as possible
                     </p>
