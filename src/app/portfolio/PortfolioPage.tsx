@@ -235,14 +235,6 @@ const ServiceModal = ({
                 }}
                 className="bg-black/80 backdrop-blur-md border border-white/10 rounded-xl max-w-2xl w-full max-h-[90vh] overflow-auto p-6 relative"
               >
-                <button
-                  onClick={onClose}
-                  className="absolute top-4 right-4 p-2 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white hover:bg-red-600/80 transition-all duration-300 z-10 shadow-lg"
-                  title="Close modal"
-                >
-                  <X className="w-5 h-5" strokeWidth={2} />
-                </button>
-
                 <div className="flex items-center mb-6">
                   <div
                     className="w-12 h-12 rounded-full flex items-center justify-center mr-4"
@@ -275,7 +267,7 @@ const ServiceModal = ({
 
                 <div className="flex justify-between mt-8 pt-4 border-t border-white/10">
                   <button
-                    className="px-5 py-2 rounded-lg text-black font-medium transition-all"
+                    className="px-5 py-2 rounded-lg text-black font-medium transition-all cursor-pointer"
                     style={{ backgroundColor: service.color }}
                     onClick={onClose}
                   >
@@ -822,10 +814,10 @@ export default function PortfolioPage() {
             {projects.map((project, index) => (
               <motion.div
                 key={project.title}
-                initial={{ opacity: 0, y: 50 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-50px' }}
-                transition={{ duration: 0.6, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{ duration: 0.3, delay: index * 0.05, ease: 'easeOut' }}
               >
                 <EnhancedProjectCard
                   project={project}
