@@ -69,9 +69,11 @@ export default function Footer() {
                   <Youtube className="w-5 h-5" />
                 </Link>
                 <Link
-                  href="#"
+                  href="https://www.linkedin.com/company/devx-group-llc/"
                   className="text-muted-foreground hover:text-[#4CD787] transition-colors p-2 hover:bg-white/5 rounded-md"
                   aria-label="LinkedIn"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <Linkedin className="w-5 h-5" />
                 </Link>
