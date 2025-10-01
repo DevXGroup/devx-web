@@ -141,16 +141,16 @@ const ProjectDetailModal = ({ project, isOpen, onClose }: ProjectDetailModalProp
                 {/* Sticky Close Button - Always visible at top right */}
                 <motion.button
                   onClick={onClose}
-                  className="sticky top-4 float-right mr-4 mt-4 p-3 rounded-full bg-black/80 backdrop-blur-md border border-white/30 text-white hover:bg-red-600/80 transition-all duration-300 z-[100] shadow-2xl"
+                  className="sticky top-4 float-right mr-4 mt-4 p-3 rounded-full bg-black/80 backdrop-blur-md border-2 border-white/80 text-white hover:bg-red-600/80 transition-all duration-300 z-[100] shadow-2xl cursor-pointer"
                   whileHover={{
                     scale: 1.1,
                     backgroundColor: 'rgba(239, 68, 68, 0.8)',
-                    borderColor: 'rgba(239, 68, 68, 0.6)'
+                    borderColor: 'rgba(239, 68, 68, 0.8)'
                   }}
                   whileTap={{ scale: 0.9 }}
                   title="Close modal (ESC key or click outside)"
                 >
-                  <X size={20} strokeWidth={2} />
+                  <X size={22} strokeWidth={2.5} />
                 </motion.button>
 
                 {/* Category & Status */}
