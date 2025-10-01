@@ -9,6 +9,7 @@ import GlobalTransition from '@/components/transitions/GlobalTransition'
 import ScrollToTop from '@/components/layout/ScrollToTop'
 import StructuredData from '@/components/seo/StructuredData'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import Script from 'next/script'
 
 // Configure IBM Plex Sans as primary body font
 const ibmPlexSans = IBM_Plex_Sans({
@@ -103,6 +104,9 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const gtmId = process.env.NEXT_PUBLIC_GTM_ID || 'GTM-TBDBXQWX'
+  const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-GXG9QQLB7C'
+
   return (
     <html lang="en" className={`${ibmPlexSans.variable} ${ibmPlexMono.variable} dark`} style={{ backgroundColor: '#000000' }}>
       <head>
@@ -113,28 +117,55 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <StructuredData type="organization" />
         <StructuredData type="localBusiness" />
         <StructuredData type="website" />
+      </head>
+      <body className="bg-black text-white font-sans antialiased" style={{ backgroundColor: '#000000', transition: 'none' }} suppressHydrationWarning>
+        {/* Google Tag Manager (noscript) */}
+        <noscript>
+          <iframe
+            src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
+            height="0"
+            width="0"
+            style={{ display: 'none', visibility: 'hidden' }}
+          />
+        </noscript>
+        {/* End Google Tag Manager (noscript) */}
+
         {/* Google Tag Manager */}
-        <script
+        <Script
+          id="gtm-script"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
 (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-TBDBXQWX');
+})(window,document,'script','dataLayer','${gtmId}');
             `.trim()
           }}
         />
-        {/* End Google Tag Manager */}
-      </head>
-      <body className="bg-black text-white font-sans antialiased" style={{ backgroundColor: '#000000', transition: 'none' }} suppressHydrationWarning>
-        {/* Google Tag Manager (noscript) */}
-        <noscript
+
+        {/* Google Analytics 4 */}
+        <Script
+          id="ga-script"
+          strategy="afterInteractive"
+          src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+        />
+        <Script
+          id="ga-config"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
-            __html: '<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TBDBXQWX" height="0" width="0" style="display:none;visibility:hidden"></iframe>'
+            __html: `
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${gaId}', {
+  page_path: window.location.pathname,
+  send_page_view: true
+});
+            `.trim()
           }}
         />
-        {/* End Google Tag Manager (noscript) */}
 
         <BrowserCompatibilityDetector />
         <ErrorBoundary>
