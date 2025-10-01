@@ -217,7 +217,7 @@ export default function Hero() {
             >
               <StarBorder
                 onClick={navigateToPortfolio}
-                color="#ccff00"
+                color="#e534eb"
                 speed="4s"
                 className="font-mono font-semibold text-lg sm:text-xl md:text-xl lg:text-2xl px-3 py-1"
               >
