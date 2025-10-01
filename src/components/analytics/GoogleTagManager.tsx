@@ -1,70 +1,11 @@
 'use client'
 
-import { useEffect } from 'react'
-import Script from 'next/script'
-
-interface GoogleTagManagerProps {
-  gtmId: string
-}
-
+// Analytics utility functions and type definitions
 declare global {
   interface Window {
     dataLayer: any[]
     gtag: (...args: any[]) => void
   }
-}
-
-export default function GoogleTagManager({ gtmId }: GoogleTagManagerProps) {
-  useEffect(() => {
-    // Initialize dataLayer if it doesn't exist
-    if (typeof window !== 'undefined') {
-      window.dataLayer = window.dataLayer || []
-
-      // Push initial GTM configuration
-      window.dataLayer.push({
-        'gtm.start': new Date().getTime(),
-        event: 'gtm.js'
-      })
-
-      // Initialize gtag function
-      window.gtag = function() {
-        window.dataLayer.push(arguments)
-      }
-
-      // Set initial configuration
-      window.gtag('config', gtmId, {
-        page_title: document.title,
-        page_location: window.location.href,
-        send_page_view: true
-      })
-    }
-  }, [gtmId])
-
-  if (!gtmId) {
-    console.warn('Google Tag Manager ID is missing')
-    return null
-  }
-
-  return (
-    <>
-      {/* Google Tag Manager Script */}
-      <Script
-        id="gtm-script"
-        strategy="afterInteractive"
-        src={`https://www.googletagmanager.com/gtm.js?id=${gtmId}`}
-      />
-
-      {/* Google Tag Manager Noscript */}
-      <noscript>
-        <iframe
-          src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
-          height="0"
-          width="0"
-          style={{ display: 'none', visibility: 'hidden' }}
-        />
-      </noscript>
-    </>
-  )
 }
 
 // Analytics utility functions
@@ -81,7 +22,8 @@ export const trackEvent = (eventName: string, parameters?: Record<string, any>) 
 
 export const trackPageView = (url: string, title?: string) => {
   if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('config', process.env.NEXT_PUBLIC_GTM_ID, {
+    const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-GXG9QQLB7C'
+    window.gtag('config', gaId, {
       page_title: title || document.title,
       page_location: url,
       send_page_view: true
