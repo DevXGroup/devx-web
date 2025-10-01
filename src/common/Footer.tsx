@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Instagram, Linkedin, Youtube } from 'lucide-react'
+import { Github, Instagram, Linkedin, Youtube } from 'lucide-react'
 import Threads from '@animations/Threads'
 import FooterContactForm from '@/components/FooterContactForm'
 
@@ -76,6 +76,15 @@ export default function Footer() {
                   rel="noopener noreferrer"
                 >
                   <Linkedin className="w-5 h-5" />
+                </Link>
+                <Link
+                  href="https://github.com/DevXGroup"
+                  className="text-muted-foreground hover:text-[#4CD787] transition-colors p-2 hover:bg-white/5 rounded-md"
+                  aria-label="GitHub"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Github className="w-5 h-5" />
                 </Link>
                 <Link
                   href="#"
