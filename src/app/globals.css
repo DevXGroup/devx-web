@@ -39,8 +39,8 @@ html::before {
 
 [data-page='home'].loaded {
   opacity: 1 !important;
-  transition: opacity 1.9s ease-in;
   background-color: #000000 !important;
+  transition: opacity 0.8s ease-in;
 }
 
 /* Force black background on home route before hydration */

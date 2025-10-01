@@ -27,6 +27,10 @@ const DynamicShootingStars = dynamic(() => import('../hero/ShootingStars'), {
   ssr: false,
   loading: () => <div className="absolute inset-0 opacity-50" />,
 })
+const DynamicGridBackground3D = dynamic(() => import('../3d/GridBackground3D'), {
+  ssr: false,
+  loading: () => <div className="absolute inset-0" />,
+})
 
 const subheaders = ['Stunning UI/UX', 'Rapid MVP Launches', 'AI Automation']
 
@@ -136,32 +140,38 @@ export default function Hero() {
                 Elite software team shipping polished software at&nbsp;startup&nbsp;speed.
               </p>
               <div className="relative mx-auto w-full mt-10 flex justify-center">
-                <div className="relative flex flex-wrap items-center justify-center gap-3 sm:gap-4 px-6 py-3 rounded-full">
-                  <Link
-                    href="/services"
-                    className="uppercase tracking-[0.19em] text-base sm:text-lg md:text-lg lg:text-lg font-medium opacity-90 hover:opacity-100"
-                  >
-                    <ShinyText text="Elite Services" speed={3} delay={0.3} />
-                  </Link>
-                  <span className="hidden sm:inline text-gray-600 text-base md:text-lg lg:text-lg">
-                    •
-                  </span>
-                  <Link
-                    href="/portfolio"
-                    className="uppercase tracking-[0.19em] text-base sm:text-lg md:text-lg lg:text-lg font-medium opacity-90 hover:opacity-100"
-                  >
-                    <ShinyText text="Proven Record" speed={5} delay={0.6} />
-                  </Link>
+                <div className="relative flex flex-wrap items-center justify-center gap-3 sm:gap-4 px-8 py-6 rounded-2xl overflow-hidden bg-black/40 backdrop-blur-sm border border-white/10">
+                  {/* 3D Grid Background */}
+                  <DynamicGridBackground3D />
 
-                  <span className="hidden md:inline text-gray-600 text-base md:text-lg lg:text-lg">
-                    •
-                  </span>
-                  <Link
-                    href="/pricing"
-                    className="uppercase tracking-[0.19em] text-base sm:text-lg md:text-lg lg:text-lg font-medium opacity-90 hover:opacity-100"
-                  >
-                    <ShinyText text="Competitive Pricing" speed={7} delay={0.9} />
-                  </Link>
+                  {/* Content with z-index to appear above background */}
+                  <div className="relative z-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+                    <Link
+                      href="/services"
+                      className="uppercase tracking-[0.19em] text-base sm:text-lg md:text-lg lg:text-lg font-medium opacity-90 hover:opacity-100"
+                    >
+                      <ShinyText text="Elite Services" speed={3} delay={0.3} />
+                    </Link>
+                    <span className="hidden sm:inline text-gray-600 text-base md:text-lg lg:text-lg">
+                      •
+                    </span>
+                    <Link
+                      href="/portfolio"
+                      className="uppercase tracking-[0.19em] text-base sm:text-lg md:text-lg lg:text-lg font-medium opacity-90 hover:opacity-100"
+                    >
+                      <ShinyText text="Proven Record" speed={5} delay={0.6} />
+                    </Link>
+
+                    <span className="hidden md:inline text-gray-600 text-base md:text-lg lg:text-lg">
+                      •
+                    </span>
+                    <Link
+                      href="/pricing"
+                      className="uppercase tracking-[0.19em] text-base sm:text-lg md:text-lg lg:text-lg font-medium opacity-90 hover:opacity-100"
+                    >
+                      <ShinyText text="Competitive Pricing" speed={7} delay={0.9} />
+                    </Link>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -177,7 +187,7 @@ export default function Hero() {
               typingSpeed={shouldReduceMotion ? 40 : 80}
               deletingSpeed={shouldReduceMotion ? 25 : 50}
               pauseDuration={shouldReduceMotion ? 800 : 2000}
-              className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-4xl font-mono text-[#ccff00] typewriter-text tracking-[0.08em] text-center mx-auto"
+              className="text-2xl sm:text-3xl md:text-3xl lg:text-3xl xl:text-4xl font-mono text-[#ccff00] typewriter-text tracking-[0.08em] text-center mx-auto"
               showCursor={true}
               cursorCharacter="_"
               cursorClassName=""
@@ -187,7 +197,7 @@ export default function Hero() {
 
           <motion.div
             variants={itemVariants}
-            className="flex flex-row flex-wrap justify-center gap-4 sm:gap-5 relative z-[120] mt-6 sm:mt-7"
+            className="flex flex-row flex-wrap justify-center gap-4 sm:gap-5 relative z-[120] mt-6 sm:mt-7 mb-12 md:mb-16 lg:mb-20"
           >
             <motion.div
               variants={buttonVariants}
@@ -203,7 +213,7 @@ export default function Hero() {
                 rel="noopener noreferrer"
                 color="#ccff00"
                 speed="3s"
-                className="font-mono font-semibold text-lg sm:text-xl md:text-xl lg:text-2xl px-3 py-1"
+                className="font-mono font-semibold text-base sm:text-md md:text-md px-6 py-2 sm:px-8 sm:py-2"
               >
                 Book a Free Call
               </StarBorder>
@@ -219,7 +229,7 @@ export default function Hero() {
                 onClick={navigateToPortfolio}
                 color="#e534eb"
                 speed="4s"
-                className="font-mono font-semibold text-lg sm:text-xl md:text-xl lg:text-2xl px-3 py-1"
+                className="font-mono font-semibold text-base sm:text-md md:text-md px-6 py-2 sm:px-8 sm:py-2"
               >
                 See Our Work
               </StarBorder>

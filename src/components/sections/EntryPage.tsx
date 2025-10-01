@@ -53,8 +53,8 @@ interface DecryptedTextProps
 
 // Concentrated Letter Glitch Background Effect
 const LetterGlitch = ({
-  glitchColors = ['#00ff41', '#008f11', '#004d0a'],
-  glitchSpeed = 500,
+  glitchColors = ['#2b4539', '#61dca3', '#61b3dc'],
+  glitchSpeed = 63,
   centerVignette = true,
   outerVignette = false,
   smooth = true,
@@ -66,9 +66,9 @@ const LetterGlitch = ({
   const context = useRef<CanvasRenderingContext2D | null>(null)
   const lastGlitchTime = useRef<number>(Date.now())
 
-  const fontSize = 15
-  const charWidth = 10
-  const charHeight = 20
+  const fontSize = 22
+  const charWidth = 13
+  const charHeight = 23
 
   const lettersAndSymbols = [
     'A',
@@ -206,7 +206,9 @@ const LetterGlitch = ({
 
       // More conservative pixel ratio for Safari compatibility
       const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
-      const isSafari = typeof navigator !== 'undefined' && /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+      const isSafari =
+        typeof navigator !== 'undefined' &&
+        /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
       let dpr = 1
 
       if (typeof window !== 'undefined') {
@@ -348,7 +350,7 @@ const LetterGlitch = ({
           ctx = canvas.getContext('2d', {
             alpha: true,
             desynchronized: false,
-            colorSpace: 'srgb'
+            colorSpace: 'srgb',
           })
         } catch (ctxError) {
           console.warn('Context creation with options failed, trying basic:', ctxError)
@@ -359,7 +361,9 @@ const LetterGlitch = ({
 
         if (context.current) {
           // Safari-specific initialization delay
-          const isSafari = typeof navigator !== 'undefined' && /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+          const isSafari =
+            typeof navigator !== 'undefined' &&
+            /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
           const initDelay = isSafari ? 100 : 0
 
           setTimeout(() => {
@@ -370,13 +374,16 @@ const LetterGlitch = ({
           handleResize = () => {
             try {
               if (resizeTimeout) clearTimeout(resizeTimeout)
-              resizeTimeout = setTimeout(() => {
-                if (animationRef.current && typeof window !== 'undefined') {
-                  cancelAnimationFrame(animationRef.current)
-                }
-                resizeCanvas()
-                animate()
-              }, isSafari ? 300 : 200) // Longer debounce for Safari
+              resizeTimeout = setTimeout(
+                () => {
+                  if (animationRef.current && typeof window !== 'undefined') {
+                    cancelAnimationFrame(animationRef.current)
+                  }
+                  resizeCanvas()
+                  animate()
+                },
+                isSafari ? 300 : 200
+              ) // Longer debounce for Safari
             } catch (error) {
               console.warn('Resize handler error:', error)
             }
@@ -410,7 +417,10 @@ const LetterGlitch = ({
   }, [glitchSpeed, smooth])
 
   return (
-    <div className="absolute inset-0 w-full h-full bg-black overflow-hidden" suppressHydrationWarning>
+    <div
+      className="absolute inset-0 w-full h-full bg-black overflow-hidden"
+      suppressHydrationWarning
+    >
       <canvas ref={canvasRef} className="block w-full h-full" suppressHydrationWarning />
       {outerVignette && (
         <div className="absolute top-0 left-0 w-full h-full pointer-events-none bg-[radial-gradient(circle,_rgba(0,0,0,0)_60%,_rgba(0,0,0,1)_100%)]"></div>
@@ -654,19 +664,21 @@ function DecryptedText({
 
 // Enhanced star field component with more realistic distribution
 function StarField() {
-  const [stars, setStars] = useState<Array<{
-    id: number
-    x: number
-    y: number
-    size: number
-    opacity: number
-    duration: number
-    delay: number
-    twinkleIntensity: number
-    isFlashing: boolean
-    flashDuration: number
-    flashDelay: number
-  }>>([])
+  const [stars, setStars] = useState<
+    Array<{
+      id: number
+      x: number
+      y: number
+      size: number
+      opacity: number
+      duration: number
+      delay: number
+      twinkleIntensity: number
+      isFlashing: boolean
+      flashDuration: number
+      flashDelay: number
+    }>
+  >([])
 
   useEffect(() => {
     // Generate stars on client side only to prevent hydration mismatch
@@ -747,11 +759,11 @@ function AnimatedInfinity({ onComplete }: { onComplete: () => void }) {
   }, [])
 
   const handleDrawingComplete = () => {
-    setTimeout(() => setAnimationPhase('text'), 200)
+    setTimeout(() => setAnimationPhase('text'), 100)
   }
 
   const handleTextComplete = () => {
-    setTimeout(onComplete, 400)
+    setTimeout(onComplete, 200)
   }
 
   if (!mounted) return null
@@ -790,7 +802,7 @@ function AnimatedInfinity({ onComplete }: { onComplete: () => void }) {
               initial={{ pathLength: 0, opacity: 0 }}
               animate={{ pathLength: 1, opacity: 1 }}
               transition={{
-                duration: 1.5,
+                duration: 1.0,
                 ease: 'easeInOut',
                 onComplete: handleDrawingComplete,
               }}
@@ -815,9 +827,9 @@ function AnimatedInfinity({ onComplete }: { onComplete: () => void }) {
           >
             <DecryptedText
               text="DevX Group LLC"
-              speed={70}
+              speed={80}
               sequential={true}
-              revealDirection="start"
+              revealDirection="center"
               animateOn="view"
               onComplete={handleTextComplete}
             />
@@ -850,12 +862,8 @@ export default function EntryPage() {
     if (animationComplete && mounted) {
       // Start collapse animation immediately
       setIsCollapsing(true)
-      // Navigate right as shutter completes for seamless transition
-      setTimeout(() => {
-        router.push('/home')
-      }, 400) // Exactly when shutter finishes (400ms)
     }
-  }, [animationComplete, router, mounted])
+  }, [animationComplete, mounted])
 
   // Skip animation if user prefers reduced motion
   useEffect(() => {
@@ -872,7 +880,10 @@ export default function EntryPage() {
   // Show consistent loading state during hydration - no conditional rendering
   if (!mounted || !clientSide) {
     return (
-      <div className="fixed inset-0 bg-black flex items-center justify-center" suppressHydrationWarning>
+      <div
+        className="fixed inset-0 bg-black flex items-center justify-center"
+        suppressHydrationWarning
+      >
         <div className="text-white text-xl font-mono">Loading...</div>
       </div>
     )
@@ -880,7 +891,10 @@ export default function EntryPage() {
 
   if (reduceMotion) {
     return (
-      <div className="fixed inset-0 bg-black flex items-center justify-center" suppressHydrationWarning>
+      <div
+        className="fixed inset-0 bg-black flex items-center justify-center"
+        suppressHydrationWarning
+      >
         <div className="text-white text-xl font-mono">Loading...</div>
       </div>
     )
@@ -889,13 +903,7 @@ export default function EntryPage() {
   return (
     <div className="fixed inset-0 bg-black overflow-hidden" suppressHydrationWarning>
       <StarField />
-      <LetterGlitch
-        glitchColors={['#4CD787', '#FFD700', '#9d4edd', '#4834D4', '#00ff41', '#008f11']}
-        glitchSpeed={50}
-        centerVignette={true}
-        outerVignette={false}
-        smooth={true}
-      />
+      <LetterGlitch />
       <AnimatedInfinity onComplete={() => setAnimationComplete(true)} />
 
       {/* Shutter Collapse Animation - Top and Bottom bars */}
@@ -909,7 +917,13 @@ export default function EntryPage() {
         }}
         initial={{ height: 0 }}
         animate={{ height: isCollapsing ? '50vh' : 0 }}
-        transition={{ duration: 0.4, ease: 'easeInOut' }}
+        transition={{ duration: 0.2, ease: 'easeIn' }}
+        onAnimationComplete={() => {
+          if (isCollapsing) {
+            sessionStorage.setItem('fromEntry', 'true')
+            router.push('/home')
+          }
+        }}
       />
       <motion.div
         className="fixed bottom-0 left-0 right-0 z-[100] w-full"
@@ -921,7 +935,7 @@ export default function EntryPage() {
         }}
         initial={{ height: 0 }}
         animate={{ height: isCollapsing ? '50vh' : 0 }}
-        transition={{ duration: 0.4, ease: 'easeInOut' }}
+        transition={{ duration: 0.2, ease: 'easeIn' }}
       />
     </div>
   )

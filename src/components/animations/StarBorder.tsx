@@ -14,7 +14,7 @@ const StarBorder = <T extends React.ElementType = 'button'>({
   className = '',
   color = 'white',
   speed = '6s',
-  thickness = 2,
+  thickness = 1,
   children,
   ...rest
 }: StarBorderProps<T>) => {
@@ -22,7 +22,7 @@ const StarBorder = <T extends React.ElementType = 'button'>({
 
   return (
     <Component
-      className={`relative inline-block overflow-hidden rounded-[20px] cursor-pointer ${className}`}
+      className={`relative inline-block overflow-hidden rounded-[20px] cursor-pointer`}
       {...(rest as any)}
       style={{
         padding: `${thickness}px 0`,
@@ -31,21 +31,23 @@ const StarBorder = <T extends React.ElementType = 'button'>({
       }}
     >
       <div
-        className="absolute w-[300%] h-[50%] opacity-70 bottom-[-11px] right-[-250%] rounded-full animate-star-movement-bottom z-99999999"
+        className="absolute w-[300%] h-[50%] opacity-70 bottom-[-11px] right-[-250%] rounded-full animate-star-movement-bottom z-[1]"
         style={{
           background: `radial-gradient(circle, ${color}, transparent 10%)`,
           animationDuration: speed,
         }}
       ></div>
       <div
-        className="absolute w-[300%] h-[50%] opacity-70 top-[-10px] left-[-250%] rounded-full animate-star-movement-top z-0"
+        className="absolute w-[300%] h-[50%] opacity-70 top-[-10px] left-[-250%] rounded-full animate-star-movement-top z-[1]"
         style={{
           background: `radial-gradient(circle, ${color}, transparent 10%)`,
           animationDuration: speed,
         }}
       ></div>
-      <div className="relative z-1 bg-gradient-to-b from-black to-gray-900 border border-gray-800 text-white hover:text-[#ccff00] hover:shadow-[0_0_20px_rgba(204,255,0,0.8)] text-center text-[14px] py-[4px] px-[26px] rounded-[20px] hover:border-robinhood transition-all duration-300">
-        <span className="relative z-10 hover:drop-shadow-[0_0_8px_rgba(204,255,0,1)]">
+      <div
+        className={`relative z-[10] bg-gradient-to-b from-black to-gray-900 border border-gray-800 text-white hover:text-[#ccff00] hover:shadow-[0_0_20px_rgba(204,255,0,0.8)] text-center rounded-[20px] hover:border-robinhood transition-all duration-300 ${className}`}
+      >
+        <span className="relative z-[20] hover:drop-shadow-[0_0_8px_rgba(204,255,0,1)]">
           {children}
         </span>
       </div>

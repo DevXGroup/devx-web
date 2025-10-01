@@ -324,11 +324,7 @@ function ServiceIcon({
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1, type: 'spring', damping: 20 }}
-      whileHover={
-        shouldReduceMotion
-          ? {}
-          : { scale: 1.15, y: -8 }
-      }
+      whileHover={shouldReduceMotion ? {} : { scale: 1.15, y: -8 }}
       whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
     >
       <motion.div
@@ -658,12 +654,14 @@ export default function PortfolioPage() {
                 variants={fadeInUpVariants}
                 className="text-lg md:text-xl text-foreground/90 font-light max-w-2xl mb-8 leading-relaxed"
               >
-                Selected work across web, mobile, AI, and cloud. Real products, real outcomes.
+                Selected work across web, mobile, AI, and cloud.
+                <br />
+                Real products, real outcomes.
               </motion.p>
 
               {/* Decorative squares row under subtitle */}
-              <div className="relative mt-8 mb-6 h-[160px] sm:h-[180px] md:h-[200px] w-full">
-                <div className="relative w-full max-w-4xl mx-auto flex items-center justify-center h-[10px]">
+              <div className="relative mt-12 mb-8 h-[280px] sm:h-[300px] md:h-[320px] w-full">
+                <div className="relative w-full max-w-4xl mx-auto flex items-center justify-center h-full">
                   <AsciiEffect3D
                     key={`hero-ascii-ball-${pathname}`}
                     height={480}
@@ -671,7 +669,7 @@ export default function PortfolioPage() {
                     color="#A382C3"
                     charSize={6}
                     opacity={0.5}
-                    showBase={false}
+                    showBase={true}
                     sphereRadius={240}
                     lighting="bottomLeft" // key at top-right, shadow bottom-left
                     lightScale={1} // slightly dimmer
@@ -700,10 +698,10 @@ export default function PortfolioPage() {
                 >
                   <div className="w-full h-full">
                     <LetterGlitch
-                      glitchColors={['#4CD787', '#61dca3', '#2b4539']}
-                      glitchSpeed={100}
-                      centerVignette={false}
-                      outerVignette={false}
+                      glitchColors={['#2b4539', '#61dca3', '#61b3dc']}
+                      glitchSpeed={33}
+                      centerVignette={true}
+                      outerVignette={true}
                       smooth={true}
                     />
                   </div>
@@ -812,7 +810,7 @@ export default function PortfolioPage() {
       </section>
 
       {/* Projects */}
-      <section className="py-24 relative">
+      <section className="pt-[5px] pb-24 relative">
         <div className="container mx-auto px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-8 max-w-8xl">
           <motion.div
             className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-8 md:gap-10 lg:gap-12 xl:gap-14 2xl:gap-16 relative z-10"

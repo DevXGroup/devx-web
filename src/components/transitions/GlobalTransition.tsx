@@ -9,38 +9,29 @@ export default function GlobalTransition() {
   const pathname = usePathname()
   const reduceMotion = useReducedMotion()
   const [isTransitioning, setIsTransitioning] = useState(false)
-  const [previousPath, setPreviousPath] = useState<string | null>(null)
-  const [hasShownEntryTransition, setHasShownEntryTransition] = useState(false)
+  const [hasShownTransition, setHasShownTransition] = useState(false)
 
   useEffect(() => {
-    // Only show transition when navigating TO /home FROM root entry page (/) 
-    // and only if we haven't shown the entry transition yet
-    if (pathname === '/home' && previousPath === '/' && !hasShownEntryTransition) {
+    // Show transition only once when first arriving at /home
+    if (pathname === '/home' && !hasShownTransition) {
       setIsTransitioning(true)
-      setHasShownEntryTransition(true)
+      setHasShownTransition(true)
 
-      // Simple navbar hiding during transition
+      // Hide navbar during transition
       document.body.classList.add('navbar-hidden')
 
-      // Remove the overlay after animation completes
+      // End transition after animation
       const timer = setTimeout(() => {
         setIsTransitioning(false)
         document.body.classList.remove('navbar-hidden')
-      }, 3000)
+      }, 500)
 
       return () => {
         clearTimeout(timer)
         document.body.classList.remove('navbar-hidden')
       }
-    } else {
-      setIsTransitioning(false)
-      document.body.classList.remove('navbar-hidden')
     }
-
-    // Update previous path for next navigation
-    setPreviousPath(pathname)
-    return undefined
-  }, [pathname, previousPath, hasShownEntryTransition])
+  }, [pathname, hasShownTransition])
 
   if (reduceMotion) {
     return null
@@ -50,33 +41,26 @@ export default function GlobalTransition() {
     <AnimatePresence>
       {isTransitioning && (
         <motion.div
-          className="fixed inset-0 pointer-events-none flex items-start justify-center"
-          style={{ zIndex: 999999 }}
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 1 }}
-          transition={{ duration: 3.0 }}
+          className="fixed inset-0 pointer-events-none flex items-start justify-center overflow-hidden"
+          style={{ zIndex: 9999999 }}
         >
-          {/* Visible circular slide down from top */}
+          {/* Black circle that slides down to reveal page */}
           <motion.div
             className="rounded-full bg-black"
             style={{
-              boxShadow: '0 0 50px rgba(0,0,0,0.8)',
-              zIndex: 999999,
+              width: '300vmax',
+              height: '300vmax',
             }}
             initial={{
-              width: '150vw',
-              height: '150vw',
-              y: '-75vw',
+              y: '-150vmax',
             }}
             animate={{
-              y: '150vh',
+              y: '150vmax',
             }}
             transition={{
-              duration: 4.3,
-              delay: 0,
-              ease: [0.25, 0.46, 0.45, 0.94],
+              duration: 3.5,
+              ease: [2.43, 3.13, 1.23, 0.16],
             }}
-            onAnimationComplete={() => setIsTransitioning(false)}
           />
         </motion.div>
       )}

@@ -362,7 +362,7 @@ export default function Navbar() {
             <motion.button
               ref={hamburgerButtonRef}
               onClick={() => setIsOpen(!isOpen)}
-              className="relative p-3 group"
+              className="relative p-3 group cursor-pointer"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               aria-label="Toggle menu"
