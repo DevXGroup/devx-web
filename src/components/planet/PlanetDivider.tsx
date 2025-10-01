@@ -82,15 +82,16 @@ export default function PlanetDivider() {
     const isMobile = width < 768
     const isTablet = width >= 768 && width < 1024
     const isDesktop = width >= 1024
-    
+
     let planetSize, planetMargin, containerWidth, containerHeight
-    
+
     if (isMobile) {
-      // Mobile: Use screen width percentage for better centering, larger max size
-      planetSize = Math.min(width * 1.1, 450) // 110% of screen width, max 450px
+      // Mobile: Optimized for iPhone and mobile devices
+      // Reduce complexity for better performance
+      planetSize = Math.min(width * 0.95, 380) // 95% of screen width, max 380px
       planetMargin = -planetSize / 2 // Perfect centering
       containerWidth = width
-      containerHeight = Math.min(width * 0.6, 280)
+      containerHeight = Math.min(width * 0.55, 250) // Slightly reduced height
     } else if (isTablet) {
       planetSize = 600 // Increased from 400
       planetMargin = -300 // Adjusted for new size
@@ -102,14 +103,14 @@ export default function PlanetDivider() {
       containerWidth = 900
       containerHeight = 450
     }
-    
+
     return {
-      glowRadius: getResponsiveValue(80, 100, 120), // Increased proportionally
-      glowRadius2: getResponsiveValue(160, 200, 240), // Increased proportionally
-      shadowSize: getResponsiveValue(20, 25, 30), // Increased proportionally
-      blurAmount: getResponsiveValue(2, 2.5, 3), // Increased proportionally
-      planetShadow: getResponsiveValue(60, 75, 90), // Increased proportionally
-      planetGlow: getResponsiveValue(200, 250, 300), // Increased proportionally
+      glowRadius: getResponsiveValue(50, 100, 120), // Reduced for mobile
+      glowRadius2: getResponsiveValue(100, 200, 240), // Reduced for mobile
+      shadowSize: getResponsiveValue(15, 25, 30), // Reduced for mobile
+      blurAmount: getResponsiveValue(1.5, 2.5, 3), // Reduced for mobile
+      planetShadow: getResponsiveValue(40, 75, 90), // Reduced for mobile
+      planetGlow: getResponsiveValue(120, 250, 300), // Reduced for mobile
       // Pixel-based sizing for better control
       planetMaxWidth: planetSize,
       planetMarginLeft: planetMargin,
@@ -341,11 +342,31 @@ export default function PlanetDivider() {
           }
         }
 
-        /* Mobile Safari optimizations */
+        /* Mobile Safari optimizations - iPhone specific */
+        @media screen and (max-width: 767px) {
+          .planet-glow-effect {
+            /* Simplified filter for better mobile performance */
+            filter: drop-shadow(0 0 25px rgba(76, 215, 135, 0.25)) drop-shadow(0 0 50px rgba(76, 215, 135, 0.15));
+            -webkit-filter: drop-shadow(0 0 25px rgba(76, 215, 135, 0.25)) drop-shadow(0 0 50px rgba(76, 215, 135, 0.15));
+            /* Hardware acceleration */
+            -webkit-transform: translateZ(0) scale3d(1, 1, 1);
+            transform: translateZ(0) scale3d(1, 1, 1);
+            /* Optimize for touch devices */
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            -webkit-perspective: 1000px;
+            perspective: 1000px;
+            /* Reduce complexity */
+            will-change: transform;
+          }
+        }
+
+        /* iOS-specific optimizations */
         @supports (-webkit-overflow-scrolling: touch) {
           .planet-glow-effect {
-            filter: drop-shadow(0 0 30px rgba(76, 215, 135, 0.28)) drop-shadow(0 0 60px rgba(76, 215, 135, 0.18));
-            -webkit-filter: drop-shadow(0 0 30px rgba(76, 215, 135, 0.28)) drop-shadow(0 0 60px rgba(76, 215, 135, 0.18));
+            /* Further reduce complexity on iOS devices */
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
           }
         }
       `}</style>
