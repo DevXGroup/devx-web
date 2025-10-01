@@ -10,6 +10,7 @@ import {
   Linkedin,
   Instagram,
   Youtube,
+  Github,
   ArrowRight,
   CheckCircle,
   Calendar,
@@ -504,16 +505,28 @@ export default function ContactPage() {
                   <h3 className="font-semibold text-foreground mb-4">Connect With Us</h3>
                   <div className="flex space-x-4">
                     <a
-                      href="#"
+                      href="https://www.youtube.com/channel/UC6Zqx3Bhwbberq_MEmlgpIw"
                       className="w-10 h-10 rounded-full bg-white/5 hover:bg-[#4CD787]/20 flex items-center justify-center transition-colors duration-300"
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       <Youtube className="w-5 h-5 text-[#4CD787]" />
                     </a>
                     <a
-                      href="#"
+                      href="https://www.linkedin.com/company/devx-group-llc/"
                       className="w-10 h-10 rounded-full bg-white/5 hover:bg-[#4CD787]/20 flex items-center justify-center transition-colors duration-300"
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       <Linkedin className="w-5 h-5 text-[#4CD787]" />
+                    </a>
+                    <a
+                      href="https://github.com/DevXGroup"
+                      className="w-10 h-10 rounded-full bg-white/5 hover:bg-[#4CD787]/20 flex items-center justify-center transition-colors duration-300"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Github className="w-5 h-5 text-[#4CD787]" />
                     </a>
                     <a
                       href="#"
