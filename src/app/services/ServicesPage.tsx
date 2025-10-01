@@ -301,26 +301,30 @@ export default function ServicesPage() {
             >
               <div className="flex items-center justify-center w-full">
                 <div
+                  className="flex items-center justify-center"
                   style={{
                     position: 'relative',
                     height: '100px',
-                    width: '320px',
+                    width: '100%',
+                    maxWidth: '320px',
                     padding: '0',
-                    marginRight: '0px',
+                    margin: '0 auto',
                   }}
                 >
-                  <TextPressure
-                    text="Services  "
-                    flex={true}
-                    alpha={false}
-                    stroke={false}
-                    width={true}
-                    weight={true}
-                    italic={false}
-                    textColor="#FFD700"
-                    strokeColor="#FFFFFF"
-                    minFontSize={59}
-                  />
+                  <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                    <TextPressure
+                      text="Services  "
+                      flex={true}
+                      alpha={false}
+                      stroke={false}
+                      width={true}
+                      weight={true}
+                      italic={false}
+                      textColor="#FFD700"
+                      strokeColor="#FFFFFF"
+                      minFontSize={59}
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -380,17 +384,17 @@ export default function ServicesPage() {
                   onMouseEnter={() => {}} // Required for hover effects
                   onMouseLeave={() => {}} // Required for hover effects
                 >
-                  <h3 className="text-xl font-semibold text-[#FFD700] mb-2 transition-colors duration-300 relative z-10">
+                  <h3 className="text-xl md:text-2xl font-semibold text-[#FFD700] mb-2 transition-colors duration-300 relative z-10">
                     {prop.title}
                   </h3>
                   <p
-                    className="text-white/90 text-sm transition-colors duration-300 font-['IBM_Plex_Sans'] font-medium relative z-10 mb-3"
+                    className="text-white/90 text-base md:text-lg transition-colors duration-300 font-['IBM_Plex_Sans'] font-medium relative z-10 mb-3"
                     style={{ textShadow: '0 1px 4px rgba(0,0,0,0.7)', letterSpacing: '0.025em' }}
                   >
                     {prop.description}
                   </p>
                   {prop.proofPoint && (
-                    <p className="text-[#4CD787] text-xs font-semibold transition-colors duration-300 relative z-10">
+                    <p className="text-[#4CD787] text-sm md:text-base font-semibold transition-colors duration-300 relative z-10">
                       ✓ {prop.proofPoint}
                     </p>
                   )}

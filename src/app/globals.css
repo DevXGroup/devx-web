@@ -450,7 +450,7 @@ html.is-firefox .navbar-blur {
 
 @media (min-width: 944px) and (max-width: 1023px) {
   .hero-title {
-    font-size: 3.6rem !important; /* Tablet size */
+    font-size: 3.2rem !important; /* Tablet size - reduced to prevent wrapping */
     line-height: 1.1;
   }
 }

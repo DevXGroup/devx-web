@@ -27,10 +27,6 @@ const DynamicShootingStars = dynamic(() => import('../hero/ShootingStars'), {
   ssr: false,
   loading: () => <div className="absolute inset-0 opacity-50" />,
 })
-const DynamicGridBackground3D = dynamic(() => import('../3d/GridBackground3D'), {
-  ssr: false,
-  loading: () => <div className="absolute inset-0" />,
-})
 
 const subheaders = ['Stunning UI/UX', 'Rapid MVP Launches', 'AI Automation']
 
@@ -105,12 +101,12 @@ export default function Hero() {
         initial="hidden"
         animate={controls}
       >
-        <div className="text-center mx-auto w-full px-[50px] space-y-7 sm:space-y-9 pt-6 sm:pt-10 flex flex-col items-center justify-center">
+        <div className="text-center mx-auto w-full px-6 sm:px-[50px] space-y-7 sm:space-y-9 pt-6 sm:pt-10 flex flex-col items-center justify-center">
           {/* Hero content wrapper - this div prevents movement on button hover */}
           <div className="space-y-5 sm:space-y-7">
             <motion.h1
               variants={itemVariants}
-              className="hero-title mx-auto flex flex-nowrap items-center justify-center gap-2 sm:gap-3 md:gap-4 text-center text-white font-mono font-bold tracking-tight w-full whitespace-nowrap"
+              className="hero-title mx-auto flex flex-wrap md:flex-nowrap items-center justify-center gap-2 sm:gap-3 md:gap-4 text-center text-white font-mono font-bold tracking-tight w-full"
             >
               <span
                 className="inline-block"
@@ -140,9 +136,11 @@ export default function Hero() {
                 Elite software team shipping polished software at&nbsp;startup&nbsp;speed.
               </p>
               <div className="relative mx-auto w-full mt-10 flex justify-center">
-                <div className="relative flex flex-wrap items-center justify-center gap-3 sm:gap-4 px-8 py-6 rounded-2xl overflow-hidden bg-black/40 backdrop-blur-sm border border-white/10">
-                  {/* 3D Grid Background */}
-                  <DynamicGridBackground3D />
+                <div className="relative flex flex-wrap items-center justify-center gap-3 sm:gap-4 px-8 py-6 rounded-2xl overflow-hidden bg-gradient-to-r from-black/50 via-black/40 to-black/50 backdrop-blur-sm border border-white/10">
+                  {/* Subtle animated gradient background */}
+                  <div className="absolute inset-0 opacity-30">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#4CD787]/5 via-transparent to-[#ccff00]/5 animate-pulse" style={{ animationDuration: '4s' }} />
+                  </div>
 
                   {/* Content with z-index to appear above background */}
                   <div className="relative z-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
@@ -179,7 +177,7 @@ export default function Hero() {
 
           <motion.div
             variants={itemVariants}
-            className="min-h-[3rem] sm:min-h-[3.5rem] md:min-h-[4rem] mt-3 sm:mt-4 md:mt-5 flex justify-center items-center w-full"
+            className="min-h-[4rem] sm:min-h-[4.5rem] md:min-h-[4rem] mt-3 sm:mt-4 md:mt-5 flex justify-center items-center w-full"
           >
             <TextType
               text={subheaders}
@@ -187,7 +185,7 @@ export default function Hero() {
               typingSpeed={shouldReduceMotion ? 40 : 80}
               deletingSpeed={shouldReduceMotion ? 25 : 50}
               pauseDuration={shouldReduceMotion ? 800 : 2000}
-              className="text-2xl sm:text-3xl md:text-3xl lg:text-3xl xl:text-4xl font-mono text-[#ccff00] typewriter-text tracking-[0.08em] text-center mx-auto"
+              className="text-[3.25rem] xs:text-[3.5rem] sm:text-[2.5rem] md:text-4xl lg:text-5xl xl:text-5xl font-mono text-[#ccff00] typewriter-text tracking-[0.08em] text-center mx-auto leading-tight"
               showCursor={true}
               cursorCharacter="_"
               cursorClassName=""
