@@ -146,7 +146,10 @@ export default function Hero() {
                 <div className="relative flex flex-wrap items-center justify-center gap-3 sm:gap-4 px-8 py-6 rounded-2xl overflow-hidden bg-gradient-to-r from-black/50 via-black/40 to-black/50 backdrop-blur-sm border border-white/10">
                   {/* Subtle animated gradient background */}
                   <div className="absolute inset-0 opacity-30">
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#4CD787]/5 via-transparent to-[#ccff00]/5 animate-pulse" style={{ animationDuration: '4s' }} />
+                    <div
+                      className="absolute inset-0 bg-gradient-to-br from-[#4CD787]/5 via-transparent to-[#ccff00]/5 animate-pulse"
+                      style={{ animationDuration: '4s' }}
+                    />
                   </div>
 
                   {/* Content with z-index to appear above background */}
@@ -192,7 +195,7 @@ export default function Hero() {
               typingSpeed={shouldReduceMotion ? 40 : 80}
               deletingSpeed={shouldReduceMotion ? 25 : 50}
               pauseDuration={shouldReduceMotion ? 800 : 2000}
-              className="text-[3.25rem] xs:text-[3.5rem] sm:text-[2.5rem] md:text-4xl lg:text-5xl xl:text-5xl font-mono text-[#ccff00] typewriter-text tracking-[0.08em] text-center mx-auto leading-tight"
+              className="font-mono typewriter-text tracking-[0.08em] text-center mx-auto leading-tight"
               showCursor={true}
               cursorCharacter="_"
               cursorClassName=""
