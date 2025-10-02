@@ -4,11 +4,45 @@
 html {
   background-color: #000000 !important;
   overflow-x: hidden;
+  /* Mobile font size baseline - 16px minimum for readability */
+  font-size: 16px;
 }
 body {
   background-color: #000000 !important;
   color: #ffffff !important;
   overflow-x: hidden;
+  /* Improve text rendering on mobile */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 650px) {
+  /* Ensure sufficient spacing on mobile */
+  section {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* Optimize tap targets for mobile */
+  button,
+  a,
+  [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* Performance: content-visibility for off-screen sections */

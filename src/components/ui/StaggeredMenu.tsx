@@ -206,7 +206,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
         { xPercent: 100 },
         {
           xPercent: 0,
-          duration: 0.4,
+          duration: 0.28,
           ease: 'power3.out',
           force3D: true,
         },
@@ -216,7 +216,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
 
     const lastTime = layerStates.length ? (layerStates.length - 1) * 0.05 : 0
     const panelInsertTime = lastTime + (layerStates.length ? 0.1 : 0)
-    const panelDuration = 0.9
+    const panelDuration = 0.6
 
     tl.fromTo(
       panel,
@@ -234,7 +234,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
         {
           yPercent: 0,
           rotate: 0,
-          duration: 0.5,
+          duration: 0.35,
           ease: 'power2.out',
           stagger: { each: 0.1, from: 'start' },
         },
@@ -245,7 +245,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
         tl.to(
           numberEls,
           {
-            duration: 0.6,
+            duration: 0.4,
             ease: 'power2.out',
             ['--sm-num-opacity' as any]: 1,
             stagger: { each: 0.1, from: 'start' },
@@ -259,14 +259,14 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
       const socialsStart = panelInsertTime + panelDuration * 0.4
 
       if (socialTitle)
-        tl.to(socialTitle, { opacity: 1, duration: 0.5, ease: 'power2.out' }, socialsStart)
+        tl.to(socialTitle, { opacity: 1, duration: 0.35, ease: 'power2.out' }, socialsStart)
       if (socialLinks.length) {
         tl.to(
           socialLinks,
           {
             y: 0,
             opacity: 1,
-            duration: 0.6,
+            duration: 0.4,
             ease: 'power2.out',
             stagger: { each: 0.1, from: 'start' },
             onComplete: () => {
@@ -315,7 +315,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
 
     if (isFirstOpen) {
       // On first open, ensure DOM is fully ready and layers are initialized
-      setTimeout(executeAnimation, 100)
+      setTimeout(executeAnimation, 40)
     } else {
       // Subsequent opens can be immediate
       executeAnimation()

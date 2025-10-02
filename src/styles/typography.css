@@ -1,11 +1,11 @@
 /* DevX Global Typography System */
 
-/* Main Headings - Hero titles */
+/* Main Headings - Hero titles - Mobile optimized with minimum 16px base */
 .heading-hero {
-  @apply text-5xl md:text-6xl lg:text-8xl font-bold;
+  @apply text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold;
   font-family: var(--font-ibm-plex-mono), ui-monospace, "SF Mono", monospace;
   font-weight: 700;
-  line-height: 1.1;
+  line-height: 1.2;
   letter-spacing: 0.02em;
   text-shadow: 0 4px 12px rgba(0,0,0,0.9), 0 2px 6px rgba(0,0,0,0.7);
   -webkit-text-stroke: 0.5px rgba(255,255,255,0.1);
@@ -52,9 +52,10 @@
   text-shadow: 0 3px 12px rgba(0,0,0,0.95), 0 2px 6px rgba(0,0,0,0.85);
 }
 
-/* Body Text - Regular */
+/* Body Text - Regular - Minimum 16px for mobile readability */
 .text-body {
-  @apply text-base md:text-lg font-normal;
+  font-size: 16px;
+  @apply md:text-lg font-normal;
   font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
   font-weight: 400;
   line-height: 1.6;
