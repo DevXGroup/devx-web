@@ -160,13 +160,17 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-[14px]">
-          <Link href="/home">
+          <Link href="/home" aria-label="DevX Group LLC">
             <Image
               src="/images/logos/devx-logo.png"
-              alt="DevX Logo"
+              alt="DevX Group LLC"
               width={200}
-              height={36}
+              height={40}
               priority
+              fetchPriority="high"
+              quality={70}
+              sizes="(max-width: 640px) 160px, 200px"
+              style={{ height: 'auto', width: 'auto', maxWidth: 200 }}
             />
           </Link>
           {/* Desktop Menu - right aligned */}

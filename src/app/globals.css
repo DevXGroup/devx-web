@@ -11,6 +11,12 @@ body {
   overflow-x: hidden;
 }
 
+/* Performance: content-visibility for off-screen sections */
+.defer-section {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 500px;
+}
+
 /* Prevent white flash during navigation */
 #__next,
 main,

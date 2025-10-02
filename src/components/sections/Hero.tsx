@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, useState } from 'react'
 import { motion, useReducedMotion, useAnimation } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -10,22 +10,18 @@ import StarBorder from '@animations/StarBorder'
 import TextType from '@animations/TextType'
 import ShinyText from '@/components/ui/ShinyText'
 
-// Dynamically import components that use browser APIs with better loading states
+// Dynamically import heavy components with loading={null} for faster LCP
 const DynamicHeroBackground = dynamic(() => import('../hero/HeroBackground'), {
   ssr: false,
-  loading: () => (
-    <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 to-purple-900/20" />
-  ),
+  loading: () => null,
 })
 const DynamicPlanetDivider = dynamic(() => import('../planet/PlanetDivider'), {
   ssr: false,
-  loading: () => (
-    <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/50 to-transparent" />
-  ),
+  loading: () => null,
 })
 const DynamicShootingStars = dynamic(() => import('../hero/ShootingStars'), {
   ssr: false,
-  loading: () => <div className="absolute inset-0 opacity-50" />,
+  loading: () => null,
 })
 
 const subheaders = [
@@ -38,25 +34,25 @@ const subheaders = [
   'AI Automation',
 ]
 
-// Enhanced animation variants for better performance
+// Optimized animation variants for better performance and LCP
 const containerVariants = {
-  hidden: { opacity: 0 },
+  hidden: { opacity: 1 },  // Changed from 0 to 1 for immediate visibility (better LCP)
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2,
-      delayChildren: 0.1,
+      staggerChildren: 0.08,  // Reduced from 0.12
+      delayChildren: 0,       // No delay for faster LCP
     },
   },
 }
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 1, y: 0 },  // Changed to 1, 0 for immediate visibility (better LCP)
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.6,
+      duration: 0.3,  // Reduced from 0.4
     },
   },
 }
@@ -65,7 +61,7 @@ const buttonVariants = {
   rest: { scale: 1 },
   hover: {
     scale: 1.02,
-    transition: { duration: 0.3 },
+    transition: { duration: 0.2 },  // Reduced from 0.3
   },
   tap: { scale: 0.98 },
 }
@@ -74,6 +70,8 @@ export default function Hero() {
   const router = useRouter()
   const shouldReduceMotion = useReducedMotion()
   const controls = useAnimation()
+  const [enableBackground, setEnableBackground] = useState(false)
+  const [enableShootingStars, setEnableShootingStars] = useState(false)
 
   // Function to navigate to the portfolio page
   const navigateToPortfolio = useCallback(() => {
@@ -84,6 +82,50 @@ export default function Hero() {
   useEffect(() => {
     controls.start('visible')
   }, [controls])
+
+  useEffect(() => {
+    let idleHandle: number | null = null
+    let timeoutHandle: ReturnType<typeof setTimeout> | null = null
+    let shootingTimeout: ReturnType<typeof setTimeout> | null = null
+
+    const activateBackground = () => {
+      setEnableBackground(true)
+      // Defer shooting stars more to prioritize LCP
+      if (shootingTimeout) {
+        clearTimeout(shootingTimeout)
+      }
+      shootingTimeout = setTimeout(() => setEnableShootingStars(true), 300)
+    }
+
+    if (typeof window !== 'undefined') {
+      const requestIdle = window.requestIdleCallback?.bind(window)
+
+      if (requestIdle) {
+        idleHandle = requestIdle(
+          () => {
+            activateBackground()
+          },
+          { timeout: 1500 } // Increased timeout for better LCP
+        )
+      }
+    }
+
+    if (idleHandle === null) {
+      timeoutHandle = setTimeout(activateBackground, 400) // Increased from 180ms
+    }
+
+    return () => {
+      if (idleHandle !== null && typeof window !== 'undefined') {
+        window.cancelIdleCallback?.(idleHandle)
+      }
+      if (timeoutHandle) {
+        clearTimeout(timeoutHandle)
+      }
+      if (shootingTimeout) {
+        clearTimeout(shootingTimeout)
+      }
+    }
+  }, [])
 
   return (
     <section className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-black">
@@ -99,14 +141,16 @@ export default function Hero() {
 
       {/* 3D Background - Only rendered on client */}
       <ClientOnly>
-        <div className="absolute inset-0 w-full h-full">
-          <DynamicHeroBackground />
-        </div>
+        {enableBackground && (
+          <div className="absolute inset-0 w-full h-full">
+            <DynamicHeroBackground />
+          </div>
+        )}
       </ClientOnly>
 
       {/* Shooting Stars - Only rendered on client */}
       <ClientOnly>
-        <DynamicShootingStars />
+        {enableShootingStars && <DynamicShootingStars />}
       </ClientOnly>
 
       {/* Content */}
@@ -115,6 +159,7 @@ export default function Hero() {
         variants={containerVariants}
         initial="hidden"
         animate={controls}
+        style={{ willChange: 'opacity' }}
       >
         <div className="text-center mx-auto w-full px-6 sm:px-[50px] space-y-7 sm:space-y-9 pt-6 sm:pt-10 flex flex-col items-center justify-center">
           {/* Hero content wrapper - this div prevents movement on button hover */}
@@ -122,6 +167,10 @@ export default function Hero() {
             <motion.h1
               variants={itemVariants}
               className="hero-title mx-auto flex flex-wrap md:flex-nowrap items-center justify-center gap-2 sm:gap-3 md:gap-4 text-center text-white font-mono font-bold tracking-tight w-full"
+              style={{
+                willChange: 'opacity, transform',
+                minHeight: '5rem',  // Reserve space to prevent CLS
+              }}
             >
               <span
                 className="inline-block"
@@ -146,7 +195,11 @@ export default function Hero() {
               </span>
             </motion.h1>
 
-            <motion.div variants={itemVariants} className="text-center w-full mx-auto space-y-5">
+            <motion.div
+              variants={itemVariants}
+              className="text-center w-full mx-auto space-y-5"
+              style={{ willChange: 'opacity, transform' }}
+            >
               <p className="text-xl sm:text-2xl md:text-2xl lg:text-2xl xl:text-2xl text-white font-sans font-light leading-relaxed text-center mx-auto max-w-4xl">
                 Elite software team shipping polished software at&nbsp;startup&nbsp;speed.
               </p>
@@ -195,7 +248,8 @@ export default function Hero() {
 
           <motion.div
             variants={itemVariants}
-            className="min-h-[4rem] sm:min-h-[4.5rem] md:min-h-[4rem] mt-3 sm:mt-4 md:mt-5 flex justify-center items-center w-full"
+            className="h-[4rem] sm:h-[4.5rem] md:h-[4rem] mt-3 sm:mt-4 md:mt-5 flex justify-center items-center w-full"
+            style={{ minHeight: '4rem' }}
           >
             <TextType
               text={subheaders}
