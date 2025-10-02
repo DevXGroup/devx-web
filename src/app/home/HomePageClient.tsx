@@ -1,15 +1,30 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import dynamic from 'next/dynamic'
 import Hero from '@sections/Hero'
-import Features from '@sections/Features'
-import Process from '@sections/Process'
-import DevelopmentTools from '@sections/DevelopmentTools'
+
+// Optimize dynamic imports with loading={null} for better performance
+const FeaturesSection = dynamic(() => import('@sections/Features'), {
+  ssr: false,
+  loading: () => null,
+})
+
+const ProcessSection = dynamic(() => import('@sections/Process'), {
+  ssr: false,
+  loading: () => null,
+})
+
+const DevelopmentToolsSection = dynamic(() => import('@sections/DevelopmentTools'), {
+  ssr: false,
+  loading: () => null,
+})
 
 export default function HomePageClient() {
   const [isLoaded, setIsLoaded] = useState(false)
   const [navbarReady, setNavbarReady] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [showDeferredSections, setShowDeferredSections] = useState(false)
 
   useEffect(() => {
     setMounted(true)
@@ -46,6 +61,45 @@ export default function HomePageClient() {
     }
   }, [])
 
+  useEffect(() => {
+    if (!mounted || showDeferredSections) {
+      return
+    }
+
+    let idleHandle: number | null = null
+    let timeoutHandle: ReturnType<typeof setTimeout> | null = null
+
+    const enableDeferredSections = () => {
+      setShowDeferredSections(true)
+    }
+
+    if (typeof window !== 'undefined') {
+      const requestIdle = window.requestIdleCallback?.bind(window)
+
+      if (requestIdle) {
+        idleHandle = requestIdle(
+          () => {
+            enableDeferredSections()
+          },
+          { timeout: 2000 } // Increased from 1200ms for better LCP priority
+        )
+      }
+    }
+
+    if (idleHandle === null) {
+      timeoutHandle = setTimeout(enableDeferredSections, 600) // Increased from 300ms
+    }
+
+    return () => {
+      if (idleHandle !== null && typeof window !== 'undefined') {
+        window.cancelIdleCallback?.(idleHandle)
+      }
+      if (timeoutHandle) {
+        clearTimeout(timeoutHandle)
+      }
+    }
+  }, [mounted, showDeferredSections])
+
   // Don't render content until mounted to prevent white flash
   if (!mounted) {
     return (
@@ -66,9 +120,13 @@ export default function HomePageClient() {
       style={{ backgroundColor: '#000000' }}
     >
       <Hero />
-      <Features />
-      <Process />
-      <DevelopmentTools />
+      {showDeferredSections && (
+        <>
+          <FeaturesSection />
+          <ProcessSection />
+          <DevelopmentToolsSection />
+        </>
+      )}
     </main>
   )
 }
