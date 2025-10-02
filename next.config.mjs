@@ -3,7 +3,11 @@ import { withSentryConfig } from "@sentry/nextjs";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    optimizePackageImports: ['framer-motion', 'lucide-react'],
+    optimizePackageImports: ['framer-motion', 'lucide-react', '@radix-ui/react-icons', 'three', '@react-three/fiber', '@react-three/drei'],
+  },
+  // Target modern browsers - avoid legacy polyfills
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error', 'warn'] } : false,
   },
   eslint: {
     ignoreDuringBuilds: false,
@@ -12,10 +16,19 @@ const nextConfig = {
     ignoreBuildErrors: false,
   },
   images: {
-    unoptimized: true,
+    unoptimized: false, // Enable Next.js image optimization
     domains: ['hebbkx1anhila5yf.public.blob.vercel-storage.com'],
-    qualities: [75, 100],
+    formats: ['image/avif', 'image/webp'], // Modern formats for better compression
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    minimumCacheTTL: 60,
+    dangerouslyAllowSVG: true,
+    contentDispositionType: 'attachment',
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
+  compress: true,
+  poweredByHeader: false,
+  reactStrictMode: true,
   // Security headers
   async headers() {
     return [
@@ -67,7 +80,7 @@ const nextConfig = {
       },
     ]
   },
-  // Enhanced HMR settings
+  // Enhanced webpack settings for better performance
   webpack: (config, { dev, isServer }) => {
     if (dev && !isServer) {
       config.watchOptions = {
@@ -75,6 +88,67 @@ const nextConfig = {
         aggregateTimeout: 300,
       }
     }
+
+    // Optimize production builds
+    if (!dev) {
+      // Enable tree-shaking
+      config.optimization = {
+        ...config.optimization,
+        moduleIds: 'deterministic',
+        runtimeChunk: 'single',
+        usedExports: true, // Enable tree-shaking
+        sideEffects: true, // Respect package.json sideEffects
+        splitChunks: {
+          chunks: 'all',
+          maxInitialRequests: 25,
+          minSize: 20000,
+          cacheGroups: {
+            default: false,
+            vendors: false,
+            // Vendor chunk for node_modules
+            vendor: {
+              name: 'vendor',
+              chunks: 'all',
+              test: /node_modules/,
+              priority: 20,
+              maxSize: 244000, // Split if larger than 244KB
+            },
+            // Separate chunk for common/shared code
+            common: {
+              name: 'common',
+              minChunks: 2,
+              chunks: 'all',
+              priority: 10,
+              reuseExistingChunk: true,
+              enforce: true,
+            },
+            // Three.js in separate chunk with size limit
+            three: {
+              name: 'three',
+              test: /[\\/]node_modules[\\/](three|@react-three)[\\/]/,
+              priority: 30,
+              reuseExistingChunk: true,
+              maxSize: 150000, // Split if larger than 150KB
+            },
+            // Framer Motion in separate chunk
+            framerMotion: {
+              name: 'framer-motion',
+              test: /[\\/]node_modules[\\/]framer-motion[\\/]/,
+              priority: 30,
+              reuseExistingChunk: true,
+            },
+            // Radix UI in separate chunk
+            radix: {
+              name: 'radix',
+              test: /[\\/]node_modules[\\/]@radix-ui[\\/]/,
+              priority: 25,
+              reuseExistingChunk: true,
+            },
+          },
+        },
+      }
+    }
+
     return config
   },
 }
@@ -104,6 +178,9 @@ const sentryWebpackPluginOptions = {
   // Disable Sentry during development builds
   autoInstrumentServerFunctions: process.env.NODE_ENV === "production",
   autoInstrumentMiddleware: process.env.NODE_ENV === "production",
+
+  // Disable automatic client instrumentation to fix Next.js 15.5.4 compatibility
+  autoInstrumentAppDirectory: false,
 };
 
 // Export the config wrapped with Sentry
