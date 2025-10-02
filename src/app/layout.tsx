@@ -11,24 +11,26 @@ import StructuredData from '@/components/seo/StructuredData'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import Script from 'next/script'
 
-// Configure IBM Plex Sans as primary body font
+// Configure IBM Plex Sans - optimized with swap for better LCP
 const ibmPlexSans = IBM_Plex_Sans({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
+  weight: ['400', '600'], // Reduced weights for smaller bundle
   variable: '--font-ibm-plex-sans',
-  display: 'optional',
+  display: 'swap', // Changed from optional to swap for better LCP
   preload: true,
   fallback: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+  adjustFontFallback: true,
 })
 
-// Configure IBM Plex Mono for headings and code
+// Configure IBM Plex Mono - optimized with swap
 const ibmPlexMono = IBM_Plex_Mono({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
+  weight: ['400', '600'], // Reduced weights for smaller bundle
   variable: '--font-ibm-plex-mono',
-  display: 'optional',
+  display: 'swap', // Changed from optional to swap for better LCP
   preload: true,
   fallback: ['Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', 'monospace'],
+  adjustFontFallback: true,
 })
 
 export const metadata: Metadata = {
@@ -114,11 +116,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="format-detection" content="telephone=no" />
+        {/* Resource hints for better performance */}
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* Preload critical font for LCP */}
+        <link
+          rel="preload"
+          href="/fonts/IBMPlexMono-Bold.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
         <StructuredData type="organization" />
         <StructuredData type="localBusiness" />
         <StructuredData type="website" />
       </head>
-      <body className="bg-black text-white font-sans antialiased" style={{ backgroundColor: '#000000', transition: 'none' }} suppressHydrationWarning>
+      <body className="bg-black text-white font-sans antialiased" style={{ backgroundColor: '#000000', transition: 'none', paddingTop: '64px' }} suppressHydrationWarning>
         {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe
@@ -130,10 +145,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </noscript>
         {/* End Google Tag Manager (noscript) */}
 
-        {/* Google Tag Manager */}
+        {/* Google Tag Manager - Deferred for better performance */}
         <Script
           id="gtm-script"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           dangerouslySetInnerHTML={{
             __html: `
 (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -145,15 +160,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           }}
         />
 
-        {/* Google Analytics 4 */}
+        {/* Google Analytics 4 - Deferred for better performance */}
         <Script
           id="ga-script"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
         />
         <Script
           id="ga-config"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           dangerouslySetInnerHTML={{
             __html: `
 window.dataLayer = window.dataLayer || [];
