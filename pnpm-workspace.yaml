@@ -1,3 +1,7 @@
+ignoredBuiltDependencies:
+  - '@sentry/cli'
+  - '@vercel/speed-insights'
+
 onlyBuiltDependencies:
   - '@tailwindcss/oxide'
   - sharp
