@@ -70,67 +70,13 @@ const LetterGlitch = ({
   const charWidth = 13
   const charHeight = 23
 
+  // Pre-calculated constant array - reduces memory allocations
   const lettersAndSymbols = [
-    'A',
-    'B',
-    'C',
-    'D',
-    'E',
-    'F',
-    'G',
-    'H',
-    'I',
-    'J',
-    'K',
-    'L',
-    'M',
-    'N',
-    'O',
-    'P',
-    'Q',
-    'R',
-    'S',
-    'T',
-    'U',
-    'V',
-    'W',
-    'X',
-    'Y',
-    'Z',
-    '!',
-    '@',
-    '#',
-    '$',
-    '&',
-    '*',
-    '(',
-    ')',
-    '-',
-    '_',
-    '+',
-    '=',
-    '/',
-    '[',
-    ']',
-    '{',
-    '}',
-    ';',
-    ':',
-    '<',
-    '>',
-    ',',
-    '0',
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-    '7',
-    '8',
-    '9',
-    '?',
-    '/',
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+    'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+    '!', '@', '#', '$', '&', '*', '(', ')', '-', '_', '+', '=', '/',
+    '[', ']', '{', '}', ';', ':', '<', '>', ',',
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '?',
   ] as const
 
   const getRandomChar = (): string => {
@@ -204,19 +150,13 @@ const LetterGlitch = ({
       const rect = parent.getBoundingClientRect()
       if (rect.width <= 0 || rect.height <= 0) return
 
-      // More conservative pixel ratio for Safari compatibility
+      // Optimize DPR for better performance - cap at 1.5 for all devices
       const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
-      const isSafari =
-        typeof navigator !== 'undefined' &&
-        /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
       let dpr = 1
 
       if (typeof window !== 'undefined') {
-        if (isSafari) {
-          dpr = Math.min(window.devicePixelRatio || 1, 1.5) // Limit for Safari
-        } else {
-          dpr = isMobile ? Math.min(window.devicePixelRatio || 1, 2) : window.devicePixelRatio || 1
-        }
+        // Use lower DPR for better performance, capped at 1.5 max
+        dpr = isMobile ? 1 : Math.min(window.devicePixelRatio || 1, 1.5)
       }
 
       // Set canvas size with error handling
@@ -278,9 +218,9 @@ const LetterGlitch = ({
   const updateLetters = (): void => {
     if (!letters.current || letters.current.length === 0) return
 
-    // Reduce update frequency on mobile for better performance
+    // Optimize update frequency for better performance
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
-    const updatePercentage = isMobile ? 0.02 : 0.05
+    const updatePercentage = isMobile ? 0.015 : 0.03 // Reduced from 0.02/0.05
     const updateCount: number = Math.max(1, Math.floor(letters.current.length * updatePercentage))
 
     for (let i = 0; i < updateCount; i++) {
@@ -662,7 +602,7 @@ function DecryptedText({
   )
 }
 
-// Enhanced star field component with more realistic distribution
+// Optimized star field component with reduced count for better performance
 function StarField() {
   const [stars, setStars] = useState<
     Array<{
@@ -681,8 +621,8 @@ function StarField() {
   >([])
 
   useEffect(() => {
-    // Generate stars on client side only to prevent hydration mismatch
-    const generatedStars = Array.from({ length: 150 }, (_, i) => ({
+    // Reduced star count from 150 to 80 for better performance
+    const generatedStars = Array.from({ length: 80 }, (_, i) => ({
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
@@ -691,7 +631,7 @@ function StarField() {
       duration: Math.random() * 2 + 1.5,
       delay: Math.random() * 3,
       twinkleIntensity: Math.random() * 0.6 + 0.4,
-      isFlashing: Math.random() < 0.3, // 30% of stars will have flashing effect
+      isFlashing: Math.random() < 0.2, // Reduced from 30% to 20%
       flashDuration: Math.random() * 3 + 2,
       flashDelay: Math.random() * 5,
     }))

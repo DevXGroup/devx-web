@@ -558,11 +558,14 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
             >
               <Image
                 src={logoUrl || '/images/logos/devx-logo.png'}
-                alt="Logo"
+                alt="DevX Group LLC"
                 className="sm-logo-img block h-8 w-auto object-contain"
                 draggable={false}
                 width={110}
                 height={24}
+                quality={70}
+                sizes="110px"
+                style={{ height: 'auto', width: 'auto', maxWidth: 110 }}
               />
             </div>
 
