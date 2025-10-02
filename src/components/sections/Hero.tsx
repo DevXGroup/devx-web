@@ -283,7 +283,8 @@ export default function Hero() {
                 rel="noopener noreferrer"
                 color="#ccff00"
                 speed="3s"
-                className="font-mono font-semibold text-base sm:text-md md:text-md px-6 py-2 sm:px-8 sm:py-2"
+                className="font-mono font-semibold text-base sm:text-md md:text-md px-6 py-3 sm:px-8 sm:py-3 min-h-[44px] flex items-center justify-center"
+                aria-label="Book a free consultation call with DevX Group"
               >
                 Book a Free Call
               </StarBorder>
@@ -299,7 +300,8 @@ export default function Hero() {
                 onClick={navigateToPortfolio}
                 color="#e534eb"
                 speed="4s"
-                className="font-mono font-semibold text-base sm:text-md md:text-md px-6 py-2 sm:px-8 sm:py-2"
+                className="font-mono font-semibold text-base sm:text-md md:text-md px-6 py-3 sm:px-8 sm:py-3 min-h-[44px] flex items-center justify-center"
+                aria-label="View DevX Group portfolio"
               >
                 See Our Work
               </StarBorder>

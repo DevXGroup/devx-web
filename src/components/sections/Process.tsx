@@ -115,8 +115,8 @@ export default function Process() {
           </div>
         </div>
 
-        {/* Add SDLCProcess component above the cards */}
-        <div className="mb-24">
+        {/* Add SDLCProcess component above the cards - hidden on mobile for better UX */}
+        <div className="mb-24 hidden min-[650px]:block">
           <SDLCProcess />
         </div>
 
@@ -134,7 +134,9 @@ export default function Process() {
                 y: -8,
               }}
               whileTap={{ scale: 0.98 }}
-              className="group relative bg-black/50 backdrop-blur-sm p-6 sm:p-8 md:p-10 rounded-xl border border-white/10 flex flex-col items-start text-left overflow-hidden cursor-pointer"
+              className="group relative bg-black/50 backdrop-blur-sm p-8 sm:p-8 md:p-10 rounded-xl border border-white/10 flex flex-col items-start text-left overflow-hidden cursor-pointer min-h-[180px]"
+              role="article"
+              aria-label={`${process.title}: ${process.description}`}
             >
               {/* Morphing background blob */}
               <motion.div

@@ -1,4 +1,30 @@
 import { withSentryConfig } from "@sentry/nextjs";
+import path from 'node:path'
+
+// Some third-party bundles expect a `self` global, even during server-side
+// execution. Define it when running inside Node to prevent ReferenceErrors
+// during the Next.js build step.
+if (typeof globalThis !== 'undefined' && typeof globalThis.self === 'undefined') {
+  Object.defineProperty(globalThis, 'self', {
+    value: globalThis,
+    configurable: true,
+    enumerable: false,
+    writable: true,
+  })
+}
+
+try {
+  if (typeof globalThis !== 'undefined' && typeof self === 'undefined') {
+    // eslint-disable-next-line no-new-func
+    Function('self = this').call(globalThis)
+  }
+} catch {
+  // Ignore if the environment already defines `self` or disallows assignment.
+}
+
+if (typeof globalThis !== 'undefined' && typeof globalThis.webpackChunk_N_E === 'undefined') {
+  globalThis.webpackChunk_N_E = []
+}
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -17,7 +43,12 @@ const nextConfig = {
   },
   images: {
     unoptimized: false, // Enable Next.js image optimization
-    domains: ['hebbkx1anhila5yf.public.blob.vercel-storage.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'hebbkx1anhila5yf.public.blob.vercel-storage.com',
+      },
+    ],
     formats: ['image/avif', 'image/webp'], // Modern formats for better compression
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
@@ -82,6 +113,10 @@ const nextConfig = {
   },
   // Enhanced webpack settings for better performance
   webpack: (config, { dev, isServer }) => {
+    if (isServer) {
+      config.output = config.output || {}
+      config.output.globalObject = 'globalThis'
+    }
     if (dev && !isServer) {
       config.watchOptions = {
         poll: 1000,
@@ -89,8 +124,8 @@ const nextConfig = {
       }
     }
 
-    // Optimize production builds
-    if (!dev) {
+    // Optimize production builds (client-side only)
+    if (!dev && !isServer) {
       // Enable tree-shaking
       config.optimization = {
         ...config.optimization,
@@ -146,6 +181,37 @@ const nextConfig = {
             },
           },
         },
+      }
+    }
+
+    if (isServer) {
+      const originalEntry = config.entry
+      const polyfillPath = path.join(process.cwd(), 'src/lib/server-self-polyfill.ts')
+
+      config.entry = async () => {
+        const resolvedEntry =
+          typeof originalEntry === 'function' ? await originalEntry() : originalEntry
+        const entries = Array.isArray(resolvedEntry) || typeof resolvedEntry === 'object'
+          ? resolvedEntry
+          : {}
+
+        if (entries && typeof entries === 'object') {
+          for (const key of Object.keys(entries)) {
+            const entryValue = entries[key]
+
+            if (Array.isArray(entryValue)) {
+              if (!entryValue.includes(polyfillPath)) {
+                entries[key] = [polyfillPath, ...entryValue]
+              }
+            } else if (entryValue && typeof entryValue === 'object') {
+              if (Array.isArray(entryValue.import) && !entryValue.import.includes(polyfillPath)) {
+                entryValue.import.unshift(polyfillPath)
+              }
+            }
+          }
+        }
+
+        return entries
       }
     }
 

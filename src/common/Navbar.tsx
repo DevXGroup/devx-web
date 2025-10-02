@@ -348,9 +348,10 @@ export default function Navbar() {
               href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-robinhood text-black hover:bg-white hover:text-black px-5 md:px-6 py-2 rounded-lg transition-all duration-300 ease-out font-medium border-2 border-robinhood shadow-lg relative overflow-hidden whitespace-nowrap text-sm md:text-base"
+              className="bg-robinhood text-black hover:bg-white hover:text-black px-5 md:px-6 py-3 rounded-lg transition-all duration-300 ease-out font-medium border-2 border-robinhood shadow-lg relative overflow-hidden whitespace-nowrap text-sm md:text-base min-h-[44px] flex items-center justify-center"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              aria-label="Schedule a meeting with DevX Group"
             >
               <motion.div
                 className="absolute inset-0 bg-gradient-to-r from-theme-green to-theme-gold opacity-0"
@@ -366,10 +367,11 @@ export default function Navbar() {
             <motion.button
               ref={hamburgerButtonRef}
               onClick={() => setIsOpen(!isOpen)}
-              className="relative p-3 group cursor-pointer"
+              className="relative p-3 group cursor-pointer min-w-[44px] min-h-[44px] flex items-center justify-center"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              aria-label="Toggle menu"
+              aria-label={isOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={isOpen}
             >
               {/* Hamburger lines */}
               <div className="flex flex-col items-center justify-center space-y-1.5">
