@@ -11,6 +11,7 @@ import ScrollToTop from '@/components/layout/ScrollToTop'
 import StructuredData from '@/components/seo/StructuredData'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import Script from 'next/script'
+import { Analytics } from '@vercel/analytics/next'
 
 // Configure IBM Plex Sans - optimized with swap for better LCP
 const ibmPlexSans = IBM_Plex_Sans({
@@ -192,6 +193,7 @@ gtag('config', '${gaId}', {
           </div>
         </ErrorBoundary>
         <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   )
