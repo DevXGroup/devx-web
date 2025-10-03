@@ -72,6 +72,7 @@ export default function Hero() {
   const controls = useAnimation()
   const [enableBackground, setEnableBackground] = useState(false)
   const [enableShootingStars, setEnableShootingStars] = useState(false)
+  const [enablePlanetDivider, setEnablePlanetDivider] = useState(false)
 
   // Function to navigate to the portfolio page
   const navigateToPortfolio = useCallback(() => {
@@ -87,6 +88,7 @@ export default function Hero() {
     let idleHandle: number | null = null
     let timeoutHandle: ReturnType<typeof setTimeout> | null = null
     let shootingTimeout: ReturnType<typeof setTimeout> | null = null
+    let planetTimeout: ReturnType<typeof setTimeout> | null = null
 
     const activateBackground = () => {
       setEnableBackground(true)
@@ -95,6 +97,10 @@ export default function Hero() {
         clearTimeout(shootingTimeout)
       }
       shootingTimeout = setTimeout(() => setEnableShootingStars(true), 300)
+      if (planetTimeout) {
+        clearTimeout(planetTimeout)
+      }
+      planetTimeout = setTimeout(() => setEnablePlanetDivider(true), 600)
     }
 
     if (typeof window !== 'undefined') {
@@ -123,6 +129,9 @@ export default function Hero() {
       }
       if (shootingTimeout) {
         clearTimeout(shootingTimeout)
+      }
+      if (planetTimeout) {
+        clearTimeout(planetTimeout)
       }
     }
   }, [])
@@ -155,13 +164,13 @@ export default function Hero() {
 
       {/* Content */}
       <motion.div
-        className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-[80] w-full py-20 sm:py-24 lg:py-32"
+        className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-[80] w-full py-12 sm:py-16 lg:py-20"
         variants={containerVariants}
         initial="hidden"
         animate={controls}
         style={{ willChange: 'opacity' }}
       >
-        <div className="text-center mx-auto w-full px-6 sm:px-[50px] space-y-7 sm:space-y-9 pt-6 sm:pt-10 flex flex-col items-center justify-center">
+        <div className="text-center mx-auto w-full px-6 sm:px-[50px] space-y-7 sm:space-y-9 pt-2 sm:pt-4 flex flex-col items-center justify-center">
           {/* Hero content wrapper - this div prevents movement on button hover */}
           <div className="space-y-5 sm:space-y-7">
             <motion.h1
@@ -312,9 +321,11 @@ export default function Hero() {
 
       {/* Planet Divider at the bottom of hero - Only rendered on client */}
       <ClientOnly>
-        <div className="absolute bottom-0 left-0 w-full z-50">
-          <DynamicPlanetDivider />
-        </div>
+        {enablePlanetDivider && (
+          <div className="absolute bottom-0 left-0 w-full z-50" aria-hidden>
+            <DynamicPlanetDivider />
+          </div>
+        )}
       </ClientOnly>
       <style jsx>{`
         .link-gradient {

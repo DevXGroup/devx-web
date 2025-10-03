@@ -116,26 +116,6 @@ export default function DevelopmentTools() {
     setMounted(true)
   }, [])
 
-  // IntersectionObserver to detect when section is visible
-  useEffect(() => {
-    if (!sectionRef.current) return
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          setIsVisible(entry.isIntersecting)
-        })
-      },
-      {
-        threshold: 0.1,
-        rootMargin: '200px 0px 200px 0px' // Start animation well before fully visible
-      }
-    )
-
-    observer.observe(sectionRef.current)
-    return () => observer.disconnect()
-  }, [mounted])
-
   // Move stars generation to component level
   const stars = useMemo(() => {
     const rng = seedrandom('devx-stars') // seed to ensure deterministic output
@@ -150,6 +130,26 @@ export default function DevelopmentTools() {
       delay: rng() * 2,
     }))
   }, [])
+
+  // IntersectionObserver to detect when section is visible
+  useEffect(() => {
+    if (!sectionRef.current) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsVisible(entry.isIntersecting)
+        })
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '200px 0px 200px 0px', // Start animation well before fully visible
+      }
+    )
+
+    observer.observe(sectionRef.current)
+    return () => observer.disconnect()
+  }, [mounted])
 
   // Automatic cycle with black hole transition animation - only when visible
   useEffect(() => {
@@ -317,8 +317,6 @@ export default function DevelopmentTools() {
     <LayoutGroup>
       {/* Optimized height for better spacing with extra bottom padding for tablets */}
       <div ref={sectionRef} className="relative w-full bg-black z-[150]">
-        {' '}
-        {/* Reduced height and padding */}
         {/* Reduced number of stars and added glow effect */}
         {stars.map((star) => (
           <motion.div
@@ -343,12 +341,16 @@ export default function DevelopmentTools() {
           />
         ))}
         {/* Title section */}
-        <div className="pt-16 pb-32">
+        <div className="py-20 md:py-0 mt-36 md:mt-36 mb-2 md:mb-2">
           <div className="container mx-auto px-4">
             <div className="flex flex-col items-center">
-              <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold font-['IBM_Plex_Mono'] text-center animate-gradient-text mb-16">
+              <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold font-['IBM_Plex_Mono'] text-center animate-gradient-text mb-4">
                 DevX Development Tools
               </h3>
+              <p className="text-slate-400 text-lg md:text-xl font-['IBM_Plex_Sans'] text-center max-w-2xl mb-16">
+                Cutting-edge technologies powering innovative solutions across web, mobile, and
+                cloud platforms
+              </p>
             </div>
           </div>
         </div>
@@ -558,8 +560,10 @@ export default function DevelopmentTools() {
           {/* z-[90] - Below inner orbit but visible */}
           <AIToolsOrbit activeIndex={activeIndex} onIconClick={handleAIToolClick} />
         </div>
-        {/* Bottom spacing */}
-        <div className="pb-32"></div>
+        {/* Bottom spacing with gradient fade to black */}
+        <div className="pb-32 relative">
+          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-black pointer-events-none" />
+        </div>
       </div>
     </LayoutGroup>
   )
@@ -670,7 +674,7 @@ function TransitionPlanet({
 
         {/* The actual tool icon */}
         <motion.div
-          className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-gray-800 shadow border border-gray-500 flex items-center justify-center relative overflow-hidden"
+          className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-slate-800 shadow border border-purple-500/30 flex items-center justify-center relative overflow-hidden"
           animate={{
             rotateY: [0, 180, 360, 540, 720],
             rotateX: [0, 45, 90, 45, 0],
@@ -794,7 +798,7 @@ function StaticIconsOrbit({
             <motion.div
               layoutId={`icon-${tool.name}`}
               onClick={() => onIconClick(i)}
-              className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-gray-800 shadow border border-gray-500 flex items-center justify-center cursor-pointer"
+              className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-slate-800 shadow border border-purple-500/30 hover:border-purple-400/50 flex items-center justify-center cursor-pointer transition-all duration-300"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               transition={{
@@ -878,7 +882,7 @@ function AIToolsOrbit({
       },
       {
         threshold: 0.1,
-        rootMargin: '100px 0px 100px 0px' // Start animation slightly before fully visible
+        rootMargin: '100px 0px 100px 0px', // Start animation slightly before fully visible
       }
     )
 
@@ -959,7 +963,7 @@ function AIToolsOrbit({
             >
               {/* Main icon container with enhanced trail effect - now clickable */}
               <motion.div
-                className="absolute w-10 h-10 sm:w-12 sm:h-12 -ml-5 -mt-5 sm:-ml-6 sm:-mt-6 rounded-full bg-gray-900/80 backdrop-blur-sm shadow border border-[#4CD787]/30 flex items-center justify-center cursor-pointer"
+                className="absolute w-10 h-10 sm:w-12 sm:h-12 -ml-5 -mt-5 sm:-ml-6 sm:-mt-6 rounded-full bg-slate-900/80 backdrop-blur-sm shadow border border-purple-500/40 flex items-center justify-center cursor-pointer"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => onIconClick(i)}
