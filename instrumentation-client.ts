@@ -3,7 +3,7 @@ import * as Sentry from "@sentry/nextjs";
 // Export navigation instrumentation hook
 export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;
 
-const dsn = process.env.NEXT_PUBLIC_SENTRY_DSN;
+const dsn = process.env.NEXT_PUBLIC_SENTRY_DSN || process.env.SENTRY_DSN;
 
 // Only initialize Sentry if DSN is provided
 if (dsn) {

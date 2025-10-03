@@ -36,6 +36,7 @@ const ibmPlexMono = IBM_Plex_Mono({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://devxgroup.io'),
   title: {
     default: 'DevX Group - Elite Software Development Team | Custom Applications & AI Solutions',
     template: '%s | DevX Group'
