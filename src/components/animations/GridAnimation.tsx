@@ -13,6 +13,9 @@ interface GridAnimationProps {
   borderColor?: CanvasStrokeStyle;
   squareSize?: number;
   hoverFillColor?: CanvasStrokeStyle;
+  randomFlicker?: boolean;
+  flickerInterval?: number;
+  maxFlickerSquares?: number;
 }
 
 const GridAnimation: React.FC<GridAnimationProps> = ({
@@ -21,6 +24,9 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
   borderColor = "#999",
   squareSize = 40,
   hoverFillColor = "#222",
+  randomFlicker = false,
+  flickerInterval = 150,
+  maxFlickerSquares = 5,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const requestRef = useRef<number | null>(null);
@@ -28,6 +34,8 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
   const numSquaresY = useRef<number>(0);
   const gridOffset = useRef<GridOffset>({ x: 0, y: 0 });
   const hoveredSquareRef = useRef<GridOffset | null>(null);
+  const flickerSquaresRef = useRef<Set<string>>(new Set());
+  const lastFlickerTimeRef = useRef<number>(0);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -57,13 +65,18 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
           const squareX = x - (gridOffset.current.x % squareSize);
           const squareY = y - (gridOffset.current.y % squareSize);
 
-          if (
-            hoveredSquareRef.current &&
-            Math.floor((x - startX) / squareSize) ===
-              hoveredSquareRef.current.x &&
-            Math.floor((y - startY) / squareSize) === hoveredSquareRef.current.y
-          ) {
-            // Enhanced hover effect with glow
+          const gridX = Math.floor((x - startX) / squareSize);
+          const gridY = Math.floor((y - startY) / squareSize);
+          const squareKey = `${gridX}-${gridY}`;
+
+          const isHovered = hoveredSquareRef.current &&
+            gridX === hoveredSquareRef.current.x &&
+            gridY === hoveredSquareRef.current.y;
+
+          const isFlickering = randomFlicker && flickerSquaresRef.current.has(squareKey);
+
+          if (isHovered || isFlickering) {
+            // Enhanced hover/flicker effect with glow
             ctx.fillStyle = hoverFillColor;
             ctx.shadowColor = typeof borderColor === 'string' ? borderColor : '#FFD700';
             ctx.shadowBlur = 8;
@@ -89,6 +102,22 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
 
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
+    };
+
+    const updateFlickerSquares = () => {
+      const now = Date.now();
+      if (now - lastFlickerTimeRef.current >= flickerInterval) {
+        flickerSquaresRef.current.clear();
+
+        const numSquares = Math.floor(Math.random() * maxFlickerSquares) + 1;
+        for (let i = 0; i < numSquares; i++) {
+          const randomX = Math.floor(Math.random() * numSquaresX.current);
+          const randomY = Math.floor(Math.random() * numSquaresY.current);
+          flickerSquaresRef.current.add(`${randomX}-${randomY}`);
+        }
+
+        lastFlickerTimeRef.current = now;
+      }
     };
 
     const updateAnimation = () => {
@@ -120,6 +149,10 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
           break;
       }
 
+      if (randomFlicker) {
+        updateFlickerSquares();
+      }
+
       drawGrid();
       requestRef.current = requestAnimationFrame(updateAnimation);
     };
@@ -133,10 +166,10 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
       const startY = Math.floor(gridOffset.current.y / squareSize) * squareSize;
 
       const hoveredSquareX = Math.floor(
-        (mouseX + gridOffset.current.x - startX) / squareSize
+        (mouseX + (gridOffset.current.x % squareSize)) / squareSize
       );
       const hoveredSquareY = Math.floor(
-        (mouseY + gridOffset.current.y - startY) / squareSize
+        (mouseY + (gridOffset.current.y % squareSize)) / squareSize
       );
 
       if (
@@ -162,7 +195,7 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
       canvas.removeEventListener("mousemove", handleMouseMove);
       canvas.removeEventListener("mouseleave", handleMouseLeave);
     };
-  }, [direction, speed, borderColor, hoverFillColor, squareSize]);
+  }, [direction, speed, borderColor, hoverFillColor, squareSize, randomFlicker, flickerInterval, maxFlickerSquares]);
 
   return (
     <canvas
