@@ -2,7 +2,7 @@
   <!-- Background -->
   <defs>
     <linearGradient id="bgGradient3" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#000000;stop-opacity:1" />
+      <stop offset="0%" style="stop-color:#0a0014;stop-opacity:1" />
       <stop offset="50%" style="stop-color:#1a0033;stop-opacity:1" />
       <stop offset="100%" style="stop-color:#0a0a1a;stop-opacity:1" />
     </linearGradient>
@@ -11,29 +11,71 @@
       <stop offset="0%" style="stop-color:#4CD787;stop-opacity:1" />
       <stop offset="100%" style="stop-color:#9d4edd;stop-opacity:1" />
     </linearGradient>
+
+    <radialGradient id="portfolioGlow" cx="50%" cy="40%">
+      <stop offset="0%" style="stop-color:#4CD787;stop-opacity:0.3" />
+      <stop offset="70%" style="stop-color:#4CD787;stop-opacity:0" />
+    </radialGradient>
+
+    <filter id="glow3" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
   </defs>
 
   <rect width="1200" height="630" fill="url(#bgGradient3)"/>
+  <rect width="1200" height="630" fill="url(#portfolioGlow)"/>
+
+  <!-- Decorative dots -->
+  <g opacity="0.2">
+    <circle cx="150" cy="150" r="3" fill="#4CD787"/>
+    <circle cx="1050" cy="500" r="4" fill="#9d4edd"/>
+    <circle cx="950" cy="120" r="2" fill="#4CD787"/>
+    <circle cx="250" cy="550" r="3" fill="#8B5CF6"/>
+  </g>
 
   <!-- Logo (Top Right) -->
-  <text x="1040" y="100" font-family="'IBM Plex Mono', monospace" font-size="48" font-weight="bold" fill="#8B5CF6" text-anchor="end">DevX</text>
-  <text x="1140" y="100" font-family="'IBM Plex Mono', monospace" font-size="30" font-weight="300" fill="#9d4edd" opacity="0.8" text-anchor="end">Group LLC</text>
+  <g filter="url(#glow3)">
+    <text x="1084" y="110" font-family="'IBM Plex Mono', monospace" font-size="56" font-weight="bold" fill="#8B5CF6" text-anchor="end">DevX</text>
+    <text x="1140" y="110" font-family="'IBM Plex Mono', monospace" font-size="32" font-weight="300" fill="#c4b5fd" text-anchor="end">Group LLC</text>
+  </g>
 
   <!-- Main Title -->
-  <text x="60" y="290" font-family="'IBM Plex Mono', monospace" font-size="88" font-weight="bold" fill="url(#titleGradient)">
+  <text x="60" y="280" font-family="'IBM Plex Mono', monospace" font-size="100" font-weight="bold" fill="url(#titleGradient)" filter="url(#glow3)">
     Our Work
   </text>
 
   <!-- Subtitle -->
-  <text x="60" y="370" font-family="'IBM Plex Sans', sans-serif" font-size="32" fill="#ffffff" opacity="0.8">
+  <text x="60" y="360" font-family="'IBM Plex Sans', sans-serif" font-size="36" font-weight="500" fill="#ffffff" opacity="0.9">
     50+ Successful Projects Delivered
   </text>
 
-  <!-- Grid Items -->
-  <g stroke="#4CD787" stroke-width="1" fill="rgba(76, 215, 135, 0.05)" opacity="0.6">
-    <rect x="60" y="480" width="255" height="80" rx="8"/>
-    <rect x="335" y="480" width="255" height="80" rx="8"/>
-    <rect x="610" y="480" width="255" height="80" rx="8"/>
-    <rect x="885" y="480" width="255" height="80" rx="8"/>
+  <!-- Stats bar -->
+  <g font-family="'IBM Plex Mono', monospace" font-size="18">
+    <text x="60" y="420" fill="#4CD787">98% Client Satisfaction</text>
+    <text x="360" y="420" fill="#9d4edd">15+ Years Experience</text>
+    <text x="680" y="420" fill="#06B6D4">100% On-Time Delivery</text>
+  </g>
+
+  <!-- Project showcase cards -->
+  <g>
+    <rect x="60" y="480" width="260" height="90" rx="8" fill="rgba(76, 215, 135, 0.15)" stroke="#4CD787" stroke-width="2"/>
+    <text x="90" y="520" font-family="'IBM Plex Sans', sans-serif" font-size="20" font-weight="600" fill="#4CD787">AI Solutions</text>
+    <text x="90" y="545" font-family="'IBM Plex Sans', sans-serif" font-size="14" fill="#ffffff" opacity="0.7">Machine Learning</text>
+
+    <rect x="340" y="480" width="260" height="90" rx="8" fill="rgba(157, 78, 221, 0.15)" stroke="#9d4edd" stroke-width="2"/>
+    <text x="370" y="520" font-family="'IBM Plex Sans', sans-serif" font-size="20" font-weight="600" fill="#9d4edd">Web Apps</text>
+    <text x="370" y="545" font-family="'IBM Plex Sans', sans-serif" font-size="14" fill="#ffffff" opacity="0.7">Full-Stack Dev</text>
+
+    <rect x="620" y="480" width="260" height="90" rx="8" fill="rgba(6, 182, 212, 0.15)" stroke="#06B6D4" stroke-width="2"/>
+    <text x="650" y="520" font-family="'IBM Plex Sans', sans-serif" font-size="20" font-weight="600" fill="#06B6D4">Cloud &amp; IoT</text>
+    <text x="650" y="545" font-family="'IBM Plex Sans', sans-serif" font-size="14" fill="#ffffff" opacity="0.7">Infrastructure</text>
+
+    <rect x="900" y="480" width="260" height="90" rx="8" fill="rgba(255, 215, 0, 0.15)" stroke="#CFB53B" stroke-width="2"/>
+    <text x="930" y="520" font-family="'IBM Plex Sans', sans-serif" font-size="20" font-weight="600" fill="#CFB53B">Mobile Apps</text>
+    <text x="930" y="545" font-family="'IBM Plex Sans', sans-serif" font-size="14" fill="#ffffff" opacity="0.7">iOS &amp; Android</text>
   </g>
 </svg>
