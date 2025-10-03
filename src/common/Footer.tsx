@@ -18,12 +18,9 @@ export default function Footer() {
 
   return (
     <>
-      {/* Fade transition from above */}
-      <div className="relative h-20 bg-gradient-to-b from-black/60 via-black/40 to-transparent pointer-events-none" />
-
       {/* Include the Threads effect touching the footer */}
-      <div className="w-full h-screen relative bg-transparent mb-[-300px] mt-[-280px]">
-        <div className="absolute inset-0 z-10">
+      <div className="w-full h-[40vh] sm:h-[45vh] md:h-[50vh] lg:h-[60vh] xl:h-[70vh] relative bg-black m-0 p-0">
+        <div className="absolute inset-0">
           {isSafari ? (
             <Threads
               color={[2, 1.5, 9]}
@@ -32,12 +29,17 @@ export default function Footer() {
               enableMouseInteraction={true}
             />
           ) : (
-            <Threads color={[3, 2, 7]} amplitude={1} distance={0.1} enableMouseInteraction={true} />
+            <Threads
+              color={[2, 1.5, 9]}
+              amplitude={1}
+              distance={0.1}
+              enableMouseInteraction={true}
+            />
           )}
         </div>
       </div>
 
-      <footer className="bg-background text-foreground relative mb-5">
+      <footer className="bg-black text-foreground relative mb-5 mt-5">
         {/* Background Pattern */}
         <div className="absolute inset-0 bg-[url('/images/patterns/grid.svg')] opacity-10"></div>
 
@@ -54,7 +56,7 @@ export default function Footer() {
                   className="h-8 w-auto"
                 />
               </Link>
-              <p className="text-sm text-muted-foreground mb-6 max-w-sm leading-relaxed">
+              <p className="text-sm text-muted-foreground mb-6 max-w-sm leading-relaxed font-light">
                 California-based software development company specializing in custom software,
                 AI/ML, IoT hardware, and digital transformation services.
               </p>
@@ -109,35 +111,35 @@ export default function Footer() {
             <div className="sm:hidden grid grid-cols-2 gap-4 col-span-1">
               {/* Services */}
               <div className="min-w-0">
-                <h3 className="text-base font-bold mb-4">Services</h3>
+                <h3 className="text-base font-extrabold mb-4">Services</h3>
                 <div className="space-y-2">
                   <Link
                     href="/services"
-                    className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate"
+                    className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                   >
                     Custom Software
                   </Link>
                   <Link
                     href="/services"
-                    className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate"
+                    className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                   >
                     AI & ML
                   </Link>
                   <Link
                     href="/services"
-                    className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate"
+                    className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                   >
                     IoT Hardware
                   </Link>
                   <Link
                     href="/services"
-                    className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate"
+                    className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                   >
                     Digital Transform
                   </Link>
                   <Link
                     href="/services"
-                    className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate"
+                    className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                   >
                     Web Development
                   </Link>
@@ -146,35 +148,35 @@ export default function Footer() {
 
               {/* Company */}
               <div className="min-w-0">
-                <h3 className="text-base font-bold mb-4">Company</h3>
+                <h3 className="text-base font-extrabold mb-4">Company</h3>
                 <div className="space-y-2">
                   <Link
                     href="/about"
-                    className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate"
+                    className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                   >
                     About Us
                   </Link>
                   <Link
                     href="/portfolio"
-                    className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate"
+                    className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                   >
                     Portfolio
                   </Link>
                   <Link
                     href="/pricing"
-                    className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate"
+                    className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                   >
                     Pricing
                   </Link>
                   <Link
                     href="/contact"
-                    className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate"
+                    className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                   >
                     Contact
                   </Link>
                   <Link
                     href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative"
-                    className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate"
+                    className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                   >
                     Schedule Call
                   </Link>
@@ -184,35 +186,35 @@ export default function Footer() {
 
             {/* Services - Hidden on mobile, shown on sm+ */}
             <div className="hidden sm:block lg:col-span-1 xl:col-span-1 min-w-0">
-              <h3 className="text-base font-bold mb-4 lg:mb-6">Services</h3>
+              <h3 className="text-base font-extrabold mb-4 lg:mb-6">Services</h3>
               <div className="space-y-2 lg:space-y-3">
                 <Link
                   href="/services"
-                  className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate"
+                  className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                 >
                   Custom Software
                 </Link>
                 <Link
                   href="/services"
-                  className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate"
+                  className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                 >
                   AI & Machine Learning
                 </Link>
                 <Link
                   href="/services"
-                  className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate"
+                  className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                 >
                   IoT Hardware
                 </Link>
                 <Link
                   href="/services"
-                  className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate"
+                  className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                 >
                   Digital Transformation
                 </Link>
                 <Link
                   href="/services"
-                  className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate"
+                  className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                 >
                   Web Development
                 </Link>
@@ -221,35 +223,35 @@ export default function Footer() {
 
             {/* Company - Hidden on mobile, shown on sm+ */}
             <div className="hidden sm:block lg:col-span-1 xl:col-span-1 min-w-0">
-              <h3 className="text-base font-bold mb-4 lg:mb-6">Company</h3>
+              <h3 className="text-base font-extrabold mb-4 lg:mb-6">Company</h3>
               <div className="space-y-2 lg:space-y-3">
                 <Link
                   href="/about"
-                  className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate"
+                  className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                 >
                   About Us
                 </Link>
                 <Link
                   href="/portfolio"
-                  className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate"
+                  className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                 >
                   Portfolio
                 </Link>
                 <Link
                   href="/pricing"
-                  className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate"
+                  className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                 >
                   Pricing
                 </Link>
                 <Link
                   href="/contact"
-                  className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate"
+                  className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                 >
                   Contact
                 </Link>
                 <Link
                   href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative"
-                  className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate"
+                  className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                 >
                   Schedule Call
                 </Link>
