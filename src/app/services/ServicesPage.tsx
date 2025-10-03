@@ -9,7 +9,7 @@ import {
   useMotionValue,
   AnimatePresence,
 } from 'framer-motion'
-import { Code2, Cloud, Brain, Smartphone, Cpu, Bot, Monitor } from 'lucide-react'
+import { ArrowRight, Code2, Cloud, Brain, Smartphone, Cpu, Bot, Monitor } from 'lucide-react'
 // import Link from 'next/link'
 import { useRef, useState, useEffect } from 'react'
 import TrueFocus from '@/components/animations/TrueFocus'
@@ -54,7 +54,7 @@ const services = [
       'Application Store Optimization',
       'Mobile-First UI/UX Design',
     ],
-    color: '#FFD700',
+    color: '#F472B6',
   },
   {
     icon: Monitor,
@@ -134,35 +134,35 @@ const valueProps = [
     title: 'Fast Delivery',
     description:
       'Start your project today and see results in days, not months. We get you up and running quickly.',
-    proofPoint: 'Average MVP delivery in 6-8 weeks, 40% faster than industry standard'
+    proofPoint: 'Average MVP delivery in 6-8 weeks, 40% faster than industry standard',
   },
   {
     title: 'Reliable Results',
     description:
       "We deliver what we promise on time. You'll see real improvements in your business.",
-    proofPoint: '98% on-time delivery rate across 50+ projects completed'
+    proofPoint: '98% on-time delivery rate across 50+ projects completed',
   },
   {
     title: 'Clear Pricing',
     description: "No hidden costs or surprises. You'll know exactly what you pay before we start.",
-    proofPoint: 'Fixed-price projects with 0% cost overruns in the last 2 years'
+    proofPoint: 'Fixed-price projects with 0% cost overruns in the last 2 years',
   },
   {
     title: 'Long-term Support',
     description: 'We stick around after launch. Get ongoing help and advice when you need it.',
-    proofPoint: '90% client retention rate with ongoing support relationships'
+    proofPoint: '90% client retention rate with ongoing support relationships',
   },
   {
     title: 'Experienced Team',
     description:
       "Work with skilled developers, designers, and project managers who know what they're doing.",
-    proofPoint: '15+ years combined experience with 100+ successful deployments'
+    proofPoint: '15+ years combined experience with 100+ successful deployments',
   },
   {
     title: 'Modern AI Tools',
     description:
       'Use the latest AI technology to automate work and improve your business processes.',
-    proofPoint: 'AI implementations reducing operational costs by 60% on average'
+    proofPoint: 'AI implementations reducing operational costs by 60% on average',
   },
 ]
 
@@ -320,7 +320,7 @@ export default function ServicesPage() {
                       width={true}
                       weight={true}
                       italic={false}
-                      textColor="#FFD700"
+                      textColor="#F472B6"
                       strokeColor="#FFFFFF"
                       minFontSize={59}
                     />
@@ -334,7 +334,6 @@ export default function ServicesPage() {
                 style={{
                   textShadow: '0 2px 8px rgba(0,0,0,0.9)',
                   fontWeight: '400',
-                  letterSpacing: '0.025em',
                 }}
               >
                 Comprehensive software solutions to drive your business forward. We combine
@@ -344,57 +343,28 @@ export default function ServicesPage() {
           </div>
 
           {/* Value Propositions with Apple-style reveal */}
-          <div
-            ref={valuePropsRef}
-            className="w-full max-w-5xl mb-8 relative z-20 pointer-events-auto"
-          >
-            <div className="flex justify-center items-center mb-16 text-center mt-24">
-              <div
-                style={{
-                  fontFamily: 'Georgia, "Times New Roman", Times, serif',
-                  fontStyle: 'italic',
-                  fontWeight: '300',
-                  textShadow: '0 4px 8px rgba(207, 181, 59, 0.3), 0 2px 4px rgba(0, 0, 0, 0.5)',
-                  letterSpacing: '0.02em',
-                }}
-              >
-                <BlurText
-                  text="The DevX Edge"
-                  className="text-2xl md:text-3xl lg:text-3xl font-light text-center text-[#FFD700] mt-10 tracking-wide italic"
-                  delay={120}
-                  animateBy="words"
-                  direction="top"
-                  animationFrom={{ opacity: 0, y: 70 }}
-                  animationTo={[{ opacity: 1, y: 0 }]}
-                  onAnimationComplete={() => {}}
-                />
-              </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6 md:gap-8 lg:gap-10 xl:gap-12 px-6 md:px-8 lg:px-8 xl:px-12 max-w-7xl mx-auto relative z-20">
+          <div ref={valuePropsRef} className="w-full mb-8 relative z-20 pointer-events-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 px-4 mx-auto relative z-20 max-w-screen-xl mt-38">
               {valueProps.map((prop, index) => (
                 <motion.div
                   key={prop.title}
                   initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="bg-black/60 md:bg-black/30 backdrop-blur-md md:backdrop-blur-sm p-6 lg:p-8 rounded-xl border border-white/20 md:border-white/10 hover:border-white/30 transition-all duration-300 group cursor-pointer pointer-events-auto relative overflow-hidden"
-                  whileHover={{ scale: 1.02 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  className="bg-black/40 backdrop-blur-lg p-8 rounded-xl border border-white/10 transition-all duration-300 group cursor-pointer pointer-events-auto relative overflow-hidden shadow-xl group-hover:shadow-[0_0_20px_rgba(6,182,212,0.5)] before:absolute before:inset-0 before:border before:border-transparent before:rounded-xl before:transition-all before:duration-300 group-hover:before:border-white/20"
                   whileTap={{ scale: 0.98 }}
-                  onMouseEnter={() => {}} // Required for hover effects
-                  onMouseLeave={() => {}} // Required for hover effects
                 >
-                  <h3 className="text-xl md:text-2xl lg:text-2xl font-semibold text-[#FFD700] mb-3 lg:mb-4 transition-colors duration-300 relative z-10">
+                  <h3 className="text-xl md:text-2xl lg:text-2xl font-semibold text-[#06B6D4] mb-3 lg:mb-4 transition-colors duration-300 relative z-10">
                     {prop.title}
                   </h3>
                   <p
                     className="text-white/90 text-base md:text-lg lg:text-xl transition-colors duration-300 font-['IBM_Plex_Sans'] font-medium relative z-10 mb-3 lg:mb-4 leading-relaxed"
-                    style={{ textShadow: '0 1px 4px rgba(0,0,0,0.7)', letterSpacing: '0.025em' }}
+                    style={{ textShadow: '0 1px 4px rgba(0,0,0,0.7)' }}
                   >
                     {prop.description}
                   </p>
                   {prop.proofPoint && (
-                    <p className="text-[#4CD787] text-sm md:text-base lg:text-lg font-semibold transition-colors duration-300 relative z-10">
+                    <p className="text-[#4CD787] text-xs md:text-sm font-semibold transition-colors duration-300 relative z-10">
                       ✓ {prop.proofPoint}
                     </p>
                   )}
@@ -409,7 +379,7 @@ export default function ServicesPage() {
                     <motion.div
                       className="absolute w-full h-[2px] bg-gradient-to-r from-transparent via-white to-transparent top-0"
                       style={{
-                        boxShadow: '0 0 6px #FFD700, 0 0 12px rgba(207, 181, 59, 0.4)',
+                        boxShadow: '0 0 6px #06B6D4, 0 0 12px rgba(6, 182, 212, 0.4)',
                       }}
                       initial={{ x: '-100%' }}
                       whileHover={{
@@ -424,7 +394,7 @@ export default function ServicesPage() {
                     <motion.div
                       className="absolute w-[2px] h-full bg-gradient-to-b from-transparent via-white to-transparent right-0"
                       style={{
-                        boxShadow: '0 0 6px #FFD700, 0 0 12px rgba(207, 181, 59, 0.4)',
+                        boxShadow: '0 0 6px #06B6D4, 0 0 12px rgba(6, 182, 212, 0.4)',
                       }}
                       initial={{ y: '-100%' }}
                       whileHover={{
@@ -440,7 +410,7 @@ export default function ServicesPage() {
                     <motion.div
                       className="absolute w-full h-[2px] bg-gradient-to-r from-transparent via-white to-transparent bottom-0"
                       style={{
-                        boxShadow: '0 0 6px #FFD700, 0 0 12px rgba(207, 181, 59, 0.4)',
+                        boxShadow: '0 0 6px #06B6D4, 0 0 12px rgba(6, 182, 212, 0.4)',
                       }}
                       initial={{ x: '100%' }}
                       whileHover={{
@@ -456,7 +426,7 @@ export default function ServicesPage() {
                     <motion.div
                       className="absolute w-[2px] h-full bg-gradient-to-b from-transparent via-white to-transparent left-0"
                       style={{
-                        boxShadow: '0 0 6px #FFD700, 0 0 12px rgba(207, 181, 59, 0.4)',
+                        boxShadow: '0 0 6px #06B6D4, 0 0 12px rgba(6, 182, 212, 0.4)',
                       }}
                       initial={{ y: '100%' }}
                       whileHover={{
@@ -476,7 +446,7 @@ export default function ServicesPage() {
                     className="absolute inset-0 bg-gradient-to-tr rounded-xl z-0"
                     style={{
                       background:
-                        'radial-gradient(circle at center, #FFD70020 0%, transparent 70%)',
+                        'radial-gradient(circle at center, #06B6D420 0%, transparent 70%)',
                       opacity: 0,
                       transition: 'opacity 0.4s ease',
                     }}
@@ -548,7 +518,7 @@ export default function ServicesPage() {
 
       {/* Case Studies with Horizontal Scroll */}
       <AppleScrollSection delay={0.4}>
-        <section className="section-padding relative services-section case-studies-section mt-10">
+        <section className="section-padding relative services-section case-studies-section mt-20">
           {' '}
           {/* Responsive top margin for better spacing */}
           <div className="container mx-auto px-4">
@@ -574,7 +544,6 @@ export default function ServicesPage() {
                 className="text-lg md:text-xl text-white/90 font-light mt-10 max-w-2xl mx-auto font-['IBM_Plex_Sans'] leading-relaxed"
                 style={{
                   textShadow: '0 2px 6px rgba(0,0,0,0.8)',
-                  letterSpacing: '0.025em',
                   fontWeight: '400',
                 }}
               >
@@ -614,14 +583,14 @@ export default function ServicesPage() {
                   width={true}
                   weight={true}
                   italic={false}
-                  textColor="#FFD700"
+                  textColor="#06B6D4"
                   strokeColor="#FFFFFF"
                   minFontSize={32}
                 />
               </motion.div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 px-2 md:px-8 lg:px-16 relative z-10">
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8 px-2 md:px-8 lg:px-12 xl:px-16 relative z-10">
               {services.map((service, index) => (
                 <motion.div
                   key={service.title}
@@ -635,7 +604,7 @@ export default function ServicesPage() {
                       ease: 'easeOut',
                     },
                   }}
-                  viewport={{ once: true, amount: 0.1 }}
+                  viewport={{ amount: 0.1 }}
                 >
                   <ServiceCard service={service} index={index} />
                 </motion.div>
@@ -652,119 +621,84 @@ export default function ServicesPage() {
         </ClientOnly>
       </AppleScrollSection>
 
-      {/* CTA Section with Apple-style reveal */}
-      <AppleScrollSection delay={0.2}>
-        <section className="section-padding relative services-section">
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-purple-900/10 to-black" />
+      <section className="relative py-20 overflow-hidden">
+        <div className="absolute inset-0 z-0 bg-gradient-to-t from-black via-purple-900/20 to-black pointer-events-none" />
 
-          {/* Subtle light beams */}
-          <div className="absolute inset-0">
-            <motion.div
-              initial={{ opacity: 0, rotate: -45, x: '-50%', y: '100%' }}
-              animate={{
-                opacity: [0, 0.1, 0],
-                y: ['100%', '-100%'],
-                transition: {
-                  duration: 8,
-                  repeat: Number.POSITIVE_INFINITY,
-                  repeatType: 'loop',
-                  ease: 'linear',
-                },
-              }}
-              className="absolute left-1/4 w-[80px] h-[400px] bg-gradient-to-t from-[#4CD787]/0 via-[#4CD787]/20 to-[#4CD787]/0"
-              style={{ transform: 'rotate(-45deg)' }}
-            />
+        {/* Subtle light beams */}
+        <div className="absolute inset-0 pointer-events-none">
+          <motion.div
+            initial={{ opacity: 0, rotate: -45, x: '-50%', y: '100%' }}
+            animate={{
+              opacity: [0, 0.1, 0],
+              y: ['100%', '-100%'],
+              transition: {
+                duration: 8,
+                repeat: Number.POSITIVE_INFINITY,
+                repeatType: 'loop',
+                ease: 'linear',
+              },
+            }}
+            className="absolute left-1/4 w-[80px] h-[400px] bg-gradient-to-t from-[#4CD787]/0 via-[#4CD787]/20 to-[#4CD787]/0"
+            style={{ transform: 'rotate(-45deg)' }}
+          />
 
-            <motion.div
-              initial={{ opacity: 0, rotate: 45, x: '50%', y: '100%' }}
-              animate={{
-                opacity: [0, 0.1, 0],
-                y: ['100%', '-100%'],
-                transition: {
-                  duration: 10,
-                  repeat: Number.POSITIVE_INFINITY,
-                  repeatType: 'loop',
-                  ease: 'linear',
-                  delay: 4,
-                },
-              }}
-              className="absolute right-1/4 w-[80px] h-[400px] bg-gradient-to-t from-[#4834D4]/0 via-[#4834D4]/20 to-[#4834D4]/0"
-              style={{ transform: 'rotate(45deg)' }}
-            />
-          </div>
+          <motion.div
+            initial={{ opacity: 0, rotate: 45, x: '50%', y: '100%' }}
+            animate={{
+              opacity: [0, 0.1, 0],
+              y: ['100%', '-100%'],
+              transition: {
+                duration: 10,
+                repeat: Number.POSITIVE_INFINITY,
+                repeatType: 'loop',
+                ease: 'linear',
+                delay: 4,
+              },
+            }}
+            className="absolute right-1/4 w-[80px] h-[400px] bg-gradient-to-t from-[#4834D4]/0 via-[#4834D4]/20 to-[#4834D4]/0"
+            style={{ transform: 'rotate(45deg)' }}
+          />
+        </div>
 
-          <div className="relative">
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{
-                opacity: 1,
-                y: 0,
-                transition: {
-                  duration: 0.8,
-                  ease: [0.22, 1, 0.36, 1],
-                },
-              }}
-              viewport={{ once: true, amount: 0.3 }}
-              className="text-center max-w-3xl mx-auto px-4"
-            >
-              <motion.h2
-                className="text-3xl md:text-4xl font-bold mb-6 text-[#FFD700]"
-                style={{
-                  textShadow: '0 2px 4px rgba(0,0,0,0.5)',
-                  WebkitTextStroke: '1px rgba(0,0,0,0.3)',
-                }}
+        <div className="relative container mx-auto px-4 z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 0.7, ease: 'easeOut' }}
+            className="text-center max-w-4xl mx-auto"
+          >
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
+              Ready to Transform Your Business?
+            </h2>
+            <p className="mt-6 text-lg md:text-xl text-white/80 leading-relaxed">
+              Partner with our senior engineers to launch resilient, scalable products and unlock
+              new growth faster than you thought possible.
+            </p>
+
+            <motion.div className="mt-8" whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
+              <a
+                href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 bg-robinhood text-black hover:bg-white hover:text-black px-8 py-4 rounded-xl font-semibold text-lg border-2 border-robinhood shadow-lg hover:shadow-[0_8px_30px_rgba(76,215,135,0.3)] transition-all duration-300"
               >
-                Ready to Transform Your Business?
-              </motion.h2>
-
-              <motion.p
-                className="text-lg md:text-xl text-white font-light font-['IBM_Plex_Sans'] leading-relaxed mb-8 mt-2"
-                initial={{ opacity: 0 }}
-                whileInView={{
-                  opacity: 1,
-                  transition: { delay: 0.2, duration: 0.6 },
-                }}
-                viewport={{ once: true, amount: 0.5 }}
-                style={{
-                  textShadow: '0 2px 6px rgba(0,0,0,0.8)',
-                  letterSpacing: '0.025em',
-                  fontWeight: '400',
-                }}
-              >
-                Let&apos;s discuss how we can help you achieve your goals with our expert software
-                development services.
-              </motion.p>
-
-              <AnimatePresence>
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{
-                    opacity: 1,
-                    y: 0,
-                    transition: { delay: 0.4, duration: 0.6 },
-                  }}
-                  viewport={{ once: true, amount: 0.5 }}
-                >
-                  <a
-                    href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-block bg-robinhood text-black hover:bg-white hover:text-black px-8 py-3 rounded-lg font-medium border-2 border-robinhood shadow-lg transition-all duration-300"
-                  >
-                    <span className="relative z-10">Schedule a Strategy Call</span>
-                    <motion.span
-                      className="absolute inset-0 bg-white/20"
-                      initial={{ x: '-100%', opacity: 0 }}
-                      whileHover={{ x: '130%', opacity: 0.3 }}
-                      transition={{ duration: 0.6 }}
-                    />
-                  </a>
-                </motion.div>
-              </AnimatePresence>
+                Schedule a Strategy Call
+                <ArrowRight className="w-5 h-5" />
+              </a>
             </motion.div>
-          </div>
-        </section>
-      </AppleScrollSection>
+
+            <motion.p
+              className="mt-5 text-sm md:text-base text-white/60"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
+              Free consultation • Response within 24 hours • No commitment required
+            </motion.p>
+          </motion.div>
+        </div>
+      </section>
     </div>
   )
 }
