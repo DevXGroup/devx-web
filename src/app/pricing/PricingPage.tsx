@@ -312,10 +312,10 @@ function PricingCard({ plan, index, isYearly }: PricingCardProps) {
             <IconComponent className="w-6 h-6" style={{ color: plan.color }} />
           </motion.div>
           <div>
-            <h3 className="text-xl font-bold text-white group-hover:text-[#FFD700] transition-colors duration-300">
+            <h3 className="text-xl md:text-2xl font-bold text-white group-hover:text-[#FFD700] transition-colors duration-300">
               {plan.name}
             </h3>
-            <p className="text-xs font-medium" style={{ color: plan.color }}>
+            <p className="text-sm md:text-xs font-medium" style={{ color: plan.color }}>
               {plan.subtitle}
             </p>
           </div>
@@ -353,27 +353,27 @@ function PricingCard({ plan, index, isYearly }: PricingCardProps) {
           </motion.div>
         </div>
 
-        <p className="text-white/70 text-xs leading-relaxed mb-4 group-hover:text-white/90 transition-colors duration-300">
+        <p className="text-white/80 text-sm md:text-base leading-relaxed mb-4 group-hover:text-white/90 transition-colors duration-300">
           {plan.description}
         </p>
 
         {/* Features section with improved spacing */}
         <div className="mb-4 flex-grow">
-          <h4 className="text-xs font-bold text-white mb-3 uppercase tracking-wider flex items-center gap-2">
-            <Check className="w-3 h-3" style={{ color: plan.color }} />
+          <h4 className="text-sm md:text-xs font-bold text-white mb-3 uppercase tracking-wide flex items-center gap-2">
+            <Check className="w-4 h-4" style={{ color: plan.color }} />
             Core Features
           </h4>
           <ul className="space-y-2">
             {plan.features.map((feature: string, featureIndex: number) => (
               <motion.li
                 key={feature}
-                className="flex items-start text-xs text-white/80 group-hover:text-white transition-colors duration-300"
+                className="flex items-start text-sm md:text-base text-white/80 group-hover:text-white transition-colors duration-300"
                 initial={{ opacity: 0, x: -10 }}
                 animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
                 transition={{ delay: 0.1 * featureIndex }}
               >
                 <Check
-                  className="w-3 h-3 mr-2 mt-0.5 flex-shrink-0"
+                  className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0"
                   style={{ color: plan.color }}
                 />
                 {feature}
@@ -385,14 +385,14 @@ function PricingCard({ plan, index, isYearly }: PricingCardProps) {
         {/* What's included section with accordion-like reveal */}
         <div className="mb-6">
           <h4
-            className="text-xs font-bold mb-3 uppercase tracking-wider flex items-center gap-2"
+            className="text-sm md:text-xs font-bold mb-3 uppercase tracking-wide flex items-center gap-2"
             style={{ color: plan.color }}
           >
-            <ArrowRight className="w-3 h-3" />
+            <ArrowRight className="w-4 h-4" />
             What&apos;s Included
           </h4>
           <motion.ul
-            className="space-y-1.5 text-xs text-white/60"
+            className="space-y-2 text-sm md:text-base text-white/70"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             transition={{ delay: 0.5, duration: 0.5 }}
@@ -400,13 +400,13 @@ function PricingCard({ plan, index, isYearly }: PricingCardProps) {
             {plan.included.map((item: string, itemIndex: number) => (
               <motion.li
                 key={item}
-                className="flex items-start leading-relaxed group-hover:text-white/80 transition-colors duration-300"
+                className="flex items-start leading-relaxed group-hover:text-white/85 transition-colors duration-300"
                 initial={{ opacity: 0, x: -10 }}
                 animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
                 transition={{ delay: 0.6 + 0.1 * itemIndex }}
               >
                 <span
-                  className="w-1 h-1 rounded-full mr-2 mt-1.5 flex-shrink-0"
+                  className="w-1.5 h-1.5 rounded-full mr-2 mt-2 flex-shrink-0"
                   style={{ backgroundColor: plan.color }}
                 />
                 {item}
