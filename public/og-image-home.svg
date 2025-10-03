@@ -2,20 +2,28 @@
   <!-- Background Gradient -->
   <defs>
     <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#1a0033;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#0a0a1a;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#001a1a;stop-opacity:1" />
+      <stop offset="0%" style="stop-color:#0a0014;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#1a0033;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0a0a1a;stop-opacity:1" />
     </linearGradient>
 
-    <radialGradient id="glow1" cx="30%" cy="40%">
-      <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:0.3" />
-      <stop offset="60%" style="stop-color:#8B5CF6;stop-opacity:0" />
+    <radialGradient id="glow1" cx="20%" cy="30%">
+      <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:0.4" />
+      <stop offset="70%" style="stop-color:#8B5CF6;stop-opacity:0" />
     </radialGradient>
 
-    <radialGradient id="glow2" cx="70%" cy="60%">
-      <stop offset="0%" style="stop-color:#4CD787;stop-opacity:0.2" />
-      <stop offset="60%" style="stop-color:#4CD787;stop-opacity:0" />
+    <radialGradient id="glow2" cx="80%" cy="70%">
+      <stop offset="0%" style="stop-color:#4CD787;stop-opacity:0.3" />
+      <stop offset="70%" style="stop-color:#4CD787;stop-opacity:0" />
     </radialGradient>
+
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
   </defs>
 
   <!-- Background -->
@@ -25,28 +33,33 @@
   <rect width="1200" height="630" fill="url(#glow1)"/>
   <rect width="1200" height="630" fill="url(#glow2)"/>
 
-  <!-- Diagonal Lines Pattern -->
-  <g opacity="0.1">
-    <line x1="0" y1="0" x2="1200" y2="630" stroke="#4CD787" stroke-width="1"/>
-    <line x1="100" y1="0" x2="1200" y2="530" stroke="#8B5CF6" stroke-width="1"/>
-    <line x1="200" y1="0" x2="1200" y2="430" stroke="#4CD787" stroke-width="1"/>
-    <line x1="300" y1="0" x2="1200" y2="330" stroke="#8B5CF6" stroke-width="1"/>
-    <line x1="0" y1="100" x2="1100" y2="630" stroke="#4CD787" stroke-width="1"/>
-    <line x1="0" y1="200" x2="1000" y2="630" stroke="#8B5CF6" stroke-width="1"/>
+  <!-- Decorative Elements -->
+  <g opacity="0.15">
+    <circle cx="100" cy="100" r="4" fill="#4CD787"/>
+    <circle cx="1100" cy="530" r="6" fill="#8B5CF6"/>
+    <circle cx="900" cy="100" r="3" fill="#9d4edd"/>
+    <circle cx="200" cy="500" r="5" fill="#4CD787"/>
   </g>
 
-  <!-- Logo (DevX Group text) -->
-  <text x="60" y="100" font-family="'IBM Plex Mono', monospace" font-size="48" font-weight="bold" fill="#8B5CF6">DevX</text>
-  <text x="200" y="100" font-family="'IBM Plex Mono', monospace" font-size="36" font-weight="300" fill="#9d4edd" opacity="0.8">Group LLC</text>
+  <!-- Logo with enhanced styling -->
+  <g filter="url(#glow)">
+    <text x="60" y="110" font-family="'IBM Plex Mono', monospace" font-size="56" font-weight="bold" fill="#8B5CF6">DevX</text>
+    <text x="230" y="110" font-family="'IBM Plex Mono', monospace" font-size="32" font-weight="300" fill="#c4b5fd">Group LLC</text>
+  </g>
 
-  <!-- Main Title -->
-  <text font-family="'IBM Plex Mono', monospace" font-size="72" font-weight="bold" fill="#ffffff">
-    <tspan x="60" y="370">Elite Software</tspan>
-    <tspan x="60" y="455">Development Team</tspan>
+  <!-- Main Title with shadow -->
+  <text font-family="'IBM Plex Mono', monospace" font-size="80" font-weight="bold" fill="#ffffff" filter="url(#glow)">
+    <tspan x="60" y="340">Elite Software</tspan>
+    <tspan x="60" y="435">Development Team</tspan>
   </text>
 
-  <!-- Subtitle -->
-  <text x="60" y="545" font-family="'IBM Plex Sans', sans-serif" font-size="36" font-weight="400" fill="#4CD787">
-    Custom Applications • AI/ML • Digital Transformation
+  <!-- Subtitle with better spacing -->
+  <text x="60" y="540" font-family="'IBM Plex Sans', sans-serif" font-size="32" font-weight="500" fill="#4CD787">
+    <tspan>Custom Software • AI/ML Solutions • Cloud &amp; IoT</tspan>
+  </text>
+
+  <!-- Location badge -->
+  <text x="60" y="590" font-family="'IBM Plex Sans', sans-serif" font-size="18" font-weight="400" fill="#ffffff" opacity="0.6">
+    San Diego, California
   </text>
 </svg>

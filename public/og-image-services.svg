@@ -2,47 +2,73 @@
   <!-- Background -->
   <defs>
     <linearGradient id="bgGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#0a0a1a;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#1a0033;stop-opacity:1" />
+      <stop offset="0%" style="stop-color:#0a0014;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#1a0033;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0a0a1a;stop-opacity:1" />
     </linearGradient>
 
-    <radialGradient id="serviceGlow1" cx="20%" cy="80%">
-      <stop offset="0%" style="stop-color:#9d4edd;stop-opacity:0.15" />
-      <stop offset="40%" style="stop-color:#9d4edd;stop-opacity:0" />
+    <radialGradient id="serviceGlow1" cx="15%" cy="50%">
+      <stop offset="0%" style="stop-color:#F472B6;stop-opacity:0.4" />
+      <stop offset="60%" style="stop-color:#F472B6;stop-opacity:0" />
     </radialGradient>
 
-    <radialGradient id="serviceGlow2" cx="80%" cy="20%">
-      <stop offset="0%" style="stop-color:#4CD787;stop-opacity:0.15" />
-      <stop offset="40%" style="stop-color:#4CD787;stop-opacity:0" />
+    <radialGradient id="serviceGlow2" cx="85%" cy="30%">
+      <stop offset="0%" style="stop-color:#06B6D4;stop-opacity:0.3" />
+      <stop offset="60%" style="stop-color:#06B6D4;stop-opacity:0" />
     </radialGradient>
+
+    <filter id="glow2" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
   </defs>
 
   <rect width="1200" height="630" fill="url(#bgGradient2)"/>
   <rect width="1200" height="630" fill="url(#serviceGlow1)"/>
   <rect width="1200" height="630" fill="url(#serviceGlow2)"/>
 
+  <!-- Decorative grid -->
+  <g opacity="0.08" stroke="#06B6D4" stroke-width="1">
+    <line x1="0" y1="210" x2="1200" y2="210"/>
+    <line x1="0" y1="420" x2="1200" y2="420"/>
+    <line x1="400" y1="0" x2="400" y2="630"/>
+    <line x1="800" y1="0" x2="800" y2="630"/>
+  </g>
+
   <!-- Logo -->
-  <text x="60" y="100" font-family="'IBM Plex Mono', monospace" font-size="48" font-weight="bold" fill="#8B5CF6">DevX</text>
-  <text x="200" y="100" font-family="'IBM Plex Mono', monospace" font-size="36" font-weight="300" fill="#9d4edd" opacity="0.8">Group LLC</text>
+  <g filter="url(#glow2)">
+    <text x="60" y="110" font-family="'IBM Plex Mono', monospace" font-size="56" font-weight="bold" fill="#8B5CF6">DevX</text>
+    <text x="230" y="110" font-family="'IBM Plex Mono', monospace" font-size="32" font-weight="300" fill="#c4b5fd">Group LLC</text>
+  </g>
 
   <!-- Main Title -->
-  <text x="60" y="320" font-family="'IBM Plex Mono', monospace" font-size="96" font-weight="bold" fill="#F472B6">
+  <text x="60" y="310" font-family="'IBM Plex Mono', monospace" font-size="110" font-weight="bold" fill="#F472B6" filter="url(#glow2)">
     Services
   </text>
 
-  <!-- Features -->
-  <g font-family="'IBM Plex Sans', sans-serif" font-size="20" fill="#ffffff" opacity="0.9">
-    <text x="90" y="520">
-      <tspan fill="#06B6D4" font-size="24">◆</tspan>
-      <tspan dx="15">AI &amp; Machine Learning</tspan>
-    </text>
-    <text x="440" y="520">
-      <tspan fill="#06B6D4" font-size="24">◆</tspan>
-      <tspan dx="15">Cloud Solutions</tspan>
-    </text>
-    <text x="720" y="520">
-      <tspan fill="#06B6D4" font-size="24">◆</tspan>
-      <tspan dx="15">IoT &amp; Automation</tspan>
-    </text>
+  <!-- Subtitle -->
+  <text x="60" y="390" font-family="'IBM Plex Sans', sans-serif" font-size="28" font-weight="400" fill="#ffffff" opacity="0.8">
+    Comprehensive software solutions to drive your business forward
+  </text>
+
+  <!-- Feature Cards -->
+  <g font-family="'IBM Plex Sans', sans-serif">
+    <!-- Card 1 -->
+    <rect x="60" y="460" width="340" height="100" rx="8" fill="rgba(6, 182, 212, 0.1)" stroke="#06B6D4" stroke-width="1"/>
+    <text x="90" y="505" font-size="24" font-weight="600" fill="#06B6D4">AI &amp; ML Solutions</text>
+    <text x="90" y="535" font-size="16" fill="#ffffff" opacity="0.7">Intelligent automation</text>
+
+    <!-- Card 2 -->
+    <rect x="430" y="460" width="340" height="100" rx="8" fill="rgba(76, 215, 135, 0.1)" stroke="#4CD787" stroke-width="1"/>
+    <text x="460" y="505" font-size="24" font-weight="600" fill="#4CD787">Cloud &amp; DevOps</text>
+    <text x="460" y="535" font-size="16" fill="#ffffff" opacity="0.7">Scalable infrastructure</text>
+
+    <!-- Card 3 -->
+    <rect x="800" y="460" width="340" height="100" rx="8" fill="rgba(157, 78, 221, 0.1)" stroke="#9d4edd" stroke-width="1"/>
+    <text x="830" y="505" font-size="24" font-weight="600" fill="#9d4edd">IoT &amp; Hardware</text>
+    <text x="830" y="535" font-size="16" fill="#ffffff" opacity="0.7">Connected systems</text>
   </g>
 </svg>
