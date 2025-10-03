@@ -106,7 +106,7 @@ const services = [
       'Cross-platform Solutions',
       'Mobile App Strategy',
     ],
-    color: '#FFD700',
+    color: '#06B6D4',
   },
   {
     icon: Database,
@@ -162,7 +162,7 @@ const services = [
       'Technology Migration',
       'Digital Innovation',
     ],
-    color: '#FFD700',
+    color: '#06B6D4',
   },
   {
     icon: Cpu,
@@ -370,7 +370,7 @@ function ProjectCard({ project, index }: { project: any; index: number }) {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: index * 0.1 + 0.3 }}
           >
-            <span className="bg-gradient-to-r from-[#4CD787] to-[#FFD700] text-black px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg backdrop-blur-sm">
+            <span className="bg-gradient-to-r from-[#4CD787] to-[#06B6D4] text-black px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg backdrop-blur-sm">
               {project.category}
             </span>
           </motion.div>
@@ -402,7 +402,7 @@ function ProjectCard({ project, index }: { project: any; index: number }) {
               {project.tags.map((tag: any, tagIndex: number) => (
                 <motion.span
                   key={tag}
-                  className="px-3 py-1.5 bg-gradient-to-r from-[#4CD787]/20 to-[#FFD700]/20 text-[#4CD787] border border-[#4CD787]/30 text-xs font-medium rounded-full backdrop-blur-sm"
+                  className="px-3 py-1.5 bg-gradient-to-r from-[#4CD787]/20 to-[#06B6D4]/20 text-[#4CD787] border border-[#4CD787]/30 text-xs font-medium rounded-full backdrop-blur-sm"
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
                   transition={{ delay: index * 0.1 + 0.7 + tagIndex * 0.05 }}
@@ -593,10 +593,10 @@ export default function PortfolioPage() {
                   className="absolute -top-12 left-6 w-6 h-6 rotate-45 cursor-pointer"
                   style={{
                     background:
-                      'linear-gradient(45deg, rgba(207,181,59,0.7) 0%, rgba(207,181,59,0.3) 50%, transparent 100%)',
-                    border: '1px solid rgba(207,181,59,0.5)',
+                      'linear-gradient(45deg, rgba(6, 182, 212, 0.7) 0%, rgba(6, 182, 212, 0.3) 50%, transparent 100%)',
+                    border: '1px solid rgba(6, 182, 212, 0.5)',
                     borderRadius: '2px',
-                    boxShadow: '0 0 12px rgba(207,181,59,0.3)',
+                    boxShadow: '0 0 12px rgba(6, 182, 212, 0.3)',
                     zIndex: 1,
                   }}
                   animate={
@@ -740,9 +740,9 @@ export default function PortfolioPage() {
                     w-[130px] h-[130px]"
                   style={{
                     transform: 'rotate(-15deg)',
-                    border: '2px solid rgba(207, 181, 59, 0.6)',
+                    border: '2px solid rgba(6, 182, 212, 0.6)',
                     borderRadius: '12px',
-                    boxShadow: '0 0 20px rgba(207, 181, 59, 0.4)',
+                    boxShadow: '0 0 20px rgba(6, 182, 212, 0.4)',
                     backgroundColor: 'rgba(0, 0, 0, 0.2)',
                     zIndex: 5,
                   }}
@@ -754,9 +754,9 @@ export default function PortfolioPage() {
                     <GridAnimation
                       direction="diagonal"
                       speed={0.16}
-                      borderColor="#FFD700"
+                      borderColor="#06B6D4"
                       squareSize={20}
-                      hoverFillColor="rgba(207, 181, 59, 0.3)"
+                      hoverFillColor="rgba(6, 182, 212, 0.3)"
                     />
                   </div>
                 </motion.div>
@@ -847,7 +847,7 @@ export default function PortfolioPage() {
             transition={{ duration: 0.8 }}
             className="text-center max-w-3xl mx-auto"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#FFD700]">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#06B6D4]">
               Ready to Build Your Next Project?
             </h2>
             <p className="text-lg md:text-xl text-foreground/90 font-light mb-8 leading-relaxed">
@@ -874,7 +874,7 @@ export default function PortfolioPage() {
         <div className="absolute inset-0 z-0 bg-gradient-to-b from-black via-purple-900/10 to-black pointer-events-none" />
         <div className="container mx-auto px-4 relative">
           <div className="text-center mb-8">
-            <h3 className="text-3xl md:text-4xl font-bold mb-6 text-[#FFD700]">
+            <h3 className="text-3xl md:text-4xl font-bold mb-6 text-[#06B6D4]">
               Services we deliver
             </h3>
             <p className="text-white/70 mt-2">
