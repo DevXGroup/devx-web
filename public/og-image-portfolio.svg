@@ -37,11 +37,8 @@
     <circle cx="250" cy="550" r="3" fill="#8B5CF6"/>
   </g>
 
-  <!-- Logo (Top Right) -->
-  <g filter="url(#glow3)">
-    <text x="1084" y="110" font-family="'IBM Plex Mono', monospace" font-size="56" font-weight="bold" fill="#8B5CF6" text-anchor="end">DevX</text>
-    <text x="1140" y="110" font-family="'IBM Plex Mono', monospace" font-size="32" font-weight="300" fill="#c4b5fd" text-anchor="end">Group LLC</text>
-  </g>
+  <!-- Logo -->
+  <image href="images/logos/devx-logo-og.png" x="60" y="60" width="400" height="79"/>
 
   <!-- Main Title -->
   <text x="60" y="280" font-family="'IBM Plex Mono', monospace" font-size="100" font-weight="bold" fill="url(#titleGradient)" filter="url(#glow3)">
