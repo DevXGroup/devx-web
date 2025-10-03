@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevX OG Image Generator</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'IBM Plex Mono', monospace;
+            background: #000;
+        }
+
+        .og-image {
+            width: 1200px;
+            height: 630px;
+            position: relative;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        /* Home Page OG */
+        .og-home {
+            background: linear-gradient(135deg, #1a0033 0%, #0a0a1a 50%, #001a1a 100%);
+            position: relative;
+        }
+
+        .og-home::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                repeating-linear-gradient(
+                    -45deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(76, 215, 135, 0.03) 2px,
+                    rgba(76, 215, 135, 0.03) 4px
+                ),
+                repeating-linear-gradient(
+                    45deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(139, 92, 246, 0.03) 2px,
+                    rgba(139, 92, 246, 0.03) 4px
+                );
+            opacity: 0.6;
+        }
+
+        .og-home .logo {
+            position: absolute;
+            top: 50px;
+            left: 60px;
+            width: 400px;
+            z-index: 10;
+        }
+
+        .og-home .title {
+            position: absolute;
+            bottom: 180px;
+            left: 60px;
+            right: 60px;
+            font-size: 72px;
+            font-weight: bold;
+            color: #fff;
+            line-height: 1.1;
+            z-index: 10;
+        }
+
+        .og-home .subtitle {
+            position: absolute;
+            bottom: 100px;
+            left: 60px;
+            right: 60px;
+            font-size: 28px;
+            color: #4CD787;
+            font-weight: 300;
+            z-index: 10;
+        }
+
+        .og-home .gradient-overlay {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 30% 40%, rgba(139, 92, 246, 0.3) 0%, transparent 60%),
+                        radial-gradient(ellipse at 70% 60%, rgba(76, 215, 135, 0.2) 0%, transparent 60%);
+        }
+
+        /* Services Page OG */
+        .og-services {
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a0033 100%);
+            position: relative;
+        }
+
+        .og-services::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(circle at 20% 80%, rgba(157, 78, 221, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 20%, rgba(76, 215, 135, 0.15) 0%, transparent 40%);
+        }
+
+        .og-services .logo {
+            position: absolute;
+            top: 50px;
+            left: 60px;
+            width: 350px;
+            z-index: 10;
+        }
+
+        .og-services .title {
+            position: absolute;
+            top: 220px;
+            left: 60px;
+            font-size: 96px;
+            font-weight: bold;
+            color: #F472B6;
+            z-index: 10;
+        }
+
+        .og-services .features {
+            position: absolute;
+            bottom: 80px;
+            left: 60px;
+            right: 60px;
+            display: flex;
+            gap: 40px;
+            z-index: 10;
+        }
+
+        .og-services .feature {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .og-services .feature::before {
+            content: '◆';
+            color: #06B6D4;
+            font-size: 24px;
+        }
+
+        /* Portfolio Page OG */
+        .og-portfolio {
+            background: linear-gradient(135deg, #000 0%, #1a0033 50%, #0a0a1a 100%);
+            position: relative;
+        }
+
+        .og-portfolio .logo {
+            position: absolute;
+            top: 50px;
+            right: 60px;
+            width: 350px;
+            z-index: 10;
+        }
+
+        .og-portfolio .title {
+            position: absolute;
+            top: 200px;
+            left: 60px;
+            font-size: 88px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #4CD787 0%, #9d4edd 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            z-index: 10;
+        }
+
+        .og-portfolio .subtitle {
+            position: absolute;
+            top: 340px;
+            left: 60px;
+            font-size: 32px;
+            color: rgba(255, 255, 255, 0.8);
+            z-index: 10;
+        }
+
+        .og-portfolio .grid {
+            position: absolute;
+            bottom: 60px;
+            left: 60px;
+            right: 60px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            z-index: 10;
+        }
+
+        .og-portfolio .grid-item {
+            height: 80px;
+            border-radius: 8px;
+            border: 1px solid rgba(76, 215, 135, 0.3);
+            background: rgba(76, 215, 135, 0.05);
+        }
+
+        /* About Page OG */
+        .og-about {
+            background: linear-gradient(135deg, #0a0a1a 0%, #001a1a 100%);
+            position: relative;
+        }
+
+        .og-about .logo {
+            position: absolute;
+            top: 50px;
+            left: 60px;
+            width: 400px;
+            z-index: 10;
+        }
+
+        .og-about .title {
+            position: absolute;
+            top: 240px;
+            left: 60px;
+            font-size: 80px;
+            font-weight: bold;
+            color: #fff;
+            z-index: 10;
+        }
+
+        .og-about .tagline {
+            position: absolute;
+            bottom: 100px;
+            left: 60px;
+            right: 60px;
+            font-size: 36px;
+            color: #CFB53B;
+            font-weight: 600;
+            z-index: 10;
+        }
+
+        .og-about .accent {
+            position: absolute;
+            bottom: 60px;
+            left: 60px;
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.6);
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="color: #4CD787; margin-bottom: 40px;">DevX Group OG Images</h1>
+    <p style="color: #fff; margin-bottom: 20px;">Screenshot each image at 1200x630px resolution</p>
+
+    <!-- Home Page -->
+    <h2 style="color: #F472B6; margin-top: 40px;">Home Page (og-image-home.jpg)</h2>
+    <div class="og-image og-home">
+        <div class="gradient-overlay"></div>
+        <img class="logo" src="../public/images/logos/devx-logo.png" alt="DevX Group">
+        <div class="title">Elite Software<br>Development Team</div>
+        <div class="subtitle">Custom Applications • AI/ML Solutions • Digital Transformation</div>
+    </div>
+
+    <!-- Services Page -->
+    <h2 style="color: #F472B6; margin-top: 40px;">Services Page (og-image-services.jpg)</h2>
+    <div class="og-image og-services">
+        <img class="logo" src="../public/images/logos/devx-logo.png" alt="DevX Group">
+        <div class="title">Services</div>
+        <div class="features">
+            <div class="feature">AI & Machine Learning</div>
+            <div class="feature">Cloud Solutions</div>
+            <div class="feature">IoT & Automation</div>
+        </div>
+    </div>
+
+    <!-- Portfolio Page -->
+    <h2 style="color: #F472B6; margin-top: 40px;">Portfolio Page (og-image-portfolio.jpg)</h2>
+    <div class="og-image og-portfolio">
+        <img class="logo" src="../public/images/logos/devx-logo.png" alt="DevX Group">
+        <div class="title">Our Work</div>
+        <div class="subtitle">50+ Successful Projects Delivered</div>
+        <div class="grid">
+            <div class="grid-item"></div>
+            <div class="grid-item"></div>
+            <div class="grid-item"></div>
+            <div class="grid-item"></div>
+        </div>
+    </div>
+
+    <!-- About Page -->
+    <h2 style="color: #F472B6; margin-top: 40px;">About Page (og-image-about.jpg)</h2>
+    <div class="og-image og-about">
+        <img class="logo" src="../public/images/logos/devx-logo.png" alt="DevX Group">
+        <div class="title">About Us</div>
+        <div class="tagline">Building Tomorrow's Solutions, Today</div>
+        <div class="accent">San Diego, California • 15+ Years Combined Experience</div>
+    </div>
+
+    <script>
+        console.log('Open the browser DevTools and use screenshot tool at 1200x630px for each section');
+    </script>
+</body>
+</html>

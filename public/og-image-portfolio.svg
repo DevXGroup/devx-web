@@ -1,0 +1,39 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <defs>
+    <linearGradient id="bgGradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#000000;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#1a0033;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0a0a1a;stop-opacity:1" />
+    </linearGradient>
+
+    <linearGradient id="titleGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4CD787;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#9d4edd;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bgGradient3)"/>
+
+  <!-- Logo (Top Right) -->
+  <text x="1040" y="100" font-family="'IBM Plex Mono', monospace" font-size="48" font-weight="bold" fill="#8B5CF6" text-anchor="end">DevX</text>
+  <text x="1140" y="100" font-family="'IBM Plex Mono', monospace" font-size="30" font-weight="300" fill="#9d4edd" opacity="0.8" text-anchor="end">Group LLC</text>
+
+  <!-- Main Title -->
+  <text x="60" y="290" font-family="'IBM Plex Mono', monospace" font-size="88" font-weight="bold" fill="url(#titleGradient)">
+    Our Work
+  </text>
+
+  <!-- Subtitle -->
+  <text x="60" y="370" font-family="'IBM Plex Sans', sans-serif" font-size="32" fill="#ffffff" opacity="0.8">
+    50+ Successful Projects Delivered
+  </text>
+
+  <!-- Grid Items -->
+  <g stroke="#4CD787" stroke-width="1" fill="rgba(76, 215, 135, 0.05)" opacity="0.6">
+    <rect x="60" y="480" width="255" height="80" rx="8"/>
+    <rect x="335" y="480" width="255" height="80" rx="8"/>
+    <rect x="610" y="480" width="255" height="80" rx="8"/>
+    <rect x="885" y="480" width="255" height="80" rx="8"/>
+  </g>
+</svg>

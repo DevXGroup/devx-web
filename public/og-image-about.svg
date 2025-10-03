@@ -1,0 +1,30 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <defs>
+    <linearGradient id="bgGradient4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a1a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#001a1a;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bgGradient4)"/>
+
+  <!-- Logo -->
+  <text x="60" y="100" font-family="'IBM Plex Mono', monospace" font-size="48" font-weight="bold" fill="#8B5CF6">DevX</text>
+  <text x="200" y="100" font-family="'IBM Plex Mono', monospace" font-size="36" font-weight="300" fill="#9d4edd" opacity="0.8">Group LLC</text>
+
+  <!-- Main Title -->
+  <text x="60" y="330" font-family="'IBM Plex Mono', monospace" font-size="80" font-weight="bold" fill="#ffffff">
+    About Us
+  </text>
+
+  <!-- Tagline -->
+  <text x="60" y="510" font-family="'IBM Plex Mono', monospace" font-size="36" font-weight="600" fill="#CFB53B">
+    Building Tomorrow's Solutions, Today
+  </text>
+
+  <!-- Location -->
+  <text x="60" y="570" font-family="'IBM Plex Sans', sans-serif" font-size="20" fill="#ffffff" opacity="0.6">
+    San Diego, California • 15+ Years Combined Experience
+  </text>
+</svg>
