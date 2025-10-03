@@ -87,10 +87,10 @@ export default function Navbar() {
     switch (path) {
       case '/home':
         return {
-          text: 'text-pink-500',
-          bg: 'bg-pink-400/10',
-          shadow: 'shadow-pink-500/30',
-          indicator: 'bg-gradient-to-b from-pink-500 to-transparent',
+          text: 'text-[#ccff00]',
+          bg: 'bg-[#ccff00]/10',
+          shadow: 'shadow-[#ccff00]/30',
+          indicator: 'bg-gradient-to-b from-[#ccff00] to-transparent',
         }
       case '/services':
         return {
@@ -136,10 +136,10 @@ export default function Navbar() {
         }
       default:
         return {
-          text: 'text-pink-500',
-          bg: 'bg-pink-400/10',
-          shadow: 'shadow-pink-500/30',
-          indicator: 'bg-gradient-to-b from-pink-500 to-transparent',
+          text: 'text-[#ccff00]',
+          bg: 'bg-[#ccff00]/10',
+          shadow: 'shadow-[#ccff00]/30',
+          indicator: 'bg-gradient-to-b from-[#ccff00] to-transparent',
         }
     }
   }
