@@ -1,58 +1,61 @@
-"use client"
+'use client'
 
-import { motion, useScroll, useTransform, useMotionValue } from "framer-motion"
-import { useRef, useEffect, useState } from "react"
-import { Code2, Rocket, Users, Zap, Pencil, Settings } from "lucide-react"
-import SDLCProcess from "./SDLCProcess"
-import { AnimatedGradientText } from "@animations/AnimatedGradientText"
+import { motion, useScroll, useTransform, useMotionValue } from 'framer-motion'
+import Image from 'next/image'
+import { useRef, useEffect, useState } from 'react'
+import { Code2, Rocket, Users, Zap, Pencil, Settings } from 'lucide-react'
+import SDLCProcess from './SDLCProcess'
+import { AnimatedGradientText } from '@animations/AnimatedGradientText'
+import GridAnimation from '@animations/GridAnimation'
 
 const processes = [
   {
     icon: Users,
-    title: "Discovery",
-    description: "Share your vision. We'll understand your goals and map the perfect solution path.",
+    title: 'Discovery',
+    description:
+      "Share your vision. We'll understand your goals and map the perfect solution path.",
     shapeVariation: 0,
-    color: "#4CD787",
+    color: '#4CD787',
     useFullCard: true,
   },
   {
     icon: Pencil,
-    title: "Design",
-    description: "Get beautiful, user-friendly designs that perfectly match your brand and goals.",
+    title: 'Design',
+    description: 'Get beautiful, user-friendly designs that perfectly match your brand and goals.',
     shapeVariation: 0,
-    color: "#9d4edd",
+    color: '#9d4edd',
     useFullCard: true,
   },
   {
     icon: Code2,
-    title: "Build",
-    description: "Watch your idea come to life with clean, fast, and scalable code.",
+    title: 'Build',
+    description: 'Watch your idea come to life with clean, fast, and scalable code.',
     shapeVariation: 0,
-    color: "#8B5CF6",
+    color: '#8B5CF6',
     useFullCard: true,
   },
   {
     icon: Zap,
-    title: "Test",
-    description: "Relax while we ensure everything works flawlessly across all devices.",
+    title: 'Test',
+    description: 'Relax while we ensure everything works flawlessly across all devices.',
     shapeVariation: 0,
-    color: "#FFD700",
+    color: '#FFD700',
     useFullCard: true,
   },
   {
     icon: Rocket,
-    title: "Launch",
-    description: "Go live with confidence. We handle the technical details so you can celebrate.",
+    title: 'Launch',
+    description: 'Go live with confidence. We handle the technical details so you can celebrate.',
     shapeVariation: 0,
-    color: "#ff6b6b",
+    color: '#ff6b6b',
     useFullCard: true,
   },
   {
     icon: Settings,
-    title: "Grow",
-    description: "Keep thriving with ongoing updates, monitoring, and new features as you scale.",
+    title: 'Grow',
+    description: 'Keep thriving with ongoing updates, monitoring, and new features as you scale.',
     shapeVariation: 0,
-    color: "#4CD787",
+    color: '#4CD787',
     useFullCard: true,
   },
 ]
@@ -60,13 +63,13 @@ const processes = [
 export default function Process() {
   const containerRef = useRef<HTMLDivElement>(null)
   const [isClient, setIsClient] = useState(false)
-  
+
   // Always call useScroll to maintain hooks order
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start end", "end start"],
+    offset: ['start end', 'end start'],
   })
-  
+
   useEffect(() => {
     setIsClient(true)
   }, [])
@@ -84,34 +87,49 @@ export default function Process() {
         const containerHeight = containerRef.current.offsetHeight
         const windowHeight = window.innerHeight
 
-        const scrollPercentage = (scrollPosition - containerTop + windowHeight) / (containerHeight + windowHeight)
+        const scrollPercentage =
+          (scrollPosition - containerTop + windowHeight) / (containerHeight + windowHeight)
         setScrollProgress(Math.min(Math.max(scrollPercentage, 0), 1))
       }
     }
 
-    window.addEventListener("scroll", handleScroll)
+    window.addEventListener('scroll', handleScroll)
     handleScroll() // Initial call to set the initial state
 
     return () => {
-      window.removeEventListener("scroll", handleScroll)
+      window.removeEventListener('scroll', handleScroll)
     }
   }, [])
 
   return (
-    <section className="relative py-20 w-full" ref={containerRef}>
-      {/* Background */}
-      <div className="absolute inset-x-0 bottom-0 top-[1px] bg-gradient-to-b from-black via-[#4CD787]/20 to-black"></div>
+    <section className="relative py-20 w-full overflow-hidden" ref={containerRef}>
+      {/* Speed lines background image */}
+      <div className="absolute inset-0">
+        <Image
+          src="/images/backgrounds/speed-lines.jpg"
+          alt=""
+          fill
+          className="object-cover"
+          priority
+          quality={90}
+        />
+        {/* Dark overlay for text readability - increased opacity */}
+        <div className="absolute inset-0 bg-black/85" />
+      </div>
 
       <motion.div style={{ opacity, y }} className="relative container mx-auto px-4">
-        <div className="text-center">
-          <div className="flex flex-col items-center">
-            <AnimatedGradientText className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-center font-['IBM_Plex_Mono']">
-              How it works
-            </AnimatedGradientText>
-            <p className="text-lg md:text-xl text-foreground/80 max-w-3xl mx-auto font-['IBM_Plex_Mono'] font-light mb-16 px-4">
-              Simple steps to bring your software vision to life<br />
-              from idea to launch in record time.
-            </p>
+        <div className="relative flex items-center justify-center text-center mb-16 py-12">
+          <div className="relative z-10">
+            <div className="flex flex-col items-center">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-center font-['IBM_Plex_Mono'] text-white">
+                How It Works
+              </h2>
+              <p className="text-lg md:text-xl text-foreground/80 max-w-3xl mx-auto font-['IBM_Plex_Mono'] font-light px-4">
+                Simple steps to bring your software vision to life
+                <br />
+                from idea to launch in record time.
+              </p>
+            </div>
           </div>
         </div>
 
@@ -134,14 +152,14 @@ export default function Process() {
                 y: -8,
               }}
               whileTap={{ scale: 0.98 }}
-              className="group relative bg-black/50 backdrop-blur-sm p-8 sm:p-8 md:p-10 rounded-xl border border-white/10 flex flex-col items-start text-left overflow-hidden cursor-pointer min-h-[180px]"
+              className="group relative bg-slate-800 p-8 sm:p-8 md:p-10 rounded-xl border border-purple-500/20 hover:border-purple-400/40 flex flex-col items-start text-left overflow-hidden cursor-pointer min-h-[180px] transition-all duration-300"
               role="article"
               aria-label={`${process.title}: ${process.description}`}
             >
               {/* Morphing background blob */}
               <motion.div
                 className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100"
-                initial={{ 
+                initial={{
                   background: `radial-gradient(circle at 50% 50%, ${process.color}00 0%, transparent 100%)`,
                 }}
                 whileHover={{
@@ -150,27 +168,27 @@ export default function Process() {
                     `radial-gradient(circle at 80% 20%, ${process.color}20 0%, transparent 50%)`,
                     `radial-gradient(circle at 30% 70%, ${process.color}15 0%, transparent 60%)`,
                     `radial-gradient(circle at 70% 30%, ${process.color}20 0%, transparent 50%)`,
-                  ]
+                  ],
                 }}
                 transition={{
                   duration: 4,
                   repeat: Infinity,
-                  ease: "easeInOut"
+                  ease: 'easeInOut',
                 }}
               />
 
               {/* Scanning line effect */}
               <motion.div
                 className="absolute inset-0 opacity-0 group-hover:opacity-100"
-                initial={{ x: "-100%" }}
-                whileHover={{ 
-                  x: "100%",
-                  transition: { 
-                    duration: 2, 
-                    ease: "easeInOut",
+                initial={{ x: '-100%' }}
+                whileHover={{
+                  x: '100%',
+                  transition: {
+                    duration: 2,
+                    ease: 'easeInOut',
                     repeat: Infinity,
-                    repeatDelay: 1
-                  }
+                    repeatDelay: 1,
+                  },
                 }}
                 style={{
                   background: `linear-gradient(90deg, transparent, ${process.color}40, transparent)`,
@@ -191,7 +209,7 @@ export default function Process() {
                         left: `${20 + i * 15}%`,
                         top: '0%',
                         color: process.color,
-                        fontSize: '8px'
+                        fontSize: '8px',
                       }}
                       initial={{ y: -20, opacity: 0 }}
                       whileHover={{
@@ -202,7 +220,7 @@ export default function Process() {
                         duration: 3,
                         delay: i * 0.3,
                         repeat: Infinity,
-                        ease: "linear"
+                        ease: 'linear',
                       }}
                     >
                       {codeChars}
@@ -222,7 +240,7 @@ export default function Process() {
                 transition={{
                   duration: 3,
                   repeat: Infinity,
-                  ease: "easeInOut"
+                  ease: 'easeInOut',
                 }}
                 style={{
                   border: `1px solid ${process.color}60`,
@@ -236,40 +254,40 @@ export default function Process() {
               {/* Glitch effect overlay */}
               <motion.div
                 className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none"
-                initial={{ clipPath: "polygon(0 0, 0 0, 0 0, 0 0)" }}
+                initial={{ clipPath: 'polygon(0 0, 0 0, 0 0, 0 0)' }}
                 whileHover={{
                   clipPath: [
-                    "polygon(0 20%, 100% 20%, 100% 30%, 0 30%)",
-                    "polygon(0 60%, 100% 60%, 100% 70%, 0 70%)",
-                    "polygon(0 40%, 100% 40%, 100% 45%, 0 45%)",
-                    "polygon(0 0, 0 0, 0 0, 0 0)"
-                  ]
+                    'polygon(0 20%, 100% 20%, 100% 30%, 0 30%)',
+                    'polygon(0 60%, 100% 60%, 100% 70%, 0 70%)',
+                    'polygon(0 40%, 100% 40%, 100% 45%, 0 45%)',
+                    'polygon(0 0, 0 0, 0 0, 0 0)',
+                  ],
                 }}
                 transition={{
                   duration: 0.6,
                   times: [0, 0.3, 0.6, 1],
-                  ease: "easeInOut",
+                  ease: 'easeInOut',
                   delay: index * 0.2,
                   repeat: Infinity,
-                  repeatDelay: 3
+                  repeatDelay: 3,
                 }}
                 style={{
                   background: `linear-gradient(90deg, transparent, ${process.color}60, transparent)`,
                 }}
               />
-              
+
               {/* Content */}
               <div className="relative z-10">
                 <div className="flex items-center mb-6">
-                  <motion.div 
+                  <motion.div
                     className="w-12 h-12 rounded-full flex items-center justify-center mr-4 relative overflow-hidden"
                     whileHover={{
                       boxShadow: `0 0 30px ${process.color}60`,
                     }}
                     transition={{ duration: 0.4 }}
-                    style={{ 
+                    style={{
                       backgroundColor: process.color + '20',
-                      border: `2px solid ${process.color}40`
+                      border: `2px solid ${process.color}40`,
                     }}
                   >
                     {/* Icon pulse effect */}
@@ -277,47 +295,45 @@ export default function Process() {
                       className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100"
                       animate={{
                         scale: [1, 1.5, 1],
-                        opacity: [0, 0.3, 0]
+                        opacity: [0, 0.3, 0],
                       }}
                       transition={{
                         duration: 2,
                         repeat: Infinity,
-                        ease: "easeOut"
+                        ease: 'easeOut',
                       }}
                       style={{ backgroundColor: process.color + '30' }}
                     />
-                    
+
                     <motion.div
                       whileHover={{
                         scale: 1.2,
                         rotateY: 180,
                       }}
-                      transition={{ duration: 0.6, ease: "backOut" }}
+                      transition={{ duration: 0.6, ease: 'backOut' }}
                       className="pointer-events-none"
                     >
                       <process.icon
                         className="w-6 h-6 transition-all duration-300 relative z-10 pointer-events-none"
                         style={{
                           color: process.color,
-                          filter: `drop-shadow(0 0 4px ${process.color}80)`
+                          filter: `drop-shadow(0 0 4px ${process.color}80)`,
                         }}
                       />
                     </motion.div>
                   </motion.div>
-                  <motion.h3 
+                  <motion.h3
                     className="text-lg sm:text-xl font-semibold font-['IBM_Plex_Mono'] text-white"
-                    whileHover={{ 
+                    whileHover={{
                       scale: 1.05,
-                      textShadow: `0 0 15px ${process.color}80`
+                      textShadow: `0 0 15px ${process.color}80`,
                     }}
                     transition={{ duration: 0.3 }}
                   >
                     {process.title}
                   </motion.h3>
                 </div>
-                <motion.p 
-                  className="text-foreground/80 font-['IBM_Plex_Mono'] font-light text-sm sm:text-base leading-relaxed group-hover:text-foreground/95 transition-colors duration-500"
-                >
+                <motion.p className="text-foreground/80 font-['IBM_Plex_Mono'] font-light text-sm sm:text-base leading-relaxed group-hover:text-foreground/95 transition-colors duration-500">
                   {process.description}
                 </motion.p>
               </div>
