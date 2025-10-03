@@ -773,6 +773,18 @@ function AnimatedInfinity({ onComplete }: { onComplete: () => void }) {
               animateOn="view"
               onComplete={handleTextComplete}
             />
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 1.5, ease: 'easeOut' }}
+              className="text-sm md:text-base text-white/70 mt-4 font-['IBM_Plex_Sans']"
+              style={{
+                letterSpacing: '0.05em',
+                textShadow: '0 2px 4px rgba(0,0,0,0.8)',
+              }}
+            >
+              Elite Software Development
+            </motion.p>
           </motion.div>
         </motion.div>
       )}
