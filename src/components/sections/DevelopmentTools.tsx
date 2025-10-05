@@ -4,6 +4,7 @@ import { LayoutGroup, motion, AnimatePresence } from 'framer-motion'
 import { useEffect, useState, useCallback, useRef, useMemo } from 'react'
 import Image from 'next/image'
 import seedrandom from 'seedrandom'
+import LogoLoop from '@animations/LogoLoop'
 
 const tools = [
   {
@@ -557,9 +558,22 @@ export default function DevelopmentTools() {
             transitionData={transitionData}
           />
           {/* ============ Outer AI Tools Orbit ============ */}
-          {/* z-[90] - Below inner orbit but visible */}
-          <AIToolsOrbit activeIndex={activeIndex} onIconClick={handleAIToolClick} />
+          {/* z-[90] - Below inner orbit but visible - Hidden on mobile */}
+          <div className="hidden lg:block">
+            <AIToolsOrbit activeIndex={activeIndex} onIconClick={handleAIToolClick} />
+          </div>
         </div>
+
+        {/* Logo Loop Section - Mobile Replacement for Outer Orbit */}
+        <div className="w-full mt-16 md:mt-40 lg:mt-48 xl:mt-56 py-12 md:py-16 lg:py-20">
+          <div className="w-full max-w-full">
+            <h4 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold font-['IBM_Plex_Mono'] text-center text-white mb-12 md:mb-16 lg:mb-20 px-4">
+              AI & Cloud Technologies
+            </h4>
+            <LogoLoop logos={aiTools} speed={12} />
+          </div>
+        </div>
+
         {/* Bottom spacing with gradient fade to black */}
         <div className="pb-32 relative">
           <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-black pointer-events-none" />
