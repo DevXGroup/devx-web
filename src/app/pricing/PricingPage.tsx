@@ -578,7 +578,7 @@ export default function PricingPage() {
       </section>
 
       {/* Pricing Cards */}
-      <section className="relative py-12">
+      <section className="relative py-12 z-[5000]">
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto items-stretch"
@@ -622,8 +622,8 @@ export default function PricingPage() {
       <section className="relative pt-20 pb-0">
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
             className="text-center max-w-4xl mx-auto"
