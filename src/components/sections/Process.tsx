@@ -133,8 +133,8 @@ export default function Process() {
           </div>
         </div>
 
-        {/* Add SDLCProcess component above the cards - hidden on mobile for better UX */}
-        <div className="mb-24 hidden min-[650px]:block">
+        {/* Add SDLCProcess component above the cards */}
+        <div className="mb-24">
           <SDLCProcess />
         </div>
 
@@ -143,8 +143,8 @@ export default function Process() {
           {processes.map((process, index) => (
             <motion.div
               key={process.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.2 }}
               whileHover={{

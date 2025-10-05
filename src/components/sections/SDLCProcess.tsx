@@ -54,7 +54,7 @@ const AnimatedIcon = ({ Icon, isActive, isComplete, progress }: { Icon: any, isA
 const ConnectingLine = ({ currentStep, progress, totalSteps }: { currentStep: number, progress: number, totalSteps: number }) => {
   const lineProgress = (currentStep + progress) / (totalSteps - 1)
   return (
-    <div className="absolute top-1/2 left-0 right-0 h-0.5 transform -translate-y-[14px] overflow-hidden">
+    <div className="absolute top-1/2 left-0 right-0 h-0.5 -translate-y-1/2 overflow-hidden">
       <motion.div
         className="h-full bg-gradient-to-r from-[#8B5CF6] via-[#EC4899] to-[#3B82F6]"
         style={{
@@ -209,8 +209,8 @@ export default function SDLCProcess() {
           {sdlcSteps.map((step, index) => (
             <motion.div
               key={step.name}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="flex flex-col items-center"
