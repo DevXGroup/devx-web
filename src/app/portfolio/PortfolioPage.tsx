@@ -379,24 +379,24 @@ function ProjectCard({ project, index }: { project: any; index: number }) {
           <div className="relative z-10">
             <motion.h3
               className="text-xl md:text-2xl font-bold text-white mb-3 group-hover:text-[#4CD787] transition-colors duration-300"
-              initial={{ opacity: 0, y: 10 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+              initial={{ opacity: 0 }}
+              animate={isInView ? { opacity: 1 } : { opacity: 0 }}
               transition={{ delay: index * 0.1 + 0.4 }}
             >
               {project.title}
             </motion.h3>
             <motion.p
               className="text-white/80 font-light mb-6 leading-relaxed group-hover:text-white/95 transition-colors duration-300"
-              initial={{ opacity: 0, y: 10 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+              initial={{ opacity: 0 }}
+              animate={isInView ? { opacity: 1 } : { opacity: 0 }}
               transition={{ delay: index * 0.1 + 0.5 }}
             >
               {project.description}
             </motion.p>
             <motion.div
               className="flex flex-wrap gap-2"
-              initial={{ opacity: 0, y: 10 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+              initial={{ opacity: 0 }}
+              animate={isInView ? { opacity: 1 } : { opacity: 0 }}
               transition={{ delay: index * 0.1 + 0.6 }}
             >
               {project.tags.map((tag: any, tagIndex: number) => (
@@ -814,8 +814,8 @@ export default function PortfolioPage() {
             {projects.map((project, index) => (
               <motion.div
                 key={project.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
                 viewport={{ once: true, margin: '-100px' }}
                 transition={{ duration: 0.3, delay: index * 0.05, ease: 'easeOut' }}
               >
@@ -841,8 +841,8 @@ export default function PortfolioPage() {
         <div className="absolute inset-0 z-0 bg-gradient-to-t from-black via-purple-900/20 to-black pointer-events-none" />
         <div className="relative container mx-auto px-4">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
             className="text-center max-w-3xl mx-auto"
@@ -870,7 +870,7 @@ export default function PortfolioPage() {
       </section>
 
       {/* Services */}
-      <section className="py-16 relative z-50">
+      <section className="py-16 relative z-[5000]">
         <div className="absolute inset-0 z-0 bg-gradient-to-b from-black via-purple-900/10 to-black pointer-events-none" />
         <div className="container mx-auto px-4 relative">
           <div className="text-center mb-8">
