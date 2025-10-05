@@ -19,7 +19,7 @@ export default function Footer() {
   return (
     <>
       {/* Include the Threads effect touching the footer */}
-      <div className="w-full h-[40vh] sm:h-[45vh] md:h-[50vh] lg:h-[60vh] xl:h-[70vh] relative bg-black m-0 p-0">
+      <div className="w-full h-[70vh] sm:h-[45vh] md:h-[50vh] lg:h-[60vh] xl:h-[70vh] relative bg-black mt-[-190px] p-0 z-999">
         <div className="absolute inset-0">
           {isSafari ? (
             <Threads
@@ -39,7 +39,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <footer className="bg-black text-foreground relative mb-5 mt-5">
+      <footer className="bg-black text-foreground relative mb-5 mt-[-90px] z-9999">
         {/* Background Pattern */}
         <div className="absolute inset-0 bg-[url('/images/patterns/grid.svg')] opacity-10"></div>
 
