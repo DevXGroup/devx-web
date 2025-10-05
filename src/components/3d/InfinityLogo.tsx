@@ -9,14 +9,17 @@ import DevXEnvironment from "./DevXEnvironment"
 export default function InfinityLogo() {
   const [isMounted, setIsMounted] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
+  const [isInteracting, setIsInteracting] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
 
-  // Prevent scrolling when interacting with the canvas
+  // Only prevent scrolling when actively interacting with the 3D object
   useEffect(() => {
     if (!containerRef.current) return
 
     const preventDefault = (e: Event) => {
-      e.preventDefault()
+      if (isInteracting) {
+        e.preventDefault()
+      }
     }
 
     const container = containerRef.current
@@ -27,7 +30,7 @@ export default function InfinityLogo() {
       container.removeEventListener("wheel", preventDefault)
       container.removeEventListener("touchmove", preventDefault)
     }
-  }, [])
+  }, [isInteracting])
 
   useEffect(() => {
     setIsMounted(true)
@@ -59,10 +62,9 @@ export default function InfinityLogo() {
     <div className="w-full h-[40vh] flex justify-center items-center overflow-hidden">
       <div
         ref={containerRef}
-        className="relative w-full h-full touch-none"
+        className="relative w-full h-full"
         style={{
           cursor: "grab",
-          touchAction: "none",
         }}
       >
         {isVisible ? (
@@ -85,7 +87,7 @@ export default function InfinityLogo() {
           <pointLight position={[3, 2, 3]} intensity={2} color="#CCFF00" distance={15} decay={2} />
           <pointLight position={[-3, -2, 4]} intensity={1.5} color="#4CD787" distance={12} decay={2} />
 
-          <InfinityMesh />
+          <InfinityMesh setIsInteracting={setIsInteracting} />
         </Canvas>
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-gray-900 to-black flex items-center justify-center">
@@ -97,7 +99,7 @@ export default function InfinityLogo() {
   )
 }
 
-function InfinityMesh() {
+function InfinityMesh({ setIsInteracting }: { setIsInteracting: (value: boolean) => void }) {
   const meshRef = useRef<Mesh>(null!)
   const hitAreaRef = useRef<Mesh>(null!)
   const mouseDown = useRef(false)
@@ -138,6 +140,7 @@ function InfinityMesh() {
   const onPointerDown = (e: any) => {
     e.stopPropagation()
     mouseDown.current = true
+    setIsInteracting(true)
     lastMousePosition.current = { x: e.clientX, y: e.clientY }
     lastUpdateTime.current = performance.now()
     momentumActive.current = false
@@ -154,6 +157,7 @@ function InfinityMesh() {
   const onPointerUp = (e: any) => {
     e.stopPropagation()
     mouseDown.current = false
+    setIsInteracting(false)
 
     // Activate momentum based on final velocity
     if (Math.abs(velocity.current.x) > 0.001 || Math.abs(velocity.current.y) > 0.001) {
