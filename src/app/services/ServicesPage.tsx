@@ -348,8 +348,8 @@ export default function ServicesPage() {
               {valueProps.map((prop, index) => (
                 <motion.div
                   key={prop.title}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
                   transition={{ duration: 0.5, delay: 0.2 }}
                   className="bg-black/40 backdrop-blur-lg p-8 rounded-xl border border-white/10 transition-all duration-300 group cursor-pointer pointer-events-auto relative overflow-hidden shadow-xl group-hover:shadow-[0_0_20px_rgba(6,182,212,0.5)] before:absolute before:inset-0 before:border before:border-transparent before:rounded-xl before:transition-all before:duration-300 group-hover:before:border-white/20"
                   whileTap={{ scale: 0.98 }}
@@ -523,10 +523,9 @@ export default function ServicesPage() {
           {/* Responsive top margin for better spacing */}
           <div className="container mx-auto px-4">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0 }}
               whileInView={{
                 opacity: 1,
-                y: 0,
               }}
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               viewport={{ once: true, amount: 0.2 }}
@@ -534,10 +533,9 @@ export default function ServicesPage() {
             >
               <TrueFocus sentence="Case Studies" />
               <motion.p
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0 }}
                 whileInView={{
                   opacity: 1,
-                  y: 0,
                 }}
                 transition={{ delay: 0.3, duration: 0.6 }}
                 viewport={{ once: true, amount: 0.2 }}
@@ -561,10 +559,9 @@ export default function ServicesPage() {
           <div className="container mx-auto px-4 ">
             <div className="w-full flex justify-center mb-28">
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0 }}
                 whileInView={{
                   opacity: 1,
-                  y: 0,
                 }}
                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                 viewport={{ once: true, amount: 0.2 }}
@@ -594,10 +591,9 @@ export default function ServicesPage() {
               {services.map((service, index) => (
                 <motion.div
                   key={service.title}
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0 }}
                   whileInView={{
                     opacity: 1,
-                    y: 0,
                     transition: {
                       duration: 0.5,
                       delay: index * 0.05,
@@ -660,10 +656,10 @@ export default function ServicesPage() {
           />
         </div>
 
-        <div className="relative container mx-auto px-4 z-10">
+        <div className="relative container mx-auto px-4 z-[5000]">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true, amount: 0.4 }}
             transition={{ duration: 0.7, ease: 'easeOut' }}
             className="text-center max-w-4xl mx-auto"
