@@ -11,7 +11,6 @@ import {
   Instagram,
   Youtube,
   Github,
-  ArrowRight,
   CheckCircle,
   Calendar,
   Send,
@@ -19,7 +18,6 @@ import {
   MessageCircle,
   X,
 } from 'lucide-react'
-import BlurText from '@/components/animations/BlurText'
 import TextPressure from '@/components/animations/TextPressure'
 import Lightning from '@/components/animations/Lightning'
 
@@ -253,7 +251,7 @@ export default function ContactPage() {
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target
     setFormState((prev) => ({ ...prev, [name]: checked }))
-    
+
     // Clear errors when user checks the box
     if ((formErrors as any)[name]) {
       setFormErrors((prev) => ({ ...prev, [name]: null }))
@@ -364,8 +362,8 @@ export default function ContactPage() {
 
         <div className="relative container mx-auto px-4 pt-24">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 0.8 }}
             className="text-center max-w-4xl mx-auto"
           >
@@ -599,8 +597,8 @@ export default function ContactPage() {
                         />
                         {(formErrors as any).name && (
                           <motion.p
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
                             className="text-red-400 text-sm mt-1"
                           >
                             {(formErrors as any).name}
@@ -629,8 +627,8 @@ export default function ContactPage() {
                         />
                         {(formErrors as any).email && (
                           <motion.p
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
                             className="text-red-400 text-sm mt-1"
                           >
                             {(formErrors as any).email}
@@ -712,15 +710,14 @@ export default function ContactPage() {
 
                       {(formErrors as any).message && (
                         <motion.p
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
                           className="text-red-400 text-sm mt-1"
                         >
                           {(formErrors as any).message}
                         </motion.p>
                       )}
                     </div>
-
 
                     <div className="flex justify-between items-center">
                       {/* Success Message */}
@@ -735,7 +732,9 @@ export default function ContactPage() {
                             <div className="text-sm">
                               <span className="font-semibold">Thank you for your message!</span>
                               <br />
-                              <span className="text-foreground/70">Please allow 24hrs for follow up email.</span>
+                              <span className="text-foreground/70">
+                                Please allow 24hrs for follow up email.
+                              </span>
                             </div>
                           </motion.div>
                         )}
@@ -795,8 +794,8 @@ export default function ContactPage() {
       <section className="py-16 relative">
         <div className="container mx-auto px-4">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
             className="text-center max-w-3xl mx-auto mb-12"
@@ -885,11 +884,11 @@ export default function ContactPage() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-20 relative">
+      <section className="py-20 relative z-[5000]">
         <div className="container mx-auto px-4">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
             className="text-center max-w-3xl mx-auto mb-16"
@@ -982,8 +981,8 @@ export default function ContactPage() {
           onClick={() => setShowExampleModal(false)}
         >
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             className="bg-black/80 backdrop-blur-lg border border-white/20 rounded-xl p-6 max-w-lg w-full mx-4"
             onClick={(e) => e.stopPropagation()}
@@ -1004,8 +1003,8 @@ export default function ContactPage() {
                 Platform Development
               </p>
               <p className="mb-4">
-                &quot;Hi there! I&apos;m looking to build a custom e-commerce platform for my growing
-                business.
+                &quot;Hi there! I&apos;m looking to build a custom e-commerce platform for my
+                growing business.
               </p>
               <p className="mb-4">
                 <span className="text-[#FFD700] font-medium">Key Requirements:</span>
@@ -1025,8 +1024,8 @@ export default function ContactPage() {
                 <span className="text-[#4CD787] font-medium">Budget:</span> $45,000 - $55,000
               </p>
               <p>
-                I&apos;d love to discuss this project further and see how DevX Group can help bring this
-                vision to life. Looking forward to hearing from you!&quot;
+                I&apos;d love to discuss this project further and see how DevX Group can help bring
+                this vision to life. Looking forward to hearing from you!&quot;
               </p>
             </div>
 
