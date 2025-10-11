@@ -1,72 +1,87 @@
-<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background -->
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg" text-rendering="optimizeLegibility">
   <defs>
-    <linearGradient id="bgGradient4" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#0a0014;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#1a0033;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#0a0a1a;stop-opacity:1" />
+    <linearGradient id="about-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#050012"/>
+      <stop offset="52%" stop-color="#10163a"/>
+      <stop offset="100%" stop-color="#051c23"/>
     </linearGradient>
-
-    <radialGradient id="aboutGlow1" cx="30%" cy="50%">
-      <stop offset="0%" style="stop-color:#CFB53B;stop-opacity:0.3" />
-      <stop offset="70%" style="stop-color:#CFB53B;stop-opacity:0" />
+    <radialGradient id="about-glow-a" cx="24%" cy="32%" r="58%">
+      <stop offset="0%" stop-color="#CFB53B" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#CFB53B" stop-opacity="0"/>
     </radialGradient>
-
-    <radialGradient id="aboutGlow2" cx="70%" cy="50%">
-      <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:0.2" />
-      <stop offset="70%" style="stop-color:#8B5CF6;stop-opacity:0" />
+    <radialGradient id="about-glow-b" cx="78%" cy="66%" r="52%">
+      <stop offset="0%" stop-color="#8B5CF6" stop-opacity="0.36"/>
+      <stop offset="100%" stop-color="#8B5CF6" stop-opacity="0"/>
     </radialGradient>
-
-    <filter id="glow4" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-      <feMerge>
-        <feMergeNode in="coloredBlur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
+    <linearGradient id="about-title" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#fef3c7"/>
+      <stop offset="100%" stop-color="#ddd6fe"/>
+    </linearGradient>
+    <linearGradient id="about-brand-text" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#facc15"/>
+      <stop offset="100%" stop-color="#a5b4fc"/>
+    </linearGradient>
+    <filter id="about-soft" x="-45%" y="-45%" width="190%" height="190%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="blur"/>
+      <feBlend in="SourceGraphic" in2="blur" mode="screen"/>
+    </filter>
+    <filter id="about-card-glow" x="-18%" y="-35%" width="136%" height="170%">
+      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#0f172a" flood-opacity="0.35"/>
     </filter>
   </defs>
 
-  <rect width="1200" height="630" fill="url(#bgGradient4)"/>
-  <rect width="1200" height="630" fill="url(#aboutGlow1)"/>
-  <rect width="1200" height="630" fill="url(#aboutGlow2)"/>
+  <rect width="1200" height="630" fill="url(#about-bg)"/>
+  <rect width="1200" height="630" fill="url(#about-glow-a)"/>
+  <rect width="1200" height="630" fill="url(#about-glow-b)"/>
 
-  <!-- Decorative elements -->
-  <g opacity="0.1">
-    <circle cx="200" cy="200" r="100" fill="none" stroke="#CFB53B" stroke-width="1"/>
-    <circle cx="1000" cy="400" r="80" fill="none" stroke="#8B5CF6" stroke-width="1"/>
+  <g stroke="rgba(207,181,59,0.28)" stroke-width="1" opacity="0.5">
+    <circle cx="1020" cy="170" r="110" fill="none"/>
+    <circle cx="120" cy="520" r="90" fill="none"/>
+    <path d="M180 130h840" stroke-dasharray="10 24"/>
+    <path d="M180 480h840" stroke-dasharray="8 20"/>
   </g>
 
-  <!-- Logo -->
-  <image href="images/logos/devx-logo-og.png" x="60" y="60" width="400" height="79"/>
-
-  <!-- Main Title -->
-  <text x="60" y="300" font-family="'IBM Plex Mono', monospace" font-size="96" font-weight="bold" fill="#ffffff" filter="url(#glow4)">
-    About Us
-  </text>
-
-  <!-- Tagline -->
-  <text x="60" y="420" font-family="'IBM Plex Mono', monospace" font-size="42" font-weight="600" fill="#CFB53B" filter="url(#glow4)">
-    Building Tomorrow's Solutions, Today
-  </text>
-
-  <!-- Value props -->
-  <g font-family="'IBM Plex Sans', sans-serif" font-size="24" fill="#ffffff">
-    <text x="60" y="500" opacity="0.9">
-      <tspan fill="#4CD787" font-size="28">✓</tspan>
-      <tspan dx="15">Elite Engineering Team</tspan>
+  <g transform="translate(72 62)">
+    <image href="images/logos/devx-infinity.png" x="0" y="0" width="160" height="70" preserveAspectRatio="xMinYMid meet"/>
+    <text x="188" y="46" font-size="44" font-family="IBM Plex Sans, 'Segoe UI', sans-serif" font-weight="700" fill="url(#about-brand-text)" letter-spacing="-1.1">
+      DevX Group
     </text>
-    <text x="450" y="500" opacity="0.9">
-      <tspan fill="#4CD787" font-size="28">✓</tspan>
-      <tspan dx="15">Proven Track Record</tspan>
-    </text>
-    <text x="850" y="500" opacity="0.9">
-      <tspan fill="#4CD787" font-size="28">✓</tspan>
-      <tspan dx="15">Innovation First</tspan>
+    <text x="190" y="80" font-size="20" font-family="IBM Plex Sans, 'Segoe UI', sans-serif" fill="rgba(226,232,240,0.82)">
+      About the team • Product leadership • Engineering stewardship
     </text>
   </g>
 
-  <!-- Location -->
-  <text x="60" y="570" font-family="'IBM Plex Sans', sans-serif" font-size="20" fill="#ffffff" opacity="0.7">
-    📍 San Diego, California  •  15+ Years Combined Experience
+  <text x="72" y="282" font-size="102" font-family="IBM Plex Sans, 'Segoe UI', sans-serif" font-weight="700" fill="url(#about-title)" filter="url(#about-soft)" letter-spacing="-1.4">
+    We engineer with intent
   </text>
+
+  <text font-size="32" font-family="IBM Plex Mono, 'Fira Mono', monospace" fill="rgba(248,250,252,0.82)">
+    <tspan x="72" y="344">Veteran, product-led collaborators partnering</tspan>
+    <tspan x="72" y="384">with founders and operators</tspan>
+  </text>
+
+  <g font-family="IBM Plex Sans, 'Segoe UI', sans-serif">
+    <g transform="translate(72 400)">
+      <rect width="320" height="140" rx="20" fill="rgba(207,181,59,0.2)" stroke="rgba(207,181,59,0.5)" filter="url(#about-card-glow)"/>
+      <text x="34" y="80" font-size="30" font-weight="600" fill="#fef3c7">15+ years combined</text>
+      <text x="34" y="110" font-size="18" fill="rgba(254,243,199,0.8)">Product, design, strategy, ops</text>
+    </g>
+    <g transform="translate(416 400)">
+      <rect width="320" height="140" rx="20" fill="rgba(139,92,246,0.18)" stroke="rgba(139,92,246,0.48)" filter="url(#about-card-glow)"/>
+      <text x="34" y="80" font-size="30" font-weight="600" fill="#e0e7ff">Founder-friendly</text>
+      <text x="34" y="110" font-size="18" fill="rgba(224,231,255,0.82)">Hands-on partners from day one</text>
+    </g>
+    <g transform="translate(760 400)">
+      <rect width="320" height="140" rx="20" fill="rgba(76,215,135,0.18)" stroke="rgba(76,215,135,0.48)" filter="url(#about-card-glow)"/>
+      <text x="34" y="80" font-size="30" font-weight="600" fill="#dcfce7">Operator mindset</text>
+      <text x="34" y="110" font-size="18" fill="rgba(220,252,231,0.82)">Shipping what moves metrics</text>
+    </g>
+  </g>
+
+  <g transform="translate(72 562)" font-family="IBM Plex Sans, 'Segoe UI', sans-serif">
+    <rect width="556" height="56" rx="28" fill="rgba(15,23,42,0.8)" stroke="rgba(148,163,184,0.45)" filter="url(#about-card-glow)"/>
+    <text x="34" y="37" font-size="20" fill="rgba(226,232,240,0.9)">
+      📍 San Diego HQ • Remote-first collaborators across 4 timezones
+    </text>
+  </g>
 </svg>
