@@ -1,52 +1,48 @@
-# Repository Guidelines
+# DevX WebApp Agent Guide
 
-## Project Structure & Module Organization
+## Project Snapshot
+- Next.js App Router app under `src/` with shared chrome in `src/common/`.
+- React 19 + TypeScript strict + Tailwind 4; formatting via Prettier (2 spaces, singles, no semicolons).
+- Package manager: `pnpm` (10.x). Local dev runs on port 3002.
+- Tests use Jest (`tests/components/**`) and Playwright specs in `tests/integration/`, `tests/qa/`, `tests/audit/`.
 
-- Source lives in `src/` using Next.js App Router.
-  - `src/app/**/page.tsx` routes; `src/app/layout.tsx` wraps pages. Present routes include `about/`, `contact/`, `home/`, `portfolio/`, `pricing/`, `privacy/`, `terms/`, and `services/creative-animation/` (with `sections/`).
-  - `src/components/`: UI and effects organized under `3d/`, `animations/`, `sections/`, `services/`, `ui/`, `layout/`, `effects/`, `portfolio/`, `planet/`, `transitions/`, plus shared components.
-  - `src/common/`: Layout chrome (`Navbar.tsx`, `Footer.tsx`).
-  - `src/hooks/`, `src/lib/`, `src/data/`, `src/styles/`, `src/types/`, and `src/dev-features/` for hooks, utils, data, CSS, type decls, and dev-only pages.
-- Top-level utilities: `helper/` and `scripts/` contain dev helpers (e.g., `find-unused-files.js`).
-- Additional root `hooks/` directory exists for shared hooks (`use-mobile.tsx`, `use-toast.ts`).
-- Static assets in `public/` (e.g., `images/about/*`, `images/portfolio/*`, `robots.txt`, `sitemap.xml`).
-- Tests in `tests/`:
-  - React unit tests under `tests/components/*` (Jest + Testing Library).
-  - Playwright specs under `tests/integration/`, `tests/qa/`, and `tests/audit/` with screenshot artifacts in `tests/audit/artifacts/`.
-- Useful aliases (see `tsconfig.json`): `@/*`, `@animations/*`, `@layout/*`, `@sections/*`, `@3d/*`.
-  - Example: `import { Button } from '@/components/ui/button'`.
+## Codebase Layout
+- Routes live in `src/app/**/page.tsx`; shared layout in `src/app/layout.tsx`. Active routes include `home/`, `about/`, `portfolio/`, `pricing/`, `services/creative-animation/sections`, `contact/`, `privacy/`, and `terms/`.
+- UI and effects components live under `src/components/` (notable dirs: `3d/`, `animations/`, `layout/`, `sections/`, `services/`, `ui/`, `effects/`, `portfolio/`, `planet/`, `transitions/`).
+- Supporting modules: `src/hooks/`, `src/lib/`, `src/data/`, `src/styles/`, `src/types/`, `src/dev-features/`.
+- Extras: top-level `hooks/` for shared hooks (`use-mobile.tsx`, `use-toast.ts`), helpers in `helper/`, scripts in `scripts/`, static assets in `public/`.
+- Path aliases in `tsconfig.json`: `@/*`, `@animations/*`, `@layout/*`, `@sections/*`, `@3d/*`. Prefer them over long relatives.
 
-## Build, Test, and Development Commands
+## Day-To-Day Commands
+- `pnpm dev` to run the app locally (port 3002).
+- `pnpm lint` for ESLint (`next/core-web-vitals` preset).
+- `pnpm test`, `pnpm test:watch`, `pnpm test:coverage` for Jest.
+- `pnpm build` then `pnpm start` to verify production bundles.
 
-- `pnpm dev` — Run local dev server on port 3002.
-- `pnpm build` — Production build (Next.js).
-- `pnpm start` — Serve the built app.
-- `pnpm lint` — ESLint (Next core-web-vitals rules).
-- `pnpm test` | `pnpm test:watch` | `pnpm test:coverage` — Jest suite.
+## Coding Standards
+- Components in `PascalCase.tsx`; hooks as `use-*.ts` or `use*.ts`; App Router folders stay lowercase/kebab-case.
+- Keep public APIs typed explicitly; lean on inference for internals when clear.
+- Import styling: Tailwind + module CSS where needed; co-locate component styles.
+- When adding complex behaviour, include a brief comment to help reviewers; avoid redundant narration.
 
-## Coding Style & Naming Conventions
+## Testing Expectations
+- Cover new UI pieces with Testing Library where practical; mount via `tests/test-utils.ts`.
+- Browser-only effects should guard the DOM (e.g., use `dynamic`/`ClientOnly`) to keep Jest green.
+- Keep Playwright specs updated when UX flows shift; screenshots land in `tests/audit/artifacts/`.
+- Run `pnpm test:coverage` for major features to watch regressions.
 
-- TypeScript strict mode enabled; prefer explicit types for public APIs.
-- Prettier: 2 spaces, single quotes, no semicolons, width 100, trailing commas (es5).
-- Components: `PascalCase.tsx`; hooks: `use-*.ts` or `use*.ts`; routes/folders under `src/app/` use lowercase/kebab-case.
-- Use path aliases over long relative imports.
+## Git & Review Flow
+- Follow commit prefix convention: `feat:`, `fix:`, `refactor:`, `chore:`, `docs:`.
+- PRs include: intent summary, linked issues, UI before/after if visuals change, and local test notes.
+- Ensure `pnpm lint` and relevant tests pass before handing off; mention any skipped suites with rationale.
 
-## Testing Guidelines
+## Security & Performance
+- Never commit secrets; rely on `.env.local` and `NEXT_PUBLIC_*` when exposing vars to the client.
+- Keep bundles lean: prefer dynamic imports for heavy or browser-only modules; tree-shakeable imports only.
+- Validate 3D/animation heavy features in dev and prod builds to avoid regressions in `three`/`gsap`.
 
-- Unit tests: Jest + `@testing-library/react` with `jest-environment-jsdom`.
-- Locations: React unit tests in `tests/components/**.test.tsx` (or `*.spec.tsx`).
-- Playwright: Integration/QA/audit specs live in `tests/integration/`, `tests/qa/`, and `tests/audit/` (artifacts in `tests/audit/artifacts/`). These run with Playwright if configured separately from Jest.
-- Utilities: use `tests/test-utils.ts` and rely on global mocks from `jest.setup.js` (e.g., `IntersectionObserver`).
-- Coverage: run `pnpm test:coverage`; avoid regressions and add focused tests for new components and hooks.
-
-## Commit & Pull Request Guidelines
-
-- Commit style: concise, imperative subject with a type prefix (e.g., `feat:`, `fix:`, `refactor:`, `chore:`, `docs:`). Example: `feat: add Services 3D showcase`.
-- PRs include: clear description, linked issues, before/after screenshots for UI, and notes on testing.
-- Require green CI, `pnpm lint` and `pnpm test` passing; note any follow-ups.
-
-## Security & Configuration Tips
-
-- Never commit secrets. Use `.env.local`; expose only client-safe vars with `NEXT_PUBLIC_*`.
-- Gate browser-only features via dynamic import or `ClientOnly`; avoid server-only modules in client components.
-- Keep imports tree-shaken and assets in `public/` with stable paths.
+## Agent Workflow Tips
+- Start by scanning this guide plus `README.md` for context; check open instructions in the task thread.
+- Before editing, inspect existing files to align with styling and directory conventions.
+- Use `apply_patch` for targeted edits; keep diffs focused and avoid disturbing unrelated user changes.
+- Document outstanding questions or risks back to the user; propose next actions when handing off.
