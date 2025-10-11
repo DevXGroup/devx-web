@@ -1,6 +1,6 @@
 # DevX Web – Frontend Framework for DevX Group LLC
 
-![Tech Stack](https://img.shields.io/badge/Built%20With-Next.js%20%7C%20React%20%7C%20Tailwind%20CSS-blueviolet?style=flat&logo=next.js)
+![Tech Stack](https://img.shields.io/badge/Built%20With-Next.js%2015%20%7C%20React%2019%20%7C%20Tailwind%204-blueviolet?style=flat&logo=next.js)
 ![Status](https://img.shields.io/badge/status-active-success?style=flat)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey?style=flat)
 
@@ -8,130 +8,125 @@
 
 ## 🔥 About DevX Group LLC
 
-**DevX Group LLC** is a California-based software and IoT development powerhouse built on decades of industry experience and a passion for solving complex challenges.
-
-We are a hand-selected group of elite professionals chosen not just for technical expertise but for our ability to execute with **precision**, **efficiency**, and **excellence**—like a commando unit.
-
-Whether you're a startup turning vision into product or an established firm needing high-caliber problem solvers, we step in and get it done. Seamlessly. Relentlessly. Exceptionally.
+**DevX Group LLC** is a California-based software and IoT engineering collective built to deliver high-impact solutions with precision, efficiency, and excellence. We combine decades of product experience with a bias for execution, helping teams move from concept to real-world impact quickly.
 
 📍 Learn more: [www.devxgroup.io](https://www.devxgroup.io)
 
 ---
 
-## 🚀 Project Overview
+## 🚀 Project Highlights
+
+- Next.js 15 App Router with shared chrome via `ConditionalLayout` and rich SEO metadata out of the box.
+- React 19 + TypeScript strict mode, Tailwind CSS 4, and a growing component library of motion, 3D, and marketing primitives.
+- Jest + Testing Library unit suite and Playwright coverage for flows, audits, and QA scenarios.
+- Vercel analytics, Speed Insights, and Sentry optics wired into the root layout.
+- Agent onboarding and workflow notes captured in `AGENTS.md`.
+
+---
+
+## 📁 Repository Structure
 
 ```
 devx-web/
 ├── src/
-│   ├── app/                # Next.js App Router pages
-│   │   ├── home/, about/, contact/, portfolio/, pricing/, privacy/, terms/, services/creative-animation/
-│   │   ├── layout.tsx      # Global fonts, BrowserCompatibilityDetector, ConditionalLayout
-│   │   └── page.tsx        # Entry point when no path is provided
-│   ├── common/             # Shared layout pieces (Navbar, Footer)
-│   ├── components/         # Reusable components: 3d/, animations/, sections/, services/, portfolio/, layout/, effects/, planet/, transitions/, ui/
-│   ├── hooks/              # Client-side hooks (backdrop filter support, smooth scroll, etc.)
-│   ├── lib/                # Utilities (cn function for class merging)
-│   ├── data/               # Static data (e.g., portfolioProjects.ts)
+│   ├── app/
+│   │   ├── home/, about/, contact/, portfolio/, pricing/, privacy/, terms/
+│   │   ├── services/creative-animation/ (sections/, hero, client wiring)
+│   │   ├── dev-features/ (internal playground)
+│   │   ├── error.tsx, global-error.tsx, not-found.tsx
+│   │   └── layout.tsx, page.tsx
+│   ├── common/             # Navbar, Footer, shared chrome
+│   ├── components/         # 3d/, animations/, sections/, services/, ui/, layout/, effects/, portfolio/, transitions/, seo/, analytics/
+│   ├── hooks/              # Client-side hooks (motion, media queries, safari detection, etc.)
+│   ├── lib/                # Utilities, polyfills, animation helpers
+│   ├── data/               # Static datasets (e.g., portfolioProjects.ts)
 │   ├── styles/             # Global CSS (typography.css)
-│   ├── types/              # Type declarations (e.g., css.d.ts)
-│   └── dev-features/       # Dev-only pages and feature playgrounds
-├── tests/                  # Jest unit tests; Playwright specs (integration/, qa/, audit/) + artifacts/
-├── public/                 # Static assets (images, logos, robots.txt, sitemap.xml)
-├── hooks/, helper/, scripts/ # Supporting hooks/utilities outside `src/`
-├── tailwind.config.js      # Tailwind theme extensions
-├── tsconfig.json           # TypeScript configuration with strict mode
-├── next.config.mjs         # Next.js build/runtime settings
-└── README.md               # Project overview and setup
+│   ├── types/              # Type declarations and module shims
+│   └── dev-features/       # Development-only showcase components
+├── hooks/                  # Shared hooks consumed across packages
+├── tests/                  # Jest + Playwright suites (components/, integration/, qa/, audit/)
+├── helper/, scripts/       # Node utilities and build helpers
+├── public/                 # Static assets, favicons, metadata files
+├── AGENTS.md               # Agent-specific workflow guide
+├── tailwind.config.js      # Tailwind CSS v4 configuration
+├── next.config.mjs         # Next.js runtime/build settings
+├── tsconfig.json           # TypeScript config with path aliases
+└── package.json            # pnpm scripts and dependency graph
 ```
 
-This repository contains the frontend for the **DevX web experience**, including:
-
-- **Marketing site**
-- **Client portal**
-- **Project dashboards**
-- **Responsive components powered by Tailwind**
-- Seamless integration with DevX APIs and backend services
+Path aliases (see `tsconfig.json`): `@/*`, `@animations/*`, `@layout/*`, `@sections/*`, `@3d/*`. Prefer these over long relative paths.
 
 ---
 
 ## 🧠 Tech Stack
 
-- [Next.js](https://nextjs.org/)
-- [React](https://reactjs.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [ESLint & Prettier](https://eslint.org/)
-- [Vercel](https://vercel.com/) or Docker (depending on deploy target)
+- **Framework:** Next.js 15 (App Router) + React 19
+- **Language:** TypeScript (strict)
+- **Styling:** Tailwind CSS 4 + custom CSS modules where needed
+- **Animation & 3D:** Framer Motion, GSAP, React Three Fiber, OGL, postprocessing
+- **State & Forms:** React Hook Form, Zod resolvers, Radix UI primitives
+- **Tooling:** pnpm, ESLint (`next/core-web-vitals`), Prettier conventions (2 spaces, single quotes, no semicolons)
+- **Testing:** Jest + Testing Library, Playwright (integration, QA, audit)
+- **Observability:** Vercel Analytics, Speed Insights, Sentry
 
 ---
 
-## 🛠️ Local Development
+## 🛠️ Getting Started
 
 ```bash
 git clone https://github.com/DevXGroup/devx-web.git
 cd devx-web
 pnpm install
-pnpm dev        # launches dev server on port 3002
-pnpm test       # run Jest tests
-pnpm lint       # run ESLint/Prettier
+
+# Start local dev server (http://localhost:3002)
+pnpm dev
+
+# Lint, test, and build
+pnpm lint
+pnpm test          # Jest suite
+pnpm test:watch
+pnpm test:coverage
+pnpm build         # Production build
+pnpm start         # Serve .next output
 ```
 
-### Key Concepts & Patterns
+Environment-specific values live in `.env.local`. Expose browser-safe values with the `NEXT_PUBLIC_` prefix only.
 
-1. **Next.js App Router**
+---
 
-   - Pages live in `src/app/**/page.tsx` with optional nested directories for routes like `/home`, `/services`, etc.
-   - `src/app/layout.tsx` sets up global fonts and wraps content in `ConditionalLayout`, which inserts the navigation and footer on all routes except `/`.
+## 🧩 Architectural Notes
 
-2. **Component Organization**
+- **App Router:** Route segments map to directories under `src/app`. Each route exports a `page.tsx`; shared font, analytics, and layout logic live in `src/app/layout.tsx`.
+- **Layouts & Chrome:** `ConditionalLayout` and `BrowserCompatibilityDetector` wrap most pages, inserting `Navbar`, `Footer`, transition effects, and compatibility messaging.
+- **Components:** Feature work resides under `src/components/` with dedicated folders for hero sections, animations, 3D canvases, services, and UI primitives. Browser-only features use dynamic import or `ClientOnly` guards.
+- **Hooks & Utilities:** Custom hooks in `src/hooks/` and root-level `hooks/` handle environment probing (reduced motion, Safari detection), analytics wiring, smooth scrolling, and toast notifications. Shared helpers (e.g., `cn`) live in `src/lib`.
+- **Styling:** Tailwind CSS drives layout and theming; global typographic rules extend via `src/styles/typography.css`.
+- **Data & Content:** Structured content lives in `src/data/` for reuse across routes and components. Rich SEO metadata is provided via `src/components/seo/StructuredData`.
 
-   - `src/common` holds shared layout components (Navbar, Footer).
-   - `src/components` contains feature-rich components (hero animations, parallax sections, 3D elements) and a `ui` subfolder of headless UI primitives derived from Shadcn.
-   - Many heavy or browser-specific components are loaded with `next/dynamic` and gated behind `ClientOnly` to avoid server/client mismatches.
+---
 
-3. **Styling & Utilities**
+## ✅ Testing & Quality
 
-   - Tailwind CSS is the primary styling mechanism; custom colors, fonts, and animations are configured in `tailwind.config.js`.
-   - The `cn` utility (in `src/lib/utils.ts`) merges Tailwind class strings.
-   - Global typography rules reside in `src/styles/typography.css`.
+- **Unit & Component Tests:** Jest (`pnpm test`) with Testing Library. Use `tests/test-utils.ts` for consistent providers and mocks (Next router, IntersectionObserver, etc.).
+- **Playwright Suites:** Located under `tests/integration/`, `tests/qa/`, and `tests/audit/`. Audit specs generate artifacts in `tests/audit/artifacts/`.
+- **CI Expectations:** Run `pnpm lint` and relevant tests before raising PRs. Track coverage with `pnpm test:coverage` when introducing major features.
+- **Metrics & Error Tracking:** Sentry instrumentation is enabled in the App Router; ensure new pages/components either respect existing boundaries or are wrapped with `ErrorBoundary` where appropriate.
 
-4. **Custom Hooks**
+---
 
-   - `src/hooks` and root-level hooks provide reusable logic, e.g., detecting backdrop-filter support, responding to motion preferences, building a toast system, or gating rendering to the client.
+## 🔄 Workflow Tips
 
-5. **Testing**
+- Follow commit prefixes (`feat:`, `fix:`, `refactor:`, `chore:`, `docs:`) and keep messages concise.
+- Keep diffs focused; use `apply_patch` or targeted edits to avoid disrupting unrelated files.
+- Reference `AGENTS.md` for agent-facing conventions and quick-start guidance.
+- When adding client-only behaviour, gate it behind dynamic imports or the provided `ClientOnly` utilities to keep SSR stable.
 
-   - Jest and Testing Library are configured via `jest.config.js` and `jest.setup.js`.
-   - Tests live under `tests/`, with helpers in `tests/test-utils.ts` that mock Next.js router, IntersectionObserver, etc.
-   - Playwright specs live in `tests/integration/`, `tests/qa/`, and `tests/audit/` (artifacts in `tests/audit/artifacts/`). Configure Playwright separately from Jest.
+---
 
-6. **Helper Scripts**
+## 📚 Additional Resources
 
-   - The `helper` directory contains scripts for managing assets (e.g., downloading portfolio images) and a standalone `utils.ts` for non-app code.
-
-7. **Guidelines & Documentation**
-   - Internal engineering and content guidelines are maintained privately.
-
-### Next Steps for Deepening Understanding
-
-- **Explore the App Router**
-
-  - Start with `src/app/home/page.tsx` to see how major sections (Hero, Features, Process, DevelopmentTools) come together.
-  - Look at `ConditionalLayout` and `BrowserCompatibilityDetector` for global app behavior.
-
-- **Understand Components & Animations**
-
-  - Study `src/components/sections/Hero.tsx` (Framer Motion, dynamic imports, text animations).
-  - Explore `src/components/services/` and `src/components/portfolio/` for feature-specific UI.
-  - Review 3D examples like `src/components/3d/ModernCube.tsx` or `src/components/3d/RotatingCube.tsx` using React Three Fiber.
-
-- **Learn Custom Hooks**
-
-  - `use-backdrop-filter-support.ts`, `use-reduced-motion.ts`, `use-safari-detection.ts`, etc., show how environment-specific logic is encapsulated.
-
-- **Check Testing Practices**
-
-  - `tests/components/ModernCube.test.tsx` and `ParallaxTestimonials.test.tsx` demonstrate component testing with mocked libraries and helpers.
-
-- **Follow Guidelines**
-  - Follow internal guidelines maintained privately for content and engineering practices.
+- [Next.js Docs](https://nextjs.org/docs)
+- [Tailwind CSS Docs](https://tailwindcss.com/docs)
+- [React Three Fiber](https://docs.pmnd.rs/react-three-fiber/getting-started/introduction)
+- [Playwright](https://playwright.dev/docs/intro)
+- Internal product and content documentation is shared privately with the DevX Group team.
