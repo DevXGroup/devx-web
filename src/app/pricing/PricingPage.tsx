@@ -233,7 +233,6 @@ interface PricingCardProps {
 function PricingCard({ plan, index, isYearly }: PricingCardProps) {
   const shouldReduceMotion = useReducedMotion()
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '-50px' })
   const IconComponent = plan.icon
   const [isHovered, setIsHovered] = useState(false)
 
@@ -242,7 +241,7 @@ function PricingCard({ plan, index, isYearly }: PricingCardProps) {
       ref={ref}
       variants={fadeInUpVariants}
       initial="hidden"
-      animate={isInView ? 'visible' : 'hidden'}
+      animate={'visible'}
       whileHover={shouldReduceMotion ? {} : cardHoverVariants.hover}
       className={`relative bg-black/40 backdrop-blur-xl rounded-2xl border ${
         plan.popular
@@ -369,7 +368,7 @@ function PricingCard({ plan, index, isYearly }: PricingCardProps) {
                 key={feature}
                 className="flex items-start text-sm md:text-base text-white/80 group-hover:text-white transition-colors duration-300"
                 initial={{ opacity: 0, x: -10 }}
-                animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1 * featureIndex }}
               >
                 <Check
@@ -402,7 +401,7 @@ function PricingCard({ plan, index, isYearly }: PricingCardProps) {
                 key={item}
                 className="flex items-start leading-relaxed group-hover:text-white/85 transition-colors duration-300"
                 initial={{ opacity: 0, x: -10 }}
-                animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.6 + 0.1 * itemIndex }}
               >
                 <span
