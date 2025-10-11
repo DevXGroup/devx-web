@@ -28,6 +28,7 @@ const LetterGlitch = ({
   const lastGlitchTime = useRef(Date.now());
   const mousePosition = useRef({ x: -1, y: -1 });
   const isHovering = useRef(false);
+  const isDev = process.env.NODE_ENV !== 'production';
 
   const fontSize = 14;
   const charWidth = 9;
@@ -190,7 +191,9 @@ const LetterGlitch = ({
     try {
       rect = canvas.getBoundingClientRect();
     } catch (error) {
-      console.warn('Could not get canvas dimensions, using defaults', error);
+      if (isDev) {
+        console.warn('Could not get canvas dimensions, using defaults', error);
+      }
     }
     ctx.clearRect(0, 0, rect.width, rect.height);
     ctx.font = `${fontSize}px monospace`;
@@ -204,7 +207,9 @@ const LetterGlitch = ({
         ctx.fillText(letter.char, x, y);
       });
     } catch (error) {
-      console.warn('Error drawing letters', error);
+      if (isDev) {
+        console.warn('Error drawing letters', error);
+      }
     }
   };
 
@@ -312,7 +317,9 @@ const LetterGlitch = ({
         width = Math.max(rect.width || 100, 100);
         height = Math.max(rect.height || 100, 100);
       } catch (error) {
-        console.warn('Could not get parent element dimensions, using defaults', error);
+        if (isDev) {
+          console.warn('Could not get parent element dimensions, using defaults', error);
+        }
       }
       
       const dpr = window.devicePixelRatio || 1;
@@ -354,7 +361,9 @@ const LetterGlitch = ({
           isHovering.current = true;
         }
       } catch (error) {
-        console.warn('Error in mouse move handler:', error);
+        if (isDev) {
+          console.warn('Error in mouse move handler:', error);
+        }
       }
     };
 
@@ -386,7 +395,9 @@ const LetterGlitch = ({
         };
         isHovering.current = true;
       } catch (error) {
-        console.warn('Error in parent mouse move handler:', error);
+        if (isDev) {
+          console.warn('Error in parent mouse move handler:', error);
+        }
       }
     };
 

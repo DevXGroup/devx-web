@@ -21,9 +21,8 @@ interface TextPressureProps {
 
 const TextPressure: React.FC<TextPressureProps> = ({
   text = 'Our Story',
-  fontFamily = 'IBM Plex Mono',
-  // fontUrl = 'https://res.cloudinary.com/dr6lvwubh/raw/upload/v1529908256/CompressaPRO-GX.woff2',
-  fontUrl = 'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap',
+  fontFamily = 'var(--font-ibm-plex-mono)',
+  fontUrl = '',
   width = true,
   weight = true,
   italic = true,
@@ -57,6 +56,8 @@ const TextPressure: React.FC<TextPressureProps> = ({
     return Math.sqrt(dx * dx + dy * dy)
   }
 
+  const isDev = process.env.NODE_ENV !== 'production'
+
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       cursorRef.current.x = e.clientX
@@ -81,7 +82,9 @@ const TextPressure: React.FC<TextPressureProps> = ({
         cursorRef.current.x = mouseRef.current.x
         cursorRef.current.y = mouseRef.current.y
       } catch (error) {
-        console.warn('TextPressure: Could not get container bounds', error)
+        if (isDev) {
+          console.warn('TextPressure: Could not get container bounds', error)
+        }
       }
     }
 
@@ -89,7 +92,7 @@ const TextPressure: React.FC<TextPressureProps> = ({
       window.removeEventListener('mousemove', handleMouseMove)
       window.removeEventListener('touchmove', handleTouchMove)
     }
-  }, [])
+  }, [isDev])
 
   const setSize = useCallback(() => {
     if (!containerRef.current || !titleRef.current) return
@@ -100,7 +103,9 @@ const TextPressure: React.FC<TextPressureProps> = ({
       containerW = rect.width
       containerH = rect.height
     } catch (error) {
-      console.warn('TextPressure: Could not get container dimensions', error)
+      if (isDev) {
+        console.warn('TextPressure: Could not get container dimensions', error)
+      }
     }
 
     let newFontSize = containerW / (chars.length / 2)
@@ -120,10 +125,12 @@ const TextPressure: React.FC<TextPressureProps> = ({
           setLineHeight(yRatio)
         }
       } catch (error) {
-        console.warn('TextPressure: Could not get title dimensions', error)
+        if (isDev) {
+          console.warn('TextPressure: Could not get title dimensions', error)
+        }
       }
     })
-  }, [chars.length, minFontSize, scale])
+  }, [chars.length, minFontSize, scale, isDev])
 
   useEffect(() => {
     // Force immediate sizing on mount and after a short delay for Safari
@@ -150,7 +157,9 @@ const TextPressure: React.FC<TextPressureProps> = ({
         try {
           titleRect = titleRef.current.getBoundingClientRect()
         } catch (error) {
-          console.warn('TextPressure: Could not get title rect for animation', error)
+          if (isDev) {
+            console.warn('TextPressure: Could not get title rect for animation', error)
+          }
         }
         const maxDist = titleRect.width / 2
 
@@ -161,7 +170,9 @@ const TextPressure: React.FC<TextPressureProps> = ({
           try {
             rect = span.getBoundingClientRect()
           } catch (error) {
-            console.warn('TextPressure: Could not get span rect', error)
+            if (isDev) {
+              console.warn('TextPressure: Could not get span rect', error)
+            }
             return
           }
 
@@ -192,16 +203,18 @@ const TextPressure: React.FC<TextPressureProps> = ({
 
     animate()
     return () => cancelAnimationFrame(rafId)
-  }, [width, weight, italic, alpha, chars.length])
+  }, [width, weight, italic, alpha, chars.length, isDev])
 
   return (
     <div ref={containerRef} className="relative w-full h-full overflow-hidden bg-transparent">
       <style>{`
+        ${fontUrl ? `
         @font-face {
           font-family: '${fontFamily}';
           src: url('${fontUrl}');
           font-style: normal;
         }
+        ` : ''}
         .stroke span {
           position: relative;
           color: ${textColor};
@@ -237,7 +250,7 @@ const TextPressure: React.FC<TextPressureProps> = ({
           transform: `scale(1, ${scaleY})`,
           transformOrigin: 'center center',
           margin: 0,
-          fontWeight: 100,
+          fontWeight: 400,
           color: stroke ? undefined : textColor,
           letterSpacing: letterSpacing,
         }}
