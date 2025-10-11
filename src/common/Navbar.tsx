@@ -80,6 +80,17 @@ export default function Navbar() {
 
   const isActive = (path: string) => pathname === path
 
+  // Handle clicking the same page link in mobile menu
+  const handleMobileLinkClick = (path: string) => {
+    if (isActive(path)) {
+      // If clicking current page, reload and close menu
+      setIsOpen(false)
+      isOpenRef.current = false
+      document.body.style.overflow = 'unset'
+      window.location.href = path
+    }
+  }
+
   // Get the active page color based on current pathname
   const getActiveColor = (path: string) => {
     if (!isActive(path)) return null
@@ -160,7 +171,7 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-[14px]">
-          <Link href="/home" aria-label="DevX Group LLC">
+          <Link href="/home" aria-label="DevX Group LLC" className="flex-shrink-0">
             <Image
               src="/images/logos/devx-logo.png"
               alt="DevX Group LLC"
@@ -170,7 +181,8 @@ export default function Navbar() {
               fetchPriority="high"
               quality={70}
               sizes="(max-width: 640px) 160px, 200px"
-              style={{ height: 'auto', width: 'auto', maxWidth: 200 }}
+              className="w-[200px] h-auto"
+              style={{ maxWidth: '200px', height: 'auto' }}
             />
           </Link>
           {/* Desktop Menu - right aligned */}
@@ -506,6 +518,7 @@ export default function Navbar() {
             changeMenuColorOnOpen={true}
             hideToggleButton={true}
             isOpen={isOpen}
+            currentPath={pathname}
             onMenuOpen={() => {
               document.body.style.overflow = 'hidden'
             }}
@@ -513,6 +526,7 @@ export default function Navbar() {
               document.body.style.overflow = 'unset'
               setIsOpen(false)
             }}
+            onLinkClick={handleMobileLinkClick}
           />
         </div>
       </div>

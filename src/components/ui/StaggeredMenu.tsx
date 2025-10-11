@@ -29,6 +29,8 @@ export interface StaggeredMenuProps {
   onMenuClose?: () => void
   hideToggleButton?: boolean
   isOpen?: boolean
+  currentPath?: string
+  onLinkClick?: (path: string) => void
 }
 
 export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
@@ -48,6 +50,8 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
   onMenuClose,
   hideToggleButton = false,
   isOpen: externalIsOpen,
+  currentPath,
+  onLinkClick,
 }: StaggeredMenuProps) => {
   const [open, setOpen] = useState(false)
   const openRef = useRef(false)
@@ -74,6 +78,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
   const busyRef = useRef(false)
 
   const itemEntranceTweenRef = useRef<gsap.core.Tween | null>(null)
+  const isDev = process.env.NODE_ENV !== 'production'
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -119,9 +124,10 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
               layer.getBoundingClientRect()
             })
 
-            // Verify layer positions are set correctly
-            const positions = preLayers.map(layer => gsap.getProperty(layer, 'xPercent'))
-            console.log('Layer initialization complete:', preLayers.length, 'layers with positions:', positions)
+            if (isDev) {
+              const positions = preLayers.map(layer => gsap.getProperty(layer, 'xPercent'))
+              console.log('Layer initialization complete:', preLayers.length, 'layers with positions:', positions)
+            }
           }
         }
       }
@@ -133,7 +139,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
       setTimeout(initializeLayers, 150)
     })
     return () => ctx.revert()
-  }, [menuButtonColor, position])
+  }, [menuButtonColor, position, isDev])
 
   const buildOpenTimeline = useCallback(() => {
     const panel = panelRef.current
@@ -144,7 +150,9 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
     const layers = Array.from(preContainer.querySelectorAll('.sm-prelayer')) as HTMLElement[]
     preLayerElsRef.current = layers
 
-    console.log('buildOpenTimeline - Found layers:', layers.length)
+    if (isDev) {
+      console.log('buildOpenTimeline - Found layers:', layers.length)
+    }
 
     // Ensure layers are properly initialized before animation with stronger guarantees
     if (layers.length) {
@@ -165,7 +173,9 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
         // Double check that the positioning took effect
         const currentPos = gsap.getProperty(layer, 'xPercent')
         if (currentPos !== 100) {
-          console.warn('Layer position not set correctly, retrying:', currentPos)
+          if (isDev) {
+            console.warn('Layer position not set correctly, retrying:', currentPos)
+          }
           gsap.set(layer, { xPercent: 100, immediateRender: true })
         }
       })
@@ -190,7 +200,9 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
       start: Number(gsap.getProperty(el, 'xPercent')),
     }))
 
-    console.log('Layers found:', layers.length, 'Layer states:', layerStates)
+    if (isDev) {
+      console.log('Layers found:', layers.length, 'Layer states:', layerStates)
+    }
     const panelStart = Number(gsap.getProperty(panel, 'xPercent'))
 
     if (itemEls.length) gsap.set(itemEls, { yPercent: 140, rotate: 10 })
@@ -206,17 +218,17 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
         { xPercent: 100 },
         {
           xPercent: 0,
-          duration: 0.28,
+          duration: 0.18,
           ease: 'power3.out',
           force3D: true,
         },
-        i * 0.05
+        i * 0.03
       )
     })
 
-    const lastTime = layerStates.length ? (layerStates.length - 1) * 0.05 : 0
-    const panelInsertTime = lastTime + (layerStates.length ? 0.1 : 0)
-    const panelDuration = 0.6
+    const lastTime = layerStates.length ? (layerStates.length - 1) * 0.03 : 0
+    const panelInsertTime = lastTime + (layerStates.length ? 0.06 : 0)
+    const panelDuration = 0.35
 
     tl.fromTo(
       panel,
@@ -280,7 +292,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
 
     openTlRef.current = tl
     return tl
-  }, [])
+  }, [isDev])
 
   const playOpen = useCallback(() => {
     if (busyRef.current) return
@@ -297,7 +309,9 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
         })
         tl.play(0)
       } else {
-        console.warn('Failed to build timeline, retrying...')
+        if (isDev) {
+          console.warn('Failed to build timeline, retrying...')
+        }
         // Retry once if timeline building fails
         setTimeout(() => {
           const retryTl = buildOpenTimeline()
@@ -320,7 +334,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
       // Subsequent opens can be immediate
       executeAnimation()
     }
-  }, [buildOpenTimeline])
+  }, [buildOpenTimeline, isDev])
 
   const playClose = useCallback(() => {
     openTlRef.current?.kill()
@@ -461,6 +475,11 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
       onMenuOpen?.()
       playOpen()
     } else {
+      if (typeof window !== 'undefined') {
+        window.requestAnimationFrame(() => toggleBtnRef.current?.focus())
+      } else {
+        toggleBtnRef.current?.focus()
+      }
       onMenuClose?.()
       playClose()
     }
@@ -526,7 +545,9 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
                   ]
             // Show all 4 layers for maximum visual impact
             const arr = raw.slice(0, 4)
-            console.log('Creating layers with colors:', arr)
+            if (isDev) {
+              console.log('Creating layers with colors:', arr)
+            }
             return arr.map((c, i) => (
               <div
                 key={i}
@@ -615,7 +636,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
           ref={panelRef}
           className="staggered-menu-panel absolute top-0 right-0 h-full bg-black flex flex-col p-[6em_2em_2em_2em] overflow-y-auto z-10 backdrop-blur-[12px]"
           style={{ WebkitBackdropFilter: 'blur(12px)' }}
-          aria-hidden={!open}
+          aria-hidden={open ? undefined : true}
         >
           <div className="sm-panel-inner flex-1 flex flex-col gap-5">
             <ul
@@ -634,6 +655,12 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
                       href={it.link}
                       aria-label={it.ariaLabel}
                       data-index={idx + 1}
+                      onClick={(e) => {
+                        if (currentPath === it.link && onLinkClick) {
+                          e.preventDefault()
+                          onLinkClick(it.link)
+                        }
+                      }}
                     >
                       <span className="sm-panel-itemLabel inline-block [transform-origin:50%_100%] will-change-transform">
                         {it.label}
