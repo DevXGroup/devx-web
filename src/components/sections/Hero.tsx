@@ -32,6 +32,9 @@ const subheaders = [
   'Predictive Analytics',
   'Scale with Confidence',
   'AI Automation',
+  'Agentic AI Solutions',
+  'RAG Implementation',
+  'Intelligent Workflows',
 ]
 
 // Optimized animation variants for better performance and LCP

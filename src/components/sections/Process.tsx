@@ -117,17 +117,15 @@ export default function Process() {
         <div className="absolute inset-0 bg-black/85" />
       </div>
 
-      <motion.div style={{ opacity, y }} className="relative container mx-auto px-4">
-        <div className="relative flex items-center justify-center text-center mb-16 py-12">
+      <motion.div style={{ opacity, y }} className="relative container mx-auto px-4 sm:px-6">
+        <div className="relative flex items-center justify-center text-center mb-12 sm:mb-16 py-8 sm:py-12">
           <div className="relative z-10">
             <div className="flex flex-col items-center">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-center font-['IBM_Plex_Mono'] text-white">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 text-center font-['IBM_Plex_Mono'] text-white">
                 How It Works
               </h2>
-              <p className="text-lg md:text-xl text-foreground/80 max-w-3xl mx-auto font-['IBM_Plex_Mono'] font-light px-4">
-                Simple steps to bring your software vision to life
-                <br />
-                from idea to launch in record time.
+              <p className="text-base sm:text-lg md:text-xl text-foreground/80 max-w-3xl mx-auto font-['IBM_Plex_Mono'] font-light px-4 leading-relaxed">
+                Simple steps to bring your software vision to life from idea to launch in record time.
               </p>
             </div>
           </div>
@@ -139,20 +137,20 @@ export default function Process() {
         </div>
 
         {/* Process cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-24 px-4 sm:px-0">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-16 sm:mb-24 px-4 sm:px-0">
           {processes.map((process, index) => (
             <motion.div
               key={process.title}
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.2 }}
+              transition={{ duration: 0.5, delay: index * 0.15 }}
               whileHover={{
                 scale: 1.02,
                 y: -8,
               }}
               whileTap={{ scale: 0.98 }}
-              className="group relative bg-slate-800 p-8 sm:p-8 md:p-10 rounded-xl border border-purple-500/20 hover:border-purple-400/40 flex flex-col items-start text-left overflow-hidden cursor-pointer min-h-[180px] transition-all duration-300"
+              className="group relative bg-slate-800 p-6 sm:p-8 md:p-10 rounded-xl border border-purple-500/20 hover:border-purple-400/40 flex flex-col items-start text-left overflow-hidden cursor-pointer min-h-[160px] sm:min-h-[180px] transition-all duration-300"
               role="article"
               aria-label={`${process.title}: ${process.description}`}
             >
@@ -278,9 +276,9 @@ export default function Process() {
 
               {/* Content */}
               <div className="relative z-10">
-                <div className="flex items-center mb-6">
+                <div className="flex items-center mb-4 sm:mb-6">
                   <motion.div
-                    className="w-12 h-12 rounded-full flex items-center justify-center mr-4 relative overflow-hidden"
+                    className="w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center mr-3 sm:mr-4 relative overflow-hidden shrink-0"
                     whileHover={{
                       boxShadow: `0 0 30px ${process.color}60`,
                     }}
@@ -314,7 +312,7 @@ export default function Process() {
                       className="pointer-events-none"
                     >
                       <process.icon
-                        className="w-6 h-6 transition-all duration-300 relative z-10 pointer-events-none"
+                        className="w-5 h-5 sm:w-6 sm:h-6 transition-all duration-300 relative z-10 pointer-events-none"
                         style={{
                           color: process.color,
                           filter: `drop-shadow(0 0 4px ${process.color}80)`,

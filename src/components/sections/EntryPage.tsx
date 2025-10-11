@@ -65,6 +65,7 @@ const LetterGlitch = ({
   const grid = useRef<Grid>({ columns: 0, rows: 0 })
   const context = useRef<CanvasRenderingContext2D | null>(null)
   const lastGlitchTime = useRef<number>(Date.now())
+  const isDev = process.env.NODE_ENV !== 'production'
 
   const fontSize = 22
   const charWidth = 13
@@ -166,7 +167,9 @@ const LetterGlitch = ({
         canvas.style.width = `${rect.width}px`
         canvas.style.height = `${rect.height}px`
       } catch (canvasError) {
-        console.warn('Canvas size error:', canvasError)
+        if (isDev) {
+          console.warn('Canvas size error:', canvasError)
+        }
         return
       }
 
@@ -174,7 +177,9 @@ const LetterGlitch = ({
         try {
           context.current.setTransform(dpr, 0, 0, dpr, 0, 0)
         } catch (transformError) {
-          console.warn('Canvas transform error:', transformError)
+          if (isDev) {
+            console.warn('Canvas transform error:', transformError)
+          }
         }
       }
 
@@ -183,7 +188,9 @@ const LetterGlitch = ({
 
       drawLetters()
     } catch (error) {
-      console.warn('Canvas resize error:', error)
+      if (isDev) {
+        console.warn('Canvas resize error:', error)
+      }
     }
   }
 
@@ -211,7 +218,9 @@ const LetterGlitch = ({
       // Reset alpha for other elements
       ctx.globalAlpha = 1
     } catch (error) {
-      console.warn('Canvas draw error:', error)
+      if (isDev) {
+        console.warn('Canvas draw error:', error)
+      }
     }
   }
 
@@ -293,7 +302,9 @@ const LetterGlitch = ({
             colorSpace: 'srgb',
           })
         } catch (ctxError) {
-          console.warn('Context creation with options failed, trying basic:', ctxError)
+          if (isDev) {
+            console.warn('Context creation with options failed, trying basic:', ctxError)
+          }
           ctx = canvas.getContext('2d')
         }
 
@@ -325,7 +336,9 @@ const LetterGlitch = ({
                 isSafari ? 300 : 200
               ) // Longer debounce for Safari
             } catch (error) {
-              console.warn('Resize handler error:', error)
+              if (isDev) {
+                console.warn('Resize handler error:', error)
+              }
             }
           }
 
@@ -335,7 +348,9 @@ const LetterGlitch = ({
         }
       }
     } catch (error) {
-      console.warn('Canvas initialization error:', error)
+      if (isDev) {
+        console.warn('Canvas initialization error:', error)
+      }
     }
 
     return () => {
@@ -350,7 +365,9 @@ const LetterGlitch = ({
           clearTimeout(resizeTimeout)
         }
       } catch (error) {
-        console.warn('Cleanup error:', error)
+        if (isDev) {
+          console.warn('Cleanup error:', error)
+        }
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -773,18 +790,6 @@ function AnimatedInfinity({ onComplete }: { onComplete: () => void }) {
               animateOn="view"
               onComplete={handleTextComplete}
             />
-            <motion.p
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 1.5, ease: 'easeOut' }}
-              className="text-sm md:text-base text-white/70 mt-4 font-['IBM_Plex_Sans']"
-              style={{
-                letterSpacing: '0.05em',
-                textShadow: '0 2px 4px rgba(0,0,0,0.8)',
-              }}
-            >
-              Elite Software Development
-            </motion.p>
           </motion.div>
         </motion.div>
       )}
