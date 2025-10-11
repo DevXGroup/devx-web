@@ -619,7 +619,7 @@ export default function PricingPage() {
       </section>
 
       {/* Enhanced CTA Section */}
-      <section className="relative pt-20 pb-0">
+      <section className="relative pt-20 pb-0 z-[6000]">
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
             initial={{ opacity: 0 }}

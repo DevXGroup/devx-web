@@ -335,12 +335,13 @@ export default function Footer() {
                 >
                   Terms of Service
                 </Link>
-                <Link
+                <a
                   href="/sitemap.xml"
                   className="text-muted-foreground hover:text-[#4CD787] transition-colors text-center lg:text-left"
+                  rel="noreferrer"
                 >
                   Sitemap
-                </Link>
+                </a>
               </div>
             </div>
           </div>

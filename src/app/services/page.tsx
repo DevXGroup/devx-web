@@ -3,8 +3,8 @@ import ServicesPage from "./ServicesPage"
 
 export const metadata: Metadata = {
   title: 'Software Development Services | Web Apps, Mobile Apps, AI & IoT Solutions',
-  description: 'Comprehensive software development services including web applications, mobile apps, AI/ML solutions, IoT hardware integration, and digital transformation. Expert developers delivering scalable solutions.',
-  keywords: ['software development services', 'web applications', 'mobile apps', 'AI solutions', 'ML development', 'IoT integration', 'digital transformation', 'custom software'],
+  description: 'Comprehensive software development services including web applications, mobile apps, AI/ML solutions, Agentic AI, RAG implementation, IoT hardware integration, and digital transformation. Expert developers delivering scalable solutions.',
+  keywords: ['software development services', 'web applications', 'mobile apps', 'AI solutions', 'ML development', 'IoT integration', 'digital transformation', 'custom software', 'agentic AI', 'RAG', 'retrieval augmented generation', 'AI agents', 'workflow automation', 'n8n', 'make', 'zapier'],
   openGraph: {
     title: 'Software Development Services | Web Apps, Mobile Apps, AI & IoT Solutions',
     description: 'Comprehensive software development services including web applications, mobile apps, AI/ML solutions, IoT hardware integration, and digital transformation.',

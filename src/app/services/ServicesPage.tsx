@@ -553,6 +553,252 @@ export default function ServicesPage() {
         </section>
       </AppleScrollSection>
 
+      {/* Agentic AI & RAG Section */}
+      <AppleScrollSection delay={0.3}>
+        <section className="section-padding relative py-20 overflow-hidden">
+          <div className="absolute inset-0 overflow-hidden" style={{ opacity: 0.3 }}>
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-full object-cover"
+            >
+              <source src="/videos/agentic-ai-header.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            <div className="absolute inset-0 pointer-events-none">
+              <div className="absolute inset-0 bg-gradient-to-r from-black/25 via-transparent to-black/25" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-black/15" />
+            </div>
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-[#1a0b2e]/45 to-black/90" />
+
+          <div className="container mx-auto px-4 relative z-10">
+            <div className="flex flex-col items-center text-center gap-8 mb-12">
+              {/* Section Title */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.8 }}
+                className="max-w-3xl"
+              >
+                <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+                  <span className="bg-gradient-to-r from-[#4CD787] via-[#9d4edd] to-[#CFB53B] bg-clip-text text-transparent">
+                    Agentic AI & RAG Solutions
+                  </span>
+                </h2>
+                <p className="text-lg md:text-xl text-white/80 font-['IBM_Plex_Sans'] leading-relaxed mx-auto">
+                  Transform your business with intelligent AI agents that think, learn, and act autonomously.
+                  Powered by cutting-edge retrieval-augmented generation technology.
+                </p>
+              </motion.div>
+            </div>
+
+            {/* Video and Cards Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-start justify-items-center max-w-7xl mx-auto">
+              {/* Video Section */}
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="order-1 lg:order-1 lg:col-span-2 flex flex-col items-center"
+              >
+                <div className="relative group rounded-2xl overflow-hidden border-2 border-[#4CD787]/20 shadow-2xl shadow-[#4CD787]/10 max-w-4xl w-full">
+                  <div className="relative aspect-video bg-black">
+                    <video
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="w-full h-full object-cover"
+                      poster="/videos/agentic-ai-grid-poster.jpg"
+                    >
+                      <source src="/videos/agentic-ai-grid.mp4" type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+                  </div>
+                  <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#4CD787]/30 via-[#9d4edd]/30 to-[#CFB53B]/30 blur-xl" />
+                  </div>
+                </div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                  className="mt-6 text-center"
+                >
+                  <p className="text-sm md:text-base text-white/60 font-['IBM_Plex_Mono']">
+                    Real-time AI Agent Orchestration
+                  </p>
+                </motion.div>
+              </motion.div>
+
+              {/* Cards Section */}
+              <div className="order-2 space-y-6 w-full flex flex-col items-center lg:col-span-2">
+                {/* Card 1: Agentic AI */}
+                <motion.div
+                  initial={{ opacity: 0, x: 50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ duration: 0.8, delay: 0.3 }}
+                  className="relative group w-full max-w-3xl"
+                >
+                  <div className="bg-[#0B0B10]/90 p-8 rounded-2xl border border-[#4CD787]/30 hover:border-[#4CD787]/50 transition-all duration-300 shadow-lg hover:shadow-[#4CD787]/30 text-left">
+                    <div className="flex flex-col gap-4">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-xl bg-[#4CD787]/20 flex items-center justify-center">
+                          <Bot className="w-6 h-6 text-[#4CD787]" />
+                        </div>
+                        <h3 className="text-xl md:text-2xl font-bold text-[#4CD787]">
+                          Agentic AI Development
+                        </h3>
+                      </div>
+                      <p className="text-white/80 text-base md:text-lg leading-relaxed font-['IBM_Plex_Sans'] max-w-2xl">
+                        Build autonomous AI agents that execute complex workflows end-to-end. Powered by OpenAI AgentKit, n8n, Make, and Zapier for seamless automation.
+                      </p>
+                      <ul className="space-y-2 text-sm md:text-base text-white/70">
+                        <li className="flex items-start gap-2">
+                          <span className="text-[#4CD787]">✓</span>
+                          Multi-agent orchestration & collaboration
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-[#4CD787]">✓</span>
+                          Browser automation with computer use tools
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-[#4CD787]">✓</span>
+                          24/7 autonomous task execution
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-[#4CD787]">✓</span>
+                          70% reduction in manual workflows
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Card 2: RAG Implementation */}
+                <motion.div
+                  initial={{ opacity: 0, x: 50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                  className="relative group w-full max-w-3xl"
+                >
+                  <div className="bg-[#0B0B10]/90 p-8 rounded-2xl border border-[#9d4edd]/30 hover:border-[#9d4edd]/50 transition-all duration-300 shadow-lg hover:shadow-[#9d4edd]/30 text-left">
+                    <div className="flex flex-col gap-4">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-xl bg-[#9d4edd]/20 flex items-center justify-center">
+                          <Brain className="w-6 h-6 text-[#9d4edd]" />
+                        </div>
+                        <h3 className="text-xl md:text-2xl font-bold text-[#9d4edd]">
+                          RAG Implementation
+                        </h3>
+                      </div>
+                      <p className="text-white/80 text-base md:text-lg leading-relaxed font-['IBM_Plex_Sans'] max-w-2xl">
+                        Enhance AI accuracy with retrieval-augmented generation. Connect LLMs to your knowledge base for contextually relevant, up-to-date responses.
+                      </p>
+                      <ul className="space-y-2 text-sm md:text-base text-white/70">
+                        <li className="flex items-start gap-2">
+                          <span className="text-[#9d4edd]">✓</span>
+                          Real-time knowledge retrieval & integration
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-[#9d4edd]">✓</span>
+                          99% accuracy with GraphRAG technology
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-[#9d4edd]">✓</span>
+                          Multimodal RAG (text, audio, video, images)
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-[#9d4edd]">✓</span>
+                          Eliminate AI hallucinations
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Card 3: Workflow Automation */}
+                <motion.div
+                  initial={{ opacity: 0, x: 50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ duration: 0.8, delay: 0.5 }}
+                  className="relative group w-full max-w-3xl"
+                >
+                  <div className="bg-[#0B0B10]/90 p-8 rounded-2xl border border-[#CFB53B]/30 hover:border-[#CFB53B]/50 transition-all duration-300 shadow-lg hover:shadow-[#CFB53B]/30 text-left">
+                    <div className="flex flex-col gap-4">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-xl bg-[#CFB53B]/20 flex items-center justify-center">
+                          <Cpu className="w-6 h-6 text-[#CFB53B]" />
+                        </div>
+                        <h3 className="text-xl md:text-2xl font-bold text-[#CFB53B]">
+                          Intelligent Workflow Automation
+                        </h3>
+                      </div>
+                      <p className="text-white/80 text-base md:text-lg leading-relaxed font-['IBM_Plex_Sans'] max-w-2xl">
+                        Automate repetitive tasks with AI-powered workflows. Integrate with 8,000+ apps using n8n, Make, and Zapier platforms.
+                      </p>
+                      <ul className="space-y-2 text-sm md:text-base text-white/70">
+                        <li className="flex items-start gap-2">
+                          <span className="text-[#CFB53B]">✓</span>
+                          Visual workflow builder with drag-and-drop
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-[#CFB53B]">✓</span>
+                          Self-hosted & cloud deployment options
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-[#CFB53B]">✓</span>
+                          Advanced AI node integrations
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-[#CFB53B]">✓</span>
+                          60% operational cost reduction
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+            </div>
+
+            {/* Call to Action */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              className="mt-16 text-center"
+            >
+              <p className="text-lg md:text-xl text-white/70 mb-6 font-['IBM_Plex_Sans']">
+                Ready to automate your business with intelligent AI agents?
+              </p>
+              <motion.a
+                href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 bg-gradient-to-r from-[#4CD787] to-[#9d4edd] hover:from-[#9d4edd] hover:to-[#CFB53B] text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-2xl transition-all duration-300"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                Schedule AI Strategy Session
+                <ArrowRight className="w-5 h-5" />
+              </motion.a>
+            </motion.div>
+          </div>
+        </section>
+      </AppleScrollSection>
+
       {/* Services Grid with Apple-style reveal */}
       <AppleScrollSection>
         <section className="section-padding relative services-section pt-8 md:pt-12">

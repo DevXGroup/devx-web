@@ -3,8 +3,8 @@ import PortfolioPage from "./PortfolioPage"
 
 export const metadata: Metadata = {
   title: 'Portfolio | Software Development Projects & Case Studies | DevX Group',
-  description: 'Explore DevX Group\'s portfolio of successful software development projects including e-commerce platforms, mobile apps, AI solutions, and digital transformation case studies.',
-  keywords: ['portfolio', 'software development projects', 'case studies', 'e-commerce platforms', 'mobile applications', 'ai solutions', 'project showcase'],
+  description: 'Explore DevX Group\'s portfolio of successful software development projects including e-commerce platforms, mobile apps, AI solutions, Agentic AI implementations, RAG systems, and digital transformation case studies.',
+  keywords: ['portfolio', 'software development projects', 'case studies', 'e-commerce platforms', 'mobile applications', 'ai solutions', 'project showcase', 'agentic AI projects', 'RAG implementation', 'AI automation case studies'],
   openGraph: {
     title: 'Portfolio | Software Development Projects & Case Studies | DevX Group',
     description: 'Explore DevX Group\'s portfolio of successful software development projects including e-commerce platforms, mobile apps, AI solutions, and digital transformation case studies.',

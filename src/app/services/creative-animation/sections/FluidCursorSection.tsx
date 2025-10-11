@@ -288,7 +288,12 @@ function SplashCursor({
       gl.shaderSource(shader, shaderSource);
       gl.compileShader(shader);
       if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-        console.trace(gl.getShaderInfoLog(shader));
+        const log = gl.getShaderInfoLog(shader);
+        if (process.env.NODE_ENV !== "production" && log) {
+          console.error("FluidCursor shader compile error:", log);
+        }
+        gl.deleteShader(shader);
+        return null;
       }
       return shader;
     }
@@ -304,7 +309,12 @@ function SplashCursor({
       gl.attachShader(program, fragmentShader);
       gl.linkProgram(program);
       if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-        console.trace(gl.getProgramInfoLog(program));
+        const log = gl.getProgramInfoLog(program);
+        if (process.env.NODE_ENV !== "production" && log) {
+          console.error("FluidCursor program link error:", log);
+        }
+        gl.deleteProgram(program);
+        return null;
       }
       return program;
     }
