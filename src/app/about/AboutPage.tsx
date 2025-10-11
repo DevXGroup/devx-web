@@ -4,11 +4,25 @@ import { motion, useReducedMotion, useInView } from 'framer-motion'
 import { useRef, useCallback, useMemo, useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Check, Users, Zap, Globe, Shield, Heart, UserCheck, Lightbulb, Star } from 'lucide-react'
+import {
+  Check,
+  Users,
+  Zap,
+  Globe,
+  Shield,
+  Heart,
+  UserCheck,
+  Lightbulb,
+  Star,
+  Lock,
+  FileText,
+} from 'lucide-react'
 import TextPressure from '@/components/animations/TextPressure'
 import ShapeBlur from '@/components/animations/ShapeBlur'
 import CardSwap, { Card } from '@/components/animations/CardSwap'
 import OrgChart from '@/components/sections/OrgChart'
+import DarkVeil from '@/components/animations/DarkVeil'
+import ScrollStack, { ScrollStackItem } from '@/components/animations/ScrollStack'
 
 // Enhanced animation variants for better performance
 const fadeInUpVariants = {
@@ -29,8 +43,8 @@ const containerVariants = {
 const cardHoverVariants = {
   rest: { scale: 1, y: 0 },
   hover: {
-    scale: 1.02,
-    y: -8,
+    scale: 1.01,
+    y: -4,
   },
 }
 
@@ -143,8 +157,8 @@ const ValueCard = ({
         shouldReduceMotion
           ? {}
           : {
-              scale: 1.02,
-              y: -8,
+              scale: 1.01,
+              y: -4,
             }
       }
       whileTap={{ scale: 0.98 }}
@@ -170,45 +184,6 @@ const ValueCard = ({
           duration: 4,
           repeat: Infinity,
           ease: 'easeInOut',
-        }}
-      />
-
-      {/* Scanning line effect */}
-      <motion.div
-        className="absolute inset-0 opacity-0 group-hover:opacity-100"
-        initial={{ x: '-100%' }}
-        whileHover={{
-          x: '100%',
-          transition: {
-            duration: 2,
-            ease: 'easeInOut',
-            repeat: Infinity,
-            repeatDelay: 1,
-          },
-        }}
-        style={{
-          background: 'linear-gradient(90deg, transparent, #4CD78740, transparent)',
-          width: '50%',
-          height: '100%',
-        }}
-      />
-
-      {/* Holographic edge effect */}
-      <motion.div
-        className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100"
-        initial={{ scale: 1 }}
-        whileHover={{
-          scale: [1, 1.02, 1],
-          rotate: [0, 1, 0, -1, 0],
-        }}
-        transition={{
-          duration: 3,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-        style={{
-          border: '1px solid #4CD78760',
-          boxShadow: '0 0 20px #4CD78730, inset 0 0 20px #4CD78710',
         }}
       />
 
@@ -242,11 +217,8 @@ const ValueCard = ({
             />
 
             <motion.div
-              whileHover={{
-                scale: 1.2,
-                rotateY: 180,
-              }}
-              transition={{ duration: 0.6, ease: 'backOut' }}
+              whileHover={{ scale: 1.08 }}
+              transition={{ duration: 0.25, ease: 'easeOut' }}
               className="pointer-events-none"
             >
               <Icon
@@ -277,7 +249,92 @@ const ValueCard = ({
   )
 }
 
-// Vision/Mission Card with running border animation
+type DeliveryItem = {
+  text: string
+  color: string
+  icon: React.ComponentType<{ className?: string }>
+}
+
+const deliveryHighlights: DeliveryItem[] = [
+  {
+    text: 'Weekly demos with milestone reviews keep delivery transparent.',
+    color: '#4CD787',
+    icon: Check,
+  },
+  {
+    text: 'Security hardening modeled after DoD Impact Level 5 controls for cloud delivery.',
+    color: '#06B6D4',
+    icon: Shield,
+  },
+  {
+    text: 'NDA-first engagement and U.S.-based contracting safeguard your IP.',
+    color: '#8A4FFF',
+    icon: Lock,
+  },
+  {
+    text: 'Complete code transfer, environment configs, and runbooks at acceptance.',
+    color: '#9d4edd',
+    icon: FileText,
+  },
+  {
+    text: '30-day stabilization support with on-call fixes and optimization guidance.',
+    color: '#4CD787',
+    icon: Heart,
+  },
+]
+
+const clamp = (value: number, min = 0, max = 1) => Math.min(Math.max(value, min), max)
+
+const normalizeHex = (hex: string) => {
+  const sanitized = hex.replace('#', '')
+  if (sanitized.length === 3) {
+    return sanitized
+      .split('')
+      .map((char) => char + char)
+      .join('')
+  }
+  return sanitized.padStart(6, '0').slice(0, 6)
+}
+
+const withAlpha = (hex: string, alpha: number) => {
+  const normalized = normalizeHex(hex)
+  const clampedAlpha = clamp(alpha)
+  const alphaValue = Math.round(clampedAlpha * 255)
+  return `#${normalized}${alphaValue.toString(16).padStart(2, '0')}`
+}
+
+const DeliveryCard = ({ text, color, icon: Icon, index }: DeliveryItem & { index: number }) => {
+  const accent = color
+  const borderColor = withAlpha(accent, 0.35)
+  const badgeBackground = withAlpha(accent, 0.1)
+  const badgeText = withAlpha(accent, 0.85)
+  const iconBackground = withAlpha(accent, 0.18)
+  const indexColor = withAlpha(accent, 0.7)
+
+  return (
+    <div
+      className="flex min-h-[240px] flex-col gap-8 rounded-[28px] border px-10 py-12 md:px-14 md:py-12"
+      style={{ borderColor, backgroundColor: '#0a1224' }}
+    >
+      <div className="flex items-center justify-between">
+        <div className="inline-flex items-center gap-3 rounded-full border px-4 py-2" style={{ borderColor, backgroundColor: badgeBackground }}>
+          <div className="flex h-10 w-10 items-center justify-center rounded-full" style={{ backgroundColor: iconBackground }}>
+            <Icon className="h-5 w-5" style={{ color: accent }} />
+          </div>
+          <span className="text-xs font-semibold uppercase tracking-[0.28em]" style={{ color: badgeText }}>
+            Ownership
+          </span>
+        </div>
+        <span className="text-sm font-medium" style={{ color: indexColor }}>
+          Step {index + 1}
+        </span>
+      </div>
+      <p className="text-lg leading-relaxed text-white/90 font-['IBM_Plex_Sans']">{text}</p>
+    </div>
+  )
+}
+
+// Vision/Mission Card without running border animation
 const VisionMissionCard = ({
   children,
   delay = 0,
@@ -285,7 +342,6 @@ const VisionMissionCard = ({
   children: React.ReactNode
   delay?: number
 }) => {
-  const [isHovered, setIsHovered] = useState(false)
   const shouldReduceMotion = useReducedMotion()
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true })
@@ -298,121 +354,8 @@ const VisionMissionCard = ({
       animate={isInView ? 'visible' : 'hidden'}
       transition={{ duration: 0.6, delay: shouldReduceMotion ? 0 : delay }}
       className="relative bg-black/60 backdrop-blur-md p-6 md:p-8 rounded-xl border border-white/20 hover:border-[#4CD787]/40 transition-colors duration-300 shadow-2xl overflow-hidden"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
     >
       {children}
-
-      {/* Running border animation - always visible, changes color on hover */}
-      <motion.div
-        className="absolute inset-0 overflow-hidden rounded-xl pointer-events-none"
-        initial={{ opacity: 1 }}
-        animate={{ opacity: 1 }}
-      >
-        {/* Top border */}
-        <motion.div
-          className="absolute w-full h-[2px] bg-gradient-to-r from-transparent via-white to-transparent top-0"
-          style={{
-            boxShadow: isHovered
-              ? `0 0 6px #4CD787, 0 0 12px #4CD78740`
-              : `0 0 6px white, 0 0 12px rgba(255,255,255,0.4)`,
-          }}
-          animate={{
-            x: ['-100%', '100%'],
-            background: isHovered
-              ? 'linear-gradient(to right, transparent, #4CD787, transparent)'
-              : 'linear-gradient(to right, transparent, white, transparent)',
-          }}
-          transition={{
-            x: {
-              duration: 3,
-              repeat: Infinity,
-              ease: 'linear',
-            },
-            background: {
-              duration: 0.3,
-            },
-          }}
-        />
-        {/* Right border */}
-        <motion.div
-          className="absolute w-[2px] h-full bg-gradient-to-b from-transparent via-white to-transparent right-0"
-          style={{
-            boxShadow: isHovered
-              ? `0 0 6px #4CD787, 0 0 12px #4CD78740`
-              : `0 0 6px white, 0 0 12px rgba(255,255,255,0.4)`,
-          }}
-          animate={{
-            y: ['-100%', '100%'],
-            background: isHovered
-              ? 'linear-gradient(to bottom, transparent, #4CD787, transparent)'
-              : 'linear-gradient(to bottom, transparent, white, transparent)',
-          }}
-          transition={{
-            y: {
-              duration: 3,
-              repeat: Infinity,
-              ease: 'linear',
-              delay: 0.75,
-            },
-            background: {
-              duration: 0.3,
-            },
-          }}
-        />
-        {/* Bottom border */}
-        <motion.div
-          className="absolute w-full h-[2px] bg-gradient-to-r from-transparent via-white to-transparent bottom-0"
-          style={{
-            boxShadow: isHovered
-              ? `0 0 6px #4CD787, 0 0 12px #4CD78740`
-              : `0 0 6px white, 0 0 12px rgba(255,255,255,0.4)`,
-          }}
-          animate={{
-            x: ['100%', '-100%'],
-            background: isHovered
-              ? 'linear-gradient(to right, transparent, #4CD787, transparent)'
-              : 'linear-gradient(to right, transparent, white, transparent)',
-          }}
-          transition={{
-            x: {
-              duration: 3,
-              repeat: Infinity,
-              ease: 'linear',
-              delay: 1.5,
-            },
-            background: {
-              duration: 0.3,
-            },
-          }}
-        />
-        {/* Left border */}
-        <motion.div
-          className="absolute w-[2px] h-full bg-gradient-to-b from-transparent via-white to-transparent left-0"
-          style={{
-            boxShadow: isHovered
-              ? `0 0 6px #4CD787, 0 0 12px #4CD78740`
-              : `0 0 6px white, 0 0 12px rgba(255,255,255,0.4)`,
-          }}
-          animate={{
-            y: ['100%', '-100%'],
-            background: isHovered
-              ? 'linear-gradient(to bottom, transparent, #4CD787, transparent)'
-              : 'linear-gradient(to bottom, transparent, white, transparent)',
-          }}
-          transition={{
-            y: {
-              duration: 3,
-              repeat: Infinity,
-              ease: 'linear',
-              delay: 2.25,
-            },
-            background: {
-              duration: 0.3,
-            },
-          }}
-        />
-      </motion.div>
     </motion.div>
   )
 }
@@ -430,7 +373,7 @@ const StatCounter = ({
   const [count, setCount] = useState(0)
   const countRef = useRef(null)
   const shouldReduceMotion = useReducedMotion()
-  const isInView = useInView(countRef, { once: false, margin: '-50px' })
+  const isInView = useInView(countRef, { once: true, margin: '-50px' })
   const targetNumber = useMemo(() => Number.parseInt(String(number).replace(/\D/g, '')), [number])
 
   const animateCount = useCallback(() => {
@@ -461,10 +404,6 @@ const StatCounter = ({
     if (isInView) {
       const cleanup = animateCount()
       return cleanup
-    } else {
-      // Reset count when not in view
-      setCount(0)
-      return undefined
     }
   }, [isInView, animateCount])
 
@@ -514,6 +453,15 @@ const StatCounter = ({
 
 export default function AboutPage() {
   const shouldReduceMotion = useReducedMotion()
+  const [isSafari, setIsSafari] = useState(false)
+  const [hasMounted, setHasMounted] = useState(false)
+  useEffect(() => {
+    setHasMounted(true)
+    if (typeof navigator === 'undefined') return
+    const ua = navigator.userAgent
+    const safariMatch = /safari/i.test(ua) && !/chrome|crios|android|fxios|edg/i.test(ua)
+    setIsSafari(safariMatch)
+  }, [])
   const handleProcessCardClick = useCallback((idx: number) => {
     if (process.env.NODE_ENV !== 'production') {
       console.log(`Process step ${idx + 1} clicked`)
@@ -523,47 +471,14 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-[#000B14] pt-24">
       {/* Hero Section */}
-      <section className="pt-2 pb-8 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#000B14] via-[#0a0a1a] to-[#000B14]"></div>
-
-        {/* Enhanced animated background elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <motion.div
-            animate={
-              shouldReduceMotion
-                ? {}
-                : {
-                    opacity: [0.4, 0.6, 0.4],
-                    scale: [1, 1.1, 1],
-                    x: [0, 20, 0],
-                    y: [0, -10, 0],
-                  }
-            }
-            transition={{ duration: 8, repeat: Number.POSITIVE_INFINITY, repeatType: 'reverse' }}
-            className="absolute w-[600px] h-[600px] bg-gradient-to-r from-[#4CD787]/10 to-[#4834D4]/10 rounded-full blur-3xl -top-48 -left-24"
-          />
-          <motion.div
-            animate={
-              shouldReduceMotion
-                ? {}
-                : {
-                    opacity: [0.3, 0.5, 0.3],
-                    scale: [1, 1.2, 1],
-                    x: [0, -30, 0],
-                    y: [0, 15, 0],
-                  }
-            }
-            transition={{
-              duration: 10,
-              repeat: Number.POSITIVE_INFINITY,
-              repeatType: 'reverse',
-              delay: 1,
-            }}
-            className="absolute w-[500px] h-[500px] bg-gradient-to-l from-[#4834D4]/10 to-[#4CD787]/10 rounded-full blur-3xl top-96 -right-24"
-          />
+      <section className="pt-2 pb-8 relative overflow-visible">
+        {/* DarkVeil background animation */}
+        <div className="absolute inset-x-0 -top-20 bottom-0 z-0 pointer-events-none opacity-55">
+          <DarkVeil speed={1.1} warpAmount={0.35} noiseIntensity={0.08} scanlineIntensity={0.05} scanlineFrequency={0.6} />
         </div>
+        <div className="absolute inset-x-0 -top-20 bottom-0 z-[1] bg-gradient-to-b from-[#000B14]/70 via-[black]/75 to-[darkBlue]/20 mix-blend-plus-lighter pointer-events-none"></div>
 
-        <div className="container mx-auto px-[21px] relative">
+        <div className="container mx-auto px-[21px] relative z-10">
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               {/* Title and content - Left side */}
@@ -574,7 +489,7 @@ export default function AboutPage() {
                     style={{
                       position: 'relative',
                       height: '100px',
-                      width: '420px',
+                      width: '400px',
                       padding: '0 0px',
                     }}
                   >
@@ -637,22 +552,26 @@ export default function AboutPage() {
                       src="/images/about/devx-office.jpg"
                       alt="DevX Office"
                       fill
-                      className="object-cover"
+                      className="object-cover will-change-transform"
                       sizes="(max-width: 768px) 100vw, 50vw"
                       priority={true}
+                      loading="eager"
+                      style={{ transform: 'translateZ(0)', WebkitTransform: 'translateZ(0)' }}
                     />
                     {/* ShapeBlur effect that creates animated mask on the image */}
-                    <div className="absolute inset-0 mix-blend-multiply">
-                      <ShapeBlur
-                        className="w-full h-full"
-                        variation={0}
-                        shapeSize={1.2}
-                        roundness={0.4}
-                        borderSize={0.05}
-                        circleSize={0.3}
-                        circleEdge={0.5}
-                      />
-                    </div>
+                    {hasMounted && !isSafari && (
+                      <div className="absolute inset-0 mix-blend-multiply pointer-events-none">
+                        <ShapeBlur
+                          className="w-full h-full"
+                          variation={0}
+                          shapeSize={1.2}
+                          roundness={0.4}
+                          borderSize={0.05}
+                          circleSize={0.3}
+                          circleEdge={0.5}
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
               </AnimatedSection>
@@ -662,7 +581,7 @@ export default function AboutPage() {
       </section>
 
       {/* Stats Section */}
-      <section className="pt-8 pb-16 relative">
+      <section className="pt-8 pb-16 relative mt-19">
         <div className="container mx-auto px-[21px]">
           <AnimatedSection className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
@@ -768,7 +687,7 @@ export default function AboutPage() {
                 cardDistance={66}
                 verticalDistance={60}
                 delay={3000}
-                pauseOnHover={true}
+                pauseOnHover={false}
                 easing="elastic"
                 onCardClick={handleProcessCardClick}
               >
@@ -802,7 +721,7 @@ export default function AboutPage() {
                   <p className="text-foreground/90 text-sm leading-relaxed">
                     Weekly demos, no surprises. We optimize for reliability and maintainability.
                   </p>
-                  <div className="mt-4 w-12 h-1 bg-gradient-to-r from-[#4834D4] to-[#4834D4]/50 rounded-full"></div>
+                  <div className="mt-4 w-12 h-1 bg-gradient-to-r from-[#21cf3e] to-[#4834D4]/50 rounded-full"></div>
                 </Card>
 
                 <Card className="bg-gradient-to-br from-black/80 to-black/60 border-[#9d4edd]/30 backdrop-blur-sm p-6">
@@ -843,17 +762,17 @@ export default function AboutPage() {
             </p>
           </AnimatedSection>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             <ValueCard
               icon={Heart}
-              title="Customer Obsession"
+              title="Client-Centered Focus"
               description="Our customers are always first in everything we do. We provide support after delivery and build long-term relationships."
               delay={0.1}
             />
             <ValueCard
               icon={Shield}
               title="Security First"
-              description="We implement everything with enterprise-grade security in mind, preventing XSS, phishing, SQL injection, cross-site scripting, CSRF attacks, and data breaches. OWASP compliance, secure coding practices, and U.S. standards guide every line of code."
+              description="We build with enterprise-grade security: protecting against XSS, phishing, SQL injection, CSRF, and data breaches. Every line follows OWASP, secure coding practices, and U.S. compliance standards."
               delay={0.2}
             />
             <ValueCard
@@ -885,7 +804,7 @@ export default function AboutPage() {
       </section>
 
       {/* Delivery Ownership Section */}
-      <section className="pt-20 pb-16 relative">
+      <section className="pt-16 pb-12 relative">
         <div className="container mx-auto px-[21px]">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-12">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6 text-white font-['IBM_Plex_Mono']">
@@ -896,54 +815,49 @@ export default function AboutPage() {
             </p>
           </AnimatedSection>
 
-          <div className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-2xl p-4 md:p-8 max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-              <div className="flex items-start gap-3">
-                <div className="w-2 h-2 bg-[#4CD787] rounded-full mt-2 flex-shrink-0"></div>
-                <p className="text-sm md:text-base text-foreground/90">
-                  Fixed scope with milestone reviews and progress transparency
-                </p>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="w-2 h-2 bg-[#06B6D4] rounded-full mt-2 flex-shrink-0"></div>
-                <p className="text-sm md:text-base text-foreground/90">
-                  NDA by default and U.S.-based contracting
-                </p>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="w-2 h-2 bg-[#9d4edd] rounded-full mt-2 flex-shrink-0"></div>
-                <p className="text-sm md:text-base text-foreground/90">
-                  Code ownership transfer with documentation at acceptance
-                </p>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="w-2 h-2 bg-[#4CD787] rounded-full mt-2 flex-shrink-0"></div>
-                <p className="text-sm md:text-base text-foreground/90">
-                  Stabilization support for 30 days post-launch
-                </p>
-              </div>
-            </div>
-          </div>
+          <ScrollStack
+            className="mt-10"
+            itemDistance={200}
+            itemScale={0.038}
+            itemStackDistance={30}
+            stackPosition="20%"
+            scaleEndPosition="15%"
+            baseScale={0.85}
+            rotationAmount={0}
+            blurAmount={0}
+            useWindowScroll
+          >
+            {deliveryHighlights.map((item, index) => (
+              <ScrollStackItem
+                key={item.text}
+                itemClassName="p-0 bg-transparent border-none shadow-none"
+              >
+                <DeliveryCard {...item} index={index} />
+              </ScrollStackItem>
+            ))}
+          </ScrollStack>
         </div>
       </section>
 
       {/* Vision & Mission Section with Background Video */}
-      <section className="pt-20 pb-16 relative overflow-hidden">
+      <section className="pt-16 pb-14 relative overflow-hidden">
         {/* Background Video */}
-        <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="auto"
-            aria-hidden="true"
-            className="absolute inset-0 h-full w-full object-cover scale-105 brightness-[1.05]"
-          >
-            <source src="/videos/sticky-background.mp4" type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/55 to-[#05060d]/80" />
-        </div>
+        {!shouldReduceMotion && (
+          <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
+              aria-hidden="true"
+              className="absolute inset-0 h-full w-full object-cover scale-105 brightness-[1.05]"
+            >
+              <source src="/videos/sticky-background.mp4" type="video/mp4" />
+            </video>
+            <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/55 to-[#05060d]/80" />
+          </div>
+        )}
 
         <div className="container mx-auto px-[21px] relative z-10">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-12">
@@ -983,20 +897,22 @@ export default function AboutPage() {
 
       {/* Team Section */}
       <section className="pt-20 pb-16 relative overflow-hidden">
-        <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="auto"
-            aria-hidden="true"
-            className="absolute inset-0 h-full w-full object-cover scale-105 brightness-[1.05]"
-          >
-            <source src="/videos/sticky-background.mp4" type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 bg-gradient-to-b from-[#05060d]/20 via-black/60 to-[#010203]/85" />
-        </div>
+        {!shouldReduceMotion && (
+          <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
+              aria-hidden="true"
+              className="absolute inset-0 h-full w-full object-cover scale-105 brightness-[1.05]"
+            >
+              <source src="/videos/sticky-background.mp4" type="video/mp4" />
+            </video>
+            <div className="absolute inset-0 bg-gradient-to-b from-[#05060d]/20 via-black/60 to-[#010203]/85" />
+          </div>
+        )}
 
         <div className="container mx-auto px-[21px] relative z-10">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
@@ -1020,9 +936,12 @@ export default function AboutPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="pt-8 pb-16 relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a1a] via-[#4CD787]/5 to-[#0a0a1a]"></div>
-        <div className="container mx-auto px-[21px] relative">
+      <section className="relative pt-16 pb-24 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#050810] to-black"></div>
+        <div className="absolute -top-32 left-1/2 h-64 w-[140%] -translate-x-1/2 rounded-full bg-[#4CD787]/10 blur-3xl opacity-40"></div>
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-black/40 via-black/80 to-black"></div>
+
+        <div className="container mx-auto px-[21px] relative z-10">
           <AnimatedSection className="bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-8 md:p-12 max-w-4xl mx-auto text-center">
             <a
               href="#our-values"
@@ -1077,7 +996,7 @@ export default function AboutPage() {
       </section>
 
       {/* Gradient transition to footer */}
-      <div className="h-32 bg-gradient-to-b from-[#000B14] to-black"></div>
+      <div className="h-24 bg-gradient-to-b from-black to-[#000000]"></div>
     </div>
   )
 }
