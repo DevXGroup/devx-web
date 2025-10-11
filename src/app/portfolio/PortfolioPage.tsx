@@ -77,6 +77,8 @@ const services = [
       'Natural Language Processing',
       'Computer Vision Solutions',
       'Machine Learning Models',
+      'Agentic AI Solutions',
+      'RAG Implementation',
     ],
     color: '#9d4edd',
   },
