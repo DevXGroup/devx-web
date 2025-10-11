@@ -276,7 +276,9 @@ export default function DevelopmentTools() {
   const handleAIToolClick = useCallback((index: number) => {
     const tool = aiTools[index]
     if (!tool) return
-    console.log(`AI Tool clicked: ${tool.name}`)
+    if (process.env.NODE_ENV !== 'production') {
+      console.log(`AI Tool clicked: ${tool.name}`)
+    }
     // Future: Could show AI tool info or integrate into main cycle
   }, [])
 

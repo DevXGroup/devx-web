@@ -338,10 +338,12 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ delay: 3.2, duration: 0.6 }}
           >
-            <div className="flex justify-center items-center gap-6 text-sm">
+            <div className="flex flex-wrap justify-center items-center gap-6 text-sm">
               <div className="text-center">
                 <div className="text-2xl font-bold text-[#4CD787] mb-1">23</div>
-                <div className="text-white/80 font-medium text-xs">Total Team</div>
+                <div className="text-white/80 font-medium text-xs">
+                  <span className="block sm:inline">Total Team</span>
+                </div>
               </div>
               <div className="w-px h-8 bg-white/20"></div>
               <div className="text-center">
@@ -384,7 +386,8 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
               {/* Close button */}
               <button
                 onClick={() => setSelectedMember(null)}
-                className="absolute top-4 right-4 text-white/60 hover:text-white transition-colors"
+                className="absolute top-3 right-3 md:top-4 md:right-4 p-2 text-white/80 hover:text-white transition-all bg-black/70 rounded-full hover:bg-black/90 hover:scale-110 shadow-[0_8px_20px_rgba(0,0,0,0.4)]"
+                aria-label="Close bio modal"
               >
                 <X className="w-6 h-6" />
               </button>

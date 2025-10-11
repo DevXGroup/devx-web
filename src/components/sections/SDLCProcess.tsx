@@ -51,10 +51,23 @@ const AnimatedIcon = ({ Icon, isActive, isComplete, progress }: { Icon: any, isA
   )
 }
 
-const ConnectingLine = ({ currentStep, progress, totalSteps }: { currentStep: number, progress: number, totalSteps: number }) => {
+const ConnectingLine = ({
+  currentStep,
+  progress,
+  totalSteps,
+  metrics,
+}: {
+  currentStep: number
+  progress: number
+  totalSteps: number
+  metrics: { left: number; width: number; top: number }
+}) => {
   const lineProgress = (currentStep + progress) / (totalSteps - 1)
   return (
-    <div className="absolute top-1/2 left-0 right-0 h-0.5 -translate-y-1/2 overflow-hidden">
+    <div
+      className="absolute h-0.5 overflow-hidden"
+      style={{ left: `${metrics.left}px`, width: `${Math.max(metrics.width, 0)}px`, top: `${metrics.top}px` }}
+    >
       <motion.div
         className="h-full bg-gradient-to-r from-[#8B5CF6] via-[#EC4899] to-[#3B82F6]"
         style={{
@@ -95,6 +108,8 @@ export default function SDLCProcess() {
   const activeAnimationRef = useRef<ReturnType<typeof animate> | null>(null)
   const cancelledRef = useRef(false)
   const timeoutsRef = useRef<number[]>([])
+  const iconRefs = useRef<(HTMLDivElement | null)[]>([])
+  const [lineMetrics, setLineMetrics] = useState({ left: 56, width: 0, top: 0 })
 
   const clearScheduledTimeouts = () => {
     timeoutsRef.current.forEach((timeoutId) => window.clearTimeout(timeoutId))
@@ -104,6 +119,45 @@ export default function SDLCProcess() {
   useEffect(() => {
     isVisibleRef.current = isVisible
   }, [isVisible])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const updateMetrics = () => {
+      const container = containerRef.current
+      const icons = iconRefs.current
+      if (!container || !icons.length) return
+
+      const containerRect = container.getBoundingClientRect()
+      const firstRect = icons[0]?.getBoundingClientRect()
+      const lastRect = icons[icons.length - 1]?.getBoundingClientRect()
+
+      if (!firstRect || !lastRect) return
+
+      const leftCenter = firstRect.left + firstRect.width / 2 - containerRect.left
+      const rightCenter = lastRect.left + lastRect.width / 2 - containerRect.left
+      const width = Math.max(rightCenter - leftCenter, 0)
+      const topCenter = firstRect.height / 2 + 10
+
+      setLineMetrics({ left: leftCenter, width, top: topCenter })
+    }
+
+    const handleResize = () => updateMetrics()
+
+    updateMetrics()
+    window.addEventListener('resize', handleResize)
+
+    const resizeObserver = new ResizeObserver(() => updateMetrics())
+    if (containerRef.current) resizeObserver.observe(containerRef.current)
+    iconRefs.current.forEach((icon) => {
+      if (icon) resizeObserver.observe(icon)
+    })
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+      resizeObserver.disconnect()
+    }
+  }, [])
 
   // IntersectionObserver to detect when component is visible
   useEffect(() => {
@@ -203,9 +257,18 @@ export default function SDLCProcess() {
 
   return (
     <>
-      <div ref={containerRef} className="relative mb-12 w-full px-4 md:px-16 py-8">
-        <ConnectingLine currentStep={currentStep} progress={progress} totalSteps={sdlcSteps.length} />
-        <div className="flex justify-between items-center relative z-10">
+      {/* Hidden on small/xs screens (below 640px), visible on sm and up */}
+      <div ref={containerRef} className="relative mb-12 w-full px-4 md:px-16 py-8 hidden sm:block">
+        <ConnectingLine
+          currentStep={currentStep}
+          progress={progress}
+          totalSteps={sdlcSteps.length}
+          metrics={lineMetrics}
+        />
+        <div
+          className="relative z-10 grid items-center justify-items-center gap-4 md:gap-6"
+          style={{ gridTemplateColumns: `repeat(${sdlcSteps.length}, minmax(0, 1fr))` }}
+        >
           {sdlcSteps.map((step, index) => (
             <motion.div
               key={step.name}
@@ -214,6 +277,9 @@ export default function SDLCProcess() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="flex flex-col items-center"
+              ref={(el) => {
+                iconRefs.current[index] = el
+              }}
             >
               <AnimatedIcon
                 Icon={step.icon}
