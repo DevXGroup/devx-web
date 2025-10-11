@@ -1,10 +1,49 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 100" width="250" height="100">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="DevX infinity mark">
   <defs>
-    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#4B0082;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#9d4edd;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#C71585;stop-opacity:1" />
+    <linearGradient id="infinity-gradient" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" stop-color="#a93cff" />
+      <stop offset="45%" stop-color="#7c3cff" />
+      <stop offset="55%" stop-color="#5164ff" />
+      <stop offset="100%" stop-color="#1f9fff" />
     </linearGradient>
+    <linearGradient id="infinity-highlight" x1="10%" y1="30%" x2="90%" y2="70%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.6)" />
+      <stop offset="35%" stop-color="rgba(255,255,255,0.25)" />
+      <stop offset="65%" stop-color="rgba(255,255,255,0.1)" />
+      <stop offset="100%" stop-color="rgba(255,255,255,0)" />
+    </linearGradient>
+    <filter id="soft-glow" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blurred" />
+      <feMerge>
+        <feMergeNode in="blurred" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
   </defs>
-  <path d="M 40 30 Q 10 30, 10 50 Q 10 70, 40 70 Q 60 70, 70 50 Q 80 30, 100 30 Q 110 30, 115 35 Q 120 40, 125 50 Q 130 40, 135 35 Q 140 30, 150 30 Q 180 30, 210 50 Q 240 70, 240 50 Q 240 30, 210 30 Q 190 30, 180 50 Q 170 70, 150 70 Q 140 70, 135 65 Q 130 60, 125 50 Q 120 60, 115 65 Q 110 70, 100 70 Q 70 70, 40 50 Q 10 30, 40 30 Z" fill="url(#gradient)" />
+  <rect width="256" height="256" rx="64" fill="none" />
+  <path
+    d="M 52 128
+       C 52 84 108 84 128 128
+       C 148 172 204 172 204 128
+       C 204 84 148 84 128 128
+       C 108 172 52 172 52 128"
+    stroke="url(#infinity-gradient)"
+    stroke-width="32"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    fill="none"
+    filter="url(#soft-glow)"
+  />
+  <path
+    d="M 52 128
+       C 52 84 108 84 128 128
+       C 148 172 204 172 204 128
+       C 204 84 148 84 128 128
+       C 108 172 52 172 52 128"
+    stroke="url(#infinity-highlight)"
+    stroke-width="12"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    fill="none"
+  />
 </svg>

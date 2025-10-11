@@ -1,71 +1,89 @@
-<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background -->
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg" text-rendering="optimizeLegibility">
   <defs>
-    <linearGradient id="bgGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#0a0014;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#1a0033;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#0a0a1a;stop-opacity:1" />
+    <linearGradient id="services-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#040012"/>
+      <stop offset="48%" stop-color="#1a0d3a"/>
+      <stop offset="100%" stop-color="#021823"/>
     </linearGradient>
-
-    <radialGradient id="serviceGlow1" cx="15%" cy="50%">
-      <stop offset="0%" style="stop-color:#F472B6;stop-opacity:0.4" />
-      <stop offset="60%" style="stop-color:#F472B6;stop-opacity:0" />
+    <radialGradient id="services-glow-a" cx="18%" cy="32%" r="58%">
+      <stop offset="0%" stop-color="#F472B6" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#F472B6" stop-opacity="0"/>
     </radialGradient>
-
-    <radialGradient id="serviceGlow2" cx="85%" cy="30%">
-      <stop offset="0%" style="stop-color:#06B6D4;stop-opacity:0.3" />
-      <stop offset="60%" style="stop-color:#06B6D4;stop-opacity:0" />
+    <radialGradient id="services-glow-b" cx="80%" cy="70%" r="53%">
+      <stop offset="0%" stop-color="#06B6D4" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#06B6D4" stop-opacity="0"/>
     </radialGradient>
-
-    <filter id="glow2" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-      <feMerge>
-        <feMergeNode in="coloredBlur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
+    <linearGradient id="services-title" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#fde2f1"/>
+      <stop offset="50%" stop-color="#f9a8d4"/>
+      <stop offset="100%" stop-color="#fdf2f8"/>
+    </linearGradient>
+    <linearGradient id="services-brand-text" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f9a8d4"/>
+      <stop offset="100%" stop-color="#67e8f9"/>
+    </linearGradient>
+    <filter id="services-soft" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="blur"/>
+      <feBlend in="SourceGraphic" in2="blur" mode="screen"/>
+    </filter>
+    <filter id="services-card-glow" x="-18%" y="-35%" width="136%" height="170%">
+      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#0f172a" flood-opacity="0.35"/>
     </filter>
   </defs>
 
-  <rect width="1200" height="630" fill="url(#bgGradient2)"/>
-  <rect width="1200" height="630" fill="url(#serviceGlow1)"/>
-  <rect width="1200" height="630" fill="url(#serviceGlow2)"/>
+  <rect width="1200" height="630" fill="url(#services-bg)"/>
+  <rect width="1200" height="630" fill="url(#services-glow-a)"/>
+  <rect width="1200" height="630" fill="url(#services-glow-b)"/>
 
-  <!-- Decorative grid -->
-  <g opacity="0.08" stroke="#06B6D4" stroke-width="1">
-    <line x1="0" y1="210" x2="1200" y2="210"/>
-    <line x1="0" y1="420" x2="1200" y2="420"/>
-    <line x1="400" y1="0" x2="400" y2="630"/>
-    <line x1="800" y1="0" x2="800" y2="630"/>
+  <g stroke="rgba(148,163,184,0.18)" stroke-width="1">
+    <line x1="120" y1="140" x2="1080" y2="140" stroke-dasharray="6 20"/>
+    <line x1="120" y1="280" x2="1080" y2="280" stroke-dasharray="6 20"/>
+    <line x1="120" y1="420" x2="1080" y2="420" stroke-dasharray="6 20"/>
+    <line x1="120" y1="560" x2="1080" y2="560" stroke-dasharray="6 20"/>
+    <line x1="340" y1="90" x2="340" y2="560" stroke-dasharray="12 26"/>
+    <line x1="860" y1="90" x2="860" y2="560" stroke-dasharray="12 26"/>
   </g>
 
-  <!-- Logo -->
-  <image href="images/logos/devx-logo-og.png" x="60" y="60" width="400" height="79"/>
+  <g transform="translate(120 62)">
+    <image href="images/logos/devx-infinity.png" x="0" y="0" width="160" height="70" preserveAspectRatio="xMinYMid meet"/>
+    <text x="186" y="46" font-size="44" font-family="IBM Plex Sans, 'Segoe UI', sans-serif" font-weight="700" fill="url(#services-brand-text)" letter-spacing="-1.1">
+      DevX Group
+    </text>
+    <text x="188" y="80" font-size="20" font-family="IBM Plex Sans, 'Segoe UI', sans-serif" fill="rgba(226,232,240,0.8)">
+      Services Guild • Strategy • Delivery • Growth
+    </text>
+  </g>
 
-  <!-- Main Title -->
-  <text x="60" y="310" font-family="'IBM Plex Mono', monospace" font-size="110" font-weight="bold" fill="#F472B6" filter="url(#glow2)">
-    Services
+  <text x="120" y="282" font-size="100" font-family="IBM Plex Sans, 'Segoe UI', sans-serif" font-weight="700" fill="url(#services-title)" filter="url(#services-soft)" letter-spacing="-1.4">
+    Full-Stack Services
   </text>
 
-  <!-- Subtitle -->
-  <text x="60" y="390" font-family="'IBM Plex Sans', sans-serif" font-size="28" font-weight="400" fill="#ffffff" opacity="0.8">
-    Comprehensive software solutions to drive your business forward
+  <text x="120" y="344" font-size="34" font-family="IBM Plex Mono, 'Fira Mono', monospace" fill="rgba(236,252,255,0.78)">
+    From strategy to launch — resilient, AI-forward digital products
   </text>
 
-  <!-- Feature Cards -->
-  <g font-family="'IBM Plex Sans', sans-serif">
-    <!-- Card 1 -->
-    <rect x="60" y="460" width="340" height="100" rx="8" fill="rgba(6, 182, 212, 0.1)" stroke="#06B6D4" stroke-width="1"/>
-    <text x="90" y="505" font-size="24" font-weight="600" fill="#06B6D4">AI &amp; ML Solutions</text>
-    <text x="90" y="535" font-size="16" fill="#ffffff" opacity="0.7">Intelligent automation</text>
+  <g font-family="IBM Plex Sans, 'Segoe UI', sans-serif">
+    <g transform="translate(120 388)">
+      <rect width="320" height="140" rx="20" fill="rgba(244,114,182,0.16)" stroke="rgba(244,114,182,0.5)" filter="url(#services-card-glow)"/>
+      <text x="38" y="80" font-size="30" font-weight="600" fill="#fbcfe8">Product Strategy</text>
+      <text x="38" y="110" font-size="18" fill="rgba(251,207,232,0.78)">Discovery, validation, roadmaps</text>
+    </g>
+    <g transform="translate(464 388)">
+      <rect width="320" height="140" rx="20" fill="rgba(14,165,233,0.16)" stroke="rgba(14,165,233,0.5)" filter="url(#services-card-glow)"/>
+      <text x="38" y="80" font-size="30" font-weight="600" fill="#a5f3fc">AI &amp; Platform Engineering</text>
+      <text x="38" y="110" font-size="18" fill="rgba(165,243,252,0.82)">Data, ML, platform scale</text>
+    </g>
+    <g transform="translate(808 388)">
+      <rect width="320" height="140" rx="20" fill="rgba(76,215,135,0.16)" stroke="rgba(76,215,135,0.5)" filter="url(#services-card-glow)"/>
+      <text x="38" y="80" font-size="30" font-weight="600" fill="#dcfce7">Sustained Delivery</text>
+      <text x="38" y="110" font-size="18" fill="rgba(220,252,231,0.82)">DevOps, QA, release ops</text>
+    </g>
+  </g>
 
-    <!-- Card 2 -->
-    <rect x="430" y="460" width="340" height="100" rx="8" fill="rgba(76, 215, 135, 0.1)" stroke="#4CD787" stroke-width="1"/>
-    <text x="460" y="505" font-size="24" font-weight="600" fill="#4CD787">Cloud &amp; DevOps</text>
-    <text x="460" y="535" font-size="16" fill="#ffffff" opacity="0.7">Scalable infrastructure</text>
-
-    <!-- Card 3 -->
-    <rect x="800" y="460" width="340" height="100" rx="8" fill="rgba(157, 78, 221, 0.1)" stroke="#9d4edd" stroke-width="1"/>
-    <text x="830" y="505" font-size="24" font-weight="600" fill="#9d4edd">IoT &amp; Hardware</text>
-    <text x="830" y="535" font-size="16" fill="#ffffff" opacity="0.7">Connected systems</text>
+  <g transform="translate(120 560)">
+    <rect width="500" height="56" rx="28" fill="rgba(15,23,42,0.8)" stroke="rgba(148,163,184,0.45)"/>
+    <text x="36" y="37" font-size="20" font-family="IBM Plex Sans, 'Segoe UI', sans-serif" fill="rgba(226,232,240,0.9)">
+      • Certified cloud architects • Enterprise-grade security woven in
+    </text>
   </g>
 </svg>
