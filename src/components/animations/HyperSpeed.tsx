@@ -9,6 +9,23 @@ import {
   SMAAPreset,
 } from 'postprocessing'
 
+const isDev = process.env.NODE_ENV !== 'production'
+
+const supportsWebGL = (): boolean => {
+  if (typeof window === 'undefined') return false
+  try {
+    const canvas = document.createElement('canvas')
+    const hasContext =
+      !!window.WebGLRenderingContext &&
+      (!!canvas.getContext('webgl2') ||
+        !!canvas.getContext('webgl') ||
+        !!canvas.getContext('experimental-webgl'))
+    return Boolean(hasContext)
+  } catch {
+    return false
+  }
+}
+
 interface Distortion {
   uniforms: Record<string, { value: any }>
   getDistortion: string
@@ -1088,7 +1105,9 @@ class App {
         this.composer.addPass(smaaPass)
       }
     } catch (error) {
-      console.warn('HyperSpeed passes initialization error:', error)
+      if (isDev) {
+        console.warn('HyperSpeed passes initialization error:', error)
+      }
       // Fallback to simple render pass only
       this.renderPass = new RenderPass(this.scene, this.camera)
       this.renderPass.renderToScreen = true
@@ -1171,7 +1190,9 @@ class App {
         this.scene.clear()
       }
     } catch (error) {
-      console.warn('HyperSpeed WebGL cleanup warning:', error)
+      if (isDev) {
+        console.warn('HyperSpeed WebGL cleanup warning:', error)
+      }
     }
 
     window.removeEventListener('resize', this.onWindowResize.bind(this))
@@ -1237,6 +1258,13 @@ const Hyperspeed: FC<HyperspeedProps> = ({ effectOptions = {}, startOnScroll = f
       appRef.current = null
     }
 
+    if (!supportsWebGL()) {
+      if (isDev) {
+        console.warn('HyperSpeed skipped: WebGL not supported')
+      }
+      return
+    }
+
     const container = hyperspeed.current
     if (!container || !shouldStart) return
 
@@ -1269,7 +1297,9 @@ const Hyperspeed: FC<HyperspeedProps> = ({ effectOptions = {}, startOnScroll = f
           setIsInitialized(true) // Set immediately
         }
       }).catch((error) => {
-        console.warn('HyperSpeed asset loading error:', error)
+        if (isDev) {
+          console.warn('HyperSpeed asset loading error:', error)
+        }
         // Initialize anyway with fallback
         if (appRef.current === myApp && !myApp.disposed) {
           myApp.init()
@@ -1277,7 +1307,9 @@ const Hyperspeed: FC<HyperspeedProps> = ({ effectOptions = {}, startOnScroll = f
         }
       })
     } catch (error) {
-      console.error('HyperSpeed initialization error:', error)
+      if (isDev) {
+        console.error('HyperSpeed initialization error:', error)
+      }
     }
 
     return () => {
