@@ -116,7 +116,7 @@ const TeamMemberCard = ({
   )
 }
 
-// Clean value card component with simple border animation
+// Enhanced value card component matching home page process cards quality
 const ValueCard = ({
   icon: Icon,
   title,
@@ -131,7 +131,6 @@ const ValueCard = ({
   const shouldReduceMotion = useReducedMotion()
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true })
-  const [isCardHovered, setIsCardHovered] = useState(false)
 
   return (
     <motion.div
@@ -140,49 +139,280 @@ const ValueCard = ({
       initial="hidden"
       animate={isInView ? 'visible' : 'hidden'}
       transition={{ duration: 0.6, delay: shouldReduceMotion ? 0 : delay }}
-      className="bg-black/30 backdrop-blur-sm p-6 rounded-xl border border-white/10 hover:border-[#4CD787] transition-all duration-300 group cursor-pointer relative"
-      onMouseEnter={() => setIsCardHovered(true)}
-      onMouseLeave={() => setIsCardHovered(false)}
       whileHover={
         shouldReduceMotion
           ? {}
           : {
               scale: 1.02,
-              y: -4,
+              y: -8,
             }
       }
+      whileTap={{ scale: 0.98 }}
+      className="group relative bg-slate-800 p-8 md:p-10 rounded-xl border border-purple-500/20 hover:border-purple-400/40 flex flex-col items-start text-left overflow-hidden cursor-pointer min-h-[220px] transition-all duration-300"
+      role="article"
+      aria-label={`${title}: ${description}`}
     >
-      {/* Clean animated border */}
-      <div className="absolute inset-0 rounded-xl border-2 border-transparent group-hover:border-[#4CD787] transition-all duration-300 opacity-0 group-hover:opacity-100"></div>
+      {/* Morphing background blob */}
+      <motion.div
+        className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100"
+        initial={{
+          background: 'radial-gradient(circle at 50% 50%, #4CD78700 0%, transparent 100%)',
+        }}
+        whileHover={{
+          background: [
+            'radial-gradient(circle at 20% 80%, #4CD78715 0%, transparent 60%)',
+            'radial-gradient(circle at 80% 20%, #4CD78720 0%, transparent 50%)',
+            'radial-gradient(circle at 30% 70%, #4CD78715 0%, transparent 60%)',
+            'radial-gradient(circle at 70% 30%, #4CD78720 0%, transparent 50%)',
+          ],
+        }}
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+      />
 
-      {/* Header with icon and title in a clean row */}
-      <div className="flex items-center gap-4 mb-5">
-        <motion.div
-          className="w-12 h-12 rounded-full bg-[#4CD787]/10 flex items-center justify-center group-hover:bg-[#4CD787]/20 transition-colors relative overflow-hidden flex-shrink-0"
-          animate={isCardHovered && !shouldReduceMotion ? { scale: 1.05 } : { scale: 1 }}
-          transition={{ duration: 0.3, ease: 'easeOut' }}
-        >
-          {/* Simplified background effect */}
+      {/* Scanning line effect */}
+      <motion.div
+        className="absolute inset-0 opacity-0 group-hover:opacity-100"
+        initial={{ x: '-100%' }}
+        whileHover={{
+          x: '100%',
+          transition: {
+            duration: 2,
+            ease: 'easeInOut',
+            repeat: Infinity,
+            repeatDelay: 1,
+          },
+        }}
+        style={{
+          background: 'linear-gradient(90deg, transparent, #4CD78740, transparent)',
+          width: '50%',
+          height: '100%',
+        }}
+      />
+
+      {/* Holographic edge effect */}
+      <motion.div
+        className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100"
+        initial={{ scale: 1 }}
+        whileHover={{
+          scale: [1, 1.02, 1],
+          rotate: [0, 1, 0, -1, 0],
+        }}
+        transition={{
+          duration: 3,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+        style={{
+          border: '1px solid #4CD78760',
+          boxShadow: '0 0 20px #4CD78730, inset 0 0 20px #4CD78710',
+        }}
+      />
+
+      {/* Content */}
+      <div className="relative z-10 w-full">
+        <div className="flex items-center mb-6">
           <motion.div
-            className="absolute inset-0 rounded-full bg-gradient-to-r from-[#4CD787]/20 to-[#4834D4]/20"
-            animate={isCardHovered ? { scale: 1.1, opacity: 1 } : { scale: 0.9, opacity: 0 }}
+            className="w-12 h-12 rounded-full flex items-center justify-center mr-4 relative overflow-hidden shrink-0"
+            whileHover={{
+              boxShadow: '0 0 30px #4CD78760',
+            }}
             transition={{ duration: 0.4 }}
-          />
+            style={{
+              backgroundColor: '#4CD78720',
+              border: '2px solid #4CD78740',
+            }}
+          >
+            {/* Icon pulse effect */}
+            <motion.div
+              className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100"
+              animate={{
+                scale: [1, 1.5, 1],
+                opacity: [0, 0.3, 0],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: 'easeOut',
+              }}
+              style={{ backgroundColor: '#4CD78730' }}
+            />
 
-          {/* Icon with minimal animation to avoid fuzziness */}
-          <Icon className="w-6 h-6 text-[#4CD787] relative z-10" />
-        </motion.div>
-
-        <h3 className="text-xl font-semibold text-white group-hover:text-[#4CD787] transition-colors duration-300 flex-1 font-['IBM_Plex_Sans']">
-          {title}
-        </h3>
+            <motion.div
+              whileHover={{
+                scale: 1.2,
+                rotateY: 180,
+              }}
+              transition={{ duration: 0.6, ease: 'backOut' }}
+              className="pointer-events-none"
+            >
+              <Icon
+                className="w-6 h-6 transition-all duration-300 relative z-10 pointer-events-none"
+                style={{
+                  color: '#4CD787',
+                  filter: 'drop-shadow(0 0 4px #4CD78780)',
+                }}
+              />
+            </motion.div>
+          </motion.div>
+          <motion.h3
+            className="text-xl font-semibold font-['IBM_Plex_Sans'] text-white"
+            whileHover={{
+              scale: 1.05,
+              textShadow: '0 0 15px #4CD78780',
+            }}
+            transition={{ duration: 0.3 }}
+          >
+            {title}
+          </motion.h3>
+        </div>
+        <motion.p className="text-white/90 font-['IBM_Plex_Sans'] font-light text-base leading-relaxed group-hover:text-white transition-colors duration-500">
+          {description}
+        </motion.p>
       </div>
-      <p
-        className="text-white/70 text-sm group-hover:text-white/85 transition-colors duration-300 leading-relaxed font-['IBM_Plex_Sans'] font-light"
-        style={{ letterSpacing: '0.02em' }}
+    </motion.div>
+  )
+}
+
+// Vision/Mission Card with running border animation
+const VisionMissionCard = ({
+  children,
+  delay = 0,
+}: {
+  children: React.ReactNode
+  delay?: number
+}) => {
+  const [isHovered, setIsHovered] = useState(false)
+  const shouldReduceMotion = useReducedMotion()
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true })
+
+  return (
+    <motion.div
+      ref={ref}
+      variants={fadeInUpVariants}
+      initial="hidden"
+      animate={isInView ? 'visible' : 'hidden'}
+      transition={{ duration: 0.6, delay: shouldReduceMotion ? 0 : delay }}
+      className="relative bg-black/60 backdrop-blur-md p-6 md:p-8 rounded-xl border border-white/20 hover:border-[#4CD787]/40 transition-colors duration-300 shadow-2xl overflow-hidden"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {children}
+
+      {/* Running border animation - always visible, changes color on hover */}
+      <motion.div
+        className="absolute inset-0 overflow-hidden rounded-xl pointer-events-none"
+        initial={{ opacity: 1 }}
+        animate={{ opacity: 1 }}
       >
-        {description}
-      </p>
+        {/* Top border */}
+        <motion.div
+          className="absolute w-full h-[2px] bg-gradient-to-r from-transparent via-white to-transparent top-0"
+          style={{
+            boxShadow: isHovered
+              ? `0 0 6px #4CD787, 0 0 12px #4CD78740`
+              : `0 0 6px white, 0 0 12px rgba(255,255,255,0.4)`,
+          }}
+          animate={{
+            x: ['-100%', '100%'],
+            background: isHovered
+              ? 'linear-gradient(to right, transparent, #4CD787, transparent)'
+              : 'linear-gradient(to right, transparent, white, transparent)',
+          }}
+          transition={{
+            x: {
+              duration: 3,
+              repeat: Infinity,
+              ease: 'linear',
+            },
+            background: {
+              duration: 0.3,
+            },
+          }}
+        />
+        {/* Right border */}
+        <motion.div
+          className="absolute w-[2px] h-full bg-gradient-to-b from-transparent via-white to-transparent right-0"
+          style={{
+            boxShadow: isHovered
+              ? `0 0 6px #4CD787, 0 0 12px #4CD78740`
+              : `0 0 6px white, 0 0 12px rgba(255,255,255,0.4)`,
+          }}
+          animate={{
+            y: ['-100%', '100%'],
+            background: isHovered
+              ? 'linear-gradient(to bottom, transparent, #4CD787, transparent)'
+              : 'linear-gradient(to bottom, transparent, white, transparent)',
+          }}
+          transition={{
+            y: {
+              duration: 3,
+              repeat: Infinity,
+              ease: 'linear',
+              delay: 0.75,
+            },
+            background: {
+              duration: 0.3,
+            },
+          }}
+        />
+        {/* Bottom border */}
+        <motion.div
+          className="absolute w-full h-[2px] bg-gradient-to-r from-transparent via-white to-transparent bottom-0"
+          style={{
+            boxShadow: isHovered
+              ? `0 0 6px #4CD787, 0 0 12px #4CD78740`
+              : `0 0 6px white, 0 0 12px rgba(255,255,255,0.4)`,
+          }}
+          animate={{
+            x: ['100%', '-100%'],
+            background: isHovered
+              ? 'linear-gradient(to right, transparent, #4CD787, transparent)'
+              : 'linear-gradient(to right, transparent, white, transparent)',
+          }}
+          transition={{
+            x: {
+              duration: 3,
+              repeat: Infinity,
+              ease: 'linear',
+              delay: 1.5,
+            },
+            background: {
+              duration: 0.3,
+            },
+          }}
+        />
+        {/* Left border */}
+        <motion.div
+          className="absolute w-[2px] h-full bg-gradient-to-b from-transparent via-white to-transparent left-0"
+          style={{
+            boxShadow: isHovered
+              ? `0 0 6px #4CD787, 0 0 12px #4CD78740`
+              : `0 0 6px white, 0 0 12px rgba(255,255,255,0.4)`,
+          }}
+          animate={{
+            y: ['100%', '-100%'],
+            background: isHovered
+              ? 'linear-gradient(to bottom, transparent, #4CD787, transparent)'
+              : 'linear-gradient(to bottom, transparent, white, transparent)',
+          }}
+          transition={{
+            y: {
+              duration: 3,
+              repeat: Infinity,
+              ease: 'linear',
+              delay: 2.25,
+            },
+            background: {
+              duration: 0.3,
+            },
+          }}
+        />
+      </motion.div>
     </motion.div>
   )
 }
@@ -284,6 +514,11 @@ const StatCounter = ({
 
 export default function AboutPage() {
   const shouldReduceMotion = useReducedMotion()
+  const handleProcessCardClick = useCallback((idx: number) => {
+    if (process.env.NODE_ENV !== 'production') {
+      console.log(`Process step ${idx + 1} clicked`)
+    }
+  }, [])
 
   return (
     <div className="min-h-screen bg-[#000B14] pt-24">
@@ -358,7 +593,7 @@ export default function AboutPage() {
                   </div>
                 </div>
                 <p
-                  className="text-lg md:text-xl text-foreground/90 mb-8 leading-relaxed font-['IBM_Plex_Sans']"
+                  className="text-base md:text-lg lg:text-xl text-foreground/90 mb-6 md:mb-8 leading-relaxed font-['IBM_Plex_Sans']"
                   style={{
                     letterSpacing: '0.025em',
                     fontWeight: '400',
@@ -431,9 +666,11 @@ export default function AboutPage() {
         <div className="container mx-auto px-[21px]">
           <AnimatedSection className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#FFD700]">Our Impact</h2>
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6 text-white">
+                Our Impact
+              </h2>
               <p
-                className="text-lg md:text-xl text-foreground/90 font-light max-w-2xl mx-auto leading-relaxed font-['IBM_Plex_Sans'] mt-6"
+                className="text-base md:text-lg lg:text-xl text-foreground/90 font-light max-w-2xl mx-auto leading-relaxed font-['IBM_Plex_Sans'] mt-4 md:mt-6 px-4"
                 style={{
                   letterSpacing: '0.025em',
                   fontWeight: '400',
@@ -444,9 +681,9 @@ export default function AboutPage() {
               </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-              <StatCounter number="100+" label="Happy Clients" delay={0.1} />
-              <StatCounter number="15+" label="Years Experience" delay={0.2} />
-              <StatCounter number="200+" label="Projects Completed" delay={0.3} />
+              <StatCounter number="30+" label="Happy Clients" delay={0.1} />
+              <StatCounter number="2+" label="Years Experience" delay={0.2} />
+              <StatCounter number="40+" label="Projects Completed" delay={0.3} />
               <StatCounter number="23" label="Team Members" delay={0.4} />
             </div>
             <p className="text-xs text-white/60 text-center mt-4">Totals verified internally.</p>
@@ -455,15 +692,18 @@ export default function AboutPage() {
       </section>
 
       {/* How We Work Section */}
-      <section className="pt-8 pb-16 relative">
+      <section className="pt-20 pb-16 relative">
         <div className="container mx-auto px-[21px]">
           <AnimatedSection className="max-w-5xl mx-auto text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#FFD700]">How We Work</h2>
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6 text-white">
+              How We Work
+            </h2>
             <p
-              className="text-lg md:text-xl text-foreground/90 font-light max-w-3xl mx-auto leading-relaxed font-['IBM_Plex_Sans'] mt-6"
+              className="text-base md:text-lg lg:text-xl text-foreground/90 font-light max-w-3xl mx-auto leading-relaxed font-['IBM_Plex_Sans'] mt-4 md:mt-6 px-4"
               style={{ letterSpacing: '0.025em', fontWeight: '400', whiteSpace: 'wrap' }}
             >
-              A simple, reliable process that keeps you in control and delivers outcomes on&nbsp;time.
+              A simple, reliable process that keeps you in control and delivers outcomes
+              on&nbsp;time.
             </p>
           </AnimatedSection>
 
@@ -530,7 +770,7 @@ export default function AboutPage() {
                 delay={3000}
                 pauseOnHover={true}
                 easing="elastic"
-                onCardClick={(idx) => console.log(`Process step ${idx + 1} clicked`)}
+                onCardClick={handleProcessCardClick}
               >
                 <Card className="bg-gradient-to-br from-black/80 to-black/60 border-[#4CD787]/30 backdrop-blur-sm p-6">
                   <div className="flex items-center gap-3 mb-4">
@@ -584,13 +824,15 @@ export default function AboutPage() {
       {/* Our Values Section */}
       <section
         id="our-values"
-        className="pt-8 pb-16 relative bg-gradient-to-b from-transparent via-[#0a0a1a] to-transparent"
+        className="pt-20 pb-16 relative bg-gradient-to-b from-transparent via-[#0a0a1a] to-transparent"
       >
         <div className="container mx-auto px-[21px]">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#FFD700]">Our Values</h2>
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6 text-white">
+              Our Values
+            </h2>
             <p
-              className="text-lg md:text-xl text-foreground/90 font-light leading-relaxed font-['IBM_Plex_Sans'] mt-6"
+              className="text-base md:text-lg lg:text-xl text-foreground/90 font-light leading-relaxed font-['IBM_Plex_Sans'] mt-4 md:mt-6 px-4"
               style={{
                 letterSpacing: '0.025em',
                 fontWeight: '400',
@@ -610,7 +852,7 @@ export default function AboutPage() {
             />
             <ValueCard
               icon={Shield}
-              title="Security & Compliance First"
+              title="Security First"
               description="We implement everything with enterprise-grade security in mind, preventing XSS, phishing, SQL injection, cross-site scripting, CSRF attacks, and data breaches. OWASP compliance, secure coding practices, and U.S. standards guide every line of code."
               delay={0.2}
             />
@@ -622,7 +864,7 @@ export default function AboutPage() {
             />
             <ValueCard
               icon={Globe}
-              title="Versatile and Adaptable"
+              title="Adaptability"
               description="We embrace remote work to enable rapid execution and provide seamless, global services ensuring flexibility."
               delay={0.4}
             />
@@ -643,94 +885,126 @@ export default function AboutPage() {
       </section>
 
       {/* Delivery Ownership Section */}
-      <section className="py-16 relative">
+      <section className="pt-20 pb-16 relative">
         <div className="container mx-auto px-[21px]">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#FFD700] font-['IBM_Plex_Mono']">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6 text-white font-['IBM_Plex_Mono']">
               Delivery Ownership
             </h2>
-            <p className="text-lg md:text-xl text-foreground/90 font-light leading-relaxed font-['IBM_Plex_Sans']">
+            <p className="text-base md:text-lg lg:text-xl text-foreground/90 font-light leading-relaxed font-['IBM_Plex_Sans'] px-4">
               Your project success is our responsibility. We stand behind our commitments.
             </p>
           </AnimatedSection>
 
-          <div className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-2xl p-8 max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-2xl p-4 md:p-8 max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               <div className="flex items-start gap-3">
                 <div className="w-2 h-2 bg-[#4CD787] rounded-full mt-2 flex-shrink-0"></div>
-                <p className="text-foreground/90">
+                <p className="text-sm md:text-base text-foreground/90">
                   Fixed scope with milestone reviews and progress transparency
                 </p>
               </div>
               <div className="flex items-start gap-3">
-                <div className="w-2 h-2 bg-[#FFD700] rounded-full mt-2 flex-shrink-0"></div>
-                <p className="text-foreground/90">NDA by default and U.S.-based contracting</p>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="w-2 h-2 bg-[#4834D4] rounded-full mt-2 flex-shrink-0"></div>
-                <p className="text-foreground/90">
-                  Code ownership transfer with documentation at acceptance
+                <div className="w-2 h-2 bg-[#06B6D4] rounded-full mt-2 flex-shrink-0"></div>
+                <p className="text-sm md:text-base text-foreground/90">
+                  NDA by default and U.S.-based contracting
                 </p>
               </div>
               <div className="flex items-start gap-3">
                 <div className="w-2 h-2 bg-[#9d4edd] rounded-full mt-2 flex-shrink-0"></div>
-                <p className="text-foreground/90">Stabilization support for 30 days post-launch</p>
+                <p className="text-sm md:text-base text-foreground/90">
+                  Code ownership transfer with documentation at acceptance
+                </p>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="w-2 h-2 bg-[#4CD787] rounded-full mt-2 flex-shrink-0"></div>
+                <p className="text-sm md:text-base text-foreground/90">
+                  Stabilization support for 30 days post-launch
+                </p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Vision & Mission Section */}
-      <section className="py-16 relative">
-        <div className="container mx-auto px-[21px]">
+      {/* Vision & Mission Section with Background Video */}
+      <section className="pt-20 pb-16 relative overflow-hidden">
+        {/* Background Video */}
+        <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            aria-hidden="true"
+            className="absolute inset-0 h-full w-full object-cover scale-105 brightness-[1.05]"
+          >
+            <source src="/videos/sticky-background.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/55 to-[#05060d]/80" />
+        </div>
+
+        <div className="container mx-auto px-[21px] relative z-10">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#FFD700] font-['IBM_Plex_Mono']">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6 text-white font-['IBM_Plex_Mono']">
               Our Purpose
             </h2>
-            <p className="text-lg md:text-xl text-foreground/90 font-light leading-relaxed font-['IBM_Plex_Sans']">
+            <p className="text-base md:text-lg lg:text-xl text-foreground/90 font-light leading-relaxed font-['IBM_Plex_Sans'] px-4">
               Driven by vision, guided by mission, committed to excellence.
             </p>
           </AnimatedSection>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            <AnimatedSection className="bg-black/30 backdrop-blur-sm p-8 rounded-xl border border-white/10 hover:border-[#4CD787]/30 transition-colors duration-300">
-              <h3 className="text-2xl font-bold mb-4 text-[#4CD787] font-['IBM_Plex_Mono']">
+            <VisionMissionCard delay={0}>
+              <h3 className="text-xl md:text-2xl font-bold mb-3 md:mb-4 text-[#4CD787] font-['IBM_Plex_Mono']">
                 Our Vision
               </h3>
-              <p className="text-base md:text-lg text-foreground/90 leading-relaxed font-['IBM_Plex_Sans']">
+              <p className="text-sm md:text-base lg:text-lg text-white/90 leading-relaxed font-['IBM_Plex_Sans']">
                 To revolutionize software development by delivering innovative, efficient, and
                 scalable solutions that empower businesses worldwide to thrive in a digital-first
                 future.
               </p>
-            </AnimatedSection>
+            </VisionMissionCard>
 
-            <AnimatedSection
-              className="bg-black/30 backdrop-blur-sm p-8 rounded-xl border border-white/10 hover:border-[#FFD700]/30 transition-colors duration-300"
-              delay={0.2}
-            >
-              <h3 className="text-2xl font-bold mb-4 text-[#FFD700] font-['IBM_Plex_Mono']">
+            <VisionMissionCard delay={0.2}>
+              <h3 className="text-xl md:text-2xl font-bold mb-3 md:mb-4 text-[#06B6D4] font-['IBM_Plex_Mono']">
                 Our Mission
               </h3>
-              <p className="text-base md:text-lg text-foreground/90 leading-relaxed font-['IBM_Plex_Sans']">
+              <p className="text-sm md:text-base lg:text-lg text-white/90 leading-relaxed font-['IBM_Plex_Sans']">
                 To simplify the software development journey through a streamlined, results-first
                 process, ensuring exceptional quality, adaptability, and long-term success for every
                 client.
               </p>
-            </AnimatedSection>
+            </VisionMissionCard>
           </div>
         </div>
       </section>
 
       {/* Team Section */}
-      <section className="pt-8 pb-16 relative">
-        <div className="container mx-auto px-[21px]">
+      <section className="pt-20 pb-16 relative overflow-hidden">
+        <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            aria-hidden="true"
+            className="absolute inset-0 h-full w-full object-cover scale-105 brightness-[1.05]"
+          >
+            <source src="/videos/sticky-background.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-b from-[#05060d]/20 via-black/60 to-[#010203]/85" />
+        </div>
+
+        <div className="container mx-auto px-[21px] relative z-10">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#FFD700]">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6 text-white">
               Our Team Structure
             </h2>
             <p
-              className="text-lg md:text-xl text-foreground/90 font-light leading-relaxed font-['IBM_Plex_Sans'] mt-6"
+              className="text-base md:text-lg lg:text-xl text-foreground/90 font-light leading-relaxed font-['IBM_Plex_Sans'] mt-4 md:mt-6 px-4"
               style={{
                 letterSpacing: '0.025em',
                 fontWeight: '400',
@@ -762,11 +1036,11 @@ export default function AboutPage() {
             >
               Discover why clients choose us
             </a>
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6 text-white">
               Ready to Start Your Project?
             </h2>
             <p
-              className="text-lg md:text-xl text-foreground/90 mb-8 max-w-2xl mx-auto leading-relaxed font-['IBM_Plex_Sans'] mt-4"
+              className="text-base md:text-lg lg:text-xl text-foreground/90 mb-6 md:mb-8 max-w-2xl mx-auto leading-relaxed font-['IBM_Plex_Sans'] mt-4 px-4"
               style={{
                 letterSpacing: '0.025em',
                 fontWeight: '400',
