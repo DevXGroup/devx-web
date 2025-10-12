@@ -346,11 +346,9 @@ const DeliveryCard = ({ text, color, icon: Icon, index }: DeliveryItem & { index
             className="absolute inset-0 rounded-2xl opacity-40 blur-xl"
             style={{ backgroundColor: accent }}
           />
-          <Icon
-            className="w-16 h-16 md:w-20 md:h-20 relative z-10"
-            style={{ color: accent, filter: 'drop-shadow(0 0 10px rgba(0,0,0,0.6))' }}
-            strokeWidth={1.5}
-          />
+          <div style={{ color: accent, filter: 'drop-shadow(0 0 10px rgba(0,0,0,0.6))' }}>
+            <Icon className="w-16 h-16 md:w-20 md:h-20 relative z-10" />
+          </div>
         </div>
       </div>
 
@@ -543,7 +541,7 @@ const StatCounter = ({ number, label }: { number: string | number; label: string
 
   const decimalPlaces = useMemo(() => {
     const match = String(number).match(/\.(\d+)/)
-    return match ? match[1].length : 0
+    return match && match[1] ? match[1].length : 0
   }, [number])
 
   const suffix = useMemo(() => {
