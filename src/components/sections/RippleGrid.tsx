@@ -260,6 +260,7 @@ void main() {
       const node = root!
       resizeObserver = new ResizeObserver((entries) => {
         const entry = entries[0]
+        if (!entry) return
         const width = entry.contentRect?.width ?? 0
         const height = entry.contentRect?.height ?? 0
         if (width > 0 && height > 0) {
@@ -293,7 +294,7 @@ void main() {
       }
       if (rendererRef.current && gl) {
         gl.getExtension('WEBGL_lose_context')?.loseContext()
-        if (root && gl.canvas.parentNode === root) {
+        if (root && gl.canvas instanceof HTMLCanvasElement && gl.canvas.parentNode === root) {
           root.removeChild(gl.canvas)
         }
       }
