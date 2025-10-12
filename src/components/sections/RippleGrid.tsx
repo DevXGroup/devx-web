@@ -302,6 +302,9 @@ void main() {
       gl = null
       mesh = null
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Uniform prop values are intentionally not in deps to avoid recreating WebGL context.
+    // They are updated via the second useEffect below which only updates uniform values.
   }, [handleMouseMove, mouseInteraction])
 
   useEffect(() => {
