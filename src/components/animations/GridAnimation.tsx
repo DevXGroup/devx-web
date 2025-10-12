@@ -41,32 +41,35 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
+    const dpr = window.devicePixelRatio || 1;
 
     const resizeCanvas = () => {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-      numSquaresX.current = Math.ceil(canvas.width / squareSize) + 1;
-      numSquaresY.current = Math.ceil(canvas.height / squareSize) + 1;
+      canvas.width = canvas.offsetWidth * dpr;
+      canvas.height = canvas.offsetHeight * dpr;
+      numSquaresX.current = Math.ceil(canvas.offsetWidth / squareSize) + 1;
+      numSquaresY.current = Math.ceil(canvas.offsetHeight / squareSize) + 1;
     };
 
     window.addEventListener("resize", resizeCanvas);
-    resizeCanvas();
+    setTimeout(resizeCanvas, 0);
+
+    const scaledSquareSize = squareSize * dpr;
 
     const drawGrid = () => {
       if (!ctx) return;
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      const startX = Math.floor(gridOffset.current.x / squareSize) * squareSize;
-      const startY = Math.floor(gridOffset.current.y / squareSize) * squareSize;
+      const startX = Math.floor(gridOffset.current.x / scaledSquareSize) * scaledSquareSize;
+      const startY = Math.floor(gridOffset.current.y / scaledSquareSize) * scaledSquareSize;
 
-      for (let x = startX; x < canvas.width + squareSize; x += squareSize) {
-        for (let y = startY; y < canvas.height + squareSize; y += squareSize) {
-          const squareX = x - (gridOffset.current.x % squareSize);
-          const squareY = y - (gridOffset.current.y % squareSize);
+      for (let x = startX; x < canvas.width + scaledSquareSize; x += scaledSquareSize) {
+        for (let y = startY; y < canvas.height + scaledSquareSize; y += scaledSquareSize) {
+          const squareX = x - gridOffset.current.x;
+          const squareY = y - gridOffset.current.y;
 
-          const gridX = Math.floor((x - startX) / squareSize);
-          const gridY = Math.floor((y - startY) / squareSize);
+          const gridX = Math.floor(x / scaledSquareSize);
+          const gridY = Math.floor(y / scaledSquareSize);
           const squareKey = `${gridX}-${gridY}`;
 
           const isHovered = hoveredSquareRef.current &&
@@ -80,12 +83,12 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
             ctx.fillStyle = hoverFillColor;
             ctx.shadowColor = typeof borderColor === 'string' ? borderColor : '#FFD700';
             ctx.shadowBlur = 8;
-            ctx.fillRect(squareX, squareY, squareSize, squareSize);
+            ctx.fillRect(squareX, squareY, scaledSquareSize, scaledSquareSize);
             ctx.shadowBlur = 0;
           }
 
           ctx.strokeStyle = borderColor;
-          ctx.strokeRect(squareX, squareY, squareSize, squareSize);
+          ctx.strokeRect(squareX, squareY, scaledSquareSize, scaledSquareSize);
         }
       }
 
@@ -121,29 +124,23 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
     };
 
     const updateAnimation = () => {
-      const effectiveSpeed = Math.max(speed, 0.1);
+      const effectiveSpeed = Math.max(speed, 0.1) * dpr;
       switch (direction) {
         case "right":
-          gridOffset.current.x =
-            (gridOffset.current.x - effectiveSpeed + squareSize) % squareSize;
+          gridOffset.current.x -= effectiveSpeed;
           break;
         case "left":
-          gridOffset.current.x =
-            (gridOffset.current.x + effectiveSpeed + squareSize) % squareSize;
+          gridOffset.current.x += effectiveSpeed;
           break;
         case "up":
-          gridOffset.current.y =
-            (gridOffset.current.y + effectiveSpeed + squareSize) % squareSize;
+          gridOffset.current.y += effectiveSpeed;
           break;
         case "down":
-          gridOffset.current.y =
-            (gridOffset.current.y - effectiveSpeed + squareSize) % squareSize;
+          gridOffset.current.y -= effectiveSpeed;
           break;
         case "diagonal":
-          gridOffset.current.x =
-            (gridOffset.current.x - effectiveSpeed + squareSize) % squareSize;
-          gridOffset.current.y =
-            (gridOffset.current.y - effectiveSpeed + squareSize) % squareSize;
+          gridOffset.current.x -= effectiveSpeed;
+          gridOffset.current.y -= effectiveSpeed;
           break;
         default:
           break;
@@ -158,19 +155,22 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
     };
 
     const handleMouseMove = (event: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      const mouseX = event.clientX - rect.left;
-      const mouseY = event.clientY - rect.top;
+      let target = canvas as (HTMLElement | null);
+      let offsetX = 0;
+      let offsetY = 0;
 
-      const startX = Math.floor(gridOffset.current.x / squareSize) * squareSize;
-      const startY = Math.floor(gridOffset.current.y / squareSize) * squareSize;
+      if (target && target.offsetParent) {
+        do {
+          offsetX += target.offsetLeft;
+          offsetY += target.offsetTop;
+        } while (target = target.offsetParent as HTMLElement);
+      }
 
-      const hoveredSquareX = Math.floor(
-        (mouseX + (gridOffset.current.x % squareSize)) / squareSize
-      );
-      const hoveredSquareY = Math.floor(
-        (mouseY + (gridOffset.current.y % squareSize)) / squareSize
-      );
+      const mouseX = (event.pageX - offsetX) * dpr;
+      const mouseY = (event.pageY - offsetY + 40) * dpr;
+
+      const hoveredSquareX = Math.floor((mouseX + gridOffset.current.x) / scaledSquareSize);
+      const hoveredSquareY = Math.floor((mouseY + gridOffset.current.y) / scaledSquareSize);
 
       if (
         !hoveredSquareRef.current ||
@@ -201,6 +201,7 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
     <canvas
       ref={canvasRef}
       className="w-full h-full border-none block"
+      style={{ cursor: 'default' }}
     ></canvas>
   );
 };
