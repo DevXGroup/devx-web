@@ -448,7 +448,6 @@ const LetterGlitch = ({
       className="relative w-full h-full bg-black overflow-hidden"
       style={{ 
         pointerEvents: 'auto',
-        cursor: 'none',
         zIndex: 1
       }}
     >
@@ -466,6 +465,7 @@ const LetterGlitch = ({
         // Add fallback text if canvas fails
         aria-label="Animated Glitch Background"
       />
+      <div className="absolute inset-0 w-full h-full cursor-pointer" style={{ zIndex: 4 }}></div>
       {outerVignette && (
         <div
           className="absolute top-0 left-0 w-full h-full pointer-events-none bg-[radial-gradient(circle,_rgba(0,0,0,0)_60%,_rgba(0,0,0,1)_100%)]"
