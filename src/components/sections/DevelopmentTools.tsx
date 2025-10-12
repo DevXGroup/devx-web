@@ -979,7 +979,7 @@ function AIToolsOrbit({
             >
               {/* Main icon container with enhanced trail effect - now clickable */}
               <motion.div
-                className="absolute w-10 h-10 sm:w-12 sm:h-12 -ml-5 -mt-5 sm:-ml-6 sm:-mt-6 rounded-full backdrop-blur-sm shadow border border-purple-500/40 flex items-center justify-center cursor-pointer"
+                className="absolute w-10 h-10 sm:w-12 sm:h-12 -ml-5 -mt-5 sm:-ml-6 sm:-mt-6 rounded-full backdrop-blur-sm shadow border border-purple-500/40 flex items-center justify-center cursor-pointer group/icon"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => onIconClick(i)}
@@ -1013,14 +1013,21 @@ function AIToolsOrbit({
                     className="object-contain"
                   />
                 </div>
-              </motion.div>
 
-              {/* Tool name label - closer to circles with reduced spacing */}
-              <div className="absolute whitespace-nowrap top-6 sm:top-7 left-0 -translate-x-1/2">
-                <span className="text-xs sm:text-sm text-white/80 bg-black/70 px-2 py-0.5 rounded-full backdrop-blur-sm border border-white/10">
-                  {tool.name}
-                </span>
-              </div>
+                {/* Tool name label - Shows on hover */}
+                <div
+                  className="absolute whitespace-nowrap top-8 sm:top-9 left-0 -translate-x-1/2 z-[999] pointer-events-none opacity-0 translate-y-2 scale-95 transition-all duration-300 group-hover/icon:opacity-100 group-hover/icon:translate-y-0 group-hover/icon:scale-100"
+                >
+                  <span
+                    className="text-sm sm:text-base text-white font-medium bg-black/95 backdrop-blur-md px-4 py-2 rounded-lg border border-[#4CD787]/50 shadow-lg shadow-[#4CD787]/20 font-['IBM_Plex_Mono']"
+                    style={{
+                      textShadow: '0 0 8px rgba(76, 215, 135, 0.5)',
+                    }}
+                  >
+                    {tool.name}
+                  </span>
+                </div>
+              </motion.div>
             </div>
           </div>
         )

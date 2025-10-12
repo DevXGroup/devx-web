@@ -15,7 +15,7 @@ export default function LogoLoop({ logos, speed = 15 }: LogoLoopProps) {
   const scrollerRef = useRef<HTMLDivElement>(null)
 
   return (
-    <div className="relative w-full overflow-hidden py-8">
+    <div className="relative w-full overflow-hidden py-8 pb-20">
       {/* Dark gradient overlays on the edges */}
       <div className="absolute left-0 top-0 bottom-0 w-32 md:w-48 lg:w-64 bg-gradient-to-r from-black via-black/80 to-transparent z-20 pointer-events-none" />
       <div className="absolute right-0 top-0 bottom-0 w-32 md:w-48 lg:w-64 bg-gradient-to-l from-black via-black/80 to-transparent z-20 pointer-events-none" />
@@ -53,12 +53,16 @@ export default function LogoLoop({ logos, speed = 15 }: LogoLoopProps) {
               {/* Label - Shows on hover */}
               <div
                 className={`
-                  absolute -bottom-10 left-1/2 -translate-x-1/2 whitespace-nowrap z-30
-                  bg-black/90 backdrop-blur-sm px-3 py-1.5 rounded-lg
-                  border border-purple-500/30 text-white text-xs sm:text-sm font-['IBM_Plex_Mono']
-                  transition-all duration-300 pointer-events-none opacity-0 translate-y-2
-                  group-hover/item:opacity-100 group-hover/item:translate-y-0
+                  absolute -bottom-12 left-1/2 -translate-x-1/2 whitespace-nowrap z-[999]
+                  bg-black/95 backdrop-blur-md px-4 py-2 rounded-lg
+                  border border-[#4CD787]/50 text-white text-sm sm:text-base font-['IBM_Plex_Mono'] font-medium
+                  shadow-lg shadow-[#4CD787]/20
+                  transition-all duration-300 pointer-events-none opacity-0 translate-y-2 scale-95
+                  group-hover/item:opacity-100 group-hover/item:translate-y-0 group-hover/item:scale-100
                 `}
+                style={{
+                  textShadow: '0 0 8px rgba(76, 215, 135, 0.5)',
+                }}
               >
                 {logo.name}
               </div>
