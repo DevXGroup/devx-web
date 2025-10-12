@@ -343,10 +343,20 @@ const DotGrid = ({
       const canvas = canvasRef.current
       if (!canvas) return
 
-      const rect = canvas.getBoundingClientRect()
-      const x = e.clientX - rect.left
-      const y = e.clientY - rect.top
+      let target: HTMLElement | null = canvas;
+      let offsetX = 0;
+      let offsetY = 0;
 
+      while (target) {
+        offsetX += target.offsetLeft;
+        offsetY += target.offsetTop;
+        target = target.offsetParent as HTMLElement | null;
+      }
+
+      const x = e.pageX - offsetX;
+      const y = e.pageY - offsetY;
+
+      const rect = canvas.getBoundingClientRect();
       // Check if pointer is within canvas bounds with small margin
       if (x < -10 || y < -10 || x > rect.width + 10 || y > rect.height + 10) return
 
@@ -414,9 +424,18 @@ const DotGrid = ({
       const canvas = canvasRef.current
       if (!canvas) return
 
-      const rect = canvas.getBoundingClientRect()
-      const cx = e.clientX - rect.left
-      const cy = e.clientY - rect.top
+      let target: HTMLElement | null = canvas;
+      let offsetX = 0;
+      let offsetY = 0;
+
+      while (target) {
+        offsetX += target.offsetLeft;
+        offsetY += target.offsetTop;
+        target = target.offsetParent as HTMLElement | null;
+      }
+
+      const cx = e.pageX - offsetX;
+      const cy = e.pageY - offsetY;
 
       for (const dot of dotsRef.current) {
         const dist = Math.hypot(dot.cx - cx, dot.cy - cy)

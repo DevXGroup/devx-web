@@ -20,6 +20,7 @@ const subheaders = [
   'Legacy System Modernization',
   'Cross-Platform Development',
   'Stunning UI/UX Design',
+  'Agentic AI',
 ]
 
 // Use global animation variants for consistency
@@ -240,8 +241,8 @@ export default function Features() {
         <GridAnimation
           direction="diagonal"
           speed={0.3}
-          borderColor="rgba(168, 85, 247, 0.6)"
-          squareSize={50}
+          borderColor="rgba(168, 85, 247, 0.5)"
+          squareSize={38}
           hoverFillColor="rgba(168, 85, 247, 0.7)"
           randomFlicker={true}
           flickerInterval={800}
@@ -254,7 +255,7 @@ export default function Features() {
         variants={containerVariants}
         initial="hidden"
         animate={isInView ? 'visible' : 'hidden'}
-        className="relative container mx-auto px-4 z-[3] max-w-6xl"
+        className="relative container mx-auto px-4 z-[3] max-w-6xl pointer-events-none"
       >
         {/* Hire Developers Section */}
         <div ref={hireDevelopersRef} className="relative">
@@ -278,7 +279,7 @@ export default function Features() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="group relative bg-[#0C1A1D] p-6 sm:p-8 md:p-10 rounded-2xl border border-transparent transition-all duration-500 overflow-hidden shadow-xl group-hover:shadow-[0_0_20px_rgba(204,255,0,0.5)] before:absolute before:inset-0 before:border before:border-transparent before:rounded-2xl before:transition-all before:duration-300 group-hover:before:border-[#ccff00]/50"
+              className="group relative bg-[#0C1A1D] p-6 sm:p-8 md:p-10 rounded-2xl border border-transparent transition-all duration-500 overflow-hidden shadow-xl group-hover:shadow-[0_0_20px_rgba(204,255,0,0.5)] before:absolute before:inset-0 before:border before:border-transparent before:rounded-2xl before:transition-all before:duration-300 group-hover:before:border-[#ccff00]/50 pointer-events-auto"
               whileHover={
                 shouldReduceMotion
                   ? {}
@@ -316,7 +317,7 @@ export default function Features() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="group relative bg-[#0C1A1D] p-6 sm:p-8 md:p-10 rounded-2xl border border-transparent transition-all duration-500 overflow-hidden shadow-xl group-hover:shadow-[0_0_20px_rgba(204,255,0,0.5)] before:absolute before:inset-0 before:border before:border-transparent before:rounded-2xl before:transition-all before:duration-300 group-hover:before:border-[#ccff00]/50"
+              className="group relative bg-[#0C1A1D] p-6 sm:p-8 md:p-10 rounded-2xl border border-transparent transition-all duration-500 overflow-hidden shadow-xl group-hover:shadow-[0_0_20px_rgba(204,255,0,0.5)] before:absolute before:inset-0 before:border before:border-transparent before:rounded-2xl before:transition-all before:duration-300 group-hover:before:border-[#ccff00]/50 pointer-events-auto"
               whileHover={
                 shouldReduceMotion
                   ? {}
@@ -359,22 +360,24 @@ export default function Features() {
               <span className="text-2xl sm:text-4xl md:text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-500">
                 Creative
               </span>
-              <RotatingText
-                texts={subheaders}
-                rotationInterval={shouldReduceMotion ? 2500 : 3000}
-                transition={{ type: 'spring', stiffness: 200, damping: 25 }}
-                initial={{ rotateX: -90, opacity: 0 }}
-                animate={{ rotateX: 0, opacity: 1 }}
-                exit={{ rotateX: 90, opacity: 0 }}
-                splitBy="characters"
-                staggerDuration={0.03}
-                staggerFrom="center"
-                mainClassName="relative -top-0.5 font-bold text-lg sm:text-2xl md:text-3xl font-mono text-center"
-                splitLevelClassName="overflow-visible"
-                elementLevelClassName="inline-block drop-shadow-lg"
-                loop={true}
-                auto={true}
-              />
+              <div className="relative inline-block bg-gradient-to-br from-gray-900 to-black backdrop-blur-md py-4 sm:py-5 md:py-6 px-3 sm:px-4 md:px-5 rounded-xl border border-slate-600/50 shadow-lg">
+                <RotatingText
+                  texts={subheaders}
+                  rotationInterval={shouldReduceMotion ? 2500 : 3000}
+                  transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+                  initial={{ y: 30, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: -30, opacity: 0 }}
+                  splitBy="characters"
+                  staggerDuration={0.03}
+                  staggerFrom="center"
+                  mainClassName="relative font-bold text-lg sm:text-2xl md:text-3xl font-mono text-center text-white"
+                  splitLevelClassName="overflow-visible"
+                  elementLevelClassName="inline-block drop-shadow-lg"
+                  loop={true}
+                  auto={true}
+                />
+              </div>
             </div>
           </div>
         </div>

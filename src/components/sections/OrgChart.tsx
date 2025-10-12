@@ -25,7 +25,7 @@ const teamMembers: TeamMember[] = [
     title: 'CEO/CTO & Founder',
     image: '/images/about/max-headshot.jpg',
     bio: '15+ years of experience at Amazon, Viasat, Qualcomm, and high-growth startups. Led core teams delivering innovative features for Amazon e-commerce platforms. Combines deep engineering expertise with collaborative leadership to drive team growth and consistent success.',
-    linkedIn: 'https://www.linkedin.com/in/max-sheikhizadeh-7847a68/'
+    linkedIn: 'https://www.linkedin.com/in/max-sheikhizadeh-7847a68/',
   },
   {
     id: 'milaad',
@@ -33,25 +33,25 @@ const teamMembers: TeamMember[] = [
     title: 'General Manager',
     image: '/images/about/milaad-headshot.jpg',
     bio: 'General Manager with a background in business studies at USD and sales experience at Sunrun. Known for brilliance in sales and marketing, and a bright, effective approach to management.',
-    linkedIn: 'https://www.linkedin.com/in/milaad-sheikhizadeh-b086392a8/'
-  }
+    linkedIn: 'https://www.linkedin.com/in/milaad-sheikhizadeh-b086392a8/',
+  },
 ]
 
 const OrgChart = ({ className = '' }: OrgChartProps) => {
   const shouldReduceMotion = useReducedMotion()
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '-50px' })
+  const isInView = useInView(ref, { once: false, margin: '-50px', amount: 0.4 })
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null)
 
   const fadeInUp = {
     hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0 }
+    visible: { opacity: 1, y: 0 },
   }
 
   const modalVariants = {
     hidden: { opacity: 0, scale: 0.8 },
     visible: { opacity: 1, scale: 1 },
-    exit: { opacity: 0, scale: 0.8 }
+    exit: { opacity: 0, scale: 0.8 },
   }
 
   return (
@@ -59,37 +59,40 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
       <div ref={ref} className={`relative ${className}`}>
         <div className="max-w-5xl mx-auto">
           {/* Leadership Level - Top Row */}
-          <motion.div 
+          <motion.div
             className="flex flex-col sm:flex-row justify-center gap-6 sm:gap-12 mb-8 relative z-10"
-            initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
+            initial={false}
+            animate="visible"
             variants={{
-              hidden: {},
               visible: {
-                transition: { staggerChildren: 0.2, delayChildren: 0.3 }
-              }
+                transition: { staggerChildren: 0.2, delayChildren: 0.1 },
+              },
             }}
             id="leadership-row"
           >
             {/* Max Sheikhizadeh */}
-            <motion.div 
+            <motion.div
               variants={fadeInUp}
+              initial={false}
+              animate="visible"
               className="text-center group relative bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 cursor-pointer hover:border-[#4CD787]/50 transition-colors w-full max-w-[240px] mx-auto min-h-[260px] flex flex-col justify-between"
               onClick={() => teamMembers[0] && setSelectedMember(teamMembers[0])}
             >
               <div className="relative mb-4">
-                <div className="w-28 h-28 mx-auto rounded-xl overflow-hidden border-2 border-[#4CD787] shadow-lg">
+                <div className="w-32 h-32 mx-auto rounded-xl overflow-hidden border-2 border-[#4CD787] shadow-lg">
                   <Image
                     src="/images/about/max-headshot.jpg"
                     alt="Max Sheikhizadeh"
-                    width={112}
-                    height={112}
+                    width={128}
+                    height={128}
                     className="w-full h-full object-cover"
                   />
                 </div>
               </div>
               <div>
-                <h3 className="font-bold text-white text-base mb-1 leading-tight">Max Sheikhizadeh</h3>
+                <h3 className="font-bold text-white text-base mb-1 leading-tight">
+                  Max Sheikhizadeh
+                </h3>
                 <p className="text-[#4CD787] text-xs font-medium mb-2">CEO/CTO & Founder</p>
                 <button className="bg-[#4CD787]/20 hover:bg-[#4CD787]/30 text-[#4CD787] px-3 py-1.5 rounded-md text-xs font-medium transition-colors border border-[#4CD787]/30">
                   <User className="w-3 h-3 inline mr-1" />
@@ -99,24 +102,28 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
             </motion.div>
 
             {/* Milaad Sheikhizadeh */}
-            <motion.div 
+            <motion.div
               variants={fadeInUp}
+              initial={false}
+              animate="visible"
               className="text-center group relative bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 cursor-pointer hover:border-[#FFD700]/50 transition-colors w-full max-w-[240px] mx-auto min-h-[260px] flex flex-col justify-between"
               onClick={() => teamMembers[1] && setSelectedMember(teamMembers[1])}
             >
               <div className="relative mb-4">
-                <div className="w-28 h-28 mx-auto rounded-xl overflow-hidden border-2 border-[#FFD700] shadow-lg">
+                <div className="w-32 h-32 mx-auto rounded-xl overflow-hidden border-2 border-[#FFD700] shadow-lg">
                   <Image
                     src="/images/about/milaad-headshot.jpg"
                     alt="Milaad Sheikhizadeh"
-                    width={112}
-                    height={112}
+                    width={128}
+                    height={128}
                     className="w-full h-full object-cover"
                   />
                 </div>
               </div>
               <div>
-                <h3 className="font-bold text-white text-base mb-1 leading-tight">Milaad Sheikhizadeh</h3>
+                <h3 className="font-bold text-white text-base mb-1 leading-tight">
+                  Milaad Sheikhizadeh
+                </h3>
                 <p className="text-[#FFD700] text-xs font-medium mb-2">General Manager</p>
                 <button className="bg-[#FFD700]/20 hover:bg-[#FFD700]/30 text-[#FFD700] px-3 py-1.5 rounded-md text-xs font-medium transition-colors border border-[#FFD700]/30">
                   <User className="w-3 h-3 inline mr-1" />
@@ -128,12 +135,12 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
 
           {/* Centered Connecting Lines Structure */}
           {/* Step 1: Vertical lines positioned exactly under center of leadership cards */}
-          <div className="relative -mt-2 mb-4">
+          <div className="relative -mt-2 mb-4 hidden md:block">
             {/* Use exact same layout as leadership cards to ensure perfect alignment */}
             <div className="flex flex-col sm:flex-row justify-center gap-6 sm:gap-12">
               {/* Max's line - positioned to match his card center exactly */}
               <div className="flex justify-center w-full max-w-[240px] mx-auto">
-                <motion.div 
+                <motion.div
                   className="w-0.5 h-16 bg-gradient-to-b from-[#4CD787]/60 to-[#4CD787]/40"
                   initial={{ opacity: 0, scaleY: 0 }}
                   animate={isInView ? { opacity: 1, scaleY: 1 } : { opacity: 0, scaleY: 0 }}
@@ -142,7 +149,7 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
               </div>
               {/* Milaad's line - positioned to match his card center exactly */}
               <div className="flex justify-center w-full max-w-[240px] mx-auto">
-                <motion.div 
+                <motion.div
                   className="w-0.5 h-16 bg-gradient-to-b from-[#FFD700]/60 to-[#FFD700]/40"
                   initial={{ opacity: 0, scaleY: 0 }}
                   animate={isInView ? { opacity: 1, scaleY: 1 } : { opacity: 0, scaleY: 0 }}
@@ -153,8 +160,8 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
           </div>
 
           {/* Step 2: Extended horizontal line connecting leadership */}
-          <div className="flex justify-center mb-6">
-            <motion.div 
+          <div className="hidden md:flex justify-center mb-6">
+            <motion.div
               className="h-0.5 w-48 sm:w-64 md:w-80 lg:w-96 bg-gradient-to-r from-transparent via-[#4CD787]/60 to-transparent"
               initial={{ opacity: 0, scaleX: 0 }}
               animate={isInView ? { opacity: 1, scaleX: 1 } : { opacity: 0, scaleX: 0 }}
@@ -163,8 +170,8 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
           </div>
 
           {/* Step 3: Single vertical line down to management */}
-          <div className="flex justify-center mb-6">
-            <motion.div 
+          <div className="hidden md:flex justify-center mb-6">
+            <motion.div
               className="w-0.5 h-20 bg-gradient-to-b from-[#4CD787]/60 to-[#4CD787]/40"
               initial={{ opacity: 0, scaleY: 0 }}
               animate={isInView ? { opacity: 1, scaleY: 1 } : { opacity: 0, scaleY: 0 }}
@@ -173,8 +180,8 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
           </div>
 
           {/* Step 4: Extended horizontal line to management positions */}
-          <div className="flex justify-center mb-4">
-            <motion.div 
+          <div className="hidden md:flex justify-center mb-4">
+            <motion.div
               className="h-0.5 w-80 sm:w-96 lg:w-[28rem] xl:w-[32rem] bg-gradient-to-r from-transparent via-[#4CD787]/50 to-transparent"
               initial={{ opacity: 0, scaleX: 0 }}
               animate={isInView ? { opacity: 1, scaleX: 1 } : { opacity: 0, scaleX: 0 }}
@@ -183,11 +190,11 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
           </div>
 
           {/* Step 5: Four vertical lines to management cards - centered under each card */}
-          <div className="flex justify-center -mb-2">
+          <div className="hidden md:flex justify-center -mb-2">
             <div className="w-full max-w-5xl px-4">
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
                 {[0, 1, 2, 3].map((index) => (
-                  <motion.div 
+                  <motion.div
                     key={index}
                     className="flex justify-center"
                     initial={{ opacity: 0, scaleY: 0 }}
@@ -202,21 +209,22 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
           </div>
 
           {/* Management Level */}
-          <motion.div 
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-4 relative z-10 -mt-2"
-            initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
+          <motion.div
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-4 relative z-10 mt-6 md:-mt-2"
+            initial={false}
+            animate="visible"
             variants={{
-              hidden: {},
               visible: {
-                transition: { staggerChildren: 0.1, delayChildren: 1.5 }
-              }
+                transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+              },
             }}
           >
             {/* Overseas Logistic Manager */}
             {/* TODO: Add photo placeholder - replace icon with Image component when photos are available */}
-            <motion.div 
+            <motion.div
               variants={fadeInUp}
+              initial={false}
+              animate="visible"
               className="text-center bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:border-[#4CD787]/30 transition-colors"
             >
               <div className="w-12 h-12 mx-auto mb-3 bg-gradient-to-br from-[#4CD787]/20 to-[#4CD787]/40 rounded-lg flex items-center justify-center border border-[#4CD787]/30">
@@ -228,8 +236,10 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
 
             {/* Technical Lead */}
             {/* TODO: Add photo placeholder - replace icon with Image component when photos are available */}
-            <motion.div 
+            <motion.div
               variants={fadeInUp}
+              initial={false}
+              animate="visible"
               className="text-center bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:border-[#4834D4]/30 transition-colors"
             >
               <div className="w-12 h-12 mx-auto mb-3 bg-gradient-to-br from-[#4834D4]/20 to-[#4834D4]/40 rounded-lg flex items-center justify-center border border-[#4834D4]/30">
@@ -240,8 +250,10 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
 
             {/* Project Managers (Consolidated) */}
             {/* TODO: Add photo placeholder - replace icon with Image component when photos are available */}
-            <motion.div 
+            <motion.div
               variants={fadeInUp}
+              initial={false}
+              animate="visible"
               className="text-center bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:border-[#FFD700]/30 transition-colors"
             >
               <div className="w-12 h-12 mx-auto mb-3 bg-gradient-to-br from-[#FFD700]/20 to-[#FFD700]/40 rounded-lg flex items-center justify-center border border-[#FFD700]/30">
@@ -253,8 +265,10 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
 
             {/* Designer */}
             {/* TODO: Add photo placeholder - replace icon with Image component when photos are available */}
-            <motion.div 
+            <motion.div
               variants={fadeInUp}
+              initial={false}
+              animate="visible"
               className="text-center bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:border-[#9d4edd]/30 transition-colors"
             >
               <div className="w-12 h-12 mx-auto mb-3 bg-gradient-to-br from-[#9d4edd]/20 to-[#9d4edd]/40 rounded-lg flex items-center justify-center border border-[#9d4edd]/30">
@@ -266,11 +280,11 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
 
           {/* Connecting lines from management to developers */}
           {/* Step 6: Four vertical lines down from center of management cards */}
-          <div className="flex justify-center -mb-2 relative -mt-2">
+          <div className="hidden md:flex justify-center -mb-2 relative -mt-2">
             <div className="w-full max-w-5xl px-4">
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
                 {[0, 1, 2, 3].map((index) => (
-                  <motion.div 
+                  <motion.div
                     key={index}
                     className="flex justify-center"
                     initial={{ opacity: 0, scaleY: 0 }}
@@ -285,8 +299,8 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
           </div>
 
           {/* Step 7: Horizontal line converging to center - shorter to avoid crossing */}
-          <div className="flex justify-center mb-6">
-            <motion.div 
+          <div className="hidden md:flex justify-center mb-6">
+            <motion.div
               className="h-0.5 w-64 sm:w-80 lg:w-96 bg-gradient-to-r from-transparent via-[#4CD787]/40 to-transparent"
               initial={{ opacity: 0, scaleX: 0 }}
               animate={isInView ? { opacity: 1, scaleX: 1 } : { opacity: 0, scaleX: 0 }}
@@ -295,8 +309,8 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
           </div>
 
           {/* Step 8: Final vertical line to developers */}
-          <div className="flex justify-center -mb-2">
-            <motion.div 
+          <div className="hidden md:flex justify-center -mb-2">
+            <motion.div
               className="w-0.5 h-16 bg-gradient-to-b from-[#4CD787]/40 to-[#4CD787]/20"
               initial={{ opacity: 0, scaleY: 0 }}
               animate={isInView ? { opacity: 1, scaleY: 1 } : { opacity: 0, scaleY: 0 }}
@@ -305,39 +319,15 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
           </div>
 
           {/* Developers Team Level */}
-          <motion.div 
-            className="text-center bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 max-w-3xl mx-auto relative -mt-2"
-            initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
-            variants={fadeInUp}
-            transition={{ delay: 2.6 }}
-          >
-            <motion.h4 
-              className="text-white text-2xl font-bold mb-2"
-              initial={{ opacity: 0, y: 10 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-              transition={{ delay: 2.8 }}
-            >
-              15+ Senior Developers
-            </motion.h4>
-            
-            <motion.p 
-              className="text-white/80 text-sm"
-              initial={{ opacity: 0 }}
-              animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-              transition={{ delay: 3.0 }}
-            >
+          <div className="text-center bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 max-w-3xl mx-auto relative mt-6 md:-mt-2">
+            <h4 className="text-white text-2xl font-bold mb-2">15+ Senior Developers</h4>
+            <p className="text-white/80 text-sm">
               Specialized in Full-Stack, AI/ML, IoT, and Mobile Development
-            </motion.p>
-          </motion.div>
+            </p>
+          </div>
 
           {/* Team Stats */}
-          <motion.div 
-            className="text-center mt-8 p-6 bg-black/40 backdrop-blur-sm rounded-xl border border-white/10"
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ delay: 3.2, duration: 0.6 }}
-          >
+          <div className="text-center mt-6 md:mt-8 p-6 bg-black/40 backdrop-blur-sm rounded-xl border border-white/10">
             <div className="flex flex-wrap justify-center items-center gap-6 text-sm">
               <div className="text-center">
                 <div className="text-2xl font-bold text-[#4CD787] mb-1">23</div>
@@ -361,7 +351,7 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
                 <div className="text-white/80 font-medium text-xs">Developers</div>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
 
@@ -395,9 +385,11 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
               {/* Modal content */}
               <div className="flex flex-col md:flex-row gap-6">
                 <div className="flex-shrink-0">
-                  <div className={`w-32 h-32 rounded-2xl overflow-hidden border-3 shadow-2xl ${
-                    selectedMember.id === 'max' ? 'border-[#4CD787]' : 'border-[#FFD700]'
-                  }`}>
+                  <div
+                    className={`w-32 h-32 rounded-2xl overflow-hidden border-3 shadow-2xl ${
+                      selectedMember.id === 'max' ? 'border-[#4CD787]' : 'border-[#FFD700]'
+                    }`}
+                  >
                     <Image
                       src={selectedMember.image}
                       alt={selectedMember.name}
@@ -407,25 +399,25 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
                     />
                   </div>
                 </div>
-                
+
                 <div className="flex-1">
                   <h3 className="text-2xl font-bold text-white mb-2">{selectedMember.name}</h3>
-                  <p className={`text-lg font-medium mb-4 ${
-                    selectedMember.id === 'max' ? 'text-[#4CD787]' : 'text-[#FFD700]'
-                  }`}>
+                  <p
+                    className={`text-lg font-medium mb-4 ${
+                      selectedMember.id === 'max' ? 'text-[#4CD787]' : 'text-[#FFD700]'
+                    }`}
+                  >
                     {selectedMember.title}
                   </p>
-                  <p className="text-white/80 leading-relaxed mb-6">
-                    {selectedMember.bio}
-                  </p>
-                  
+                  <p className="text-white/80 leading-relaxed mb-6">{selectedMember.bio}</p>
+
                   {selectedMember.linkedIn && (
                     <a
                       href={selectedMember.linkedIn}
                       target="_blank"
                       rel="noopener noreferrer"
                       className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                        selectedMember.id === 'max' 
+                        selectedMember.id === 'max'
                           ? 'bg-[#4CD787]/20 hover:bg-[#4CD787]/30 text-[#4CD787] border border-[#4CD787]/30'
                           : 'bg-[#FFD700]/20 hover:bg-[#FFD700]/30 text-[#FFD700] border border-[#FFD700]/30'
                       }`}

@@ -344,13 +344,13 @@ export default function DevelopmentTools() {
           />
         ))}
         {/* Title section */}
-        <div className="py-20 md:py-0 mt-36 md:mt-36 mb-2 md:mb-2">
+        <div className="py-10 md:py-0 mt-24 md:mt-36 mb-8 md:mb-2">
           <div className="container mx-auto px-4">
             <div className="flex flex-col items-center">
               <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold font-['IBM_Plex_Mono'] text-center animate-gradient-text mb-4">
                 DevX Development Tools
               </h3>
-              <p className="text-slate-400 text-lg md:text-xl font-['IBM_Plex_Sans'] text-center max-w-2xl mb-16">
+              <p className="text-slate-400 text-lg md:text-xl font-['IBM_Plex_Sans'] text-center max-w-2xl mb-8">
                 Cutting-edge technologies powering innovative solutions across web, mobile, and
                 cloud platforms
               </p>
@@ -358,7 +358,7 @@ export default function DevelopmentTools() {
           </div>
         </div>
         {/* Animation container with proper sizing */}
-        <div className="relative w-full h-[80vh] flex items-center justify-center">
+        <div className="relative w-full h-[60vh] sm:h-[80vh] flex items-center justify-center">
           {/* ============ Center black circle with glowing border ============ */}
           {/* Responsive center position with decreased circumference */}
           <div
@@ -567,9 +567,9 @@ export default function DevelopmentTools() {
         </div>
 
         {/* Logo Loop Section - Mobile Replacement for Outer Orbit */}
-        <div className="w-full mt-16 md:mt-40 lg:mt-48 xl:mt-56 py-12 md:py-16 lg:py-20">
+        <div className="w-full mt-8 md:mt-24 lg:mt-32 xl:mt-40 py-8 md:py-12 lg:py-16">
           <div className="w-full max-w-full">
-            <h4 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold font-['IBM_Plex_Mono'] text-center text-white mb-12 md:mb-16 lg:mb-20 px-4">
+            <h4 className="text-2xl sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold font-['IBM_Plex_Mono'] text-center text-white mb-12 md:mb-16 lg:mb-20 px-4">
               AI & Cloud Technologies
             </h4>
             <LogoLoop logos={aiTools} speed={12} />
@@ -690,7 +690,7 @@ function TransitionPlanet({
 
         {/* The actual tool icon */}
         <motion.div
-          className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-slate-800 shadow border border-purple-500/30 flex items-center justify-center relative overflow-hidden"
+          className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full shadow border border-purple-500/30 flex items-center justify-center relative overflow-hidden"
           animate={{
             rotateY: [0, 180, 360, 540, 720],
             rotateX: [0, 45, 90, 45, 0],
@@ -814,7 +814,7 @@ function StaticIconsOrbit({
             <motion.div
               layoutId={`icon-${tool.name}`}
               onClick={() => onIconClick(i)}
-              className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-slate-800 shadow border border-purple-500/30 hover:border-purple-400/50 flex items-center justify-center cursor-pointer transition-all duration-300"
+              className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full shadow border border-purple-500/30 hover:border-purple-400/50 flex items-center justify-center cursor-pointer transition-all duration-300"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               transition={{
@@ -979,7 +979,7 @@ function AIToolsOrbit({
             >
               {/* Main icon container with enhanced trail effect - now clickable */}
               <motion.div
-                className="absolute w-10 h-10 sm:w-12 sm:h-12 -ml-5 -mt-5 sm:-ml-6 sm:-mt-6 rounded-full bg-slate-900/80 backdrop-blur-sm shadow border border-purple-500/40 flex items-center justify-center cursor-pointer"
+                className="absolute w-10 h-10 sm:w-12 sm:h-12 -ml-5 -mt-5 sm:-ml-6 sm:-mt-6 rounded-full backdrop-blur-sm shadow border border-purple-500/40 flex items-center justify-center cursor-pointer"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => onIconClick(i)}
