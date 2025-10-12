@@ -49,3 +49,4 @@ export const setupIntersectionObserverMock = () => {
   })
   window.IntersectionObserver = mockIntersectionObserver
 }
+
