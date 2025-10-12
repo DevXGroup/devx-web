@@ -1,6 +1,6 @@
 'use client'
 
-import { motion, useReducedMotion, useInView } from 'framer-motion'
+import { motion, useReducedMotion, useInView, useMotionValue, animate } from 'framer-motion'
 import { useRef, useCallback, useMemo, useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -263,7 +263,7 @@ const deliveryHighlights: DeliveryItem[] = [
   },
   {
     text: 'Security hardening modeled after DoD Impact Level 5 controls for cloud delivery.',
-    color: '#06B6D4',
+    color: '#FFD700',
     icon: Shield,
   },
   {
@@ -273,12 +273,12 @@ const deliveryHighlights: DeliveryItem[] = [
   },
   {
     text: 'Complete code transfer, environment configs, and runbooks at acceptance.',
-    color: '#9d4edd',
+    color: '#2a9df4',
     icon: FileText,
   },
   {
     text: '30-day stabilization support with on-call fixes and optimization guidance.',
-    color: '#4CD787',
+    color: '#ff6b35',
     icon: Heart,
   },
 ]
@@ -305,46 +305,207 @@ const withAlpha = (hex: string, alpha: number) => {
 
 const DeliveryCard = ({ text, color, icon: Icon, index }: DeliveryItem & { index: number }) => {
   const accent = color
-  const borderColor = withAlpha(accent, 0.35)
-  const badgeBackground = withAlpha(accent, 0.1)
-  const badgeText = withAlpha(accent, 0.85)
-  const iconBackground = withAlpha(accent, 0.18)
-  const indexColor = withAlpha(accent, 0.7)
+  const isEven = index % 2 === 0
+
+  // Map accent colors to deeper, richer backgrounds with subtle tints
+  const colorMapping: Record<string, string> = {
+    '#4CD787': 'linear-gradient(135deg, #0d1714 0%, #121a1e 100%)', // Deep green-black
+    '#FFD700': 'linear-gradient(135deg, #1a180f 0%, #1c1a12 100%)', // Deep yellow-black
+    '#8A4FFF': 'linear-gradient(135deg, #12101a 0%, #151318 100%)', // Deep purple-black
+    '#2a9df4': 'linear-gradient(135deg, #0f161a 0%, #12181c 100%)', // Deep blue-black
+    '#ff6b35': 'linear-gradient(135deg, #1a130f 0%, #1c1512 100%)', // Deep orange-black
+  }
+
+  const cardBg = colorMapping[accent] || 'linear-gradient(135deg, #0a0a0f 0%, #12121a 100%)'
 
   return (
     <div
-      className="flex min-h-[240px] flex-col gap-8 rounded-[28px] border px-10 py-12 md:px-14 md:py-12"
-      style={{ borderColor, backgroundColor: '#0a1224' }}
+      className={`flex flex-col md:flex-row min-h-[320px] items-center gap-8 md:gap-12 rounded-2xl px-8 py-10 md:px-12 md:py-12 relative overflow-hidden ${
+        isEven ? 'md:flex-row' : 'md:flex-row-reverse'
+      }`}
+      style={{
+        background: cardBg,
+        border: `2px solid ${withAlpha(accent, 0.35)}`,
+        boxShadow: `0 8px 32px rgba(0, 0, 0, 0.6), inset 0 1px 0 ${withAlpha(accent, 0.1)}`,
+      }}
     >
-      <div className="flex items-center justify-between">
-        <div className="inline-flex items-center gap-3 rounded-full border px-4 py-2" style={{ borderColor, backgroundColor: badgeBackground }}>
-          <div className="flex h-10 w-10 items-center justify-center rounded-full" style={{ backgroundColor: iconBackground }}>
-            <Icon className="h-5 w-5" style={{ color: accent }} />
-          </div>
-          <span className="text-xs font-semibold uppercase tracking-[0.28em]" style={{ color: badgeText }}>
-            Ownership
-          </span>
+      {/* Large decorative icon on the side */}
+      <div className="relative flex-shrink-0 z-10">
+        <div
+          className="w-32 h-32 md:w-40 md:h-40 rounded-2xl flex items-center justify-center relative"
+          style={{
+            background: `linear-gradient(135deg, ${withAlpha(accent, 0.18)} 0%, ${withAlpha(
+              accent,
+              0.08
+            )} 100%)`,
+            border: `2px solid ${withAlpha(accent, 0.45)}`,
+          }}
+        >
+          {/* Icon glow effect */}
+          <div
+            className="absolute inset-0 rounded-2xl opacity-40 blur-xl"
+            style={{ backgroundColor: accent }}
+          />
+          <Icon
+            className="w-16 h-16 md:w-20 md:h-20 relative z-10"
+            style={{ color: accent, filter: 'drop-shadow(0 0 10px rgba(0,0,0,0.6))' }}
+            strokeWidth={1.5}
+          />
         </div>
-        <span className="text-sm font-medium" style={{ color: indexColor }}>
-          Step {index + 1}
-        </span>
       </div>
-      <p className="text-lg leading-relaxed text-white/90 font-['IBM_Plex_Sans']">{text}</p>
+
+      {/* Text content on opposite side */}
+      <div
+        className={`relative z-10 flex-1 text-center ${isEven ? 'md:text-left' : 'md:text-right'}`}
+      >
+        <p
+          className="text-base sm:text-lg md:text-xl lg:text-2xl leading-relaxed text-white font-['IBM_Plex_Sans'] font-light"
+          style={{ letterSpacing: '0.01em' }}
+        >
+          {text}
+        </p>
+      </div>
     </div>
   )
 }
 
-// Vision/Mission Card without running border animation
+// Vision Card Component
+const VisionCard = () => {
+  const [isHovered, setIsHovered] = useState(false)
+
+  return (
+    <VisionMissionCard
+      delay={0}
+      accentColor="#4CD787"
+      isHovered={isHovered}
+      onHoverChange={setIsHovered}
+    >
+      <div className="flex items-center gap-3 mb-3 md:mb-4">
+        <motion.h3
+          className="text-xl md:text-2xl font-bold text-[#4CD787] font-['IBM_Plex_Mono'] whitespace-nowrap"
+          animate={
+            isHovered
+              ? { textShadow: '0 0 12px rgba(76, 215, 135, 0.4), 0 0 24px rgba(76, 215, 135, 0.2)' }
+              : { textShadow: '0 0 0px rgba(76, 215, 135, 0)' }
+          }
+          transition={{ duration: 0.3 }}
+        >
+          Our Vision
+        </motion.h3>
+        {/* Animated line that fills up on hover/tap - RIGHT side */}
+        <motion.div
+          className="h-0.5 bg-[#4CD787] rounded-full flex-1"
+          animate={
+            isHovered
+              ? {
+                  scaleX: 1,
+                  opacity: 1,
+                }
+              : { scaleX: 0, opacity: 0 }
+          }
+          style={{
+            originX: 0,
+            boxShadow: isHovered
+              ? '0 0 6px rgba(76, 215, 135, 0.6), 0 0 12px rgba(76, 215, 135, 0.3)'
+              : '0 0 0px rgba(76, 215, 135, 0)',
+          }}
+          transition={{
+            duration: 0.5,
+            ease: 'easeOut',
+          }}
+        />
+      </div>
+      <p className="text-sm md:text-base lg:text-lg text-white/90 leading-relaxed font-['IBM_Plex_Sans']">
+        To revolutionize software development by delivering innovative, efficient, and scalable
+        solutions that empower businesses worldwide to thrive in a digital-first future.
+      </p>
+    </VisionMissionCard>
+  )
+}
+
+// Mission Card Component
+const MissionCard = () => {
+  const [isHovered, setIsHovered] = useState(false)
+
+  return (
+    <VisionMissionCard
+      delay={0.2}
+      accentColor="#06B6D4"
+      isHovered={isHovered}
+      onHoverChange={setIsHovered}
+    >
+      <div className="flex items-center gap-3 mb-3 md:mb-4">
+        <motion.h3
+          className="text-xl md:text-2xl font-bold text-[#06B6D4] font-['IBM_Plex_Mono'] whitespace-nowrap"
+          animate={
+            isHovered
+              ? { textShadow: '0 0 12px rgba(6, 182, 212, 0.4), 0 0 24px rgba(6, 182, 212, 0.2)' }
+              : { textShadow: '0 0 0px rgba(6, 182, 212, 0)' }
+          }
+          transition={{ duration: 0.3 }}
+        >
+          Our Mission
+        </motion.h3>
+        {/* Animated line that fills up on hover/tap - RIGHT side */}
+        <motion.div
+          className="h-0.5 bg-[#06B6D4] rounded-full flex-1"
+          animate={
+            isHovered
+              ? {
+                  scaleX: 1,
+                  opacity: 1,
+                }
+              : { scaleX: 0, opacity: 0 }
+          }
+          style={{
+            originX: 0,
+            boxShadow: isHovered
+              ? '0 0 6px rgba(6, 182, 212, 0.6), 0 0 12px rgba(6, 182, 212, 0.3)'
+              : '0 0 0px rgba(6, 182, 212, 0)',
+          }}
+          transition={{
+            duration: 0.5,
+            ease: 'easeOut',
+          }}
+        />
+      </div>
+      <p className="text-sm md:text-base lg:text-lg text-white/90 leading-relaxed font-['IBM_Plex_Sans']">
+        To simplify the software development journey through a streamlined, results-first process,
+        ensuring exceptional quality, adaptability, and long-term success for every client.
+      </p>
+    </VisionMissionCard>
+  )
+}
+
+// Vision/Mission Card with animated line (touch and hover enabled)
 const VisionMissionCard = ({
   children,
   delay = 0,
+  accentColor = '#4CD787',
+  isHovered,
+  onHoverChange,
 }: {
   children: React.ReactNode
   delay?: number
+  accentColor?: string
+  isHovered?: boolean
+  onHoverChange?: (hovered: boolean) => void
 }) => {
   const shouldReduceMotion = useReducedMotion()
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true })
+
+  // Handle touch events for mobile
+  const handleTouchStart = () => {
+    onHoverChange?.(true)
+  }
+
+  const handleTouchEnd = () => {
+    // Keep the animation visible briefly on touch end
+    setTimeout(() => {
+      onHoverChange?.(false)
+    }, 300)
+  }
 
   return (
     <motion.div
@@ -353,7 +514,12 @@ const VisionMissionCard = ({
       initial="hidden"
       animate={isInView ? 'visible' : 'hidden'}
       transition={{ duration: 0.6, delay: shouldReduceMotion ? 0 : delay }}
-      className="relative bg-black/60 backdrop-blur-md p-6 md:p-8 rounded-xl border border-white/20 hover:border-[#4CD787]/40 transition-colors duration-300 shadow-2xl overflow-hidden"
+      className="group relative bg-black/60 backdrop-blur-md p-6 md:p-8 rounded-xl border border-white/20 hover:border-[#4CD787]/40 active:border-[#4CD787]/60 transition-colors duration-300 shadow-2xl overflow-visible cursor-pointer touch-manipulation"
+      onMouseEnter={() => onHoverChange?.(true)}
+      onMouseLeave={() => onHoverChange?.(false)}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
     >
       {children}
     </motion.div>
@@ -361,90 +527,179 @@ const VisionMissionCard = ({
 }
 
 // Enhanced stat counter with animation
-const StatCounter = ({
-  number,
-  label,
-  delay = 0,
-}: {
-  number: string | number
-  label: string
-  delay?: number
-}) => {
-  const [count, setCount] = useState(0)
-  const countRef = useRef(null)
+const StatCounter = ({ number, label }: { number: string | number; label: string }) => {
+  const containerRef = useRef<HTMLDivElement | null>(null)
   const shouldReduceMotion = useReducedMotion()
-  const isInView = useInView(countRef, { once: true, margin: '-50px' })
-  const targetNumber = useMemo(() => Number.parseInt(String(number).replace(/\D/g, '')), [number])
+  const isInView = useInView(containerRef, {
+    once: false,
+    margin: '-150px',
+    amount: 0.35,
+  })
 
-  const animateCount = useCallback(() => {
+  const numericTarget = useMemo(() => {
+    const numericPortion = Number.parseFloat(String(number).replace(/[^0-9.]/g, ''))
+    return Number.isFinite(numericPortion) ? numericPortion : 0
+  }, [number])
+
+  const decimalPlaces = useMemo(() => {
+    const match = String(number).match(/\.(\d+)/)
+    return match ? match[1].length : 0
+  }, [number])
+
+  const suffix = useMemo(() => {
+    if (typeof number !== 'string') return ''
+    return number.replace(/[-+]?[\d.,\s]+/g, '')
+  }, [number])
+
+  const countValue = useMotionValue(numericTarget)
+  const [displayValue, setDisplayValue] = useState(() =>
+    decimalPlaces > 0 ? numericTarget.toFixed(decimalPlaces) : Math.round(numericTarget).toString(),
+  )
+
+  const animationRef = useRef<ReturnType<typeof animate> | null>(null)
+  const prevInView = useRef(false)
+  const hoverSequenceRef = useRef(0)
+
+  const formatValue = useCallback(
+    (value: number) => {
+      if (decimalPlaces > 0) {
+        return value.toFixed(decimalPlaces)
+      }
+      return Math.round(value).toString()
+    },
+    [decimalPlaces],
+  )
+
+  const stopActiveAnimation = useCallback(() => {
+    if (animationRef.current) {
+      animationRef.current.stop()
+      animationRef.current = null
+    }
+  }, [])
+
+  const animateTo = useCallback(
+    async (value: number, options: { duration?: number; ease?: any } = {}) => {
+      if (shouldReduceMotion) {
+        stopActiveAnimation()
+        countValue.set(value)
+        setDisplayValue(formatValue(value))
+        return
+      }
+
+      stopActiveAnimation()
+      const controls = animate(countValue, value, {
+        duration: 0.8,
+        ease: [0.16, 1, 0.3, 1],
+        ...options,
+      })
+      animationRef.current = controls
+      await controls.finished
+    },
+    [countValue, formatValue, shouldReduceMotion, stopActiveAnimation],
+  )
+
+  const runCountUp = useCallback(async () => {
     if (shouldReduceMotion) {
-      setCount(targetNumber)
+      countValue.set(numericTarget)
+      setDisplayValue(formatValue(numericTarget))
       return
     }
 
-    setCount(0) // Reset count before animation
-    let start = 0
-    const duration = 2500
-    const step = Math.ceil(targetNumber / (duration / 16))
-
-    const timer = setInterval(() => {
-      start += step
-      if (start > targetNumber) {
-        setCount(targetNumber)
-        clearInterval(timer)
-      } else {
-        setCount(start)
-      }
-    }, 16)
-
-    return () => clearInterval(timer)
-  }, [targetNumber, shouldReduceMotion])
+    stopActiveAnimation()
+    countValue.set(0)
+    setDisplayValue(formatValue(0))
+    await animateTo(numericTarget, { duration: 1.4 })
+  }, [animateTo, countValue, formatValue, numericTarget, shouldReduceMotion, stopActiveAnimation])
 
   useEffect(() => {
-    if (isInView) {
-      const cleanup = animateCount()
-      return cleanup
+    const unsubscribe = countValue.on('change', (latest) => {
+      setDisplayValue(formatValue(latest))
+    })
+    return () => unsubscribe()
+  }, [countValue, formatValue])
+
+  useEffect(() => {
+    countValue.set(numericTarget)
+    setDisplayValue(formatValue(numericTarget))
+  }, [countValue, formatValue, numericTarget])
+
+  useEffect(() => {
+    if (isInView && !prevInView.current) {
+      runCountUp()
     }
-  }, [isInView, animateCount])
+    prevInView.current = isInView
+  }, [isInView, runCountUp])
+
+  useEffect(
+    () => () => {
+      stopActiveAnimation()
+    },
+    [stopActiveAnimation],
+  )
+
+  const handleMouseEnter = useCallback(() => {
+    if (shouldReduceMotion) return
+    const currentSequence = hoverSequenceRef.current + 1
+    hoverSequenceRef.current = currentSequence
+
+    ;(async () => {
+      await animateTo(0, { duration: 0.45, ease: 'easeInOut' })
+      if (hoverSequenceRef.current !== currentSequence) return
+      await animateTo(numericTarget, { duration: 0.75 })
+    })().catch(() => {
+      // No-op; animation was likely interrupted
+    })
+  }, [animateTo, numericTarget, shouldReduceMotion])
+
+  const handleMouseLeave = useCallback(() => {
+    hoverSequenceRef.current += 1
+    if (shouldReduceMotion) return
+    void animateTo(numericTarget, { duration: 0.6 })
+  }, [animateTo, numericTarget, shouldReduceMotion])
+
+  const formattedDisplay = `${displayValue}${suffix}`
 
   return (
     <motion.div
-      ref={countRef}
-      variants={fadeInUpVariants}
-      initial="hidden"
-      animate={isInView ? 'visible' : 'hidden'}
-      transition={{ duration: 0.6, delay: shouldReduceMotion ? 0 : delay }}
-      className="relative group cursor-pointer"
+      ref={containerRef}
+      className="relative group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4CD787]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#000B14]/80 rounded-3xl h-[200px] sm:h-[210px] md:h-[220px] lg:h-[230px]"
       whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onFocus={handleMouseEnter}
+      onBlur={handleMouseLeave}
+      tabIndex={0}
     >
-      {/* Background glow effect */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#4CD787]/5 to-[#4834D4]/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm scale-110"></div>
+      {/* Background shimmer */}
+      <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/[0.04] via-white/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
       {/* Main content */}
-      <div className="relative bg-gradient-to-br from-black/60 to-black/40 backdrop-blur-sm p-6 rounded-2xl border border-white/10 group-hover:border-[#4CD787]/30 transition-all duration-500 text-center">
-        {/* Animated border */}
-        <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#4CD787]/20 via-[#4834D4]/20 to-[#4CD787]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10"></div>
+      <div className="relative bg-white/[0.02] backdrop-blur-sm p-6 rounded-3xl border border-white/10 text-center h-full transition-all duration-500 group-hover:bg-white/[0.04] group-hover:border-white/20 group-hover:shadow-[0_12px_32px_-24px_rgba(76,215,135,0.35)] flex flex-col items-center justify-between gap-6">
+        {/* Accent ring */}
+        <div className="pointer-events-none absolute inset-0 rounded-[26px] ring-1 ring-inset ring-white/0 transition-all duration-500 group-hover:ring-[#4CD787]/30"></div>
 
         {/* Counter number */}
         <motion.div
-          className="text-5xl md:text-6xl font-bold text-white mb-3 font-['IBM_Plex_Mono'] group-hover:text-[#4CD787] transition-colors duration-300 relative"
+          className="text-4xl md:text-5xl font-bold text-white font-['IBM_Plex_Mono'] group-hover:text-[#4CD787] transition-colors duration-300 relative"
           whileHover={shouldReduceMotion ? {} : { y: -3 }}
         >
           {/* Glowing text effect */}
           <span className="relative">
-            {String(number).includes('+') ? `${count}+` : count}
+            {formattedDisplay}
             <span className="absolute inset-0 text-[#4CD787] opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur-sm">
-              {String(number).includes('+') ? `${count}+` : count}
+              {formattedDisplay}
             </span>
           </span>
         </motion.div>
 
         {/* Separator line */}
-        <div className="w-12 h-0.5 bg-gradient-to-r from-transparent via-[#4CD787]/50 to-transparent mx-auto mb-3 group-hover:from-[#4CD787]/30 group-hover:via-[#4CD787] group-hover:to-[#4CD787]/30 transition-all duration-300"></div>
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-12 h-0.5 bg-gradient-to-r from-transparent via-[#4CD787]/50 to-transparent group-hover:from-[#4CD787]/30 group-hover:via-[#4CD787] group-hover:to-[#4CD787]/30 transition-all duration-300"></div>
 
-        {/* Label */}
-        <div className="text-sm md:text-base text-white/80 font-['IBM_Plex_Mono'] font-medium group-hover:text-white transition-colors duration-300 uppercase tracking-wide">
-          {label}
+          {/* Label */}
+          <div className="text-sm md:text-base text-white/80 font-['IBM_Plex_Mono'] font-medium group-hover:text-white transition-colors duration-300 uppercase tracking-wide">
+            {label}
+          </div>
         </div>
       </div>
     </motion.div>
@@ -474,7 +729,13 @@ export default function AboutPage() {
       <section className="pt-2 pb-8 relative overflow-visible">
         {/* DarkVeil background animation */}
         <div className="absolute inset-x-0 -top-20 bottom-0 z-0 pointer-events-none opacity-55">
-          <DarkVeil speed={1.1} warpAmount={0.35} noiseIntensity={0.08} scanlineIntensity={0.05} scanlineFrequency={0.6} />
+          <DarkVeil
+            speed={1.1}
+            warpAmount={0.35}
+            noiseIntensity={0.02}
+            scanlineIntensity={0}
+            scanlineFrequency={0}
+          />
         </div>
         <div className="absolute inset-x-0 -top-20 bottom-0 z-[1] bg-gradient-to-b from-[#000B14]/70 via-[black]/75 to-[darkBlue]/20 mix-blend-plus-lighter pointer-events-none"></div>
 
@@ -589,7 +850,7 @@ export default function AboutPage() {
                 Our Impact
               </h2>
               <p
-                className="text-base md:text-lg lg:text-xl text-foreground/90 font-light max-w-2xl mx-auto leading-relaxed font-['IBM_Plex_Sans'] mt-4 md:mt-6 px-4"
+                className="text-base md:text-lg lg:text-xl text-foreground/90 font-light max-w-2xl mx-auto leading-relaxed font-['IBM_Plex_Sans'] mt-2 md:mt-4 px-4"
                 style={{
                   letterSpacing: '0.025em',
                   fontWeight: '400',
@@ -599,13 +860,18 @@ export default function AboutPage() {
                 us.
               </p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-              <StatCounter number="30+" label="Happy Clients" delay={0.1} />
-              <StatCounter number="2+" label="Years Experience" delay={0.2} />
-              <StatCounter number="40+" label="Projects Completed" delay={0.3} />
-              <StatCounter number="23" label="Team Members" delay={0.4} />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 items-stretch">
+              <StatCounter number="30+" label="Happy Clients" />
+              <StatCounter
+                number="15+"
+                label="Technical Experience"
+              />
+              <StatCounter number="40+" label="Projects Completed" />
+              <StatCounter number="23" label="Team Members" />
             </div>
-            <p className="text-xs text-white/60 text-center mt-4">Totals verified internally.</p>
+            <p className="text-xs text-white/60 text-center mt-4">
+              DevX Group LLC has been in business for 2+ years with a seasoned senior engineering team.
+            </p>
           </AnimatedSection>
         </div>
       </section>
@@ -613,23 +879,24 @@ export default function AboutPage() {
       {/* How We Work Section */}
       <section className="pt-20 pb-16 relative">
         <div className="container mx-auto px-[21px]">
-          <AnimatedSection className="max-w-5xl mx-auto text-center mb-12">
+          <AnimatedSection className="max-w-5xl mx-auto text-center mb-14 md:mb-16">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6 text-white">
               How We Work
             </h2>
             <p
-              className="text-base md:text-lg lg:text-xl text-foreground/90 font-light max-w-3xl mx-auto leading-relaxed font-['IBM_Plex_Sans'] mt-4 md:mt-6 px-4"
+              className="text-base md:text-lg lg:text-xl text-foreground/90 font-light max-w-3xl mx-auto leading-relaxed font-['IBM_Plex_Sans'] mt-3 md:mt-4 px-4"
               style={{ letterSpacing: '0.025em', fontWeight: '400', whiteSpace: 'wrap' }}
             >
-              A simple, reliable process that keeps you in control and delivers outcomes
-              on&nbsp;time.
+              A simple, reliable process that keeps you in control
+              <br />
+              and delivers outcomes on time.
             </p>
           </AnimatedSection>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center ml-[13px]">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-y-8 sm:gap-y-10 md:gap-y-12 lg:gap-y-0 gap-x-6 sm:gap-x-8 md:gap-x-10 lg:gap-x-16 items-center ml-[13px]">
             {/* Left side - Text content */}
 
-            <AnimatedSection className="space-y-8">
+            <AnimatedSection className="space-y-6 sm:space-y-8">
               <div className="space-y-4">
                 <div className="flex items-start gap-4">
                   <div className="w-8 h-8 rounded-full bg-[#4CD787]/20 flex items-center justify-center flex-shrink-0 mt-1">
@@ -680,7 +947,10 @@ export default function AboutPage() {
             </AnimatedSection>
 
             {/* Right side - CardSwap */}
-            <AnimatedSection delay={0.2} className="relative h-[500px] lg:h-[600px]">
+            <AnimatedSection
+              delay={0.2}
+              className="relative h-[320px] sm:h-[360px] md:h-[420px] lg:h-[560px] xl:h-[600px]"
+            >
               <CardSwap
                 width={490}
                 height={290}
@@ -751,7 +1021,7 @@ export default function AboutPage() {
               Our Values
             </h2>
             <p
-              className="text-base md:text-lg lg:text-xl text-foreground/90 font-light leading-relaxed font-['IBM_Plex_Sans'] mt-4 md:mt-6 px-4"
+              className="text-base md:text-lg lg:text-xl text-foreground/90 font-light leading-relaxed font-['IBM_Plex_Sans'] mt-2 md:mt-4 px-4"
               style={{
                 letterSpacing: '0.025em',
                 fontWeight: '400',
@@ -804,10 +1074,10 @@ export default function AboutPage() {
       </section>
 
       {/* Delivery Ownership Section */}
-      <section className="pt-16 pb-12 relative">
+      <section className="pt-16 pb-12 relative mt-30">
         <div className="container mx-auto px-[21px]">
-          <AnimatedSection className="text-center max-w-3xl mx-auto mb-12">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6 text-white font-['IBM_Plex_Mono']">
+          <AnimatedSection className="text-center max-w-3xl mx-auto">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-0 md:mb-6 text-white font-['IBM_Plex_Mono'] mb-6">
               Delivery Ownership
             </h2>
             <p className="text-base md:text-lg lg:text-xl text-foreground/90 font-light leading-relaxed font-['IBM_Plex_Sans'] px-4">
@@ -816,10 +1086,10 @@ export default function AboutPage() {
           </AnimatedSection>
 
           <ScrollStack
-            className="mt-10"
+            className="mt-1"
             itemDistance={200}
             itemScale={0.038}
-            itemStackDistance={30}
+            itemStackDistance={40}
             stackPosition="20%"
             scaleEndPosition="15%"
             baseScale={0.85}
@@ -839,28 +1109,10 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Vision & Mission Section with Background Video */}
+      {/* Vision & Mission Section */}
       <section className="pt-16 pb-14 relative overflow-hidden">
-        {/* Background Video */}
-        {!shouldReduceMotion && (
-          <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="auto"
-              aria-hidden="true"
-              className="absolute inset-0 h-full w-full object-cover scale-105 brightness-[1.05]"
-            >
-              <source src="/videos/sticky-background.mp4" type="video/mp4" />
-            </video>
-            <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/55 to-[#05060d]/80" />
-          </div>
-        )}
-
         <div className="container mx-auto px-[21px] relative z-10">
-          <AnimatedSection className="text-center max-w-3xl mx-auto mb-12">
+          <AnimatedSection className="text-center max-w-3xl mx-auto mb-8">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6 text-white font-['IBM_Plex_Mono']">
               Our Purpose
             </h2>
@@ -870,57 +1122,21 @@ export default function AboutPage() {
           </AnimatedSection>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            <VisionMissionCard delay={0}>
-              <h3 className="text-xl md:text-2xl font-bold mb-3 md:mb-4 text-[#4CD787] font-['IBM_Plex_Mono']">
-                Our Vision
-              </h3>
-              <p className="text-sm md:text-base lg:text-lg text-white/90 leading-relaxed font-['IBM_Plex_Sans']">
-                To revolutionize software development by delivering innovative, efficient, and
-                scalable solutions that empower businesses worldwide to thrive in a digital-first
-                future.
-              </p>
-            </VisionMissionCard>
-
-            <VisionMissionCard delay={0.2}>
-              <h3 className="text-xl md:text-2xl font-bold mb-3 md:mb-4 text-[#06B6D4] font-['IBM_Plex_Mono']">
-                Our Mission
-              </h3>
-              <p className="text-sm md:text-base lg:text-lg text-white/90 leading-relaxed font-['IBM_Plex_Sans']">
-                To simplify the software development journey through a streamlined, results-first
-                process, ensuring exceptional quality, adaptability, and long-term success for every
-                client.
-              </p>
-            </VisionMissionCard>
+            <VisionCard />
+            <MissionCard />
           </div>
         </div>
       </section>
 
       {/* Team Section */}
       <section className="pt-20 pb-16 relative overflow-hidden">
-        {!shouldReduceMotion && (
-          <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="auto"
-              aria-hidden="true"
-              className="absolute inset-0 h-full w-full object-cover scale-105 brightness-[1.05]"
-            >
-              <source src="/videos/sticky-background.mp4" type="video/mp4" />
-            </video>
-            <div className="absolute inset-0 bg-gradient-to-b from-[#05060d]/20 via-black/60 to-[#010203]/85" />
-          </div>
-        )}
-
         <div className="container mx-auto px-[21px] relative z-10">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6 text-white">
               Our Team Structure
             </h2>
             <p
-              className="text-base md:text-lg lg:text-xl text-foreground/90 font-light leading-relaxed font-['IBM_Plex_Sans'] mt-4 md:mt-6 px-4"
+              className="text-base md:text-lg lg:text-xl text-foreground/90 font-light leading-relaxed font-['IBM_Plex_Sans'] mt-2 md:mt-4 px-4"
               style={{
                 letterSpacing: '0.025em',
                 fontWeight: '400',
