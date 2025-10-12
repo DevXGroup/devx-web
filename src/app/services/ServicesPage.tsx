@@ -23,7 +23,12 @@ import ScrollVelocityText from '@/components/animations/ScrollVelocityText'
 import HorizontalScroll from '@/components/HorizontalScroll'
 import ParallaxTestimonials from '@/components/ParallaxTestimonials'
 
-import HyperSpeed from '@/components/animations/HyperSpeed'
+import dynamic from 'next/dynamic'
+
+const HyperSpeed = dynamic(() => import('@/components/animations/HyperSpeed'), {
+  ssr: false,
+  loading: () => <div className="w-full h-[390px]" />,
+})
 import ClientOnly from '@/components/layout/ClientOnly'
 
 // Define services array here, as it's specific to this page's cards
@@ -489,7 +494,7 @@ export default function ServicesPage() {
             >
               <ScrollVelocityText
                 baseVelocity={70}
-                className="text-7xl font-extrabold text-[#383e7b71] leading-tight h-[87px]"
+                className="text-8xl font-extrabold text-[#383e7b71] leading-tight h-[107px]"
                 damping={30}
                 stiffness={600}
                 velocityMapping={{ input: [0, 1000], output: [0, 6] }}
@@ -501,7 +506,7 @@ export default function ServicesPage() {
               </ScrollVelocityText>
               <ScrollVelocityText
                 baseVelocity={-80}
-                className="text-3xl font-extralight text-[#cd97cd] leading-tight h-[100px]"
+                className="text-2xl font-extralight text-[#cd97cd] leading-tight h-[100px]"
                 damping={30}
                 stiffness={600}
                 velocityMapping={{ input: [0, 1000], output: [0, 7] }}
@@ -556,22 +561,6 @@ export default function ServicesPage() {
       {/* Agentic AI & RAG Section */}
       <AppleScrollSection delay={0.3}>
         <section className="section-padding relative py-20 overflow-hidden">
-          <div className="absolute inset-0 overflow-hidden" style={{ opacity: 0.3 }}>
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-full h-full object-cover"
-            >
-              <source src="/videos/agentic-ai-header.mp4" type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-            <div className="absolute inset-0 pointer-events-none">
-              <div className="absolute inset-0 bg-gradient-to-r from-black/25 via-transparent to-black/25" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-black/15" />
-            </div>
-          </div>
           <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-[#1a0b2e]/45 to-black/90" />
 
           <div className="container mx-auto px-4 relative z-10">
@@ -590,8 +579,8 @@ export default function ServicesPage() {
                   </span>
                 </h2>
                 <p className="text-lg md:text-xl text-white/80 font-['IBM_Plex_Sans'] leading-relaxed mx-auto">
-                  Transform your business with intelligent AI agents that think, learn, and act autonomously.
-                  Powered by cutting-edge retrieval-augmented generation technology.
+                  Transform your business with intelligent AI agents that think, learn, and act
+                  autonomously. Powered by cutting-edge retrieval-augmented generation technology.
                 </p>
               </motion.div>
             </div>
@@ -604,10 +593,10 @@ export default function ServicesPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
-                className="order-1 lg:order-1 lg:col-span-2 flex flex-col items-center"
+                className="order-1 lg:order-1 lg:col-span-2 flex flex-col items-center w-full"
               >
-                <div className="relative group rounded-2xl overflow-hidden border-2 border-[#4CD787]/20 shadow-2xl shadow-[#4CD787]/10 max-w-4xl w-full">
-                  <div className="relative aspect-video bg-black">
+                <div className="relative group rounded-2xl overflow-hidden shadow-2xl shadow-[#4CD787]/10 w-full">
+                  <div className="relative w-full h-full bg-black">
                     <video
                       autoPlay
                       loop
@@ -660,7 +649,8 @@ export default function ServicesPage() {
                         </h3>
                       </div>
                       <p className="text-white/80 text-base md:text-lg leading-relaxed font-['IBM_Plex_Sans'] max-w-2xl">
-                        Build autonomous AI agents that execute complex workflows end-to-end. Powered by OpenAI AgentKit, n8n, Make, and Zapier for seamless automation.
+                        Build autonomous AI agents that execute complex workflows end-to-end.
+                        Powered by OpenAI AgentKit, n8n, Make, and Zapier for seamless automation.
                       </p>
                       <ul className="space-y-2 text-sm md:text-base text-white/70">
                         <li className="flex items-start gap-2">
@@ -703,7 +693,8 @@ export default function ServicesPage() {
                         </h3>
                       </div>
                       <p className="text-white/80 text-base md:text-lg leading-relaxed font-['IBM_Plex_Sans'] max-w-2xl">
-                        Enhance AI accuracy with retrieval-augmented generation. Connect LLMs to your knowledge base for contextually relevant, up-to-date responses.
+                        Enhance AI accuracy with retrieval-augmented generation. Connect LLMs to
+                        your knowledge base for contextually relevant, up-to-date responses.
                       </p>
                       <ul className="space-y-2 text-sm md:text-base text-white/70">
                         <li className="flex items-start gap-2">
@@ -746,7 +737,8 @@ export default function ServicesPage() {
                         </h3>
                       </div>
                       <p className="text-white/80 text-base md:text-lg leading-relaxed font-['IBM_Plex_Sans'] max-w-2xl">
-                        Automate repetitive tasks with AI-powered workflows. Integrate with 8,000+ apps using n8n, Make, and Zapier platforms.
+                        Automate repetitive tasks with AI-powered workflows. Integrate with 8,000+
+                        apps using n8n, Make, and Zapier platforms.
                       </p>
                       <ul className="space-y-2 text-sm md:text-base text-white/70">
                         <li className="flex items-start gap-2">

@@ -32,7 +32,12 @@ import Waves from '@animations/Waves'
 import EnhancedProjectCard from '@/components/portfolio/EnhancedProjectCard'
 import ProjectDetailModal from '@/components/portfolio/ProjectDetailModal'
 import { portfolioProjects, ProjectData } from '@/data/portfolioProjects'
-import AsciiEffect3D from '@/components/effects/AsciiEffect3D'
+import dynamic from 'next/dynamic'
+
+const AsciiEffect3D = dynamic(() => import('@/components/effects/AsciiEffect3D'), {
+  ssr: false,
+  loading: () => <div className="w-full h-[480px]" />,
+})
 
 // Animation variants kept minimal
 const fadeInUpVariants = {
@@ -549,7 +554,7 @@ export default function PortfolioPage() {
   return (
     <div className="min-h-screen bg-background pt-20">
       {/* Top hero, simplified backgrounds */}
-      <section className="relative isolate py-20 overflow-hidden">
+      <section className="relative isolate py-9 overflow-hidden">
         <div className="absolute inset-0 z-0 bg-gradient-to-b from-black via-purple-900/20 to-black pointer-events-none" />
 
         <div className="relative z-[150] container mx-auto px-4">
@@ -562,11 +567,12 @@ export default function PortfolioPage() {
           >
             <div className="flex flex-col items-center">
               {/* Small decorative elements above title */}
-              <div className="relative mb-8">
+              <div className="relative mb-4">
                 {/* Bouncing orange ball */}
                 <motion.div
-                  className="absolute -top-6 left-2 w-3 h-3 rounded-full"
+                  className="absolute -top-2 w-3 h-3 rounded-full"
                   style={{
+                    left: '8.25rem',
                     background: '#ff6b35',
                     boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
                     zIndex: 1,
@@ -592,13 +598,14 @@ export default function PortfolioPage() {
 
                 {/* Small animated yellow square - positioned under the orange circle */}
                 <motion.div
-                  className="absolute -top-12 left-6 w-6 h-6 rotate-45 cursor-pointer"
+                  className="absolute -top-6 w-6 h-6 rotate-45 cursor-pointer"
                   style={{
+                    left: '9.25rem',
                     background:
-                      'linear-gradient(45deg, rgba(6, 182, 212, 0.7) 0%, rgba(6, 182, 212, 0.3) 50%, transparent 100%)',
-                    border: '1px solid rgba(6, 182, 212, 0.5)',
+                      'linear-gradient(45deg, rgba(255, 255, 0, 0.7) 0%, rgba(255, 255, 0, 0.3) 50%, transparent 100%)',
+                    border: '1px solid rgba(255, 255, 0, 0.5)',
                     borderRadius: '2px',
-                    boxShadow: '0 0 12px rgba(6, 182, 212, 0.3)',
+                    boxShadow: '0 0 12px rgba(255, 255, 0, 0.3)',
                     zIndex: 1,
                   }}
                   animate={
@@ -646,7 +653,7 @@ export default function PortfolioPage() {
 
               <motion.p
                 variants={fadeInUpVariants}
-                className="text-lg md:text-xl text-foreground/90 font-light max-w-2xl mb-8 leading-relaxed"
+                className="text-lg md:text-xl text-foreground/90 font-light text-gray-500 max-w-2xl mb-8 -mt-5 leading-relaxed"
               >
                 Selected work across web, mobile, AI, and cloud.
                 <br />
@@ -654,11 +661,11 @@ export default function PortfolioPage() {
               </motion.p>
 
               {/* Decorative squares row under subtitle */}
-              <div className="relative mt-12 mb-8 h-[280px] sm:h-[300px] md:h-[320px] w-full">
+              <div className="relative mt-0 mb-9 h-[220px] sm:h-[250px] md:h-[330px] w-full">
                 <div className="relative w-full max-w-4xl mx-auto flex items-center justify-center h-full">
                   <AsciiEffect3D
                     key={`hero-ascii-ball-${pathname}`}
-                    height={480}
+                    height={620}
                     className="rounded-xl"
                     color="#A382C3"
                     charSize={6}
@@ -667,8 +674,8 @@ export default function PortfolioPage() {
                     sphereRadius={240}
                     lighting="bottomLeft" // key at top-right, shadow bottom-left
                     lightScale={1} // slightly dimmer
-                    ambient={0.01} // soften jagged edges subtly
-                    charSet={' .*%$#@'}
+                    ambient={0.03} // soften jagged edges subtly
+                    charSet={' ..*%$#@a,-/| '}
                   />
                 </div>
 
@@ -677,14 +684,13 @@ export default function PortfolioPage() {
                   className="hidden lg:block absolute 
                     top-1/2 -translate-y-1/2 left-[8%]
                     backdrop-blur-md overflow-hidden
-                    w-[110px] h-[110px]"
+                    w-[110px] h-[110px] cursor-default"
                   style={{
                     transform: 'rotate(-8deg)',
                     border: '2px solid rgba(76, 215, 135, 0.6)',
                     borderRadius: '12px',
-                    boxShadow: '0 0 20px rgba(76, 215, 135, 0.4)',
                     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                    zIndex: 2,
+                    zIndex: 11,
                   }}
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -706,12 +712,10 @@ export default function PortfolioPage() {
                   className="hidden lg:block absolute 
                     top-1/2 -translate-y-1/2 left-[25%]
                     backdrop-blur-md overflow-hidden
-                    w-[132px] h-[132px]"
+                    w-[132px] h-[132px] cursor-pointer"
                   style={{
-                    transform: 'rotate(12deg)',
                     border: '2px solid rgba(72, 52, 212, 0.6)',
                     borderRadius: '12px',
-                    boxShadow: '0 0 20px rgba(72, 52, 212, 0.4)',
                     backgroundColor: 'transparent',
                     zIndex: 10,
                   }}
@@ -742,9 +746,8 @@ export default function PortfolioPage() {
                     w-[130px] h-[130px]"
                   style={{
                     transform: 'rotate(-15deg)',
-                    border: '2px solid rgba(6, 182, 212, 0.6)',
+                    border: '2px solid rgba(255, 215, 0, 0.5)',
                     borderRadius: '12px',
-                    boxShadow: '0 0 20px rgba(6, 182, 212, 0.4)',
                     backgroundColor: 'rgba(0, 0, 0, 0.2)',
                     zIndex: 5,
                   }}
@@ -756,9 +759,9 @@ export default function PortfolioPage() {
                     <GridAnimation
                       direction="diagonal"
                       speed={0.16}
-                      borderColor="#06B6D4"
+                      borderColor="rgba(255, 215, 0, 0.5)"
                       squareSize={20}
-                      hoverFillColor="rgba(6, 182, 212, 0.3)"
+                      hoverFillColor="rgba(255, 215, 0, 0.2)"
                     />
                   </div>
                 </motion.div>
@@ -773,7 +776,6 @@ export default function PortfolioPage() {
                     transform: 'rotate(-30deg)',
                     border: '2px solid rgba(76, 215, 135, 0.6)',
                     borderRadius: '12px',
-                    boxShadow: '0 0 20px rgba(76, 215, 135, 0.4)',
                     backgroundColor: 'rgba(0, 0, 0, 0.5)',
                     zIndex: 3,
                   }}
