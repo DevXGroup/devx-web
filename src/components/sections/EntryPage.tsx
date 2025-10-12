@@ -53,8 +53,8 @@ interface DecryptedTextProps
 
 // Concentrated Letter Glitch Background Effect
 const LetterGlitch = ({
-  glitchColors = ['#2b4539', '#61dca3', '#61b3dc'],
-  glitchSpeed = 63,
+  glitchColors = ['#b8860b', '#8b7355', '#6b8e23', '#556b2f', '#7a6a4f', '#9acd32'],
+  glitchSpeed = 70,
   centerVignette = true,
   outerVignette = false,
   smooth = true,
@@ -67,9 +67,9 @@ const LetterGlitch = ({
   const lastGlitchTime = useRef<number>(Date.now())
   const isDev = process.env.NODE_ENV !== 'production'
 
-  const fontSize = 22
-  const charWidth = 13
-  const charHeight = 23
+  const fontSize = 20
+  const charWidth = 12
+  const charHeight = 21
 
   // Pre-calculated constant array - reduces memory allocations
   const lettersAndSymbols = [
@@ -210,8 +210,8 @@ const LetterGlitch = ({
       letters.current.forEach((letter: Letter, index: number) => {
         const x = (index % grid.current.columns) * charWidth
         const y = Math.floor(index / grid.current.columns) * charHeight
-        // Dim the background letters to make text more prominent
-        ctx.globalAlpha = 0.3
+        // Moderate opacity for code-like appearance, not too bright
+        ctx.globalAlpha = 0.32
         ctx.fillStyle = letter.color
         ctx.fillText(letter.char, x, y)
       })
@@ -227,9 +227,9 @@ const LetterGlitch = ({
   const updateLetters = (): void => {
     if (!letters.current || letters.current.length === 0) return
 
-    // Optimize update frequency for better performance
+    // Optimize update frequency for better performance - fewer updates = faster load
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
-    const updatePercentage = isMobile ? 0.015 : 0.03 // Reduced from 0.02/0.05
+    const updatePercentage = isMobile ? 0.012 : 0.025
     const updateCount: number = Math.max(1, Math.floor(letters.current.length * updatePercentage))
 
     for (let i = 0; i < updateCount; i++) {
@@ -252,7 +252,8 @@ const LetterGlitch = ({
     let needsRedraw = false
     letters.current.forEach((letter: Letter) => {
       if (letter.colorProgress < 1) {
-        letter.colorProgress += 0.05
+        // Faster transition for smoother appearance
+        letter.colorProgress += 0.08
         if (letter.colorProgress > 1) letter.colorProgress = 1
 
         const startRgb = hexToRgb(letter.color)
@@ -392,7 +393,7 @@ const LetterGlitch = ({
 // Decrypted text animation for DevX Group LLC
 function DecryptedText({
   text,
-  speed = 50,
+  speed = 60,
   maxIterations = 10,
   sequential = true,
   revealDirection = 'start',
@@ -568,16 +569,16 @@ function DecryptedText({
   const isComplete = revealedIndices.size === text.length && !isScrambling
 
   return (
-    <div className="relative z-10 flex items-center justify-center min-h-[80px]">
+    <div className="relative z-10 flex items-center justify-center min-h-[100px] md:min-h-[120px]">
       <motion.h1
         ref={containerRef}
-        className="text-lg md:text-xl lg:text-2xl xl:text-3xl font-mono text-center"
+        className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-mono text-center px-4"
         style={{
           fontFamily: "'IBM Plex Mono', 'SF Pro Display', 'Helvetica Neue', sans-serif",
           fontWeight: 600,
-          letterSpacing: '0.1em',
+          letterSpacing: '0.08em',
           minWidth: '300px',
-          height: '1.2em',
+          height: 'auto',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -585,7 +586,7 @@ function DecryptedText({
         }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.6 }}
         {...(props as any)}
       >
         <span className="sr-only">{text}</span>
@@ -593,15 +594,15 @@ function DecryptedText({
           aria-hidden="true"
           className="inline-block"
           animate={{
-            color: isComplete ? '#ffffff' : '#cccccc',
+            color: isComplete ? '#ffffff' : '#d0d0d0',
           }}
           transition={{
-            color: { duration: isComplete ? 0.8 : 0 },
+            color: { duration: isComplete ? 1.0 : 0, ease: 'easeOut' },
           }}
           style={{
             textShadow: isComplete
-              ? '0 0 20px rgba(255,255,255,0.6), 0 0 10px rgba(255,255,255,0.4)'
-              : 'none',
+              ? '0 0 25px rgba(255,255,255,0.7), 0 0 12px rgba(255,255,255,0.5)'
+              : '0 0 8px rgba(208,208,208,0.3)',
           }}
         >
           {displayText.split('').map((char, index) => {
@@ -619,92 +620,101 @@ function DecryptedText({
   )
 }
 
-// Optimized star field component with reduced count for better performance
-function StarField() {
-  const [stars, setStars] = useState<
-    Array<{
-      id: number
-      x: number
-      y: number
-      size: number
-      opacity: number
-      duration: number
-      delay: number
-      twinkleIntensity: number
-      isFlashing: boolean
-      flashDuration: number
-      flashDelay: number
-    }>
-  >([])
 
-  useEffect(() => {
-    // Reduced star count from 150 to 80 for better performance
-    const generatedStars = Array.from({ length: 80 }, (_, i) => ({
-      id: i,
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      size: Math.random() * 1.5 + 0.5,
-      opacity: Math.random() * 0.8 + 0.4,
-      duration: Math.random() * 2 + 1.5,
-      delay: Math.random() * 3,
-      twinkleIntensity: Math.random() * 0.6 + 0.4,
-      isFlashing: Math.random() < 0.2, // Reduced from 30% to 20%
-      flashDuration: Math.random() * 3 + 2,
-      flashDelay: Math.random() * 5,
-    }))
-    setStars(generatedStars)
-  }, [])
+import dynamic from 'next/dynamic'
 
-  // Don't render anything until stars are generated
-  if (stars.length === 0) {
-    return <div className="absolute inset-0 overflow-hidden" suppressHydrationWarning />
+// Dynamically import StarField for better performance
+const StarField = dynamic(
+  () =>
+    Promise.resolve(() => {
+      const [stars, setStars] = useState<
+        Array<{
+          id: number
+          x: number
+          y: number
+          size: number
+          opacity: number
+          duration: number
+          delay: number
+          twinkleIntensity: number
+          isFlashing: boolean
+          flashDuration: number
+          flashDelay: number
+        }>
+      >([])
+
+      useEffect(() => {
+        // Reduced star count for better initial load performance
+        const starCount = typeof window !== 'undefined' && window.innerWidth < 768 ? 50 : 65
+        const generatedStars = Array.from({ length: starCount }, (_, i) => ({
+          id: i,
+          x: Math.random() * 100,
+          y: Math.random() * 100,
+          size: Math.random() * 1.5 + 0.5,
+          opacity: Math.random() * 0.8 + 0.4,
+          duration: Math.random() * 2 + 1.5,
+          delay: Math.random() * 3,
+          twinkleIntensity: Math.random() * 0.6 + 0.4,
+          isFlashing: Math.random() < 0.15,
+          flashDuration: Math.random() * 3 + 2,
+          flashDelay: Math.random() * 5,
+        }))
+        setStars(generatedStars)
+      }, [])
+
+      if (stars.length === 0) {
+        return <div className="absolute inset-0 overflow-hidden" suppressHydrationWarning />
+      }
+
+      return (
+        <div className="absolute inset-0 overflow-hidden" suppressHydrationWarning>
+          {stars.map((star) => (
+            <motion.div
+              key={star.id}
+              className="absolute bg-white rounded-full"
+              style={{
+                left: `${star.x}%`,
+                top: `${star.y}%`,
+                width: `${star.size}px`,
+                height: `${star.size}px`,
+                boxShadow: `0 0 ${star.size * 3}px rgba(255,255,255,0.8)`,
+              }}
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={
+                star.isFlashing
+                  ? {
+                      opacity: [0, star.opacity, star.opacity, 0, 0, star.opacity],
+                      scale: [0.5, 1.3, 1.3, 0.3, 0.3, 1.3],
+                    }
+                  : {
+                      opacity: [
+                        0,
+                        star.opacity * star.twinkleIntensity,
+                        star.opacity,
+                        0.1,
+                        star.opacity,
+                        0,
+                      ],
+                      scale: [0.5, 1.2, 1, 0.8, 1.1, 0.5],
+                    }
+              }
+              transition={{
+                duration: star.isFlashing ? star.flashDuration : star.duration,
+                repeat: Infinity,
+                delay: star.isFlashing ? star.flashDelay : star.delay,
+                ease: star.isFlashing ? 'easeInOut' : 'easeInOut',
+              }}
+            />
+          ))}
+        </div>
+      )
+    }),
+  {
+    ssr: false,
+    loading: () => <div className="absolute inset-0 bg-black" />,
   }
+)
 
-  return (
-    <div className="absolute inset-0 overflow-hidden" suppressHydrationWarning>
-      {stars.map((star) => (
-        <motion.div
-          key={star.id}
-          className="absolute bg-white rounded-full"
-          style={{
-            left: `${star.x}%`,
-            top: `${star.y}%`,
-            width: `${star.size}px`,
-            height: `${star.size}px`,
-            boxShadow: `0 0 ${star.size * 3}px rgba(255,255,255,0.8)`,
-          }}
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={
-            star.isFlashing
-              ? {
-                  // Flashing stars: turn completely on and off
-                  opacity: [0, star.opacity, star.opacity, 0, 0, star.opacity],
-                  scale: [0.5, 1.3, 1.3, 0.3, 0.3, 1.3],
-                }
-              : {
-                  // Regular twinkling stars
-                  opacity: [
-                    0,
-                    star.opacity * star.twinkleIntensity,
-                    star.opacity,
-                    0.1,
-                    star.opacity,
-                    0,
-                  ],
-                  scale: [0.5, 1.2, 1, 0.8, 1.1, 0.5],
-                }
-          }
-          transition={{
-            duration: star.isFlashing ? star.flashDuration : star.duration,
-            repeat: Infinity,
-            delay: star.isFlashing ? star.flashDelay : star.delay,
-            ease: star.isFlashing ? 'easeInOut' : 'easeInOut',
-          }}
-        />
-      ))}
-    </div>
-  )
-}
 
 // Animation sequence without zoom
 function AnimatedInfinity({ onComplete }: { onComplete: () => void }) {
@@ -716,11 +726,13 @@ function AnimatedInfinity({ onComplete }: { onComplete: () => void }) {
   }, [])
 
   const handleDrawingComplete = () => {
-    setTimeout(() => setAnimationPhase('text'), 100)
+    // Give more time to see the infinity symbol and background
+    setTimeout(() => setAnimationPhase('text'), 500)
   }
 
   const handleTextComplete = () => {
-    setTimeout(onComplete, 200)
+    // Give more time to see the completed text before transitioning
+    setTimeout(onComplete, 700)
   }
 
   if (!mounted) return null
@@ -759,7 +771,7 @@ function AnimatedInfinity({ onComplete }: { onComplete: () => void }) {
               initial={{ pathLength: 0, opacity: 0 }}
               animate={{ pathLength: 1, opacity: 1 }}
               transition={{
-                duration: 1.0,
+                duration: 1.6,
                 ease: 'easeInOut',
                 onComplete: handleDrawingComplete,
               }}
@@ -778,13 +790,13 @@ function AnimatedInfinity({ onComplete }: { onComplete: () => void }) {
           className="text-center relative z-10"
         >
           <motion.div
-            initial={{ filter: 'blur(8px)', opacity: 0.3 }}
+            initial={{ filter: 'blur(10px)', opacity: 0.2 }}
             animate={{ filter: 'blur(0px)', opacity: 1 }}
-            transition={{ duration: 1.2, ease: 'easeOut' }}
+            transition={{ duration: 1.6, ease: 'easeOut' }}
           >
             <DecryptedText
               text="DevX Group LLC"
-              speed={80}
+              speed={110}
               sequential={true}
               revealDirection="center"
               animateOn="view"
@@ -874,7 +886,7 @@ export default function EntryPage() {
         }}
         initial={{ height: 0 }}
         animate={{ height: isCollapsing ? '50vh' : 0 }}
-        transition={{ duration: 0.2, ease: 'easeIn' }}
+        transition={{ duration: 0.8, ease: 'easeInOut' }}
         onAnimationComplete={() => {
           if (isCollapsing) {
             sessionStorage.setItem('fromEntry', 'true')
@@ -892,7 +904,7 @@ export default function EntryPage() {
         }}
         initial={{ height: 0 }}
         animate={{ height: isCollapsing ? '50vh' : 0 }}
-        transition={{ duration: 0.2, ease: 'easeIn' }}
+        transition={{ duration: 0.8, ease: 'easeInOut' }}
       />
     </div>
   )

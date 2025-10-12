@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useCallback } from 'react'
 import { Renderer, Program, Triangle, Mesh } from 'ogl'
 
 type Props = {
@@ -35,6 +35,18 @@ const RippleGrid: React.FC<Props> = ({
   const targetMouseRef = useRef({ x: 0.5, y: 0.5 })
   const mouseInfluenceRef = useRef(0)
   const uniformsRef = useRef<any>(null)
+  const rendererRef = useRef<Renderer | null>(null)
+
+  const handleMouseMove = useCallback(
+    (e: MouseEvent) => {
+      if (!mouseInteraction || !containerRef.current) return
+      const rect = containerRef.current.getBoundingClientRect()
+      const x = (e.clientX - rect.left) / rect.width
+      const y = 1.0 - (e.clientY - rect.top) / rect.height // Flip Y coordinate
+      targetMouseRef.current = { x, y }
+    },
+    [mouseInteraction],
+  )
 
   useEffect(() => {
     if (!containerRef.current) return
@@ -51,7 +63,6 @@ const RippleGrid: React.FC<Props> = ({
         : [1, 1, 1]
     }
 
-    let renderer: Renderer | null = null
     let gl: WebGLRenderingContext | WebGL2RenderingContext | null = null
     let mesh: Mesh | null = null
     let resizeObserver: ResizeObserver | null = null
@@ -181,17 +192,9 @@ void main() {
     uniformsRef.current = uniforms
 
     const doResize = (w: number, h: number) => {
-      if (!renderer) return
-      renderer.setSize(w, h)
+      if (!rendererRef.current) return
+      rendererRef.current.setSize(w, h)
       uniforms.iResolution.value = [w, h]
-    }
-
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!mouseInteraction || !root) return
-      const rect = root.getBoundingClientRect()
-      const x = (e.clientX - rect.left) / rect.width
-      const y = 1.0 - (e.clientY - rect.top) / rect.height // Flip Y coordinate
-      targetMouseRef.current = { x, y }
     }
 
     const handleMouseEnter = () => {
@@ -205,32 +208,30 @@ void main() {
     }
 
     const initWebGL = () => {
-      if (!root) return
-      if (renderer) return // already initialized
-      renderer = new Renderer({
+      if (!root || rendererRef.current) return
+      const renderer = new Renderer({
         dpr: Math.min(window.devicePixelRatio, 2),
         alpha: true,
       })
+      rendererRef.current = renderer
       gl = renderer.gl
       gl.enable(gl.BLEND)
       gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
       ;(gl.canvas as HTMLCanvasElement).style.width = '100%'
       ;(gl.canvas as HTMLCanvasElement).style.height = '100%'
-      root && root.appendChild(gl.canvas as HTMLCanvasElement)
+      root.appendChild(gl.canvas as HTMLCanvasElement)
 
       const geometry = new Triangle(gl as any)
       const program = new Program(gl as any, { vertex: vert, fragment: frag, uniforms })
       mesh = new Mesh(gl as any, { geometry, program })
 
-      // Initial size set
       const { clientWidth: w, clientHeight: h } = root
       if (w > 0 && h > 0) doResize(w, h)
 
-      // Mouse interactions
       if (mouseInteraction) {
-        root?.addEventListener('mousemove', handleMouseMove)
-        root?.addEventListener('mouseenter', handleMouseEnter)
-        root?.addEventListener('mouseleave', handleMouseLeave)
+        root.addEventListener('mousemove', handleMouseMove)
+        root.addEventListener('mouseenter', handleMouseEnter)
+        root.addEventListener('mouseleave', handleMouseLeave)
       }
 
       const render = (t: number) => {
@@ -248,48 +249,29 @@ void main() {
 
         uniforms.mousePosition.value = [mousePositionRef.current.x, mousePositionRef.current.y]
 
-        if (renderer && mesh) renderer.render({ scene: mesh })
+        if (rendererRef.current && mesh) rendererRef.current.render({ scene: mesh })
         renderRafId = requestAnimationFrame(render)
       }
 
       renderRafId = requestAnimationFrame(render)
     }
 
-    // Resize handling: prefer ResizeObserver
     const setupResizeHandling = () => {
       const node = root!
-      const hasRO = typeof ResizeObserver !== 'undefined'
-      if (hasRO) {
-        resizeObserver = new ResizeObserver((entries) => {
-          const entry = entries[0]
-          // content-box width/height
-          const width = (entry as any).contentRect?.width ?? 0
-          const height = (entry as any).contentRect?.height ?? 0
-          if (width && height) doResize(width, height)
-        })
-        resizeObserver.observe(node)
-      } else {
-        // Fallback to window resize
-        const onWinResize = () => {
-          const { clientWidth: w, clientHeight: h } = node
-          if (w && h) doResize(w, h)
+      resizeObserver = new ResizeObserver((entries) => {
+        const entry = entries[0]
+        const width = entry.contentRect?.width ?? 0
+        const height = entry.contentRect?.height ?? 0
+        if (width > 0 && height > 0) {
+          doResize(width, height)
         }
-        window.addEventListener('resize', onWinResize)
-        // Store a minimal wrapper in resizeObserver for unified cleanup
-        // @ts-ignore
-        resizeObserver = {
-          disconnect() {
-            window.removeEventListener('resize', onWinResize)
-          },
-        } as unknown as ResizeObserver
-      }
+      })
+      resizeObserver.observe(node)
     }
 
-    // On mount: if size is 0x0, poll via rAF until non-zero, then init WebGL
-    const node = root
     const tryInit = () => {
-      if (!node) return
-      const { clientWidth: w, clientHeight: h } = node
+      if (!root) return
+      const { clientWidth: w, clientHeight: h } = root
       if (w > 0 && h > 0) {
         initWebGL()
         setupResizeHandling()
@@ -301,27 +283,25 @@ void main() {
     tryInit()
 
     return () => {
-      // Cleanup
       if (resizeObserver) resizeObserver.disconnect()
       if (renderRafId !== null) cancelAnimationFrame(renderRafId)
       if (sizePollRafId !== null) cancelAnimationFrame(sizePollRafId)
       if (mouseInteraction && root) {
-        root?.removeEventListener('mousemove', handleMouseMove)
-        root?.removeEventListener('mouseenter', handleMouseEnter)
-        root?.removeEventListener('mouseleave', handleMouseLeave)
+        root.removeEventListener('mousemove', handleMouseMove)
+        root.removeEventListener('mouseenter', handleMouseEnter)
+        root.removeEventListener('mouseleave', handleMouseLeave)
       }
-      if (renderer && gl) {
-        ;(gl as any).getExtension('WEBGL_lose_context')?.loseContext()
-        if (root && (gl as any).canvas.parentNode === root) {
-          root.removeChild((gl as any).canvas)
+      if (rendererRef.current && gl) {
+        gl.getExtension('WEBGL_lose_context')?.loseContext()
+        if (root && gl.canvas.parentNode === root) {
+          root.removeChild(gl.canvas)
         }
       }
-      renderer = null
+      rendererRef.current = null
       gl = null
       mesh = null
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [handleMouseMove, mouseInteraction])
 
   useEffect(() => {
     if (!uniformsRef.current) return
