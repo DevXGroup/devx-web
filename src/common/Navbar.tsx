@@ -156,7 +156,7 @@ export default function Navbar() {
   }
 
   // Determine background opacity based on backdrop-filter support
-  const bgOpacity = supportsBackdropFilter ? 0.5 : 0.85
+  const bgOpacity = supportsBackdropFilter ? 0.2 : 0.5
   const scrolledBgStyle = {
     backgroundColor: `rgba(0, 0, 0, ${bgOpacity})`,
     backdropFilter: supportsBackdropFilter ? 'blur(10px)' : 'none',
@@ -499,12 +499,12 @@ export default function Navbar() {
             position="right"
             colors={['#8b5cf6', '#6b7280', '#f3f4f6', '#9333ea']}
             items={[
-              { label: 'Home', ariaLabel: 'Navigate to home page', link: '/home' },
-              { label: 'Services', ariaLabel: 'Navigate to services page', link: '/services' },
-              { label: 'Portfolio', ariaLabel: 'Navigate to portfolio page', link: '/portfolio' },
-              { label: 'About', ariaLabel: 'Navigate to about page', link: '/about' },
-              { label: 'Pricing', ariaLabel: 'Navigate to pricing page', link: '/pricing' },
-              { label: 'Contact', ariaLabel: 'Navigate to contact page', link: '/contact' },
+              { label: 'Home', ariaLabel: 'Navigate to home page', link: '/home', hoverColor: '#ccff00' },
+              { label: 'Services', ariaLabel: 'Navigate to services page', link: '/services', hoverColor: '#c084fc' },
+              { label: 'Portfolio', ariaLabel: 'Navigate to portfolio page', link: '/portfolio', hoverColor: '#60a5fa' },
+              { label: 'About', ariaLabel: 'Navigate to about page', link: '/about', hoverColor: '#4ade80' },
+              { label: 'Pricing', ariaLabel: 'Navigate to pricing page', link: '/pricing', hoverColor: '#fb923c' },
+              { label: 'Contact', ariaLabel: 'Navigate to contact page', link: '/contact', hoverColor: '#fb7185' },
             ]}
             socialItems={[
               { label: '💬 Free Consultation', link: 'https://calendly.com/a-sheikhizadeh/devx-group-llc-representative' },
