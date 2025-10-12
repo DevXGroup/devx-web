@@ -343,7 +343,6 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       scrollerRef.current?.querySelectorAll('.scroll-stack-card') ?? []
     ) as HTMLElement[]
     cardsRef.current = cards
-    const transformsCache = lastTransformsRef.current
 
     cards.forEach((card, i) => {
       if (i < cards.length - 1) {
@@ -401,7 +400,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       }
       stackCompletedRef.current = false
       cardsRef.current = []
-      transformsCache.clear()
+      lastTransformsRef.current.clear()
       isUpdatingRef.current = false
       cardBaseOffsetsRef.current.clear()
       endElementBaseOffsetRef.current = null
@@ -423,6 +422,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
     updateCardTransforms,
     handleScroll,
     measureLayouts,
+    scheduleUpdate,
   ])
 
   return (
