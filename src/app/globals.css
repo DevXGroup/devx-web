@@ -19,11 +19,7 @@ body {
 
 /* Mobile-specific optimizations */
 @media (max-width: 650px) {
-  /* Ensure sufficient spacing on mobile */
-  section {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
+
 
   /* Optimize tap targets for mobile */
   button,
