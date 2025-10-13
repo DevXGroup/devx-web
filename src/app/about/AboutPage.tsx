@@ -23,6 +23,7 @@ import CardSwap, { Card } from '@/components/animations/CardSwap'
 import OrgChart from '@/components/sections/OrgChart'
 import DarkVeil from '@/components/animations/DarkVeil'
 import ScrollStack, { ScrollStackItem } from '@/components/animations/ScrollStack'
+import { useIsMobile } from '@/hooks/use-mobile'
 
 // Enhanced animation variants for better performance
 const fadeInUpVariants = {
@@ -331,33 +332,32 @@ const DeliveryCard = ({ text, color, icon: Icon, index }: DeliveryItem & { index
     >
       {/* Large decorative icon on the side */}
       <div className="relative flex-shrink-0 z-10">
-        <div
-          className="w-32 h-32 md:w-40 md:h-40 rounded-2xl flex items-center justify-center relative"
-          style={{
-            background: `linear-gradient(135deg, ${withAlpha(accent, 0.18)} 0%, ${withAlpha(
-              accent,
-              0.08
-            )} 100%)`,
-            border: `2px solid ${withAlpha(accent, 0.45)}`,
-          }}
-        >
-          {/* Icon glow effect */}
-          <div
-            className="absolute inset-0 rounded-2xl opacity-40 blur-xl"
-            style={{ backgroundColor: accent }}
-          />
-          <div style={{ color: accent, filter: 'drop-shadow(0 0 10px rgba(0,0,0,0.6))' }}>
-            <Icon className="w-16 h-16 md:w-20 md:h-20 relative z-10" />
-          </div>
-        </div>
-      </div>
+                  <div
+                    className="w-24 h-24 md:w-40 md:h-40 rounded-2xl flex items-center justify-center relative"
+                    style={{
+                      background: `linear-gradient(135deg, ${withAlpha(accent, 0.18)} 0%, ${withAlpha(
+                        accent,
+                        0.08
+                      )} 100%)`,
+                      border: `2px solid ${withAlpha(accent, 0.45)}`,
+                    }}
+                  >
+                    {/* Icon glow effect */}
+                    <div
+                      className="absolute inset-0 rounded-2xl opacity-40 blur-xl"
+                      style={{ backgroundColor: accent }}
+                    />
+                    <div style={{ color: accent, filter: 'drop-shadow(0 0 10px rgba(0,0,0,0.6))' }}>
+                      <Icon className="w-12 h-12 md:w-20 md:h-20 relative z-10" />
+                    </div>
+                  </div>      </div>
 
       {/* Text content on opposite side */}
       <div
-        className={`relative z-10 flex-1 text-center ${isEven ? 'md:text-left' : 'md:text-right'}`}
+        className={`relative z-10 flex-1 text-center ${isEven ? 'md:text-left md:pr-6' : 'md:text-right md:pl-6'}`}
       >
         <p
-          className="text-base sm:text-lg md:text-xl lg:text-2xl leading-relaxed text-white font-['IBM_Plex_Sans'] font-light"
+          className="max-w-prose text-base sm:text-lg md:text-xl lg:text-2xl leading-relaxed text-white font-['IBM_Plex_Sans'] font-light inline-block"
           style={{ letterSpacing: '0.01em' }}
         >
           {text}
@@ -490,33 +490,27 @@ const VisionMissionCard = ({
   onHoverChange?: (hovered: boolean) => void
 }) => {
   const shouldReduceMotion = useReducedMotion()
+  const isMobile = useIsMobile()
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true })
+  const isInViewForFadeIn = useInView(ref, { once: true })
+  const isInViewForHover = useInView(ref, { once: false, margin: "-40% 0px -40% 0px" })
 
-  // Handle touch events for mobile
-  const handleTouchStart = () => {
-    onHoverChange?.(true)
-  }
-
-  const handleTouchEnd = () => {
-    // Keep the animation visible briefly on touch end
-    setTimeout(() => {
-      onHoverChange?.(false)
-    }, 300)
-  }
+  useEffect(() => {
+    if (isMobile) {
+      onHoverChange?.(isInViewForHover)
+    }
+  }, [isMobile, isInViewForHover, onHoverChange])
 
   return (
     <motion.div
       ref={ref}
       variants={fadeInUpVariants}
       initial="hidden"
-      animate={isInView ? 'visible' : 'hidden'}
+      animate={isInViewForFadeIn ? 'visible' : 'hidden'}
       transition={{ duration: 0.6, delay: shouldReduceMotion ? 0 : delay }}
       className="group relative bg-black/60 backdrop-blur-md p-6 md:p-8 rounded-xl border border-white/20 hover:border-[#4CD787]/40 active:border-[#4CD787]/60 transition-colors duration-300 shadow-2xl overflow-visible cursor-pointer touch-manipulation"
-      onMouseEnter={() => onHoverChange?.(true)}
-      onMouseLeave={() => onHoverChange?.(false)}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
+      onMouseEnter={() => !isMobile && onHoverChange?.(true)}
+      onMouseLeave={() => !isMobile && onHoverChange?.(false)}
       whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
     >
       {children}
@@ -706,6 +700,7 @@ const StatCounter = ({ number, label }: { number: string | number; label: string
 
 export default function AboutPage() {
   const shouldReduceMotion = useReducedMotion()
+  const isMobile = useIsMobile()
   const [isSafari, setIsSafari] = useState(false)
   const [hasMounted, setHasMounted] = useState(false)
   useEffect(() => {
@@ -1073,37 +1068,45 @@ export default function AboutPage() {
 
       {/* Delivery Ownership Section */}
       <section className="pt-16 pb-12 relative mt-30">
-        <div className="container mx-auto px-[21px]">
+        <div className="max-w-screen-lg mx-auto px-[21px]">
           <AnimatedSection className="text-center max-w-3xl mx-auto">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-0 md:mb-6 text-white font-['IBM_Plex_Mono'] mb-6">
               Delivery Ownership
             </h2>
             <p className="text-base md:text-lg lg:text-xl text-foreground/90 font-light leading-relaxed font-['IBM_Plex_Sans'] px-4">
-              Your project success is our responsibility. We stand behind our commitments.
+              Your project success is our responsibility. <br /> We stand behind our commitments.
             </p>
           </AnimatedSection>
 
-          <ScrollStack
-            className="mt-1"
-            itemDistance={200}
-            itemScale={0.038}
-            itemStackDistance={40}
-            stackPosition="20%"
-            scaleEndPosition="15%"
-            baseScale={0.85}
-            rotationAmount={0}
-            blurAmount={0}
-            useWindowScroll
-          >
-            {deliveryHighlights.map((item, index) => (
-              <ScrollStackItem
-                key={item.text}
-                itemClassName="p-0 bg-transparent border-none shadow-none"
-              >
-                <DeliveryCard {...item} index={index} />
-              </ScrollStackItem>
-            ))}
-          </ScrollStack>
+          {isMobile ? (
+            <div className="space-y-8 mt-12">
+              {deliveryHighlights.map((item, index) => (
+                <DeliveryCard {...item} index={index} key={item.text} />
+              ))}
+            </div>
+          ) : (
+            <ScrollStack
+              className="mt-1"
+              itemDistance={200}
+              itemScale={0.038}
+              itemStackDistance={40}
+              stackPosition="20%"
+              scaleEndPosition="15%"
+              baseScale={0.85}
+              rotationAmount={0}
+              blurAmount={0}
+              useWindowScroll
+            >
+              {deliveryHighlights.map((item, index) => (
+                <ScrollStackItem
+                  key={item.text}
+                  itemClassName="p-0 bg-transparent border-none shadow-none"
+                >
+                  <DeliveryCard {...item} index={index} />
+                </ScrollStackItem>
+              ))}
+            </ScrollStack>
+          )}
         </div>
       </section>
 
