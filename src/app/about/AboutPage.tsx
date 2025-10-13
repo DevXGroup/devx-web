@@ -737,8 +737,7 @@ export default function AboutPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               {/* Title and content - Left side */}
               <AnimatedSection className="lg:order-1">
-                <h1 className="sr-only">About Us</h1>
-                <div className="mb-6">
+                <h1 className="mb-6">
                   <div
                     style={{
                       position: 'relative',
@@ -759,8 +758,9 @@ export default function AboutPage() {
                       strokeColor="#FFFFFF"
                       minFontSize={32}
                     />
+                    <span className="sr-only">About Us</span>
                   </div>
-                </div>
+                </h1>
                 <p
                   className="text-base md:text-lg lg:text-xl text-foreground/90 mb-6 md:mb-8 leading-relaxed font-['IBM_Plex_Sans']"
                   style={{
