@@ -9,6 +9,10 @@ export const size = {
 export const contentType = 'image/png'
 
 export default async function Image() {
+  const logoData = await fetch(
+    new URL('../../public/images/logos/devx-logo-og.png', import.meta.url)
+  ).then((res) => res.arrayBuffer())
+
   return new ImageResponse(
     (
       <div
@@ -50,19 +54,7 @@ export default async function Image() {
             justifyContent: 'center',
           }}
         >
-          <svg width="140" height="56" viewBox="0 0 250 100">
-            <defs>
-              <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" style={{ stopColor: '#E0BBE4', stopOpacity: 1 }} />
-                <stop offset="50%" style={{ stopColor: '#FFF', stopOpacity: 1 }} />
-                <stop offset="100%" style={{ stopColor: '#E0BBE4', stopOpacity: 1 }} />
-              </linearGradient>
-            </defs>
-            <path
-              d="M 40 30 Q 10 30, 10 50 Q 10 70, 40 70 Q 60 70, 70 50 Q 80 30, 100 30 Q 110 30, 115 35 Q 120 40, 125 50 Q 130 40, 135 35 Q 140 30, 150 30 Q 180 30, 210 50 Q 240 70, 240 50 Q 240 30, 210 30 Q 190 30, 180 50 Q 170 70, 150 70 Q 140 70, 135 65 Q 130 60, 125 50 Q 120 60, 115 65 Q 110 70, 100 70 Q 70 70, 40 50 Q 10 30, 40 30 Z"
-              fill="url(#logoGradient)"
-            />
-          </svg>
+          <img width="200" src={logoData as any} alt="DevX logo" />
         </div>
 
         {/* Company name */}
