@@ -311,7 +311,7 @@ export default function HorizontalScroll() {
                   <h3 className="text-lg font-bold text-white mb-2 leading-tight font-mono">
                     {study.title}
                   </h3>
-                  <p className="text-white/80 text-sm mb-3 leading-relaxed font-sans line-clamp-3">
+                  <p className="text-white/80 text-sm md:text-base mb-3 leading-relaxed font-sans min-h-[96px]">
                     {study.description}
                   </p>
 

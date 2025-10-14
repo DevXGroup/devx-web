@@ -163,7 +163,7 @@ function WhyUsCard({
 
         {/* Description */}
         <motion.p
-          className="text-slate-300 font-['IBM_Plex_Sans'] text-sm sm:text-base md:text-lg leading-relaxed group-hover:text-white transition-colors duration-500 text-center max-w-full break-words px-2"
+          className="text-slate-300 font-['IBM_Plex_Sans'] text-base sm:text-lg md:text-lg leading-relaxed group-hover:text-white transition-colors duration-500 text-center max-w-full break-words px-2"
           style={{ lineHeight: '1.6' }}
         >
           {description}
@@ -305,7 +305,7 @@ export default function Features() {
                   <h3 className="text-xl md:text-2xl font-bold text-white font-['IBM_Plex_Sans'] mb-2 sm:mb-3 leading-tight">
                     Are you launching a startup or new product?
                   </h3>
-                  <p className="text-slate-400 font-['IBM_Plex_Sans'] text-base md:text-lg leading-relaxed">
+                  <p className="text-slate-400 font-['IBM_Plex_Sans'] text-base sm:text-lg md:text-lg leading-relaxed">
                     Our expert team launches your product fast with reliability and scale built in
                   </p>
                 </div>
@@ -343,7 +343,7 @@ export default function Features() {
                   <h3 className="text-xl md:text-2xl font-bold text-white font-['IBM_Plex_Sans'] mb-2 sm:mb-3 leading-tight">
                     Need a top-tier dev team you can count on?
                   </h3>
-                  <p className="text-slate-400 font-['IBM_Plex_Sans'] text-base md:text-lg leading-relaxed">
+                  <p className="text-slate-400 font-['IBM_Plex_Sans'] text-base sm:text-lg md:text-lg leading-relaxed">
                     Partner with a proven team that plugs in instantly with zero onboarding hassle
                   </p>
                 </div>
@@ -432,12 +432,12 @@ export default function Features() {
           </motion.div>
 
           {/* Added link to About page */}
-          <div className="mt-12 sm:mt-16 text-center px-4">
+          <div className="mt-12 sm:mt-16 text-center px-4 pointer-events-auto">
             <motion.div
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               transition={{ duration: 0.2 }}
-              className="relative inline-block"
+              className="relative inline-block pointer-events-auto"
             >
               {/* Animated star border effect */}
               <div className="absolute inset-0 rounded-xl overflow-hidden">

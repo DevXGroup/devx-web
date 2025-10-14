@@ -167,7 +167,7 @@ export default function Hero() {
 
       {/* Content */}
       <motion.div
-        className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-[80] w-full py-12 sm:py-16 lg:py-20"
+        className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-[80] w-full pt-12 sm:pt-16 lg:pt-20 pb-36 sm:pb-44 lg:pb-52"
         variants={containerVariants}
         initial="hidden"
         animate={controls}
@@ -216,9 +216,9 @@ export default function Hero() {
                 Elite software team shipping polished software at&nbsp;startup&nbsp;speed.
               </p>
               <div className="relative mx-auto w-full mt-10 flex justify-center">
-                <div className="relative flex flex-wrap items-center justify-center gap-3 sm:gap-4 px-8 py-6 rounded-2xl overflow-hidden bg-gradient-to-r from-black/50 via-black/40 to-black/50 backdrop-blur-sm border border-white/10">
+                <div className="relative flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap sm:gap-4 px-5 py-4 sm:px-8 sm:py-6 rounded-2xl overflow-hidden border border-white/10 bg-black/40 backdrop-blur-sm sm:bg-gradient-to-r sm:from-black/50 sm:via-black/40 sm:to-black/50">
                   {/* Subtle animated gradient background */}
-                  <div className="absolute inset-0 opacity-30">
+                  <div className="absolute inset-0 hidden opacity-30 sm:block">
                     <div
                       className="absolute inset-0 bg-gradient-to-br from-[#4CD787]/5 via-transparent to-[#ccff00]/5 animate-pulse"
                       style={{ animationDuration: '4s' }}
@@ -226,10 +226,10 @@ export default function Hero() {
                   </div>
 
                   {/* Content with z-index to appear above background */}
-                  <div className="relative z-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+                  <div className="relative z-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
                     <Link
                       href="/services"
-                      className="uppercase tracking-[0.19em] text-base sm:text-lg md:text-lg lg:text-lg font-medium opacity-90 hover:opacity-100"
+                      className="uppercase tracking-[0.19em] text-sm sm:text-base md:text-lg lg:text-lg font-medium opacity-90 hover:opacity-100"
                     >
                       <ShinyText text="Elite Services" speed={3} delay={0.3} />
                     </Link>
@@ -238,7 +238,7 @@ export default function Hero() {
                     </span>
                     <Link
                       href="/portfolio"
-                      className="uppercase tracking-[0.19em] text-base sm:text-lg md:text-lg lg:text-lg font-medium opacity-90 hover:opacity-100"
+                      className="uppercase tracking-[0.19em] text-sm sm:text-base md:text-lg lg:text-lg font-medium opacity-90 hover:opacity-100"
                     >
                       <ShinyText text="Proven Record" speed={5} delay={0.6} />
                     </Link>
@@ -248,7 +248,7 @@ export default function Hero() {
                     </span>
                     <Link
                       href="/pricing"
-                      className="uppercase tracking-[0.19em] text-base sm:text-lg md:text-lg lg:text-lg font-medium opacity-90 hover:opacity-100"
+                      className="uppercase tracking-[0.19em] text-sm sm:text-base md:text-lg lg:text-lg font-medium opacity-90 hover:opacity-100"
                     >
                       <ShinyText text="Competitive Pricing" speed={7} delay={0.9} />
                     </Link>

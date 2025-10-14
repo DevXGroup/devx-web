@@ -62,13 +62,37 @@ export default function PlanetDivider() {
     // Responsive scroll threshold based on screen size
     const maxScroll = getResponsiveValue(200, 250, 300)
     const progress = Math.min(1, scrollY / maxScroll)
+    const width = screenSize.width
+    let basePosition: number
+    let positionRange: number
+    let bottomOffset: number
+
+    if (width < 480) {
+      basePosition = 0.33
+      positionRange = 0.24
+      bottomOffset = -8
+    } else if (width < 640) {
+      basePosition = 0.24
+      positionRange = 0.22
+      bottomOffset = -12
+    } else if (width < 1024) {
+      basePosition = -0.15
+      positionRange = 0.4
+      bottomOffset = -18
+    } else {
+      basePosition = -0.3
+      positionRange = 0.45
+      bottomOffset = -26
+    }
+    const position = basePosition + progress * positionRange
     
     // Reduce rotation speed for Safari to prevent artifacts
     const rotationMultiplier = isSafari ? 0.6 : 1.2
     const scrollRotationMultiplier = isSafari ? 4 : 8
 
     return {
-      position: -0.8 + progress * 0.5,
+      position,
+      bottomOffset,
       opacity: 1 - progress, // Original scroll-based opacity
       scrollRotation: progress * scrollRotationMultiplier, // Rotation during scroll
       continuousRotation: time * rotationMultiplier // Continuous visible rotation
@@ -83,25 +107,28 @@ export default function PlanetDivider() {
     const isTablet = width >= 768 && width < 1024
     const isDesktop = width >= 1024
 
-    let planetSize, planetMargin, containerWidth, containerHeight
+    let planetSize, planetMargin, containerWidth, containerHeight, translateY
 
     if (isMobile) {
       // Mobile: Optimized for iPhone and mobile devices
       // Reduce complexity for better performance
-      planetSize = Math.min(width * 0.95, 380) // 95% of screen width, max 380px
+      planetSize = Math.min(width * 1.18, 460) // Slightly larger footprint for visibility
       planetMargin = -planetSize / 2 // Perfect centering
       containerWidth = width
-      containerHeight = Math.min(width * 0.55, 250) // Slightly reduced height
+      containerHeight = Math.min(width * 0.95, 360) // Increased height to avoid clipping
+      translateY = '28%'
     } else if (isTablet) {
       planetSize = 600 // Increased from 400
       planetMargin = -300 // Adjusted for new size
       containerWidth = 700
       containerHeight = 350
+      translateY = '42%'
     } else {
       planetSize = 800 // Increased from 500
       planetMargin = -400 // Adjusted for new size
       containerWidth = 900
       containerHeight = 450
+      translateY = '48%'
     }
 
     return {
@@ -115,11 +142,12 @@ export default function PlanetDivider() {
       planetMaxWidth: planetSize,
       planetMarginLeft: planetMargin,
       containerMaxWidth: containerWidth,
-      containerHeight: containerHeight
+      containerHeight: containerHeight,
+      translateY,
     }
   }
 
-  const { position, opacity, scrollRotation, continuousRotation } = calculateVisibility()
+  const { position, bottomOffset, opacity, scrollRotation, continuousRotation } = calculateVisibility()
   const sizes = getResponsiveSizes()
 
   // Cross-browser compatible styles with mobile-specific fixes
@@ -158,8 +186,8 @@ export default function PlanetDivider() {
       {/* Main planet body with enhanced 3D definition */}
       <div
         className="absolute w-full h-[200%] left-0 planet-glow-effect"
-        style={getCrossBrowserStyle(`translateY(50%) rotate(${(scrollRotation + continuousRotation) * 1}deg)`, {
-          bottom: `${position * 20 - 30}%`,
+        style={getCrossBrowserStyle(`translateY(${sizes.translateY}) rotate(${(scrollRotation + continuousRotation) * 1}deg)`, {
+          bottom: `${position * 20 + bottomOffset}%`,
           aspectRatio: "1/1",
           borderRadius: "50%",
           width: `${sizes.planetMaxWidth}px`,
@@ -188,8 +216,8 @@ export default function PlanetDivider() {
       {/* Large crater formations and rock outcrops - Layer 1 */}
       <div
         className="absolute w-full h-[200%] left-0"
-        style={getCrossBrowserStyle(`translateY(50%) rotate(${(scrollRotation + continuousRotation) * (isSafari ? 0.9 : 0.8)}deg)`, {
-          bottom: `${position * 20 - 30}%`,
+        style={getCrossBrowserStyle(`translateY(${sizes.translateY}) rotate(${(scrollRotation + continuousRotation) * (isSafari ? 0.9 : 0.8)}deg)`, {
+          bottom: `${position * 20 + bottomOffset}%`,
           aspectRatio: "1/1",
           borderRadius: "50%",
           width: `${sizes.planetMaxWidth}px`,
@@ -212,8 +240,8 @@ export default function PlanetDivider() {
       {/* Medium rocky terrain and boulder fields - Layer 2 */}
       <div
         className="absolute w-full h-[200%] left-0"
-        style={getCrossBrowserStyle(`translateY(50%) rotate(${(scrollRotation + continuousRotation) * (isSafari ? 0.85 : 0.6)}deg)`, {
-          bottom: `${position * 20 - 30}%`,
+        style={getCrossBrowserStyle(`translateY(${sizes.translateY}) rotate(${(scrollRotation + continuousRotation) * (isSafari ? 0.85 : 0.6)}deg)`, {
+          bottom: `${position * 20 + bottomOffset}%`,
           aspectRatio: "1/1",
           borderRadius: "50%",
           width: `${sizes.planetMaxWidth}px`,
@@ -238,8 +266,8 @@ export default function PlanetDivider() {
       {/* Fine surface details, rocks and debris - Layer 3 */}
       <div
         className="absolute w-full h-[200%] left-0"
-        style={getCrossBrowserStyle(`translateY(50%) rotate(${(scrollRotation + continuousRotation) * (isSafari ? 0.8 : 0.4)}deg)`, {
-          bottom: `${position * 20 - 30}%`,
+        style={getCrossBrowserStyle(`translateY(${sizes.translateY}) rotate(${(scrollRotation + continuousRotation) * (isSafari ? 0.8 : 0.4)}deg)`, {
+          bottom: `${position * 20 + bottomOffset}%`,
           aspectRatio: "1/1",
           borderRadius: "50%",
           width: `${sizes.planetMaxWidth}px`,
@@ -267,8 +295,8 @@ export default function PlanetDivider() {
       {/* Ultra-fine surface texture and micro-details - Layer 4 */}
       <div
         className="absolute w-full h-[200%] left-0"
-        style={getCrossBrowserStyle(`translateY(50%) rotate(${(scrollRotation + continuousRotation) * (isSafari ? 0.75 : 0.2)}deg)`, {
-          bottom: `${position * 20 - 30}%`,
+        style={getCrossBrowserStyle(`translateY(${sizes.translateY}) rotate(${(scrollRotation + continuousRotation) * (isSafari ? 0.75 : 0.2)}deg)`, {
+          bottom: `${position * 20 + bottomOffset}%`,
           aspectRatio: "1/1",
           borderRadius: "50%",
           width: `${sizes.planetMaxWidth}px`,
@@ -294,8 +322,8 @@ export default function PlanetDivider() {
       {/* Subtle rim lighting effect - rotates with globe for realistic shadows */}
       <div
         className="absolute w-full h-[200%] left-0"
-        style={getCrossBrowserStyle(`translateY(50%) rotate(${(scrollRotation + continuousRotation) * 1}deg)`, {
-          bottom: `${position * 20 - 30}%`,
+        style={getCrossBrowserStyle(`translateY(${sizes.translateY}) rotate(${(scrollRotation + continuousRotation) * 1}deg)`, {
+          bottom: `${position * 20 + bottomOffset}%`,
           aspectRatio: "1/1",
           borderRadius: "50%",
           width: `${sizes.planetMaxWidth}px`,
