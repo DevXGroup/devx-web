@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, useReducedMotion, useInView } from 'framer-motion'
 import Link from 'next/link'
 import {
@@ -17,6 +17,7 @@ import {
   User,
   MessageCircle,
   X,
+  Copy,
 } from 'lucide-react'
 import TextPressure from '@/components/animations/TextPressure'
 import Lightning from '@/components/animations/Lightning'
@@ -124,6 +125,22 @@ const AnimatedGradientText = ({
   </span>
 )
 
+const exampleProjectRequest = `Subject: Custom E-commerce Platform Development
+
+"Hi there! I'm looking to build a custom e-commerce platform for my growing business.
+
+Key Requirements:
+• Inventory management system
+• Payment processing (Stripe/PayPal)
+• Customer analytics dashboard
+• Mobile-responsive design
+• SEO optimization
+
+Timeline: 3-4 months
+Budget: $45,000 - $55,000
+
+I'd love to discuss this project further and see how DevX Group can help bring this vision to life. Looking forward to hearing from you!"`
+
 export default function ContactPage() {
   const [formState, setFormState] = useState({
     name: '',
@@ -142,9 +159,14 @@ export default function ContactPage() {
   const [showConfetti, setShowConfetti] = useState(false)
   const [confettiOrigin, setConfettiOrigin] = useState({ x: 0, y: 0 })
   const [showExampleModal, setShowExampleModal] = useState(false)
+  const [hasCopiedExample, setHasCopiedExample] = useState(false)
+  const copyTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const shouldReduceMotion = useReducedMotion()
   const formRef = useRef(null)
   const isFormInView = useInView(formRef, { once: true })
+  const handleConfettiComplete = useCallback(() => {
+    setShowConfetti(false)
+  }, [])
 
   // Initialize Calendly widget when component mounts
   useEffect(() => {
@@ -166,6 +188,10 @@ export default function ContactPage() {
       // Clean up typing timeout
       if (typingTimeoutRef.current) {
         clearTimeout(typingTimeoutRef.current)
+      }
+      if (copyTimeoutRef.current) {
+        clearTimeout(copyTimeoutRef.current)
+        copyTimeoutRef.current = null
       }
       // Clean up style
       const style = document.getElementById('gradient-animation-style')
@@ -268,7 +294,7 @@ export default function ContactPage() {
     return errors
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     const errors = validateForm()
@@ -278,8 +304,8 @@ export default function ContactPage() {
     }
 
     // Capture button position for confetti
-    const button = e.target as HTMLFormElement
-    const submitButton = button.querySelector('button[type="submit"]') as HTMLButtonElement
+    const form = e.currentTarget
+    const submitButton = form.querySelector('button[type="submit"]') as HTMLButtonElement | null
     if (submitButton) {
       const rect = submitButton.getBoundingClientRect()
       setConfettiOrigin({
@@ -296,10 +322,8 @@ export default function ContactPage() {
       setIsSubmitting(false)
       setIsSubmitted(true)
 
-      // Only trigger confetti if not already shown to prevent double animation
-      if (!showConfetti) {
-        setShowConfetti(true)
-      }
+      // Trigger confetti for the success state
+      setShowConfetti(true)
 
       // Reset form after showing success message
       setTimeout(() => {
@@ -310,12 +334,32 @@ export default function ContactPage() {
     }, 1500)
   }
 
+  const handleCopyExample = useCallback(async () => {
+    if (typeof navigator === 'undefined' || !navigator.clipboard) {
+      return
+    }
+
+    try {
+      await navigator.clipboard.writeText(exampleProjectRequest)
+      setHasCopiedExample(true)
+      if (copyTimeoutRef.current) {
+        clearTimeout(copyTimeoutRef.current)
+      }
+      copyTimeoutRef.current = setTimeout(() => {
+        setHasCopiedExample(false)
+        copyTimeoutRef.current = null
+      }, 2000)
+    } catch {
+      // Silently ignore copy failures (e.g. clipboard unavailable)
+    }
+  }, [])
+
   return (
     <div className="min-h-screen bg-background">
       {/* Confetti Animation */}
       <Confetti
         isActive={showConfetti}
-        onComplete={() => setShowConfetti(false)}
+        onComplete={handleConfettiComplete}
         duration={3000}
         particleCount={120}
         originX={confettiOrigin.x}
@@ -987,21 +1031,43 @@ export default function ContactPage() {
             className="bg-black/80 backdrop-blur-lg border border-white/20 rounded-xl p-6 max-w-lg w-full mx-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-white">Message Example</h3>
+            <div className="flex items-start justify-between mb-4 gap-4">
+              <div>
+                <h3 className="text-lg font-semibold text-white">Message Example</h3>
+                <p className="text-foreground/60 text-sm mt-1">
+                  Copy the template below to fast-track your outreach.
+                </p>
+              </div>
               <button
                 onClick={() => setShowExampleModal(false)}
                 className="text-foreground/60 hover:text-foreground transition-colors p-1"
+                aria-label="Close example modal"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <div className="bg-white/5 rounded-lg p-4 text-sm text-foreground/80 leading-relaxed">
-              <p className="mb-3">
-                <span className="text-[#4CD787] font-medium">Subject:</span> Custom E-commerce
-                Platform Development
-              </p>
+              <div className="flex items-start justify-between gap-4 mb-3">
+                <p className="leading-relaxed">
+                  <span className="text-[#4CD787] font-medium">Subject:</span> Custom E-commerce
+                  Platform Development
+                </p>
+                <button
+                  type="button"
+                  onClick={handleCopyExample}
+                  className={`p-1 transition-colors focus:outline-none ${
+                    hasCopiedExample ? 'text-[#4CD787]' : 'text-foreground/60 hover:text-foreground'
+                  }`}
+                  aria-label="Copy example request text"
+                >
+                  {hasCopiedExample ? (
+                    <CheckCircle className="w-4 h-4" />
+                  ) : (
+                    <Copy className="w-4 h-4" />
+                  )}
+                </button>
+              </div>
               <p className="mb-4">
                 &quot;Hi there! I&apos;m looking to build a custom e-commerce platform for my
                 growing business.

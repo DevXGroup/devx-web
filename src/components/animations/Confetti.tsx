@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 interface ConfettiPiece {
@@ -39,6 +39,11 @@ const Confetti = ({
   const particlesRef = useRef<ConfettiPiece[]>([])
   const animationFrameRef = useRef<number | undefined>(undefined)
   const startTimeRef = useRef<number>(0)
+  const onCompleteRef = useRef(onComplete)
+
+  useEffect(() => {
+    onCompleteRef.current = onComplete
+  }, [onComplete])
 
   useEffect(() => {
     if (!isActive) return
@@ -93,7 +98,7 @@ const Confetti = ({
       const elapsed = currentTime - startTimeRef.current
 
       if (elapsed > duration) {
-        if (onComplete) onComplete()
+        if (onCompleteRef.current) onCompleteRef.current()
         return
       }
 
@@ -168,7 +173,7 @@ const Confetti = ({
         cancelAnimationFrame(animationFrameRef.current)
       }
     }
-  }, [isActive, duration, particleCount, onComplete, originX, originY])
+  }, [isActive, duration, particleCount, originX, originY])
 
   if (!isActive) return null
 
