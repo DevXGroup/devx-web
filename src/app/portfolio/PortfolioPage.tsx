@@ -34,6 +34,7 @@ import EnhancedProjectCard from '@/components/portfolio/EnhancedProjectCard'
 import ProjectDetailModal from '@/components/portfolio/ProjectDetailModal'
 import { portfolioProjects, ProjectData } from '@/data/portfolioProjects'
 import dynamic from 'next/dynamic'
+import { Button } from '@/components/ui/button'
 
 const AsciiEffect3D = dynamic(() => import('@/components/effects/AsciiEffect3D'), {
   ssr: false,
@@ -889,22 +890,29 @@ export default function PortfolioPage() {
               Partner with a team that has shipped complex products across industries and platforms.
             </p>
             <motion.div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <a
-                href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-robinhood text-black hover:bg-white hover:text-black px-8 py-3 rounded-lg font-medium border-2 border-robinhood hover:shadow-[0_5px_15px_rgba(204,255,0,0.3)] transition-all duration-300 shadow-lg"
+              <Button
+                asChild
+                className="group inline-flex items-center gap-2 bg-robinhood text-black hover:bg-white hover:text-black px-8 py-3 rounded-lg font-semibold text-lg border-2 border-robinhood shadow-lg transition-all duration-300 hover:shadow-[0_5px_15px_rgba(204,255,0,0.3)]"
               >
-                Schedule a Strategy Call
-                <ArrowRight className="w-4 h-4" />
-              </a>
-              <Link
-                href="/contact"
-                className="inline-flex items-center gap-2 rounded-lg border border-white/30 px-8 py-3 font-medium text-white transition-all duration-300 hover:border-white hover:bg-white/10"
+                <a
+                  href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?background_color=000000&text_color=ffffff&primary_color=4CD787&hide_gdpr_banner=1"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span>Schedule a Strategy Call</span>
+                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                </a>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                className="group inline-flex items-center gap-2 border border-white/30 px-8 py-3 font-medium text-white transition-all duration-300 hover:border-white hover:bg-white/10"
               >
-                Contact Our Team
-                <ArrowRight className="w-4 h-4" />
-              </Link>
+                <Link href="/contact">
+                  <span>Contact Our Team</span>
+                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                </Link>
+              </Button>
             </motion.div>
           </motion.div>
         </div>
