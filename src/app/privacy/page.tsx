@@ -1,4 +1,27 @@
 import { Metadata } from 'next';
+import { createOgImageUrl, createTwitterImageUrl, getSiteUrl } from '@/lib/og';
+
+const siteUrl = getSiteUrl();
+const pagePath = '/privacy';
+const pageUrl = `${siteUrl}${pagePath}`;
+const ogImage = createOgImageUrl(
+  {
+    eyebrow: 'Privacy Policy',
+    title: 'Committed to Secure & Compliant Software Delivery',
+    subtitle: 'Transparent data practices across every engagement',
+    focus: ['CCPA Compliance', 'Secure Infrastructure', 'Trusted Partnerships'],
+  },
+  siteUrl
+);
+const twitterImage = createTwitterImageUrl(
+  {
+    eyebrow: 'Privacy Policy',
+    title: 'Committed to Secure & Compliant Software Delivery',
+    subtitle: 'Transparent data practices across every engagement',
+    focus: ['CCPA Compliance', 'Secure Infrastructure', 'Trusted Partnerships'],
+  },
+  siteUrl
+);
 
 export const metadata: Metadata = {
   title: 'Privacy Policy | DevX Group LLC',
@@ -7,11 +30,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Privacy Policy | DevX Group LLC',
     description: 'Privacy Policy for DevX Group LLC - Learn how we collect, use, and protect your personal information in compliance with CCPA and privacy regulations.',
-    url: 'https://devxgroup.io/privacy',
+    url: pageUrl,
     siteName: 'DevX Group',
     images: [
       {
-        url: 'https://devxgroup.io/og-image-privacy.jpg',
+        url: ogImage,
         width: 1200,
         height: 630,
         alt: 'DevX Group Privacy Policy',
@@ -24,10 +47,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Privacy Policy | DevX Group LLC',
     description: 'Privacy Policy for DevX Group LLC - CCPA compliant data protection and privacy practices.',
-    images: ['https://devxgroup.io/twitter-image-privacy.jpg'],
+    images: [twitterImage],
   },
   alternates: {
-    canonical: 'https://devxgroup.io/privacy',
+    canonical: pageUrl,
   },
   robots: {
     index: true,

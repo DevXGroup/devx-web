@@ -1,4 +1,27 @@
 import { Metadata } from 'next'
+import { createOgImageUrl, createTwitterImageUrl, getSiteUrl } from '@/lib/og'
+
+const siteUrl = getSiteUrl()
+const pagePath = '/services/creative-animation'
+const pageUrl = `${siteUrl}${pagePath}`
+const ogImage = createOgImageUrl(
+  {
+    eyebrow: 'Creative Animation',
+    title: 'Immersive UI Animation & Interactive 3D',
+    subtitle: 'Motion systems that elevate product storytelling',
+    focus: ['3D Experiences', 'Scroll Narratives', 'Liquid Motion', 'Microinteractions'],
+  },
+  siteUrl
+)
+const twitterImage = createTwitterImageUrl(
+  {
+    eyebrow: 'Creative Animation',
+    title: 'Immersive UI Animation & Interactive 3D',
+    subtitle: 'Motion systems that elevate product storytelling',
+    focus: ['3D Experiences', 'Scroll Narratives', 'Liquid Motion', 'Microinteractions'],
+  },
+  siteUrl
+)
 
 export const metadata: Metadata = {
   title: 'Creative Animation Services | Advanced UI/UX Animations | DevX Group',
@@ -7,11 +30,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Creative Animation Services | Advanced UI/UX Animations | DevX Group',
     description: 'Immersive creative animation services including 3D interactions, morphing text, liquid motion effects, and scroll-triggered animations.',
-    url: 'https://devxgroup.io/services/creative-animation',
+    url: pageUrl,
     siteName: 'DevX Group',
     images: [
       {
-        url: 'https://devxgroup.io/og-image-creative-animation.jpg',
+        url: ogImage,
         width: 1200,
         height: 630,
         alt: 'DevX Group Creative Animation Services',
@@ -24,10 +47,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Creative Animation Services | DevX Group',
     description: 'Immersive creative animation services including 3D interactions, morphing text, and liquid motion effects.',
-    images: ['https://devxgroup.io/twitter-image-creative-animation.jpg'],
+    images: [twitterImage],
   },
   alternates: {
-    canonical: 'https://devxgroup.io/services/creative-animation',
+    canonical: pageUrl,
   },
 }
 

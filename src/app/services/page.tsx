@@ -1,5 +1,28 @@
 import { Metadata } from 'next'
 import ServicesPage from "./ServicesPage"
+import { createOgImageUrl, createTwitterImageUrl, getSiteUrl } from '@/lib/og'
+
+const siteUrl = getSiteUrl()
+const pagePath = '/services'
+const pageUrl = `${siteUrl}${pagePath}`
+const ogImage = createOgImageUrl(
+  {
+    eyebrow: 'Services',
+    title: 'Software Development & Agentic AI Services',
+    subtitle: 'Custom Apps • Mobile • IoT • Automation',
+    focus: ['Product Engineering', 'Agentic AI', 'RAG Systems', 'IoT & Cloud'],
+  },
+  siteUrl
+)
+const twitterImage = createTwitterImageUrl(
+  {
+    eyebrow: 'Services',
+    title: 'Software Development & Agentic AI Services',
+    subtitle: 'Custom Apps • Mobile • IoT • Automation',
+    focus: ['Product Engineering', 'Agentic AI', 'RAG Systems', 'IoT & Cloud'],
+  },
+  siteUrl
+)
 
 export const metadata: Metadata = {
   title: 'Software Development Services | Web Apps, Mobile Apps, AI & IoT Solutions',
@@ -8,11 +31,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Software Development Services | Web Apps, Mobile Apps, AI & IoT Solutions',
     description: 'Comprehensive software development services including web applications, mobile apps, AI/ML solutions, IoT hardware integration, and digital transformation.',
-    url: 'https://devxgroup.io/services',
+    url: pageUrl,
     siteName: 'DevX Group',
     images: [
       {
-        url: 'https://devxgroup.io/og-image-services.jpg',
+        url: ogImage,
         width: 1200,
         height: 630,
         alt: 'DevX Group Software Development Services',
@@ -25,10 +48,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Software Development Services | DevX Group',
     description: 'Comprehensive software development services including web apps, mobile apps, AI/ML solutions, and IoT integration.',
-    images: ['https://devxgroup.io/twitter-image-services.jpg'],
+    images: [twitterImage],
   },
   alternates: {
-    canonical: 'https://devxgroup.io/services',
+    canonical: pageUrl,
   },
 }
 

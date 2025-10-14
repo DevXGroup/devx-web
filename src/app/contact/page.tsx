@@ -1,5 +1,28 @@
 import { Metadata } from 'next'
 import ContactPage from "./ContactPage"
+import { createOgImageUrl, createTwitterImageUrl, getSiteUrl } from '@/lib/og'
+
+const siteUrl = getSiteUrl()
+const pagePath = '/contact'
+const pageUrl = `${siteUrl}${pagePath}`
+const ogImage = createOgImageUrl(
+  {
+    eyebrow: "Let's talk",
+    title: 'Book a Strategy Session with DevX Group',
+    subtitle: 'Custom Software • Agentic AI • Cloud Modernization',
+    focus: ['Discovery Workshops', 'Product Roadmaps', 'Build & Scale'],
+  },
+  siteUrl
+)
+const twitterImage = createTwitterImageUrl(
+  {
+    eyebrow: "Let's talk",
+    title: 'Book a Strategy Session with DevX Group',
+    subtitle: 'Custom Software • Agentic AI • Cloud Modernization',
+    focus: ['Discovery Workshops', 'Product Roadmaps', 'Build & Scale'],
+  },
+  siteUrl
+)
 
 export const metadata: Metadata = {
   title: 'Contact DevX Group | Get a Free Software Development Consultation',
@@ -8,11 +31,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Contact DevX Group | Get a Free Software Development Consultation',
     description: 'Contact DevX Group for your software development needs. Schedule a free consultation, get a custom quote, or discuss your project requirements.',
-    url: 'https://devxgroup.io/contact',
+    url: pageUrl,
     siteName: 'DevX Group',
     images: [
       {
-        url: 'https://devxgroup.io/og-image-contact.jpg',
+        url: ogImage,
         width: 1200,
         height: 630,
         alt: 'Contact DevX Group - Free Software Development Consultation',
@@ -25,10 +48,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Contact DevX Group | Free Software Development Consultation',
     description: 'Contact DevX Group for your software development needs. Schedule a free consultation or get a custom quote.',
-    images: ['https://devxgroup.io/twitter-image-contact.jpg'],
+    images: [twitterImage],
   },
   alternates: {
-    canonical: 'https://devxgroup.io/contact',
+    canonical: pageUrl,
   },
 }
 

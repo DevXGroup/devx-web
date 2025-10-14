@@ -1,5 +1,28 @@
 import { Metadata } from 'next'
 import PricingPage from "./PricingPage"
+import { createOgImageUrl, createTwitterImageUrl, getSiteUrl } from '@/lib/og'
+
+const siteUrl = getSiteUrl()
+const pagePath = '/pricing'
+const pageUrl = `${siteUrl}${pagePath}`
+const ogImage = createOgImageUrl(
+  {
+    eyebrow: 'Pricing',
+    title: 'Flexible Engagements for High-Velocity Teams',
+    subtitle: 'Rapid MVP • Growth Accelerator • Enterprise Delivery',
+    focus: ['Dedicated Squads', 'Fractional Leadership', 'Support Retainers'],
+  },
+  siteUrl
+)
+const twitterImage = createTwitterImageUrl(
+  {
+    eyebrow: 'Pricing',
+    title: 'Flexible Engagements for High-Velocity Teams',
+    subtitle: 'Rapid MVP • Growth Accelerator • Enterprise Delivery',
+    focus: ['Dedicated Squads', 'Fractional Leadership', 'Support Retainers'],
+  },
+  siteUrl
+)
 
 export const metadata: Metadata = {
   title: 'Software Development Pricing | Custom Solutions & Enterprise Packages | DevX Group',
@@ -8,11 +31,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Software Development Pricing | Custom Solutions & Enterprise Packages | DevX Group',
     description: 'Transparent pricing for professional software development services. Choose from Rapid MVP, Growth Accelerator, or Enterprise packages.',
-    url: 'https://devxgroup.io/pricing',
+    url: pageUrl,
     siteName: 'DevX Group',
     images: [
       {
-        url: 'https://devxgroup.io/og-image-pricing.jpg',
+        url: ogImage,
         width: 1200,
         height: 630,
         alt: 'DevX Group Software Development Pricing',
@@ -25,10 +48,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Software Development Pricing | DevX Group',
     description: 'Transparent pricing for professional software development services. Rapid MVP, Growth Accelerator, and Enterprise packages.',
-    images: ['https://devxgroup.io/twitter-image-pricing.jpg'],
+    images: [twitterImage],
   },
   alternates: {
-    canonical: 'https://devxgroup.io/pricing',
+    canonical: pageUrl,
   },
 }
 
