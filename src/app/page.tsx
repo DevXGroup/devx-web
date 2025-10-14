@@ -1,5 +1,27 @@
 import { Metadata } from 'next'
 import EntryPage from '@sections/EntryPage'
+import { createOgImageUrl, createTwitterImageUrl, getSiteUrl } from '@/lib/og'
+
+const siteUrl = getSiteUrl()
+const pageUrl = siteUrl
+const ogImage = createOgImageUrl(
+  {
+    eyebrow: 'Elite Software Partners',
+    title: 'Build Products Faster with DevX Group',
+    subtitle: 'Custom Applications • Agentic AI • Cloud & IoT Platforms',
+    focus: ['Product Engineering', 'Agentic AI', 'Cloud Modernization'],
+  },
+  siteUrl
+)
+const twitterImage = createTwitterImageUrl(
+  {
+    eyebrow: 'Elite Software Partners',
+    title: 'Build Products Faster with DevX Group',
+    subtitle: 'Custom Applications • Agentic AI • Cloud & IoT Platforms',
+    focus: ['Product Engineering', 'Agentic AI', 'Cloud Modernization'],
+  },
+  siteUrl
+)
 
 export const metadata: Metadata = {
   title: 'DevX Group - Elite Software Development Team | Custom Applications & AI Solutions',
@@ -8,11 +30,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'DevX Group - Elite Software Development Team | Custom Applications & AI Solutions',
     description: 'DevX Group delivers elite software development services including custom applications, AI/ML solutions, IoT hardware integration, and digital transformation.',
-    url: 'https://devxgroup.io',
+    url: pageUrl,
     siteName: 'DevX Group',
     images: [
       {
-        url: 'https://devxgroup.io/og-image-home.jpg',
+        url: ogImage,
         width: 1200,
         height: 630,
         alt: 'DevX Group - Elite Software Development Team',
@@ -25,10 +47,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'DevX Group - Elite Software Development Team',
     description: 'Elite software development services including custom applications, AI/ML solutions, and digital transformation.',
-    images: ['https://devxgroup.io/twitter-image-home.jpg'],
+    images: [twitterImage],
   },
   alternates: {
-    canonical: 'https://devxgroup.io',
+    canonical: pageUrl,
   },
 }
 

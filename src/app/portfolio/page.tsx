@@ -1,5 +1,28 @@
 import { Metadata } from 'next'
 import PortfolioPage from "./PortfolioPage"
+import { createOgImageUrl, createTwitterImageUrl, getSiteUrl } from '@/lib/og'
+
+const siteUrl = getSiteUrl()
+const pagePath = '/portfolio'
+const pageUrl = `${siteUrl}${pagePath}`
+const ogImage = createOgImageUrl(
+  {
+    eyebrow: 'Client Case Studies',
+    title: 'High-impact Software & AI Delivery',
+    subtitle: 'E-commerce • SaaS • AI Platforms • Mobile',
+    focus: ['Product Engineering', 'AI Solutions', 'Experience Design', 'Cloud Ops'],
+  },
+  siteUrl
+)
+const twitterImage = createTwitterImageUrl(
+  {
+    eyebrow: 'Client Case Studies',
+    title: 'High-impact Software & AI Delivery',
+    subtitle: 'E-commerce • SaaS • AI Platforms • Mobile',
+    focus: ['Product Engineering', 'AI Solutions', 'Experience Design', 'Cloud Ops'],
+  },
+  siteUrl
+)
 
 export const metadata: Metadata = {
   title: 'Portfolio | Software Development Projects & Case Studies | DevX Group',
@@ -8,11 +31,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Portfolio | Software Development Projects & Case Studies | DevX Group',
     description: 'Explore DevX Group\'s portfolio of successful software development projects including e-commerce platforms, mobile apps, AI solutions, and digital transformation case studies.',
-    url: 'https://devxgroup.io/portfolio',
+    url: pageUrl,
     siteName: 'DevX Group',
     images: [
       {
-        url: 'https://devxgroup.io/og-image-portfolio.jpg',
+        url: ogImage,
         width: 1200,
         height: 630,
         alt: 'DevX Group Portfolio - Software Development Projects',
@@ -25,10 +48,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Portfolio | DevX Group Software Development Projects',
     description: 'Explore successful software development projects including e-commerce platforms, mobile apps, and AI solutions.',
-    images: ['https://devxgroup.io/twitter-image-portfolio.jpg'],
+    images: [twitterImage],
   },
   alternates: {
-    canonical: 'https://devxgroup.io/portfolio',
+    canonical: pageUrl,
   },
 }
 

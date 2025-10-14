@@ -1,5 +1,28 @@
 import { Metadata } from 'next'
 import AboutPage from "./AboutPage"
+import { createOgImageUrl, createTwitterImageUrl, getSiteUrl } from '@/lib/og'
+
+const siteUrl = getSiteUrl()
+const pagePath = '/about'
+const pageUrl = `${siteUrl}${pagePath}`
+const ogImage = createOgImageUrl(
+  {
+    eyebrow: 'About DevX Group',
+    title: 'Product Engineers with Enterprise DNA',
+    subtitle: 'San Diego HQ · Global Delivery · Founder Friendly',
+    focus: ['AI Leadership', 'Design Systems', 'Cloud Architecture', 'Dedicated Teams'],
+  },
+  siteUrl
+)
+const twitterImage = createTwitterImageUrl(
+  {
+    eyebrow: 'About DevX Group',
+    title: 'Product Engineers with Enterprise DNA',
+    subtitle: 'San Diego HQ · Global Delivery · Founder Friendly',
+    focus: ['AI Leadership', 'Design Systems', 'Cloud Architecture', 'Dedicated Teams'],
+  },
+  siteUrl
+)
 
 export const metadata: Metadata = {
   title: 'About DevX Group | Elite Software Development Team | San Diego, California',
@@ -8,11 +31,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'About DevX Group | Elite Software Development Team | San Diego, California',
     description: 'Learn about DevX Group LLC - an elite software development team based in San Diego, California. Meet our experienced developers and discover our mission.',
-    url: 'https://devxgroup.io/about',
+    url: pageUrl,
     siteName: 'DevX Group',
     images: [
       {
-        url: 'https://devxgroup.io/og-image-about.jpg',
+        url: ogImage,
         width: 1200,
         height: 630,
         alt: 'About DevX Group - Elite Development Team',
@@ -25,10 +48,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'About DevX Group | Elite Software Development Team',
     description: 'Learn about DevX Group LLC - elite software development team based in San Diego, California.',
-    images: ['https://devxgroup.io/twitter-image-about.jpg'],
+    images: [twitterImage],
   },
   alternates: {
-    canonical: 'https://devxgroup.io/about',
+    canonical: pageUrl,
   },
 }
 

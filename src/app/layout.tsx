@@ -13,6 +13,7 @@ import StructuredData from '@/components/seo/StructuredData'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import Script from 'next/script'
 import { Analytics } from '@vercel/analytics/next'
+import { createOgImageUrl, createTwitterImageUrl, getSiteUrl } from '@/lib/og'
 
 // Configure IBM Plex Sans - optimized with swap for better LCP
 const ibmPlexSans = IBM_Plex_Sans({
@@ -36,8 +37,26 @@ const ibmPlexMono = IBM_Plex_Mono({
   adjustFontFallback: true,
 })
 
+const siteUrl = getSiteUrl()
+const defaultOgImage = createOgImageUrl(
+  {
+    title: 'DevX Group · Elite Product Engineers',
+    subtitle: 'Custom Applications • Agentic AI • Cloud Modernization',
+    focus: ['Product Engineering', 'Agentic Automation', 'Cloud Ops'],
+  },
+  siteUrl
+)
+const defaultTwitterImage = createTwitterImageUrl(
+  {
+    title: 'DevX Group · Elite Product Engineers',
+    subtitle: 'Custom Applications • Agentic AI • Cloud Modernization',
+    focus: ['Product Engineering', 'Agentic Automation', 'Cloud Ops'],
+  },
+  siteUrl
+)
+
 export const metadata: Metadata = {
-  metadataBase: new URL('https://devxgroup.io'),
+  metadataBase: new URL(siteUrl),
   title: {
     default: 'DevX Group - Elite Software Development Team | Custom Applications & AI Solutions',
     template: '%s | DevX Group'
@@ -61,13 +80,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://devxgroup.io',
+    url: siteUrl,
     siteName: 'DevX Group',
     title: 'DevX Group - Elite Software Development Team | Custom Applications & AI Solutions',
     description: 'DevX Group delivers elite software development services including custom applications, AI/ML solutions, IoT hardware integration, and digital transformation.',
     images: [
       {
-        url: 'https://devxgroup.io/og-image.jpg',
+        url: defaultOgImage,
         width: 1200,
         height: 630,
         alt: 'DevX Group - Elite Software Development Team',
@@ -78,7 +97,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'DevX Group - Elite Software Development Team',
     description: 'Elite software development services including custom applications, AI/ML solutions, and digital transformation.',
-    images: ['https://devxgroup.io/twitter-image.jpg'],
+    images: [defaultTwitterImage],
     creator: '@devxgroup',
     site: '@devxgroup',
   },
@@ -86,7 +105,7 @@ export const metadata: Metadata = {
     google: 'verification_token_here',
   },
   alternates: {
-    canonical: 'https://devxgroup.io',
+    canonical: siteUrl,
   },
   manifest: '/site.webmanifest',
   icons: {
