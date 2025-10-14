@@ -990,13 +990,13 @@ class App {
     })
     this.renderer.setSize(container.offsetWidth, container.offsetHeight, false)
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-    
+
     // Set clear color to prevent white flash
     this.renderer.setClearColor(0x000000, 0)
 
     this.composer = new EffectComposer(this.renderer)
     container.appendChild(this.renderer.domElement)
-    
+
     // Hard-disable all interactions on the canvas so hover/mouse/touch never affect it
     this.renderer.domElement.style.pointerEvents = 'none'
     this.renderer.domElement.style.userSelect = 'none'
@@ -1005,7 +1005,7 @@ class App {
     this.renderer.domElement.style.willChange = 'transform'
     this.renderer.domElement.style.opacity = '0'
     this.renderer.domElement.style.transition = 'opacity 0.5s ease-in-out'
-    
+
     // Accessibility: hide from a11y tree and prevent focus
     this.renderer.domElement.setAttribute('aria-hidden', 'true')
     ;(this.renderer.domElement as HTMLCanvasElement).tabIndex = -1
@@ -1061,8 +1061,15 @@ class App {
   }
 
   onWindowResize() {
-    const width = this.container.offsetWidth
-    const height = this.container.offsetHeight
+    const width = this.container.offsetWidth || window.innerWidth
+    const height =
+      this.container.offsetHeight ||
+      this.container.parentElement?.clientHeight ||
+      window.innerHeight
+
+    if (!width || !height) {
+      return
+    }
 
     this.renderer.setSize(width, height)
     this.camera.aspect = width / height
@@ -1088,18 +1095,18 @@ class App {
           preset: SMAAPreset.MEDIUM,
         })
       )
-      
+
       // Ensure passes are properly configured before adding
       if (this.renderPass) {
         this.renderPass.renderToScreen = false
         this.composer.addPass(this.renderPass)
       }
-      
+
       if (this.bloomPass) {
         this.bloomPass.renderToScreen = false
         this.composer.addPass(this.bloomPass)
       }
-      
+
       if (smaaPass) {
         smaaPass.renderToScreen = true
         this.composer.addPass(smaaPass)
@@ -1239,7 +1246,7 @@ const Hyperspeed: FC<HyperspeedProps> = ({ effectOptions = {}, startOnScroll = f
       },
       {
         threshold: [0.1],
-        rootMargin: '0px 0px -20% 0px'
+        rootMargin: '0px 0px -20% 0px',
       }
     )
 
@@ -1252,7 +1259,7 @@ const Hyperspeed: FC<HyperspeedProps> = ({ effectOptions = {}, startOnScroll = f
 
   useEffect(() => {
     setIsInitialized(false)
-    
+
     if (appRef.current) {
       appRef.current.dispose()
       appRef.current = null
@@ -1289,23 +1296,36 @@ const Hyperspeed: FC<HyperspeedProps> = ({ effectOptions = {}, startOnScroll = f
     try {
       const myApp = new App(container, options)
       appRef.current = myApp
-      
+
       // Initialize immediately without waiting for assets
-      myApp.loadAssets().then(() => {
-        if (appRef.current === myApp && !myApp.disposed) {
-          myApp.init()
-          setIsInitialized(true) // Set immediately
-        }
-      }).catch((error) => {
-        if (isDev) {
-          console.warn('HyperSpeed asset loading error:', error)
-        }
-        // Initialize anyway with fallback
-        if (appRef.current === myApp && !myApp.disposed) {
-          myApp.init()
-          setIsInitialized(true) // Set immediately
-        }
-      })
+      myApp
+        .loadAssets()
+        .then(() => {
+          if (appRef.current === myApp && !myApp.disposed) {
+            myApp.init()
+            requestAnimationFrame(() => {
+              if (appRef.current === myApp && !myApp.disposed) {
+                myApp.onWindowResize()
+              }
+            })
+            setIsInitialized(true) // Set immediately
+          }
+        })
+        .catch((error) => {
+          if (isDev) {
+            console.warn('HyperSpeed asset loading error:', error)
+          }
+          // Initialize anyway with fallback
+          if (appRef.current === myApp && !myApp.disposed) {
+            myApp.init()
+            requestAnimationFrame(() => {
+              if (appRef.current === myApp && !myApp.disposed) {
+                myApp.onWindowResize()
+              }
+            })
+            setIsInitialized(true) // Set immediately
+          }
+        })
     } catch (error) {
       if (isDev) {
         console.error('HyperSpeed initialization error:', error)

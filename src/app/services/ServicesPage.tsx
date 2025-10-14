@@ -259,37 +259,17 @@ export default function ServicesPage() {
   const activeServiceData = services.find((s, i) => i === activeService) || services[0]
 
   return (
-    <div className="min-h-screen bg-background pt-24">
-      {/* Hero Section with Enhanced Metallic Helix */}
+    <div className="min-h-screen bg-background pt-19">
+      <HyperSpeed />
       <section
         ref={heroRef}
-        className="relative min-h-screen py-20 flex flex-col items-center justify-center overflow-hidden"
+        className="relative min-h-[85vh] pt-20 md:pt-24 pb-12 md:pb-16 flex flex-col items-center justify-start overflow-hidden"
       >
         <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-900/10 to-black" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-72 bg-gradient-to-b from-transparent via-black/70 to-black z-10" />
 
-        {/* HyperSpeed Animation - Positioned above DevX Edge title */}
-        <ClientOnly>
-          <div
-            className="absolute left-0 right-0 w-full h-[390px] overflow-hidden pointer-events-none select-none"
-            aria-hidden="true"
-            style={{
-              top: '36px',
-              zIndex: 1,
-              pointerEvents: 'none',
-              userSelect: 'none',
-              touchAction: 'none',
-              isolation: 'isolate',
-              background: 'linear-gradient(to bottom, transparent 0%, transparent 70%, black 100%)',
-              maskImage: 'linear-gradient(to bottom, white 0%, white 70%, transparent 100%)',
-              WebkitMaskImage: 'linear-gradient(to bottom, white 0%, white 70%, transparent 100%)',
-            }}
-          >
-            <HyperSpeed />
-          </div>
-        </ClientOnly>
-
-        <div className="relative z-20 w-full flex flex-col items-center pointer-events-none">
-          <div className="container mx-auto px-4 relative z-20 pointer-events-none">
+        <div className="relative z-20 w-full flex flex-col items-center">
+          <div className="container mx-auto px-4 relative z-20">
             <motion.div
               initial="hidden"
               animate="visible"
@@ -302,7 +282,7 @@ export default function ServicesPage() {
                   },
                 },
               }}
-              className="text-center max-w-4xl mx-auto title-margin pointer-events-none  -mt-8"
+              className="text-center max-w-4xl mx-auto title-margin -mt-20 md:-mt-24"
             >
               <div className="flex items-center justify-center w-full">
                 <div
@@ -341,133 +321,16 @@ export default function ServicesPage() {
                   fontWeight: '400',
                 }}
               >
-                Comprehensive software solutions to drive your business forward. We combine
-                expertise with innovation to deliver exceptional results.
+                Launch revenue-driving web, mobile, AI, and automation products your customers rely
+                on. Our team embeds with yours to deliver dependable software and measurable wins.
               </motion.p>
             </motion.div>
-          </div>
-
-          {/* Value Propositions with Apple-style reveal */}
-          <div ref={valuePropsRef} className="w-full mb-8 relative z-20 pointer-events-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 px-4 mx-auto relative z-20 max-w-screen-xl mt-38">
-              {valueProps.map((prop, index) => (
-                <motion.div
-                  key={prop.title}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                  className="bg-black/40 backdrop-blur-lg p-8 rounded-xl border border-white/10 transition-all duration-300 group cursor-pointer pointer-events-auto relative overflow-hidden shadow-xl group-hover:shadow-[0_0_20px_rgba(6,182,212,0.5)] before:absolute before:inset-0 before:border before:border-transparent before:rounded-xl before:transition-all before:duration-300 group-hover:before:border-white/20"
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <h3 className="text-xl md:text-2xl lg:text-2xl font-semibold text-[#06B6D4] mb-3 lg:mb-4 transition-colors duration-300 relative z-10">
-                    {prop.title}
-                  </h3>
-                  <p
-                    className="text-white/90 text-base md:text-lg lg:text-xl transition-colors duration-300 font-['IBM_Plex_Sans'] font-medium relative z-10 mb-3 lg:mb-4 leading-relaxed"
-                    style={{ textShadow: '0 1px 4px rgba(0,0,0,0.7)' }}
-                  >
-                    {prop.description}
-                  </p>
-                  {prop.proofPoint && (
-                    <p className="text-[#4CD787] text-xs md:text-sm font-semibold transition-colors duration-300 relative z-10">
-                      ✓ {prop.proofPoint}
-                    </p>
-                  )}
-
-                  {/* Running shining line effect on hover - matching ServiceCard style */}
-                  <motion.div
-                    className="absolute inset-0 overflow-hidden rounded-xl pointer-events-none z-0"
-                    initial={{ opacity: 0 }}
-                    whileHover={{ opacity: 1 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <motion.div
-                      className="absolute w-full h-[2px] bg-gradient-to-r from-transparent via-white to-transparent top-0"
-                      style={{
-                        boxShadow: '0 0 6px #06B6D4, 0 0 12px rgba(6, 182, 212, 0.4)',
-                      }}
-                      initial={{ x: '-100%' }}
-                      whileHover={{
-                        x: ['-100%', '100%'],
-                      }}
-                      transition={{
-                        duration: 1.5,
-                        repeat: Infinity,
-                        ease: 'linear',
-                      }}
-                    />
-                    <motion.div
-                      className="absolute w-[2px] h-full bg-gradient-to-b from-transparent via-white to-transparent right-0"
-                      style={{
-                        boxShadow: '0 0 6px #06B6D4, 0 0 12px rgba(6, 182, 212, 0.4)',
-                      }}
-                      initial={{ y: '-100%' }}
-                      whileHover={{
-                        y: ['-100%', '100%'],
-                      }}
-                      transition={{
-                        duration: 1.5,
-                        repeat: Infinity,
-                        ease: 'linear',
-                        delay: 0.375,
-                      }}
-                    />
-                    <motion.div
-                      className="absolute w-full h-[2px] bg-gradient-to-r from-transparent via-white to-transparent bottom-0"
-                      style={{
-                        boxShadow: '0 0 6px #06B6D4, 0 0 12px rgba(6, 182, 212, 0.4)',
-                      }}
-                      initial={{ x: '100%' }}
-                      whileHover={{
-                        x: ['100%', '-100%'],
-                      }}
-                      transition={{
-                        duration: 1.5,
-                        repeat: Infinity,
-                        ease: 'linear',
-                        delay: 0.75,
-                      }}
-                    />
-                    <motion.div
-                      className="absolute w-[2px] h-full bg-gradient-to-b from-transparent via-white to-transparent left-0"
-                      style={{
-                        boxShadow: '0 0 6px #06B6D4, 0 0 12px rgba(6, 182, 212, 0.4)',
-                      }}
-                      initial={{ y: '100%' }}
-                      whileHover={{
-                        y: ['100%', '-100%'],
-                      }}
-                      transition={{
-                        duration: 1.5,
-                        repeat: Infinity,
-                        ease: 'linear',
-                        delay: 1.125,
-                      }}
-                    />
-                  </motion.div>
-
-                  {/* Enhanced background effect on hover */}
-                  <div
-                    className="absolute inset-0 bg-gradient-to-tr rounded-xl z-0"
-                    style={{
-                      background:
-                        'radial-gradient(circle at center, #06B6D420 0%, transparent 70%)',
-                      opacity: 0,
-                      transition: 'opacity 0.4s ease',
-                    }}
-                  />
-                </motion.div>
-              ))}
-            </div>
           </div>
         </div>
       </section>
 
       {/* Scroll Velocity Animation */}
-      <section
-        ref={velocityRef}
-        className="relative overflow-hidden pt-0 pb-0 md:pt-0 md:pb-1 lg:pt-0 lg:pb-0"
-      >
+      <section ref={velocityRef} className="relative overflow-hidden pt-4 pb-4 md:pt-6 md:pb-6">
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{
@@ -486,15 +349,15 @@ export default function ServicesPage() {
               suppressHydrationWarning={true}
               className="w-full"
               style={{
-                gap: '-10px',
+                gap: '1px',
                 display: 'flex',
                 flexDirection: 'column',
-                marginTop: '50px',
+                marginTop: '10px',
               }}
             >
               <ScrollVelocityText
                 baseVelocity={70}
-                className="text-8xl font-extrabold text-[#383e7b71] leading-tight h-[107px]"
+                className="text-6xl font-extrabold text-[#0e8a1871] leading-tight"
                 damping={30}
                 stiffness={600}
                 velocityMapping={{ input: [0, 1000], output: [0, 6] }}
@@ -506,7 +369,7 @@ export default function ServicesPage() {
               </ScrollVelocityText>
               <ScrollVelocityText
                 baseVelocity={-80}
-                className="text-2xl font-extralight text-[#cd97cd] leading-tight h-[100px]"
+                className="text-3xl font-extralight text-[#af4eaf] leading-tight h-[100px]"
                 damping={30}
                 stiffness={600}
                 velocityMapping={{ input: [0, 1000], output: [0, 7] }}
@@ -521,45 +384,65 @@ export default function ServicesPage() {
         </motion.div>
       </section>
 
-      {/* Case Studies with Horizontal Scroll */}
-      <AppleScrollSection delay={0.4}>
-        <section className="section-padding relative services-section case-studies-section mt-20">
-          {' '}
-          {/* Responsive top margin for better spacing */}
-          <div className="container mx-auto px-4">
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{
-                opacity: 1,
-              }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              viewport={{ once: true, amount: 0.2 }}
-              className="title-margin text-center"
-            >
-              <TrueFocus sentence="Case Studies" />
-              <motion.p
+      {/* Services Grid with Apple-style reveal */}
+      <AppleScrollSection>
+        <section className="section-padding relative services-section pt-8 md:pt-12">
+          <div className="container mx-auto px-4 ">
+            <div className="w-full flex justify-center mb-28">
+              <motion.div
                 initial={{ opacity: 0 }}
                 whileInView={{
                   opacity: 1,
                 }}
-                transition={{ delay: 0.3, duration: 0.6 }}
+                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                 viewport={{ once: true, amount: 0.2 }}
-                className="text-lg md:text-xl text-white/90 font-light mt-10 max-w-2xl mx-auto font-['IBM_Plex_Sans'] leading-relaxed"
                 style={{
-                  textShadow: '0 2px 6px rgba(0,0,0,0.8)',
-                  fontWeight: '400',
+                  position: 'relative',
+                  height: '100px',
+                  width: '420px',
+                  padding: '0 0px',
                 }}
               >
-                Proven results backed by analytics data from 6 months to 1 year implementations
-              </motion.p>
-            </motion.div>
+                <TextPressure
+                  text="Expertise&nbsp; "
+                  flex={true}
+                  alpha={false}
+                  stroke={false}
+                  width={true}
+                  weight={true}
+                  italic={false}
+                  textColor="#06B6D4"
+                  strokeColor="#FFFFFF"
+                  minFontSize={32}
+                />
+              </motion.div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8 px-2 md:px-8 lg:px-12 xl:px-16 relative z-10">
+              {services.map((service, index) => (
+                <motion.div
+                  key={service.title}
+                  initial={{ opacity: 0 }}
+                  whileInView={{
+                    opacity: 1,
+                    transition: {
+                      duration: 0.5,
+                      delay: index * 0.05,
+                      ease: 'easeOut',
+                    },
+                  }}
+                  viewport={{ amount: 0.1 }}
+                >
+                  <ServiceCard service={service} index={index} />
+                </motion.div>
+              ))}
+            </div>
           </div>
-          <HorizontalScroll />
         </section>
       </AppleScrollSection>
 
       {/* Agentic AI & RAG Section */}
-      <AppleScrollSection delay={0.3}>
+      <AppleScrollSection delay={0.2}>
         <section className="section-padding relative py-20 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-[#1a0b2e]/45 to-black/90" />
 
@@ -593,25 +476,22 @@ export default function ServicesPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
-                className="order-1 lg:order-1 lg:col-span-2 flex flex-col items-center w-full"
+                className="order-1 lg:order-1 lg:col-span-2 flex flex-col items-stretch w-full"
               >
-                <div className="relative group rounded-2xl overflow-hidden shadow-2xl shadow-[#4CD787]/10 w-full">
-                  <div className="relative w-full h-full bg-black">
+                <div className="relative mx-auto w-full max-w-5xl overflow-hidden rounded-2xl shadow-2xl shadow-[#4CD787]/10 ring-1 ring-white/10 transition-[box-shadow] duration-500">
+                  <div className="relative w-full aspect-[16/9] bg-black">
                     <video
                       autoPlay
                       loop
                       muted
                       playsInline
-                      className="w-full h-full object-cover"
+                      className="absolute inset-0 h-full w-full object-cover"
                       poster="/videos/agentic-ai-grid-poster.jpg"
                     >
                       <source src="/videos/agentic-ai-grid.mp4" type="video/mp4" />
                       Your browser does not support the video tag.
                     </video>
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-                  </div>
-                  <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#4CD787]/30 via-[#9d4edd]/30 to-[#CFB53B]/30 blur-xl" />
                   </div>
                 </div>
 
@@ -791,60 +671,177 @@ export default function ServicesPage() {
         </section>
       </AppleScrollSection>
 
-      {/* Services Grid with Apple-style reveal */}
-      <AppleScrollSection>
-        <section className="section-padding relative services-section pt-8 md:pt-12">
-          <div className="container mx-auto px-4 ">
-            <div className="w-full flex justify-center mb-28">
-              <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{
-                  opacity: 1,
-                }}
-                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                viewport={{ once: true, amount: 0.2 }}
-                style={{
-                  position: 'relative',
-                  height: '100px',
-                  width: '420px',
-                  padding: '0 0px',
-                }}
+      {/* Proof of delivery */}
+      <AppleScrollSection delay={0.3}>
+        <section className="section-padding relative">
+          <div className="container mx-auto px-4">
+            <div className="max-w-3xl mx-auto text-center mb-14">
+              <BlurText
+                text="Why teams choose DevX"
+                className="justify-center text-3xl md:text-4xl font-semibold text-[#06B6D4]"
+                delay={80}
+              />
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="text-white/80 text-base md:text-lg leading-relaxed font-['IBM_Plex_Sans'] mt-4"
               >
-                <TextPressure
-                  text="Expertise&nbsp; "
-                  flex={true}
-                  alpha={false}
-                  stroke={false}
-                  width={true}
-                  weight={true}
-                  italic={false}
-                  textColor="#06B6D4"
-                  strokeColor="#FFFFFF"
-                  minFontSize={32}
-                />
-              </motion.div>
+                Every engagement is anchored on speed, predictability, and the confidence that your
+                product will delight customers from day one.
+              </motion.p>
             </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8 px-2 md:px-8 lg:px-12 xl:px-16 relative z-10">
-              {services.map((service, index) => (
+            <div
+              ref={valuePropsRef}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 px-2 md:px-4 lg:px-6 max-w-screen-xl mx-auto"
+            >
+              {valueProps.map((prop, index) => (
                 <motion.div
-                  key={service.title}
-                  initial={{ opacity: 0 }}
-                  whileInView={{
-                    opacity: 1,
-                    transition: {
-                      duration: 0.5,
-                      delay: index * 0.05,
-                      ease: 'easeOut',
-                    },
-                  }}
-                  viewport={{ amount: 0.1 }}
+                  key={prop.title}
+                  initial={{ opacity: 0, y: 12 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.08 }}
+                  className="bg-black/40 backdrop-blur-lg p-8 rounded-xl border border-white/10 transition-all duration-300 group cursor-pointer pointer-events-auto relative overflow-hidden shadow-xl group-hover:shadow-[0_0_20px_rgba(6,182,212,0.5)] before:absolute before:inset-0 before:border before:border-transparent before:rounded-xl before:transition-all before:duration-300 group-hover:before:border-white/20"
+                  whileHover={{ y: -6 }}
+                  whileTap={{ scale: 0.98 }}
                 >
-                  <ServiceCard service={service} index={index} />
+                  <h3 className="text-xl md:text-2xl lg:text-2xl font-semibold text-[#06B6D4] mb-3 lg:mb-4 transition-colors duration-300 relative z-10">
+                    {prop.title}
+                  </h3>
+                  <p
+                    className="text-white/90 text-base md:text-lg transition-colors duration-300 font-['IBM_Plex_Sans'] font-medium relative z-10 mb-3 lg:mb-4 leading-relaxed"
+                    style={{ textShadow: '0 1px 4px rgba(0,0,0,0.7)' }}
+                  >
+                    {prop.description}
+                  </p>
+                  {prop.proofPoint && (
+                    <p className="text-[#4CD787] text-xs md:text-sm font-semibold transition-colors duration-300 relative z-10">
+                      ✓ {prop.proofPoint}
+                    </p>
+                  )}
+
+                  <motion.div
+                    className="absolute inset-0 overflow-hidden rounded-xl pointer-events-none z-0"
+                    initial={{ opacity: 0 }}
+                    whileHover={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <motion.div
+                      className="absolute w-full h-[2px] bg-gradient-to-r from-transparent via-white to-transparent top-0"
+                      style={{
+                        boxShadow: '0 0 6px #06B6D4, 0 0 12px rgba(6, 182, 212, 0.4)',
+                      }}
+                      initial={{ x: '-100%' }}
+                      whileHover={{
+                        x: ['-100%', '100%'],
+                      }}
+                      transition={{
+                        duration: 1.5,
+                        repeat: Infinity,
+                        ease: 'linear',
+                      }}
+                    />
+                    <motion.div
+                      className="absolute w-[2px] h-full bg-gradient-to-b from-transparent via-white to-transparent right-0"
+                      style={{
+                        boxShadow: '0 0 6px #06B6D4, 0 0 12px rgba(6, 182, 212, 0.4)',
+                      }}
+                      initial={{ y: '-100%' }}
+                      whileHover={{
+                        y: ['-100%', '100%'],
+                      }}
+                      transition={{
+                        duration: 1.5,
+                        repeat: Infinity,
+                        ease: 'linear',
+                        delay: 0.375,
+                      }}
+                    />
+                    <motion.div
+                      className="absolute w-full h-[2px] bg-gradient-to-r from-transparent via-white to-transparent bottom-0"
+                      style={{
+                        boxShadow: '0 0 6px #06B6D4, 0 0 12px rgba(6, 182, 212, 0.4)',
+                      }}
+                      initial={{ x: '100%' }}
+                      whileHover={{
+                        x: ['100%', '-100%'],
+                      }}
+                      transition={{
+                        duration: 1.5,
+                        repeat: Infinity,
+                        ease: 'linear',
+                        delay: 0.75,
+                      }}
+                    />
+                    <motion.div
+                      className="absolute w-[2px] h-full bg-gradient-to-b from-transparent via-white to-transparent left-0"
+                      style={{
+                        boxShadow: '0 0 6px #06B6D4, 0 0 12px rgba(6, 182, 212, 0.4)',
+                      }}
+                      initial={{ y: '100%' }}
+                      whileHover={{
+                        y: ['100%', '-100%'],
+                      }}
+                      transition={{
+                        duration: 1.5,
+                        repeat: Infinity,
+                        ease: 'linear',
+                        delay: 1.125,
+                      }}
+                    />
+                  </motion.div>
+
+                  <div
+                    className="absolute inset-0 bg-gradient-to-tr rounded-xl z-0"
+                    style={{
+                      background:
+                        'radial-gradient(circle at center, #06B6D420 0%, transparent 70%)',
+                      opacity: 0,
+                      transition: 'opacity 0.4s ease',
+                    }}
+                  />
                 </motion.div>
               ))}
             </div>
           </div>
+        </section>
+      </AppleScrollSection>
+
+      {/* Case Studies with Horizontal Scroll */}
+      <AppleScrollSection delay={0.4}>
+        <section className="section-padding relative services-section case-studies-section mt-20">
+          <div className="container mx-auto px-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{
+                opacity: 1,
+              }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              viewport={{ once: true, amount: 0.2 }}
+              className="title-margin text-center"
+            >
+              <TrueFocus sentence="Case Studies" />
+              <motion.p
+                initial={{ opacity: 0 }}
+                whileInView={{
+                  opacity: 1,
+                }}
+                transition={{ delay: 0.3, duration: 0.6 }}
+                viewport={{ once: true, amount: 0.2 }}
+                className="text-lg md:text-xl text-white/90 font-light mt-10 max-w-2xl mx-auto font-['IBM_Plex_Sans'] leading-relaxed"
+                style={{
+                  textShadow: '0 2px 6px rgba(0,0,0,0.8)',
+                  fontWeight: '400',
+                }}
+              >
+                Explore shipped products and the business impact we continue to deliver for founders
+                and enterprise teams.
+              </motion.p>
+            </motion.div>
+          </div>
+          <HorizontalScroll />
         </section>
       </AppleScrollSection>
 

@@ -9,6 +9,7 @@
 
 import { motion, useReducedMotion, useInView, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useRef, useState, useLayoutEffect, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import {
@@ -655,9 +656,8 @@ export default function PortfolioPage() {
                 variants={fadeInUpVariants}
                 className="text-lg md:text-xl text-foreground/90 font-light text-gray-500 max-w-2xl mb-8 -mt-5 leading-relaxed"
               >
-                Selected work across web, mobile, AI, and cloud.
-                <br />
-                Real products, real outcomes.
+                Explore shipped products that increased revenue, retention, and efficiency across
+                web, mobile, AI, and cloud experiences.
               </motion.p>
 
               {/* Decorative squares row under subtitle */}
@@ -840,39 +840,6 @@ export default function PortfolioPage() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-20 relative">
-        <div className="absolute inset-0 z-0 bg-gradient-to-t from-black via-purple-900/20 to-black pointer-events-none" />
-        <div className="relative container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="text-center max-w-3xl mx-auto"
-          >
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#06B6D4]">
-              Ready to Build Your Next Project?
-            </h2>
-            <p className="text-lg md:text-xl text-foreground/90 font-light mb-8 leading-relaxed">
-              Let&apos;s collaborate to bring your ideas to life with our expertise in cutting-edge
-              technologies.
-            </p>
-            <motion.div>
-              <a
-                href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-robinhood text-black hover:bg-white hover:text-black px-8 py-3 rounded-lg font-medium border-2 border-robinhood hover:shadow-[0_5px_15px_rgba(204,255,0,0.3)] transition-all duration-300 shadow-lg"
-              >
-                Schedule a Strategy Call
-                <ArrowRight className="w-4 h-4" />
-              </a>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
       {/* Services */}
       <section className="py-16 relative z-[5000]">
         <div className="absolute inset-0 z-0 bg-gradient-to-b from-black via-purple-900/10 to-black pointer-events-none" />
@@ -902,6 +869,45 @@ export default function PortfolioPage() {
           onClose={handleCloseModal}
           clickPosition={clickPosition}
         />
+      </section>
+
+      {/* CTA */}
+      <section className="py-20 relative">
+        <div className="absolute inset-0 z-0 bg-gradient-to-t from-black via-purple-900/20 to-black pointer-events-none" />
+        <div className="relative container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center max-w-3xl mx-auto"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#06B6D4]">
+              Ready to Build Your Next Project?
+            </h2>
+            <p className="text-lg md:text-xl text-foreground/90 font-light mb-8 leading-relaxed">
+              Partner with a team that has shipped complex products across industries and platforms.
+            </p>
+            <motion.div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+              <a
+                href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-robinhood text-black hover:bg-white hover:text-black px-8 py-3 rounded-lg font-medium border-2 border-robinhood hover:shadow-[0_5px_15px_rgba(204,255,0,0.3)] transition-all duration-300 shadow-lg"
+              >
+                Schedule a Strategy Call
+                <ArrowRight className="w-4 h-4" />
+              </a>
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-2 rounded-lg border border-white/30 px-8 py-3 font-medium text-white transition-all duration-300 hover:border-white hover:bg-white/10"
+              >
+                Contact Our Team
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </motion.div>
+          </motion.div>
+        </div>
       </section>
 
       {/* Project Detail Modal */}

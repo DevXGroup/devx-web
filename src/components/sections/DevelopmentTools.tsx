@@ -561,13 +561,13 @@ export default function DevelopmentTools() {
           />
           {/* ============ Outer AI Tools Orbit ============ */}
           {/* z-[90] - Below inner orbit but visible - Hidden on mobile */}
-          <div className="hidden lg:block">
+          <div className="hidden lg:block relative z-[120]">
             <AIToolsOrbit activeIndex={activeIndex} onIconClick={handleAIToolClick} />
           </div>
         </div>
 
         {/* Logo Loop Section - Mobile Replacement for Outer Orbit */}
-        <div className="w-full mt-8 md:mt-24 lg:mt-32 xl:mt-40 py-8 md:py-12 lg:py-16">
+        <div className="w-full mt-8 md:mt-24 lg:mt-32 xl:mt-40 py-8 md:py-12 lg:py-16 mb-6">
           <div className="w-full max-w-full">
             <h4 className="text-2xl sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold font-['IBM_Plex_Mono'] text-center text-white mb-12 md:mb-16 lg:mb-20 px-4">
               AI & Cloud Technologies
@@ -575,10 +575,9 @@ export default function DevelopmentTools() {
             <LogoLoop logos={aiTools} speed={12} />
           </div>
         </div>
-
         {/* Bottom spacing with gradient fade to black */}
         <div className="pb-32 relative">
-          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-black pointer-events-none" />
+          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-black pointer-events-none z-0" />
         </div>
       </div>
     </LayoutGroup>
@@ -864,6 +863,7 @@ function AIToolsOrbit({
   const [mounted, setMounted] = useState(false)
   const [radius, setRadius] = useState(380)
   const [isVisible, setIsVisible] = useState(false)
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const orbitRef = useRef<HTMLDivElement>(null)
   const animationRef = useRef<number | null>(null)
 
@@ -885,6 +885,10 @@ function AIToolsOrbit({
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  useEffect(() => {
+    setHoveredIndex(null)
+  }, [activeIndex])
 
   // IntersectionObserver to detect when component is visible
   useEffect(() => {
@@ -937,6 +941,18 @@ function AIToolsOrbit({
     }
   }, [mounted, isVisible])
 
+  const handlePointerEnter = useCallback((index: number) => {
+    setHoveredIndex(index)
+  }, [])
+
+  const handlePointerLeave = useCallback(() => {
+    setHoveredIndex(null)
+  }, [])
+
+  const handleTouchStart = useCallback((index: number) => {
+    setHoveredIndex(index)
+  }, [])
+
   // Don't render until mounted to prevent hydration issues
   if (!mounted) {
     return null
@@ -945,90 +961,94 @@ function AIToolsOrbit({
   return (
     <div
       ref={orbitRef}
-      className="absolute z-[90] top-[50%] sm:top-[55%] md:top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2"
+      className="absolute z-[90] top-[50%] sm:top-[55%] md:top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
       style={{
-        width: 0,
-        height: 0,
-        transform: `rotate(${rotation}deg)`,
-        willChange: 'transform',
-        filter: 'blur(0.2px)', // Add subtle motion blur for trail effect
+        width: '100%',
+        height: '100%',
       }}
     >
       {aiTools.map((tool, i) => {
-        const angle = (i * 360) / aiTools.length
+        const angle = (i * 360) / aiTools.length + rotation
+        const angleRad = (angle * Math.PI) / 180
+        const x = Math.cos(angleRad) * radius
+        const y = Math.sin(angleRad) * radius
+        const isActive = activeIndex === i
+        const isHovered = hoveredIndex === i
+        const showLabel = isActive || isHovered
+
         return (
           <div
-            className="absolute"
             key={tool.name}
             style={{
-              top: 0,
-              left: 0,
-              width: 0,
-              height: 0,
-              transform: `rotate(${angle}deg) translateX(${radius}px)`,
+              position: 'absolute',
+              left: '50%',
+              top: '50%',
+              transform: `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`,
+              pointerEvents: 'auto',
             }}
           >
-            {/* Container that counter-rotates to keep both icon and label upright */}
-            <div
-              className="absolute"
+            <motion.button
+              type="button"
+              aria-label={tool.name}
+              aria-pressed={isActive}
+              className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full backdrop-blur-sm shadow border border-purple-500/40 flex items-center justify-center cursor-pointer group/icon focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4CD787] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+              whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => onIconClick(i)}
+              onPointerEnter={() => handlePointerEnter(i)}
+              onPointerLeave={handlePointerLeave}
+              onFocus={() => handlePointerEnter(i)}
+              onBlur={handlePointerLeave}
+              onTouchStart={() => handleTouchStart(i)}
               style={{
-                transform: `rotate(-${angle + rotation}deg)`,
-                width: 0,
-                height: 0,
+                filter: 'drop-shadow(0 0 4px rgba(76, 215, 135, 0.3))',
               }}
             >
-              {/* Main icon container with enhanced trail effect - now clickable */}
               <motion.div
-                className="absolute w-10 h-10 sm:w-12 sm:h-12 -ml-5 -mt-5 sm:-ml-6 sm:-mt-6 rounded-full backdrop-blur-sm shadow border border-purple-500/40 flex items-center justify-center cursor-pointer group/icon"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => onIconClick(i)}
-                style={{
-                  filter: 'drop-shadow(0 0 4px rgba(76, 215, 135, 0.3))', // Add subtle trail glow
+                className="absolute inset-0 rounded-full pointer-events-none"
+                animate={{
+                  boxShadow: [
+                    '0 0 8px rgba(76, 215, 135, 0.4), 0 0 2px rgba(76, 215, 135, 0.6)',
+                    '0 0 20px rgba(76, 215, 135, 0.6), 0 0 6px rgba(76, 215, 135, 0.8)',
+                    '0 0 8px rgba(76, 215, 135, 0.4), 0 0 2px rgba(76, 215, 135, 0.6)',
+                  ],
                 }}
-              >
-                {/* Enhanced glowing trail effect */}
-                <motion.div
-                  className="absolute inset-0 rounded-full"
-                  animate={{
-                    boxShadow: [
-                      '0 0 8px rgba(76, 215, 135, 0.4), 0 0 2px rgba(76, 215, 135, 0.6)',
-                      '0 0 20px rgba(76, 215, 135, 0.6), 0 0 6px rgba(76, 215, 135, 0.8)',
-                      '0 0 8px rgba(76, 215, 135, 0.4), 0 0 2px rgba(76, 215, 135, 0.6)',
-                    ],
-                  }}
-                  transition={{
-                    duration: 2.5,
-                    repeat: Number.POSITIVE_INFINITY,
-                    repeatType: 'reverse',
-                  }}
+                transition={{
+                  duration: 2.5,
+                  repeat: Number.POSITIVE_INFINITY,
+                  repeatType: 'reverse',
+                }}
+              />
+
+              <div className="relative w-6 h-6 sm:w-7 sm:h-7 pointer-events-none">
+                <Image
+                  src={tool.icon || '/placeholder.svg'}
+                  alt={tool.name}
+                  fill
+                  className="object-contain"
                 />
+              </div>
 
-                {/* Icon */}
-                <div className="relative w-6 h-6 sm:w-7 sm:h-7">
-                  <Image
-                    src={tool.icon || '/placeholder.svg'}
-                    alt={tool.name}
-                    fill
-                    className="object-contain"
-                  />
-                </div>
-
-                {/* Tool name label - Shows on hover */}
-                <div
-                  className="absolute whitespace-nowrap top-8 sm:top-9 left-0 -translate-x-1/2 z-[999] pointer-events-none opacity-0 translate-y-2 scale-95 transition-all duration-300 group-hover/icon:opacity-100 group-hover/icon:translate-y-0 group-hover/icon:scale-100"
+              <motion.div
+                initial={false}
+                animate={{
+                  opacity: showLabel ? 1 : 0,
+                  y: showLabel ? 0 : 8,
+                  scale: showLabel ? 1 : 0.95,
+                }}
+                transition={{ duration: 0.25 }}
+                className="absolute whitespace-nowrap top-11 sm:top-12 left-1/2 -translate-x-1/2 z-[999] pointer-events-none"
+              >
+                <span
+                  className="text-sm sm:text-base text-white font-medium bg-black/95 backdrop-blur-md px-4 py-2 rounded-lg border border-[#4CD787]/50 shadow-lg shadow-[#4CD787]/20 font-['IBM_Plex_Mono']"
+                  style={{
+                    textShadow: '0 0 8px rgba(76, 215, 135, 0.5)',
+                  }}
                 >
-                  <span
-                    className="text-sm sm:text-base text-white font-medium bg-black/95 backdrop-blur-md px-4 py-2 rounded-lg border border-[#4CD787]/50 shadow-lg shadow-[#4CD787]/20 font-['IBM_Plex_Mono']"
-                    style={{
-                      textShadow: '0 0 8px rgba(76, 215, 135, 0.5)',
-                    }}
-                  >
-                    {tool.name}
-                  </span>
-                </div>
+                  {tool.name}
+                </span>
               </motion.div>
-            </div>
+            </motion.button>
           </div>
         )
       })}
