@@ -16,6 +16,59 @@ type Props = {
   mouseInteractionRadius?: number
 }
 
+type UniformInputs = Required<Props>
+
+type UniformValue<T> = { value: T }
+
+type Uniforms = {
+  iTime: UniformValue<number>
+  iResolution: UniformValue<[number, number]>
+  enableRainbow: UniformValue<boolean>
+  gridColor: UniformValue<[number, number, number]>
+  rippleIntensity: UniformValue<number>
+  gridSize: UniformValue<number>
+  gridThickness: UniformValue<number>
+  fadeDistance: UniformValue<number>
+  vignetteStrength: UniformValue<number>
+  glowIntensity: UniformValue<number>
+  opacity: UniformValue<number>
+  gridRotation: UniformValue<number>
+  mouseInteraction: UniformValue<boolean>
+  mousePosition: UniformValue<[number, number]>
+  mouseInfluence: UniformValue<number>
+  mouseInteractionRadius: UniformValue<number>
+}
+
+const hexToRgb = (hex: string): [number, number, number] => {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+  return result && result[1] && result[2] && result[3]
+    ? [
+        parseInt(result[1], 16) / 255,
+        parseInt(result[2], 16) / 255,
+        parseInt(result[3], 16) / 255,
+      ]
+    : [1, 1, 1]
+}
+
+const createUniforms = (config: UniformInputs): Uniforms => ({
+  iTime: { value: 0 },
+  iResolution: { value: [1, 1] },
+  enableRainbow: { value: config.enableRainbow },
+  gridColor: { value: hexToRgb(config.gridColor) },
+  rippleIntensity: { value: config.rippleIntensity },
+  gridSize: { value: config.gridSize },
+  gridThickness: { value: config.gridThickness },
+  fadeDistance: { value: config.fadeDistance },
+  vignetteStrength: { value: config.vignetteStrength },
+  glowIntensity: { value: config.glowIntensity },
+  opacity: { value: config.opacity },
+  gridRotation: { value: config.gridRotation },
+  mouseInteraction: { value: config.mouseInteraction },
+  mousePosition: { value: [0.5, 0.5] },
+  mouseInfluence: { value: 0 },
+  mouseInteractionRadius: { value: config.mouseInteractionRadius },
+})
+
 const RippleGrid: React.FC<Props> = ({
   enableRainbow = false,
   gridColor = '#ffffff',
@@ -34,8 +87,25 @@ const RippleGrid: React.FC<Props> = ({
   const mousePositionRef = useRef({ x: 0.5, y: 0.5 })
   const targetMouseRef = useRef({ x: 0.5, y: 0.5 })
   const mouseInfluenceRef = useRef(0)
-  const uniformsRef = useRef<any>(null)
+  const uniformsRef = useRef<Uniforms | null>(null)
   const rendererRef = useRef<Renderer | null>(null)
+
+  if (!uniformsRef.current) {
+    uniformsRef.current = createUniforms({
+      enableRainbow,
+      gridColor,
+      rippleIntensity,
+      gridSize,
+      gridThickness,
+      fadeDistance,
+      vignetteStrength,
+      glowIntensity,
+      opacity,
+      gridRotation,
+      mouseInteraction,
+      mouseInteractionRadius,
+    })
+  }
 
   const handleMouseMove = useCallback(
     (e: MouseEvent) => {
@@ -51,17 +121,9 @@ const RippleGrid: React.FC<Props> = ({
   useEffect(() => {
     if (!containerRef.current) return
     const root = containerRef.current
+    const uniforms = uniformsRef.current
 
-    const hexToRgb = (hex: string): [number, number, number] => {
-      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
-      return result && result[1] && result[2] && result[3]
-        ? [
-            parseInt(result[1], 16) / 255,
-            parseInt(result[2], 16) / 255,
-            parseInt(result[3], 16) / 255,
-          ]
-        : [1, 1, 1]
-    }
+    if (!uniforms) return
 
     let gl: WebGLRenderingContext | WebGL2RenderingContext | null = null
     let mesh: Mesh | null = null
@@ -169,27 +231,6 @@ void main() {
     float alpha = length(color) * finalFade * opacity;
     gl_FragColor = vec4(color * t * finalFade * opacity, alpha);
 }`
-
-    const uniforms = {
-      iTime: { value: 0 },
-      iResolution: { value: [1, 1] as [number, number] },
-      enableRainbow: { value: enableRainbow },
-      gridColor: { value: hexToRgb(gridColor) },
-      rippleIntensity: { value: rippleIntensity },
-      gridSize: { value: gridSize },
-      gridThickness: { value: gridThickness },
-      fadeDistance: { value: fadeDistance },
-      vignetteStrength: { value: vignetteStrength },
-      glowIntensity: { value: glowIntensity },
-      opacity: { value: opacity },
-      gridRotation: { value: gridRotation },
-      mouseInteraction: { value: mouseInteraction },
-      mousePosition: { value: [0.5, 0.5] as [number, number] },
-      mouseInfluence: { value: 0 },
-      mouseInteractionRadius: { value: mouseInteractionRadius },
-    }
-
-    uniformsRef.current = uniforms
 
     const doResize = (w: number, h: number) => {
       if (!rendererRef.current) return
@@ -309,17 +350,6 @@ void main() {
 
   useEffect(() => {
     if (!uniformsRef.current) return
-
-    const hexToRgb = (hex: string): [number, number, number] => {
-      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
-      return result && result[1] && result[2] && result[3]
-        ? [
-            parseInt(result[1], 16) / 255,
-            parseInt(result[2], 16) / 255,
-            parseInt(result[3], 16) / 255,
-          ]
-        : [1, 1, 1]
-    }
 
     uniformsRef.current.enableRainbow.value = enableRainbow
     uniformsRef.current.gridColor.value = hexToRgb(gridColor)

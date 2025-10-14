@@ -380,6 +380,9 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
 
     scheduleUpdate()
 
+    const lastTransforms = lastTransformsRef.current
+    const cardBaseOffsets = cardBaseOffsetsRef.current
+
     return () => {
       window.removeEventListener('resize', handleResize)
       if (useWindowScroll) {
@@ -400,9 +403,9 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       }
       stackCompletedRef.current = false
       cardsRef.current = []
-      lastTransformsRef.current.clear()
+      lastTransforms.clear()
       isUpdatingRef.current = false
-      cardBaseOffsetsRef.current.clear()
+      cardBaseOffsets.clear()
       endElementBaseOffsetRef.current = null
       needsMeasurementRef.current = true
     }
