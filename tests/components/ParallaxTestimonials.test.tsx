@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { screen, fireEvent } from '@testing-library/react'
 import { renderWithProviders, setupIntersectionObserverMock } from '../test-utils'
 import ParallaxTestimonials from '@/components/ParallaxTestimonials'
 
@@ -27,39 +27,41 @@ describe('ParallaxTestimonials', () => {
     renderWithProviders(<ParallaxTestimonials />)
     
     // Check for all testimonial authors
-    expect(screen.getByText('Sarah Johnson')).toBeInTheDocument()
-    expect(screen.getByText('Michael Chen')).toBeInTheDocument()
-    expect(screen.getByText('Emily Rodriguez')).toBeInTheDocument()
+    expect(screen.getByText('Chamrosh Inc Founder/CEO')).toBeInTheDocument()
+    expect(screen.getByText('Lazurd Inc CEO')).toBeInTheDocument()
+    expect(screen.getByText('Lawazm Inc CEO')).toBeInTheDocument()
   })
 
   it('renders testimonial quotes', () => {
     renderWithProviders(<ParallaxTestimonials />)
     
-    expect(screen.getByText(/DevX Group transformed our business/)).toBeInTheDocument()
-    expect(screen.getByText(/Working with DevX Group has been a game-changer/)).toBeInTheDocument()
-    expect(screen.getByText(/The mobile app DevX Group built for us/)).toBeInTheDocument()
+    expect(
+      screen.getByText(/DevX Group has been assisting our company for the past three years/i)
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(/Our partnership with Dev Group has driven our company/i)
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(/The DevX Group team showed high professionalism handling our project/i)
+    ).toBeInTheDocument()
   })
 
   it('renders company positions', () => {
     renderWithProviders(<ParallaxTestimonials />)
     
-    expect(screen.getByText('CTO, TechVision Inc.')).toBeInTheDocument()
-    expect(screen.getByText('CEO, Innovate Solutions')).toBeInTheDocument()
-    expect(screen.getByText('Product Manager, MobileFirst')).toBeInTheDocument()
+    expect(screen.getByText('Founder/CEO, Chamrosh Inc')).toBeInTheDocument()
+    expect(screen.getByText('CEO, Lazurd Inc')).toBeInTheDocument()
+    expect(screen.getByText('CEO, Lawazm Inc')).toBeInTheDocument()
   })
 
-  it('renders company logos', () => {
+  it('expands truncated testimonials when clicking Read more', () => {
     renderWithProviders(<ParallaxTestimonials />)
     
-    const logos = screen.getAllByAltText('Company logo')
-    expect(logos).toHaveLength(3)
-  })
+    const readMoreButton = screen.getAllByRole('button', { name: /read more/i })[0]
+    fireEvent.click(readMoreButton)
 
-  it('renders author images', () => {
-    renderWithProviders(<ParallaxTestimonials />)
-    
-    expect(screen.getByAltText('Sarah Johnson')).toBeInTheDocument()
-    expect(screen.getByAltText('Michael Chen')).toBeInTheDocument()
-    expect(screen.getByAltText('Emily Rodriguez')).toBeInTheDocument()
+    expect(
+      screen.getByText(/We strongly recommend them to knowledgeable clients seeking a highly productive/i)
+    ).toBeInTheDocument()
   })
-}) 
+})
