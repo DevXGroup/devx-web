@@ -44,7 +44,7 @@ if (dsn) {
       "cancelled",
     ],
 
-    beforeSend(event, hint) {
+    beforeSend(event, _hint) {
       // Filter out errors from browser extensions
       if (event.exception?.values?.[0]?.stacktrace?.frames?.some(
         (frame) => frame.filename?.includes("chrome-extension://") || frame.filename?.includes("moz-extension://")
