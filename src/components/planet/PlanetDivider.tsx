@@ -149,6 +149,19 @@ export default function PlanetDivider() {
 
   const { position, bottomOffset, opacity, scrollRotation, continuousRotation } = calculateVisibility()
   const sizes = getResponsiveSizes()
+  const isMobileViewport = screenSize.width < 768
+
+  // Disable rotation on small screens to avoid the iOS rotating square artifact.
+  const getTransform = (rotationFactor: number) => {
+    const translate = sizes.translateY
+
+    if (isMobileViewport) {
+      return `translateY(${translate})`
+    }
+
+    const effectiveRotation = (scrollRotation + continuousRotation) * rotationFactor
+    return `translateY(${translate}) rotate(${effectiveRotation}deg)`
+  }
 
   // Cross-browser compatible styles with mobile-specific fixes
   const getCrossBrowserStyle = (transform: string, additionalStyles: any = {}) => ({
@@ -186,7 +199,7 @@ export default function PlanetDivider() {
       {/* Main planet body with enhanced 3D definition */}
       <div
         className="absolute w-full h-[200%] left-0 planet-glow-effect"
-        style={getCrossBrowserStyle(`translateY(${sizes.translateY}) rotate(${(scrollRotation + continuousRotation) * 1}deg)`, {
+        style={getCrossBrowserStyle(getTransform(1), {
           bottom: `${position * 20 + bottomOffset}%`,
           aspectRatio: "1/1",
           borderRadius: "50%",
@@ -216,7 +229,7 @@ export default function PlanetDivider() {
       {/* Large crater formations and rock outcrops - Layer 1 */}
       <div
         className="absolute w-full h-[200%] left-0"
-        style={getCrossBrowserStyle(`translateY(${sizes.translateY}) rotate(${(scrollRotation + continuousRotation) * (isSafari ? 0.9 : 0.8)}deg)`, {
+        style={getCrossBrowserStyle(getTransform(isSafari ? 0.9 : 0.8), {
           bottom: `${position * 20 + bottomOffset}%`,
           aspectRatio: "1/1",
           borderRadius: "50%",
@@ -240,7 +253,7 @@ export default function PlanetDivider() {
       {/* Medium rocky terrain and boulder fields - Layer 2 */}
       <div
         className="absolute w-full h-[200%] left-0"
-        style={getCrossBrowserStyle(`translateY(${sizes.translateY}) rotate(${(scrollRotation + continuousRotation) * (isSafari ? 0.85 : 0.6)}deg)`, {
+        style={getCrossBrowserStyle(getTransform(isSafari ? 0.85 : 0.6), {
           bottom: `${position * 20 + bottomOffset}%`,
           aspectRatio: "1/1",
           borderRadius: "50%",
@@ -266,7 +279,7 @@ export default function PlanetDivider() {
       {/* Fine surface details, rocks and debris - Layer 3 */}
       <div
         className="absolute w-full h-[200%] left-0"
-        style={getCrossBrowserStyle(`translateY(${sizes.translateY}) rotate(${(scrollRotation + continuousRotation) * (isSafari ? 0.8 : 0.4)}deg)`, {
+        style={getCrossBrowserStyle(getTransform(isSafari ? 0.8 : 0.4), {
           bottom: `${position * 20 + bottomOffset}%`,
           aspectRatio: "1/1",
           borderRadius: "50%",
@@ -295,7 +308,7 @@ export default function PlanetDivider() {
       {/* Ultra-fine surface texture and micro-details - Layer 4 */}
       <div
         className="absolute w-full h-[200%] left-0"
-        style={getCrossBrowserStyle(`translateY(${sizes.translateY}) rotate(${(scrollRotation + continuousRotation) * (isSafari ? 0.75 : 0.2)}deg)`, {
+        style={getCrossBrowserStyle(getTransform(isSafari ? 0.75 : 0.2), {
           bottom: `${position * 20 + bottomOffset}%`,
           aspectRatio: "1/1",
           borderRadius: "50%",
@@ -322,7 +335,7 @@ export default function PlanetDivider() {
       {/* Subtle rim lighting effect - rotates with globe for realistic shadows */}
       <div
         className="absolute w-full h-[200%] left-0"
-        style={getCrossBrowserStyle(`translateY(${sizes.translateY}) rotate(${(scrollRotation + continuousRotation) * 1}deg)`, {
+        style={getCrossBrowserStyle(getTransform(1), {
           bottom: `${position * 20 + bottomOffset}%`,
           aspectRatio: "1/1",
           borderRadius: "50%",

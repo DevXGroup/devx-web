@@ -18,8 +18,23 @@ import {
   X,
   Copy,
 } from 'lucide-react'
+import dynamic from 'next/dynamic'
 import TextPressure from '@/components/animations/TextPressure'
-import Lightning from '@/components/animations/Lightning'
+
+const Lightning = dynamic(() => import('@/components/animations/Lightning'), {
+  ssr: false,
+  loading: () => null,
+})
+
+const Orb = dynamic(() => import('@/components/animations/Orb'), {
+  ssr: false,
+  loading: () => null,
+})
+
+const Confetti = dynamic(() => import('@/components/animations/Confetti'), {
+  ssr: false,
+  loading: () => null,
+})
 
 // Always Visible Lightning with Natural Fade
 const IntermittentLightning = ({
@@ -77,8 +92,6 @@ const IntermittentLightning = ({
     </motion.div>
   )
 }
-import Orb from '@/components/animations/Orb'
-import Confetti from '@/components/animations/Confetti'
 
 // Enhanced animation variants
 const fadeInUpVariants = {
@@ -138,6 +151,9 @@ export default function ContactPage() {
   const [confettiOrigin, setConfettiOrigin] = useState({ x: 0, y: 0 })
   const [showExampleModal, setShowExampleModal] = useState(false)
   const [hasCopiedExample, setHasCopiedExample] = useState(false)
+  const [showLightning, setShowLightning] = useState(false)
+  const [confettiReady, setConfettiReady] = useState(false)
+  const [showOrb, setShowOrb] = useState(false)
   const copyTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const shouldReduceMotion = useReducedMotion()
   const formRef = useRef(null)
@@ -147,6 +163,41 @@ export default function ContactPage() {
   }, [])
   const calendlyEmbedUrl =
     'https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?hide_gdpr_banner=1&background_color=000000&text_color=ffffff&primary_color=4CD787&embed_type=Inline'
+
+  // Defer WebGL-heavy lightning animation to improve LCP
+  useEffect(() => {
+    let idleHandle: number | null = null
+    let timeoutHandle: ReturnType<typeof setTimeout> | null = null
+
+    const enableLightning = () => {
+      setShowLightning(true)
+    }
+
+    if (typeof window !== 'undefined') {
+      const requestIdle = window.requestIdleCallback?.bind(window)
+      if (requestIdle) {
+        idleHandle = requestIdle(
+          () => {
+            enableLightning()
+          },
+          { timeout: 1500 }
+        )
+      }
+    }
+
+    if (idleHandle === null) {
+      timeoutHandle = setTimeout(enableLightning, 400)
+    }
+
+    return () => {
+      if (idleHandle !== null && typeof window !== 'undefined') {
+        window.cancelIdleCallback?.(idleHandle)
+      }
+      if (timeoutHandle) {
+        clearTimeout(timeoutHandle)
+      }
+    }
+  }, [])
 
   // Prepare gradient animation styles and handle cleanup
   useEffect(() => {
@@ -180,6 +231,18 @@ export default function ContactPage() {
       }
     }
   }, [])
+
+  useEffect(() => {
+    if (showConfetti) {
+      setConfettiReady(true)
+    }
+  }, [showConfetti])
+
+  useEffect(() => {
+    if ((isFormInView || isTyping) && !showOrb) {
+      setShowOrb(true)
+    }
+  }, [isFormInView, isTyping, showOrb])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -283,21 +346,25 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Confetti Animation */}
-      <Confetti
-        isActive={showConfetti}
-        onComplete={handleConfettiComplete}
-        duration={3000}
-        particleCount={120}
-        originX={confettiOrigin.x}
-        originY={confettiOrigin.y}
-      />
+      {confettiReady && (
+        <Confetti
+          isActive={showConfetti}
+          onComplete={handleConfettiComplete}
+          duration={3000}
+          particleCount={120}
+          originX={confettiOrigin.x}
+          originY={confettiOrigin.y}
+        />
+      )}
       {/* Hero Section with Lightning Background - Reduced height */}
       <section className="relative pt-0 pb-8 overflow-hidden h-[60vh]">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-[#0a0a1a] to-black" />
 
         {/* Lightning Effect Background - Natural thunderstorm, centered */}
         <div className="absolute -top-24 left-0 right-0 bottom-0 opacity-75 w-full">
-          <IntermittentLightning hue={200} xOffset={0} speed={0.8} intensity={0.9} size={1.6} />
+          {showLightning && (
+            <IntermittentLightning hue={200} xOffset={0} speed={0.8} intensity={0.9} size={1.6} />
+          )}
         </div>
 
         {/* Bottom fade-out overlay */}
@@ -640,14 +707,16 @@ export default function ContactPage() {
                                   transform: 'translateZ(0)',
                                 }}
                               >
-                                <Orb
-                                  hue={isTyping ? 35 : 130}
-                                  hoverIntensity={
-                                    isTyping ? Math.min(typingIntensity * 2.5, 1.0) : 0.15
-                                  }
-                                  rotateOnHover={true}
-                                  forceHoverState={isTyping}
-                                />
+                                {showOrb && (
+                                  <Orb
+                                    hue={isTyping ? 35 : 130}
+                                    hoverIntensity={
+                                      isTyping ? Math.min(typingIntensity * 2.5, 1.0) : 0.15
+                                    }
+                                    rotateOnHover={true}
+                                    forceHoverState={isTyping}
+                                  />
+                                )}
                               </div>
                             </div>
                           </div>

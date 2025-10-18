@@ -23,19 +23,18 @@ const DevelopmentToolsSection = dynamic(() => import('@sections/DevelopmentTools
 export default function HomePageClient() {
   const [isLoaded, setIsLoaded] = useState(false)
   const [navbarReady, setNavbarReady] = useState(false)
-  const [mounted, setMounted] = useState(false)
   const [showDeferredSections, setShowDeferredSections] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
-
     // Prevent scroll restoration causing page to scroll up on refresh
-    if ('scrollRestoration' in history) {
-      history.scrollRestoration = 'manual'
+    if (typeof window !== 'undefined' && 'scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual'
     }
 
     // Ensure page starts at top
-    window.scrollTo(0, 0)
+    if (typeof window !== 'undefined') {
+      window.scrollTo(0, 0)
+    }
 
     // Delay to allow circle animation to start
     const timer = setTimeout(() => {
@@ -62,7 +61,7 @@ export default function HomePageClient() {
   }, [])
 
   useEffect(() => {
-    if (!mounted || showDeferredSections) {
+    if (showDeferredSections) {
       return
     }
 
@@ -98,18 +97,7 @@ export default function HomePageClient() {
         clearTimeout(timeoutHandle)
       }
     }
-  }, [mounted, showDeferredSections])
-
-  // Don't render content until mounted to prevent white flash
-  if (!mounted) {
-    return (
-      <main
-        data-page="home"
-        className="flex min-h-screen flex-col items-center w-full bg-black"
-        style={{ backgroundColor: '#000000', opacity: 0 }}
-      />
-    )
-  }
+  }, [showDeferredSections])
 
   return (
     <main
