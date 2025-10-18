@@ -19,7 +19,7 @@ export async function register() {
         "HMR",
       ],
 
-      beforeSend(event, hint) {
+      beforeSend(event, _hint) {
         if (process.env.NODE_ENV === "development" && !process.env.SENTRY_DEBUG) {
           return null;
         }
