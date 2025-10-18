@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, useReducedMotion, useInView } from 'framer-motion'
-import Link from 'next/link'
 import {
   Phone,
   Mail,
@@ -105,26 +104,6 @@ const buttonVariants = {
   tap: { scale: 0.98 },
 }
 
-// Enhanced AnimatedGradientText component with better animation
-const AnimatedGradientText = ({
-  children,
-  className = '',
-}: {
-  children: React.ReactNode
-  className?: string
-}) => (
-  <span
-    className={`bg-clip-text text-transparent inline-block ${className}`}
-    style={{
-      backgroundImage: 'linear-gradient(-45deg, #4CD787, #FFD700, #9d4edd, #4834D4)',
-      backgroundSize: '300% 300%',
-      animation: 'gradient-animation 6s ease infinite',
-    }}
-  >
-    {children}
-  </span>
-)
-
 const exampleProjectRequest = `Subject: Custom E-commerce Platform Development
 
 "Hi there! I'm looking to build a custom e-commerce platform for my growing business.
@@ -151,7 +130,6 @@ export default function ContactPage() {
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
-  const [calendarLoaded, setCalendarLoaded] = useState(false)
   const [formErrors, setFormErrors] = useState({})
   const [isTyping, setIsTyping] = useState(false)
   const [typingIntensity, setTypingIntensity] = useState(0)
@@ -208,8 +186,6 @@ export default function ContactPage() {
       script.src = 'https://assets.calendly.com/assets/external/widget.js'
       script.async = true
       script.onload = () => {
-        setCalendarLoaded(true)
-
         // Initialize Calendly with dark mode
         setTimeout(() => {
           if ((window as any).Calendly) {
@@ -240,7 +216,6 @@ export default function ContactPage() {
       }
     } else {
       // Script already exists, set calendar as loaded
-      setCalendarLoaded(true)
       return undefined
     }
   }, [])
@@ -269,16 +244,6 @@ export default function ContactPage() {
     }, 400) // Very quick response
 
     // Clear errors when user starts typing
-    if ((formErrors as any)[name]) {
-      setFormErrors((prev) => ({ ...prev, [name]: null }))
-    }
-  }
-
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, checked } = e.target
-    setFormState((prev) => ({ ...prev, [name]: checked }))
-
-    // Clear errors when user checks the box
     if ((formErrors as any)[name]) {
       setFormErrors((prev) => ({ ...prev, [name]: null }))
     }

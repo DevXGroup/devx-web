@@ -1,7 +1,7 @@
 'use client'
 
-import { motion, useReducedMotion, useInView } from 'framer-motion'
-import { Check, Star, Zap, Users, Shield, ArrowRight, Sparkles, Target, Crown } from 'lucide-react'
+import { motion, useReducedMotion } from 'framer-motion'
+import { Check, Star, Zap, Shield, ArrowRight, Sparkles, Target, Crown } from 'lucide-react'
 import { useRef, useState } from 'react'
 import TextPressure from '@animations/TextPressure'
 
@@ -226,11 +226,9 @@ interface PricingPlan {
 
 interface PricingCardProps {
   plan: PricingPlan
-  index: number
-  isYearly: boolean
 }
 
-function PricingCard({ plan, index, isYearly }: PricingCardProps) {
+function PricingCard({ plan }: PricingCardProps) {
   const shouldReduceMotion = useReducedMotion()
   const ref = useRef(null)
   const IconComponent = plan.icon
@@ -450,8 +448,7 @@ function PricingCard({ plan, index, isYearly }: PricingCardProps) {
 }
 
 export default function PricingPage() {
-  const shouldReduceMotion = useReducedMotion()
-  const [isYearly, setIsYearly] = useState(false)
+  useState(false)
 
   return (
     <div className="min-h-screen bg-black relative overflow-hidden pt-24">
@@ -586,7 +583,7 @@ export default function PricingPage() {
             whileInView="visible"
             viewport={{ once: true, margin: '-100px' }}
           >
-            {pricingPlans.map((plan, index) => (
+            {pricingPlans.map((plan) => (
               <div key={plan.name} className="relative flex flex-col h-full">
                 {/* Popular badge positioned above card */}
                 {plan.popular && (
@@ -609,7 +606,7 @@ export default function PricingPage() {
                   </div>
                 )}
                 <div className="flex-1">
-                  <PricingCard plan={plan} index={index} isYearly={isYearly} />
+                  <PricingCard plan={plan} />
                 </div>
               </div>
             ))}

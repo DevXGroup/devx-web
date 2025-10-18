@@ -281,7 +281,7 @@ const Interactive3DShowcase = () => {
                 { label: 'Real-time 3D', value: '60fps' },
                 { label: 'Interactive', value: 'Mouse' },
                 { label: 'Performance', value: 'Optimized' }
-              ].map((stat, index) => (
+              ].map((stat) => (
                 <motion.div
                   key={stat.label}
                   variants={itemVariants}

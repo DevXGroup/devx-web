@@ -22,7 +22,7 @@ const teamMembers: TeamMember[] = [
   {
     id: 'max',
     name: 'Max Sheikhizadeh',
-    title: 'CEO/CTO & Founder',
+    title: 'CTO & Founder',
     image: '/images/about/max-headshot.jpg',
     bio: '15+ years of experience at Amazon, Viasat, Qualcomm, and high-growth startups. Led core teams delivering innovative features for Amazon e-commerce platforms. Combines deep engineering expertise with collaborative leadership to drive team growth and consistent success.',
     linkedIn: 'https://www.linkedin.com/in/max-sheikhizadeh-7847a68/',
