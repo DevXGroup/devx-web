@@ -20,6 +20,7 @@
 - React 19 + TypeScript strict mode, Tailwind CSS 4, and a growing component library of motion, 3D, and marketing primitives.
 - Jest + Testing Library unit suite and Playwright coverage for flows, audits, and QA scenarios.
 - Vercel analytics, Speed Insights, and Sentry optics wired into the root layout.
+- Contact experience ships with a zero-CLS Calendly scheduling iframe and responsive form states tuned for 24-hour follow-up.
 - Agent onboarding and workflow notes captured in `AGENTS.md`.
 
 ---
