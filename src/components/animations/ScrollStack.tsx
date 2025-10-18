@@ -52,8 +52,10 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   const scrollerRef = useRef<HTMLDivElement>(null);
   const stackCompletedRef = useRef(false);
   const animationFrameRef = useRef<number | null>(null);
+  const transformFrameRef = useRef<number | null>(null);
   const lenisRef = useRef<Lenis | null>(null);
   const cardsRef = useRef<HTMLElement[]>([]);
+  const cardOffsetsRef = useRef<number[]>([]);
   const lastTransformsRef = useRef(new Map<number, any>());
   const isUpdatingRef = useRef(false);
 
@@ -99,12 +101,34 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
     [useWindowScroll]
   );
 
+  const cacheCardOffsets = useCallback(() => {
+    if (!cardsRef.current.length) return;
+
+    const offsets: number[] = [];
+
+    cardsRef.current.forEach((card, index) => {
+      if (!card) return;
+
+      const currentTransform = card.style.transform;
+      card.style.transform = 'none';
+
+      const baseOffset = useWindowScroll
+        ? card.getBoundingClientRect().top + window.scrollY
+        : card.offsetTop;
+
+      offsets[index] = baseOffset;
+      card.style.transform = currentTransform;
+    });
+
+    cardOffsetsRef.current = offsets;
+  }, [useWindowScroll]);
+
   const updateCardTransforms = useCallback(() => {
     if (!cardsRef.current.length || isUpdatingRef.current) return;
 
     isUpdatingRef.current = true;
 
-    const { scrollTop, containerHeight, scrollContainer } = getScrollData();
+    const { scrollTop, containerHeight } = getScrollData();
     const stackPositionPx = parsePercentage(stackPosition, containerHeight);
     const scaleEndPositionPx = parsePercentage(scaleEndPosition, containerHeight);
 
@@ -117,7 +141,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
     cardsRef.current.forEach((card, i) => {
       if (!card) return;
 
-      const cardTop = getElementOffset(card);
+      const cardTop = cardOffsetsRef.current[i] ?? getElementOffset(card);
       const triggerStart = cardTop - stackPositionPx - itemStackDistance * i;
       const triggerEnd = cardTop - scaleEndPositionPx;
       const pinStart = cardTop - stackPositionPx - itemStackDistance * i;
@@ -134,7 +158,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
         for (let j = 0; j < cardsRef.current.length; j++) {
           const card = cardsRef.current[j];
           if (!card) continue;
-          const jCardTop = getElementOffset(card);
+          const jCardTop = cardOffsetsRef.current[j] ?? getElementOffset(card);
           const jTriggerStart = jCardTop - stackPositionPx - itemStackDistance * j;
           if (scrollTop >= jTriggerStart) {
             topCardIndex = j;
@@ -210,7 +234,12 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   ]);
 
   const handleScroll = useCallback(() => {
-    updateCardTransforms();
+    if (transformFrameRef.current !== null) return;
+
+    transformFrameRef.current = requestAnimationFrame(() => {
+      transformFrameRef.current = null;
+      updateCardTransforms();
+    });
   }, [updateCardTransforms]);
 
   const setupLenis = useCallback(() => {
@@ -278,6 +307,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
         : (scrollerRef.current?.querySelectorAll('.scroll-stack-card') ?? [])
     ) as HTMLElement[];
     cardsRef.current = cards;
+    cacheCardOffsets();
     const transformsCache = lastTransformsRef.current;
 
     cards.forEach((card, i) => {
@@ -301,6 +331,10 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
+      if (transformFrameRef.current) {
+        cancelAnimationFrame(transformFrameRef.current);
+        transformFrameRef.current = null;
+      }
       if (lenisRef.current) {
         lenisRef.current.destroy();
       }
@@ -321,9 +355,51 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
     blurAmount,
     useWindowScroll,
     onStackComplete,
+    cacheCardOffsets,
     setupLenis,
     updateCardTransforms
   ]);
+
+  useLayoutEffect(() => {
+    if (!cardsRef.current.length) return;
+
+    const handleResize = () => {
+      cacheCardOffsets();
+      updateCardTransforms();
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [cacheCardOffsets, updateCardTransforms]);
+
+  useLayoutEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (!cardsRef.current.length) return;
+
+    const target = useWindowScroll ? document.documentElement : scrollerRef.current;
+    if (!target) return;
+
+    const frameId = window.requestAnimationFrame(() => {
+      cacheCardOffsets();
+      updateCardTransforms();
+    });
+
+    let observer: ResizeObserver | null = null;
+    if ('ResizeObserver' in window) {
+      observer = new ResizeObserver(() => {
+        cacheCardOffsets();
+        updateCardTransforms();
+      });
+      observer.observe(target);
+    }
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+      observer?.disconnect();
+    };
+  }, [cacheCardOffsets, updateCardTransforms, useWindowScroll]);
 
   return (
     <div
