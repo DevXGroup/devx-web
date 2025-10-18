@@ -198,7 +198,7 @@ export default function PlanetDivider() {
     >
       {/* Main planet body with enhanced 3D definition */}
       <div
-        className="absolute w-full h-[200%] left-0 planet-glow-effect"
+        className={`absolute w-full h-[200%] left-0 planet-glow-effect${isMobileViewport ? ' planet-glow-effect--mobile' : ''}`}
         style={getCrossBrowserStyle(getTransform(1), {
           bottom: `${position * 20 + bottomOffset}%`,
           aspectRatio: "1/1",
@@ -356,6 +356,8 @@ export default function PlanetDivider() {
           will-change: transform, opacity;
           filter: drop-shadow(0 0 60px rgba(76, 215, 135, 0.25)) drop-shadow(0 0 110px rgba(76, 215, 135, 0.18)) drop-shadow(0 0 160px rgba(76, 215, 135, 0.12));
           -webkit-filter: drop-shadow(0 0 60px rgba(76, 215, 135, 0.25)) drop-shadow(0 0 110px rgba(76, 215, 135, 0.18)) drop-shadow(0 0 160px rgba(76, 215, 135, 0.12));
+          pointer-events: none;
+          overflow: visible;
         }
 
         /* Safari-specific optimizations for large screens */
@@ -392,6 +394,21 @@ export default function PlanetDivider() {
         }
 
         /* Mobile Safari optimizations - iPhone specific */
+        @keyframes planetGlowPulseMobile {
+          0% {
+            opacity: 0.38;
+            transform: scale(0.95);
+          }
+          50% {
+            opacity: 0.5;
+            transform: scale(1);
+          }
+          100% {
+            opacity: 0.62;
+            transform: scale(1.06);
+          }
+        }
+
         @media screen and (max-width: 767px) {
           .planet-glow-effect {
             /* Simplified filter for better mobile performance */
@@ -407,6 +424,23 @@ export default function PlanetDivider() {
             perspective: 1000px;
             /* Reduce complexity */
             will-change: transform;
+          }
+
+          .planet-glow-effect--mobile {
+            filter: none;
+            -webkit-filter: none;
+          }
+
+          .planet-glow-effect--mobile::after {
+            content: "";
+            position: absolute;
+            inset: -22%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 50% 50%, rgba(76, 215, 135, 0.38) 0%, rgba(76, 215, 135, 0.22) 35%, rgba(76, 215, 135, 0.08) 55%, rgba(76, 215, 135, 0) 80%);
+            animation: planetGlowPulseMobile 4.2s ease-in-out infinite;
+            pointer-events: none;
+            mix-blend-mode: screen;
+            transform-origin: center;
           }
         }
 
