@@ -495,9 +495,9 @@ export default function PortfolioPage() {
                     key={`hero-ascii-ball-${pathname}`}
                     height={620}
                     className="rounded-xl"
-                    color="#4CD787"
+                    color="#9d4edd"
                     charSize={6}
-                    opacity={0.25}
+                    opacity={0.5}
                     showBase={false}
                     sphereRadius={240}
                     lighting="bottomLeft"
