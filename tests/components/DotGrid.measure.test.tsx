@@ -1,10 +1,12 @@
 import React from 'react'
+import { waitFor } from '@testing-library/react'
 import { renderWithProviders } from '../../tests/test-utils'
 import DotGrid from '@sections/DotGrid'
 
 // Helper to mock wrapper size via getBoundingClientRect/clientWidth/Height
 function mockElementSize(el: HTMLElement, { width, height }: { width: number; height: number }) {
   Object.defineProperty(el, 'getBoundingClientRect', {
+    configurable: true,
     value: () => ({ width, height, top: 0, left: 0, right: width, bottom: height, x: 0, y: 0, toJSON: () => {} }),
   })
   Object.defineProperty(el, 'clientWidth', { value: width, configurable: true })
@@ -35,12 +37,10 @@ describe('DotGrid measuring', () => {
     const canvas = section.querySelector('canvas') as HTMLCanvasElement
     expect(canvas).toBeInTheDocument()
 
-    // Allow any rAF queued build/draw to run
-    await new Promise((r) => setTimeout(r, 0))
-
-    // In component, style width/height are set in px
-    expect(canvas.style.width).toBe('300px')
-    expect(canvas.style.height).toBe('200px')
+    await waitFor(() => {
+      expect(canvas.style.width).toBe('300px')
+      expect(canvas.style.height).toBe('200px')
+    })
   })
 
   test('uses minimum 100x100 when wrapper reports 0', async () => {
@@ -54,10 +54,9 @@ describe('DotGrid measuring', () => {
     mockElementSize(wrapper, { width: 0, height: 0 })
     const canvas = container.querySelector('canvas') as HTMLCanvasElement
 
-    await new Promise((r) => setTimeout(r, 0))
-
-    expect(canvas.style.width).toBe('100px')
-    expect(canvas.style.height).toBe('100px')
+    await waitFor(() => {
+      expect(canvas.style.width).toBe('100px')
+      expect(canvas.style.height).toBe('100px')
+    })
   })
 })
-

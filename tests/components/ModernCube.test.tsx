@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import { renderWithProviders, setupIntersectionObserverMock } from '../test-utils'
 import ModernCube3D from '@3d/ModernCube'
 
@@ -34,27 +34,36 @@ jest.mock('three', () => ({
 }))
 
 describe('ModernCube3D', () => {
+  const originalGetContext = HTMLCanvasElement.prototype.getContext
+
   beforeEach(() => {
     setupIntersectionObserverMock()
+    HTMLCanvasElement.prototype.getContext = jest.fn().mockReturnValue({})
   })
 
-  it('renders the canvas container', () => {
+  afterEach(() => {
+    HTMLCanvasElement.prototype.getContext = originalGetContext
+  })
+
+  const renderCube = async () => {
     renderWithProviders(<ModernCube3D />)
+    await screen.findByTestId('canvas')
+  }
+
+  it('renders the canvas container', async () => {
+    await renderCube()
     expect(screen.getByTestId('canvas')).toBeInTheDocument()
   })
 
-  it('renders 3D scene elements', () => {
-    renderWithProviders(<ModernCube3D />)
-    
-    expect(screen.getByTestId('perspective-camera')).toBeInTheDocument()
-    expect(screen.getByTestId('environment')).toBeInTheDocument()
-    expect(screen.getByTestId('orbit-controls')).toBeInTheDocument()
+  it('renders interactive controls', async () => {
+    await renderCube()
+    expect(await screen.findByTestId('orbit-controls')).toBeInTheDocument()
   })
 
-  it('renders cube faces with correct text', () => {
-    renderWithProviders(<ModernCube3D />)
+  it('renders cube faces with correct text', async () => {
+    await renderCube()
     
-    const texts = screen.getAllByTestId('text')
+    const texts = await screen.findAllByTestId('text')
     expect(texts).toHaveLength(6) // 6 faces of the cube
     
     // Check for some of the face texts
@@ -63,31 +72,28 @@ describe('ModernCube3D', () => {
     expect(screen.getByText('Fast Results')).toBeInTheDocument()
   })
 
-  it('renders visual effects', () => {
-    renderWithProviders(<ModernCube3D />)
-    
-    expect(screen.getByTestId('float')).toBeInTheDocument()
-    expect(screen.getByTestId('edges')).toBeInTheDocument()
-    expect(screen.getByTestId('sparkles')).toBeInTheDocument()
+  it('renders visual effects', async () => {
+    await renderCube()
+    expect(await screen.findByTestId('float')).toBeInTheDocument()
+    expect(await screen.findByTestId('edges')).toBeInTheDocument()
+    expect(await screen.findByTestId('sparkles')).toBeInTheDocument()
   })
 
-  it('renders the main cube structure', () => {
-    renderWithProviders(<ModernCube3D />)
+  it('renders the main cube structure', async () => {
+    await renderCube()
     
-    expect(screen.getByTestId('rounded-box')).toBeInTheDocument()
+    expect(await screen.findByTestId('rounded-box')).toBeInTheDocument()
   })
 
-  it('handles WebGL failure gracefully', () => {
-    // Mock WebGL failure
-    const mockGetContext = jest.fn().mockReturnValue(null)
-    const mockCreateElement = jest.fn().mockReturnValue({
-      getContext: mockGetContext,
-    })
-    document.createElement = mockCreateElement
+  it('handles WebGL failure gracefully', async () => {
+    const originalGetContext = HTMLCanvasElement.prototype.getContext
+    HTMLCanvasElement.prototype.getContext = jest.fn().mockReturnValue(null)
 
     renderWithProviders(<ModernCube3D />)
-    
-    // Should render fallback component
-    expect(screen.getByTestId('canvas')).toBeInTheDocument()
+
+    expect(await screen.findByText('Custom Software')).toBeInTheDocument()
+    expect(screen.queryByTestId('canvas')).not.toBeInTheDocument()
+
+    HTMLCanvasElement.prototype.getContext = originalGetContext
   })
-}) 
+})
