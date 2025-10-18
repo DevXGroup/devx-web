@@ -214,7 +214,9 @@ export default function PlanetDivider() {
             radial-gradient(ellipse 30% 40% at 40% 70%, rgba(30, 30, 30, 0.25) 0%, rgba(20, 20, 20, 0.15) 45%, transparent 75%),
             #3a3a3a
           `,
-          boxShadow: `
+          boxShadow: isMobileViewport
+            ? 'none'
+            : `
             0 0 ${sizes.glowRadius}px rgba(76, 215, 135, ${0.06 + Math.sin(time * 0.02) * 0.015}),
             0 0 ${sizes.glowRadius2}px rgba(76, 215, 135, ${0.03 + Math.sin(time * 0.015) * 0.008}),
             0 0 ${sizes.planetGlow}px rgba(76, 215, 135, ${0.02 + Math.sin(time * 0.01) * 0.003}),
@@ -436,11 +438,12 @@ export default function PlanetDivider() {
             position: absolute;
             inset: -22%;
             border-radius: 50%;
-            background: radial-gradient(circle at 50% 50%, rgba(76, 215, 135, 0.38) 0%, rgba(76, 215, 135, 0.22) 35%, rgba(76, 215, 135, 0.08) 55%, rgba(76, 215, 135, 0) 80%);
+            background: radial-gradient(circle at 50% 50%, rgba(76, 215, 135, 0.45) 0%, rgba(76, 215, 135, 0.24) 36%, rgba(76, 215, 135, 0.12) 52%, rgba(76, 215, 135, 0.02) 66%, rgba(76, 215, 135, 0) 82%);
             animation: planetGlowPulseMobile 4.2s ease-in-out infinite;
             pointer-events: none;
-            mix-blend-mode: screen;
             transform-origin: center;
+            -webkit-mask-image: radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 55%, rgba(0, 0, 0, 0) 75%);
+            mask-image: radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 55%, rgba(0, 0, 0, 0) 75%);
           }
         }
 
