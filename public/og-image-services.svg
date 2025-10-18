@@ -45,11 +45,11 @@
   </g>
 
   <g transform="translate(120 62)">
-    <image href="images/logos/devx-infinity.png" x="0" y="0" width="160" height="70" preserveAspectRatio="xMinYMid meet"/>
-    <text x="186" y="46" font-size="44" font-family="IBM Plex Sans, 'Segoe UI', sans-serif" font-weight="700" fill="url(#services-brand-text)" letter-spacing="-1.1">
+    <image href="images/logos/devx-logo-clean.svg" x="0" y="0" width="220" height="44" preserveAspectRatio="xMinYMid meet"/>
+    <text x="238" y="46" font-size="44" font-family="IBM Plex Sans, 'Segoe UI', sans-serif" font-weight="700" fill="url(#services-brand-text)" letter-spacing="-1.1">
       DevX Group
     </text>
-    <text x="188" y="80" font-size="20" font-family="IBM Plex Sans, 'Segoe UI', sans-serif" fill="rgba(226,232,240,0.8)">
+    <text x="240" y="80" font-size="20" font-family="IBM Plex Sans, 'Segoe UI', sans-serif" fill="rgba(226,232,240,0.8)">
       Services Guild • Strategy • Delivery • Growth
     </text>
   </g>
