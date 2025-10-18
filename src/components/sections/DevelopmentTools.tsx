@@ -93,6 +93,26 @@ const aiTools = [
   },
 ]
 
+type OrbitMetrics = {
+  radius: number
+  offset: number
+}
+
+const getInnerOrbitMetrics = (width: number): OrbitMetrics => {
+  if (width < 640) return { radius: 150, offset: -110 }
+  if (width < 768) return { radius: 180, offset: -120 }
+  if (width < 1024) return { radius: 210, offset: -130 }
+  return { radius: 230, offset: -140 }
+}
+
+const getOuterOrbitMetrics = (width: number, inner: OrbitMetrics): OrbitMetrics => {
+  const offsetAdjustment = -32
+  if (width < 640) return { radius: inner.radius + 70, offset: inner.offset + offsetAdjustment }
+  if (width < 768) return { radius: inner.radius + 85, offset: inner.offset + offsetAdjustment }
+  if (width < 1024) return { radius: inner.radius + 100, offset: inner.offset + offsetAdjustment }
+  return { radius: inner.radius + 120, offset: inner.offset + offsetAdjustment }
+}
+
 // Duration each tool remains in center
 const DISPLAY_DURATION = 3500
 
@@ -107,14 +127,28 @@ export default function DevelopmentTools() {
     to: { x: number; y: number }
     tool: any
   } | null>(null)
+  const [viewportWidth, setViewportWidth] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth : 1440
+  )
 
   const cycleRef = useRef<NodeJS.Timeout | null>(null)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
+  const innerMetrics = useMemo(() => getInnerOrbitMetrics(viewportWidth), [viewportWidth])
+  const outerMetrics = useMemo(() => getOuterOrbitMetrics(viewportWidth, innerMetrics), [viewportWidth, innerMetrics])
 
   // Handle mounting for hydration safety
   useEffect(() => {
     setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const handleResize = () => setViewportWidth(window.innerWidth)
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
   }, [])
 
   // Move stars generation to component level
@@ -180,11 +214,7 @@ export default function DevelopmentTools() {
       const angle = (nextIndex * 360) / tools.length
       const radian = (angle * Math.PI) / 180
 
-      // Use responsive radius based on current screen size
-      let radius = 240 // desktop default
-      if (window.innerWidth < 640) radius = 170
-      else if (window.innerWidth < 768) radius = 190
-      else if (window.innerWidth < 1024) radius = 220
+      const { radius } = innerMetrics
 
       const fromX = Math.cos(radian) * radius
       const fromY = Math.sin(radian) * radius
@@ -215,7 +245,7 @@ export default function DevelopmentTools() {
       if (cycleRef.current) clearTimeout(cycleRef.current)
       // Do not clear timerRef here, it controls resuming after manual clicks
     }
-  }, [isManual, activeIndex, transitioning, isVisible])
+  }, [isManual, activeIndex, transitioning, isVisible, innerMetrics])
 
   // User click => trigger transition animation
   const handleIconClick = useCallback(
@@ -235,11 +265,7 @@ export default function DevelopmentTools() {
       const angle = (index * 360) / tools.length
       const radian = (angle * Math.PI) / 180
 
-      // Use responsive radius
-      let radius = 240 // desktop default
-      if (window.innerWidth < 640) radius = 170
-      else if (window.innerWidth < 768) radius = 190
-      else if (window.innerWidth < 1024) radius = 220
+      const { radius } = innerMetrics
 
       const fromX = Math.cos(radian) * radius
       const fromY = Math.sin(radian) * radius
@@ -269,7 +295,7 @@ export default function DevelopmentTools() {
         setIsManual(false)
       }, 3000) // Resume after 3 seconds
     },
-    [activeIndex, transitioning]
+    [activeIndex, transitioning, innerMetrics]
   )
 
   // Handle AI tool clicks (for now just log, later can be expanded)
@@ -344,13 +370,13 @@ export default function DevelopmentTools() {
           />
         ))}
         {/* Title section */}
-        <div className="py-10 md:py-0 mt-24 md:mt-36 mb-8 md:mb-2">
+        <div className="py-30 md:py-0 mt-24 md:mt-36 mb-16 md:mb-24">
           <div className="container mx-auto px-4">
             <div className="flex flex-col items-center">
               <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold font-['IBM_Plex_Mono'] text-center animate-gradient-text mb-4">
                 DevX Development Tools
               </h3>
-              <p className="text-slate-400 text-lg md:text-xl font-['IBM_Plex_Sans'] text-center max-w-2xl mb-8">
+              <p className="text-slate-400 text-lg md:text-xl font-['IBM_Plex_Sans'] text-center max-w-2xl mb-10 md:mb-12">
                 Cutting-edge technologies powering innovative solutions across web, mobile, and
                 cloud platforms
               </p>
@@ -358,18 +384,15 @@ export default function DevelopmentTools() {
           </div>
         </div>
         {/* Animation container with proper sizing */}
-        <div className="relative w-full h-[60vh] sm:h-[80vh] flex items-center justify-center">
+        <div className="relative w-full h-[72vh] sm:h-[92vh] lg:h-[105vh] flex items-center justify-center mt-12 md:mt-20 pt-16 md:pt-24">
           {/* ============ Center black circle with glowing border ============ */}
           {/* Responsive center position with decreased circumference */}
           <div
-            className="
-            absolute z-[100]
-            top-[50%] sm:top-[55%] md:top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2
-            w-[60vw] h-[60vw] sm:w-[50vw] sm:h-[50vw] md:w-[45vw] md:h-[45vw] 
+            className="absolute z-[100] left-1/2 -translate-x-1/2 -translate-y-1/2
+            w-[60vw] h-[60vw] sm:w-[50vw] sm:h-[50vw] md:w-[45vw] md:h-[45vw]
             max-w-[220px] max-h-[220px] sm:max-w-[240px] sm:max-h-[240px] md:max-w-[260px] md:max-h-[260px]
-            rounded-full bg-black text-white
-            flex items-center justify-center text-center p-3 sm:p-4 md:p-5 shadow-md
-          "
+            rounded-full bg-black text-white flex items-center justify-center text-center p-3 sm:p-4 md:p-5 shadow-md"
+            style={{ top: `calc(50% + ${innerMetrics.offset}px)` }}
           >
             {/* 
             Pulsing outer border - enhanced for tablet visibility
@@ -547,6 +570,7 @@ export default function DevelopmentTools() {
               to={transitionData.to}
               tool={transitionData.tool}
               duration={1200}
+              offset={innerMetrics.offset}
             />
           )}
 
@@ -558,11 +582,16 @@ export default function DevelopmentTools() {
             onIconClick={handleIconClick}
             transitioning={transitioning}
             transitionData={transitionData}
+            metrics={innerMetrics}
           />
           {/* ============ Outer AI Tools Orbit ============ */}
           {/* z-[90] - Below inner orbit but visible - Hidden on mobile */}
           <div className="hidden lg:block relative z-[120]">
-            <AIToolsOrbit activeIndex={activeIndex} onIconClick={handleAIToolClick} />
+            <AIToolsOrbit
+              activeIndex={activeIndex}
+              onIconClick={handleAIToolClick}
+              metrics={outerMetrics}
+            />
           </div>
         </div>
 
@@ -592,15 +621,18 @@ function TransitionPlanet({
   to,
   tool,
   duration,
+  offset,
 }: {
   from: { x: number; y: number }
   to: { x: number; y: number }
   tool: any
   duration: number
+  offset: number
 }) {
   return (
     <motion.div
-      className="absolute z-[105] top-[50%] sm:top-[55%] md:top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+      className="absolute z-[105] left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+      style={{ top: `calc(50% + ${offset}px)`, filter: 'blur(0px)' }}
       initial={{
         x: from.x,
         y: from.y,
@@ -617,9 +649,6 @@ function TransitionPlanet({
         duration: duration / 1000,
         ease: [0.25, 0.8, 0.25, 1], // Custom easing for gravitational pull feel
         times: [0, 0.2, 0.4, 0.6, 0.8, 1],
-      }}
-      style={{
-        filter: 'blur(0px)',
       }}
     >
       {/* White trailing light effect */}
@@ -689,7 +718,7 @@ function TransitionPlanet({
 
         {/* The actual tool icon */}
         <motion.div
-          className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full shadow border border-purple-500/30 flex items-center justify-center relative overflow-hidden"
+            className="w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 rounded-full shadow border border-purple-500/30 flex items-center justify-center relative overflow-hidden"
           animate={{
             rotateY: [0, 180, 360, 540, 720],
             rotateX: [0, 45, 90, 45, 0],
@@ -699,7 +728,7 @@ function TransitionPlanet({
             ease: 'easeInOut',
           }}
         >
-          <div className="relative w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8">
+          <div className="relative w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 scale-110">
             <Image
               src={tool.icon || '/placeholder.svg'}
               alt={tool.name}
@@ -758,6 +787,7 @@ function StaticIconsOrbit({
   onIconClick,
   transitioning,
   transitionData,
+  metrics,
 }: {
   toolList: typeof tools
   activeIndex: number
@@ -768,25 +798,13 @@ function StaticIconsOrbit({
     to: { x: number; y: number }
     tool: any
   } | null
+  metrics: OrbitMetrics
 }) {
-  // Responsive radius like the original getResponsiveRadius but fixed per render
-  const [radius, setRadius] = useState(240)
-
-  useEffect(() => {
-    const updateRadius = () => {
-      if (window.innerWidth < 640) setRadius(170) // mobile
-      else if (window.innerWidth < 768) setRadius(190) // small tablet
-      else if (window.innerWidth < 1024) setRadius(220) // tablet
-      else setRadius(240) // desktop
-    }
-
-    updateRadius()
-    window.addEventListener('resize', updateRadius)
-    return () => window.removeEventListener('resize', updateRadius)
-  }, [])
-
   return (
-    <div className="absolute z-[85] top-[50%] sm:top-[55%] md:top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2">
+    <div
+      className="absolute z-[85] left-1/2 -translate-x-1/2 -translate-y-1/2"
+      style={{ top: `calc(50% + ${metrics.offset}px)` }}
+    >
       {toolList.map((tool, i) => {
         if (i === activeIndex) return null
 
@@ -797,8 +815,8 @@ function StaticIconsOrbit({
         const radian = (angle * Math.PI) / 180
 
         // Calculate position using trigonometry for precise placement
-        const x = Math.cos(radian) * radius
-        const y = Math.sin(radian) * radius
+        const x = Math.cos(radian) * metrics.radius
+        const y = Math.sin(radian) * metrics.radius
 
         return (
           <motion.div
@@ -813,7 +831,7 @@ function StaticIconsOrbit({
             <motion.div
               layoutId={`icon-${tool.name}`}
               onClick={() => onIconClick(i)}
-              className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full shadow border border-purple-500/30 hover:border-purple-400/50 flex items-center justify-center cursor-pointer transition-all duration-300"
+              className="w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full shadow border border-purple-500/30 hover:border-purple-400/50 flex items-center justify-center cursor-pointer transition-all duration-300"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               transition={{
@@ -823,7 +841,7 @@ function StaticIconsOrbit({
                 layout: { duration: 0.6 },
               }}
             >
-              <div className="relative w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8">
+              <div className="relative w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9">
                 <Image
                   src={tool.icon || '/placeholder.svg'}
                   alt={tool.name}
@@ -855,31 +873,18 @@ function StaticIconsOrbit({
 function AIToolsOrbit({
   activeIndex,
   onIconClick,
+  metrics,
 }: {
   activeIndex: number
   onIconClick: (index: number) => void
+  metrics: OrbitMetrics
 }) {
   const [rotation, setRotation] = useState(0)
   const [mounted, setMounted] = useState(false)
-  const [radius, setRadius] = useState(380)
   const [isVisible, setIsVisible] = useState(false)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const orbitRef = useRef<HTMLDivElement>(null)
   const animationRef = useRef<number | null>(null)
-
-  // Set responsive radius for AI tools
-  useEffect(() => {
-    const updateRadius = () => {
-      if (window.innerWidth < 640) setRadius(280) // mobile
-      else if (window.innerWidth < 768) setRadius(320) // small tablet
-      else if (window.innerWidth < 1024) setRadius(360) // tablet
-      else setRadius(380) // desktop
-    }
-
-    updateRadius()
-    window.addEventListener('resize', updateRadius)
-    return () => window.removeEventListener('resize', updateRadius)
-  }, [])
 
   // Handle mounting for hydration safety
   useEffect(() => {
@@ -961,17 +966,18 @@ function AIToolsOrbit({
   return (
     <div
       ref={orbitRef}
-      className="absolute z-[90] top-[50%] sm:top-[55%] md:top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+      className="absolute z-[90] left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
       style={{
         width: '100%',
         height: '100%',
+        top: `calc(50% + ${metrics.offset}px)`,
       }}
     >
       {aiTools.map((tool, i) => {
-        const angle = (i * 360) / aiTools.length + rotation
-        const angleRad = (angle * Math.PI) / 180
-        const x = Math.cos(angleRad) * radius
-        const y = Math.sin(angleRad) * radius
+    const angle = (i * 360) / aiTools.length + rotation
+    const angleRad = (angle * Math.PI) / 180
+        const x = Math.cos(angleRad) * metrics.radius
+        const y = Math.sin(angleRad) * metrics.radius
         const isActive = activeIndex === i
         const isHovered = hoveredIndex === i
         const showLabel = isActive || isHovered
@@ -991,7 +997,7 @@ function AIToolsOrbit({
               type="button"
               aria-label={tool.name}
               aria-pressed={isActive}
-              className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full backdrop-blur-sm shadow border border-purple-500/40 flex items-center justify-center cursor-pointer group/icon focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4CD787] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+              className="relative w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full backdrop-blur-sm shadow border border-purple-500/40 flex items-center justify-center cursor-pointer group/icon focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4CD787] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
               whileHover={{ scale: 1.08 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => onIconClick(i)}
@@ -1020,7 +1026,7 @@ function AIToolsOrbit({
                 }}
               />
 
-              <div className="relative w-6 h-6 sm:w-7 sm:h-7 pointer-events-none">
+              <div className="relative w-8 h-8 sm:w-9 sm:h-9 pointer-events-none">
                 <Image
                   src={tool.icon || '/placeholder.svg'}
                   alt={tool.name}
