@@ -7,10 +7,10 @@
  * - Preserves projects grid, services, and modals
  */
 
-import { motion, useReducedMotion, useInView, AnimatePresence } from 'framer-motion'
-import Image from 'next/image'
+import { motion, useReducedMotion, AnimatePresence } from 'framer-motion'
+
 import Link from 'next/link'
-import { useRef, useState, useLayoutEffect, useEffect } from 'react'
+import { useState } from 'react'
 import { usePathname } from 'next/navigation'
 import {
   ArrowRight,
@@ -23,7 +23,6 @@ import {
   Smartphone,
   Globe,
   Cpu,
-  X,
 } from 'lucide-react'
 import DotGrid from '@sections/DotGrid'
 import TextPressure from '@animations/TextPressure'
@@ -341,179 +340,7 @@ function ServiceIcon({
   )
 }
 
-function ProjectCard({ project, index }: { project: any; index: number }) {
-  const shouldReduceMotion = useReducedMotion()
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '-50px' })
-  const [isHovered, setIsHovered] = useState(false)
 
-  return (
-    <div className="h-full">
-      <motion.div
-        ref={ref}
-        initial="hidden"
-        animate={isInView ? 'visible' : 'hidden'}
-        className="bg-black/40 backdrop-blur-lg rounded-2xl overflow-hidden border border-white/10 group hover:border-[#4CD787] hover:shadow-[0_0_30px_rgba(76,215,135,0.4),0_0_60px_rgba(76,215,135,0.2)] transition-all duration-500 cursor-pointer h-full relative shadow-2xl"
-        whileHover={
-          shouldReduceMotion
-            ? {}
-            : { scale: 1.03, y: -8, boxShadow: '0 30px 60px -12px rgba(76, 215, 135, 0.3)' }
-        }
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        <div className="relative overflow-hidden h-64 md:h-72 lg:h-80 xl:h-96">
-          <Image
-            src={project.image || '/placeholder.svg'}
-            alt={project.title}
-            width={600}
-            height={400}
-            className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110"
-            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            priority={index < 6}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-          <motion.div
-            className="absolute top-4 right-4"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: index * 0.1 + 0.3 }}
-          >
-            <span className="bg-gradient-to-r from-[#4CD787] to-[#06B6D4] text-black px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg backdrop-blur-sm">
-              {project.category}
-            </span>
-          </motion.div>
-        </div>
-        <div className="p-6 md:p-8 relative">
-          <div className="relative z-10">
-            <motion.h3
-              className="text-xl md:text-2xl font-bold text-white mb-3 group-hover:text-[#4CD787] transition-colors duration-300"
-              initial={{ opacity: 0 }}
-              animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-              transition={{ delay: index * 0.1 + 0.4 }}
-            >
-              {project.title}
-            </motion.h3>
-            <motion.p
-              className="text-white/80 font-light mb-6 leading-relaxed group-hover:text-white/95 transition-colors duration-300"
-              initial={{ opacity: 0 }}
-              animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-              transition={{ delay: index * 0.1 + 0.5 }}
-            >
-              {project.description}
-            </motion.p>
-            <motion.div
-              className="flex flex-wrap gap-2"
-              initial={{ opacity: 0 }}
-              animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-              transition={{ delay: index * 0.1 + 0.6 }}
-            >
-              {project.tags.map((tag: any, tagIndex: number) => (
-                <motion.span
-                  key={tag}
-                  className="px-3 py-1.5 bg-gradient-to-r from-[#4CD787]/20 to-[#06B6D4]/20 text-[#4CD787] border border-[#4CD787]/30 text-xs font-medium rounded-full backdrop-blur-sm"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
-                  transition={{ delay: index * 0.1 + 0.7 + tagIndex * 0.05 }}
-                >
-                  {tag}
-                </motion.span>
-              ))}
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Running shining line effect on hover */}
-        <motion.div
-          className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none z-50"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isHovered ? 1 : 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          <motion.div
-            className="absolute w-full h-[2px] bg-gradient-to-r from-transparent via-white to-transparent top-0"
-            style={{
-              boxShadow: `0 0 6px #4CD787, 0 0 12px #4CD78740`,
-            }}
-            initial={{ x: '-100%' }}
-            animate={
-              isHovered
-                ? {
-                    x: ['-100%', '100%'],
-                  }
-                : { x: '-100%' }
-            }
-            transition={{
-              duration: 1.5,
-              repeat: isHovered ? Infinity : 0,
-              ease: 'linear',
-            }}
-          />
-          <motion.div
-            className="absolute w-[2px] h-full bg-gradient-to-b from-transparent via-white to-transparent right-0"
-            style={{
-              boxShadow: `0 0 6px #4CD787, 0 0 12px #4CD78740`,
-            }}
-            initial={{ y: '-100%' }}
-            animate={
-              isHovered
-                ? {
-                    y: ['-100%', '100%'],
-                  }
-                : { y: '-100%' }
-            }
-            transition={{
-              duration: 1.5,
-              repeat: isHovered ? Infinity : 0,
-              ease: 'linear',
-              delay: 0.375,
-            }}
-          />
-          <motion.div
-            className="absolute w-full h-[2px] bg-gradient-to-r from-transparent via-white to-transparent bottom-0"
-            style={{
-              boxShadow: `0 0 6px #4CD787, 0 0 12px #4CD78740`,
-            }}
-            initial={{ x: '100%' }}
-            animate={
-              isHovered
-                ? {
-                    x: ['100%', '-100%'],
-                  }
-                : { x: '100%' }
-            }
-            transition={{
-              duration: 1.5,
-              repeat: isHovered ? Infinity : 0,
-              ease: 'linear',
-              delay: 0.75,
-            }}
-          />
-          <motion.div
-            className="absolute w-[2px] h-full bg-gradient-to-b from-transparent via-white to-transparent left-0"
-            style={{
-              boxShadow: `0 0 6px #4CD787, 0 0 12px #4CD78740`,
-            }}
-            initial={{ y: '100%' }}
-            animate={
-              isHovered
-                ? {
-                    y: ['100%', '-100%'],
-                  }
-                : { y: '100%' }
-            }
-            transition={{
-              duration: 1.5,
-              repeat: isHovered ? Infinity : 0,
-              ease: 'linear',
-              delay: 1.125,
-            }}
-          />
-        </motion.div>
-      </motion.div>
-    </div>
-  )
-}
 
 export default function PortfolioPage() {
   const shouldReduceMotion = useReducedMotion()
@@ -557,9 +384,9 @@ export default function PortfolioPage() {
     <div className="min-h-screen bg-background pt-20">
       {/* Top hero, simplified backgrounds */}
       <section className="relative isolate py-9 overflow-hidden">
-        <div className="absolute inset-0 z-0 bg-gradient-to-b from-black via-purple-900/20 to-black pointer-events-none" />
+        <div className="absolute inset-0 z-0 bg-gradient-to-b from-black via-black/40 to-black pointer-events-none" />
 
-        <div className="relative z-[150] container mx-auto px-4">
+        <div className="relative z-[60] container mx-auto px-4">
           {/* Main Content Area */}
           <motion.div
             variants={containerVariants}
@@ -662,20 +489,20 @@ export default function PortfolioPage() {
               </motion.p>
 
               {/* Decorative squares row under subtitle */}
-              <div className="relative mt-0 mb-9 h-[220px] sm:h-[250px] md:h-[330px] w-full">
+              <div className="relative mt-1 mb-49 h-[220px] sm:h-[250px] md:h-[330px] w-full">
                 <div className="relative w-full max-w-4xl mx-auto flex items-center justify-center h-full">
                   <AsciiEffect3D
                     key={`hero-ascii-ball-${pathname}`}
                     height={620}
                     className="rounded-xl"
-                    color="#A382C3"
+                    color="#4CD787"
                     charSize={6}
-                    opacity={0.5}
-                    showBase={true}
+                    opacity={0.25}
+                    showBase={false}
                     sphereRadius={240}
-                    lighting="bottomLeft" // key at top-right, shadow bottom-left
-                    lightScale={1} // slightly dimmer
-                    ambient={0.03} // soften jagged edges subtly
+                    lighting="bottomLeft"
+                    lightScale={1}
+                    ambient={0.04}
                     charSet={' ..*%$#@a,-/| '}
                   />
                 </div>
@@ -873,15 +700,15 @@ export default function PortfolioPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 relative">
-        <div className="absolute inset-0 z-0 bg-gradient-to-t from-black via-purple-900/20 to-black pointer-events-none" />
-        <div className="relative container mx-auto px-4">
+      <section className="relative z-[9999] py-20 pb-24 overflow-visible mb-33">
+        <div className="absolute inset-0 z-0 bg-gradient-to-t from-black via-black/30 to-black pointer-events-none" />
+        <div className="relative z-20 container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="text-center max-w-3xl mx-auto"
+            className="relative z-30 text-center max-w-3xl mx-auto"
           >
             <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#06B6D4]">
               Ready to Build Your Next Project?
@@ -892,7 +719,7 @@ export default function PortfolioPage() {
             <motion.div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Button
                 asChild
-                className="group inline-flex items-center gap-2 bg-robinhood text-black hover:bg-white hover:text-black px-8 py-3 rounded-lg font-semibold text-lg border-2 border-robinhood shadow-lg transition-all duration-300 hover:shadow-[0_5px_15px_rgba(204,255,0,0.3)]"
+                className="group relative z-40 inline-flex items-center gap-2 bg-robinhood text-black hover:bg-white hover:text-black px-8 py-3 rounded-lg font-semibold text-lg border-2 border-robinhood shadow-lg transition-all duration-300 hover:shadow-[0_5px_15px_rgba(204,255,0,0.3)]"
               >
                 <a
                   href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?background_color=000000&text_color=ffffff&primary_color=4CD787&hide_gdpr_banner=1"
@@ -906,7 +733,7 @@ export default function PortfolioPage() {
               <Button
                 asChild
                 variant="outline"
-                className="group inline-flex items-center gap-2 border border-white/30 px-8 py-3 font-medium text-white transition-all duration-300 hover:border-white hover:bg-white/10"
+                className="group relative z-40 inline-flex items-center gap-2 border border-white/30 px-8 py-3 font-medium text-white transition-all duration-300 hover:border-white hover:bg-white/10"
               >
                 <Link href="/contact">
                   <span>Contact Our Team</span>
