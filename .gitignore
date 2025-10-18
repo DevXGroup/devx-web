@@ -78,4 +78,5 @@ playwright-report/
 test-results/
 
 # Documents
-/documents
+# Keep the folder tracked for project documentation.
+# To ignore generated artifacts under documents, add patterns below.
