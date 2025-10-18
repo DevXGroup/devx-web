@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useRef, useState, useCallback, useLayoutEffect } from 'react'
 
 interface TextPressureProps {
   text?: string
@@ -55,6 +55,8 @@ const TextPressure: React.FC<TextPressureProps> = ({
     const dy = b.y - a.y
     return Math.sqrt(dx * dx + dy * dy)
   }
+
+  const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect
 
   const isDev = process.env.NODE_ENV !== 'production'
 
@@ -132,8 +134,8 @@ const TextPressure: React.FC<TextPressureProps> = ({
     })
   }, [chars.length, minFontSize, scale, isDev])
 
-  useEffect(() => {
-    // Force immediate sizing on mount and after a short delay for Safari
+  useIsomorphicLayoutEffect(() => {
+    // Force immediate sizing before paint to avoid layout jank
     setSize()
     const timeoutId = setTimeout(() => {
       setSize()

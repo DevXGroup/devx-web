@@ -145,8 +145,10 @@ export default function ContactPage() {
   const handleConfettiComplete = useCallback(() => {
     setShowConfetti(false)
   }, [])
+  const calendlyEmbedUrl =
+    'https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?hide_gdpr_banner=1&background_color=000000&text_color=ffffff&primary_color=4CD787&embed_type=Inline'
 
-  // Initialize Calendly widget when component mounts
+  // Prepare gradient animation styles and handle cleanup
   useEffect(() => {
     // Add the keyframes animation to the document if it doesn't exist
     if (!document.getElementById('gradient-animation-style')) {
@@ -176,47 +178,6 @@ export default function ContactPage() {
       if (style) {
         document.head.removeChild(style)
       }
-    }
-  }, [])
-
-  useEffect(() => {
-    // Add Calendly script if it doesn't exist
-    if (!document.querySelector('script[src*="calendly.com"]')) {
-      const script = document.createElement('script')
-      script.src = 'https://assets.calendly.com/assets/external/widget.js'
-      script.async = true
-      script.onload = () => {
-        // Initialize Calendly with dark mode
-        setTimeout(() => {
-          if ((window as any).Calendly) {
-            const widget = document.querySelector('.calendly-inline-widget') as HTMLElement
-            if (widget) {
-              // Initialize with dark mode settings using proper URL parameters
-              ;(window as any).Calendly.initInlineWidget({
-                url: 'https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?background_color=000000&text_color=ffffff&primary_color=4CD787&hide_gdpr_banner=1',
-                parentElement: widget,
-                prefill: {},
-                utm: {},
-                styles: {
-                  height: '1000px',
-                },
-              })
-            }
-          }
-        }, 1000)
-      }
-      document.body.appendChild(script)
-
-      return () => {
-        // Clean up script when component unmounts
-        const existingScript = document.querySelector('script[src*="calendly.com"]')
-        if (existingScript) {
-          document.body.removeChild(existingScript)
-        }
-      }
-    } else {
-      // Script already exists, set calendar as loaded
-      return undefined
     }
   }, [])
 
@@ -825,69 +786,25 @@ export default function ContactPage() {
           </motion.div>
 
           <div className="bg-black/40 backdrop-blur-sm p-4 md:p-6 rounded-2xl border border-white/10 overflow-hidden">
-            <div
-              className="calendly-inline-widget"
-              data-calendly-theme="dark"
-              data-url="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?background_color=000000&text_color=ffffff&primary_color=4CD787&hide_gdpr_banner=1"
-              style={{
-                minWidth: '320px',
-                height: '1000px',
-                backgroundColor: '#000000',
-                border: 'none',
-                borderRadius: '12px',
-                overflow: 'hidden',
-              }}
-            ></div>
-
-            {/* Enhanced dark mode enforcement */}
-            <style jsx global>{`
-              /* Force dark theme for entire Calendly widget */
-              .calendly-inline-widget {
-                background-color: #000000 !important;
-                color: #ffffff !important;
-                border-radius: 12px;
-                overflow: hidden;
-              }
-
-              .calendly-inline-widget iframe {
-                background-color: #000000 !important;
-                border-radius: 12px;
-                filter: none !important;
-              }
-
-              /* Override Calendly's default white theme */
-              .calendly-inline-widget * {
-                background-color: transparent !important;
-                color: inherit !important;
-              }
-
-              /* Specific overrides for common Calendly elements */
-              .calendly-popup-content,
-              .calendly-overlay,
-              [data-calendly-theme],
-              .calendly-badge-content,
-              .calendly-badge-widget {
-                background-color: #000000 !important;
-                color: #ffffff !important;
-              }
-
-              /* Try to force dark mode through data attributes */
-              .calendly-inline-widget[data-calendly-theme='dark'] {
-                background-color: #000000 !important;
-              }
-
-              /* Additional fallback for stubborn elements */
-              .calendly-inline-widget > div,
-              .calendly-inline-widget iframe body {
-                background-color: #000000 !important;
-                color: #ffffff !important;
-              }
-
-              /* Hide cookie settings text from Calendly */
-              .calendly-cookie-settings {
-                display: none !important;
-              }
-            `}</style>
+            <div className="relative">
+              <iframe
+                title="Schedule a consultation with DevX Group"
+                src={calendlyEmbedUrl}
+                loading="lazy"
+                className="w-full rounded-xl"
+                style={{
+                  minWidth: '320px',
+                  height: '1000px',
+                  border: 'none',
+                  backgroundColor: '#000000',
+                }}
+                allow="fullscreen"
+              />
+              <div
+                className="pointer-events-none absolute inset-0 rounded-xl border border-white/10"
+                aria-hidden="true"
+              />
+            </div>
           </div>
         </div>
       </section>
