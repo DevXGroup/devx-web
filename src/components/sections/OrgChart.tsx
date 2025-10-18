@@ -93,7 +93,7 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
                 <h3 className="font-bold text-white text-base mb-1 leading-tight">
                   Max Sheikhizadeh
                 </h3>
-                <p className="text-[#4CD787] text-xs font-medium mb-2">CEO/CTO & Founder</p>
+                <p className="text-[#4CD787] text-xs font-medium mb-2">CTO & Founder</p>
                 <button className="bg-[#4CD787]/20 hover:bg-[#4CD787]/30 text-[#4CD787] px-3 py-1.5 rounded-md text-xs font-medium transition-colors border border-[#4CD787]/30">
                   <User className="w-3 h-3 inline mr-1" />
                   Bio
