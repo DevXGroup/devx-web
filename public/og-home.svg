@@ -43,11 +43,11 @@
   </g>
 
   <g transform="translate(72 60)">
-    <image href="images/logos/devx-infinity.png" x="0" y="0" width="160" height="70" preserveAspectRatio="xMinYMid meet"/>
-    <text x="188" y="46" font-size="46" font-family="IBM Plex Sans, 'Segoe UI', sans-serif" font-weight="700" fill="url(#brand-text)" letter-spacing="-1.2">
+    <image href="images/logos/devx-logo-clean.svg" x="0" y="0" width="220" height="44" preserveAspectRatio="xMinYMid meet"/>
+    <text x="240" y="46" font-size="46" font-family="IBM Plex Sans, 'Segoe UI', sans-serif" font-weight="700" fill="url(#brand-text)" letter-spacing="-1.2">
       DevX Group
     </text>
-    <text x="190" y="80" font-size="20" font-family="IBM Plex Sans, 'Segoe UI', sans-serif" fill="rgba(226,232,240,0.78)">
+    <text x="242" y="80" font-size="20" font-family="IBM Plex Sans, 'Segoe UI', sans-serif" fill="rgba(226,232,240,0.78)">
       Elite software partners for AI-forward teams
     </text>
   </g>
