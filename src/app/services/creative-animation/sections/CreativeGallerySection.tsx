@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { motion, useAnimation, useInView } from 'framer-motion'
 
 interface GalleryItem {
@@ -221,12 +221,11 @@ const CreativeGallerySection = () => {
             className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center"
           >
             {[
-              { number: '50+', label: 'Projects Completed' },
-              { number: '15+', label: 'Animation Types' },
-              { number: '99%', label: 'Client Satisfaction' },
-              { number: '24/7', label: 'Creative Support' }
-            ].map((stat, index) => (
-              <motion.div
+                            { number: '50+', label: 'Projects Completed' },
+                            { number: '15+', label: 'Animation Types' },
+                            { number: '99%', label: 'Client Satisfaction' },
+                            { number: '24/7', label: 'Creative Support' }
+                          ].map((stat) => (              <motion.div
                 key={stat.label}
                 variants={itemVariants}
                 className="bg-white/5 backdrop-blur-lg rounded-xl p-5 border border-white/10 hover:bg-white/10 transition-all duration-300"

@@ -4,10 +4,7 @@ import {
   motion,
   useAnimation,
   useInView,
-  useScroll,
-  useTransform,
   useMotionValue,
-  AnimatePresence,
 } from 'framer-motion'
 import { ArrowRight, Code2, Cloud, Brain, Smartphone, Cpu, Bot, Monitor } from 'lucide-react'
 // import Link from 'next/link'
@@ -173,7 +170,7 @@ const valueProps = [
 
 export default function ServicesPage() {
   // Existing state variables
-  const [activeSection, setActiveSection] = useState(null)
+  const [, setActiveSection] = useState(null)
   const [isMounted, setIsMounted] = useState(false)
   const heroRef = useRef(null)
   const valuePropsRef = useRef(null)

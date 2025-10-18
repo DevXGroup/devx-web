@@ -192,7 +192,7 @@ const MorphingTextSection = () => {
                   description: 'Custom animations that reflect your brand identity',
                   icon: '🎨',
                 },
-              ].map((feature, index) => (
+              ].map((feature) => (
                 <motion.div
                   key={feature.title}
                   variants={itemVariants}

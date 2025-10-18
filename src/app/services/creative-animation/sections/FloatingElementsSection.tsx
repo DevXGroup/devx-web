@@ -234,7 +234,7 @@ const FloatingElementsSection = () => {
                   description: '60fps animations with optimized rendering',
                   value: '⚡ Fast'
                 }
-              ].map((feature, index) => (
+              ].map((feature) => (
                 <motion.div
                   key={feature.title}
                   variants={itemVariants}

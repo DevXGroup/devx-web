@@ -20,7 +20,7 @@ const ExplosiveCTASection = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const isInView = useInView(sectionRef, { once: false, amount: 0.3 })
   const controls = useAnimation()
-  const [particles, setParticles] = useState<Particle[]>([])
+  const [, setParticles] = useState<Particle[]>([])
   const [isExploding, setIsExploding] = useState(false)
 
   // Create explosion effect

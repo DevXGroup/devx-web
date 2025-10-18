@@ -7,9 +7,7 @@ import {
   Sphere, 
   MeshDistortMaterial, 
   Stars, 
-  Float,
-  Text3D,
-  Center
+  Float
 } from '@react-three/drei'
 import * as THREE from 'three'
 import { motion, useScroll, useTransform } from 'framer-motion'
@@ -19,7 +17,7 @@ import DevXEnvironment from '@/components/3d/DevXEnvironment'
 function AnimatedPlanet() {
   const meshRef = useRef<THREE.Mesh>(null)
   const materialRef = useRef<any>(null)
-  const { viewport } = useThree()
+  useThree()
   const [scroll, setScroll] = useState(0)
 
   // Listen to scroll events
@@ -173,9 +171,7 @@ function FloatingGeometry() {
   return (
     <group ref={groupRef}>
       {shapes.map((shape, index) => {
-        const Component = shape.type === 'box' ? 'boxGeometry' : 
-                         shape.type === 'octahedron' ? 'octahedronGeometry' :
-                         shape.type === 'tetrahedron' ? 'tetrahedronGeometry' : 'icosahedronGeometry'
+        
         
         return (
           <Float key={index} speed={1 + index * 0.5} rotationIntensity={1} floatIntensity={0.5}>

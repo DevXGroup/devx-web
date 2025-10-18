@@ -34,21 +34,6 @@ const fadeInUpVariants = {
   },
 }
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-  },
-}
-
-const cardHoverVariants = {
-  rest: { scale: 1, y: 0 },
-  hover: {
-    scale: 1.01,
-    y: -4,
-  },
-}
-
 // Enhanced animated section component for reuse
 const AnimatedSection = ({
   children,
@@ -73,60 +58,6 @@ const AnimatedSection = ({
       className={className}
     >
       {children}
-    </motion.div>
-  )
-}
-
-// Enhanced team member card component
-const TeamMemberCard = ({
-  name,
-  role,
-  image,
-  delay = 0,
-}: {
-  name: string
-  role: string
-  image: string
-  delay?: number
-}) => {
-  const shouldReduceMotion = useReducedMotion()
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true })
-
-  return (
-    <motion.div
-      ref={ref}
-      variants={cardHoverVariants}
-      initial="hidden"
-      animate={isInView ? 'visible' : 'hidden'}
-      transition={{ duration: 0.6, delay: shouldReduceMotion ? 0 : delay }}
-      className="group cursor-pointer"
-      whileHover={shouldReduceMotion ? {} : 'hover'}
-    >
-      <div className="relative overflow-hidden rounded-xl mb-4 aspect-square">
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-        <Image
-          src={image || '/placeholder.svg'}
-          alt={name}
-          fill
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
-          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
-          priority={false}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#4CD787]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-      </div>
-      <motion.div
-        className="text-center"
-        whileHover={shouldReduceMotion ? {} : { y: -2 }}
-        transition={{ duration: 0.2 }}
-      >
-        <h3 className="text-xl font-semibold text-white group-hover:text-[#4CD787] transition-colors duration-300">
-          {name}
-        </h3>
-        <p className="text-[#4CD787] group-hover:text-white transition-colors duration-300">
-          {role}
-        </p>
-      </motion.div>
     </motion.div>
   )
 }
@@ -495,6 +426,9 @@ const VisionMissionCard = ({
   const isInViewForFadeIn = useInView(ref, { once: true })
   const isInViewForHover = useInView(ref, { once: false, margin: "-40% 0px -40% 0px" })
 
+  void accentColor
+  void isHovered
+
   useEffect(() => {
     if (isMobile) {
       onHoverChange?.(isInViewForHover)
@@ -699,7 +633,6 @@ const StatCounter = ({ number, label }: { number: string | number; label: string
 }
 
 export default function AboutPage() {
-  const shouldReduceMotion = useReducedMotion()
   const isMobile = useIsMobile()
   const [isSafari, setIsSafari] = useState(false)
   const [hasMounted, setHasMounted] = useState(false)
