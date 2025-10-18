@@ -155,19 +155,14 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
     };
 
     const handleMouseMove = (event: MouseEvent) => {
-      let target = canvas as (HTMLElement | null);
-      let offsetX = 0;
-      let offsetY = 0;
-
-      if (target && target.offsetParent) {
-        do {
-          offsetX += target.offsetLeft;
-          offsetY += target.offsetTop;
-        } while (target = target.offsetParent as HTMLElement);
-      }
-
-      const mouseX = (event.pageX - offsetX) * dpr;
-      const mouseY = (event.pageY - offsetY + 40) * dpr;
+      // Use page coordinates to avoid scrolling issues
+      // Get canvas position relative to the document
+      const canvasRect = canvas.getBoundingClientRect();
+      const canvasDocX = canvasRect.left + window.scrollX;
+      const canvasDocY = canvasRect.top + window.scrollY;
+      
+      const mouseX = (event.pageX - canvasDocX) * dpr;
+      const mouseY = (event.pageY - canvasDocY) * dpr;
 
       const hoveredSquareX = Math.floor((mouseX + gridOffset.current.x) / scaledSquareSize);
       const hoveredSquareY = Math.floor((mouseY + gridOffset.current.y) / scaledSquareSize);
@@ -185,8 +180,26 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
       hoveredSquareRef.current = null;
     };
 
+    // Create a debounced scroll handler to reset canvas calculations after scrolling stops
+    let scrollTimer: number | null = null;
+    const debouncedScrollHandler = () => {
+      if (scrollTimer) {
+        window.clearTimeout(scrollTimer);
+      }
+      
+      // Clear hover state during scrolling
+      hoveredSquareRef.current = null;
+      
+      // After scrolling stops for a brief moment, recalculate the canvas state
+      scrollTimer = window.setTimeout(() => {
+        // Recalculate canvas dimensions and grid sizes like during resize
+        resizeCanvas();
+      }, 150); // Wait 150ms after scrolling stops before recalculating
+    };
+
     canvas.addEventListener("mousemove", handleMouseMove);
     canvas.addEventListener("mouseleave", handleMouseLeave);
+    window.addEventListener("scroll", debouncedScrollHandler);
     requestRef.current = requestAnimationFrame(updateAnimation);
 
     return () => {
@@ -194,6 +207,8 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
       canvas.removeEventListener("mousemove", handleMouseMove);
       canvas.removeEventListener("mouseleave", handleMouseLeave);
+      window.removeEventListener("scroll", debouncedScrollHandler);
+      if (scrollTimer) window.clearTimeout(scrollTimer);
     };
   }, [direction, speed, borderColor, hoverFillColor, squareSize, randomFlicker, flickerInterval, maxFlickerSquares]);
 
