@@ -249,5 +249,11 @@ const sentryWebpackPluginOptions = {
   autoInstrumentAppDirectory: false,
 };
 
-// Export the config wrapped with Sentry
-export default withSentryConfig(nextConfig, sentryWebpackPluginOptions);
+// Only run the webpack plugin (which performs network calls) when CI is present
+const enableSentryWebpackPlugin = process.env.CI === "true" || process.env.CI === "1";
+
+const exportedConfig = enableSentryWebpackPlugin
+  ? withSentryConfig(nextConfig, sentryWebpackPluginOptions)
+  : nextConfig;
+
+export default exportedConfig;
