@@ -1,6 +1,13 @@
 'use client'
 
-import { useState, useEffect, useRef, useCallback } from 'react'
+import {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  type ChangeEvent,
+  type FormEvent,
+} from 'react'
 import { motion, useReducedMotion, useInView } from 'framer-motion'
 import {
   Phone,
@@ -244,7 +251,9 @@ export default function ContactPage() {
     }
   }, [isFormInView, isTyping, showOrb])
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const [submitError, setSubmitError] = useState<string | null>(null)
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormState((prev) => ({ ...prev, [name]: value }))
 
@@ -271,6 +280,9 @@ export default function ContactPage() {
     if ((formErrors as any)[name]) {
       setFormErrors((prev) => ({ ...prev, [name]: null }))
     }
+    if (submitError) {
+      setSubmitError(null)
+    }
   }
 
   const validateForm = () => {
@@ -283,7 +295,7 @@ export default function ContactPage() {
     return errors
   }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     const errors = validateForm()
@@ -305,22 +317,52 @@ export default function ContactPage() {
 
     setIsSubmitting(true)
     setFormErrors({})
+    setSubmitError(null)
 
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false)
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          source: 'contact-page',
+          name: formState.name.trim(),
+          email: formState.email.trim(),
+          message: formState.message.trim(),
+        }),
+      })
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => null)
+        const apiErrors = (data?.errors ?? {}) as Record<string, string[]>
+        const nextErrors: Record<string, string> = {}
+        if (apiErrors.name?.[0]) nextErrors.name = apiErrors.name[0]
+        if (apiErrors.email?.[0]) nextErrors.email = apiErrors.email[0]
+        if (apiErrors.message?.[0]) nextErrors.message = apiErrors.message[0]
+        if (Object.keys(nextErrors).length > 0) {
+          setFormErrors(nextErrors)
+        }
+
+        setSubmitError(
+          data?.message ??
+            'We could not send your message. Please try again or email support@devxgroup.io.'
+        )
+        return
+      }
+
       setIsSubmitted(true)
-
-      // Trigger confetti for the success state
       setShowConfetti(true)
 
       // Reset form after showing success message
       setTimeout(() => {
         setFormState({ name: '', email: '', message: '', agreeToTerms: false })
-      }, 2000) // Keep form usable
-
-      // Success message stays persistent until page refresh - no auto-reset
-    }, 1500)
+      }, 2000)
+    } catch {
+      setSubmitError('We could not send your message. Please email support@devxgroup.io directly.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handleCopyExample = useCallback(async () => {
@@ -673,6 +715,15 @@ export default function ContactPage() {
                         )}
                       </div>
                     </div>
+                    {submitError && (
+                      <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="text-red-400 text-sm mt-4"
+                      >
+                        {submitError}
+                      </motion.p>
+                    )}
 
                     <div className="relative">
                       <label

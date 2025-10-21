@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import type { ChangeEvent, FormEvent } from 'react'
 import { motion } from 'framer-motion'
 import { CheckCircle } from 'lucide-react'
 import { Input } from '@/components/ui/input'
@@ -16,11 +17,16 @@ export default function FooterContactForm() {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [formErrors, setFormErrors] = useState<{ email?: string; message?: string }>({})
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const [submitError, setSubmitError] = useState<string | null>(null)
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormState((prev) => ({ ...prev, [name]: value }))
     if (formErrors[name as keyof typeof formErrors]) {
       setFormErrors((prev) => ({ ...prev, [name]: undefined }))
+    }
+    if (submitError) {
+      setSubmitError(null)
     }
   }
 
@@ -37,7 +43,7 @@ export default function FooterContactForm() {
     return errors
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const errors = validateForm()
     if (Object.keys(errors).length > 0) {
@@ -46,14 +52,43 @@ export default function FooterContactForm() {
     }
     setIsSubmitting(true)
     setFormErrors({})
-    setTimeout(() => {
-      setIsSubmitting(false)
+    setSubmitError(null)
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          source: 'footer',
+          email: formState.email.trim(),
+          message: formState.message.trim(),
+        }),
+      })
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => null)
+        const apiErrors = (data?.errors ?? {}) as Record<string, string[]>
+        const nextErrors: { email?: string; message?: string } = {}
+        if (apiErrors.email?.[0]) nextErrors.email = apiErrors.email[0]
+        if (apiErrors.message?.[0]) nextErrors.message = apiErrors.message[0]
+        if (Object.keys(nextErrors).length > 0) {
+          setFormErrors(nextErrors)
+        }
+        setSubmitError(data?.message ?? 'We could not send your message. Please try again shortly.')
+        return
+      }
+
       setIsSubmitted(true)
+      setFormState({ email: '', message: '' })
       setTimeout(() => {
-        setFormState({ email: '', message: '' })
         setIsSubmitted(false)
-      }, 3000)
-    }, 1500)
+      }, 4000)
+    } catch {
+      setSubmitError('We could not send your message. Please email support@devxgroup.io directly.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -121,6 +156,15 @@ export default function FooterContactForm() {
           >
             {isSubmitting ? 'Sending...' : 'Send message'}
           </Button>
+          {submitError && (
+            <motion.p
+              initial={{ opacity: 0, y: -6 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-red-400 text-xs"
+            >
+              {submitError}
+            </motion.p>
+          )}
         </form>
       )}
     </div>

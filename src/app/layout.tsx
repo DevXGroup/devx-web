@@ -1,8 +1,8 @@
+/* eslint-disable @next/next/no-page-custom-font */
 import '@/lib/polyfills'
 import type React from 'react'
 import './globals.css'
 import type { Metadata } from 'next'
-import { IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google'
 import ConditionalLayout from '@/components/layout/ConditionalLayout'
 import { BrowserCompatibilityDetector } from '@/components/layout/BrowserCompatibilityDetector'
 import { DevToolsErrorSuppressor } from '@/components/layout/DevToolsErrorSuppressor'
@@ -14,28 +14,6 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 import Script from 'next/script'
 import { Analytics } from '@vercel/analytics/next'
 import { createOgImageUrl, createTwitterImageUrl, getSiteUrl } from '@/lib/og'
-
-// Configure IBM Plex Sans - optimized with swap for better LCP
-const ibmPlexSans = IBM_Plex_Sans({
-  subsets: ['latin'],
-  weight: ['400', '600'], // Reduced weights for smaller bundle
-  variable: '--font-ibm-plex-sans',
-  display: 'swap', // Changed from optional to swap for better LCP
-  preload: true,
-  fallback: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
-  adjustFontFallback: true,
-})
-
-// Configure IBM Plex Mono - optimized with swap
-const ibmPlexMono = IBM_Plex_Mono({
-  subsets: ['latin'],
-  weight: ['400', '600'], // Reduced weights for smaller bundle
-  variable: '--font-ibm-plex-mono',
-  display: 'swap', // Changed from optional to swap for better LCP
-  preload: true,
-  fallback: ['Monaco', 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', 'monospace'],
-  adjustFontFallback: true,
-})
 
 const siteUrl = getSiteUrl()
 const defaultOgImage = createOgImageUrl(
@@ -133,7 +111,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-GXG9QQLB7C'
 
   return (
-    <html lang="en" className={`${ibmPlexSans.variable} ${ibmPlexMono.variable} dark`} style={{ backgroundColor: '#000000' }}>
+    <html lang="en" className="dark" style={{ backgroundColor: '#000000' }}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -145,6 +123,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600&display=swap"
+        />
         <StructuredData type="organization" />
         <StructuredData type="localBusiness" />
         <StructuredData type="website" />
