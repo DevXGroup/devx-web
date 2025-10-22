@@ -700,15 +700,15 @@ export default function PortfolioPage() {
       </section>
 
       {/* CTA */}
-      <section className="relative z-[9999] py-20 pb-24 overflow-visible mb-33">
-        <div className="absolute inset-0 z-0 bg-gradient-to-t from-black via-black/30 to-black pointer-events-none" />
-        <div className="relative z-20 container mx-auto px-4">
+      <section className="relative z-[30] py-20 pb-24 overflow-visible mb-33">
+        <div className="absolute inset-0 z-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent pointer-events-none" />
+        <div className="relative z-10 container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="relative z-30 text-center max-w-3xl mx-auto"
+            className="relative z-20 text-center max-w-3xl mx-auto"
           >
             <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#06B6D4]">
               Ready to Build Your Next Project?
