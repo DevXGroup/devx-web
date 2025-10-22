@@ -1,3 +1,5 @@
+import { readFile } from 'node:fs/promises'
+import { join } from 'node:path'
 import { ImageResponse } from 'next/og'
 
 interface OgSearchParams {
@@ -7,7 +9,7 @@ interface OgSearchParams {
   focus?: string
 }
 
-export const runtime = 'edge'
+export const runtime = 'nodejs'
 export const alt = 'DevX Group - Elite Software Development Team'
 export const size = {
   width: 1200,
@@ -19,6 +21,7 @@ const DEFAULT_TITLE = 'DevX Group'
 const DEFAULT_SUBTITLE = 'Custom Software • Agentic AI • Cloud Modernization'
 const DEFAULT_EYEBROW = 'Elite Product Engineers'
 const DEFAULT_FOCUS = ['AI Platforms', 'Agentic Automation', 'Product Design', 'Cloud Ops']
+const LOGO_FILE = ['devx', 'logo', 'og'].join('-') + '.png'
 
 const parseSearchParams = (params: OgSearchParams | undefined) => {
   const valueOf = (value: string | undefined) =>
@@ -40,9 +43,9 @@ const parseSearchParams = (params: OgSearchParams | undefined) => {
 }
 
 export default async function Image({ searchParams }: { searchParams?: OgSearchParams }) {
-  const logoData = await fetch(
-    new URL('../../public/images/logos/devx-logo-og.png', import.meta.url)
-  ).then((res) => res.arrayBuffer())
+  const logoPath = join(process.cwd(), 'public', 'images', 'logos', LOGO_FILE)
+  const logoBytes = await readFile(logoPath)
+  const logoSrc = `data:image/png;base64,${logoBytes.toString('base64')}`
 
   const { title, subtitle, eyebrow, focus } = parseSearchParams(searchParams)
 
@@ -135,7 +138,7 @@ export default async function Image({ searchParams }: { searchParams?: OgSearchP
               <img
                 width="178"
                 height="130"
-                src={logoData as any}
+                src={logoSrc}
                 alt="DevX Group logo"
                 style={{ objectFit: 'contain' }}
               />
