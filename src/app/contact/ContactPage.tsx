@@ -27,6 +27,24 @@ import {
 } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import TextPressure from '@/components/animations/TextPressure'
+import { useIsMobile } from '@/hooks/use-mobile'
+
+declare global {
+  interface Window {
+    Calendly?: {
+      initInlineWidget: (options: {
+        url: string
+        parentElement: HTMLElement
+        textColor?: string
+        primaryColor?: string
+        backgroundColor?: string
+        branding?: boolean
+        prefill?: Record<string, unknown>
+        utm?: Record<string, string>
+      }) => void
+    }
+  }
+}
 
 const Lightning = dynamic(() => import('@/components/animations/Lightning'), {
   ssr: false,
@@ -165,11 +183,153 @@ export default function ContactPage() {
   const shouldReduceMotion = useReducedMotion()
   const formRef = useRef(null)
   const isFormInView = useInView(formRef, { once: true })
+  const isMobile = useIsMobile()
+  const calendlyContainerRef = useRef<HTMLDivElement | null>(null)
+  const calendlyScriptPromiseRef = useRef<Promise<void> | null>(null)
+  const [calendlyHeight, setCalendlyHeight] = useState(1100)
+  const clampCalendlyHeight = useCallback(
+    (height: number) => {
+      const minHeight = isMobile ? 1180 : 1000
+      const maxHeight = isMobile ? 1800 : 1600
+      return Math.min(Math.max(height, minHeight), maxHeight)
+    },
+    [isMobile]
+  )
   const handleConfettiComplete = useCallback(() => {
     setShowConfetti(false)
   }, [])
   const calendlyEmbedUrl =
-    'https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?hide_gdpr_banner=1&background_color=000000&text_color=ffffff&primary_color=4CD787&embed_type=Inline'
+    'https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?hide_gdpr_banner=1&embed_type=Inline&background_color=050505&text_color=E2E8F0&primary_color=4CD787'
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    const updateHeight = () => {
+      const viewportHeight = window.innerHeight || 0
+      const baseHeight = viewportHeight + (isMobile ? 420 : 240)
+      const nextHeight = clampCalendlyHeight(baseHeight)
+
+      setCalendlyHeight((previous) => (previous === nextHeight ? previous : nextHeight))
+    }
+
+    updateHeight()
+    window.addEventListener('resize', updateHeight)
+    window.addEventListener('orientationchange', updateHeight)
+
+    return () => {
+      window.removeEventListener('resize', updateHeight)
+      window.removeEventListener('orientationchange', updateHeight)
+    }
+  }, [clampCalendlyHeight, isMobile])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    const allowedOrigins = new Set(['https://calendly.com', 'https://calendly.eu'])
+
+    const handleMessage = (event: MessageEvent) => {
+      if (!allowedOrigins.has(event.origin)) {
+        return
+      }
+
+      const data = event.data
+      if (!data || typeof data !== 'object') {
+        return
+      }
+
+      if (data.event === 'calendly.page_height') {
+        const incomingHeight = Number(data.payload?.height)
+        if (!Number.isFinite(incomingHeight) || incomingHeight <= 0) {
+          return
+        }
+
+        const bufferedHeight = incomingHeight + (isMobile ? 160 : 120)
+        const nextHeight = clampCalendlyHeight(bufferedHeight)
+        setCalendlyHeight((previous) => (previous === nextHeight ? previous : nextHeight))
+      }
+    }
+
+    window.addEventListener('message', handleMessage)
+
+    return () => {
+      window.removeEventListener('message', handleMessage)
+    }
+  }, [clampCalendlyHeight, isMobile])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    const containerElement = calendlyContainerRef.current
+    if (!containerElement) {
+      return
+    }
+
+    let isCancelled = false
+
+    const initializeWidget = () => {
+      if (
+        isCancelled ||
+        !window.Calendly ||
+        !containerElement.isConnected
+      ) {
+        return
+      }
+
+      containerElement.innerHTML = ''
+
+      window.Calendly.initInlineWidget({
+        url: calendlyEmbedUrl,
+        parentElement: containerElement,
+        textColor: '#E2E8F0',
+        primaryColor: '#4CD787',
+        backgroundColor: '#050505',
+        branding: false,
+      })
+    }
+
+    if (window.Calendly) {
+      initializeWidget()
+      return () => {
+        isCancelled = true
+        containerElement.innerHTML = ''
+      }
+    }
+
+    if (!calendlyScriptPromiseRef.current) {
+      calendlyScriptPromiseRef.current = new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = 'https://assets.calendly.com/assets/external/widget.js'
+        script.async = true
+        script.onload = () => resolve()
+        script.onerror = () => reject(new Error('Failed to load Calendly widget script'))
+        document.head.appendChild(script)
+      })
+    }
+
+    calendlyScriptPromiseRef.current
+      ?.then(() => {
+        if (!isCancelled) {
+          initializeWidget()
+        }
+      })
+      .catch((error) => {
+        calendlyScriptPromiseRef.current = null
+        if (process.env.NODE_ENV !== 'production') {
+          console.error(error)
+        }
+      })
+
+    return () => {
+      isCancelled = true
+      containerElement.innerHTML = ''
+    }
+  }, [calendlyEmbedUrl])
 
   // Defer WebGL-heavy lightning animation to improve LCP
   useEffect(() => {
@@ -905,20 +1065,17 @@ export default function ContactPage() {
             </p>
           </motion.div>
 
-          <div className="bg-black/40 backdrop-blur-sm p-4 md:p-6 rounded-2xl border border-white/10 overflow-hidden">
-            <div className="relative">
-              <iframe
-                title="Schedule a consultation with DevX Group"
-                src={calendlyEmbedUrl}
-                loading="lazy"
-                className="w-full rounded-xl"
+          <div className="bg-[#050505] p-4 md:p-6 rounded-2xl border border-white/10 shadow-[0_0_35px_rgba(4,4,8,0.45)] overflow-hidden">
+            <div className="relative rounded-xl">
+              <div
+                ref={calendlyContainerRef}
+                className="w-full rounded-xl overflow-hidden"
                 style={{
                   minWidth: '320px',
-                  height: '1000px',
-                  border: 'none',
-                  backgroundColor: '#000000',
+                  minHeight: calendlyHeight,
+                  height: calendlyHeight,
+                  backgroundColor: '#050505',
                 }}
-                allow="fullscreen"
               />
               <div
                 className="pointer-events-none absolute inset-0 rounded-xl border border-white/10"
