@@ -819,7 +819,7 @@ export default function AboutPage() {
             </p>
           </AnimatedSection>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-y-8 sm:gap-y-10 md:gap-y-12 lg:gap-y-0 gap-x-6 sm:gap-x-8 md:gap-x-10 lg:gap-x-16 items-center ml-[13px]">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-y-12 sm:gap-y-16 lg:gap-y-0 gap-x-6 sm:gap-x-8 md:gap-x-10 lg:gap-x-16 items-center ml-[13px]">
             {/* Left side - Text content */}
 
             <AnimatedSection className="space-y-6 sm:space-y-8">
@@ -875,7 +875,7 @@ export default function AboutPage() {
             {/* Right side - CardSwap */}
             <AnimatedSection
               delay={0.2}
-              className="relative h-[320px] sm:h-[360px] md:h-[420px] lg:h-[560px] xl:h-[600px]"
+              className="relative mt-6 sm:mt-8 h-[360px] sm:h-[420px] md:h-[480px] lg:h-[560px] xl:h-[600px]"
             >
               <CardSwap
                 width={490}
