@@ -323,7 +323,7 @@ const ExplosiveCTASection = () => {
           >
             <h3 className="text-white font-semibold text-lg mb-4">Ready to Get Started?</h3>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center text-white/70">
-              <span>📧 creative@devxgroup.io</span>
+              <span>📧 support@devxgroup.io</span>
               <span className="hidden sm:block">|</span>
               <span>📞 +1 (442) 544-0591</span>
               <span className="hidden sm:block">|</span>
