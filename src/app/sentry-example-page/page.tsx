@@ -1,6 +1,6 @@
 "use client";
 
-import * as Sentry from "@sentry/nextjs";
+import * as Sentry from "@sentry/react";
 import { Button } from "@/components/ui/button";
 
 export default function SentryExamplePage() {
