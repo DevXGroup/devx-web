@@ -69,6 +69,7 @@ Path aliases (see `tsconfig.json`): `@/*`, `@animations/*`, `@layout/*`, `@secti
 - **Tooling:** pnpm, ESLint (`next/core-web-vitals`), Prettier conventions (2 spaces, single quotes, no semicolons)
 - **Testing:** Jest + Testing Library, Playwright (integration, QA, audit)
 - **Observability:** Vercel Analytics, Speed Insights, Sentry
+- **CI Guardrails:** GitHub Actions pipeline enforces lint, coverage, build, Playwright smoke, and bundle budgets before merge.
 
 ---
 
@@ -89,6 +90,8 @@ pnpm test:watch
 pnpm test:coverage
 pnpm build         # Production build
 pnpm start         # Serve .next output
+pnpm size          # size-limit budgets
+pnpm analyze       # Bundle analyzer (ANALYZE=true next build)
 ```
 
 Environment-specific values live in `.env.local`. Expose browser-safe values with the `NEXT_PUBLIC_` prefix only.
@@ -111,6 +114,7 @@ Environment-specific values live in `.env.local`. Expose browser-safe values wit
 - **Unit & Component Tests:** Jest (`pnpm test`) with Testing Library. Use `tests/test-utils.ts` for consistent providers and mocks (Next router, IntersectionObserver, etc.).
 - **Playwright Suites:** Located under `tests/integration/`, `tests/qa/`, and `tests/audit/`. Audit specs generate artifacts in `tests/audit/artifacts/`.
 - **CI Expectations:** Run `pnpm lint` and relevant tests before raising PRs. Track coverage with `pnpm test:coverage` when introducing major features.
+- **Bundle Budgets:** `pnpm size` enforces size-limit thresholds in CI; run `pnpm analyze` locally for bundle deep dives.
 - **Metrics & Error Tracking:** Sentry instrumentation is enabled in the App Router; ensure new pages/components either respect existing boundaries or are wrapped with `ErrorBoundary` where appropriate.
 
 ---
@@ -130,4 +134,5 @@ Environment-specific values live in `.env.local`. Expose browser-safe values wit
 - [Tailwind CSS Docs](https://tailwindcss.com/docs)
 - [React Three Fiber](https://docs.pmnd.rs/react-three-fiber/getting-started/introduction)
 - [Playwright](https://playwright.dev/docs/intro)
+- [Deployment Guardrails](docs/operations/deployment-guardrails.md)
 - Internal product and content documentation is shared privately with the DevX Group team.
