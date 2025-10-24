@@ -668,14 +668,14 @@ export default function ContactPage() {
           />
         </div>
 
-        <div className="relative container mx-auto px-4 pt-24">
+        <div className="relative container mx-auto px-4 pt-16 md:pt-20">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <div className="flex flex-col items-center mt-8 py-12">
+            <div className="flex flex-col items-center mt-4 md:mt-6 py-8 md:py-10">
               <div className="flex items-center justify-center w-full">
                 <div
                   style={{

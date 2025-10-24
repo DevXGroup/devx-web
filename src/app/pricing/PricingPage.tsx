@@ -451,7 +451,7 @@ export default function PricingPage() {
   useState(false)
 
   return (
-    <div className="min-h-screen bg-black relative overflow-hidden pt-24">
+    <div className="min-h-screen bg-black relative overflow-hidden pt-16 md:pt-20">
       {/* Animated background */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900/50 to-black" />
@@ -508,7 +508,7 @@ export default function PricingPage() {
       </div>
 
       {/* Hero Section */}
-      <section className="relative pt-2 pb-8 text-center mt-9 py-9">
+      <section className="relative text-center pt-6 md:pt-8 pb-10 md:pb-12">
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
             variants={containerVariants}
@@ -545,7 +545,7 @@ export default function PricingPage() {
 
             <motion.p
               variants={fadeInUpVariants}
-              className="text-lg md:text-xl text-white/90 font-light mb-8 leading-relaxed max-w-3xl mx-auto font-['IBM_Plex_Sans'] mt-6"
+              className="text-lg md:text-xl text-white/90 font-light mb-8 leading-relaxed max-w-3xl mx-auto font-['IBM_Plex_Sans'] mt-4"
               style={{
                 letterSpacing: '0.025em',
                 fontWeight: '400',
