@@ -184,16 +184,6 @@ export default function ServicesPage() {
 
   useEffect(() => {
     setIsMounted(true)
-
-    if (typeof window !== 'undefined') {
-      requestAnimationFrame(() => {
-        if (heroRef.current instanceof HTMLElement) {
-          heroRef.current.scrollIntoView({ behavior: 'auto', block: 'start' })
-        } else {
-          window.scrollTo({ top: 0, behavior: 'auto' })
-        }
-      })
-    }
   }, [])
 
   // Disable scroll-linked animations until after hydration
