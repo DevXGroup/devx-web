@@ -59,11 +59,11 @@ function StepAnimation({
 
   const stepTextVariants = {
     active: {
-      fontWeight: 'bold',
+      fontWeight: 700,
       color: '#ffffff',
     },
     inactive: {
-      fontWeight: 'normal',
+      fontWeight: 400,
       color: 'rgb(156 163 175)',
     },
   }
