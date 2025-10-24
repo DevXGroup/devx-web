@@ -6,90 +6,145 @@ import Image from 'next/image'
 import seedrandom from 'seedrandom'
 import LogoLoop from '@animations/LogoLoop'
 
+const buildIconPath = (file: string) => `/images/tech/${file}`
+
 const tools = [
   {
     name: 'Laravel',
     description: "Quickly build secure web apps with Laravel's powerful features",
-    icon: '/images/tech/laravel.svg',
+    icon: buildIconPath('laravel.svg'),
   },
   {
     name: 'Figma',
     description: "Design & prototype collaboratively with Figma's robust toolset",
-    icon: '/images/tech/figma.svg',
+    icon: buildIconPath('figma.svg'),
   },
   {
     name: 'Angular',
     description: "Innovative enterprise solutions with Angular's robust framework",
-    icon: '/images/tech/angular.svg',
+    icon: buildIconPath('angular.svg'),
   },
   {
     name: 'React',
     description: 'Fast & dynamic user interfaces seamlessly built with React',
-    icon: '/images/tech/react.svg',
+    icon: buildIconPath('react.svg'),
   },
   {
     name: 'Flutter',
     description: 'Multi-platform apps for mobile, web, & desktop using Flutter',
-    icon: '/images/tech/flutter.svg',
+    icon: buildIconPath('flutter-icon.svg'),
   },
   {
     name: '.NET',
     description: "Develop robust, scalable solutions with Microsoft's .NET platform",
-    icon: '/images/tech/dotnet.svg',
+    icon: buildIconPath('dotnet.svg'),
   },
   {
     name: 'Adobe XD',
     description: 'Prototype and design beautiful UX with Adobe XD',
-    icon: '/images/tech/adobe-xd.svg',
+    icon: buildIconPath('adobe-xd.svg'),
   },
   {
     name: 'Magento',
     description: 'Build scalable e-commerce solutions with Magento ecosystem',
-    icon: '/images/tech/magento.svg',
+    icon: buildIconPath('magento-icon.svg'),
   },
 ]
 
 // Updated AI tools with better logos and descriptions
-const aiTools = [
+type AITool = {
+  name: string
+  description: string
+  icon: string
+  wrapperClassName?: string
+  imageClassName?: string
+  grayscale?: boolean
+  loopWrapperClassName?: string
+  loopImageClassName?: string
+}
+
+const aiTools: AITool[] = [
+  {
+    name: 'OpenAI',
+    description: "Integrate powerful AI models with OpenAI's cutting-edge APIs",
+    icon: buildIconPath('openai.svg'),
+    wrapperClassName: 'p-2 bg-[#071b16] border border-[#10A37F]/60 shadow-[0_0_12px_rgba(16,163,127,0.25)]',
+    loopWrapperClassName: 'bg-transparent rounded-none p-0',
+  },
+  {
+    name: 'Anthropic',
+    description: 'Build trustworthy AI agents with Claude and the Anthropic API',
+    icon: buildIconPath('anthropic.svg'),
+    wrapperClassName: 'p-2 bg-[#2a0c05] border border-[#ff4218]/60 shadow-[0_0_12px_rgba(255,66,24,0.2)]',
+    loopWrapperClassName: 'bg-transparent rounded-none p-0',
+  },
+  {
+    name: 'Hugging Face',
+    description: 'Launch community and enterprise AI models through Hugging Face',
+    icon: buildIconPath('huggingface.svg'),
+    wrapperClassName: 'p-2 bg-black/60 border border-[#ffb23c]/60 shadow-[0_0_12px_rgba(255,178,60,0.16)]',
+    loopWrapperClassName: 'bg-transparent rounded-none p-0',
+  },
+  {
+    name: 'Ollama',
+    description: 'Run open-source LLMs locally with Ollama for rapid prototyping',
+    icon: buildIconPath('ollama.svg'),
+    wrapperClassName: 'p-2 bg-[#0f1b24] border border-[#4cd787]/50 shadow-[0_0_12px_rgba(76,215,135,0.2)]',
+    imageClassName: 'invert brightness-[1.25] contrast-[0.9]',
+    loopWrapperClassName: 'bg-transparent rounded-none p-0',
+    loopImageClassName: 'invert brightness-[1.25] contrast-[0.9]',
+  },
+  {
+    name: 'Google AI Studio',
+    description: 'Ship Gemini-powered experiences using Google AI Studio tooling',
+    icon: buildIconPath('google-ai-studio.svg'),
+    wrapperClassName:
+      'p-2 bg-[#0b0d21]/80 border border-[#5f6bff]/50 shadow-[0_0_14px_rgba(95,107,255,0.28)]',
+    loopWrapperClassName: 'bg-transparent rounded-none p-0',
+  },
   {
     name: 'TensorFlow',
     description: "Build and deploy ML models with Google's TensorFlow platform",
-    icon: '/images/tech/tensorflow.svg',
+    icon: buildIconPath('tensorflow.svg'),
+    loopWrapperClassName: 'bg-transparent rounded-none p-0',
   },
   {
     name: 'PyTorch',
     description: 'Dynamic neural networks and deep learning with PyTorch',
-    icon: '/images/tech/pytorch.svg',
+    icon: buildIconPath('pytorch.svg'),
+    loopWrapperClassName: 'bg-transparent rounded-none p-0',
   },
   {
-    name: 'OpenAI',
-    description: "Integrate powerful AI models with OpenAI's cutting-edge APIs",
-    icon: '/images/tech/openai.svg',
+    name: 'LangChain',
+    description: 'Orchestrate multi-modal AI workflows with LangChain frameworks',
+    icon: buildIconPath('langchain.svg'),
+    wrapperClassName:
+      'p-2 bg-[#0d2b24] border border-[#00c897]/60 backdrop-blur-sm shadow-[0_0_12px_rgba(0,200,151,0.22)]',
+    loopWrapperClassName: 'bg-transparent rounded-none p-0',
   },
   {
     name: 'Python',
     description: 'Versatile programming language for AI, web, and data science',
-    icon: '/images/tech/python.svg',
-  },
-  {
-    name: 'Node.js',
-    description: 'Build scalable server-side applications with JavaScript runtime',
-    icon: '/images/tech/nodejs.svg',
+    icon: buildIconPath('python.svg'),
+    loopWrapperClassName: 'bg-transparent rounded-none p-0',
   },
   {
     name: 'Docker',
     description: 'Containerize applications for consistent deployment environments',
-    icon: '/images/tech/docker.svg',
+    icon: buildIconPath('docker.svg'),
+    loopWrapperClassName: 'bg-transparent rounded-none p-0',
   },
   {
     name: 'AWS',
     description: 'Cloud computing services for scalable infrastructure solutions',
-    icon: '/images/tech/aws.svg',
+    icon: buildIconPath('aws.svg'),
+    loopWrapperClassName: 'bg-transparent rounded-none p-0',
   },
   {
     name: 'MongoDB',
     description: 'NoSQL database for modern application development',
-    icon: '/images/tech/mongodb.svg',
+    icon: buildIconPath('mongodb.svg'),
+    loopWrapperClassName: 'bg-transparent rounded-none p-0',
   },
 ]
 
@@ -528,6 +583,7 @@ export default function DevelopmentTools() {
                       src={activeTool.icon || '/placeholder.svg'}
                       alt={activeTool.name}
                       fill
+                      sizes="(min-width: 1024px) 3rem, (min-width: 768px) 2.5rem, (min-width: 640px) 2.25rem, 2rem"
                       className={`object-contain ${
                         activeTool.name === 'Laravel' ? 'brightness-150 saturate-150' : ''
                       }`}
@@ -733,6 +789,7 @@ function TransitionPlanet({
               src={tool.icon || '/placeholder.svg'}
               alt={tool.name}
               fill
+              sizes="(min-width: 1024px) 2.25rem, (min-width: 768px) 2rem, (min-width: 640px) 1.75rem, 1.5rem"
               className={`object-contain ${
                 tool.name === 'Laravel' ? 'brightness-150 saturate-150' : ''
               }`}
@@ -846,6 +903,7 @@ function StaticIconsOrbit({
                   src={tool.icon || '/placeholder.svg'}
                   alt={tool.name}
                   fill
+                  sizes="(min-width: 1024px) 2.25rem, (min-width: 768px) 2rem, (min-width: 640px) 1.75rem, 1.5rem"
                   className={`object-contain ${
                     tool.name === 'Laravel' ? 'brightness-150 saturate-150' : ''
                   }`}
@@ -997,7 +1055,7 @@ function AIToolsOrbit({
               type="button"
               aria-label={tool.name}
               aria-pressed={isActive}
-              className="relative w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full backdrop-blur-sm shadow border border-purple-500/40 flex items-center justify-center cursor-pointer group/icon focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4CD787] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+              className={`relative w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full backdrop-blur-sm shadow border border-purple-500/40 flex items-center justify-center cursor-pointer group/icon focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4CD787] focus-visible:ring-offset-2 focus-visible:ring-offset-black ${tool.wrapperClassName ?? ''}`}
               whileHover={{ scale: 1.08 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => onIconClick(i)}
@@ -1031,7 +1089,8 @@ function AIToolsOrbit({
                   src={tool.icon || '/placeholder.svg'}
                   alt={tool.name}
                   fill
-                  className="object-contain"
+                  sizes="(min-width: 1024px) 2.25rem, (min-width: 768px) 2rem, (min-width: 640px) 1.75rem, 1.5rem"
+                  className={`object-contain ${tool.imageClassName ?? ''}`}
                 />
               </div>
 

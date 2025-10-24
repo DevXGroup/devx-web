@@ -3,11 +3,18 @@
 import { useRef } from 'react'
 import Image from 'next/image'
 
+interface LogoLoopLogo {
+  name: string
+  icon: string
+  wrapperClassName?: string
+  imageClassName?: string
+  grayscale?: boolean
+  loopWrapperClassName?: string
+  loopImageClassName?: string
+}
+
 interface LogoLoopProps {
-  logos: Array<{
-    name: string
-    icon: string
-  }>
+  logos: LogoLoopLogo[]
   speed?: number
 }
 
@@ -28,47 +35,56 @@ export default function LogoLoop({ logos, speed = 15 }: LogoLoopProps) {
           willChange: 'transform',
         }}
       >
-        {[...logos, ...logos, ...logos, ...logos].map((logo, index) => (
-          <div
-            key={`${logo.name}-${index}`}
-            className="flex-shrink-0 transition-transform duration-300 hover:scale-125 group/item cursor-pointer"
-          >
-            <div className="relative flex flex-col items-center gap-3">
-              <div className="relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 grayscale group-hover/item:grayscale-0 transition-all duration-500">
-                <Image
-                  src={logo.icon}
-                  alt={logo.name}
-                  fill
-                  className="object-contain"
-                  style={
-                    logo.name === 'Laravel'
-                      ? {
-                          filter:
-                            'brightness(1.5) saturate(1.5) hue-rotate(300deg) contrast(1.2)',
-                        }
-                      : undefined
-                  }
-                />
-              </div>
-              {/* Label - Shows on hover */}
-              <div
-                className={`
-                  absolute -bottom-12 left-1/2 -translate-x-1/2 whitespace-nowrap z-[999]
-                  bg-black/95 backdrop-blur-md px-4 py-2 rounded-lg
-                  border border-[#4CD787]/50 text-white text-sm sm:text-base font-['IBM_Plex_Mono'] font-medium
-                  shadow-lg shadow-[#4CD787]/20
-                  transition-all duration-300 pointer-events-none opacity-0 translate-y-2 scale-95
-                  group-hover/item:opacity-100 group-hover/item:translate-y-0 group-hover/item:scale-100
-                `}
-                style={{
-                  textShadow: '0 0 8px rgba(76, 215, 135, 0.5)',
-                }}
-              >
-                {logo.name}
+        {[...logos, ...logos, ...logos, ...logos].map((logo, index) => {
+          const shouldApplyGrayscale = logo.grayscale !== false
+
+          return (
+            <div
+              key={`${logo.name}-${index}`}
+              className="flex-shrink-0 transition-transform duration-300 hover:scale-125 group/item cursor-pointer"
+            >
+              <div className="relative flex flex-col items-center gap-3">
+                <div
+                  className={`relative flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 transition-all duration-500 ${
+                    shouldApplyGrayscale ? 'grayscale group-hover/item:grayscale-0' : ''
+                  } ${logo.loopWrapperClassName ?? ''}`}
+                  style={{ background: 'transparent' }}
+                >
+                  <Image
+                    src={logo.icon}
+                    alt={logo.name}
+                    fill
+                    sizes="(min-width: 1280px) 6rem, (min-width: 1024px) 5rem, (min-width: 768px) 4.5rem, (min-width: 640px) 4rem, 3rem"
+                    className={`object-contain ${logo.imageClassName ?? ''} ${
+                      logo.loopImageClassName ?? ''
+                    }`}
+                    style={
+                      logo.name === 'Laravel'
+                        ? {
+                            filter:
+                              'brightness(1.5) saturate(1.5) hue-rotate(300deg) contrast(1.2)',
+                          }
+                        : undefined
+                    }
+                  />
+                </div>
+                {/* Label - Shows on hover */}
+                <div
+                  className={`
+                    absolute -bottom-12 left-1/2 -translate-x-1/2 whitespace-nowrap z-[999]
+                    bg-black/95 backdrop-blur-md px-4 py-2 rounded-lg
+                    border border-[#4CD787]/50 text-white text-sm sm:text-base font-['IBM_Plex_Mono'] font-medium
+                    shadow-lg shadow-[#4CD787]/20
+                    transition-all duration-300 pointer-events-none opacity-0 translate-y-2 scale-95
+                    group-hover/item:opacity-100 group-hover/item:translate-y-0 group-hover/item:scale-100
+                  `}
+                >
+                  {logo.name}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
       <style jsx>{`
         @keyframes scroll {

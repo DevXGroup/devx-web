@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-page-custom-font */
 import '@/lib/polyfills'
-import type React from 'react'
+import { version as reactVersion } from 'react'
+import type { ReactNode } from 'react'
 import './globals.css'
 import type { Metadata } from 'next'
 import ConditionalLayout from '@/components/layout/ConditionalLayout'
@@ -32,6 +33,125 @@ const defaultTwitterImage = createTwitterImageUrl(
   },
   siteUrl
 )
+
+const devtoolsVersionPatchScript = `
+(function () {
+  var REACT_VERSION = ${JSON.stringify(reactVersion)};
+  if (!REACT_VERSION) {
+    return;
+  }
+
+  var ensureVersionString = function (target) {
+    if (!target || typeof target !== 'object') {
+      return;
+    }
+    var version =
+      typeof target.version === 'string' ? target.version.trim() : '';
+    if (!version) {
+      target.version = REACT_VERSION;
+    }
+    var reconcilerVersion =
+      typeof target.reconcilerVersion === 'string'
+        ? target.reconcilerVersion.trim()
+        : '';
+    if (!reconcilerVersion) {
+      target.reconcilerVersion = REACT_VERSION;
+    }
+  };
+
+  var patchRenderers = function (hook) {
+    var renderers = hook && (hook.renderers || hook._renderers);
+    if (!renderers) {
+      return;
+    }
+    if (typeof renderers.forEach === 'function') {
+      try {
+        renderers.forEach(ensureVersionString);
+      } catch (_) {}
+      return;
+    }
+    if (Array.isArray(renderers)) {
+      for (var i = 0; i < renderers.length; i++) {
+        ensureVersionString(renderers[i]);
+      }
+      return;
+    }
+    var keys = Object.keys(renderers);
+    for (var j = 0; j < keys.length; j++) {
+      ensureVersionString(renderers[keys[j]]);
+    }
+  };
+
+  var patchHook = function (hook) {
+    if (!hook || hook.__DEVX_REACT_SEMVER_PATCHED__) {
+      return;
+    }
+    hook.__DEVX_REACT_SEMVER_PATCHED__ = true;
+
+    var originalInject = typeof hook.inject === 'function' ? hook.inject : null;
+    if (originalInject) {
+      hook.inject = function (internals) {
+        ensureVersionString(internals);
+        return originalInject.call(this, internals);
+      };
+    }
+
+    patchRenderers(hook);
+
+    var subscribe = typeof hook.on === 'function' ? hook.on.bind(hook) : null;
+    if (subscribe) {
+      try {
+        subscribe('renderer', function (renderer) {
+          ensureVersionString(renderer);
+        });
+      } catch (_) {}
+      try {
+        subscribe('renderer-attached', function (id, renderer) {
+          if (renderer) {
+            ensureVersionString(renderer);
+            return;
+          }
+          var renderers = hook.renderers || hook._renderers;
+          if (!renderers) {
+            return;
+          }
+          var resolvedRenderer =
+            typeof renderers.get === 'function' ? renderers.get(id) : renderers[id];
+          ensureVersionString(resolvedRenderer);
+        });
+      } catch (_) {}
+    }
+  };
+
+  var applyPatch = function () {
+    var hook = window.__REACT_DEVTOOLS_GLOBAL_HOOK__;
+    if (hook) {
+      patchHook(hook);
+    }
+  };
+
+  applyPatch();
+
+  var descriptor = Object.getOwnPropertyDescriptor(
+    window,
+    '__REACT_DEVTOOLS_GLOBAL_HOOK__'
+  );
+  if (!descriptor || descriptor.configurable) {
+    var currentHook = window.__REACT_DEVTOOLS_GLOBAL_HOOK__;
+    Object.defineProperty(window, '__REACT_DEVTOOLS_GLOBAL_HOOK__', {
+      configurable: true,
+      enumerable: false,
+      get: function () {
+        return currentHook;
+      },
+      set: function (nextHook) {
+        currentHook = nextHook;
+        applyPatch();
+      }
+    });
+  }
+})();
+`.trim()
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -106,7 +226,9 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export const revalidate = 60
+
+export default function RootLayout({ children }: { children: ReactNode }) {
   const gtmId = process.env.NEXT_PUBLIC_GTM_ID || 'GTM-TBDBXQWX'
   const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-GXG9QQLB7C'
 
@@ -126,6 +248,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600&display=swap"
+        />
+        {/* Patch React DevTools semver regression */}
+        <Script
+          id="react-devtools-semver-patch"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: devtoolsVersionPatchScript }}
         />
         <StructuredData type="organization" />
         <StructuredData type="localBusiness" />

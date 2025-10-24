@@ -939,11 +939,23 @@ function resizeRendererToDisplaySize(
   setSize: (width: number, height: number, updateStyle: boolean) => void
 ) {
   const canvas = renderer.domElement
-  const width = canvas.clientWidth
-  const height = canvas.clientHeight
+  const parent = canvas.parentElement
+  const cssWidth =
+    canvas.clientWidth ||
+    parent?.clientWidth ||
+    window.innerWidth ||
+    1
+  const cssHeight =
+    canvas.clientHeight ||
+    parent?.clientHeight ||
+    window.innerHeight ||
+    1
+  const pixelRatio = renderer.getPixelRatio ? renderer.getPixelRatio() : window.devicePixelRatio || 1
+  const width = Math.max(1, Math.floor(cssWidth * pixelRatio))
+  const height = Math.max(1, Math.floor(cssHeight * pixelRatio))
   const needResize = canvas.width !== width || canvas.height !== height
   if (needResize) {
-    setSize(width, height, false)
+    setSize(cssWidth, cssHeight, false)
   }
   return needResize
 }
@@ -981,6 +993,21 @@ class App {
       container.removeChild(container.firstChild)
     }
 
+    const initialWidth =
+      container.offsetWidth ||
+      container.clientWidth ||
+      container.parentElement?.clientWidth ||
+      window.innerWidth ||
+      1
+    const initialHeight =
+      container.offsetHeight ||
+      container.clientHeight ||
+      container.parentElement?.clientHeight ||
+      window.innerHeight ||
+      1
+    const safeWidth = Math.max(1, Math.floor(initialWidth))
+    const safeHeight = Math.max(1, Math.floor(initialHeight))
+
     this.renderer = new THREE.WebGLRenderer({
       antialias: false,
       alpha: true,
@@ -988,7 +1015,7 @@ class App {
       failIfMajorPerformanceCaveat: false,
       powerPreference: 'default'
     })
-    this.renderer.setSize(container.offsetWidth, container.offsetHeight, false)
+    this.renderer.setSize(safeWidth, safeHeight, false)
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
     // Set clear color to prevent white flash
@@ -1012,7 +1039,7 @@ class App {
 
     this.camera = new THREE.PerspectiveCamera(
       options.fov,
-      container.offsetWidth / container.offsetHeight,
+      safeWidth / safeHeight,
       0.1,
       10000
     )
@@ -1061,11 +1088,21 @@ class App {
   }
 
   onWindowResize() {
-    const width = this.container.offsetWidth || window.innerWidth
-    const height =
+    const rawWidth =
+      this.container.offsetWidth ||
+      this.container.clientWidth ||
+      this.container.parentElement?.clientWidth ||
+      window.innerWidth ||
+      1
+    const rawHeight =
       this.container.offsetHeight ||
+      this.container.clientHeight ||
       this.container.parentElement?.clientHeight ||
-      window.innerHeight
+      window.innerHeight ||
+      1
+
+    const width = Math.max(1, Math.floor(rawWidth))
+    const height = Math.max(1, Math.floor(rawHeight))
 
     if (!width || !height) {
       return
@@ -1206,7 +1243,11 @@ class App {
   }
 
   setSize(width: number, height: number, updateStyles: boolean) {
-    this.composer.setSize(width, height, updateStyles)
+    const safeWidth = Math.max(1, Math.floor(width || 0))
+    const safeHeight = Math.max(1, Math.floor(height || 0))
+
+    this.renderer.setSize(safeWidth, safeHeight, updateStyles)
+    this.composer.setSize(safeWidth, safeHeight)
   }
 
   tick() {

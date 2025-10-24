@@ -207,7 +207,7 @@ export default function ContactPage() {
     }
 
     const updateHeight = () => {
-      const viewportHeight = window.innerHeight || 0
+      const viewportHeight = typeof window.innerHeight !== 'undefined' ? window.innerHeight : 0
       const baseHeight = viewportHeight + (isMobile ? 420 : 240)
       const nextHeight = clampCalendlyHeight(baseHeight)
 
@@ -215,12 +215,31 @@ export default function ContactPage() {
     }
 
     updateHeight()
-    window.addEventListener('resize', updateHeight)
-    window.addEventListener('orientationchange', updateHeight)
+    
+    try {
+      window.addEventListener('resize', updateHeight)
+    } catch (error) {
+      console.error('Failed to add resize event listener:', error)
+    }
+    
+    try {
+      window.addEventListener('orientationchange', updateHeight)
+    } catch (error) {
+      console.error('Failed to add orientationchange event listener:', error)
+    }
 
     return () => {
-      window.removeEventListener('resize', updateHeight)
-      window.removeEventListener('orientationchange', updateHeight)
+      try {
+        window.removeEventListener('resize', updateHeight)
+      } catch (error) {
+        console.error('Failed to remove resize event listener:', error)
+      }
+      
+      try {
+        window.removeEventListener('orientationchange', updateHeight)
+      } catch (error) {
+        console.error('Failed to remove orientationchange event listener:', error)
+      }
     }
   }, [clampCalendlyHeight, isMobile])
 
@@ -242,7 +261,11 @@ export default function ContactPage() {
       }
 
       if (data.event === 'calendly.page_height') {
-        const incomingHeight = Number(data.payload?.height)
+        const payload = data.payload
+        if (!payload) {
+          return
+        }
+        const incomingHeight = Number(payload.height)
         if (!Number.isFinite(incomingHeight) || incomingHeight <= 0) {
           return
         }
@@ -253,10 +276,18 @@ export default function ContactPage() {
       }
     }
 
-    window.addEventListener('message', handleMessage)
+    try {
+      window.addEventListener('message', handleMessage)
+    } catch (error) {
+      console.error('Failed to add message event listener:', error)
+    }
 
     return () => {
-      window.removeEventListener('message', handleMessage)
+      try {
+        window.removeEventListener('message', handleMessage)
+      } catch (error) {
+        console.error('Failed to remove message event listener:', error)
+      }
     }
   }, [clampCalendlyHeight, isMobile])
 
@@ -276,6 +307,7 @@ export default function ContactPage() {
       if (
         isCancelled ||
         !window.Calendly ||
+        typeof window.Calendly.initInlineWidget !== 'function' ||
         !containerElement.isConnected
       ) {
         return
@@ -283,17 +315,21 @@ export default function ContactPage() {
 
       containerElement.innerHTML = ''
 
-      window.Calendly.initInlineWidget({
-        url: calendlyEmbedUrl,
-        parentElement: containerElement,
-        textColor: '#E2E8F0',
-        primaryColor: '#4CD787',
-        backgroundColor: '#050505',
-        branding: false,
-      })
+      try {
+        window.Calendly.initInlineWidget({
+          url: calendlyEmbedUrl,
+          parentElement: containerElement,
+          textColor: '#E2E8F0',
+          primaryColor: '#4CD787',
+          backgroundColor: '#050505',
+          branding: false,
+        })
+      } catch (error) {
+        console.error('Failed to initialize Calendly widget:', error)
+      }
     }
 
-    if (window.Calendly) {
+    if (window.Calendly && typeof window.Calendly.initInlineWidget === 'function') {
       initializeWidget()
       return () => {
         isCancelled = true
@@ -306,7 +342,14 @@ export default function ContactPage() {
         const script = document.createElement('script')
         script.src = 'https://assets.calendly.com/assets/external/widget.js'
         script.async = true
-        script.onload = () => resolve()
+        script.onload = () => {
+          // Additional check after script loads to ensure the function exists
+          if (window.Calendly && typeof window.Calendly.initInlineWidget === 'function') {
+            resolve()
+          } else {
+            reject(new Error('Calendly widget function not available after script load'))
+          }
+        }
         script.onerror = () => reject(new Error('Failed to load Calendly widget script'))
         document.head.appendChild(script)
       })
@@ -321,7 +364,7 @@ export default function ContactPage() {
       .catch((error) => {
         calendlyScriptPromiseRef.current = null
         if (process.env.NODE_ENV !== 'production') {
-          console.error(error)
+          console.error('Calendly initialization error:', error)
         }
       })
 
@@ -369,17 +412,23 @@ export default function ContactPage() {
   // Prepare gradient animation styles and handle cleanup
   useEffect(() => {
     // Add the keyframes animation to the document if it doesn't exist
-    if (!document.getElementById('gradient-animation-style')) {
-      const style = document.createElement('style')
-      style.id = 'gradient-animation-style'
-      style.innerHTML = `
+    if (typeof document !== 'undefined' && !document.getElementById('gradient-animation-style')) {
+      try {
+        const style = document.createElement('style')
+        style.id = 'gradient-animation-style'
+        style.innerHTML = `
       @keyframes gradient-animation {
         0% { background-position: 0% 50%; }
         50% { background-position: 100% 50%; }
         100% { background-position: 0% 50%; }
       }
     `
-      document.head.appendChild(style)
+        if (document.head) {
+          document.head.appendChild(style)
+        }
+      } catch (error) {
+        console.error('Failed to create gradient animation style:', error)
+      }
     }
 
     return () => {
@@ -392,9 +441,15 @@ export default function ContactPage() {
         copyTimeoutRef.current = null
       }
       // Clean up style
-      const style = document.getElementById('gradient-animation-style')
-      if (style) {
-        document.head.removeChild(style)
+      if (typeof document !== 'undefined') {
+        try {
+          const style = document.getElementById('gradient-animation-style')
+          if (style && document.head && style.parentNode === document.head) {
+            document.head.removeChild(style)
+          }
+        } catch (error) {
+          console.error('Failed to remove gradient animation style:', error)
+        }
       }
     }
   }, [])
@@ -464,10 +519,14 @@ export default function ContactPage() {
       return
     }
 
-    // Capture button position for confetti
+    // Capture button position for confetti with defensive checks
     const form = e.currentTarget
-    const submitButton = form.querySelector('button[type="submit"]') as HTMLButtonElement | null
-    if (submitButton) {
+    let submitButton: HTMLButtonElement | null = null
+    if (form && typeof form.querySelector === 'function') {
+      submitButton = form.querySelector('button[type="submit"]') as HTMLButtonElement | null
+    }
+    
+    if (submitButton && typeof submitButton.getBoundingClientRect === 'function') {
       const rect = submitButton.getBoundingClientRect()
       setConfettiOrigin({
         x: rect.left + rect.width / 2,
@@ -494,7 +553,15 @@ export default function ContactPage() {
       })
 
       if (!response.ok) {
-        const data = await response.json().catch(() => null)
+        let data: any = null
+        try {
+          data = await response.json()
+        } catch {
+          // If response.json() fails, set a default error
+          setSubmitError('We could not send your message. Please try again or email support@devxgroup.io.')
+          return
+        }
+        
         const apiErrors = (data?.errors ?? {}) as Record<string, string[]>
         const nextErrors: Record<string, string> = {}
         if (apiErrors.name?.[0]) nextErrors.name = apiErrors.name[0]
@@ -518,7 +585,8 @@ export default function ContactPage() {
       setTimeout(() => {
         setFormState({ name: '', email: '', message: '', agreeToTerms: false })
       }, 2000)
-    } catch {
+    } catch (error) {
+      console.error('Contact form submission error:', error)
       setSubmitError('We could not send your message. Please email support@devxgroup.io directly.')
     } finally {
       setIsSubmitting(false)
@@ -526,7 +594,7 @@ export default function ContactPage() {
   }
 
   const handleCopyExample = useCallback(async () => {
-    if (typeof navigator === 'undefined' || !navigator.clipboard) {
+    if (typeof navigator === 'undefined' || !navigator.clipboard || typeof navigator.clipboard.writeText !== 'function') {
       return
     }
 
@@ -540,7 +608,8 @@ export default function ContactPage() {
         setHasCopiedExample(false)
         copyTimeoutRef.current = null
       }, 2000)
-    } catch {
+    } catch (error) {
+      console.error('Failed to copy example text to clipboard:', error)
       // Silently ignore copy failures (e.g. clipboard unavailable)
     }
   }, [])

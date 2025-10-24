@@ -237,7 +237,7 @@ export default function HorizontalScroll() {
           ref={containerRef}
           onWheel={handleWheel}
           className="relative w-full overflow-x-hidden overscroll-x-contain scroll-smooth"
-          style={{ touchAction: 'pan-y' }}
+          style={{ touchAction: 'pan-y', position: 'relative' }}
           role="region"
           aria-label="Case studies carousel"
         >
@@ -258,7 +258,7 @@ export default function HorizontalScroll() {
               min: 0,
               max: 2000,
             }}
-            className="flex flex-nowrap gap-8 py-8 cursor-grab active:cursor-grabbing"
+            className="relative flex flex-nowrap gap-8 py-8 cursor-grab active:cursor-grabbing"
             style={{
               x,
               willChange: 'transform',
@@ -267,7 +267,6 @@ export default function HorizontalScroll() {
               touchAction: isDragging ? 'pan-x' : 'auto',
               WebkitTouchCallout: 'none',
               pointerEvents: 'auto',
-              position: 'relative',
               zIndex: 10,
             }}
           >
@@ -298,7 +297,7 @@ export default function HorizontalScroll() {
                       fill
                       className="object-cover object-center pointer-events-none select-none"
                       sizes="(max-width: 768px) 280px, 320px"
-                      quality={100}
+                      quality={90}
                       priority={index < 6}
                       style={{
                         objectFit: 'cover',

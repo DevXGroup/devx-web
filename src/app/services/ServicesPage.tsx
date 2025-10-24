@@ -1,11 +1,6 @@
 'use client'
 
-import {
-  motion,
-  useAnimation,
-  useInView,
-  useMotionValue,
-} from 'framer-motion'
+import { motion, useAnimation, useInView, useMotionValue } from 'framer-motion'
 import { ArrowRight, Code2, Cloud, Brain, Smartphone, Cpu, Bot, Monitor } from 'lucide-react'
 // import Link from 'next/link'
 import { useRef, useState, useEffect } from 'react'
@@ -177,11 +172,15 @@ export default function ServicesPage() {
   const velocityRef = useRef(null)
   const isHeroInView = useInView(heroRef, { once: false })
   const heroControls = useAnimation()
+  const orchestrationTextControls = useAnimation()
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [isSafari, setIsSafari] = useState(false)
   const [activeService, setActiveService] = useState(null)
   const [isMobile, setIsMobile] = useState(false)
   const [isTablet, setIsTablet] = useState(false)
+  const [isAgentCardHovered, setIsAgentCardHovered] = useState(false)
+  const [isLargeScreen, setIsLargeScreen] = useState(false)
+  const isAgentLabelActive = isAgentCardHovered && isLargeScreen
 
   useEffect(() => {
     setIsMounted(true)
@@ -195,6 +194,7 @@ export default function ServicesPage() {
     const checkScreenSize = () => {
       setIsMobile(window.innerWidth < 768)
       setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024)
+      setIsLargeScreen(window.innerWidth >= 1024)
     }
 
     checkScreenSize()
@@ -252,6 +252,85 @@ export default function ServicesPage() {
       y: 0,
     },
   }
+
+  const agentGroupVariants = {
+    hidden: { opacity: 0 },
+    hover: {
+      opacity: 1,
+      scaleX: [1, 1.04, 1.08, 1],
+      transition: {
+        duration: 0.35,
+        ease: 'easeOut',
+        staggerChildren: 0.08,
+        delayChildren: 0.2,
+      },
+    },
+  }
+
+  const agentLineVariants = {
+    hidden: { pathLength: 0, opacity: 0 },
+    hover: (index: number = 0) => ({
+      pathLength: 1,
+      opacity: 0.9,
+      transition: {
+        duration: 0.7,
+        delay: 0.2 + index * 0.08,
+        ease: 'easeInOut',
+      },
+    }),
+  }
+
+  const agentNodeVariants = {
+    hidden: { scale: 0.5, opacity: 0 },
+    hover: (index: number = 0) => ({
+      scale: 1,
+      opacity: 1,
+      transition: {
+        duration: 0.35,
+        delay: 0.28 + index * 0.07,
+        ease: 'easeOut',
+      },
+    }),
+  }
+
+  const agentCoreVariants = {
+    hidden: { scale: 0.6, opacity: 0 },
+    hover: {
+      scale: 1,
+      opacity: 1,
+      transition: { duration: 0.45, delay: 0.32, ease: [0.16, 1, 0.3, 1] },
+    },
+  }
+
+  const agentPulseVariants = {
+    hidden: { opacity: 0, scale: 0.85 },
+    hover: {
+      opacity: [0, 0.6, 0],
+      scale: [0.92, 1.18, 1.32],
+      transition: {
+        duration: 1.6,
+        delay: 0.5,
+        repeat: Infinity,
+        ease: 'easeInOut',
+      },
+    },
+  }
+
+  const leftAgentNodes = [
+    { cx: 232, cy: 132 },
+    { cx: 190, cy: 78 },
+    { cx: 148, cy: 186 },
+    { cx: 96, cy: 102 },
+    { cx: 58, cy: 168 },
+  ]
+
+  const rightAgentNodes = [
+    { cx: 28, cy: 134 },
+    { cx: 72, cy: 78 },
+    { cx: 118, cy: 188 },
+    { cx: 166, cy: 108 },
+    { cx: 206, cy: 170 },
+  ]
 
   const activeServiceData = services.find((s, i) => i === activeService) || services[0]
 
@@ -443,28 +522,7 @@ export default function ServicesPage() {
         <section className="section-padding relative py-20 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-[#1a0b2e]/45 to-black/90" />
 
-          <div className="container mx-auto px-4 relative z-10">
-            <div className="flex flex-col items-center text-center gap-8 mb-12">
-              {/* Section Title */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.8 }}
-                className="max-w-3xl"
-              >
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-                  <span className="bg-gradient-to-r from-[#4CD787] via-[#9d4edd] to-[#CFB53B] bg-clip-text text-transparent">
-                    Agentic AI & RAG Solutions
-                  </span>
-                </h2>
-                <p className="text-lg md:text-xl text-white/80 font-['IBM_Plex_Sans'] leading-relaxed mx-auto">
-                  Transform your business with intelligent AI agents that think, learn, and act
-                  autonomously. Powered by cutting-edge retrieval-augmented generation technology.
-                </p>
-              </motion.div>
-            </div>
-
+          <div className="container mx-auto px-0 lg:px-4 relative z-10">
             {/* Video and Cards Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-start justify-items-center max-w-7xl mx-auto">
               {/* Video Section */}
@@ -475,7 +533,25 @@ export default function ServicesPage() {
                 transition={{ duration: 0.8, delay: 0.2 }}
                 className="order-1 lg:order-1 lg:col-span-2 flex flex-col items-stretch w-full"
               >
-                <div className="relative mx-auto w-full max-w-5xl overflow-hidden rounded-2xl shadow-2xl shadow-[#4CD787]/10 ring-1 ring-white/10 transition-[box-shadow] duration-500">
+                <div className="relative w-full overflow-hidden rounded-2xl shadow-2xl shadow-[#4CD787]/10 transition-[box-shadow] duration-500">
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.3 }}
+                    transition={{ duration: 0.8 }}
+                    className="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-start text-center px-4 py-6 sm:px-6 sm:py-10 lg:py-16"
+                  >
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold">
+                      <span className="bg-gradient-to-r from-[#FAD961] via-[#C2892B] to-[#0B0B0B] bg-clip-text text-transparent">
+                        Agentic AI & RAG Solutions
+                      </span>
+                    </h2>
+                    <p className="mt-3 sm:mt-4 text-sm sm:text-base md:text-lg lg:text-xl text-white/90 font-['IBM_Plex_Sans'] leading-relaxed max-w-3xl px-2 sm:px-0">
+                      Transform your business with intelligent AI agents that think, learn, and act
+                      autonomously. Powered by cutting-edge retrieval-augmented generation
+                      technology.
+                    </p>
+                  </motion.div>
                   <div className="relative w-full aspect-[16/9] bg-black">
                     <video
                       autoPlay
@@ -483,7 +559,7 @@ export default function ServicesPage() {
                       muted
                       playsInline
                       className="absolute inset-0 h-full w-full object-cover"
-                      poster="/videos/agentic-ai-grid-poster.jpg"
+                      poster="/images/backgrounds/speed-lines.jpg"
                     >
                       <source src="/videos/agentic-ai-grid.mp4" type="video/mp4" />
                       Your browser does not support the video tag.
@@ -497,16 +573,26 @@ export default function ServicesPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.4 }}
-                  className="mt-6 text-center"
+                  className="mt-6 text-center transition-all duration-300 lg:-translate-y-[60px]"
                 >
-                  <p className="text-sm md:text-base text-white/60 font-['IBM_Plex_Mono']">
+                  <motion.p
+                    className={`text-sm md:text-base font-['IBM_Plex_Mono'] transition-all duration-300 ${
+                      isAgentLabelActive
+                        ? 'lg:text-3xl lg:font-extrabold'
+                        : 'lg:text-lg lg:font-semibold'
+                    }`}
+                    animate={{
+                      letterSpacing: isAgentLabelActive ? '0.04em' : '0.01em',
+                      color: isAgentLabelActive ? '#e0b85a' : 'rgba(255,255,255,0.6)',
+                    }}
+                  >
                     Real-time AI Agent Orchestration
-                  </p>
+                  </motion.p>
                 </motion.div>
               </motion.div>
 
               {/* Cards Section */}
-              <div className="order-2 space-y-6 w-full flex flex-col items-center lg:col-span-2">
+              <div className="order-2 space-y-6 w-full flex flex-col items-center px-4 sm:px-6 lg:px-0 lg:col-span-2">
                 {/* Card 1: Agentic AI */}
                 <motion.div
                   initial={{ opacity: 0, x: 50 }}
@@ -514,9 +600,51 @@ export default function ServicesPage() {
                   viewport={{ once: true, amount: 0.3 }}
                   transition={{ duration: 0.8, delay: 0.3 }}
                   className="relative group w-full max-w-3xl"
+                  onHoverStart={() => setIsAgentCardHovered(true)}
+                  onHoverEnd={() => setIsAgentCardHovered(false)}
                 >
-                  <div className="bg-[#0B0B10]/90 p-8 rounded-2xl border border-[#4CD787]/30 hover:border-[#4CD787]/50 transition-all duration-300 shadow-lg hover:shadow-[#4CD787]/30 text-left">
-                    <div className="flex flex-col gap-4">
+                  <div className="relative bg-[#0B0B10]/90 p-8 rounded-2xl border border-[#4CD787]/30 hover:border-[#4CD787]/50 transition-all duration-300 shadow-lg hover:shadow-[#4CD787]/30 text-left">
+                    <motion.div
+                      className="absolute left-1/2 -top-23 hidden h-20 w-[3px] -translate-x-1/2 origin-bottom rounded-full bg-gradient-to-t from-amber-400/0 via-amber-300/70 to-amber-500/90 lg:block pointer-events-none"
+                      initial={{ opacity: 0, scaleY: 0.6 }}
+                      animate={
+                        isAgentCardHovered ? { opacity: 1, scaleY: 1 } : { opacity: 0, scaleY: 0.6 }
+                      }
+                      transition={{ duration: 0.45, ease: 'easeOut' }}
+                    >
+                      <motion.span
+                        className="absolute -top-17 left-1/2 block h-3 w-3 -translate-x-1/2 rounded-full bg-amber-400 shadow-[0_0_20px_rgba(251,191,36,0.7)]"
+                        initial={{ scale: 0.6, opacity: 0 }}
+                        animate={
+                          isAgentCardHovered
+                            ? { scale: [0.8, 1, 0.85], opacity: [0, 1, 0.8] }
+                            : { scale: 0.6, opacity: 0 }
+                        }
+                        transition={{
+                          duration: 1.4,
+                          repeat: isAgentCardHovered ? Infinity : 0,
+                          repeatType: 'mirror',
+                          ease: 'easeInOut',
+                        }}
+                      />
+                      <motion.span
+                        className="absolute -top-1 left-1/2 block h-[3px] w-2xl -translate-x-1/2 rounded-full bg-gradient-to-r from-transparent via-amber-400 to-transparent"
+                        initial={{ opacity: 0, scaleX: 0.6 }}
+                        animate={
+                          isAgentCardHovered
+                            ? { opacity: 1, scaleX: [0.6, 1, 0.8, 1] }
+                            : { opacity: 0, scaleX: 0.6 }
+                        }
+                        transition={{
+                          duration: 0.8,
+                          ease: 'easeInOut',
+                          repeat: isAgentCardHovered ? Infinity : 0,
+                          repeatType: 'mirror',
+                        }}
+                      />
+                    </motion.div>
+
+                    <div className="relative z-10 flex flex-col gap-4">
                       <div className="flex items-center gap-4">
                         <div className="w-12 h-12 rounded-xl bg-[#4CD787]/20 flex items-center justify-center">
                           <Bot className="w-6 h-6 text-[#4CD787]" />
@@ -647,16 +775,16 @@ export default function ServicesPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.8, delay: 0.6 }}
-              className="mt-16 text-center"
+              className="mt-16 text-center px-[5px] sm:px-2"
             >
-              <p className="text-lg md:text-xl text-white/70 mb-6 font-['IBM_Plex_Sans']">
+              <p className="text-base sm:text-lg md:text-xl text-white/70 mb-6 font-['IBM_Plex_Sans'] px-[5px] max-w-[18rem] sm:max-w-none mx-auto">
                 Ready to automate your business with intelligent AI agents?
               </p>
               <motion.a
                 href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 bg-gradient-to-r from-[#4CD787] to-[#9d4edd] hover:from-[#9d4edd] hover:to-[#CFB53B] text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-2xl transition-all duration-300"
+                className="inline-flex items-center gap-3 bg-gradient-to-r from-[#FAD961] via-[#C2892B] to-[#0B0B0B] hover:from-[#FAD961] hover:via-[#D19028] hover:to-[#111111] text-black px-8 py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-[0_12px_40px_rgba(194,137,43,0.35)] border-2 border-[#C2892B] transition-all duration-300"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -896,7 +1024,7 @@ export default function ServicesPage() {
             transition={{ duration: 0.7, ease: 'easeOut' }}
             className="text-center max-w-4xl mx-auto"
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight lg:whitespace-nowrap">
               Ready to Transform Your Business?
             </h2>
             <p className="mt-6 text-lg md:text-xl text-white/80 leading-relaxed">
@@ -909,10 +1037,10 @@ export default function ServicesPage() {
                 href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 bg-robinhood text-black hover:bg-white hover:text-black px-8 py-4 rounded-xl font-semibold text-lg border-2 border-robinhood shadow-lg hover:shadow-[0_8px_30px_rgba(76,215,135,0.3)] transition-all duration-300"
+                className="inline-flex items-center gap-2 md:gap-3 bg-gradient-to-r from-[#FAD961] via-[#C2892B] to-[#0B0B0B] text-black hover:from-[#FAD961] hover:via-[#D19028] hover:to-[#111111] px-5 py-3 md:px-8 md:py-4 rounded-xl font-semibold text-base md:text-lg border-2 border-[#C2892B] shadow-lg hover:shadow-[0_8px_30px_rgba(194,137,43,0.35)] transition-all duration-300"
               >
                 Schedule a Strategy Call
-                <ArrowRight className="w-5 h-5" />
+                <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
               </a>
             </motion.div>
 

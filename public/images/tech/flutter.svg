@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Flutter logo">
-  <rect width="64" height="64" rx="14" fill="#0a1931"/>
-  <polygon fill="#47C6FD" points="14 34 32 16 50 16 32 34"/>
-  <polygon fill="#13B0F9" points="32 34 22 44 34 56 50 40 38 40"/>
-  <polygon fill="#0E8CF1" points="22 44 18 48 30 60 34 56" opacity="0.7"/>
-</svg>

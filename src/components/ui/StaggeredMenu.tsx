@@ -79,7 +79,6 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
   const busyRef = useRef(false)
 
   const itemEntranceTweenRef = useRef<gsap.core.Tween | null>(null)
-  const isDev = process.env.NODE_ENV !== 'production'
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -125,10 +124,6 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
               layer.getBoundingClientRect()
             })
 
-            if (isDev) {
-              const positions = preLayers.map(layer => gsap.getProperty(layer, 'xPercent'))
-              console.log('Layer initialization complete:', preLayers.length, 'layers with positions:', positions)
-            }
           }
         }
       }
@@ -140,7 +135,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
       setTimeout(initializeLayers, 150)
     })
     return () => ctx.revert()
-  }, [menuButtonColor, position, isDev])
+  }, [menuButtonColor, position])
 
   const buildOpenTimeline = useCallback(() => {
     const panel = panelRef.current
@@ -150,10 +145,6 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
     // Always refresh layer references to ensure we get all layers
     const layers = Array.from(preContainer.querySelectorAll('.sm-prelayer')) as HTMLElement[]
     preLayerElsRef.current = layers
-
-    if (isDev) {
-      console.log('buildOpenTimeline - Found layers:', layers.length)
-    }
 
     // Ensure layers are properly initialized before animation with stronger guarantees
     if (layers.length) {
@@ -174,9 +165,6 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
         // Double check that the positioning took effect
         const currentPos = gsap.getProperty(layer, 'xPercent')
         if (currentPos !== 100) {
-          if (isDev) {
-            console.warn('Layer position not set correctly, retrying:', currentPos)
-          }
           gsap.set(layer, { xPercent: 100, immediateRender: true })
         }
       })
@@ -201,9 +189,6 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
       start: Number(gsap.getProperty(el, 'xPercent')),
     }))
 
-    if (isDev) {
-      console.log('Layers found:', layers.length, 'Layer states:', layerStates)
-    }
     const panelStart = Number(gsap.getProperty(panel, 'xPercent'))
 
     if (itemEls.length) gsap.set(itemEls, { yPercent: 140, rotate: 10 })
@@ -293,7 +278,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
 
     openTlRef.current = tl
     return tl
-  }, [isDev])
+  }, [])
 
   const playOpen = useCallback(() => {
     if (busyRef.current) return
@@ -310,9 +295,6 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
         })
         tl.play(0)
       } else {
-        if (isDev) {
-          console.warn('Failed to build timeline, retrying...')
-        }
         // Retry once if timeline building fails
         setTimeout(() => {
           const retryTl = buildOpenTimeline()
@@ -335,7 +317,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
       // Subsequent opens can be immediate
       executeAnimation()
     }
-  }, [buildOpenTimeline, isDev])
+  }, [buildOpenTimeline])
 
   const playClose = useCallback(() => {
     openTlRef.current?.kill()
@@ -546,9 +528,6 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
                   ]
             // Show all 4 layers for maximum visual impact
             const arr = raw.slice(0, 4)
-            if (isDev) {
-              console.log('Creating layers with colors:', arr)
-            }
             return arr.map((c, i) => (
               <div
                 key={i}
