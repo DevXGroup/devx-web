@@ -167,9 +167,9 @@ export default function ServicesPage() {
   // Existing state variables
   const [, setActiveSection] = useState(null)
   const [isMounted, setIsMounted] = useState(false)
-  const heroRef = useRef(null)
-  const valuePropsRef = useRef(null)
-  const velocityRef = useRef(null)
+  const heroRef = useRef<HTMLDivElement | null>(null)
+  const valuePropsRef = useRef<HTMLDivElement | null>(null)
+  const velocityRef = useRef<HTMLDivElement | null>(null)
   const isHeroInView = useInView(heroRef, { once: false })
   const heroControls = useAnimation()
   const orchestrationTextControls = useAnimation()
