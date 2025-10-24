@@ -1,4 +1,5 @@
 import { withSentryConfig } from "@sentry/nextjs";
+import bundleAnalyzer from '@next/bundle-analyzer'
 import path from 'node:path'
 
 // Some third-party bundles expect a `self` global, even during server-side
@@ -26,6 +27,8 @@ if (typeof globalThis !== 'undefined' && typeof globalThis.webpackChunk_N_E === 
   globalThis.webpackChunk_N_E = []
 }
 
+const withBundleAnalyzer = bundleAnalyzer({ enabled: process.env.ANALYZE === 'true' })
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
@@ -49,9 +52,24 @@ const nextConfig = {
         hostname: 'hebbkx1anhila5yf.public.blob.vercel-storage.com',
       },
     ],
+    localPatterns: [
+      {
+        pathname: '/images/**',
+        search: '',
+      },
+      {
+        pathname: '/images/**',
+        search: '?v=*',
+      },
+      {
+        pathname: '/images/**',
+        search: '?*',
+      },
+    ],
     formats: ['image/avif', 'image/webp'], // Modern formats for better compression
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    qualities: [50, 60, 70, 75, 85, 90, 95, 100],
     minimumCacheTTL: 60,
     dangerouslyAllowSVG: true,
     contentDispositionType: 'attachment',
@@ -63,6 +81,15 @@ const nextConfig = {
   // Security headers
   async headers() {
     return [
+      {
+        source: '/:all*(js|css|svg|png|jpg|jpeg|gif|webp|avif)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
       {
         source: '/(.*)',
         headers: [
@@ -94,11 +121,11 @@ const nextConfig = {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://tagmanager.google.com https://assets.calendly.com https://js.stripe.com https://cdn.segment.io https://www.recaptcha.net https://www.gstatic.com https://connect.facebook.net https://cdn.sprig.com https://cdn.pendo.io https://data.pendo.io",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://tagmanager.google.com https://assets.calendly.com https://js.stripe.com https://cdn.segment.io https://www.recaptcha.net https://www.gstatic.com https://connect.facebook.net https://cdn.sprig.com https://cdn.pendo.io https://data.pendo.io https://va.vercel-scripts.com",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://assets.calendly.com",
               "font-src 'self' data: https://fonts.gstatic.com",
               "img-src 'self' data: blob: https://www.google-analytics.com https://www.googletagmanager.com https://hebbkx1anhila5yf.public.blob.vercel-storage.com",
-              "connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://api.calendly.com https://data.pendo.io https://*.ingest.us.sentry.io",
+              "connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://api.calendly.com https://data.pendo.io https://*.ingest.us.sentry.io https://vitals.vercel-insights.com https://va.vercel-scripts.com",
               "frame-src 'self' https://calendly.com https://js.stripe.com https://www.recaptcha.net",
               "worker-src 'self' blob:",
               "child-src 'self' blob:",
@@ -252,8 +279,10 @@ const sentryWebpackPluginOptions = {
 // Only run the webpack plugin (which performs network calls) when CI is present
 const enableSentryWebpackPlugin = process.env.CI === "true" || process.env.CI === "1";
 
+const configWithAnalyzer = withBundleAnalyzer(nextConfig)
+
 const exportedConfig = enableSentryWebpackPlugin
-  ? withSentryConfig(nextConfig, sentryWebpackPluginOptions)
-  : nextConfig;
+  ? withSentryConfig(configWithAnalyzer, sentryWebpackPluginOptions)
+  : configWithAnalyzer;
 
 export default exportedConfig;
