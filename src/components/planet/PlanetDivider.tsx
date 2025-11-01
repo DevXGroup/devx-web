@@ -18,12 +18,27 @@ export default function PlanetDivider() {
   const [isSafari, setIsSafari] = useState(false)
 
   useEffect(() => {
+    let scrollTicking = false
+
     const handleScroll = () => {
-      setScrollY(window.scrollY)
+      if (!scrollTicking) {
+        window.requestAnimationFrame(() => {
+          setScrollY(window.scrollY)
+          scrollTicking = false
+        })
+        scrollTicking = true
+      }
     }
 
+    let resizeTicking = false
     const handleResize = () => {
-      setScreenSize({ width: window.innerWidth, height: window.innerHeight })
+      if (!resizeTicking) {
+        window.requestAnimationFrame(() => {
+          setScreenSize({ width: window.innerWidth, height: window.innerHeight })
+          resizeTicking = false
+        })
+        resizeTicking = true
+      }
     }
 
     // Detect Safari browser
@@ -43,8 +58,9 @@ export default function PlanetDivider() {
     window.addEventListener("resize", handleResize, { passive: true })
 
     // Animation timer for continuous rotation and lighting effects
-    // Slower animation for Safari to reduce artifacts
-    const animationSpeed = detectSafari() ? 120 : 80
+    // Slower animation for Safari and mobile to reduce artifacts and improve performance
+    const isMobileDevice = window.innerWidth < 768
+    const animationSpeed = detectSafari() ? 150 : (isMobileDevice ? 120 : 90)
     const interval = setInterval(() => {
       setTime(prev => prev + 1)
     }, animationSpeed)
@@ -150,6 +166,8 @@ export default function PlanetDivider() {
   const { position, bottomOffset, opacity, scrollRotation, continuousRotation } = calculateVisibility()
   const sizes = getResponsiveSizes()
   const isMobileViewport = screenSize.width < 768
+  const isTabletViewport = screenSize.width >= 768 && screenSize.width < 1024
+  const isSlowDevice = isMobileViewport || isTabletViewport
 
   // Disable rotation on small screens to avoid the iOS rotating square artifact.
   const getTransform = (rotationFactor: number) => {
@@ -185,7 +203,7 @@ export default function PlanetDivider() {
 
   return (
     <div
-      className={`relative w-full mx-auto pointer-events-none z-50`}
+      className={`relative w-full mx-auto pointer-events-none z-10`}
       style={{
         height: `${sizes.containerHeight}px`,
         background: 'transparent',
@@ -198,7 +216,7 @@ export default function PlanetDivider() {
     >
       {/* Main planet body with enhanced 3D definition */}
       <div
-        className={`absolute w-full h-[200%] left-0 planet-glow-effect${isMobileViewport ? ' planet-glow-effect--mobile' : ''}`}
+        className={`absolute w-full h-[200%] left-0 planet-glow-effect${isMobileViewport || isTabletViewport ? ' planet-glow-effect--mobile' : ''}`}
         style={getCrossBrowserStyle(getTransform(1), {
           bottom: `${position * 20 + bottomOffset}%`,
           aspectRatio: "1/1",
@@ -214,9 +232,7 @@ export default function PlanetDivider() {
             radial-gradient(ellipse 30% 40% at 40% 70%, rgba(30, 30, 30, 0.25) 0%, rgba(20, 20, 20, 0.15) 45%, transparent 75%),
             #3a3a3a
           `,
-          boxShadow: isMobileViewport
-            ? 'none'
-            : `
+          boxShadow: `
             0 0 ${sizes.glowRadius}px rgba(76, 215, 135, ${0.06 + Math.sin(time * 0.02) * 0.015}),
             0 0 ${sizes.glowRadius2}px rgba(76, 215, 135, ${0.03 + Math.sin(time * 0.015) * 0.008}),
             0 0 ${sizes.planetGlow}px rgba(76, 215, 135, ${0.02 + Math.sin(time * 0.01) * 0.003}),
@@ -278,8 +294,8 @@ export default function PlanetDivider() {
         })}
       />
 
-      {/* Fine surface details, rocks and debris - Layer 3 */}
-      <div
+      {/* Fine surface details, rocks and debris - Layer 3 (Desktop only for performance) */}
+      {!isSlowDevice && <div
         className="absolute w-full h-[200%] left-0"
         style={getCrossBrowserStyle(getTransform(isSafari ? 0.8 : 0.4), {
           bottom: `${position * 20 + bottomOffset}%`,
@@ -305,10 +321,10 @@ export default function PlanetDivider() {
           `,
           opacity: opacity * 0.9,
         })}
-      />
+      />}
 
-      {/* Ultra-fine surface texture and micro-details - Layer 4 */}
-      <div
+      {/* Ultra-fine surface texture and micro-details - Layer 4 (Desktop only for performance) */}
+      {!isSlowDevice && <div
         className="absolute w-full h-[200%] left-0"
         style={getCrossBrowserStyle(getTransform(isSafari ? 0.75 : 0.2), {
           bottom: `${position * 20 + bottomOffset}%`,
@@ -332,27 +348,8 @@ export default function PlanetDivider() {
           `,
           opacity: opacity * 0.85,
         })}
-      />
+      />}
 
-      {/* Subtle rim lighting effect - rotates with globe for realistic shadows */}
-      <div
-        className="absolute w-full h-[200%] left-0"
-        style={getCrossBrowserStyle(getTransform(1), {
-          bottom: `${position * 20 + bottomOffset}%`,
-          aspectRatio: "1/1",
-          borderRadius: "50%",
-          width: `${sizes.planetMaxWidth}px`,
-          height: `${sizes.planetMaxWidth}px`,
-          left: "50%",
-          marginLeft: `${sizes.planetMarginLeft}px`,
-          background: `radial-gradient(circle at ${20 + Math.sin(time * 0.04) * 2}% ${20 + Math.cos(time * 0.03) * 1.5}%, 
-            transparent 65%, 
-            rgba(76, 215, 135, ${0.03 + Math.sin(time * 0.06) * 0.01}) 78%, 
-            rgba(76, 215, 135, ${0.05 + Math.sin(time * 0.05) * 0.015}) 88%, 
-            transparent 100%)`,
-          opacity: opacity * 0.4,
-        })}
-      />
       <style jsx>{`
         .planet-glow-effect {
           will-change: transform, opacity;
@@ -383,8 +380,30 @@ export default function PlanetDivider() {
           }
         }
 
-        /* Medium screen Safari optimizations */
-        @media screen and (min-width: 768px) and (max-width: 1199px) {
+        /* Tablet screen optimizations (768px-1024px) - Similar to mobile for consistency */
+        @media screen and (min-width: 768px) and (max-width: 1023px) {
+          .planet-glow-effect {
+            /* Disable filter-based glow on tablets to prevent square artifacts */
+            filter: none;
+            -webkit-filter: none;
+          }
+
+          .planet-glow-effect::after {
+            content: "";
+            position: absolute;
+            inset: -20%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 50% 50%, rgba(76, 215, 135, 0.4) 0%, rgba(76, 215, 135, 0.22) 38%, rgba(76, 215, 135, 0.1) 54%, rgba(76, 215, 135, 0.02) 68%, rgba(76, 215, 135, 0) 84%);
+            animation: planetGlowPulseTablet 4.5s ease-in-out infinite;
+            pointer-events: none;
+            transform-origin: center;
+            -webkit-mask-image: radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 58%, rgba(0, 0, 0, 0) 78%);
+            mask-image: radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 58%, rgba(0, 0, 0, 0) 78%);
+          }
+        }
+
+        /* Desktop Safari optimizations */
+        @media screen and (min-width: 1024px) and (max-width: 1199px) {
           @supports (-webkit-appearance: none) {
             .planet-glow-effect {
               filter: drop-shadow(0 0 35px rgba(76, 215, 135, 0.22)) drop-shadow(0 0 70px rgba(76, 215, 135, 0.15));
@@ -392,6 +411,22 @@ export default function PlanetDivider() {
               -webkit-transform: translateZ(0);
               transform: translateZ(0);
             }
+          }
+        }
+
+        /* Tablet glow pulse animation */
+        @keyframes planetGlowPulseTablet {
+          0% {
+            opacity: 0.42;
+            transform: scale(0.96);
+          }
+          50% {
+            opacity: 0.55;
+            transform: scale(1.02);
+          }
+          100% {
+            opacity: 0.68;
+            transform: scale(1.08);
           }
         }
 
@@ -413,7 +448,7 @@ export default function PlanetDivider() {
 
         @media screen and (max-width: 767px) {
           .planet-glow-effect {
-            /* Simplified filter for better mobile performance */
+            /* Simplified filter for better mobile performance - keep green glow consistent with desktop */
             filter: drop-shadow(0 0 25px rgba(76, 215, 135, 0.25)) drop-shadow(0 0 50px rgba(76, 215, 135, 0.15));
             -webkit-filter: drop-shadow(0 0 25px rgba(76, 215, 135, 0.25)) drop-shadow(0 0 50px rgba(76, 215, 135, 0.15));
             /* Hardware acceleration */
@@ -426,24 +461,6 @@ export default function PlanetDivider() {
             perspective: 1000px;
             /* Reduce complexity */
             will-change: transform;
-          }
-
-          .planet-glow-effect--mobile {
-            filter: none;
-            -webkit-filter: none;
-          }
-
-          .planet-glow-effect--mobile::after {
-            content: "";
-            position: absolute;
-            inset: -22%;
-            border-radius: 50%;
-            background: radial-gradient(circle at 50% 50%, rgba(76, 215, 135, 0.45) 0%, rgba(76, 215, 135, 0.24) 36%, rgba(76, 215, 135, 0.12) 52%, rgba(76, 215, 135, 0.02) 66%, rgba(76, 215, 135, 0) 82%);
-            animation: planetGlowPulseMobile 4.2s ease-in-out infinite;
-            pointer-events: none;
-            transform-origin: center;
-            -webkit-mask-image: radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 55%, rgba(0, 0, 0, 0) 75%);
-            mask-image: radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 55%, rgba(0, 0, 0, 0) 75%);
           }
         }
 
