@@ -216,11 +216,11 @@ export default function Hero() {
                 Elite software team shipping polished software at&nbsp;startup&nbsp;speed.
               </p>
               <div className="relative mx-auto w-full mt-10 flex justify-center">
-                <div className="relative flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap sm:gap-4 px-5 py-4 sm:px-8 sm:py-6 rounded-2xl overflow-hidden border border-white/10 bg-black/40 backdrop-blur-sm sm:bg-gradient-to-r sm:from-black/50 sm:via-black/40 sm:to-black/50">
+                <div className="relative flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap sm:gap-4 px-5 py-4 sm:px-8 sm:py-6 rounded-2xl overflow-hidden border-2 border-white/20 bg-black/60 backdrop-blur-md shadow-xl shadow-black/50 sm:bg-gradient-to-r sm:from-black/70 sm:via-black/60 sm:to-black/70">
                   {/* Subtle animated gradient background */}
-                  <div className="absolute inset-0 hidden opacity-30 sm:block">
+                  <div className="absolute inset-0 hidden sm:block opacity-30">
                     <div
-                      className="absolute inset-0 bg-gradient-to-br from-[#4CD787]/5 via-transparent to-[#ccff00]/5 animate-pulse"
+                      className="absolute inset-0 bg-gradient-to-br from-[#4CD787]/8 via-transparent to-[#ccff00]/8 animate-pulse"
                       style={{ animationDuration: '4s' }}
                     />
                   </div>
@@ -325,7 +325,7 @@ export default function Hero() {
       {/* Planet Divider at the bottom of hero - Only rendered on client */}
       <ClientOnly>
         {enablePlanetDivider && (
-          <div className="absolute bottom-0 left-0 w-full z-50" aria-hidden>
+          <div className="absolute bottom-0 left-0 w-full z-10" aria-hidden>
             <DynamicPlanetDivider />
           </div>
         )}
