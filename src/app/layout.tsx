@@ -4,6 +4,7 @@ import { version as reactVersion } from 'react'
 import type { ReactNode } from 'react'
 import './globals.css'
 import type { Metadata } from 'next'
+import { IBM_Plex_Mono, IBM_Plex_Sans } from 'next/font/google'
 import ConditionalLayout from '@/components/layout/ConditionalLayout'
 import { BrowserCompatibilityDetector } from '@/components/layout/BrowserCompatibilityDetector'
 import { DevToolsErrorSuppressor } from '@/components/layout/DevToolsErrorSuppressor'
@@ -14,7 +15,23 @@ import StructuredData from '@/components/seo/StructuredData'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import Script from 'next/script'
 import { Analytics } from '@vercel/analytics/next'
+import { Partytown } from '@qwik.dev/partytown/react'
 import { createOgImageUrl, createTwitterImageUrl, getSiteUrl } from '@/lib/og'
+
+// Self-hosted fonts via next/font for better performance
+const ibmPlexMono = IBM_Plex_Mono({
+  weight: ['400', '600'],
+  subsets: ['latin'],
+  variable: '--font-ibm-plex-mono',
+  display: 'swap',
+})
+
+const ibmPlexSans = IBM_Plex_Sans({
+  weight: ['400', '600'],
+  subsets: ['latin'],
+  variable: '--font-ibm-plex-sans',
+  display: 'swap',
+})
 
 const siteUrl = getSiteUrl()
 const defaultOgImage = createOgImageUrl(
@@ -243,12 +260,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         {/* Resource hints for better performance */}
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600&display=swap"
-        />
         {/* Patch React DevTools semver regression */}
         <Script
           id="react-devtools-semver-patch"
@@ -258,8 +269,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <StructuredData type="organization" />
         <StructuredData type="localBusiness" />
         <StructuredData type="website" />
+        {/* Partytown for offloading third-party scripts */}
+        <Partytown debug={false} forward={['dataLayer.push', 'gtag']} />
       </head>
-      <body className="bg-black text-white font-sans antialiased" style={{ backgroundColor: '#000000', transition: 'none', paddingTop: '64px' }} suppressHydrationWarning>
+      <body className={`${ibmPlexSans.variable} ${ibmPlexMono.variable} bg-black text-white font-sans antialiased`} style={{ backgroundColor: '#000000', transition: 'none', paddingTop: '64px' }} suppressHydrationWarning>
         {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe
@@ -271,10 +284,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         </noscript>
         {/* End Google Tag Manager (noscript) */}
 
-        {/* Google Tag Manager - Deferred for better performance */}
+        {/* Google Tag Manager - Run in web worker via Partytown */}
         <Script
           id="gtm-script"
-          strategy="lazyOnload"
+          type="text/partytown"
+          strategy="worker"
           dangerouslySetInnerHTML={{
             __html: `
 (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -286,15 +300,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           }}
         />
 
-        {/* Google Analytics 4 - Deferred for better performance */}
+        {/* Google Analytics 4 - Run in web worker via Partytown */}
         <Script
           id="ga-script"
-          strategy="lazyOnload"
+          type="text/partytown"
+          strategy="worker"
           src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
         />
         <Script
           id="ga-config"
-          strategy="lazyOnload"
+          type="text/partytown"
+          strategy="worker"
           dangerouslySetInnerHTML={{
             __html: `
 window.dataLayer = window.dataLayer || [];

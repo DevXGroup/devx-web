@@ -34,6 +34,8 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ['framer-motion', 'lucide-react', '@radix-ui/react-icons', 'three', '@react-three/fiber', '@react-three/drei'],
   },
+  // Explicitly set the output file tracing root to silence lockfile warning
+  outputFileTracingRoot: path.join(process.cwd()),
   // Target modern browsers - avoid legacy polyfills
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error', 'warn'] } : false,
@@ -78,9 +80,8 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   reactStrictMode: true,
-  // Security headers
   async headers() {
-    return [
+    const securityHeaders = [
       {
         source: '/:all*(js|css|svg|png|jpg|jpeg|gif|webp|avif)',
         headers: [
@@ -136,6 +137,19 @@ const nextConfig = {
           },
         ],
       },
+    ]
+
+    return [
+      {
+        source: '/~partytown/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      ...securityHeaders,
     ]
   },
   // Enhanced webpack settings for better performance
