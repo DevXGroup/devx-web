@@ -114,6 +114,7 @@ export default function FooterContactForm() {
               value={formState.email}
               onChange={handleChange}
               placeholder="Enter your email address here"
+              autoComplete="email"
               className={`bg-secondary border ${
                 formErrors.email ? 'border-red-500' : 'border-secondary'
               } text-secondary-foreground placeholder:text-muted-foreground text-sm`}

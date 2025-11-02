@@ -19,7 +19,7 @@ import dynamic from 'next/dynamic'
 
 const HyperSpeed = dynamic(() => import('@/components/animations/HyperSpeed'), {
   ssr: false,
-  loading: () => <div className="w-full h-[390px]" />,
+  loading: () => <div className="w-full h-[390px] bg-black" />,
 })
 import ClientOnly from '@/components/layout/ClientOnly'
 
@@ -335,13 +335,13 @@ export default function ServicesPage() {
   const activeServiceData = services.find((s, i) => i === activeService) || services[0]
 
   return (
-    <div className="min-h-screen bg-background pt-19">
+    <div className="min-h-screen bg-black pt-19">
       <HyperSpeed />
       <section
         ref={heroRef}
-        className="relative min-h-[85vh] pt-20 md:pt-24 pb-12 md:pb-16 flex flex-col items-center justify-start overflow-hidden"
+        className="relative min-h-[85vh] pt-20 md:pt-24 pb-12 md:pb-16 flex flex-col items-center justify-start overflow-hidden bg-black"
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-900/10 to-black" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-900/10 to-black z-0" />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-72 bg-gradient-to-b from-transparent via-black/70 to-black z-10" />
 
         <div className="relative z-20 w-full flex flex-col items-center">
@@ -406,7 +406,7 @@ export default function ServicesPage() {
       </section>
 
       {/* Scroll Velocity Animation */}
-      <section ref={velocityRef} className="relative overflow-hidden pt-4 pb-4 md:pt-6 md:pb-6">
+      <section ref={velocityRef} className="relative overflow-hidden pt-4 pb-4 md:pt-6 md:pb-6 bg-black">
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{
@@ -462,7 +462,7 @@ export default function ServicesPage() {
 
       {/* Services Grid with Apple-style reveal */}
       <AppleScrollSection>
-        <section className="section-padding relative services-section pt-8 md:pt-12">
+        <section className="section-padding relative services-section pt-8 md:pt-12 bg-black">
           <div className="container mx-auto px-4 ">
             <div className="w-full flex justify-center mb-28">
               <motion.div
@@ -519,7 +519,7 @@ export default function ServicesPage() {
 
       {/* Agentic AI & RAG Section */}
       <AppleScrollSection delay={0.2}>
-        <section className="section-padding relative py-20 overflow-hidden">
+        <section className="section-padding relative py-20 overflow-hidden bg-black">
           <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-[#1a0b2e]/45 to-black/90" />
 
           <div className="container mx-auto px-0 lg:px-4 relative z-10">
@@ -559,7 +559,6 @@ export default function ServicesPage() {
                       muted
                       playsInline
                       className="absolute inset-0 h-full w-full object-cover"
-                      poster="/images/backgrounds/speed-lines.jpg"
                     >
                       <source src="/videos/agentic-ai-grid.mp4" type="video/mp4" />
                       Your browser does not support the video tag.
@@ -595,10 +594,10 @@ export default function ServicesPage() {
               <div className="order-2 space-y-6 w-full flex flex-col items-center px-4 sm:px-6 lg:px-0 lg:col-span-2">
                 {/* Card 1: Agentic AI */}
                 <motion.div
-                  initial={{ opacity: 0, x: 50 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, amount: 0.3 }}
-                  transition={{ duration: 0.8, delay: 0.3 }}
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.7, ease: 'easeOut' }}
                   className="relative group w-full max-w-3xl"
                   onHoverStart={() => setIsAgentCardHovered(true)}
                   onHoverEnd={() => setIsAgentCardHovered(false)}
@@ -681,10 +680,10 @@ export default function ServicesPage() {
 
                 {/* Card 2: RAG Implementation */}
                 <motion.div
-                  initial={{ opacity: 0, x: 50 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, amount: 0.3 }}
-                  transition={{ duration: 0.8, delay: 0.4 }}
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.7, ease: 'easeOut' }}
                   className="relative group w-full max-w-3xl"
                 >
                   <div className="bg-[#0B0B10]/90 p-8 rounded-2xl border border-[#9d4edd]/30 hover:border-[#9d4edd]/50 transition-all duration-300 shadow-lg hover:shadow-[#9d4edd]/30 text-left">
@@ -725,10 +724,10 @@ export default function ServicesPage() {
 
                 {/* Card 3: Workflow Automation */}
                 <motion.div
-                  initial={{ opacity: 0, x: 50 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, amount: 0.3 }}
-                  transition={{ duration: 0.8, delay: 0.5 }}
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.7, ease: 'easeOut' }}
                   className="relative group w-full max-w-3xl"
                 >
                   <div className="bg-[#0B0B10]/90 p-8 rounded-2xl border border-[#CFB53B]/30 hover:border-[#CFB53B]/50 transition-all duration-300 shadow-lg hover:shadow-[#CFB53B]/30 text-left">
@@ -798,13 +797,13 @@ export default function ServicesPage() {
 
       {/* Proof of delivery */}
       <AppleScrollSection delay={0.3}>
-        <section className="section-padding relative">
+        <section className="section-padding relative bg-black">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center mb-14">
               <BlurText
                 text="Why teams choose DevX"
                 className="justify-center text-3xl md:text-4xl font-semibold text-[#06B6D4]"
-                delay={80}
+                delay={200}
               />
               <motion.p
                 initial={{ opacity: 0, y: 10 }}
@@ -824,12 +823,12 @@ export default function ServicesPage() {
               {valueProps.map((prop, index) => (
                 <motion.div
                   key={prop.title}
-                  initial={{ opacity: 0, y: 12 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.08 }}
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.6, delay: index * 0.05, ease: 'easeOut' }}
                   className="bg-black/40 backdrop-blur-lg p-8 rounded-xl border border-white/10 transition-all duration-300 group cursor-pointer pointer-events-auto relative overflow-hidden shadow-xl group-hover:shadow-[0_0_20px_rgba(6,182,212,0.5)] before:absolute before:inset-0 before:border before:border-transparent before:rounded-xl before:transition-all before:duration-300 group-hover:before:border-white/20"
-                  whileHover={{ y: -6 }}
+                  whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
                   <h3 className="text-xl md:text-2xl lg:text-2xl font-semibold text-[#06B6D4] mb-3 lg:mb-4 transition-colors duration-300 relative z-10">
@@ -936,7 +935,7 @@ export default function ServicesPage() {
 
       {/* Case Studies with Horizontal Scroll */}
       <AppleScrollSection delay={0.4}>
-        <section className="section-padding relative services-section case-studies-section mt-20">
+        <section className="section-padding relative services-section case-studies-section mt-20 bg-black">
           <div className="container mx-auto px-4">
             <motion.div
               initial={{ opacity: 0 }}
@@ -977,7 +976,7 @@ export default function ServicesPage() {
         </ClientOnly>
       </AppleScrollSection>
 
-      <section className="relative py-20 overflow-hidden">
+      <section className="relative py-20 overflow-hidden bg-black">
         <div className="absolute inset-0 z-0 bg-gradient-to-t from-black via-purple-900/20 to-black pointer-events-none" />
 
         {/* Subtle light beams */}

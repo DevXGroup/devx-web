@@ -53,8 +53,8 @@ interface DecryptedTextProps
 
 // Concentrated Letter Glitch Background Effect
 const LetterGlitch = ({
-  glitchColors = ['#b8860b', '#8b7355', '#6b8e23', '#556b2f', '#7a6a4f', '#9acd32'],
-  glitchSpeed = 70,
+  glitchColors = ['#00ff41', '#00cc33', '#0099ff', '#66ccff', '#00aaff', '#33ff99'], // Classic code editor greens and blues
+  glitchSpeed = 90, // Increased from 70ms for better performance
   centerVignette = true,
   outerVignette = false,
   smooth = true,
@@ -71,13 +71,15 @@ const LetterGlitch = ({
   const charWidth = 12
   const charHeight = 21
 
-  // Pre-calculated constant array - reduces memory allocations
+  // Pre-calculated constant array - reduces memory allocations with more code-like characters
   const lettersAndSymbols = [
     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
     'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
     '!', '@', '#', '$', '&', '*', '(', ')', '-', '_', '+', '=', '/',
     '[', ']', '{', '}', ';', ':', '<', '>', ',',
     '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '?',
+    '{', '}', '[', ']', '(', ')', '=', '+', '-', '*', '/', '%', '|', '&', '^', '~', '<', '>',
+    'A', 'B', 'C', 'D', 'E', 'F', // Hex digits
   ] as const
 
   const getRandomChar = (): string => {
@@ -157,7 +159,8 @@ const LetterGlitch = ({
 
       if (typeof window !== 'undefined') {
         // Use lower DPR for better performance, capped at 1.5 max
-        dpr = isMobile ? 1 : Math.min(window.devicePixelRatio || 1, 1.5)
+        // Further reduced on mobile for better initial load
+        dpr = isMobile ? 0.75 : Math.min(window.devicePixelRatio || 1, 1.5)
       }
 
       // Set canvas size with error handling
@@ -210,8 +213,8 @@ const LetterGlitch = ({
       letters.current.forEach((letter: Letter, index: number) => {
         const x = (index % grid.current.columns) * charWidth
         const y = Math.floor(index / grid.current.columns) * charHeight
-        // Moderate opacity for code-like appearance, not too bright
-        ctx.globalAlpha = 0.32
+        // Higher opacity for more distinct code-like appearance
+        ctx.globalAlpha = 0.45
         ctx.fillStyle = letter.color
         ctx.fillText(letter.char, x, y)
       })
@@ -229,7 +232,7 @@ const LetterGlitch = ({
 
     // Optimize update frequency for better performance - fewer updates = faster load
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
-    const updatePercentage = isMobile ? 0.012 : 0.025
+    const updatePercentage = isMobile ? 0.008 : 0.020 // Reduced from 0.012/0.025 for better performance
     const updateCount: number = Math.max(1, Math.floor(letters.current.length * updatePercentage))
 
     for (let i = 0; i < updateCount; i++) {
@@ -645,7 +648,7 @@ const StarField = dynamic(
 
       useEffect(() => {
         // Reduced star count for better initial load performance
-        const starCount = typeof window !== 'undefined' && window.innerWidth < 768 ? 50 : 65
+        const starCount = typeof window !== 'undefined' && window.innerWidth < 768 ? 35 : 55
         const generatedStars = Array.from({ length: starCount }, (_, i) => ({
           id: i,
           x: Math.random() * 100,
@@ -850,9 +853,10 @@ export default function EntryPage() {
   if (!mounted || !clientSide) {
     return (
       <div
-        className="fixed inset-0 bg-black flex items-center justify-center"
+        className="fixed inset-0 bg-black flex flex-col items-center justify-center"
         suppressHydrationWarning
       >
+        <div className="text-white text-2xl md:text-3xl font-mono mb-6 text-center">DevX Group</div>
         <div className="text-white text-xl font-mono">Loading...</div>
       </div>
     )
@@ -861,9 +865,10 @@ export default function EntryPage() {
   if (reduceMotion) {
     return (
       <div
-        className="fixed inset-0 bg-black flex items-center justify-center"
+        className="fixed inset-0 bg-black flex flex-col items-center justify-center"
         suppressHydrationWarning
       >
+        <div className="text-white text-2xl md:text-3xl font-mono mb-6 text-center">DevX Group</div>
         <div className="text-white text-xl font-mono">Loading...</div>
       </div>
     )

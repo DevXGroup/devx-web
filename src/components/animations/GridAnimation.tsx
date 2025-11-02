@@ -16,6 +16,7 @@ interface GridAnimationProps {
   randomFlicker?: boolean;
   flickerInterval?: number;
   maxFlickerSquares?: number;
+  showRadialGradient?: boolean;
 }
 
 const GridAnimation: React.FC<GridAnimationProps> = ({
@@ -27,6 +28,7 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
   randomFlicker = false,
   flickerInterval = 150,
   maxFlickerSquares = 5,
+  showRadialGradient = true,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const requestRef = useRef<number | null>(null);
@@ -36,18 +38,40 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
   const hoveredSquareRef = useRef<GridOffset | null>(null);
   const flickerSquaresRef = useRef<Set<string>>(new Set());
   const lastFlickerTimeRef = useRef<number>(0);
+  const gradientRef = useRef<CanvasGradient | null>(null);
+  const isMobileRef = useRef<boolean>(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    const dpr = window.devicePixelRatio || 1;
+    const ctx = canvas.getContext("2d", { alpha: true });
+    if (!ctx) return;
+
+    // Detect mobile for performance optimizations
+    isMobileRef.current = window.innerWidth < 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const dpr = isMobileRef.current ? 1 : (window.devicePixelRatio || 1); // Use 1x on mobile for better performance
 
     const resizeCanvas = () => {
       canvas.width = canvas.offsetWidth * dpr;
       canvas.height = canvas.offsetHeight * dpr;
       numSquaresX.current = Math.ceil(canvas.offsetWidth / squareSize) + 1;
       numSquaresY.current = Math.ceil(canvas.offsetHeight / squareSize) + 1;
+
+      // Cache gradient on resize (only if needed and not on mobile)
+      if (showRadialGradient && !isMobileRef.current) {
+        gradientRef.current = ctx.createRadialGradient(
+          canvas.width / 2,
+          canvas.height / 2,
+          0,
+          canvas.width / 2,
+          canvas.height / 2,
+          Math.sqrt(canvas.width ** 2 + canvas.height ** 2) / 2
+        );
+        gradientRef.current.addColorStop(0, "rgba(0, 0, 0, 0.88)");
+        gradientRef.current.addColorStop(0.35, "rgba(0, 0, 0, 0.65)");
+        gradientRef.current.addColorStop(0.65, "rgba(0, 0, 0, 0.25)");
+        gradientRef.current.addColorStop(1, "rgba(0, 0, 0, 0)");
+      }
     };
 
     window.addEventListener("resize", resizeCanvas);
@@ -59,6 +83,7 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
       if (!ctx) return;
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.lineWidth = Math.max(0.5, 0.5 * dpr);
 
       const startX = Math.floor(gridOffset.current.x / scaledSquareSize) * scaledSquareSize;
       const startY = Math.floor(gridOffset.current.y / scaledSquareSize) * scaledSquareSize;
@@ -92,19 +117,11 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
         }
       }
 
-      const gradient = ctx.createRadialGradient(
-        canvas.width / 2,
-        canvas.height / 2,
-        0,
-        canvas.width / 2,
-        canvas.height / 2,
-        Math.sqrt(canvas.width ** 2 + canvas.height ** 2) / 2
-      );
-      gradient.addColorStop(0, "rgba(0, 0, 0, 0)");
-      gradient.addColorStop(1, "#060010");
-
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // Use cached gradient on desktop only (skip on mobile for performance)
+      if (showRadialGradient && !isMobileRef.current && gradientRef.current) {
+        ctx.fillStyle = gradientRef.current;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
     };
 
     const updateFlickerSquares = () => {
@@ -155,24 +172,25 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
     };
 
     const handleMouseMove = (event: MouseEvent) => {
-      // Use page coordinates to avoid scrolling issues
-      // Get canvas position relative to the document
+      // Use client coordinates for accurate positioning
       const canvasRect = canvas.getBoundingClientRect();
-      const canvasDocX = canvasRect.left + window.scrollX;
-      const canvasDocY = canvasRect.top + window.scrollY;
-      
-      const mouseX = (event.pageX - canvasDocX) * dpr;
-      const mouseY = (event.pageY - canvasDocY) * dpr;
 
-      const hoveredSquareX = Math.floor((mouseX + gridOffset.current.x) / scaledSquareSize);
-      const hoveredSquareY = Math.floor((mouseY + gridOffset.current.y) / scaledSquareSize);
+      // Calculate mouse position relative to canvas
+      const mouseX = (event.clientX - canvasRect.left) * dpr;
+      const mouseY = (event.clientY - canvasRect.top) * dpr;
 
-      if (
-        !hoveredSquareRef.current ||
-        hoveredSquareRef.current.x !== hoveredSquareX ||
-        hoveredSquareRef.current.y !== hoveredSquareY
-      ) {
-        hoveredSquareRef.current = { x: hoveredSquareX, y: hoveredSquareY };
+      // Check if mouse is within canvas bounds
+      if (mouseX >= 0 && mouseX <= canvas.width && mouseY >= 0 && mouseY <= canvas.height) {
+        const hoveredSquareX = Math.floor((mouseX + gridOffset.current.x) / scaledSquareSize);
+        const hoveredSquareY = Math.floor((mouseY + gridOffset.current.y) / scaledSquareSize);
+
+        if (
+          !hoveredSquareRef.current ||
+          hoveredSquareRef.current.x !== hoveredSquareX ||
+          hoveredSquareRef.current.y !== hoveredSquareY
+        ) {
+          hoveredSquareRef.current = { x: hoveredSquareX, y: hoveredSquareY };
+        }
       }
     };
 
@@ -180,24 +198,27 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
       hoveredSquareRef.current = null;
     };
 
-    // Create a debounced scroll handler to reset canvas calculations after scrolling stops
+    // Create a debounced scroll handler - mobile only clears hover, no resize
     let scrollTimer: number | null = null;
     const debouncedScrollHandler = () => {
+      // Clear hover state during scrolling
+      hoveredSquareRef.current = null;
+
+      // Skip canvas recalculation on mobile to prevent flashing
+      if (isMobileRef.current) return;
+
       if (scrollTimer) {
         window.clearTimeout(scrollTimer);
       }
-      
-      // Clear hover state during scrolling
-      hoveredSquareRef.current = null;
-      
-      // After scrolling stops for a brief moment, recalculate the canvas state
+
+      // After scrolling stops for a brief moment, recalculate the canvas state (desktop only)
       scrollTimer = window.setTimeout(() => {
-        // Recalculate canvas dimensions and grid sizes like during resize
         resizeCanvas();
-      }, 150); // Wait 150ms after scrolling stops before recalculating
+      }, 150);
     };
 
-    canvas.addEventListener("mousemove", handleMouseMove);
+    // Listen on window for hover effect to work everywhere
+    window.addEventListener("mousemove", handleMouseMove);
     canvas.addEventListener("mouseleave", handleMouseLeave);
     window.addEventListener("scroll", debouncedScrollHandler);
     requestRef.current = requestAnimationFrame(updateAnimation);
@@ -205,19 +226,37 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
     return () => {
       window.removeEventListener("resize", resizeCanvas);
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
-      canvas.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mousemove", handleMouseMove);
       canvas.removeEventListener("mouseleave", handleMouseLeave);
       window.removeEventListener("scroll", debouncedScrollHandler);
       if (scrollTimer) window.clearTimeout(scrollTimer);
     };
-  }, [direction, speed, borderColor, hoverFillColor, squareSize, randomFlicker, flickerInterval, maxFlickerSquares]);
+  }, [direction, speed, borderColor, hoverFillColor, squareSize, randomFlicker, flickerInterval, maxFlickerSquares, showRadialGradient]);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="w-full h-full border-none block"
-      style={{ cursor: 'default' }}
-    ></canvas>
+    <div className="relative w-full h-full">
+      <canvas
+        ref={canvasRef}
+        className="w-full h-full border-none block"
+        style={{
+          cursor: 'default',
+          willChange: 'transform',
+          transform: 'translateZ(0)', // Force GPU acceleration
+        }}
+      ></canvas>
+      {/* CSS-based gradient overlay for mobile (better performance than canvas) */}
+      {showRadialGradient && (
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'radial-gradient(circle, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.65) 35%, rgba(0,0,0,0.25) 65%, rgba(0,0,0,0) 100%)',
+            mixBlendMode: 'normal',
+            opacity: 1,
+          }}
+          aria-hidden="true"
+        />
+      )}
+    </div>
   );
 };
 

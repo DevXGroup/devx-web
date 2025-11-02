@@ -127,6 +127,53 @@ body:has(main[data-page='home'].navbar-ready) .navbar-container,
   }
 }
 
+.slide-in-blurred-bottom {
+  -webkit-animation: slide-in-blurred-bottom 1.15s cubic-bezier(0.230, 1.000, 0.320, 1.000) both;
+          animation: slide-in-blurred-bottom 1.15s cubic-bezier(0.230, 1.000, 0.320, 1.000) both;
+}
+
+/* slide-in-blurred-bottom animation adapted from Animista (FreeBSD License) */
+@-webkit-keyframes slide-in-blurred-bottom {
+  0% {
+    -webkit-transform: translateY(1000px) scaleY(2.5) scaleX(0.2);
+            transform: translateY(1000px) scaleY(2.5) scaleX(0.2);
+    -webkit-transform-origin: 50% 100%;
+            transform-origin: 50% 100%;
+    -webkit-filter: blur(40px);
+            filter: blur(40px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0) scaleY(1) scaleX(1);
+            transform: translateY(0) scaleY(1) scaleX(1);
+    -webkit-transform-origin: 50% 50%;
+            transform-origin: 50% 50%;
+    -webkit-filter: blur(0);
+            filter: blur(0);
+    opacity: 1;
+  }
+}
+@keyframes slide-in-blurred-bottom {
+  0% {
+    -webkit-transform: translateY(1000px) scaleY(2.5) scaleX(0.2);
+            transform: translateY(1000px) scaleY(2.5) scaleX(0.2);
+    -webkit-transform-origin: 50% 100%;
+            transform-origin: 50% 100%;
+    -webkit-filter: blur(40px);
+            filter: blur(40px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0) scaleY(1) scaleX(1);
+            transform: translateY(0) scaleY(1) scaleX(1);
+    -webkit-transform-origin: 50% 50%;
+            transform-origin: 50% 50%;
+    -webkit-filter: blur(0);
+            filter: blur(0);
+    opacity: 1;
+  }
+}
+
 /* Import DevX Typography System */
 @import '../styles/typography.css';
 
@@ -418,37 +465,12 @@ html.is-firefox .navbar-blur {
 }
 
 .tech-flow {
-  background: radial-gradient(circle at center, rgba(76, 215, 135, 0.2) 0%, rgba(0, 0, 0, 0) 70%);
-  animation: pulse 10s ease-in-out infinite alternate;
-  -webkit-animation: pulse 10s ease-in-out infinite alternate;
+  background: transparent;
+  animation: none;
+  -webkit-animation: none;
   pointer-events: none;
-  /* Prevent layout reflows during animation */
-  will-change: transform, opacity;
+  will-change: auto;
   contain: layout style paint;
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-    -webkit-transform: scale(1);
-    opacity: 0.5;
-  }
-  100% {
-    transform: scale(1.5);
-    -webkit-transform: scale(1.5);
-    opacity: 0.8;
-  }
-}
-
-@-webkit-keyframes pulse {
-  0% {
-    -webkit-transform: scale(1);
-    opacity: 0.5;
-  }
-  100% {
-    -webkit-transform: scale(1.5);
-    opacity: 0.8;
-  }
 }
 
 /* Hero heading glow effect - Enhanced cloud-like shadow */

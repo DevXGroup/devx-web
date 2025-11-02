@@ -20,13 +20,10 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 0) // Changed from 10 to 0 for immediate activation
+      setIsScrolled(window.scrollY > 0)
     }
 
-    // Initial check on mount - set to true initially for contact page effect
-    setIsScrolled(true)
     handleScroll()
-
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
@@ -157,19 +154,20 @@ export default function Navbar() {
 
   // Determine background opacity based on backdrop-filter support
   const bgOpacity = supportsBackdropFilter ? 0.2 : 0.5
-  const scrolledBgStyle = {
+  const navbarStyle = {
     backgroundColor: `rgba(0, 0, 0, ${bgOpacity})`,
-    backdropFilter: supportsBackdropFilter ? 'blur(10px)' : 'none',
-    WebkitBackdropFilter: supportsBackdropFilter ? 'blur(10px)' : 'none',
-    borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+    backdropFilter: supportsBackdropFilter ? 'blur(12px)' : 'none',
+    WebkitBackdropFilter: supportsBackdropFilter ? 'blur(12px)' : 'none',
+    borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+    boxShadow: isScrolled
+      ? '0 18px 40px rgba(0,0,0,0.35)'
+      : '0 12px 28px rgba(0,0,0,0.2)',
+    transition: 'background-color 0.3s ease, box-shadow 0.3s ease',
   }
 
   return (
-    <nav
-      className={`fixed w-full z-[9999] transition-all duration-300 mt-0 top-0`}
-      style={isScrolled ? scrolledBgStyle : { backgroundColor: 'rgba(0, 0, 0, 0.1)' }}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className={`fixed w-full z-[9999] transition-all duration-300 mt-0 top-0`} style={navbarStyle}>
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-[14px]">
           <Link href="/home" aria-label="DevX Group LLC" className="flex-shrink-0">
             <Image
@@ -178,8 +176,7 @@ export default function Navbar() {
               width={200}
               height={40}
               priority
-              fetchPriority="high"
-              quality={70}
+              quality={90}
               sizes="(max-width: 640px) 160px, 200px"
               className="w-[200px] h-auto"
               style={{ maxWidth: '200px', height: 'auto' }}
@@ -375,7 +372,7 @@ export default function Navbar() {
           </div>
 
           {/* Mobile Menu Button - Clean Hamburger Lines */}
-          <div className="lg:hidden flex items-center z-[10000]">
+          <div className="relative lg:hidden flex items-center z-[10000]">
             <motion.button
               ref={hamburgerButtonRef}
               onClick={() => setIsOpen(!isOpen)}
@@ -389,7 +386,7 @@ export default function Navbar() {
               <div className="relative flex flex-col items-center justify-center space-y-1.5">
                 {/* Top line - shortest */}
                 <motion.div
-                  className="rounded-full"
+                  className="relative rounded-full"
                   style={{
                     width: '16px',
                     height: '2px',
@@ -420,7 +417,7 @@ export default function Navbar() {
 
                 {/* Middle line - medium */}
                 <motion.div
-                  className="rounded-full"
+                  className="relative rounded-full"
                   style={{
                     width: '20px',
                     height: '2px',
@@ -452,7 +449,7 @@ export default function Navbar() {
 
                 {/* Bottom line - longest */}
                 <motion.div
-                  className="rounded-full"
+                  className="relative rounded-full"
                   style={{
                     width: '24px',
                     height: '2px',

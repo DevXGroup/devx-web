@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useCallback, useState } from 'react'
-import { motion, useReducedMotion, useAnimation } from 'framer-motion'
+import { useEffect, useCallback, useState, useRef } from 'react'
+import { motion, useReducedMotion, useAnimation, useInView } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import ClientOnly from '@layout/ClientOnly'
@@ -10,10 +10,10 @@ import StarBorder from '@animations/StarBorder'
 import TextType from '@animations/TextType'
 import ShinyText from '@/components/ui/ShinyText'
 
-// Dynamically import heavy components with loading={null} for faster LCP
+// Dynamically import heavy 3D components only when in viewport
 const DynamicHeroBackground = dynamic(() => import('../hero/HeroBackground'), {
   ssr: false,
-  loading: () => null,
+  loading: () => <div className="absolute inset-0 bg-black" />,
 })
 const DynamicPlanetDivider = dynamic(() => import('../planet/PlanetDivider'), {
   ssr: false,
@@ -76,11 +76,35 @@ export default function Hero() {
   const [enableBackground, setEnableBackground] = useState(false)
   const [enableShootingStars, setEnableShootingStars] = useState(false)
   const [enablePlanetDivider, setEnablePlanetDivider] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+
+  // Intersection observer to load 3D components only when visible
+  const sectionRef = useRef<HTMLElement>(null)
+  const isInView = useInView(sectionRef, { once: true, margin: "200px" })
 
   // Function to navigate to the portfolio page
   const navigateToPortfolio = useCallback(() => {
     router.push('/portfolio')
   }, [router])
+
+  // Check for mobile devices to optimize performance
+  useEffect(() => {
+    const checkIfMobile = () => {
+      return (
+        typeof window !== 'undefined' && 
+        (window.innerWidth < 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
+      )
+    }
+    
+    setIsMobile(checkIfMobile())
+    
+    const handleResize = () => {
+      setIsMobile(checkIfMobile())
+    }
+    
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   // Trigger entrance animation
   useEffect(() => {
@@ -88,59 +112,16 @@ export default function Hero() {
   }, [controls])
 
   useEffect(() => {
-    let idleHandle: number | null = null
-    let timeoutHandle: ReturnType<typeof setTimeout> | null = null
-    let shootingTimeout: ReturnType<typeof setTimeout> | null = null
-    let planetTimeout: ReturnType<typeof setTimeout> | null = null
-
-    const activateBackground = () => {
+    // Activate backgrounds only when section is in view (improves initial load)
+    if (isInView) {
       setEnableBackground(true)
-      // Defer shooting stars more to prioritize LCP
-      if (shootingTimeout) {
-        clearTimeout(shootingTimeout)
-      }
-      shootingTimeout = setTimeout(() => setEnableShootingStars(true), 300)
-      if (planetTimeout) {
-        clearTimeout(planetTimeout)
-      }
-      planetTimeout = setTimeout(() => setEnablePlanetDivider(true), 600)
+      setEnableShootingStars(true)
+      setEnablePlanetDivider(true)
     }
-
-    if (typeof window !== 'undefined') {
-      const requestIdle = window.requestIdleCallback?.bind(window)
-
-      if (requestIdle) {
-        idleHandle = requestIdle(
-          () => {
-            activateBackground()
-          },
-          { timeout: 1500 } // Increased timeout for better LCP
-        )
-      }
-    }
-
-    if (idleHandle === null) {
-      timeoutHandle = setTimeout(activateBackground, 400) // Increased from 180ms
-    }
-
-    return () => {
-      if (idleHandle !== null && typeof window !== 'undefined') {
-        window.cancelIdleCallback?.(idleHandle)
-      }
-      if (timeoutHandle) {
-        clearTimeout(timeoutHandle)
-      }
-      if (shootingTimeout) {
-        clearTimeout(shootingTimeout)
-      }
-      if (planetTimeout) {
-        clearTimeout(planetTimeout)
-      }
-    }
-  }, [])
+  }, [isInView])
 
   return (
-    <section className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-black">
+    <section ref={sectionRef} className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-black">
       {/* Animated Background */}
       <div className="absolute inset-0 tech-flow"></div>
 
@@ -217,11 +198,14 @@ export default function Hero() {
               </p>
               <div className="relative mx-auto w-full mt-10 flex justify-center">
                 <div className="relative flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap sm:gap-4 px-5 py-4 sm:px-8 sm:py-6 rounded-2xl overflow-hidden border-2 border-white/20 bg-black/60 backdrop-blur-md shadow-xl shadow-black/50 sm:bg-gradient-to-r sm:from-black/70 sm:via-black/60 sm:to-black/70">
-                  {/* Subtle animated gradient background */}
+                  {/* Subtle animated gradient background - disable on mobile for performance */}
                   <div className="absolute inset-0 hidden sm:block opacity-30">
                     <div
-                      className="absolute inset-0 bg-gradient-to-br from-[#4CD787]/8 via-transparent to-[#ccff00]/8 animate-pulse"
-                      style={{ animationDuration: '4s' }}
+                      className={`absolute inset-0 bg-gradient-to-br from-[#4CD787]/8 via-transparent to-[#ccff00]/8 ${isMobile ? '' : 'animate-pulse'}`}
+                      style={{ 
+                        animationDuration: '4s',
+                        animationPlayState: isMobile ? 'paused' : 'running'
+                      }}
                     />
                   </div>
 
@@ -231,7 +215,7 @@ export default function Hero() {
                       href="/services"
                       className="uppercase tracking-[0.19em] text-sm sm:text-base md:text-lg lg:text-lg font-medium opacity-90 hover:opacity-100"
                     >
-                      <ShinyText text="Elite Services" speed={3} delay={0.3} />
+                      <ShinyText text="Elite Services" speed={isMobile ? 5 : 3} delay={0.3} />
                     </Link>
                     <span className="hidden sm:inline text-gray-600 text-base md:text-lg lg:text-lg">
                       •
@@ -240,7 +224,7 @@ export default function Hero() {
                       href="/portfolio"
                       className="uppercase tracking-[0.19em] text-sm sm:text-base md:text-lg lg:text-lg font-medium opacity-90 hover:opacity-100"
                     >
-                      <ShinyText text="Proven Record" speed={5} delay={0.6} />
+                      <ShinyText text="Proven Record" speed={isMobile ? 7 : 5} delay={0.6} />
                     </Link>
 
                     <span className="hidden md:inline text-gray-600 text-base md:text-lg lg:text-lg">
@@ -250,7 +234,7 @@ export default function Hero() {
                       href="/pricing"
                       className="uppercase tracking-[0.19em] text-sm sm:text-base md:text-lg lg:text-lg font-medium opacity-90 hover:opacity-100"
                     >
-                      <ShinyText text="Competitive Pricing" speed={7} delay={0.9} />
+                      <ShinyText text="Competitive Pricing" speed={isMobile ? 9 : 7} delay={0.9} />
                     </Link>
                   </div>
                 </div>
@@ -266,9 +250,9 @@ export default function Hero() {
             <TextType
               text={subheaders}
               as="p"
-              typingSpeed={shouldReduceMotion ? 40 : 80}
-              deletingSpeed={shouldReduceMotion ? 25 : 50}
-              pauseDuration={shouldReduceMotion ? 800 : 2000}
+              typingSpeed={shouldReduceMotion ? 40 : (isMobile ? 60 : 80)} // Slower on mobile
+              deletingSpeed={shouldReduceMotion ? 25 : (isMobile ? 35 : 50)} // Slower on mobile
+              pauseDuration={shouldReduceMotion ? 800 : (isMobile ? 2500 : 2000)} // Longer on mobile
               className="font-mono typewriter-text tracking-[0.08em] text-center mx-auto leading-tight"
               showCursor={true}
               cursorCharacter="_"
@@ -294,7 +278,7 @@ export default function Hero() {
                 target="_blank"
                 rel="noopener noreferrer"
                 color="#ccff00"
-                speed="3s"
+                speed={isMobile ? "5s" : "3s"} // Slower animation on mobile
                 className="font-mono font-semibold text-base sm:text-md md:text-md px-6 py-3 sm:px-8 sm:py-3 min-h-[44px] flex items-center justify-center"
                 aria-label="Book a free consultation call with DevX Group"
               >
@@ -311,7 +295,7 @@ export default function Hero() {
               <StarBorder
                 onClick={navigateToPortfolio}
                 color="#e534eb"
-                speed="4s"
+                speed={isMobile ? "6s" : "4s"} // Slower animation on mobile
                 className="font-mono font-semibold text-base sm:text-md md:text-md px-6 py-3 sm:px-8 sm:py-3 min-h-[44px] flex items-center justify-center"
                 aria-label="View DevX Group portfolio"
               >

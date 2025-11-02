@@ -75,43 +75,54 @@ export default function PlanetDivider() {
 
   // Enhanced calculation for planet visibility and position - fully responsive
   const calculateVisibility = () => {
-    // Responsive scroll threshold based on screen size
-    const maxScroll = getResponsiveValue(200, 250, 300)
+    // Responsive scroll threshold based on screen size - extended for complete sundown
+    const maxScroll = getResponsiveValue(400, 500, 600)
     const progress = Math.min(1, scrollY / maxScroll)
     const width = screenSize.width
     let basePosition: number
     let positionRange: number
     let bottomOffset: number
+    let sundownDistance: number
 
     if (width < 480) {
       basePosition = 0.33
       positionRange = 0.24
       bottomOffset = -8
+      sundownDistance = 600 // Mobile: slide down 600px to completely hide
     } else if (width < 640) {
       basePosition = 0.24
       positionRange = 0.22
       bottomOffset = -12
+      sundownDistance = 700 // Small mobile: slide down 700px
     } else if (width < 1024) {
       basePosition = -0.15
       positionRange = 0.4
       bottomOffset = -18
+      sundownDistance = 900 // Tablet: slide down 900px
     } else {
       basePosition = -0.3
       positionRange = 0.45
       bottomOffset = -26
+      sundownDistance = 1200 // Desktop: slide down 1200px to completely hide
     }
     const position = basePosition + progress * positionRange
-    
+
     // Reduce rotation speed for Safari to prevent artifacts
     const rotationMultiplier = isSafari ? 0.6 : 1.2
     const scrollRotationMultiplier = isSafari ? 4 : 8
 
+    // Smooth sundown curve - starts slow, accelerates in middle, slows at end
+    const easeInOutProgress = progress < 0.5
+      ? 2 * progress * progress
+      : 1 - Math.pow(-2 * progress + 2, 2) / 2
+
     return {
       position,
       bottomOffset,
-      opacity: 1 - progress, // Original scroll-based opacity
+      opacity: 1, // Keep full opacity - no fading
       scrollRotation: progress * scrollRotationMultiplier, // Rotation during scroll
-      continuousRotation: time * rotationMultiplier // Continuous visible rotation
+      continuousRotation: time * rotationMultiplier, // Continuous visible rotation
+      sundownOffset: -easeInOutProgress * sundownDistance // Smooth sundown effect - completely hides planet
     }
   }
 
@@ -163,7 +174,7 @@ export default function PlanetDivider() {
     }
   }
 
-  const { position, bottomOffset, opacity, scrollRotation, continuousRotation } = calculateVisibility()
+  const { position, bottomOffset, opacity, scrollRotation, continuousRotation, sundownOffset } = calculateVisibility()
   const sizes = getResponsiveSizes()
   const isMobileViewport = screenSize.width < 768
   const isTabletViewport = screenSize.width >= 768 && screenSize.width < 1024
@@ -218,7 +229,7 @@ export default function PlanetDivider() {
       <div
         className={`absolute w-full h-[200%] left-0 planet-glow-effect${isMobileViewport || isTabletViewport ? ' planet-glow-effect--mobile' : ''}`}
         style={getCrossBrowserStyle(getTransform(1), {
-          bottom: `${position * 20 + bottomOffset}%`,
+          bottom: `calc(${position * 20 + bottomOffset}% + ${sundownOffset}px)`,
           aspectRatio: "1/1",
           borderRadius: "50%",
           width: `${sizes.planetMaxWidth}px`,
@@ -248,7 +259,7 @@ export default function PlanetDivider() {
       <div
         className="absolute w-full h-[200%] left-0"
         style={getCrossBrowserStyle(getTransform(isSafari ? 0.9 : 0.8), {
-          bottom: `${position * 20 + bottomOffset}%`,
+          bottom: `calc(${position * 20 + bottomOffset}% + ${sundownOffset}px)`,
           aspectRatio: "1/1",
           borderRadius: "50%",
           width: `${sizes.planetMaxWidth}px`,
@@ -272,7 +283,7 @@ export default function PlanetDivider() {
       <div
         className="absolute w-full h-[200%] left-0"
         style={getCrossBrowserStyle(getTransform(isSafari ? 0.85 : 0.6), {
-          bottom: `${position * 20 + bottomOffset}%`,
+          bottom: `calc(${position * 20 + bottomOffset}% + ${sundownOffset}px)`,
           aspectRatio: "1/1",
           borderRadius: "50%",
           width: `${sizes.planetMaxWidth}px`,
@@ -298,7 +309,7 @@ export default function PlanetDivider() {
       {!isSlowDevice && <div
         className="absolute w-full h-[200%] left-0"
         style={getCrossBrowserStyle(getTransform(isSafari ? 0.8 : 0.4), {
-          bottom: `${position * 20 + bottomOffset}%`,
+          bottom: `calc(${position * 20 + bottomOffset}% + ${sundownOffset}px)`,
           aspectRatio: "1/1",
           borderRadius: "50%",
           width: `${sizes.planetMaxWidth}px`,
@@ -327,7 +338,7 @@ export default function PlanetDivider() {
       {!isSlowDevice && <div
         className="absolute w-full h-[200%] left-0"
         style={getCrossBrowserStyle(getTransform(isSafari ? 0.75 : 0.2), {
-          bottom: `${position * 20 + bottomOffset}%`,
+          bottom: `calc(${position * 20 + bottomOffset}% + ${sundownOffset}px)`,
           aspectRatio: "1/1",
           borderRadius: "50%",
           width: `${sizes.planetMaxWidth}px`,
@@ -353,114 +364,59 @@ export default function PlanetDivider() {
       <style jsx>{`
         .planet-glow-effect {
           will-change: transform, opacity;
-          filter: drop-shadow(0 0 60px rgba(76, 215, 135, 0.25)) drop-shadow(0 0 110px rgba(76, 215, 135, 0.18)) drop-shadow(0 0 160px rgba(76, 215, 135, 0.12));
-          -webkit-filter: drop-shadow(0 0 60px rgba(76, 215, 135, 0.25)) drop-shadow(0 0 110px rgba(76, 215, 135, 0.18)) drop-shadow(0 0 160px rgba(76, 215, 135, 0.12));
+          /* Smooth, consistent glow across all devices */
+          filter: drop-shadow(0 0 40px rgba(76, 215, 135, 0.3))
+                  drop-shadow(0 0 80px rgba(76, 215, 135, 0.2))
+                  drop-shadow(0 0 120px rgba(76, 215, 135, 0.15));
+          -webkit-filter: drop-shadow(0 0 40px rgba(76, 215, 135, 0.3))
+                          drop-shadow(0 0 80px rgba(76, 215, 135, 0.2))
+                          drop-shadow(0 0 120px rgba(76, 215, 135, 0.15));
           pointer-events: none;
           overflow: visible;
+          /* Hardware acceleration for smooth rendering */
+          -webkit-transform: translateZ(0);
+          transform: translateZ(0);
+          -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
         }
 
-        /* Safari-specific optimizations for large screens */
-        @media screen and (min-width: 1200px) {
-          @supports (-webkit-appearance: none) {
-            .planet-glow-effect {
-              /* Reduce complexity for Safari on large screens to prevent cutoff and artifacts */
-              filter: drop-shadow(0 0 40px rgba(76, 215, 135, 0.25));
-              -webkit-filter: drop-shadow(0 0 40px rgba(76, 215, 135, 0.25));
-              -webkit-transform: translateZ(0);
-              transform: translateZ(0);
-              /* Add containment to prevent overflow issues */
-              contain: layout style paint;
-              /* Ensure proper compositing */
-              -webkit-backface-visibility: hidden;
-              backface-visibility: hidden;
-              /* Prevent anti-aliasing artifacts */
-              -webkit-font-smoothing: antialiased;
-              -moz-osx-font-smoothing: grayscale;
-            }
-          }
-        }
-
-        /* Tablet screen optimizations (768px-1024px) - Similar to mobile for consistency */
+        /* Tablet optimizations (768px-1024px) - Use same smooth glow */
         @media screen and (min-width: 768px) and (max-width: 1023px) {
           .planet-glow-effect {
-            /* Disable filter-based glow on tablets to prevent square artifacts */
-            filter: none;
-            -webkit-filter: none;
-          }
-
-          .planet-glow-effect::after {
-            content: "";
-            position: absolute;
-            inset: -20%;
-            border-radius: 50%;
-            background: radial-gradient(circle at 50% 50%, rgba(76, 215, 135, 0.4) 0%, rgba(76, 215, 135, 0.22) 38%, rgba(76, 215, 135, 0.1) 54%, rgba(76, 215, 135, 0.02) 68%, rgba(76, 215, 135, 0) 84%);
-            animation: planetGlowPulseTablet 4.5s ease-in-out infinite;
-            pointer-events: none;
-            transform-origin: center;
-            -webkit-mask-image: radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 58%, rgba(0, 0, 0, 0) 78%);
-            mask-image: radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 58%, rgba(0, 0, 0, 0) 78%);
+            /* Consistent smooth glow on tablets */
+            filter: drop-shadow(0 0 35px rgba(76, 215, 135, 0.28))
+                    drop-shadow(0 0 70px rgba(76, 215, 135, 0.18));
+            -webkit-filter: drop-shadow(0 0 35px rgba(76, 215, 135, 0.28))
+                            drop-shadow(0 0 70px rgba(76, 215, 135, 0.18));
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
           }
         }
 
-        /* Desktop Safari optimizations */
-        @media screen and (min-width: 1024px) and (max-width: 1199px) {
-          @supports (-webkit-appearance: none) {
-            .planet-glow-effect {
-              filter: drop-shadow(0 0 35px rgba(76, 215, 135, 0.22)) drop-shadow(0 0 70px rgba(76, 215, 135, 0.15));
-              -webkit-filter: drop-shadow(0 0 35px rgba(76, 215, 135, 0.22)) drop-shadow(0 0 70px rgba(76, 215, 135, 0.15));
-              -webkit-transform: translateZ(0);
-              transform: translateZ(0);
-            }
-          }
-        }
-
-        /* Tablet glow pulse animation */
-        @keyframes planetGlowPulseTablet {
-          0% {
-            opacity: 0.42;
-            transform: scale(0.96);
-          }
-          50% {
-            opacity: 0.55;
-            transform: scale(1.02);
-          }
-          100% {
-            opacity: 0.68;
-            transform: scale(1.08);
-          }
-        }
-
-        /* Mobile Safari optimizations - iPhone specific */
-        @keyframes planetGlowPulseMobile {
-          0% {
-            opacity: 0.38;
-            transform: scale(0.95);
-          }
-          50% {
-            opacity: 0.5;
-            transform: scale(1);
-          }
-          100% {
-            opacity: 0.62;
-            transform: scale(1.06);
-          }
-        }
-
+        /* Mobile optimizations (below 768px) - Smooth consistent glow */
         @media screen and (max-width: 767px) {
           .planet-glow-effect {
-            /* Simplified filter for better mobile performance - keep green glow consistent with desktop */
-            filter: drop-shadow(0 0 25px rgba(76, 215, 135, 0.25)) drop-shadow(0 0 50px rgba(76, 215, 135, 0.15));
-            -webkit-filter: drop-shadow(0 0 25px rgba(76, 215, 135, 0.25)) drop-shadow(0 0 50px rgba(76, 215, 135, 0.15));
+            /* Smooth glow on mobile - consistent appearance */
+            filter: drop-shadow(0 0 30px rgba(76, 215, 135, 0.3))
+                    drop-shadow(0 0 60px rgba(76, 215, 135, 0.2));
+            -webkit-filter: drop-shadow(0 0 30px rgba(76, 215, 135, 0.3))
+                            drop-shadow(0 0 60px rgba(76, 215, 135, 0.2));
             /* Hardware acceleration */
             -webkit-transform: translateZ(0) scale3d(1, 1, 1);
             transform: translateZ(0) scale3d(1, 1, 1);
-            /* Optimize for touch devices */
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
             -webkit-perspective: 1000px;
             perspective: 1000px;
-            /* Reduce complexity */
-            will-change: transform;
+          }
+        }
+
+        /* Safari-specific optimizations */
+        @supports (-webkit-appearance: none) {
+          .planet-glow-effect {
+            /* Ensure smooth rendering on Safari */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
           }
         }
 

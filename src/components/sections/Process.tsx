@@ -141,199 +141,63 @@ export default function Process() {
           {processes.map((process, index) => (
             <motion.div
               key={process.title}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.15 }}
-              whileHover={{
-                scale: 1.02,
-                y: -8,
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: false, amount: 0.2 }}
+              transition={{ 
+                duration: 0.6, 
+                ease: "easeOut", 
+                delay: index * 0.15
+              }}
+              whileHover={{ 
+                y: -10,
+                scale: 1.02
               }}
               whileTap={{ scale: 0.98 }}
-              className="group relative bg-slate-800 p-6 sm:p-8 md:p-10 rounded-xl border border-purple-500/20 hover:border-purple-400/40 flex flex-col items-start text-left overflow-hidden cursor-pointer min-h-[160px] sm:min-h-[180px] transition-all duration-300"
+              className="relative group rounded-xl p-[2px] cursor-pointer"
               role="article"
               aria-label={`${process.title}: ${process.description}`}
             >
-              {/* Morphing background blob */}
-              <motion.div
-                className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100"
-                initial={{
-                  background: `radial-gradient(circle at 50% 50%, ${process.color}00 0%, transparent 100%)`,
-                }}
-                whileHover={{
-                  background: [
-                    `radial-gradient(circle at 20% 80%, ${process.color}15 0%, transparent 60%)`,
-                    `radial-gradient(circle at 80% 20%, ${process.color}20 0%, transparent 50%)`,
-                    `radial-gradient(circle at 30% 70%, ${process.color}15 0%, transparent 60%)`,
-                    `radial-gradient(circle at 70% 30%, ${process.color}20 0%, transparent 50%)`,
-                  ],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: 'easeInOut',
-                }}
-              />
-
-              {/* Scanning line effect */}
-              <motion.div
-                className="absolute inset-0 opacity-0 group-hover:opacity-100"
-                initial={{ x: '-100%' }}
-                whileHover={{
-                  x: '100%',
-                  transition: {
-                    duration: 2,
-                    ease: 'easeInOut',
-                    repeat: Infinity,
-                    repeatDelay: 1,
-                  },
-                }}
+              <div
+                className="absolute inset-0 rounded-xl transition-opacity duration-700"
                 style={{
-                  background: `linear-gradient(90deg, transparent, ${process.color}40, transparent)`,
-                  width: '50%',
-                  height: '100%',
+                  background: 'linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05))',
                 }}
               />
 
-              {/* Matrix-style code rain */}
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-700">
-                {Array.from({ length: 6 }).map((_, i) => {
-                  const codeChars = ['01', '10', 'fx', 'js', 'ts', 'py'][i] || '01'
-                  return (
-                    <motion.div
-                      key={i}
-                      className="absolute font-mono text-xs"
-                      style={{
-                        left: `${20 + i * 15}%`,
-                        top: '0%',
-                        color: process.color,
-                        fontSize: '8px',
-                      }}
-                      initial={{ y: -20, opacity: 0 }}
-                      whileHover={{
-                        y: [0, 300],
-                        opacity: [0, 1, 1, 0],
-                      }}
-                      transition={{
-                        duration: 3,
-                        delay: i * 0.3,
-                        repeat: Infinity,
-                        ease: 'linear',
-                      }}
-                    >
-                      {codeChars}
-                    </motion.div>
-                  )
-                })}
-              </div>
-
-              {/* Holographic edge effect */}
-              <motion.div
-                className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100"
-                initial={{ scale: 1 }}
-                whileHover={{
-                  scale: [1, 1.02, 1],
-                  rotate: [0, 1, 0, -1, 0],
-                }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: 'easeInOut',
-                }}
+              <div
+                className="absolute inset-0 rounded-xl opacity-40 transition-opacity duration-700"
                 style={{
-                  border: `1px solid ${process.color}60`,
-                  boxShadow: `
-                    0 0 20px ${process.color}30,
-                    inset 0 0 20px ${process.color}10
-                  `,
+                  background: `linear-gradient(135deg, ${process.color}, ${process.color}99, ${process.color}66, transparent)`,
                 }}
               />
-
-              {/* Glitch effect overlay */}
-              <motion.div
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none"
-                initial={{ clipPath: 'polygon(0 0, 0 0, 0 0, 0 0)' }}
-                whileHover={{
-                  clipPath: [
-                    'polygon(0 20%, 100% 20%, 100% 30%, 0 30%)',
-                    'polygon(0 60%, 100% 60%, 100% 70%, 0 70%)',
-                    'polygon(0 40%, 100% 40%, 100% 45%, 0 45%)',
-                    'polygon(0 0, 0 0, 0 0, 0 0)',
-                  ],
-                }}
-                transition={{
-                  duration: 0.6,
-                  times: [0, 0.3, 0.6, 1],
-                  ease: 'easeInOut',
-                  delay: index * 0.2,
-                  repeat: Infinity,
-                  repeatDelay: 3,
-                }}
+              <div
+                className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"
                 style={{
-                  background: `linear-gradient(90deg, transparent, ${process.color}60, transparent)`,
+                  background: `linear-gradient(135deg, ${process.color}, ${process.color}99, ${process.color}66, transparent)`,
                 }}
               />
 
-              {/* Content */}
-              <div className="relative z-10">
-                <div className="flex items-center mb-4 sm:mb-6">
-                  <motion.div
-                    className="w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center mr-3 sm:mr-4 relative overflow-hidden shrink-0"
-                    whileHover={{
-                      boxShadow: `0 0 30px ${process.color}60`,
-                    }}
-                    transition={{ duration: 0.4 }}
+              <div className="relative bg-slate-900/70 p-6 sm:p-8 md:p-10 rounded-[10px] shadow-xl shadow-black/40 flex flex-col gap-5 h-full">
+                <div className="flex items-center gap-4">
+                  <div
+                    className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-full border border-white/20 group-hover:scale-110 transition-transform duration-300"
                     style={{
-                      backgroundColor: process.color + '20',
-                      border: `2px solid ${process.color}40`,
+                      background: `${process.color}1a`,
+                      borderColor: `${process.color}4d`,
+                      boxShadow: `0 0 18px ${process.color}33`,
+                      transition: `transform 0.5s ease, box-shadow 0.3s ease`,
                     }}
                   >
-                    {/* Icon pulse effect */}
-                    <motion.div
-                      className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100"
-                      animate={{
-                        scale: [1, 1.5, 1],
-                        opacity: [0, 0.3, 0],
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: 'easeOut',
-                      }}
-                      style={{ backgroundColor: process.color + '30' }}
-                    />
-
-                    <motion.div
-                      whileHover={{
-                        scale: 1.2,
-                        rotateY: 180,
-                      }}
-                      transition={{ duration: 0.6, ease: 'backOut' }}
-                      className="pointer-events-none"
-                    >
-                      <process.icon
-                        className="w-5 h-5 sm:w-6 sm:h-6 transition-all duration-300 relative z-10 pointer-events-none"
-                        style={{
-                          color: process.color,
-                          filter: `drop-shadow(0 0 4px ${process.color}80)`,
-                        }}
-                      />
-                    </motion.div>
-                  </motion.div>
-                  <motion.h3
-                    className="text-lg sm:text-xl font-semibold font-['IBM_Plex_Mono'] text-white"
-                    whileHover={{
-                      scale: 1.05,
-                      textShadow: `0 0 15px ${process.color}80`,
-                    }}
-                    transition={{ duration: 0.3 }}
-                  >
+                    <process.icon className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
+                  </div>
+                  <h3 className="text-lg sm:text-xl font-semibold font-['IBM_Plex_Mono'] text-white">
                     {process.title}
-                  </motion.h3>
+                  </h3>
                 </div>
-                <motion.p className="text-foreground/80 font-['IBM_Plex_Mono'] font-light text-sm sm:text-base leading-relaxed group-hover:text-foreground/95 transition-colors duration-500">
+                <p className="text-sm sm:text-base md:text-lg text-slate-100 font-['IBM_Plex_Sans'] leading-relaxed">
                   {process.description}
-                </motion.p>
+                </p>
               </div>
             </motion.div>
           ))}

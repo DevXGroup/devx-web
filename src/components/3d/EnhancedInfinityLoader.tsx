@@ -105,7 +105,7 @@ export default function EnhancedInfinityLoader({
   return (
     <div 
       ref={containerRef} 
-      className="flex items-center justify-center h-[30vh] sm:h-[35vh] md:h-[40vh] w-full"
+      className="relative flex items-center justify-center h-[30vh] sm:h-[35vh] md:h-[40vh] w-full"
       style={{
         // Force hardware acceleration on container
         WebkitTransform: "translateZ(0)",

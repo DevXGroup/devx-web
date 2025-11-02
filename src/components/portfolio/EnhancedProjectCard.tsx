@@ -79,16 +79,15 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
         transformStyle: 'preserve-3d',
         perspective: '1000px'
       }}
-      whileInView={{ 
-        opacity: 1, 
-        y: 0,
-        transition: { 
-          delay: index * 0.1,
-          duration: 0.6,
+      whileInView={{
+        opacity: 1,
+        transition: {
+          delay: index * 0.08,
+          duration: 0.7,
           ease: 'easeOut'
         }
       }}
-      initial={{ opacity: 0, y: 60 }}
+      initial={{ opacity: 0 }}
     >
       {/* Subtle Glow Effect */}
       {isHovered && isMounted && (

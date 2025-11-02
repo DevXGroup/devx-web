@@ -254,15 +254,16 @@ function RefinedBlobMaterial({ scrollY }: { scrollY: number }) {
       hslColor.x = mod(hslColor.x + uHueShift, 1.0);
       vec3 baseColor = hsl2rgb(hslColor) * uBrightness;
 
-      // Enhanced cosmic color mixing with white/gray base
+      // Enhanced cosmic color mixing with consistent base color
       vec3 cosmicColor1 = mix(uCosmicColor1, uCosmicColor2, sin(uTime * 0.008) * 0.5 + 0.5);
       vec3 cosmicColor2 = mix(cosmicColor1, uCosmicColor3, sin(uTime * 0.006) * 0.5 + 0.5);
-      
-      // Start with white/gray base and transition to cosmic colors
-      vec3 whiteBase = vec3(0.95, 0.95, 0.95); // Slightly off-white
-      baseColor = mix(whiteBase, baseColor, 0.3); // Blend with white base
-      baseColor = mix(baseColor, cosmicColor2 * 0.35, uCosmicMix);
-      baseColor = mix(baseColor, cosmicColor1 * 0.25, uCosmicMix2);
+
+      // Use the theme green as primary base color - preserve it consistently
+      vec3 themeGreen = vec3(0.3, 0.84, 0.53); // #4CD787
+      baseColor = themeGreen * uBrightness;
+      // Apply subtle cosmic overlay without changing base hue
+      baseColor += cosmicColor2 * 0.02 * uCosmicMix;
+      baseColor += cosmicColor1 * 0.015 * uCosmicMix2;
       
       vec3 highlightColor = vec3(1.0, 1.0, 1.0) * 0.2; // Increased highlight
       
@@ -309,10 +310,10 @@ function RefinedBlobMaterial({ scrollY }: { scrollY: number }) {
       // Very smooth pulsing glow
       float glow = sin(uTime * 0.15) * 0.5 + 0.5;
       color += glow * 0.02 * baseColor; // Increased pulse glow
-      
-      // Make blob shade invisible - set opacity to 0
-      float opacity = 0.0;
-      
+
+      // Restore blob visibility with proper opacity and shading
+      float opacity = uOpacityFactor * (0.8 + fresnel * 0.2);
+
       gl_FragColor = vec4(color, opacity);
     }
   `
@@ -328,7 +329,7 @@ function RefinedBlobMaterial({ scrollY }: { scrollY: number }) {
   )
 }
 
-// RefinedBlob component (now internal to AnimatedBlob)
+// RefinedBlob component
 function RefinedBlob({
   position,
   scrollY,
@@ -350,22 +351,19 @@ function RefinedBlob({
   const particlesRef = useRef<any>(null)
   const groupRef = useRef<any>(null)
 
-  // Keep reduced particle count for performance
-  const particleCount = 50
+  // Subtle particle aura - tighter clustering
+  const particleCount = 20
   const particlePositions = useRef(() => {
     const positions = new Float32Array(particleCount * 3)
-    const radius = 0.8 // Restored aura radius
-
     for (let i = 0; i < particleCount; i++) {
       const theta = Math.random() * Math.PI * 2
-      const phi = Math.random() * Math.PI
-      const r = radius * (0.7 + Math.random() * 0.3)
+      const phi = Math.acos((Math.random() * 2) - 1)
+      const r = 0.5 + Math.random() * 0.3 // Tighter radius: 0.5 to 0.8
 
       positions[i * 3] = r * Math.sin(phi) * Math.cos(theta)
       positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta)
       positions[i * 3 + 2] = r * Math.cos(phi)
     }
-
     return positions
   }).current()
 
@@ -388,7 +386,7 @@ function RefinedBlob({
   useFrame((state) => {
     if (mesh.current && groupRef.current) {
       const time = state.clock.elapsedTime * speedFactor + phaseOffset
-      const scrollFactor = scrollY * 0.001 // Restored scroll influence
+      const scrollFactor = scrollY * 0.001
       const normalizedScrollFactor = Math.min(1.0, scrollY * 0.001)
 
       // Enhanced convergence animation for more fluid movement
@@ -396,40 +394,46 @@ function RefinedBlob({
       const convergenceStrength = Math.sin(convergenceTime) * 0.5 + 0.5
       const separationDistance = 2.5 * (1 - convergenceStrength)
 
-      // Restored separation calculation
+      // Separation calculation
       const separationAngle = (index / 12) * Math.PI * 2
       const separationX = Math.cos(separationAngle) * separationDistance
       const separationY = Math.sin(separationAngle) * separationDistance
 
-      // Restored circular movement
+      // Circular movement
       const angle = time * circleSpeed
       const baseXOffset = Math.sin(angle) * circleRadius
       const baseYOffset = Math.cos(angle * 0.7) * circleRadius * 0.7
       const baseZOffset = Math.sin(angle * 1.3) * circleRadius * 0.5
 
-      // Position calculation - keep blobs flowing on left side with responsive constraints
-      let leftBoundary, rightBoundary, responsiveXOffset
+      // Position calculation - keep blobs on left side with responsive constraints
+      let leftBoundary, rightBoundary, responsiveXOffset, viewportTopBoundary, viewportBottomBoundary
 
       if (viewport.width < 768) {
         // Mobile: tighter constraints
         leftBoundary = -10
         rightBoundary = -1.5
         responsiveXOffset = -0.5
+        viewportTopBoundary = 10
+        viewportBottomBoundary = -10
       } else if (viewport.width < 1024) {
         // Tablet: medium constraints
         leftBoundary = -12
         rightBoundary = -2
         responsiveXOffset = -0.2
+        viewportTopBoundary = 12
+        viewportBottomBoundary = -12
       } else {
         // Desktop: larger constraints but still left-focused
         const scale = Math.max(1.0, Math.min(1.8, viewport.width / 1200))
         leftBoundary = -15 * scale
         rightBoundary = -2 * scale
         responsiveXOffset = 0
+        viewportTopBoundary = 15 * scale
+        viewportBottomBoundary = -15 * scale
       }
 
       const calculatedX = circleCenter.x + baseXOffset + separationX + responsiveXOffset
-      groupRef.current.position.x = Math.max(leftBoundary, Math.min(calculatedX, rightBoundary)) // Constrain to left side
+      groupRef.current.position.x = Math.max(leftBoundary, Math.min(calculatedX, rightBoundary))
       groupRef.current.position.y = circleCenter.y + baseYOffset + separationY
       groupRef.current.position.z = circleCenter.z + baseZOffset
 
@@ -439,12 +443,19 @@ function RefinedBlob({
 
       groupRef.current.position.y += verticalMovement + scrollInfluence
 
-      // Restored rotation
+      // Viewport boundary culling - check if blob is within visible bounds
+      const blobY = groupRef.current.position.y
+      const blobX = groupRef.current.position.x
+      const isInViewportX = blobX >= leftBoundary - 2 && blobX <= rightBoundary + 2
+      const isInViewportY = blobY >= viewportBottomBoundary - 2 && blobY <= viewportTopBoundary + 2
+      const isInViewport = isInViewportX && isInViewportY
+
+      // Rotation
       mesh.current.rotation.x = time * 0.15 * rotationFactor
       mesh.current.rotation.y = time * 0.1 * rotationFactor
       mesh.current.rotation.z = time * 0.05 * rotationFactor
 
-      // Restored scale calculation
+      // Scale calculation
       const scalePulse = 1 + Math.sin(time * 0.4) * 0.05
       const convergenceScale = 0.8 + convergenceStrength * 0.4
       const scrollZoom = 1 + normalizedScrollFactor * 1.0
@@ -452,7 +463,7 @@ function RefinedBlob({
 
       mesh.current.scale.set(combinedScale, combinedScale, combinedScale)
 
-      // Restored scroll-reactive scale
+      // Scroll-reactive scale
       const scrollScale = 1 + Math.sin(scrollFactor * 1.2) * 0.03
       groupRef.current.scale.set(scrollScale, scrollScale, scrollScale)
 
@@ -465,7 +476,8 @@ function RefinedBlob({
           ? 0
           : 1 - ((scrollY - globeVisibilityThreshold) / (globeFullyVisibleAt - globeVisibilityThreshold))
 
-      groupRef.current.visible = blobOpacity > 0.01
+      // Only render if in viewport and opacity > 0
+      groupRef.current.visible = isInViewport && blobOpacity > 0.01
 
       // Restored particle system update
       if (particlesRef.current) {
@@ -485,17 +497,18 @@ function RefinedBlob({
 
   return (
     <group ref={groupRef} position={position}>
-      <Sphere ref={mesh} args={[1, 32, 32]} scale={size}>
+      {/* Hide sphere - keep only particle effects */}
+      <Sphere ref={mesh} args={[1, 32, 32]} scale={size} visible={false}>
         <RefinedBlobMaterial scrollY={scrollY} />
       </Sphere>
-      <points ref={particlesRef} scale={size * 1.2}>
+      <points ref={particlesRef} scale={size * 0.8}>
         <bufferGeometry>
-          <bufferAttribute 
-            attach="attributes-position" 
-            count={particleCount} 
-            array={particlePositions} 
+          <bufferAttribute
+            attach="attributes-position"
+            count={particleCount}
+            array={particlePositions}
             itemSize={3}
-            args={[particlePositions, 3]} 
+            args={[particlePositions, 3]}
           />
           <bufferAttribute
             attach="attributes-opacity"
@@ -513,14 +526,14 @@ function RefinedBlob({
             attribute float opacity;
             varying float vOpacity;
             uniform float uTime;
-            
+
             void main() {
               vOpacity = opacity;
               vec3 pos = position;
               pos.x += sin(uTime * 0.12 + position.z * 1.2) * 0.03;
               pos.y += cos(uTime * 0.09 + position.x * 1.2) * 0.03;
               pos.z += sin(uTime * 0.07 + position.y * 1.2) * 0.03;
-              
+
               vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
               gl_PointSize = 1.5 * (300.0 / -mvPosition.z);
               gl_Position = projectionMatrix * mvPosition;
@@ -529,17 +542,17 @@ function RefinedBlob({
           fragmentShader={`
             varying float vOpacity;
             uniform float uTime;
-            
+
             void main() {
               float distanceFromCenter = length(gl_PointCoord - vec2(0.5));
               float strength = 1.0 - smoothstep(0.0, 0.5, distanceFromCenter);
-              
+
               vec3 color = mix(
                 vec3(0.6, 0.8, 0.7),
                 mix(vec3(0.6, 0.4, 0.8), vec3(0.8, 0.4, 0.6), sin(uTime * 0.03) * 0.5 + 0.5),
                 distanceFromCenter
               );
-              
+
               gl_FragColor = vec4(color, vOpacity * strength * 0.8);
             }
           `}
@@ -548,7 +561,7 @@ function RefinedBlob({
           }}
         />
       </points>
-      <Sparkles count={10} scale={size * 1.0} size={4} speed={0.15} opacity={0.08} color="#4cd787" />
+      <Sparkles count={10} scale={size * 0.7} size={4} speed={0.15} opacity={0.08} color="#4cd787" />
     </group>
   )
 }
