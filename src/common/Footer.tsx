@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Github, Instagram, Linkedin, Youtube } from 'lucide-react'
 import Threads from '@animations/Threads'
 import FooterContactForm from '@/components/FooterContactForm'
@@ -53,6 +53,8 @@ export default function Footer() {
                   alt="DevX Logo"
                   width={180}
                   height={48}
+                  quality={85}
+                  sizes="(max-width: 640px) 140px, 180px"
                   className="h-8 w-auto"
                 />
               </Link>

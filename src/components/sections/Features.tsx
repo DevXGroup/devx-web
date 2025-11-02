@@ -1,13 +1,15 @@
 'use client'
 
 import { motion, useReducedMotion, useInView } from 'framer-motion'
-import { useRef, useEffect, useState, useMemo, useCallback } from 'react'
+import { useRef, useEffect, useState, useMemo } from 'react'
+import type { LucideIcon } from 'lucide-react'
 import { Rocket, User, Layers, Search, Flag, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import RotatingText from '@animations/RotatingText'
 import InfinityLogo from '@3d/InfinityLogo'
 import GridAnimation from '@animations/GridAnimation'
 import { containerVariants as globalContainerVariants } from '@/lib/animations'
+import { usePerformanceOptimizedAnimation } from '@/hooks/use-performance-optimized-animation'
 
 const subheaders = [
   'AI-Powered Solutions',
@@ -26,11 +28,6 @@ const subheaders = [
 // Use global animation variants for consistency
 const containerVariants = globalContainerVariants
 
-const fadeIn = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 0.5 } },
-}
-
 function StepAnimation({
   step,
   text,
@@ -40,20 +37,20 @@ function StepAnimation({
   text: string
   isActive: boolean
 }) {
-  const shouldReduceMotion = useReducedMotion()
-
   const stepCircleVariants = {
     active: {
-      backgroundColor: 'rgba(99, 102, 241, 1)',
-      color: '#ffffff',
-      scale: 1.1,
-      boxShadow: '0 0 20px rgba(99, 102, 241, 0.5)',
+      backgroundColor: '#ccff00',
+      color: '#0f172a',
+      scale: 1.05,
+      borderColor: '#d8ff4d',
+      boxShadow: '0 0 18px rgba(204, 255, 0, 0.45)',
     },
     inactive: {
-      backgroundColor: 'rgb(51 65 85)',
-      color: 'rgb(203 213 225)',
+      backgroundColor: 'rgba(30, 41, 59, 0.85)', // slate-800/85
+      color: 'rgba(203, 213, 225, 0.9)', // slate-200
       scale: 1,
-      boxShadow: '0 0 0 rgba(99, 102, 241, 0)',
+      borderColor: 'rgba(148, 163, 184, 0.65)',
+      boxShadow: '0 0 0 rgba(0, 0, 0, 0)',
     },
   }
 
@@ -64,29 +61,23 @@ function StepAnimation({
     },
     inactive: {
       fontWeight: 400,
-      color: 'rgb(156 163 175)',
+      color: 'rgb(203 213 225)', // slate-200
     },
   }
 
   return (
     <motion.div key={`step-${step}`} className={`flex flex-col items-center space-y-4`}>
-      {/* Step Circle - Enhanced hover effects with bright borders */}
       <motion.div
-        className={`w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-lg md:text-xl font-bold font-['IBM_Plex_Mono'] cursor-pointer group relative border-2 border-slate-600`}
+        className="w-16 h-16 rounded-full flex items-center justify-center text-lg font-bold font-['IBM_Plex_Mono'] relative border-4"
         variants={stepCircleVariants}
         animate={isActive ? 'active' : 'inactive'}
         transition={{ duration: 0.4 }}
-        whileHover={
-          shouldReduceMotion ? {} : { scale: 1.15, boxShadow: '0 8px 32px rgba(99, 102, 241, 0.3)' }
-        }
-        whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
       >
         {step}
       </motion.div>
 
-      {/* Step Text */}
       <motion.p
-        className={`text-sm md:text-base font-['IBM_Plex_Mono'] text-center`}
+        className="text-sm md:text-base font-['IBM_Plex_Mono'] text-center"
         variants={stepTextVariants}
         animate={isActive ? 'active' : 'inactive'}
         transition={{ duration: 0.4 }}
@@ -97,77 +88,74 @@ function StepAnimation({
   )
 }
 
+type HireDevelopersCardProps = {
+  icon: LucideIcon
+  title: string
+  description: string
+  index: number
+}
+
+function HireDevelopersCard({ icon: Icon, title, description, index }: HireDevelopersCardProps) {
+  const prefersReducedMotion = useReducedMotion()
+
+  return (
+    <motion.div
+      data-card-index={index}
+      className="relative bg-slate-800/90 border border-slate-600/50 p-6 sm:p-8 md:p-10 rounded-2xl shadow-xl shadow-black/40 backdrop-blur-sm"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: false, amount: 0.1 }}
+      transition={{ duration: 0.6, ease: "easeOut", delay: index * 0.15 }}
+    >
+      <div className="relative flex flex-col gap-5">
+        <div className="flex-shrink-0 w-12 h-12 sm:w-13 sm:h-13 md:w-14 md:h-14 rounded-full bg-[#ccff00] flex items-center justify-center shadow-[0_0_18px_rgba(204,255,0,0.25)]">
+          <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-black" />
+        </div>
+        <div className="flex-1 space-y-3">
+          <h3 className="text-xl md:text-2xl font-bold text-white font-['IBM_Plex_Sans'] leading-tight">
+            {title}
+          </h3>
+          <p className="text-slate-100 font-['IBM_Plex_Sans'] text-base sm:text-lg leading-relaxed">
+            {description}
+          </p>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
 function WhyUsCard({
   icon: Icon,
   title,
   description,
+  index,
 }: {
-  icon: any
+  icon: LucideIcon
   title: string
   description: string
+  index: number
 }) {
-  const shouldReduceMotion = useReducedMotion()
+  const prefersReducedMotion = useReducedMotion()
 
   return (
     <motion.div
-      variants={fadeIn}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true }}
-      whileHover={
-        shouldReduceMotion
-          ? {}
-          : {
-              y: -5,
-            }
-      }
-      whileTap={{ scale: 0.98 }}
-      className="group relative bg-gradient-to-br from-slate-800 to-slate-900 backdrop-blur-sm p-6 sm:p-7 md:p-8 rounded-2xl border border-indigo-500/20 flex flex-col items-center text-center overflow-hidden cursor-pointer transition-all duration-300 min-h-[260px] sm:min-h-[280px] md:min-h-[300px] w-full max-w-full shadow-xl group-hover:shadow-[0_0_20px_rgba(99,102,241,0.5)] before:absolute before:inset-0 before:border before:border-transparent before:rounded-2xl before:transition-all before:duration-300 group-hover:before:border-indigo-400/40"
+      data-card-index={index}
+      className="relative bg-slate-800/90 border border-slate-600/50 p-6 sm:p-7 md:p-8 rounded-2xl shadow-xl shadow-black/40 backdrop-blur-sm flex flex-col items-center text-center overflow-hidden min-h-[260px] sm:min-h-[280px] md:min-h-[300px] w-full"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: false, amount: 0.1 }}
+      transition={{ duration: 0.6, ease: "easeOut", delay: index * 0.15 }}
     >
-      {/* Content */}
-      <div className="relative z-10 flex flex-col items-center h-full">
-        {/* Icon */}
-        <motion.div
-          className="w-14 h-14 sm:w-15 sm:h-15 md:w-16 md:h-16 rounded-full flex items-center justify-center mb-4 sm:mb-5 md:mb-6 relative overflow-hidden aspect-square shrink-0 bg-gradient-to-br from-indigo-500 to-purple-600"
-          whileHover={{
-            boxShadow: `0 0 25px rgba(99, 102, 241, 0.6)`,
-          }}
-          transition={{ duration: 0.4 }}
-          style={{
-            border: `2px solid rgb(99, 102, 241)`,
-          }}
-        >
-          <motion.div
-            whileHover={{
-              scale: 1.2,
-              rotateY: 180,
-            }}
-            transition={{ duration: 0.6, ease: 'backOut' }}
-            className="pointer-events-none"
-          >
-            <Icon className="w-7 h-7 sm:w-7.5 sm:h-7.5 md:w-8 md:h-8 transition-all duration-300 relative z-10 text-white pointer-events-none" />
-          </motion.div>
-        </motion.div>
-
-        {/* Title */}
-        <motion.h3
-          className="text-base sm:text-lg md:text-xl font-bold font-['IBM_Plex_Mono'] text-indigo-400 group-hover:text-indigo-300 transition-colors duration-300 mb-3 sm:mb-4 break-words text-center px-2"
-          whileHover={{
-            scale: 1.05,
-            textShadow: `0 0 15px rgba(99, 102, 241, 0.8)`,
-          }}
-          transition={{ duration: 0.3 }}
-        >
+      <div className="relative z-10 flex flex-col items-center h-full space-y-5">
+        <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center bg-gradient-to-br from-[#ccff00] to-yellow-300 border border-[#ccff00]/70 shadow-[0_0_18px_rgba(204,255,0,0.25)]">
+          <Icon className="w-7 h-7 sm:w-8 sm:h-8 text-black" />
+        </div>
+        <h3 className="text-base sm:text-lg md:text-xl font-bold font-['IBM_Plex_Mono'] text-white tracking-tight">
           {title}
-        </motion.h3>
-
-        {/* Description */}
-        <motion.p
-          className="text-slate-300 font-['IBM_Plex_Sans'] text-base sm:text-lg md:text-lg leading-relaxed group-hover:text-white transition-colors duration-500 text-center max-w-full break-words px-2"
-          style={{ lineHeight: '1.6' }}
-        >
+        </h3>
+        <p className="text-slate-100 font-['IBM_Plex_Sans'] text-base sm:text-lg leading-relaxed max-w-[22rem]">
           {description}
-        </motion.p>
+        </p>
       </div>
     </motion.div>
   )
@@ -182,23 +170,40 @@ export default function Features() {
 
   const [isMounted, setIsMounted] = useState(false)
   const [isStepAnimationActive, setIsStepAnimationActive] = useState(false)
+  const [viewportWidth, setViewportWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200)
   const shouldReduceMotion = useReducedMotion()
-  const isInView = useInView(containerRef, { once: true, margin: '-100px' })
-
-  // Memoize animation timing based on reduced motion preference
-  const animationTiming = useMemo(
-    () => ({
-      stepInterval: shouldReduceMotion ? 5000 : 3500, // Longer intervals for better UX
-      cardDelay: shouldReduceMotion ? 0 : 0.1,
-    }),
-    [shouldReduceMotion]
-  )
+  const isInView = useInView(containerRef, { once: true, margin: '-150px' })
+  const { isMobile, shouldOptimizeAnimations } = usePerformanceOptimizedAnimation()
 
   useEffect(() => {
     setIsMounted(true)
+    if (typeof window !== 'undefined') {
+      setViewportWidth(window.innerWidth);
+    }
   }, [])
 
-  // IntersectionObserver for step animation
+  // Memoize animation timing based on reduced motion preference and screen size
+  const stepInterval = useMemo(() => {
+    const baseInterval = isMobile ? 4000 : 5000; // Slower intervals on mobile for performance
+    return shouldOptimizeAnimations ? 6000 : baseInterval; // Even slower if animations should be optimized
+  }, [shouldOptimizeAnimations, isMobile])
+
+  useEffect(() => {
+    const handleResize = () => {
+      setViewportWidth(window.innerWidth);
+      // Update isMobile if needed
+    };
+    
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    }
+    
+    // Return undefined when window is not available
+    return undefined;
+  }, []);
+
+  // IntersectionObserver for step animation - with mobile-friendly settings
   useEffect(() => {
     if (!containerRef.current) return
 
@@ -209,29 +214,36 @@ export default function Features() {
         })
       },
       {
-        threshold: 0.3,
-        rootMargin: '100px 0px 100px 0px',
+        threshold: 0.1,  // Trigger earlier
+        rootMargin: isMobile ? '100px 0px 100px 0px' : '50px 0px 50px 0px',  // Larger margin for mobile for better UX
       }
     )
 
     observer.observe(containerRef.current)
     return () => observer.disconnect()
-  }, [isMounted])
+  }, [isMounted, isMobile])
 
   useEffect(() => {
-    if (!isStepAnimationActive) return
+    if (!isStepAnimationActive || shouldOptimizeAnimations) return // Skip animation if optimization is needed
 
     const timer = setInterval(() => {
       setCurrentStep((prevStep) => (prevStep + 1) % steps.length)
-    }, animationTiming.stepInterval)
+    }, stepInterval)
 
     return () => clearInterval(timer)
-  }, [animationTiming.stepInterval, steps.length, isStepAnimationActive])
+  }, [stepInterval, steps.length, isStepAnimationActive, shouldOptimizeAnimations])
 
   return (
-    <section
+    <motion.section
       ref={containerRef}
-      className="relative pt-24 sm:pt-32 md:pt-40 pb-12 sm:pb-16 md:pb-20 overflow-hidden bg-slate-900 w-full"
+      className="relative pt-24 sm:pt-32 md:pt-40 pb-12 sm:pb-16 md:pb-20 overflow-hidden bg-gradient-to-b from-slate-900 to-slate-950 w-full"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: false, amount: 0.1 }}
+      transition={{ 
+        duration: shouldOptimizeAnimations ? 0.4 : 0.8, 
+        ease: 'easeOut' 
+      }}
     >
       {/* Gradient transition from black to purple */}
       <div className="absolute top-0 left-0 right-0 h-2 md:h-40 bg-gradient-to-b from-black to-transparent z-[1] pointer-events-none" />
@@ -241,12 +253,10 @@ export default function Features() {
         <GridAnimation
           direction="diagonal"
           speed={0.3}
-          borderColor="rgba(168, 85, 247, 0.5)"
-          squareSize={38}
-          hoverFillColor="rgba(168, 85, 247, 0.7)"
-          randomFlicker={true}
-          flickerInterval={800}
-          maxFlickerSquares={4}
+          borderColor="rgba(204, 255, 0, 0.65)"
+          squareSize={36}
+          hoverFillColor="rgba(157, 78, 221, 0.45)"
+          randomFlicker={false}
         />
       </div>
 
@@ -255,7 +265,11 @@ export default function Features() {
         variants={containerVariants}
         initial="hidden"
         animate={isInView ? 'visible' : 'hidden'}
-        className="relative container mx-auto px-4 z-[3] max-w-6xl pointer-events-none"
+        className="relative container mx-auto px-4 z-[3] max-w-6xl select-text"
+        transition={{ 
+          duration: shouldOptimizeAnimations ? 0.3 : 0.5, 
+          ease: 'easeOut' 
+        }}
       >
         {/* Hire Developers Section */}
         <div ref={hireDevelopersRef} className="relative">
@@ -270,108 +284,45 @@ export default function Features() {
           </div>
 
           {/* Redesigned Cards Section */}
-          <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 md:gap-8 mb-12 sm:mb-16 md:mb-20 max-w-5xl mx-auto px-4 sm:px-6 relative z-[3]"
-            variants={containerVariants}
-          >
-            <motion.div
-              variants={fadeIn}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              className="group relative bg-[#0C1A1D] p-6 sm:p-8 md:p-10 rounded-2xl border border-transparent transition-all duration-500 overflow-hidden shadow-xl group-hover:shadow-[0_0_20px_rgba(204,255,0,0.5)] before:absolute before:inset-0 before:border before:border-transparent before:rounded-2xl before:transition-all before:duration-300 group-hover:before:border-[#ccff00]/50 pointer-events-auto"
-              whileHover={
-                shouldReduceMotion
-                  ? {}
-                  : {
-                      y: -4,
-                      boxShadow: '0 24px 48px rgba(0, 0, 0, 0.4)',
-                    }
-              }
-            >
-              {/* Subtle gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[#ccff00]/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-              <div className="relative flex flex-col gap-4 sm:gap-6">
-                <motion.div
-                  className="flex-shrink-0 w-12 h-12 sm:w-13 sm:h-13 md:w-14 md:h-14 rounded-full bg-[#ccff00] flex items-center justify-center"
-                  whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <Rocket className="w-6 h-6 sm:w-6.5 sm:h-6.5 md:w-7 md:h-7 text-black" />
-                </motion.div>
-
-                <div className="flex-1">
-                  <h3 className="text-xl md:text-2xl font-bold text-white font-['IBM_Plex_Sans'] mb-2 sm:mb-3 leading-tight">
-                    Are you launching a startup or new product?
-                  </h3>
-                  <p className="text-slate-400 font-['IBM_Plex_Sans'] text-base sm:text-lg md:text-lg leading-relaxed">
-                    Our expert team launches your product fast with reliability and scale built in
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              variants={fadeIn}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              className="group relative bg-[#0C1A1D] p-6 sm:p-8 md:p-10 rounded-2xl border border-transparent transition-all duration-500 overflow-hidden shadow-xl group-hover:shadow-[0_0_20px_rgba(204,255,0,0.5)] before:absolute before:inset-0 before:border before:border-transparent before:rounded-2xl before:transition-all before:duration-300 group-hover:before:border-[#ccff00]/50 pointer-events-auto"
-              whileHover={
-                shouldReduceMotion
-                  ? {}
-                  : {
-                      y: -4,
-                      boxShadow: '0 24px 48px rgba(0, 0, 0, 0.4)',
-                    }
-              }
-            >
-              {/* Subtle gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[#ccff00]/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-              <div className="relative flex flex-col gap-4 sm:gap-6">
-                <motion.div
-                  className="flex-shrink-0 w-12 h-12 sm:w-13 sm:h-13 md:w-14 md:h-14 rounded-full bg-[#ccff00] flex items-center justify-center"
-                  whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <User className="w-6 h-6 sm:w-6.5 sm:h-6.5 md:w-7 md:h-7 text-black" />
-                </motion.div>
-
-                <div className="flex-1">
-                  <h3 className="text-xl md:text-2xl font-bold text-white font-['IBM_Plex_Sans'] mb-2 sm:mb-3 leading-tight">
-                    Need a top-tier dev team you can count on?
-                  </h3>
-                  <p className="text-slate-400 font-['IBM_Plex_Sans'] text-base sm:text-lg md:text-lg leading-relaxed">
-                    Partner with a proven team that plugs in instantly with zero onboarding hassle
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 md:gap-8 mb-12 sm:mb-16 md:mb-20 max-w-5xl mx-auto px-4 sm:px-6 relative z-[3]">
+            <HireDevelopersCard
+              icon={Rocket}
+              title="Are you launching a startup or new product?"
+              description="Our expert team launches your product fast with reliability and scale built in."
+              index={0}
+            />
+            <HireDevelopersCard
+              icon={User}
+              title="Need a top-tier dev team you can count on?"
+              description="Partner with a proven team that plugs in instantly with zero onboarding hassle."
+              index={1}
+            />
+          </div>
         </div>
         {/* End of Hire Developers Section with Grid */}
 
-        {/* Creative Rotating Text Section - Gray/Blue Background */}
-        <div className="relative -mx-4 px-4 py-10 sm:py-12 md:py-16 my-10 sm:my-12 md:my-16 bg-transparent">
+        {/* Creative Rotating Text Section - Enhanced Size & Visibility */}
+        <div className="relative -mx-4 px-4 py-14 sm:py-16 md:py-20 my-12 sm:my-16 md:my-20 bg-transparent">
           <div className="relative z-10 text-center">
-            <div className="flex flex-col sm:flex-row items-center sm:items-baseline justify-center gap-2 sm:gap-3 px-4">
-              <span className="text-2xl sm:text-4xl md:text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-500">
+            <div className="flex flex-col sm:flex-row items-center sm:items-baseline justify-center gap-3 sm:gap-4 md:gap-5 px-4">
+              <span className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-indigo-500 drop-shadow-[0_0_25px_rgba(99,102,241,0.6)]">
                 Creative
               </span>
-              <div className="relative inline-block bg-gradient-to-br from-gray-900 to-black backdrop-blur-md py-4 sm:py-5 md:py-6 px-3 sm:px-4 md:px-5 rounded-xl border border-slate-600/50 shadow-lg">
+              <div className="relative inline-block">
                 <RotatingText
                   texts={subheaders}
-                  rotationInterval={shouldReduceMotion ? 2500 : 3000}
-                  transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+                  rotationInterval={shouldOptimizeAnimations ? 4000 : (shouldReduceMotion ? 2500 : 3000)} // Slower on low performance
+                  transition={{ 
+                    type: shouldOptimizeAnimations ? 'tween' : 'spring', // Simpler transition on low performance
+                    ...(shouldOptimizeAnimations ? {} : { stiffness: 200, damping: 20 })
+                  }}
                   initial={{ y: 30, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   exit={{ y: -30, opacity: 0 }}
                   splitBy="characters"
-                  staggerDuration={0.03}
-                  staggerFrom="center"
-                  mainClassName="relative font-bold text-lg sm:text-2xl md:text-3xl font-mono text-center text-white"
+                  staggerDuration={shouldOptimizeAnimations ? 0.05 : 0.03} // Slower stagger on low performance
+                  staggerFrom="first"
+                  mainClassName="relative font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-mono text-center text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]"
                   splitLevelClassName="overflow-visible"
                   elementLevelClassName="inline-block drop-shadow-lg"
                   loop={true}
@@ -382,76 +333,63 @@ export default function Features() {
           </div>
         </div>
 
-        {/* Clean Step Animation - Grainy Gray Background */}
-        <div className="relative -mx-4 px-4 py-4 md:py-4 mt-12 sm:mt-16 md:mt-20 mb-16 sm:mb-20 md:mb-24 bg-transparent">
-          {/* Steps Container */}
-          <div className="relative bg-gradient-to-br from-gray-900 to-black backdrop-blur-md py-10 sm:py-12 px-5 sm:px-6 md:px-12 rounded-2xl border border-slate-600/50 shadow-lg max-w-4xl mx-auto">
-            {/* Steps Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10 md:gap-12">
-              {steps.map((step, index) => (
-                <div key={index} className="flex justify-center">
-                  <StepAnimation step={index + 1} text={step} isActive={currentStep === index} />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
         {/* Why Us Section */}
         <div id="why-devx-section" className="text-center mb-12 sm:mb-16 md:mb-20">
           {/* Fixed title visibility with inline styles */}
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 font-['IBM_Plex_Mono'] text-white pb-2 sm:pb-3 px-4">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 font-['IBM_Plex_Mono'] text-white pb-2 sm:pb-3 px-4">
             Why Choose Us?
           </h2>
           <div className="max-w-3xl mx-auto mb-12 sm:mb-16 px-4">
-            <p className="text-slate-300 text-base sm:text-lg md:text-xl mb-4 font-['IBM_Plex_Mono'] leading-relaxed">
+            <p className="text-slate-100 text-base sm:text-lg md:text-xl mb-4 font-['IBM_Plex_Mono'] leading-relaxed">
               Trusted U.S. company with worldwide senior developers, proven track record, and
               full-stack expertise across industries.
             </p>
           </div>
 
-          <motion.div
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-8 lg:gap-10 max-w-6xl mx-auto px-4 sm:px-6"
-            variants={containerVariants}
-          >
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-8 lg:gap-10 max-w-6xl mx-auto px-4 sm:px-6">
             <WhyUsCard
               icon={Flag}
               title="Global Excellence"
               description="Headquarters in the U.S. with senior developers worldwide, ensuring accountability with round-the-clock progress."
+              index={0}
             />
             <WhyUsCard
               icon={Search}
               title="Proven Success"
               description="Hundreds of projects delivered across fintech, healthcare, retail, and SaaS — experience that reduces risk."
+              index={1}
             />
             <WhyUsCard
               icon={Layers}
               title="Full-Stack Expertise"
               description="From UI/UX design to cloud deployment, our senior engineers cover the full stack with efficiency and precision."
+              index={2}
             />
-          </motion.div>
+          </div>
 
           {/* Added link to About page */}
-          <div className="mt-12 sm:mt-16 text-center px-4 pointer-events-auto">
+          <div className="mt-12 sm:mt-16 mb-20 sm:mb-24 md:mb-28 text-center px-4 pointer-events-auto">
             <motion.div
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              transition={{ duration: 0.2 }}
+              whileHover={!shouldOptimizeAnimations ? { scale: 1.02 } : {}} // Skip animation if optimization is needed
+              whileTap={!shouldOptimizeAnimations ? { scale: 0.98 } : {}} // Skip animation if optimization is needed
+              transition={{ duration: shouldOptimizeAnimations ? 0.1 : 0.2 }} // Faster transition on low performance
               className="relative inline-block pointer-events-auto"
             >
-              {/* Animated star border effect */}
-              <div className="absolute inset-0 rounded-xl overflow-hidden">
-                <div
-                  className="absolute w-[200%] h-[200%] -top-[50%] -left-[50%] animate-spin opacity-60"
-                  style={{
-                    background: `conic-gradient(from 0deg, transparent, #ccff00, transparent, #ccff00, transparent)`,
-                    animationDuration: '3s',
-                  }}
-                />
-              </div>
+              {/* Animated glow border effect - skip if optimizing */}
+              {!shouldOptimizeAnimations && (
+                <div className="absolute inset-0 rounded-xl overflow-hidden">
+                  <div
+                    className="absolute w-[200%] h-[200%] -top-[50%] -left-[50%] animate-spin opacity-70"
+                    style={{
+                      background: `conic-gradient(from 0deg, transparent, #4CD787, transparent, #9d4edd, transparent)`,
+                      animationDuration: '3s',
+                    }}
+                  />
+                </div>
+              )}
               <Link
                 href="/about#our-values"
-                className="group relative inline-flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl text-sm sm:text-base font-semibold font-['IBM_Plex_Mono'] transition-all duration-300 backdrop-blur-sm border border-white/20 hover:border-white/40 hover:shadow-lg hover:shadow-indigo-500/30 z-10"
+                className="group relative inline-flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-[#4CD787] via-[#9d4edd] to-[#4CD787] bg-[length:200%_100%] hover:bg-[position:100%_0] text-black px-6 sm:px-8 py-3 sm:py-4 rounded-xl text-sm sm:text-base font-bold font-['IBM_Plex_Mono'] transition-all duration-500 backdrop-blur-sm border-2 border-[#4CD787]/40 hover:border-[#9d4edd]/60 hover:shadow-2xl hover:shadow-[#4CD787]/50 z-10"
               >
                 Explore more reasons to choose us
                 <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform duration-300" />
@@ -460,12 +398,29 @@ export default function Features() {
           </div>
         </div>
 
+        {/* Clean Step Animation - Enhanced Contrast - skip if optimizing */}
+        {!shouldOptimizeAnimations && (
+          <div className="relative -mx-4 px-4 py-8 sm:py-12 md:py-16 mt-8 sm:mt-12 md:mt-16 mb-16 sm:mb-20 md:mb-24 bg-transparent">
+            {/* Steps Container */}
+            <div className="relative py-10 sm:py-12 px-5 sm:px-6 md:px-12 max-w-4xl mx-auto">
+              {/* Steps Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 md:gap-12">
+                {steps.map((step, index) => (
+                  <div key={index} className="flex justify-center">
+                    <StepAnimation step={index + 1} text={step} isActive={currentStep === index} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Final CTA */}
         <div className="text-center mb-12 sm:mb-16 px-4">
           <p className="text-[#ccff00] text-xl sm:text-2xl md:text-3xl font-bold mb-3 sm:mb-4 font-['IBM_Plex_Mono']">
             We&apos;re ready to transform your vision into reality.
           </p>
-          <p className="text-slate-300 text-lg sm:text-xl md:text-2xl font-['IBM_Plex_Mono']">
+          <p className="text-slate-100 text-lg sm:text-xl md:text-2xl font-['IBM_Plex_Mono']">
             Let&apos;s embark on this journey together!
           </p>
         </div>
@@ -473,6 +428,9 @@ export default function Features() {
       <div className="mt-20">
         <InfinityLogo />
       </div>
-    </section>
+
+      {/* Smooth fade transition to next section */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 md:h-48 bg-gradient-to-b from-transparent to-black z-[1] pointer-events-none" />
+    </motion.section>
   )
 }

@@ -17,7 +17,7 @@ export default function Error({
   }, [error])
 
   return (
-    <div className="min-h-screen bg-black flex flex-col items-center justify-center relative overflow-hidden">
+    <div className="min-h-screen bg-black flex flex-col items-center justify-center relative overflow-x-hidden overflow-y-auto">
       {/* Background particles */}
       <div className="absolute inset-0">
         {[...Array(40)].map((_, i) => (
@@ -44,17 +44,19 @@ export default function Error({
 
       <div className="text-center space-y-8 relative z-10 max-w-4xl mx-auto px-4">
         {/* Fuzzy Error Code */}
-        <div className="flex justify-center">
-          <FuzzyText
-            fontSize="clamp(3rem, 10vw, 10rem)"
-            fontWeight={900}
-            fontFamily="'IBM Plex Mono', monospace"
-            color="#ef4444"
-            baseIntensity={0.4}
-            hoverIntensity={0.9}
-          >
-            ERROR
-          </FuzzyText>
+        <div className="w-full flex justify-center px-4 sm:px-8 md:px-12 overflow-visible">
+          <div className="w-full max-w-full flex justify-center overflow-visible">
+            <FuzzyText
+              fontSize="clamp(3rem, 10vw, 10rem)"
+              fontWeight={900}
+              fontFamily="'IBM Plex Mono', monospace"
+              color="#ef4444"
+              baseIntensity={0.4}
+              hoverIntensity={0.9}
+            >
+              ERROR
+            </FuzzyText>
+          </div>
         </div>
 
         {/* Fuzzy Error Message */}

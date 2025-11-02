@@ -320,11 +320,11 @@ function ServiceIcon({
         onClick(service, e)
       }}
       className="relative group service-icon-container cursor-pointer"
-      initial={{ opacity: 0, scale: 0 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: index * 0.1, type: 'spring', damping: 20 }}
-      whileHover={shouldReduceMotion ? {} : { scale: 1.15, y: -8 }}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.6, delay: index * 0.08, ease: 'easeOut' }}
+      whileHover={shouldReduceMotion ? {} : { scale: 1.08 }}
       whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
     >
       <motion.div
@@ -497,19 +497,19 @@ export default function PortfolioPage() {
                     className="rounded-xl"
                     color="#9d4edd"
                     charSize={6}
-                    opacity={0.5}
+                    opacity={0.75}
                     showBase={false}
                     sphereRadius={240}
                     lighting="bottomLeft"
-                    lightScale={1}
-                    ambient={0.04}
+                    lightScale={1.3}
+                    ambient={0.08}
                     charSet={' ..*%$#@a,-/| '}
                   />
                 </div>
 
-                {/* Left Outer Square - LetterGlitch (110x110px) - Large screens only */}
+                {/* Left Outer Square - LetterGlitch (110x110px) - Tablet and up */}
                 <motion.div
-                  className="hidden lg:block absolute 
+                  className="hidden md:block absolute
                     top-1/2 -translate-y-1/2 left-[8%]
                     backdrop-blur-md overflow-hidden
                     w-[110px] h-[110px] cursor-default"
@@ -520,9 +520,9 @@ export default function PortfolioPage() {
                     backgroundColor: 'rgba(0, 0, 0, 0.5)',
                     zIndex: 11,
                   }}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.3, duration: 0.4, ease: 'easeOut' }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3, duration: 0.6, ease: 'easeOut' }}
                 >
                   <div className="w-full h-full">
                     <LetterGlitch
@@ -535,9 +535,9 @@ export default function PortfolioPage() {
                   </div>
                 </motion.div>
 
-                {/* Left Middle Square - DotGrid (132x132px) - Large screens only */}
+                {/* Left Middle Square - DotGrid (132x132px) - Tablet and up */}
                 <motion.div
-                  className="hidden lg:block absolute 
+                  className="hidden md:block absolute
                     top-1/2 -translate-y-1/2 left-[25%]
                     backdrop-blur-md overflow-hidden
                     w-[132px] h-[132px] cursor-pointer"
@@ -547,9 +547,9 @@ export default function PortfolioPage() {
                     backgroundColor: 'transparent',
                     zIndex: 10,
                   }}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.4, duration: 0.4, ease: 'easeOut' }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.4, duration: 0.6, ease: 'easeOut' }}
                 >
                   <div className="w-full h-full">
                     <DotGrid
@@ -566,12 +566,12 @@ export default function PortfolioPage() {
                   </div>
                 </motion.div>
 
-                {/* Right Middle Square - GridAnimation (130x130px) - Large screens only */}
+                {/* Right Middle Square - GridAnimation (130x130px) - Tablet and up */}
                 <motion.div
-                  className="hidden lg:block absolute 
+                  className="hidden md:block absolute
                     top-1/2 -translate-y-1/2 right-[25%]
                     backdrop-blur-md overflow-hidden
-                    w-[130px] h-[130px]"
+                    w-[130px] h-[130px] cursor-pointer"
                   style={{
                     transform: 'rotate(-15deg)',
                     border: '2px solid rgba(255, 215, 0, 0.5)',
@@ -579,9 +579,9 @@ export default function PortfolioPage() {
                     backgroundColor: 'rgba(0, 0, 0, 0.2)',
                     zIndex: 5,
                   }}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.5, duration: 0.4, ease: 'easeOut' }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.5, duration: 0.6, ease: 'easeOut' }}
                 >
                   <div className="w-full h-full">
                     <GridAnimation
@@ -590,26 +590,27 @@ export default function PortfolioPage() {
                       borderColor="rgba(255, 215, 0, 0.5)"
                       squareSize={20}
                       hoverFillColor="rgba(255, 215, 0, 0.2)"
+                      showRadialGradient={false}
                     />
                   </div>
                 </motion.div>
 
-                {/* Right Outer Square - Waves (110x110px) - Large screens only */}
+                {/* Right Outer Square - Waves (140x140px) - Tablet and up */}
                 <motion.div
-                  className="hidden lg:block absolute 
+                  className="hidden md:block absolute
                     top-1/2 -translate-y-1/2 right-[8%]
                     backdrop-blur-md overflow-hidden
-                    w-[110px] h-[110px]"
+                    w-[140px] h-[140px] cursor-pointer"
                   style={{
-                    transform: 'rotate(-30deg)',
+                    transform: 'rotate(30deg)',
                     border: '2px solid rgba(76, 215, 135, 0.6)',
                     borderRadius: '12px',
                     backgroundColor: 'rgba(0, 0, 0, 0.5)',
                     zIndex: 3,
                   }}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.6, duration: 0.4, ease: 'easeOut' }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.6, duration: 0.6, ease: 'easeOut' }}
                 >
                   <div className="w-full h-full">
                     <Waves

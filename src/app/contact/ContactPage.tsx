@@ -897,6 +897,7 @@ export default function ContactPage() {
                           name="name"
                           value={formState.name}
                           onChange={handleChange}
+                          autoComplete="name"
                           className={`w-full px-4 py-3 bg-white/5 border ${
                             (formErrors as any).name ? 'border-red-500' : 'border-white/10'
                           } rounded-lg focus:outline-none focus:border-[#4CD787] text-foreground shadow-inner transition-colors duration-300`}
@@ -927,6 +928,7 @@ export default function ContactPage() {
                           name="email"
                           value={formState.email}
                           onChange={handleChange}
+                          autoComplete="email"
                           className={`w-full px-4 py-3 bg-white/5 border ${
                             (formErrors as any).email ? 'border-red-500' : 'border-white/10'
                           } rounded-lg focus:outline-none focus:border-[#4CD787] text-foreground shadow-inner transition-colors duration-300`}
@@ -1043,8 +1045,9 @@ export default function ContactPage() {
                       <div className="flex-1 mr-4">
                         {isSubmitted && (
                           <motion.div
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.5, ease: 'easeOut' }}
                             className="flex items-center gap-2 text-[#4CD787]"
                           >
                             <CheckCircle className="w-5 h-5" />

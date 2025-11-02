@@ -68,28 +68,32 @@ const aiTools: AITool[] = [
     name: 'OpenAI',
     description: "Integrate powerful AI models with OpenAI's cutting-edge APIs",
     icon: buildIconPath('openai.svg'),
-    wrapperClassName: 'p-2 bg-[#071b16] border border-[#10A37F]/60 shadow-[0_0_12px_rgba(16,163,127,0.25)]',
+    wrapperClassName:
+      'p-2 bg-[#071b16] border border-[#10A37F]/60 shadow-[0_0_12px_rgba(16,163,127,0.25)]',
     loopWrapperClassName: 'bg-transparent rounded-none p-0',
   },
   {
     name: 'Anthropic',
     description: 'Build trustworthy AI agents with Claude and the Anthropic API',
     icon: buildIconPath('anthropic.svg'),
-    wrapperClassName: 'p-2 bg-[#2a0c05] border border-[#ff4218]/60 shadow-[0_0_12px_rgba(255,66,24,0.2)]',
+    wrapperClassName:
+      'p-2 bg-[#2a0c05] border border-[#ff4218]/60 shadow-[0_0_12px_rgba(255,66,24,0.2)]',
     loopWrapperClassName: 'bg-transparent rounded-none p-0',
   },
   {
     name: 'Hugging Face',
     description: 'Launch community and enterprise AI models through Hugging Face',
     icon: buildIconPath('huggingface.svg'),
-    wrapperClassName: 'p-2 bg-black/60 border border-[#ffb23c]/60 shadow-[0_0_12px_rgba(255,178,60,0.16)]',
+    wrapperClassName:
+      'p-2 bg-black/60 border border-[#ffb23c]/60 shadow-[0_0_12px_rgba(255,178,60,0.16)]',
     loopWrapperClassName: 'bg-transparent rounded-none p-0',
   },
   {
     name: 'Ollama',
     description: 'Run open-source LLMs locally with Ollama for rapid prototyping',
     icon: buildIconPath('ollama.svg'),
-    wrapperClassName: 'p-2 bg-[#0f1b24] border border-[#4cd787]/50 shadow-[0_0_12px_rgba(76,215,135,0.2)]',
+    wrapperClassName:
+      'p-2 bg-[#0f1b24] border border-[#4cd787]/50 shadow-[0_0_12px_rgba(76,215,135,0.2)]',
     imageClassName: 'invert brightness-[1.25] contrast-[0.9]',
     loopWrapperClassName: 'bg-transparent rounded-none p-0',
     loopImageClassName: 'invert brightness-[1.25] contrast-[0.9]',
@@ -161,15 +165,17 @@ const getInnerOrbitMetrics = (width: number): OrbitMetrics => {
 }
 
 const getOuterOrbitMetrics = (width: number, inner: OrbitMetrics): OrbitMetrics => {
-  const offsetAdjustment = -32
-  if (width < 640) return { radius: inner.radius + 70, offset: inner.offset + offsetAdjustment }
-  if (width < 768) return { radius: inner.radius + 85, offset: inner.offset + offsetAdjustment }
-  if (width < 1024) return { radius: inner.radius + 100, offset: inner.offset + offsetAdjustment }
-  return { radius: inner.radius + 120, offset: inner.offset + offsetAdjustment }
+  // Shift outer orbit up by 13px from inner orbit for better visual alignment
+  // Spacing is controlled by radius difference for consistent visual spacing
+  const offsetAdjustment = -13
+  if (width < 640) return { radius: inner.radius + 90, offset: inner.offset + offsetAdjustment }
+  if (width < 768) return { radius: inner.radius + 105, offset: inner.offset + offsetAdjustment }
+  if (width < 1024) return { radius: inner.radius + 120, offset: inner.offset + offsetAdjustment }
+  return { radius: inner.radius + 140, offset: inner.offset + offsetAdjustment }
 }
 
 // Duration each tool remains in center
-const DISPLAY_DURATION = 3500
+const DISPLAY_DURATION = 4000
 
 export default function DevelopmentTools() {
   const [activeIndex, setActiveIndex] = useState(0)
@@ -177,6 +183,7 @@ export default function DevelopmentTools() {
   const [mounted, setMounted] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
   const [transitioning, setTransitioning] = useState(false)
+  const [resumeImmediately, setResumeImmediately] = useState(false)
   const [transitionData, setTransitionData] = useState<{
     from: { x: number; y: number }
     to: { x: number; y: number }
@@ -185,41 +192,60 @@ export default function DevelopmentTools() {
   const [viewportWidth, setViewportWidth] = useState(() =>
     typeof window !== 'undefined' ? window.innerWidth : 1440
   )
+  const [isMobile, setIsMobile] = useState(false)
 
   const cycleRef = useRef<NodeJS.Timeout | null>(null)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
   const innerMetrics = useMemo(() => getInnerOrbitMetrics(viewportWidth), [viewportWidth])
-  const outerMetrics = useMemo(() => getOuterOrbitMetrics(viewportWidth, innerMetrics), [viewportWidth, innerMetrics])
+  const outerMetrics = useMemo(
+    () => getOuterOrbitMetrics(viewportWidth, innerMetrics),
+    [viewportWidth, innerMetrics]
+  )
 
   // Handle mounting for hydration safety
   useEffect(() => {
     setMounted(true)
+    // Detect mobile devices for performance optimization
+    setIsMobile(
+      typeof window !== 'undefined' && 
+      (window.innerWidth < 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
+    )
   }, [])
 
   useEffect(() => {
     if (typeof window === 'undefined') return
 
-    const handleResize = () => setViewportWidth(window.innerWidth)
+    const handleResize = () => {
+      setViewportWidth(window.innerWidth)
+      setIsMobile(
+        window.innerWidth < 768 || 
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+      )
+    }
     handleResize()
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  // Move stars generation to component level
+  // Move stars generation to component level with responsive count
   const stars = useMemo(() => {
     const rng = seedrandom('devx-stars') // seed to ensure deterministic output
-    return Array.from({ length: 60 }).map((_, i) => ({
+    // Adjust star count based on device performance - fewer on mobile for better performance
+    const starCount = isMobile ? 40 : (viewportWidth < 768 ? 60 : 90) // Reduced from 60/80/120 for better performance
+    return Array.from({ length: starCount }).map((_, i) => ({
       id: i,
-      width: rng() * 2 + 1,
-      height: rng() * 2 + 1,
+      width: isMobile ? (rng() * 1.5 + 0.3) : (rng() * 2.5 + 0.5),
+      height: isMobile ? (rng() * 1.5 + 0.3) : (rng() * 2.5 + 0.5),
       left: rng() * 100,
       top: rng() * 100,
-      boxShadow: `0 0 ${rng() * 3 + 2}px rgba(255, 255, 255, ${rng() * 0.3 + 0.2})`,
-      duration: 3 + rng() * 4,
+      boxShadow: `0 0 ${isMobile ? (rng() * 2 + 0.8) : (rng() * 4 + 1.5)}px rgba(255, 255, 255, ${rng() * 0.2 + 0.15})`,
+      duration: isMobile ? (1.5 + rng() * 3) : (2 + rng() * 5),
       delay: rng() * 2,
+      twinkleIntensity: rng() * 0.5 + 0.2, // Less variation on mobile
+      isBrightStar: isMobile ? (rng() < 0.05) : (rng() < 0.1), // Fewer bright stars on mobile
     }))
-  }, [])
+  }, [viewportWidth, isMobile])
 
   // IntersectionObserver to detect when section is visible
   useEffect(() => {
@@ -233,33 +259,34 @@ export default function DevelopmentTools() {
       },
       {
         threshold: 0.1,
-        rootMargin: '200px 0px 200px 0px', // Start animation well before fully visible
+        rootMargin: isMobile ? '100px 0px 100px 0px' : '200px 0px 200px 0px', // Smaller margin on mobile
       }
     )
 
     observer.observe(sectionRef.current)
     return () => observer.disconnect()
-  }, [mounted])
+  }, [mounted, isMobile])
 
   // Automatic cycle with black hole transition animation - only when visible
   useEffect(() => {
-    // Clear any existing cycle timer first
-    if (cycleRef.current) {
-      clearTimeout(cycleRef.current)
-      cycleRef.current = null
+    // Don't start cycle if not visible or in manual mode
+    if (!isVisible || isManual) {
+      // Clean up any existing cycle when entering manual mode or not visible
+      if (cycleRef.current) {
+        clearTimeout(cycleRef.current)
+        cycleRef.current = null
+      }
+      return
     }
 
-    // Don't start cycle if not visible
-    if (!isVisible) {
+    // Don't restart if already transitioning
+    if (transitioning) {
       return
     }
 
     const runCycle = () => {
+      // Double check we're not in manual mode or transitioning
       if (isManual || transitioning || !isVisible) {
-        // Keep the cycle alive while user interaction/transition is in progress or when not visible
-        if (isVisible) {
-          cycleRef.current = setTimeout(runCycle, 250)
-        }
         return
       }
 
@@ -288,31 +315,63 @@ export default function DevelopmentTools() {
         setTransitioning(false)
         setTransitionData(null)
 
-        // Schedule next cycle
-        cycleRef.current = setTimeout(runCycle, DISPLAY_DURATION)
-      }, 1200)
+        // Schedule next cycle only if still in auto mode
+        if (!isManual && isVisible) {
+          // Longer interval on mobile to reduce CPU usage
+          const cycleDelay = isMobile ? DISPLAY_DURATION * 1.5 : DISPLAY_DURATION
+          cycleRef.current = setTimeout(runCycle, cycleDelay)
+        }
+      }, isMobile ? 1600 : 1300)
     }
 
-    // Start the cycle
-    cycleRef.current = setTimeout(runCycle, DISPLAY_DURATION)
+    // Start the cycle - check if we should resume immediately or wait
+    const initialDelay = resumeImmediately ? 0 : (isMobile ? DISPLAY_DURATION * 1.5 : DISPLAY_DURATION)
+
+    // Clear any existing timer before setting new one
+    if (cycleRef.current) {
+      clearTimeout(cycleRef.current)
+    }
+
+    cycleRef.current = setTimeout(runCycle, initialDelay)
+
+    // Clear the resume flag after using it
+    if (resumeImmediately) {
+      setResumeImmediately(false)
+    }
 
     return () => {
-      if (cycleRef.current) clearTimeout(cycleRef.current)
-      // Do not clear timerRef here, it controls resuming after manual clicks
+      if (cycleRef.current) {
+        clearTimeout(cycleRef.current)
+        cycleRef.current = null
+      }
     }
-  }, [isManual, activeIndex, transitioning, isVisible, innerMetrics])
+  }, [isManual, activeIndex, transitioning, isVisible, innerMetrics, resumeImmediately, isMobile])
 
   // User click => trigger transition animation
   const handleIconClick = useCallback(
     (index: number) => {
-      if (transitioning || index === activeIndex) return
+      // Prevent clicks on the same item or during transitions
+      if (index === activeIndex) return
 
+      // If transitioning, cancel the current transition and immediately start the new one
+      if (transitioning) {
+        setTransitioning(false)
+        setTransitionData(null)
+      }
+
+      // Immediately enter manual mode and clear any auto-rotation timers
       setIsManual(true)
 
-      // Pause any pending auto-cycle tick during manual interaction
+      // Clear any pending auto-cycle
       if (cycleRef.current) {
         clearTimeout(cycleRef.current)
         cycleRef.current = null
+      }
+
+      // Clear any existing manual display timer
+      if (timerRef.current) {
+        clearTimeout(timerRef.current)
+        timerRef.current = null
       }
 
       // Calculate clicked tool's position
@@ -333,24 +392,22 @@ export default function DevelopmentTools() {
       })
       setTransitioning(true)
 
-      // After transition, update active index
+      // After transition completes, update active index and start display timer
       setTimeout(() => {
         setActiveIndex(index)
         setTransitioning(false)
         setTransitionData(null)
-      }, 800)
 
-      // Clear any existing timer
-      if (timerRef.current) {
-        clearTimeout(timerRef.current)
-      }
-
-      // Set new timer to resume auto-cycle
-      timerRef.current = setTimeout(() => {
-        setIsManual(false)
-      }, 3000) // Resume after 3 seconds
+        // Start the 4-second display timer AFTER transition completes
+        // Longer display time on mobile
+        const displayDuration = isMobile ? DISPLAY_DURATION * 1.2 : DISPLAY_DURATION
+        timerRef.current = setTimeout(() => {
+          setIsManual(false) // Exit manual mode to resume auto-rotation
+          setResumeImmediately(true) // Signal to start auto-rotation immediately
+        }, displayDuration)
+      }, isMobile ? 1600 : 1300)
     },
-    [activeIndex, transitioning, innerMetrics]
+    [activeIndex, transitioning, innerMetrics, isMobile]
   )
 
   // Handle AI tool clicks (for now just log, later can be expanded)
@@ -389,7 +446,7 @@ export default function DevelopmentTools() {
       opacity: [0, 1, 1, 0],
       rotate: [0, 360, 720, 1080],
       transition: {
-        duration: 4 + i * 0.5,
+        duration: isMobile ? (2 + i * 0.3) : (4 + i * 0.5),
         ease: 'easeInOut',
         repeat: Number.POSITIVE_INFINITY,
         delay: i * 0.2,
@@ -401,26 +458,62 @@ export default function DevelopmentTools() {
     <LayoutGroup>
       {/* Optimized height for better spacing with extra bottom padding for tablets */}
       <div ref={sectionRef} className="relative w-full bg-black z-[150]">
-        {/* Reduced number of stars and added glow effect */}
+        {/* Enhanced stars with optimized twinkly animation - using transform for better performance */}
         {stars.map((star) => (
           <motion.div
             key={star.id}
-            className="absolute rounded-full"
+            className="absolute rounded-full will-change-transform"
             style={{
               width: `${star.width}px`,
               height: `${star.height}px`,
               left: `${star.left}%`,
               top: `${star.top}%`,
               boxShadow: star.boxShadow,
-              backgroundColor: 'rgba(255, 255, 255, 0.8)',
+              backgroundColor: star.isBrightStar ? 'rgba(255, 255, 255, 0.7)' : 'rgba(255, 255, 255, 0.5)',
             }}
-            initial={{ opacity: 0.2 }}
-            animate={{ opacity: [0.2, 0.6, 0.2] }}
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ 
+              opacity: star.isBrightStar 
+                ? [0, 0.3, 0.7, 0.3, 0]  // Less dramatic on mobile
+                : [0.1, star.twinkleIntensity * 0.8, 0.1, star.twinkleIntensity * 0.5, 0.1], // Less variation
+              scale: star.isBrightStar 
+                ? [0.5, 1.1, 1.3, 1.1, 0.5]  // Less scale variation on mobile
+                : [0.7, 1.0, 0.8, 0.9, 0.7], // Less scale variation on mobile
+            }}
             transition={{
               duration: star.duration,
               repeat: Number.POSITIVE_INFINITY,
               repeatType: 'reverse',
               delay: star.delay,
+              ease: 'easeInOut',
+            }}
+          />
+        ))}
+
+        {/* Additional twinkly stars for extra sparkle effect - responsive count for performance */}
+        {!isMobile && stars.slice(0, 12).map((star, idx) => (
+          <motion.div
+            key={`twinkle-${star.id}`}
+            className="absolute rounded-full will-change-transform"
+            style={{
+              width: `${star.width * 0.6}px`,
+              height: `${star.height * 0.6}px`,
+              left: `${(star.left + 7) % 100}%`, // Slightly offset position
+              top: `${(star.top + 7) % 100}%`,
+              boxShadow: `0 0 ${star.width * 1.5}px rgba(255, 255, 255, 0.4)`,
+              backgroundColor: 'rgba(255, 255, 255, 0.4)',
+            }}
+            initial={{ opacity: 0 }}
+            animate={{ 
+              opacity: [0, 0.5, 0, 0.3, 0],
+              scale: [0.5, 1.3, 0.3, 1.0, 0.5],
+            }}
+            transition={{
+              duration: star.duration * 0.8, // Different timing for the extra sparkle
+              repeat: Number.POSITIVE_INFINITY,
+              repeatType: 'reverse',
+              delay: star.delay + 1.5,
+              ease: 'easeInOut',
             }}
           />
         ))}
@@ -431,15 +524,15 @@ export default function DevelopmentTools() {
               <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold font-['IBM_Plex_Mono'] text-center animate-gradient-text mb-4">
                 DevX Development Tools
               </h3>
-              <p className="text-slate-400 text-lg md:text-xl font-['IBM_Plex_Sans'] text-center max-w-2xl mb-10 md:mb-12">
+              <p className="text-slate-400 text-lg md:text-xl font-['IBM_Plex_Sans'] text-center max-w-2xl mb-16 md:mb-24">
                 Cutting-edge technologies powering innovative solutions across web, mobile, and
                 cloud platforms
               </p>
             </div>
           </div>
         </div>
-        {/* Animation container with proper sizing */}
-        <div className="relative w-full h-[72vh] sm:h-[92vh] lg:h-[105vh] flex items-center justify-center mt-12 md:mt-20 pt-16 md:pt-24">
+        {/* Animation container with proper sizing - increased height for extra stars */}
+        <div className="relative w-full h-[75vh] sm:h-[95vh] lg:h-[110vh] flex items-center justify-center mt-12 md:mt-20 pt-16 md:pt-24">
           {/* ============ Center black circle with glowing border ============ */}
           {/* Responsive center position with decreased circumference */}
           <div
@@ -447,7 +540,7 @@ export default function DevelopmentTools() {
             w-[60vw] h-[60vw] sm:w-[50vw] sm:h-[50vw] md:w-[45vw] md:h-[45vw]
             max-w-[220px] max-h-[220px] sm:max-w-[240px] sm:max-h-[240px] md:max-w-[260px] md:max-h-[260px]
             rounded-full bg-black text-white flex items-center justify-center text-center p-3 sm:p-4 md:p-5 shadow-md"
-            style={{ top: `calc(50% + ${innerMetrics.offset}px)` }}
+            style={{ top: `calc(50% + ${outerMetrics.offset + 70}px)` }}
           >
             {/* 
             Pulsing outer border - enhanced for tablet visibility
@@ -561,10 +654,18 @@ export default function DevelopmentTools() {
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeTool.name}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.4 }}
+                initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                animate={{
+                  opacity: transitioning ? 0 : 1,
+                  scale: transitioning ? 0.8 : 1,
+                  y: transitioning ? 20 : 0,
+                }}
+                exit={{ opacity: 0, scale: 0.8, y: 20 }}
+                transition={{
+                  duration: transitioning ? 0.2 : 0.6,
+                  ease: [0.4, 0, 0.2, 1],
+                  delay: transitioning ? 0 : 0,
+                }}
                 className="px-4 flex flex-col items-center"
               >
                 {/* The icon above title (shared layout => ring->center) */}
@@ -625,8 +726,8 @@ export default function DevelopmentTools() {
               from={transitionData.from}
               to={transitionData.to}
               tool={transitionData.tool}
-              duration={1200}
-              offset={innerMetrics.offset}
+              duration={1300}
+              offset={outerMetrics.offset + 70}
             />
           )}
 
@@ -638,7 +739,7 @@ export default function DevelopmentTools() {
             onIconClick={handleIconClick}
             transitioning={transitioning}
             transitionData={transitionData}
-            metrics={innerMetrics}
+            metrics={{ ...innerMetrics, offset: outerMetrics.offset + 70 }}
           />
           {/* ============ Outer AI Tools Orbit ============ */}
           {/* z-[90] - Below inner orbit but visible - Hidden on mobile */}
@@ -654,7 +755,7 @@ export default function DevelopmentTools() {
         {/* Logo Loop Section - Mobile Replacement for Outer Orbit */}
         <div className="w-full mt-8 md:mt-24 lg:mt-32 xl:mt-40 py-8 md:py-12 lg:py-16 mb-6">
           <div className="w-full max-w-full">
-            <h4 className="text-2xl sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold font-['IBM_Plex_Mono'] text-center text-white mb-12 md:mb-16 lg:mb-20 px-4">
+            <h4 className="text-3xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold font-['IBM_Plex_Mono'] text-center text-white mb-12 md:mb-16 lg:mb-20 px-4">
               AI & Cloud Technologies
             </h4>
             <LogoLoop logos={aiTools} speed={12} />
@@ -696,92 +797,83 @@ function TransitionPlanet({
         opacity: 1,
       }}
       animate={{
-        x: [from.x, from.x * 0.7, from.x * 0.4, from.x * 0.1, 0, 0],
-        y: [from.y, from.y * 0.7, from.y * 0.4, from.y * 0.1, 0, 0],
-        scale: [0.8, 0.6, 0.4, 0.2, 1.2, 1],
-        opacity: [1, 0.9, 0.7, 0.3, 0.8, 1],
+        x: [from.x, 0, 0],
+        y: [from.y, 0, -60],
+        scale: [0.8, 1.2, 0.6],
+        opacity: [1, 1, 0],
       }}
       transition={{
         duration: duration / 1000,
-        ease: [0.25, 0.8, 0.25, 1], // Custom easing for gravitational pull feel
-        times: [0, 0.2, 0.4, 0.6, 0.8, 1],
+        ease: [0.4, 0, 0.2, 1], // Smooth bezier curve for fluid motion
+        times: [0, 0.55, 1],
       }}
     >
-      {/* White trailing light effect */}
+      {/* Subtle trailing light effect - optimized for performance */}
       <motion.div
         className="absolute inset-0"
         animate={{
           background: [
-            'radial-gradient(ellipse 80px 40px, rgba(255,255,255,0) 0%, transparent 100%)',
-            'radial-gradient(ellipse 120px 60px, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 50%, transparent 100%)',
-            'radial-gradient(ellipse 160px 80px, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.2) 40%, transparent 100%)',
-            'radial-gradient(ellipse 200px 100px, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.3) 30%, transparent 100%)',
-            'radial-gradient(ellipse 100px 50px, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 50%, transparent 100%)',
-            'radial-gradient(ellipse 40px 20px, rgba(255,255,255,0) 0%, transparent 100%)',
+            'radial-gradient(ellipse 60px 30px, rgba(255,255,255,0) 0%, transparent 100%)',
+            'radial-gradient(ellipse 100px 50px, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.05) 40%, transparent 100%)',
+            'radial-gradient(ellipse 30px 15px, rgba(255,255,255,0) 0%, transparent 100%)',
           ],
-          filter: ['blur(2px)', 'blur(4px)', 'blur(6px)', 'blur(8px)', 'blur(4px)', 'blur(1px)'],
+          filter: ['blur(0.5px)', 'blur(2px)', 'blur(0.5px)'],
         }}
         transition={{
           duration: duration / 1000,
-          times: [0, 0.2, 0.4, 0.6, 0.8, 1],
+          times: [0, 0.55, 1],
+          ease: [0.4, 0, 0.2, 1],
         }}
       />
 
-      {/* Motion blur trail effect during transition */}
+      {/* Smooth motion blur - optimized for performance */}
       <motion.div
         className="relative"
         animate={{
           filter: [
-            'blur(0px) brightness(1) drop-shadow(0 0 5px rgba(255,255,255,0.3))',
-            'blur(2px) brightness(1.3) drop-shadow(0 0 15px rgba(255,255,255,0.6))',
-            'blur(4px) brightness(1.6) drop-shadow(0 0 25px rgba(255,255,255,0.8))',
-            'blur(6px) brightness(2.2) drop-shadow(0 0 35px rgba(255,255,255,1))',
-            'blur(2px) brightness(1.4) drop-shadow(0 0 20px rgba(255,255,255,0.7))',
-            'blur(0px) brightness(1) drop-shadow(0 0 5px rgba(255,255,255,0.3))',
+            'blur(0px) brightness(1) drop-shadow(0 0 2px rgba(255,255,255,0.15))',
+            'blur(0.5px) brightness(1.15) drop-shadow(0 0 10px rgba(255,255,255,0.3))',
+            'blur(1px) brightness(0.85) drop-shadow(0 0 1px rgba(255,255,255,0))',
           ],
         }}
         transition={{
           duration: duration / 1000,
-          times: [0, 0.2, 0.4, 0.6, 0.8, 1],
+          times: [0, 0.55, 1],
+          ease: [0.4, 0, 0.2, 1],
         }}
       >
-        {/* Gravitational distortion effect */}
+        {/* Subtle gravitational glow - optimized for performance */}
         <motion.div
           className="absolute inset-0 rounded-full"
           animate={{
             boxShadow: [
-              '0 0 5px rgba(255,255,255,0.3)',
-              '0 0 15px rgba(255,255,255,0.6)',
-              '0 0 25px rgba(255,255,255,0.9)',
-              '0 0 35px rgba(255,255,255,1)',
-              '0 0 20px rgba(255,255,255,0.8)',
-              '0 0 10px rgba(255,255,255,0.5)',
+              '0 0 2px rgba(255,255,255,0.15)',
+              '0 0 10px rgba(255,255,255,0.3)',
+              '0 0 0px rgba(255,255,255,0)',
             ],
             background: [
-              'radial-gradient(circle, transparent 60%, rgba(255,255,255,0.1) 100%)',
-              'radial-gradient(circle, transparent 50%, rgba(255,255,255,0.2) 100%)',
-              'radial-gradient(circle, transparent 40%, rgba(255,255,255,0.3) 100%)',
-              'radial-gradient(circle, transparent 20%, rgba(255,255,255,0.5) 100%)',
-              'radial-gradient(circle, transparent 30%, rgba(255,255,255,0.3) 100%)',
-              'radial-gradient(circle, transparent 60%, rgba(255,255,255,0.1) 100%)',
+              'radial-gradient(circle, transparent 70%, rgba(255,255,255,0.03) 100%)',
+              'radial-gradient(circle, transparent 40%, rgba(255,255,255,0.1) 100%)',
+              'radial-gradient(circle, transparent 100%, rgba(255,255,255,0) 100%)',
             ],
           }}
           transition={{
             duration: duration / 1000,
-            times: [0, 0.2, 0.4, 0.6, 0.8, 1],
+            times: [0, 0.55, 1],
+            ease: [0.4, 0, 0.2, 1],
           }}
         />
 
         {/* The actual tool icon */}
         <motion.div
-            className="w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 rounded-full shadow border border-purple-500/30 flex items-center justify-center relative overflow-hidden"
+          className="w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 rounded-full shadow border border-purple-500/30 flex items-center justify-center relative overflow-hidden"
           animate={{
-            rotateY: [0, 180, 360, 540, 720],
-            rotateX: [0, 45, 90, 45, 0],
+            rotateY: [0, 540],
+            rotateX: [0, 180],
           }}
           transition={{
             duration: duration / 1000,
-            ease: 'easeInOut',
+            ease: [0.4, 0, 0.2, 1],
           }}
         >
           <div className="relative w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 scale-110">
@@ -804,30 +896,30 @@ function TransitionPlanet({
           </div>
         </motion.div>
 
-        {/* Flash of light when reaching destination */}
+        {/* Subtle flash when reaching destination - optimized */}
         <motion.div
           className="absolute inset-0 rounded-full pointer-events-none"
-          initial={{ opacity: 0, scale: 0.5 }}
+          initial={{ opacity: 0, scale: 0.8 }}
           animate={{
-            opacity: [0, 0, 0, 0, 0, 1, 0.8, 0.6, 0.3, 0],
-            scale: [0.5, 0.5, 0.5, 0.5, 0.5, 2, 3, 4, 5, 6],
+            opacity: [0, 0, 0, 0, 0, 0.3, 0.2, 0.15, 0.08, 0],
+            scale: [0.8, 0.8, 0.8, 0.8, 0.8, 1.4, 1.8, 2.2, 2.6, 3],
             background: [
               'radial-gradient(circle, transparent 0%, transparent 100%)',
               'radial-gradient(circle, transparent 0%, transparent 100%)',
               'radial-gradient(circle, transparent 0%, transparent 100%)',
               'radial-gradient(circle, transparent 0%, transparent 100%)',
               'radial-gradient(circle, transparent 0%, transparent 100%)',
-              'radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.3) 30%, transparent 60%)',
-              'radial-gradient(circle, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.2) 40%, transparent 70%)',
-              'radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 50%, transparent 80%)',
-              'radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 60%, transparent 90%)',
+              'radial-gradient(circle, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.08) 30%, transparent 60%)',
+              'radial-gradient(circle, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.06) 40%, transparent 70%)',
+              'radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.04) 50%, transparent 80%)',
+              'radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 60%, transparent 90%)',
               'radial-gradient(circle, transparent 0%, transparent 100%)',
             ],
           }}
           transition={{
             duration: duration / 1000,
             times: [0, 0.1, 0.2, 0.3, 0.75, 0.8, 0.85, 0.9, 0.95, 1],
-            ease: 'easeOut',
+            ease: [0.4, 0, 0.2, 1],
           }}
         />
       </motion.div>
@@ -1032,8 +1124,8 @@ function AIToolsOrbit({
       }}
     >
       {aiTools.map((tool, i) => {
-    const angle = (i * 360) / aiTools.length + rotation
-    const angleRad = (angle * Math.PI) / 180
+        const angle = (i * 360) / aiTools.length + rotation
+        const angleRad = (angle * Math.PI) / 180
         const x = Math.cos(angleRad) * metrics.radius
         const y = Math.sin(angleRad) * metrics.radius
         const isActive = activeIndex === i
@@ -1055,7 +1147,9 @@ function AIToolsOrbit({
               type="button"
               aria-label={tool.name}
               aria-pressed={isActive}
-              className={`relative w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full backdrop-blur-sm shadow border border-purple-500/40 flex items-center justify-center cursor-pointer group/icon focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4CD787] focus-visible:ring-offset-2 focus-visible:ring-offset-black ${tool.wrapperClassName ?? ''}`}
+              className={`relative w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full backdrop-blur-sm shadow border border-purple-500/40 flex items-center justify-center cursor-pointer group/icon focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4CD787] focus-visible:ring-offset-2 focus-visible:ring-offset-black ${
+                tool.wrapperClassName ?? ''
+              }`}
               whileHover={{ scale: 1.08 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => onIconClick(i)}

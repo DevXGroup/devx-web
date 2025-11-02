@@ -47,8 +47,8 @@ export default function InfinityLogo() {
         })
       },
       {
-        threshold: 0.2,
-        rootMargin: '100px 0px 100px 0px'
+        threshold: 0.05,
+        rootMargin: '300px 0px 300px 0px'
       }
     )
 

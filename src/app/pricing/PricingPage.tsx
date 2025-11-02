@@ -6,15 +6,9 @@ import { useRef, useState } from 'react'
 import TextPressure from '@animations/TextPressure'
 
 // Enhanced animation variants
-const fadeInUpVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.4,
-    },
-  },
+const fadeInVariants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1 },
 }
 
 const containerVariants = {
@@ -30,15 +24,9 @@ const containerVariants = {
 const cardHoverVariants = {
   rest: {
     scale: 1,
-    y: 0,
-    rotateX: 0,
-    rotateY: 0,
   },
   hover: {
-    scale: 1.03,
-    y: -12,
-    rotateX: 5,
-    rotateY: 2,
+    scale: 1.02,
   },
 }
 
@@ -237,20 +225,19 @@ function PricingCard({ plan }: PricingCardProps) {
   return (
     <motion.div
       ref={ref}
-      variants={fadeInUpVariants}
+      variants={fadeInVariants}
       initial="hidden"
-      animate={'visible'}
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.6, ease: [0.0, 0.0, 0.2, 1] }}
       whileHover={shouldReduceMotion ? {} : cardHoverVariants.hover}
       className={`relative bg-black/40 backdrop-blur-xl rounded-2xl border ${
         plan.popular
           ? 'border-[#FFD700] ring-2 ring-[#FFD700]/30 shadow-2xl shadow-[#FFD700]/20'
           : 'border-white/10'
-      } flex flex-col group transition-all duration-500 overflow-hidden perspective-1000 h-full`}
+      } flex flex-col group transition-all duration-500 overflow-hidden h-full`}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
-      style={{
-        transformStyle: 'preserve-3d',
-      }}
     >
       {/* Animated background gradient */}
       <motion.div
@@ -269,34 +256,6 @@ function PricingCard({ plan }: PricingCardProps) {
         transition={{ duration: 3, repeat: Infinity }}
       />
 
-      {/* Shimmer effect */}
-      <div className="absolute inset-0 overflow-hidden rounded-2xl">
-        <motion.div
-          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-12"
-          variants={shimmerVariants}
-          initial="hidden"
-          animate={isHovered ? 'visible' : 'hidden'}
-        />
-      </div>
-
-      {/* Sparkle effects */}
-      {plan.popular && (
-        <>
-          <motion.div
-            className="absolute top-4 right-4 w-2 h-2 bg-[#FFD700] rounded-full"
-            variants={sparkleVariants}
-            initial="hidden"
-            animate="visible"
-          />
-          <motion.div
-            className="absolute top-12 right-8 w-1 h-1 bg-[#4CD787] rounded-full"
-            variants={sparkleVariants}
-            initial="hidden"
-            animate="visible"
-            transition={{ delay: 0.5 }}
-          />
-        </>
-      )}
 
       <div className="relative z-10 p-6 flex flex-col h-full">
         {/* Header section */}
@@ -516,7 +475,7 @@ export default function PricingPage() {
             animate="visible"
             className="max-w-4xl mx-auto"
           >
-            <motion.div variants={fadeInUpVariants}>
+            <motion.div variants={fadeInVariants}>
               <div className="flex items-center justify-center w-full">
                 <div
                   style={{
@@ -544,7 +503,7 @@ export default function PricingPage() {
             </motion.div>
 
             <motion.p
-              variants={fadeInUpVariants}
+              variants={fadeInVariants}
               className="text-lg md:text-xl text-white/90 font-light mb-8 leading-relaxed max-w-3xl mx-auto font-['IBM_Plex_Sans'] mt-4"
               style={{
                 letterSpacing: '0.025em',
@@ -557,7 +516,7 @@ export default function PricingPage() {
             </motion.p>
 
             <motion.div
-              variants={fadeInUpVariants}
+              variants={fadeInVariants}
               className="flex items-center justify-center gap-4 mb-8"
             >
               <div className="flex items-center gap-2 bg-[#4CD787]/10 text-[#4CD787] px-6 py-3 rounded-full text-sm font-medium backdrop-blur-sm border border-[#4CD787]/20">

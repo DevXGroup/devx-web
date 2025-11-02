@@ -49,16 +49,14 @@ export default function ServiceCard({ service, index }: ServiceCardProps) {
   const cardColor = service.color || "#4CD787"
 
   return (
-    <div
+    <motion.div
       ref={ref}
       className="bg-black/60 md:bg-black/30 backdrop-blur-md md:backdrop-blur-sm p-4 sm:p-6 md:p-8 rounded-xl border border-white/20 md:border-white/10 group hover:border-white/30 transition-all duration-300 relative overflow-hidden h-full flex flex-col cursor-pointer"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      style={{
-        opacity: isInView ? 1 : 0,
-        transform: `translateY(${isInView ? 0 : 20}px)`,
-        transition: `opacity 0.4s ease, transform 0.4s ease`,
-      }}
+      initial={{ opacity: 0 }}
+      animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
     >
       {showParticles && <ParticleAnimation color={cardColor} density={isHovered ? 25 : 15} speed={0.2} />}
 
@@ -102,14 +100,12 @@ export default function ServiceCard({ service, index }: ServiceCardProps) {
 
       <ul className="space-y-3 relative z-10">
         {service.features.map((feature, i) => (
-          <li
+          <motion.li
             key={feature}
             className="flex items-center text-body-small text-white/75 group"
-            style={{
-              opacity: isInView ? 1 : 0,
-              transform: isInView ? "translateX(0)" : "translateX(-5px)",
-              transition: `opacity 0.3s ease ${i * 0.1}s, transform 0.3s ease ${i * 0.1}s`,
-            }}
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: 0.4, delay: i * 0.05, ease: "easeOut" }}
           >
             <div
               className="w-1.5 h-1.5 rounded-full mr-3 group-hover:w-2 group-hover:h-2 transition-all duration-300"
@@ -124,7 +120,7 @@ export default function ServiceCard({ service, index }: ServiceCardProps) {
             >
               {feature}
             </span>
-          </li>
+          </motion.li>
         ))}
       </ul>
 
@@ -209,6 +205,6 @@ export default function ServiceCard({ service, index }: ServiceCardProps) {
           transition: "opacity 0.4s ease",
         }}
       />
-    </div>
+    </motion.div>
   )
 }

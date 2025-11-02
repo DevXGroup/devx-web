@@ -22,12 +22,16 @@ export default function EnhancedStarfield({
 }: {
   viewport: { width: number; height: number }
 }) {
+  // Reduce star count on mobile for better performance
+  const isMobile = viewport.width < 768
+  const isTablet = viewport.width >= 768 && viewport.width < 1024
+
   return (
     <>
       {/* Enhanced twinkling background stars - more density for hero */}
-      <SimpleStarLayer count={700} viewport={viewport} />
+      <SimpleStarLayer count={isMobile ? 300 : isTablet ? 500 : 700} viewport={viewport} />
       {/* Bright stars with diffraction spikes - more for hero */}
-      <BrightStarsLayer count={25} viewport={viewport} />
+      <BrightStarsLayer count={isMobile ? 10 : isTablet ? 18 : 25} viewport={viewport} />
     </>
   )
 }
@@ -46,36 +50,51 @@ function SimpleStarLayer({
 
   const positions = useRef(() => {
     const pos = new Float32Array(count * 3)
+    const gaussian = () => {
+      let u = 0
+      let v = 0
+      while (u === 0) u = Math.random()
+      while (v === 0) v = Math.random()
+      return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v)
+    }
+
+    const isWide = viewport.width > 768
+    const spreadX = isWide ? 40 : 25
+    const spreadY = isWide ? 25 : 20
+
+    const clusterCount = Math.max(3, Math.floor(count * 0.04))
+    const clusters = Array.from({ length: clusterCount }, () => ({
+      x: (Math.random() - 0.5) * spreadX * 0.6,
+      y: (Math.random() - 0.5) * spreadY * 0.6,
+      radiusX: 2 + Math.random() * 4,
+      radiusY: 1.5 + Math.random() * 3,
+    }))
+
+    const assignDiffusePosition = (index: number) => {
+      const distance = Math.abs(gaussian()) * (isWide ? 18 : 14)
+      const angle = Math.random() * Math.PI * 2
+      pos[index * 3] = Math.cos(angle) * distance * 1.1
+      pos[index * 3 + 1] = Math.sin(angle) * distance * 0.7
+    }
+
     for (let i = 0; i < count; i++) {
-      // Better distribution for hero section - wider spread with more concentration in center
-      const spreadX = viewport.width > 768 ? 40 : 25
-      const spreadY = viewport.width > 768 ? 25 : 20
+      const useCluster = Math.random() < 0.35 && clusters.length > 0
 
-      // Bias toward center with some randomness
-      const xBias = (Math.random() - 0.5) * 0.3
-      const yBias = (Math.random() - 0.5) * 0.2
+      if (useCluster) {
+        const targetCluster = clusters[Math.floor(Math.random() * clusters.length)]
+        if (targetCluster) {
+          pos[i * 3] = targetCluster.x + gaussian() * targetCluster.radiusX
+          pos[i * 3 + 1] = targetCluster.y + gaussian() * targetCluster.radiusY
+        } else {
+          assignDiffusePosition(i)
+        }
+      } else {
+        assignDiffusePosition(i)
+      }
 
-      pos[i * 3] = (Math.random() - 0.5 + xBias) * spreadX
-      pos[i * 3 + 1] = (Math.random() - 0.5 + yBias) * spreadY
       pos[i * 3 + 2] = (Math.random() - 0.5) * 25 - 15
     }
     return pos
-  }).current()
-
-  const twinklePhases = useRef(() => {
-    const phases = new Float32Array(count)
-    for (let i = 0; i < count; i++) {
-      phases[i] = Math.random() * Math.PI * 2
-    }
-    return phases
-  }).current()
-
-  const twinkleSpeeds = useRef(() => {
-    const speeds = new Float32Array(count)
-    for (let i = 0; i < count; i++) {
-      speeds[i] = 0.1 + Math.random() * 0.5 // More varied, faster twinkling
-    }
-    return speeds
   }).current()
 
   const starColors = useRef(() => {
@@ -108,18 +127,56 @@ function SimpleStarLayer({
     for (let i = 0; i < count; i++) {
       // More varied star sizes with some larger bright stars
       const sizeRandom = Math.random()
-      if (sizeRandom < 0.8) {
-        // Small stars (80%)
-        sizes[i] = 0.015 + Math.random() * 0.025
-      } else if (sizeRandom < 0.95) {
-        // Medium stars (15%)
-        sizes[i] = 0.04 + Math.random() * 0.03
+      if (sizeRandom < 0.75) {
+        // Small stars (75%)
+        sizes[i] = 0.008 + Math.random() * 0.012
+      } else if (sizeRandom < 0.92) {
+        // Medium stars (17%)
+        sizes[i] = 0.03 + Math.random() * 0.03
       } else {
-        // Large bright stars (5%)
-        sizes[i] = 0.07 + Math.random() * 0.04
+        // Large bright stars (8%)
+        sizes[i] = 0.08 + Math.random() * 0.06
       }
     }
     return sizes
+  }).current()
+
+  const twinkleProfiles = useRef(() => {
+    const base = new Float32Array(count)
+    const amplitude = new Float32Array(count)
+    const slowSpeed = new Float32Array(count)
+    const fastSpeed = new Float32Array(count)
+    const slowPhase = new Float32Array(count)
+    const fastPhase = new Float32Array(count)
+    const noiseOffsets = new Float32Array(count)
+    const sparkleBias = new Float32Array(count)
+    const alpha = new Float32Array(count)
+
+    for (let i = 0; i < count; i++) {
+      const baseSize = starSizes[i] ?? 0
+      const sizeFactor = Math.min(1, baseSize / 0.12)
+      base[i] = 0.18 + sizeFactor * 0.25 + Math.random() * 0.25
+      amplitude[i] = 0.25 + (1 - sizeFactor) * 0.35
+      slowSpeed[i] = 0.02 + Math.random() * 0.06
+      fastSpeed[i] = 0.4 + Math.random() * 1.1
+      slowPhase[i] = Math.random() * Math.PI * 2
+      fastPhase[i] = Math.random() * Math.PI * 2
+      noiseOffsets[i] = Math.random() * Math.PI * 2
+      sparkleBias[i] = 0.78 + Math.random() * 0.18
+      alpha[i] = base[i] ?? 0
+    }
+
+    return {
+      base,
+      amplitude,
+      slowSpeed,
+      fastSpeed,
+      slowPhase,
+      fastPhase,
+      noiseOffsets,
+      sparkleBias,
+      alpha,
+    }
   }).current()
 
   useFrame((state) => {
@@ -130,25 +187,39 @@ function SimpleStarLayer({
 
     if (mesh.current) {
       const alphaAttribute = mesh.current.geometry.getAttribute('alpha')
+      const alphaArray = alphaAttribute.array as Float32Array
       const time = state.clock.getElapsedTime()
 
-      // Update more stars per frame for better twinkling effect
-      const updateCount = Math.min(count, 60) // Increased for more twinkling
-      const startIndex = (Math.floor(time * 10) * updateCount) % count
+      for (let i = 0; i < count; i++) {
+        const slowSpeed = twinkleProfiles.slowSpeed[i] ?? 0
+        const slowPhase = twinkleProfiles.slowPhase[i] ?? 0
+        const fastSpeed = twinkleProfiles.fastSpeed[i] ?? 0
+        const fastPhase = twinkleProfiles.fastPhase[i] ?? 0
+        const noiseOffset = twinkleProfiles.noiseOffsets[i] ?? 0
 
-      for (let i = 0; i < updateCount; i++) {
-        const index = (startIndex + i) % count
-        const phase = twinklePhases[index] ?? 0
-        const speed = twinkleSpeeds[index] ?? 0
-        const adjustedTime = time * speed + phase
+        const slow = (Math.sin(time * slowSpeed + slowPhase) + 1) * 0.5
+        const fast = (Math.sin(time * fastSpeed + fastPhase) + 1) * 0.5
+        const drift = (Math.sin(time * 0.15 + noiseOffset) + 1) * 0.5
 
-        // Enhanced twinkling calculation with more variation
-        const primaryTwinkle = (Math.sin(adjustedTime) + 1) / 2
-        const secondaryTwinkle = (Math.sin(adjustedTime * 1.7) + 1) / 2
-        const combinedTwinkle = primaryTwinkle * 0.7 + secondaryTwinkle * 0.3
-        const finalAlpha = 0.4 + combinedTwinkle * 0.6
+        let intensity = slow * 0.45 + fast * 0.4 + drift * 0.15
 
-        alphaAttribute.setX(index, finalAlpha)
+        const sparkleBias = twinkleProfiles.sparkleBias[i] ?? 1
+        const sparkleTrigger = fast > sparkleBias ? fast - sparkleBias : 0
+        const sparkle = sparkleTrigger * 0.6
+
+        const baseValue = twinkleProfiles.base[i] ?? 0
+        const amplitudeValue = twinkleProfiles.amplitude[i] ?? 0
+
+        const finalAlpha = Math.min(
+          1,
+          Math.max(
+            0.08,
+            baseValue + amplitudeValue * intensity + sparkle * amplitudeValue
+          )
+        )
+
+        twinkleProfiles.alpha[i] = finalAlpha
+        alphaArray[i] = finalAlpha
       }
 
       alphaAttribute.needsUpdate = true
@@ -160,7 +231,7 @@ function SimpleStarLayer({
       <bufferGeometry>
         <bufferAttribute attach="attributes-position" args={[positions, 3]} />
         <bufferAttribute attach="attributes-color" args={[starColors, 3]} />
-        <bufferAttribute attach="attributes-alpha" args={[new Float32Array(count).fill(0.7), 1]} />
+        <bufferAttribute attach="attributes-alpha" args={[twinkleProfiles.alpha, 1]} />
         <bufferAttribute attach="attributes-size" args={[starSizes, 1]} />
       </bufferGeometry>
       <shaderMaterial
@@ -190,26 +261,17 @@ function SimpleStarLayer({
           void main() {
             vec2 center = vec2(0.5, 0.5);
             vec2 uv = gl_PointCoord.xy;
-            float dist = distance(uv, center);
-            
-            // Create a more star-like shape with cross pattern
             vec2 centered = uv - center;
-            float cross1 = abs(centered.x) < 0.05 ? 1.0 : 0.0;
-            float cross2 = abs(centered.y) < 0.05 ? 1.0 : 0.0;
-            float crossPattern = max(cross1, cross2);
+            float dist = length(centered);
             
-            // Main star body with soft falloff
-            float starCore = smoothstep(0.5, 0.1, dist);
+            float airyDisc = pow(max(0.0, 1.0 - dist * dist), 3.0);
+            float glow = smoothstep(0.45, 0.0, dist) * 0.45;
+            float core = smoothstep(0.18, 0.0, dist) * 0.35;
             
-            // Outer glow
-            float glow = smoothstep(0.5, 0.0, dist) * 0.3;
+            float angle = atan(centered.y, centered.x);
+            float sparkle = smoothstep(0.92, 1.0, sin(dist * 45.0 + angle * 6.0)) * 0.12;
             
-            // Combine core, cross pattern, and glow
-            float finalStar = max(starCore + crossPattern * starCore, glow);
-            
-            // Add subtle sparkle effect
-            float sparkle = step(0.98, sin(dist * 50.0)) * 0.2;
-            finalStar += sparkle * starCore;
+            float finalStar = clamp(airyDisc + glow + core + sparkle, 0.0, 1.0);
             
             gl_FragColor = vec4(vColor, finalStar * vAlpha);
           }
