@@ -117,6 +117,9 @@ export default function Process() {
         <div className="absolute inset-0 bg-black/85" />
       </div>
 
+      {/* Top fade-in gradient */}
+      <div className="absolute top-0 left-0 right-0 h-24 md:h-40 bg-gradient-to-b from-black to-transparent z-[1] pointer-events-none" />
+
       <motion.div style={{ opacity, y }} className="relative container mx-auto px-4 sm:px-6">
         <div className="relative flex items-center justify-center text-center mb-12 sm:mb-16 py-8 sm:py-12">
           <div className="relative z-10">

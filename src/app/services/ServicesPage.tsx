@@ -19,7 +19,7 @@ import dynamic from 'next/dynamic'
 
 const HyperSpeed = dynamic(() => import('@/components/animations/HyperSpeed'), {
   ssr: false,
-  loading: () => <div className="w-full h-[390px] bg-black" />,
+  loading: () => <div className="w-full h-[450px] bg-black" />,
 })
 import ClientOnly from '@/components/layout/ClientOnly'
 
@@ -170,7 +170,7 @@ export default function ServicesPage() {
   const heroRef = useRef<HTMLDivElement | null>(null)
   const valuePropsRef = useRef<HTMLDivElement | null>(null)
   const velocityRef = useRef<HTMLDivElement | null>(null)
-  const isHeroInView = useInView(heroRef, { once: false })
+  const isHeroInView = useInView(heroRef, { once: true })
   const heroControls = useAnimation()
   const orchestrationTextControls = useAnimation()
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
@@ -336,13 +336,11 @@ export default function ServicesPage() {
 
   return (
     <div className="min-h-screen bg-black pt-19">
-      <HyperSpeed />
       <section
         ref={heroRef}
-        className="relative min-h-[85vh] pt-20 md:pt-24 pb-12 md:pb-16 flex flex-col items-center justify-start overflow-hidden bg-black"
+        className="relative pt-20 md:pt-24 pb-0 flex flex-col items-center justify-start overflow-hidden bg-black"
       >
         <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-900/10 to-black z-0" />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-72 bg-gradient-to-b from-transparent via-black/70 to-black z-10" />
 
         <div className="relative z-20 w-full flex flex-col items-center">
           <div className="container mx-auto px-4 relative z-20">
@@ -358,7 +356,7 @@ export default function ServicesPage() {
                   },
                 },
               }}
-              className="text-center max-w-4xl mx-auto title-margin -mt-20 md:-mt-24"
+              className="text-center max-w-4xl mx-auto title-margin"
             >
               <div className="flex items-center justify-center w-full">
                 <div
@@ -391,7 +389,7 @@ export default function ServicesPage() {
 
               <motion.p
                 variants={floatingAnimation}
-                className="text-lg md:text-xl font-light max-w-2xl mx-auto relative z-30 font-['IBM_Plex_Sans'] leading-relaxed mt-2"
+                className="text-lg md:text-xl font-light max-w-2xl mx-auto relative z-30 font-['IBM_Plex_Sans'] leading-relaxed mt-2 mb-0"
                 style={{
                   textShadow: '0 2px 8px rgba(0,0,0,0.9)',
                   fontWeight: '400',
@@ -404,6 +402,18 @@ export default function ServicesPage() {
           </div>
         </div>
       </section>
+
+      <div className="relative w-full h-[450px] overflow-hidden -mt-16 md:-mt-24 lg:-mt-32">
+        <HyperSpeed
+          effectOptions={{
+            lightPairsPerRoadWay: 25,
+            totalSideLightSticks: 12,
+            fov: 90,
+            length: 300,
+          }}
+        />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-black/40 to-black/80 z-10" />
+      </div>
 
       {/* Scroll Velocity Animation */}
       <section ref={velocityRef} className="relative overflow-hidden pt-4 pb-4 md:pt-6 md:pb-6 bg-black">
@@ -494,7 +504,7 @@ export default function ServicesPage() {
               </motion.div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8 px-2 md:px-8 lg:px-12 xl:px-16 relative z-10">
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,24rem),1fr))] justify-center gap-6 md:gap-8 px-2 md:px-8 lg:px-12 xl:px-16 relative z-10">
               {services.map((service, index) => (
                 <motion.div
                   key={service.title}
@@ -818,113 +828,107 @@ export default function ServicesPage() {
             </div>
             <div
               ref={valuePropsRef}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 px-2 md:px-4 lg:px-6 max-w-screen-xl mx-auto"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto"
             >
               {valueProps.map((prop, index) => (
                 <motion.div
                   key={prop.title}
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true, amount: 0.2 }}
-                  transition={{ duration: 0.6, delay: index * 0.05, ease: 'easeOut' }}
-                  className="bg-black/40 backdrop-blur-lg p-8 rounded-xl border border-white/10 transition-all duration-300 group cursor-pointer pointer-events-auto relative overflow-hidden shadow-xl group-hover:shadow-[0_0_20px_rgba(6,182,212,0.5)] before:absolute before:inset-0 before:border before:border-transparent before:rounded-xl before:transition-all before:duration-300 group-hover:before:border-white/20"
-                  whileHover={{ scale: 1.02 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.1 }}
+                  transition={{ duration: 0.6, delay: index * 0.1, ease: 'easeOut' }}
+                  className="relative bg-slate-800/90 border border-slate-600/50 p-6 sm:p-7 md:p-8 rounded-2xl shadow-xl shadow-black/40 backdrop-blur-sm group cursor-pointer overflow-hidden hover:shadow-2xl hover:shadow-[#06B6D4]/20 transition-all duration-300"
+                  whileHover={{ scale: 1.03, y: -4 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <h3 className="text-xl md:text-2xl lg:text-2xl font-semibold text-[#06B6D4] mb-3 lg:mb-4 transition-colors duration-300 relative z-10">
+                  {/* Icon */}
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center bg-gradient-to-br from-[#06B6D4] to-[#0891b2] border border-[#06B6D4]/50 shadow-[0_0_20px_rgba(6,182,212,0.3)] mb-5 sm:mb-6 group-hover:shadow-[0_0_30px_rgba(6,182,212,0.5)] transition-all duration-300">
+                    <span className="text-2xl sm:text-3xl">✓</span>
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-3 sm:mb-4 font-['IBM_Plex_Mono'] leading-tight group-hover:text-[#06B6D4] transition-colors duration-300 relative z-10">
                     {prop.title}
                   </h3>
-                  <p
-                    className="text-white/90 text-base md:text-lg transition-colors duration-300 font-['IBM_Plex_Sans'] font-medium relative z-10 mb-3 lg:mb-4 leading-relaxed"
-                    style={{ textShadow: '0 1px 4px rgba(0,0,0,0.7)' }}
-                  >
+
+                  {/* Description */}
+                  <p className="text-slate-100 text-base sm:text-lg leading-relaxed font-['IBM_Plex_Sans'] mb-4 sm:mb-5 relative z-10">
                     {prop.description}
                   </p>
+
+                  {/* Proof Point */}
                   {prop.proofPoint && (
-                    <p className="text-[#4CD787] text-xs md:text-sm font-semibold transition-colors duration-300 relative z-10">
-                      ✓ {prop.proofPoint}
+                    <p className="text-[#4CD787] text-sm md:text-base font-semibold relative z-10 flex items-start gap-2">
+                      <span className="text-[#4CD787] mt-0.5">✓</span>
+                      <span>{prop.proofPoint}</span>
                     </p>
                   )}
 
+                  {/* Animated border effect on hover */}
                   <motion.div
-                    className="absolute inset-0 overflow-hidden rounded-xl pointer-events-none z-0"
+                    className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none z-0"
                     initial={{ opacity: 0 }}
                     whileHover={{ opacity: 1 }}
                     transition={{ duration: 0.3 }}
                   >
+                    {/* Top border */}
                     <motion.div
-                      className="absolute w-full h-[2px] bg-gradient-to-r from-transparent via-white to-transparent top-0"
-                      style={{
-                        boxShadow: '0 0 6px #06B6D4, 0 0 12px rgba(6, 182, 212, 0.4)',
-                      }}
+                      className="absolute w-full h-[2px] bg-gradient-to-r from-transparent via-[#06B6D4] to-transparent top-0"
                       initial={{ x: '-100%' }}
-                      whileHover={{
-                        x: ['-100%', '100%'],
-                      }}
+                      animate={{ x: ['100%', '-100%'] }}
                       transition={{
-                        duration: 1.5,
+                        duration: 2,
                         repeat: Infinity,
                         ease: 'linear',
                       }}
                     />
+                    {/* Right border */}
                     <motion.div
-                      className="absolute w-[2px] h-full bg-gradient-to-b from-transparent via-white to-transparent right-0"
-                      style={{
-                        boxShadow: '0 0 6px #06B6D4, 0 0 12px rgba(6, 182, 212, 0.4)',
-                      }}
+                      className="absolute w-[2px] h-full bg-gradient-to-b from-transparent via-[#06B6D4] to-transparent right-0"
                       initial={{ y: '-100%' }}
-                      whileHover={{
-                        y: ['-100%', '100%'],
-                      }}
+                      animate={{ y: ['100%', '-100%'] }}
                       transition={{
-                        duration: 1.5,
+                        duration: 2,
                         repeat: Infinity,
                         ease: 'linear',
-                        delay: 0.375,
+                        delay: 0.5,
                       }}
                     />
+                    {/* Bottom border */}
                     <motion.div
-                      className="absolute w-full h-[2px] bg-gradient-to-r from-transparent via-white to-transparent bottom-0"
-                      style={{
-                        boxShadow: '0 0 6px #06B6D4, 0 0 12px rgba(6, 182, 212, 0.4)',
-                      }}
+                      className="absolute w-full h-[2px] bg-gradient-to-r from-transparent via-[#06B6D4] to-transparent bottom-0"
                       initial={{ x: '100%' }}
-                      whileHover={{
-                        x: ['100%', '-100%'],
-                      }}
+                      animate={{ x: ['-100%', '100%'] }}
                       transition={{
-                        duration: 1.5,
+                        duration: 2,
                         repeat: Infinity,
                         ease: 'linear',
-                        delay: 0.75,
+                        delay: 1,
                       }}
                     />
+                    {/* Left border */}
                     <motion.div
-                      className="absolute w-[2px] h-full bg-gradient-to-b from-transparent via-white to-transparent left-0"
-                      style={{
-                        boxShadow: '0 0 6px #06B6D4, 0 0 12px rgba(6, 182, 212, 0.4)',
-                      }}
+                      className="absolute w-[2px] h-full bg-gradient-to-b from-transparent via-[#06B6D4] to-transparent left-0"
                       initial={{ y: '100%' }}
-                      whileHover={{
-                        y: ['100%', '-100%'],
-                      }}
+                      animate={{ y: ['-100%', '100%'] }}
                       transition={{
-                        duration: 1.5,
+                        duration: 2,
                         repeat: Infinity,
                         ease: 'linear',
-                        delay: 1.125,
+                        delay: 1.5,
                       }}
                     />
                   </motion.div>
 
-                  <div
-                    className="absolute inset-0 bg-gradient-to-tr rounded-xl z-0"
+                  {/* Glow effect on hover */}
+                  <motion.div
+                    className="absolute inset-0 rounded-2xl pointer-events-none z-0"
                     style={{
-                      background:
-                        'radial-gradient(circle at center, #06B6D420 0%, transparent 70%)',
-                      opacity: 0,
-                      transition: 'opacity 0.4s ease',
+                      background: 'radial-gradient(circle at center, #06B6D410 0%, transparent 70%)',
                     }}
+                    initial={{ opacity: 0 }}
+                    whileHover={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
                   />
                 </motion.div>
               ))}

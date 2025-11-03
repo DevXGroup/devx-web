@@ -8,9 +8,12 @@ attribute vec2 position;
 void main(){gl_Position=vec4(position,0.0,1.0);}
 `;
 
+const useHighPrecision = process.env.NODE_ENV === 'production';
+
 const fragment = `
 #ifdef GL_ES
-precision mediump float;
+precision ${useHighPrecision ? 'highp' : 'mediump'} float;
+precision ${useHighPrecision ? 'highp' : 'mediump'} int;
 #endif
 uniform vec2 uResolution;
 uniform float uTime;
@@ -124,14 +127,22 @@ export default function DarkVeil({
     const mesh = new Mesh(gl, { geometry, program });
 
     const resize = () => {
-      const w = parent.clientWidth,
-        h = parent.clientHeight;
+      const rect = parent.getBoundingClientRect();
+      const w = Math.max(1, rect.width);
+      const h = Math.max(1, rect.height);
       renderer.setSize(w * resolutionScale, h * resolutionScale);
       program.uniforms.uResolution.value.set(w, h);
     };
 
     window.addEventListener('resize', resize);
     resize();
+    requestAnimationFrame(resize);
+
+    let resizeObserver: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(() => resize());
+      resizeObserver.observe(parent);
+    }
 
     const start = performance.now();
     let frame = 0;
@@ -152,6 +163,7 @@ export default function DarkVeil({
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener('resize', resize);
+      resizeObserver?.disconnect();
     };
   }, [hueShift, noiseIntensity, scanlineIntensity, speed, scanlineFrequency, warpAmount, resolutionScale]);
   return <canvas ref={ref} className="w-full h-full block" />;

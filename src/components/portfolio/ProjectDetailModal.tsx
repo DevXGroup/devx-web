@@ -125,7 +125,7 @@ const ProjectDetailModal = ({ project, isOpen, onClose }: ProjectDetailModalProp
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="relative w-full max-w-6xl max-h-[90vh] bg-black/90 backdrop-blur-xl border border-white/20 rounded-3xl overflow-y-auto"
+              className="relative w-full max-w-6xl max-h-[96vh] md:max-h-[94vh] lg:max-h-[90vh] h-[calc(100vh-4rem)] bg-black/90 backdrop-blur-xl border border-white/20 rounded-3xl overflow-y-auto"
               onClick={(e) => e.stopPropagation()}
             >
                 {/* Header */}

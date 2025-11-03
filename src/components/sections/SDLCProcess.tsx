@@ -59,7 +59,10 @@ const AnimatedIcon = ({ Icon, isActive, isComplete, progress, index }: { Icon: a
         }}
         style={{ visibility: "visible" }}
       >
-        <Icon className={`w-4 h-4 sm:w-6 sm:h-6 ${isComplete || progress === 1 ? "text-white" : "text-black"}`} />
+        <Icon
+          className={`w-4 h-4 sm:w-6 sm:h-6 ${isComplete || progress === 1 ? "" : "text-black"}`}
+          style={{ color: isComplete || progress === 1 ? "#228B22" : undefined }}
+        />
       </motion.div>
     </div>
   )

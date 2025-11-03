@@ -856,7 +856,6 @@ export default function EntryPage() {
         className="fixed inset-0 bg-black flex flex-col items-center justify-center"
         suppressHydrationWarning
       >
-        <div className="text-white text-2xl md:text-3xl font-mono mb-6 text-center">DevX Group</div>
         <div className="text-white text-xl font-mono">Loading...</div>
       </div>
     )
@@ -868,7 +867,6 @@ export default function EntryPage() {
         className="fixed inset-0 bg-black flex flex-col items-center justify-center"
         suppressHydrationWarning
       >
-        <div className="text-white text-2xl md:text-3xl font-mono mb-6 text-center">DevX Group</div>
         <div className="text-white text-xl font-mono">Loading...</div>
       </div>
     )

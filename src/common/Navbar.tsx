@@ -169,7 +169,7 @@ export default function Navbar() {
     <nav className={`fixed w-full z-[9999] transition-all duration-300 mt-0 top-0`} style={navbarStyle}>
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-[14px]">
-          <Link href="/home" aria-label="DevX Group LLC" className="flex-shrink-0">
+          <Link href="/" aria-label="DevX Group LLC" className="flex-shrink-0">
             <Image
               src="/images/logos/devx-logo.png"
               alt="DevX Group LLC"
