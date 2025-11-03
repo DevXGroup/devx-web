@@ -467,7 +467,7 @@ class CarLights {
   init() {
     const options = this.options
     const curve = new THREE.LineCurve3(new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, -1))
-    const geometry = new THREE.TubeGeometry(curve, 40, 1, 8, false)
+    const geometry = new THREE.TubeGeometry(curve, 25, 1, 6, false)
 
     const instanced = new THREE.InstancedBufferGeometry().copy(
       geometry as any
@@ -785,7 +785,7 @@ class Road {
 
   createPlane(side: number, width: number, isRoad: boolean) {
     const options = this.options
-    const segments = 100
+    const segments = 60
     const geometry = new THREE.PlaneGeometry(
       isRoad ? options.roadWidth : options.islandWidth,
       options.length,
@@ -1013,10 +1013,10 @@ class App {
       alpha: true,
       preserveDrawingBuffer: false,
       failIfMajorPerformanceCaveat: false,
-      powerPreference: 'default'
+      powerPreference: 'high-performance'
     })
     this.renderer.setSize(safeWidth, safeHeight, false)
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
 
     // Set clear color to prevent white flash
     this.renderer.setClearColor(0x000000, 0)
@@ -1120,16 +1120,16 @@ class App {
       this.bloomPass = new EffectPass(
         this.camera,
         new BloomEffect({
-          luminanceThreshold: 0.2,
+          luminanceThreshold: 0.3,
           luminanceSmoothing: 0,
-          resolutionScale: 1,
+          resolutionScale: 0.5,
         })
       )
 
       const smaaPass = new EffectPass(
         this.camera,
         new SMAAEffect({
-          preset: SMAAPreset.MEDIUM,
+          preset: SMAAPreset.LOW,
         })
       )
 

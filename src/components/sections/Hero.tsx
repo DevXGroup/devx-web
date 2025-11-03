@@ -10,19 +10,19 @@ import StarBorder from '@animations/StarBorder'
 import TextType from '@animations/TextType'
 import ShinyText from '@/components/ui/ShinyText'
 
-// Dynamically import heavy 3D components only when in viewport
-const DynamicHeroBackground = dynamic(() => import('../hero/HeroBackground'), {
+// Dynamically import components only when in viewport - optimized loading
+const DynamicCosmicStars = dynamic(() => import('../hero/CosmicStars'), {
   ssr: false,
   loading: () => <div className="absolute inset-0 bg-black" />,
 })
-const DynamicPlanetDivider = dynamic(() => import('../planet/PlanetDivider'), {
-  ssr: false,
-  loading: () => null,
-})
-const DynamicShootingStars = dynamic(() => import('../hero/ShootingStars'), {
-  ssr: false,
-  loading: () => null,
-})
+const DynamicPlanetDivider = dynamic(
+  () => import('../planet/PlanetDivider').then(mod => ({ default: mod.default })),
+  { ssr: false, loading: () => null }
+)
+const DynamicShootingStars = dynamic(
+  () => import('../hero/ShootingStars').then(mod => ({ default: mod.default })),
+  { ssr: false, loading: () => null }
+)
 
 const subheaders = [
   'Stunning UI/UX',
@@ -73,7 +73,7 @@ export default function Hero() {
   const router = useRouter()
   const shouldReduceMotion = useReducedMotion()
   const controls = useAnimation()
-  const [enableBackground, setEnableBackground] = useState(false)
+  const [enableCosmicStars, setEnableCosmicStars] = useState(false)
   const [enableShootingStars, setEnableShootingStars] = useState(false)
   const [enablePlanetDivider, setEnablePlanetDivider] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
@@ -89,54 +89,43 @@ export default function Hero() {
 
   // Check for mobile devices to optimize performance
   useEffect(() => {
-    const checkIfMobile = () => {
-      return (
-        typeof window !== 'undefined' && 
-        (window.innerWidth < 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
-      )
-    }
-    
+    const checkIfMobile = () => window.innerWidth < 768
     setIsMobile(checkIfMobile())
-    
-    const handleResize = () => {
-      setIsMobile(checkIfMobile())
-    }
-    
-    window.addEventListener('resize', handleResize)
+
+    const handleResize = () => setIsMobile(checkIfMobile())
+    window.addEventListener('resize', handleResize, { passive: true })
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  // Trigger entrance animation
+  // Trigger entrance animation and load background components when in view
   useEffect(() => {
     controls.start('visible')
-  }, [controls])
-
-  useEffect(() => {
-    // Activate backgrounds only when section is in view (improves initial load)
     if (isInView) {
-      setEnableBackground(true)
-      setEnableShootingStars(true)
-      setEnablePlanetDivider(true)
+      // Use requestIdleCallback for non-critical animations (fallback to setTimeout)
+      const loadBackgrounds = () => {
+        setEnableCosmicStars(true)
+        // Delay shooting stars and planet slightly for staggered loading
+        setTimeout(() => {
+          setEnableShootingStars(true)
+          setEnablePlanetDivider(true)
+        }, 100)
+      }
+
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(loadBackgrounds)
+      } else {
+        setTimeout(loadBackgrounds, 1)
+      }
     }
-  }, [isInView])
+  }, [controls, isInView])
 
   return (
     <section ref={sectionRef} className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-black">
-      {/* Animated Background */}
-      <div className="absolute inset-0 tech-flow"></div>
-
-      {/* Starfield Background - Always visible, especially on mobile */}
-      <div className="absolute inset-0 pointer-events-none z-[1]">
-        <div className="stars-layer-1"></div>
-        <div className="stars-layer-2"></div>
-        <div className="stars-layer-3"></div>
-      </div>
-
-      {/* 3D Background - Only rendered on client */}
+      {/* Cosmic Stars Background - Lightweight CSS-based stars */}
       <ClientOnly>
-        {enableBackground && (
-          <div className="absolute inset-0 w-full h-full">
-            <DynamicHeroBackground />
+        {enableCosmicStars && (
+          <div className="absolute inset-0 w-full h-full z-[1]">
+            <DynamicCosmicStars />
           </div>
         )}
       </ClientOnly>
@@ -234,7 +223,7 @@ export default function Hero() {
                       href="/pricing"
                       className="uppercase tracking-[0.19em] text-sm sm:text-base md:text-lg lg:text-lg font-medium opacity-90 hover:opacity-100"
                     >
-                      <ShinyText text="Competitive Pricing" speed={isMobile ? 9 : 7} delay={0.9} />
+                      <ShinyText text="Transparent Pricing" speed={isMobile ? 9 : 7} delay={0.9} />
                     </Link>
                   </div>
                 </div>

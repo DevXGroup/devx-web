@@ -1540,3 +1540,12 @@ a.button,
 .star-border-hover:hover > div:last-child {
   color: #ccff00 !important;
 }
+
+/* Additional rendering optimization for Safari to prevent square glow issue */
+@supports (-webkit-appearance: none) {
+  .planet-sphere {
+    /* Prevent overflow clipping that may cause square glow effect in Safari */
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
+    border-radius: 50%; /* Ensure circular shape for proper glow */
+  }
+}

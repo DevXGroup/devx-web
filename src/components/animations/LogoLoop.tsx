@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import Image from 'next/image'
 
 interface LogoLoopLogo {
@@ -19,7 +19,80 @@ interface LogoLoopProps {
 }
 
 export default function LogoLoop({ logos, speed = 15 }: LogoLoopProps) {
+  const containerRef = useRef<HTMLDivElement>(null)
   const scrollerRef = useRef<HTMLDivElement>(null)
+  const touchTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const [activeIndex, setActiveIndex] = useState<number | null>(null)
+  const [scrollDistance, setScrollDistance] = useState(0)
+
+  useEffect(() => {
+    const updateDistance = () => {
+      if (!scrollerRef.current || !containerRef.current) return
+      const scrollerWidth = scrollerRef.current.scrollWidth
+      const containerWidth = containerRef.current.clientWidth
+      setScrollDistance(Math.max(0, scrollerWidth - containerWidth))
+    }
+
+    updateDistance()
+    window.addEventListener('resize', updateDistance)
+
+    let observer: ResizeObserver | null = null
+    if (typeof ResizeObserver !== 'undefined' && scrollerRef.current) {
+      observer = new ResizeObserver(updateDistance)
+      observer.observe(scrollerRef.current)
+    }
+
+    return () => {
+      window.removeEventListener('resize', updateDistance)
+      if (observer) {
+        observer.disconnect()
+      }
+    }
+  }, [logos.length])
+
+  const clearTouchTimeout = () => {
+    if (touchTimeoutRef.current) {
+      clearTimeout(touchTimeoutRef.current)
+      touchTimeoutRef.current = null
+    }
+  }
+
+  const handleActivate = (index: number) => {
+    clearTouchTimeout()
+    setActiveIndex(index)
+  }
+
+  const handleDeactivate = () => {
+    clearTouchTimeout()
+    setActiveIndex(null)
+  }
+
+  const handleTouchStart = (index: number) => {
+    handleActivate(index)
+  }
+
+  const handleTouchEnd = () => {
+    clearTouchTimeout()
+    touchTimeoutRef.current = setTimeout(() => {
+      setActiveIndex(null)
+    }, 600)
+  }
+
+  useEffect(() => {
+    return () => {
+      clearTouchTimeout()
+    }
+  }, [])
+
+  const scrollerStyles: (CSSProperties & { '--scroll-distance'?: string }) = {
+    animationName: scrollDistance > 0 ? 'scroll' : 'none',
+    animationDuration: `${speed}s`,
+    animationTimingFunction: 'linear',
+    animationIterationCount: 'infinite',
+    animationDirection: 'alternate',
+    willChange: scrollDistance > 0 ? 'transform' : undefined,
+    '--scroll-distance': `${scrollDistance}px`,
+  }
 
   return (
     <div className="relative w-full overflow-hidden py-8 pb-20">
@@ -27,64 +100,72 @@ export default function LogoLoop({ logos, speed = 15 }: LogoLoopProps) {
       <div className="absolute left-0 top-0 bottom-0 w-32 md:w-48 lg:w-64 bg-gradient-to-r from-black via-black/80 to-transparent z-20 pointer-events-none" />
       <div className="absolute right-0 top-0 bottom-0 w-32 md:w-48 lg:w-64 bg-gradient-to-l from-black via-black/80 to-transparent z-20 pointer-events-none" />
 
-      <div
-        ref={scrollerRef}
-        className="flex gap-12 md:gap-16 lg:gap-20"
-        style={{
-          animation: `scroll ${speed}s linear infinite`,
-          willChange: 'transform',
-        }}
-      >
-        {[...logos, ...logos, ...logos, ...logos].map((logo, index) => {
-          const shouldApplyGrayscale = logo.grayscale !== false
+      <div ref={containerRef} className="relative w-full">
+        <div ref={scrollerRef} className="flex gap-12 md:gap-16 lg:gap-20" style={scrollerStyles}>
+          {[...logos, ...logos].map((logo, index) => {
+            const isActive = activeIndex === index
+            const shouldApplyGrayscale = logo.grayscale !== false && !isActive
 
-          return (
-            <div
-              key={`${logo.name}-${index}`}
-              className="flex-shrink-0 transition-transform duration-300 hover:scale-125 group/item cursor-pointer"
-            >
-              <div className="relative flex flex-col items-center gap-3">
-                <div
-                  className={`relative flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 transition-all duration-500 ${
-                    shouldApplyGrayscale ? 'grayscale group-hover/item:grayscale-0' : ''
-                  } ${logo.loopWrapperClassName ?? ''}`}
-                  style={{ background: 'transparent' }}
-                >
-                  <Image
-                    src={logo.icon}
-                    alt={logo.name}
-                    fill
-                    sizes="(min-width: 1280px) 6rem, (min-width: 1024px) 5rem, (min-width: 768px) 4.5rem, (min-width: 640px) 4rem, 3rem"
-                    className={`object-contain ${logo.imageClassName ?? ''} ${
-                      logo.loopImageClassName ?? ''
-                    }`}
-                    style={
-                      logo.name === 'Laravel'
-                        ? {
-                            filter:
-                              'brightness(1.5) saturate(1.5) hue-rotate(300deg) contrast(1.2)',
-                          }
-                        : undefined
-                    }
-                  />
-                </div>
-                {/* Label - Shows on hover */}
-                <div
-                  className={`
-                    absolute -bottom-12 left-1/2 -translate-x-1/2 whitespace-nowrap z-[999]
-                    bg-black/95 backdrop-blur-md px-4 py-2 rounded-lg
-                    border border-[#4CD787]/50 text-white text-sm sm:text-base font-['IBM_Plex_Mono'] font-medium
-                    shadow-lg shadow-[#4CD787]/20
-                    transition-all duration-300 pointer-events-none opacity-0 translate-y-2 scale-95
-                    group-hover/item:opacity-100 group-hover/item:translate-y-0 group-hover/item:scale-100
-                  `}
-                >
-                  {logo.name}
+            return (
+              <div
+                key={`${logo.name}-${index}`}
+                role="button"
+                tabIndex={0}
+                className={`flex-shrink-0 transition-transform duration-300 hover:scale-125 group/item cursor-pointer ${
+                  isActive ? 'scale-110' : ''
+                }`}
+                onMouseEnter={() => handleActivate(index)}
+                onMouseLeave={handleDeactivate}
+                onFocus={() => handleActivate(index)}
+                onBlur={handleDeactivate}
+                onTouchStart={() => handleTouchStart(index)}
+                onTouchEnd={handleTouchEnd}
+                onTouchCancel={handleTouchEnd}
+              >
+                <div className="relative flex flex-col items-center gap-3">
+                  <div
+                    className={`relative flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 transition-all duration-500 ${
+                      shouldApplyGrayscale ? 'grayscale group-hover/item:grayscale-0' : 'grayscale-0'
+                    } ${logo.loopWrapperClassName ?? ''}`}
+                    style={{ background: 'transparent' }}
+                  >
+                    <Image
+                      src={logo.icon}
+                      alt={logo.name}
+                      fill
+                      sizes="(min-width: 1280px) 6rem, (min-width: 1024px) 5rem, (min-width: 768px) 4.5rem, (min-width: 640px) 4rem, 3rem"
+                      className={`object-contain ${logo.imageClassName ?? ''} ${
+                        logo.loopImageClassName ?? ''
+                      }`}
+                      style={
+                        logo.name === 'Laravel'
+                          ? {
+                              filter:
+                                'brightness(1.5) saturate(1.5) hue-rotate(300deg) contrast(1.2)',
+                            }
+                          : undefined
+                      }
+                    />
+                  </div>
+                  {/* Label - Shows on hover */}
+                  <div
+                    className={`
+                      absolute -bottom-12 left-1/2 -translate-x-1/2 whitespace-nowrap z-[999]
+                      bg-black/95 backdrop-blur-md px-4 py-2 rounded-lg
+                      border border-[#4CD787]/50 text-white text-sm sm:text-base font-['IBM_Plex_Mono'] font-medium
+                      shadow-lg shadow-[#4CD787]/20
+                      transition-all duration-300 pointer-events-none opacity-0 translate-y-2 scale-95
+                      group-hover/item:opacity-100 group-hover/item:translate-y-0 group-hover/item:scale-100
+                      ${isActive ? 'opacity-100 translate-y-0 scale-100' : ''}
+                    `}
+                  >
+                    {logo.name}
+                  </div>
                 </div>
               </div>
-            </div>
-          )
-        })}
+            )
+          })}
+        </div>
       </div>
       <style jsx>{`
         @keyframes scroll {
@@ -92,7 +173,7 @@ export default function LogoLoop({ logos, speed = 15 }: LogoLoopProps) {
             transform: translateX(0);
           }
           100% {
-            transform: translateX(-50%);
+            transform: translateX(calc(-1 * var(--scroll-distance, 0px)));
           }
         }
       `}</style>
