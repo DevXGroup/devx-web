@@ -566,18 +566,17 @@ export default function PortfolioPage() {
                   </div>
                 </motion.div>
 
-                {/* Right Middle Square - GridAnimation (130x130px) - Tablet and up */}
+                {/* Right Middle Square - GridAnimation (132x132px) - Tablet and up */}
                 <motion.div
                   className="hidden md:block absolute
                     top-1/2 -translate-y-1/2 right-[25%]
                     backdrop-blur-md overflow-hidden
-                    w-[130px] h-[130px] cursor-pointer"
+                    w-[132px] h-[132px] cursor-pointer"
                   style={{
-                    transform: 'rotate(-15deg)',
                     border: '2px solid rgba(255, 215, 0, 0.5)',
                     borderRadius: '12px',
                     backgroundColor: 'rgba(0, 0, 0, 0.2)',
-                    zIndex: 5,
+                    zIndex: 10,
                   }}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -595,18 +594,18 @@ export default function PortfolioPage() {
                   </div>
                 </motion.div>
 
-                {/* Right Outer Square - Waves (140x140px) - Tablet and up */}
+                {/* Right Outer Square - Waves (110x110px) - Tablet and up */}
                 <motion.div
                   className="hidden md:block absolute
                     top-1/2 -translate-y-1/2 right-[8%]
                     backdrop-blur-md overflow-hidden
-                    w-[140px] h-[140px] cursor-pointer"
+                    w-[110px] h-[110px] cursor-pointer"
                   style={{
-                    transform: 'rotate(30deg)',
+                    transform: 'rotate(8deg)',
                     border: '2px solid rgba(76, 215, 135, 0.6)',
                     borderRadius: '12px',
                     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                    zIndex: 3,
+                    zIndex: 11,
                   }}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -638,7 +637,7 @@ export default function PortfolioPage() {
       <section className="pt-[5px] pb-24 relative">
         <div className="container mx-auto px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-8 max-w-8xl">
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-8 md:gap-10 lg:gap-12 xl:gap-14 2xl:gap-16 relative z-10"
+            className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-8 md:gap-10 lg:gap-12 xl:gap-14 2xl:gap-16 relative z-10 justify-items-center"
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
@@ -647,6 +646,7 @@ export default function PortfolioPage() {
             {projects.map((project, index) => (
               <motion.div
                 key={project.title}
+                className="w-full lg:max-w-[720px]"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true, margin: '-100px' }}

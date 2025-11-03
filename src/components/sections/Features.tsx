@@ -249,7 +249,7 @@ export default function Features() {
       <div className="absolute top-0 left-0 right-0 h-2 md:h-40 bg-gradient-to-b from-black to-transparent z-[1] pointer-events-none" />
 
       {/* Full-screen Grid Background for entire section */}
-      <div className="absolute inset-0 w-full h-full opacity-60 z-[0] pointer-events-auto">
+      <div className="absolute inset-0 w-full h-full opacity-40 z-[0] pointer-events-auto">
         <GridAnimation
           direction="diagonal"
           speed={0.3}

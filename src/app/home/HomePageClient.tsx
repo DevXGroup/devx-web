@@ -39,25 +39,20 @@ export default function HomePageClient() {
       const perfEntries = performance.getEntriesByType('measure')
       const sectionLoadTime = perfEntries.find(entry => entry.name === `${section}-load`)
 
-      if (sectionLoadTime) {
-        console.log(`${section} load time: ${sectionLoadTime.duration.toFixed(2)}ms`)
-      }
-
       // Send performance data to analytics if needed
       // analytics.track('section_load_time', { section, load_time: sectionLoadTime?.duration })
     }
   }, [])
 
-  // Performance observer for layout shifts
+  // Performance observer for layout shifts (disabled in production)
   useEffect(() => {
-    if (typeof window !== 'undefined' && 'PerformanceObserver' in window) {
+    if (typeof window !== 'undefined' && 'PerformanceObserver' in window && process.env.NODE_ENV === 'development') {
       const observer = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
           // Type guard to check if entry is a LayoutShift
           const layoutShiftEntry = entry as PerformanceEntry & { hadRecentInput?: boolean; value?: number }
           if (layoutShiftEntry.hadRecentInput) continue // Ignore layout shifts after user input
-          // Log cumulative layout shift
-          console.log(`Layout shift detected: ${layoutShiftEntry.value}`)
+          // Track cumulative layout shift silently
         }
       })
 
@@ -65,7 +60,6 @@ export default function HomePageClient() {
         observer.observe({ entryTypes: ['layout-shift'] })
       } catch (e) {
         // Some browsers might not support this entry type
-        console.warn('Layout shift observer not supported:', e)
       }
 
       return () => observer.disconnect()

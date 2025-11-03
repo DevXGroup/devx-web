@@ -756,9 +756,9 @@ export default function DevelopmentTools() {
         <div className="w-full mt-8 md:mt-24 lg:mt-32 xl:mt-40 py-8 md:py-12 lg:py-16 mb-6">
           <div className="w-full max-w-full">
             <h4 className="text-3xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold font-['IBM_Plex_Mono'] text-center text-white mb-12 md:mb-16 lg:mb-20 px-4">
-              AI & Cloud Technologies
+              Other Tools & Tech Stacks We Use
             </h4>
-            <LogoLoop logos={aiTools} speed={12} />
+            <LogoLoop logos={aiTools} speed={18} />
           </div>
         </div>
         {/* Bottom spacing with gradient fade to black */}

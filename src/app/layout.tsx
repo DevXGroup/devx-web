@@ -260,6 +260,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         {/* Resource hints for better performance */}
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+        <link rel="preconnect" href="https://calendly.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://calendly.com" />
         {/* Patch React DevTools semver regression */}
         <Script
           id="react-devtools-semver-patch"
