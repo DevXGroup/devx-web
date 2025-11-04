@@ -172,7 +172,7 @@ export default function ShootingStars() {
         }
 
         // Reset star if it goes off screen
-        const OFFSCREEN_MARGIN = 40
+        const OFFSCREEN_MARGIN = star.length
         if (
           star.x < -OFFSCREEN_MARGIN ||
           star.x > width + OFFSCREEN_MARGIN ||
