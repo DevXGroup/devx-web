@@ -663,7 +663,6 @@ export default function AboutPage() {
             scanlineFrequency={0}
           />
         </div>
-        <div className="absolute inset-x-0 -top-20 bottom-0 z-[1] bg-gradient-to-b from-[#000B14]/70 via-[black]/75 to-[darkBlue]/20 mix-blend-plus-lighter pointer-events-none"></div>
 
         <div className="container mx-auto px-[21px] relative z-10">
           <div className="max-w-6xl mx-auto">
