@@ -64,6 +64,7 @@ export default function ShootingStars() {
       angle: number
       cosAngle: number
       sinAngle: number
+      opacity: number
     }[] = []
 
     // Pre-create a reusable gradient canvas for better performance
@@ -105,6 +106,7 @@ export default function ShootingStars() {
         angle,
         cosAngle,
         sinAngle,
+        opacity: 0,
       })
     }
 
@@ -141,6 +143,9 @@ export default function ShootingStars() {
           return
         }
 
+        star.opacity += deltaTime * 0.001
+        const opacity = star.opacity * 0.8
+
         // Move star with separate X and Y speeds
         star.x += star.speedX
         star.y += star.speedY
@@ -150,7 +155,7 @@ export default function ShootingStars() {
           ctx.save()
           ctx.translate(star.x, star.y)
           ctx.rotate(star.angle)
-          ctx.globalAlpha = 0.8
+          ctx.globalAlpha = opacity
           // Draw backward (negative offset) so trail is behind the star
           ctx.drawImage(gradientPattern, -star.length, -star.size / 2, star.length, star.size)
           ctx.restore()
@@ -163,7 +168,7 @@ export default function ShootingStars() {
           ctx.beginPath()
           ctx.moveTo(star.x, star.y)
           const gradient = ctx.createLinearGradient(star.x, star.y, trailEndX, trailEndY)
-          gradient.addColorStop(0, 'rgba(255, 255, 255, 0.8)')
+          gradient.addColorStop(0, `rgba(255, 255, 255, ${opacity})`)
           gradient.addColorStop(1, 'rgba(255, 255, 255, 0)')
           ctx.lineTo(trailEndX, trailEndY)
           ctx.strokeStyle = gradient

@@ -6,9 +6,7 @@ import dynamic from 'next/dynamic'
 // Enable SSR for Hero to improve FCP/LCP - hero content renders immediately
 const Hero = dynamic(() => import('@sections/Hero'), {
   ssr: true,
-  loading: () => (
-    <div className="min-h-screen bg-black" />
-  ),
+  loading: () => <div className="min-h-screen bg-black" />,
 })
 
 const FeaturesSection = dynamic(() => import('@sections/Features'), {
@@ -34,7 +32,7 @@ export default function HomePageClient() {
   const logPerformance = useCallback((section: string) => {
     if (typeof window !== 'undefined' && window.performance) {
       const perfEntries = performance.getEntriesByType('measure')
-      const sectionLoadTime = perfEntries.find(entry => entry.name === `${section}-load`)
+      const sectionLoadTime = perfEntries.find((entry) => entry.name === `${section}-load`)
 
       // Send performance data to analytics if needed
       // analytics.track('section_load_time', { section, load_time: sectionLoadTime?.duration })
@@ -43,11 +41,18 @@ export default function HomePageClient() {
 
   // Performance observer for layout shifts (disabled in production)
   useEffect(() => {
-    if (typeof window !== 'undefined' && 'PerformanceObserver' in window && process.env.NODE_ENV === 'development') {
+    if (
+      typeof window !== 'undefined' &&
+      'PerformanceObserver' in window &&
+      process.env.NODE_ENV === 'development'
+    ) {
       const observer = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
           // Type guard to check if entry is a LayoutShift
-          const layoutShiftEntry = entry as PerformanceEntry & { hadRecentInput?: boolean; value?: number }
+          const layoutShiftEntry = entry as PerformanceEntry & {
+            hadRecentInput?: boolean
+            value?: number
+          }
           if (layoutShiftEntry.hadRecentInput) continue // Ignore layout shifts after user input
           // Track cumulative layout shift silently
         }
@@ -114,9 +119,9 @@ export default function HomePageClient() {
       style={{ backgroundColor: '#000000' }}
     >
       <Hero />
-      <FeaturesSection />
-      <ProcessSection />
-      <DevelopmentToolsSection />
+      {/*<FeaturesSection />*/}
+      {/*<ProcessSection />*/}
+      {/*<DevelopmentToolsSection />*/}
     </main>
   )
 }
