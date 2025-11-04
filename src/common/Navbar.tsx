@@ -169,7 +169,7 @@ export default function Navbar() {
     <nav className={`fixed w-full z-[9999] transition-all duration-300 mt-0 top-0`} style={navbarStyle}>
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-[14px]">
-          <Link href="/" aria-label="DevX Group LLC" className="flex-shrink-0">
+          <Link href="/home" aria-label="DevX Group LLC" className="flex-shrink-0 cursor-pointer">
             <Image
               src="/images/logos/devx-logo.png"
               alt="DevX Group LLC"
@@ -178,8 +178,8 @@ export default function Navbar() {
               priority
               quality={90}
               sizes="(max-width: 640px) 160px, 200px"
-              className="w-[200px] h-auto"
-              style={{ maxWidth: '200px', height: 'auto' }}
+              className="w-[200px] h-auto cursor-pointer"
+              style={{ maxWidth: '200px', height: 'auto', cursor: 'pointer' }}
             />
           </Link>
           {/* Desktop Menu - right aligned */}

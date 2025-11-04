@@ -73,13 +73,89 @@ const LetterGlitch = ({
 
   // Pre-calculated constant array - reduces memory allocations with more code-like characters
   const lettersAndSymbols = [
-    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-    'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-    '!', '@', '#', '$', '&', '*', '(', ')', '-', '_', '+', '=', '/',
-    '[', ']', '{', '}', ';', ':', '<', '>', ',',
-    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '?',
-    '{', '}', '[', ']', '(', ')', '=', '+', '-', '*', '/', '%', '|', '&', '^', '~', '<', '>',
-    'A', 'B', 'C', 'D', 'E', 'F', // Hex digits
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F',
+    'G',
+    'H',
+    'I',
+    'J',
+    'K',
+    'L',
+    'M',
+    'N',
+    'O',
+    'P',
+    'Q',
+    'R',
+    'S',
+    'T',
+    'U',
+    'V',
+    'W',
+    'X',
+    'Y',
+    'Z',
+    '!',
+    '@',
+    '#',
+    '$',
+    '&',
+    '*',
+    '(',
+    ')',
+    '-',
+    '_',
+    '+',
+    '=',
+    '/',
+    '[',
+    ']',
+    '{',
+    '}',
+    ';',
+    ':',
+    '<',
+    '>',
+    ',',
+    '0',
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    '?',
+    '{',
+    '}',
+    '[',
+    ']',
+    '(',
+    ')',
+    '=',
+    '+',
+    '-',
+    '*',
+    '/',
+    '%',
+    '|',
+    '&',
+    '^',
+    '~',
+    '<',
+    '>',
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F', // Hex digits
   ] as const
 
   const getRandomChar = (): string => {
@@ -232,7 +308,7 @@ const LetterGlitch = ({
 
     // Optimize update frequency for better performance - fewer updates = faster load
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
-    const updatePercentage = isMobile ? 0.008 : 0.020 // Reduced from 0.012/0.025 for better performance
+    const updatePercentage = isMobile ? 0.008 : 0.02 // Reduced from 0.012/0.025 for better performance
     const updateCount: number = Math.max(1, Math.floor(letters.current.length * updatePercentage))
 
     for (let i = 0; i < updateCount; i++) {
@@ -623,7 +699,6 @@ function DecryptedText({
   )
 }
 
-
 import dynamic from 'next/dynamic'
 
 // Dynamically import StarField for better performance
@@ -718,7 +793,6 @@ const StarField = dynamic(
   }
 )
 
-
 // Animation sequence without zoom
 function AnimatedInfinity({ onComplete }: { onComplete: () => void }) {
   const [animationPhase, setAnimationPhase] = useState<'drawing' | 'text'>('drawing')
@@ -729,13 +803,13 @@ function AnimatedInfinity({ onComplete }: { onComplete: () => void }) {
   }, [])
 
   const handleDrawingComplete = () => {
-    // Give more time to see the infinity symbol and background
-    setTimeout(() => setAnimationPhase('text'), 500)
+    // Transition to text phase
+    setTimeout(() => setAnimationPhase('text'), 300)
   }
 
   const handleTextComplete = () => {
-    // Give more time to see the completed text before transitioning
-    setTimeout(onComplete, 700)
+    // Start curtain immediately - no fade needed
+    onComplete()
   }
 
   if (!mounted) return null
@@ -832,7 +906,7 @@ export default function EntryPage() {
 
   useEffect(() => {
     if (animationComplete && mounted) {
-      // Start collapse animation immediately
+      // Start collapse animation immediately - no delay
       setIsCollapsing(true)
     }
   }, [animationComplete, mounted])
@@ -849,27 +923,13 @@ export default function EntryPage() {
     return undefined
   }, [reduceMotion, mounted, router])
 
-  // Show consistent loading state during hydration - no conditional rendering
+  // Show black screen during hydration - no loading text
   if (!mounted || !clientSide) {
-    return (
-      <div
-        className="fixed inset-0 bg-black flex flex-col items-center justify-center"
-        suppressHydrationWarning
-      >
-        <div className="text-white text-xl font-mono">Loading...</div>
-      </div>
-    )
+    return <div className="fixed inset-0 bg-black" suppressHydrationWarning />
   }
 
   if (reduceMotion) {
-    return (
-      <div
-        className="fixed inset-0 bg-black flex flex-col items-center justify-center"
-        suppressHydrationWarning
-      >
-        <div className="text-white text-xl font-mono">Loading...</div>
-      </div>
-    )
+    return <div className="fixed inset-0 bg-black" suppressHydrationWarning />
   }
 
   return (
@@ -880,7 +940,7 @@ export default function EntryPage() {
 
       {/* Shutter Collapse Animation - Top and Bottom bars */}
       <motion.div
-        className="fixed top-0 left-0 right-0 z-[100] w-full"
+        className="fixed top-0 left-0 right-0 z-[300] w-full"
         style={{
           background: '#000000',
           boxShadow: '0 4px 20px rgba(0,0,0,0.8)',
@@ -889,7 +949,7 @@ export default function EntryPage() {
         }}
         initial={{ height: 0 }}
         animate={{ height: isCollapsing ? '50vh' : 0 }}
-        transition={{ duration: 0.8, ease: 'easeInOut' }}
+        transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
         onAnimationComplete={() => {
           if (isCollapsing) {
             sessionStorage.setItem('fromEntry', 'true')
@@ -898,7 +958,7 @@ export default function EntryPage() {
         }}
       />
       <motion.div
-        className="fixed bottom-0 left-0 right-0 z-[100] w-full"
+        className="fixed bottom-0 left-0 right-0 z-[300] w-full"
         style={{
           background: '#000000',
           boxShadow: '0 -4px 20px rgba(0,0,0,0.8)',
@@ -907,7 +967,7 @@ export default function EntryPage() {
         }}
         initial={{ height: 0 }}
         animate={{ height: isCollapsing ? '50vh' : 0 }}
-        transition={{ duration: 0.8, ease: 'easeInOut' }}
+        transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
       />
     </div>
   )
