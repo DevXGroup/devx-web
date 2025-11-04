@@ -87,15 +87,14 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
 
       const startX = Math.floor(gridOffset.current.x / scaledSquareSize) * scaledSquareSize;
       const startY = Math.floor(gridOffset.current.y / scaledSquareSize) * scaledSquareSize;
+      const endX = Math.ceil((gridOffset.current.x + canvas.width) / scaledSquareSize);
+      const endY = Math.ceil((gridOffset.current.y + canvas.height) / scaledSquareSize);
 
-      for (let x = startX; x < canvas.width + scaledSquareSize; x += scaledSquareSize) {
-        for (let y = startY; y < canvas.height + scaledSquareSize; y += scaledSquareSize) {
-          const squareX = x - gridOffset.current.x;
-          const squareY = y - gridOffset.current.y;
-
-          const gridX = Math.floor(x / scaledSquareSize);
-          const gridY = Math.floor(y / scaledSquareSize);
+      for (let gridX = startX; gridX < endX; gridX++) {
+        for (let gridY = startY; gridY < endY; gridY++) {
           const squareKey = `${gridX}-${gridY}`;
+          const squareX = gridX * scaledSquareSize - gridOffset.current.x;
+          const squareY = gridY * scaledSquareSize - gridOffset.current.y;
 
           const isHovered = hoveredSquareRef.current &&
             gridX === hoveredSquareRef.current.x &&
@@ -103,19 +102,41 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
 
           const isFlickering = randomFlicker && flickerSquaresRef.current.has(squareKey);
 
-          if (isHovered || isFlickering) {
+          if (isHovered) {
             // Enhanced hover/flicker effect with glow
             ctx.fillStyle = hoverFillColor;
             ctx.shadowColor = typeof borderColor === 'string' ? borderColor : '#FFD700';
             ctx.shadowBlur = 8;
             ctx.fillRect(squareX, squareY, scaledSquareSize, scaledSquareSize);
             ctx.shadowBlur = 0;
+          } else if (isFlickering) {
+            ctx.fillStyle = hoverFillColor;
+            ctx.fillRect(squareX, squareY, scaledSquareSize, scaledSquareSize);
           }
 
-          ctx.strokeStyle = borderColor;
-          ctx.strokeRect(squareX, squareY, scaledSquareSize, scaledSquareSize);
+          // ctx.strokeStyle = borderColor;
+          // ctx.strokeRect(squareX, squareY, scaledSquareSize, scaledSquareSize);
         }
       }
+
+      ctx.beginPath();
+
+      // Vertical lines
+      for (let gridX = startX; gridX <= endX + 1; gridX++) {
+        const x = gridX * scaledSquareSize - gridOffset.current.x;
+        ctx.moveTo(x, startY * scaledSquareSize - gridOffset.current.y);
+        ctx.lineTo(x, (endY + 1) * scaledSquareSize - gridOffset.current.y);
+      }
+
+      // Horizontal lines
+      for (let gridY = startY; gridY <= endY + 1; gridY++) {
+        const y = gridY * scaledSquareSize - gridOffset.current.y;
+        ctx.moveTo(startX * scaledSquareSize - gridOffset.current.x, y);
+        ctx.lineTo((endX + 1) * scaledSquareSize - gridOffset.current.x, y);
+      }
+
+      ctx.strokeStyle = borderColor;
+      ctx.stroke();
 
       // Use cached gradient on desktop only (skip on mobile for performance)
       if (showRadialGradient && !isMobileRef.current && gradientRef.current) {
