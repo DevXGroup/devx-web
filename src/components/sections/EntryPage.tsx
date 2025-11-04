@@ -665,7 +665,7 @@ function DecryptedText({
         }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 1.3 }}
         {...(props as any)}
       >
         <span className="sr-only">{text}</span>
@@ -804,7 +804,7 @@ function AnimatedInfinity({ onComplete }: { onComplete: () => void }) {
 
   const handleDrawingComplete = () => {
     // Transition to text phase
-    setTimeout(() => setAnimationPhase('text'), 300)
+    setTimeout(() => setAnimationPhase('text'), 90)
   }
 
   const handleTextComplete = () => {
@@ -848,7 +848,7 @@ function AnimatedInfinity({ onComplete }: { onComplete: () => void }) {
               initial={{ pathLength: 0, opacity: 0 }}
               animate={{ pathLength: 1, opacity: 1 }}
               transition={{
-                duration: 1.6,
+                duration: 1.3,
                 ease: 'easeInOut',
                 onComplete: handleDrawingComplete,
               }}
@@ -869,11 +869,11 @@ function AnimatedInfinity({ onComplete }: { onComplete: () => void }) {
           <motion.div
             initial={{ filter: 'blur(10px)', opacity: 0.2 }}
             animate={{ filter: 'blur(0px)', opacity: 1 }}
-            transition={{ duration: 1.6, ease: 'easeOut' }}
+            transition={{ duration: 1.3, ease: 'easeOut' }}
           >
             <DecryptedText
               text="DevX Group LLC"
-              speed={110}
+              speed={90}
               sequential={true}
               revealDirection="center"
               animateOn="view"
@@ -949,7 +949,7 @@ export default function EntryPage() {
         }}
         initial={{ height: 0 }}
         animate={{ height: isCollapsing ? '50vh' : 0 }}
-        transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+        transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
         onAnimationComplete={() => {
           if (isCollapsing) {
             sessionStorage.setItem('fromEntry', 'true')
@@ -967,7 +967,7 @@ export default function EntryPage() {
         }}
         initial={{ height: 0 }}
         animate={{ height: isCollapsing ? '50vh' : 0 }}
-        transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+        transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
       />
     </div>
   )
