@@ -119,9 +119,9 @@ export default function HomePageClient() {
       style={{ backgroundColor: '#000000' }}
     >
       <Hero />
-      {/*<FeaturesSection />*/}
-      {/*<ProcessSection />*/}
-      {/*<DevelopmentToolsSection />*/}
+      <FeaturesSection />
+      <ProcessSection />
+      <DevelopmentToolsSection />
     </main>
   )
 }
