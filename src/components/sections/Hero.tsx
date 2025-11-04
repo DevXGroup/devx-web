@@ -13,15 +13,36 @@ import ShinyText from '@/components/ui/ShinyText'
 // Dynamically import components only when in viewport - optimized loading
 const DynamicCosmicStars = dynamic(() => import('../hero/CosmicStars'), {
   ssr: false,
-  loading: () => <div className="absolute inset-0 bg-black" />,
+  loading: () => (
+    <div
+      className="absolute inset-0 bg-black"
+      style={{ minHeight: '100vh', width: '100%' }}
+    />
+  ),
 })
 const DynamicPlanetDivider = dynamic(
   () => import('../planet/PlanetDivider').then(mod => ({ default: mod.default })),
-  { ssr: false, loading: () => null }
+  {
+    ssr: false,
+    loading: () => (
+      <div
+        className="absolute bottom-0 left-0 w-full"
+        style={{ height: '350px', background: 'transparent' }}
+      />
+    )
+  }
 )
 const DynamicShootingStars = dynamic(
   () => import('../hero/ShootingStars').then(mod => ({ default: mod.default })),
-  { ssr: false, loading: () => null }
+  {
+    ssr: false,
+    loading: () => (
+      <div
+        className="absolute inset-0"
+        style={{ minHeight: '100vh', width: '100%' }}
+      />
+    )
+  }
 )
 
 const subheaders = [
@@ -39,23 +60,23 @@ const subheaders = [
 
 // Optimized animation variants for better performance and LCP
 const containerVariants = {
-  hidden: { opacity: 1 },  // Changed from 0 to 1 for immediate visibility (better LCP)
+  hidden: { opacity: 1 },  // Immediate visibility for better FCP/LCP
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.08,  // Reduced from 0.12
-      delayChildren: 0,       // No delay for faster LCP
+      staggerChildren: 0,  // No stagger for instant visibility
+      delayChildren: 0,    // No delay for faster FCP
     },
   },
 }
 
 const itemVariants = {
-  hidden: { opacity: 1, y: 0 },  // Changed to 1, 0 for immediate visibility (better LCP)
+  hidden: { opacity: 1, y: 0 },  // Immediate visibility for better FCP/LCP
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.3,  // Reduced from 0.4
+      duration: 0,  // Instant for better FCP
     },
   },
 }
@@ -100,24 +121,11 @@ export default function Hero() {
   // Trigger entrance animation and load background components when in view
   useEffect(() => {
     controls.start('visible')
-    if (isInView) {
-      // Use requestIdleCallback for non-critical animations (fallback to setTimeout)
-      const loadBackgrounds = () => {
-        setEnableCosmicStars(true)
-        // Delay shooting stars and planet slightly for staggered loading
-        setTimeout(() => {
-          setEnableShootingStars(true)
-          setEnablePlanetDivider(true)
-        }, 100)
-      }
-
-      if ('requestIdleCallback' in window) {
-        requestIdleCallback(loadBackgrounds)
-      } else {
-        setTimeout(loadBackgrounds, 1)
-      }
-    }
-  }, [controls, isInView])
+    // Load backgrounds immediately for better perceived performance
+    setEnableCosmicStars(true)
+    setEnableShootingStars(true)
+    setEnablePlanetDivider(true)
+  }, [controls])
 
   return (
     <section ref={sectionRef} className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-black">
@@ -150,8 +158,10 @@ export default function Hero() {
               variants={itemVariants}
               className="hero-title mx-auto flex flex-wrap md:flex-nowrap items-center justify-center gap-2 sm:gap-3 md:gap-4 text-center text-white font-mono font-bold tracking-tight w-full"
               style={{
-                willChange: 'opacity, transform',
-                minHeight: '5rem',  // Reserve space to prevent CLS
+                willChange: 'auto', // Changed from 'opacity, transform' for better LCP
+                minHeight: '5rem',
+                maxHeight: '5rem',  // Prevent expansion
+                height: '5rem',     // Fixed height to prevent CLS
               }}
             >
               <span
@@ -233,8 +243,13 @@ export default function Hero() {
 
           <motion.div
             variants={itemVariants}
-            className="h-[4rem] sm:h-[4.5rem] md:h-[4rem] mt-3 sm:mt-4 md:mt-5 flex justify-center items-center w-full"
-            style={{ minHeight: '4rem' }}
+            className="mt-3 sm:mt-4 md:mt-5 flex justify-center items-center w-full"
+            style={{
+              minHeight: '4.5rem',
+              maxHeight: '4.5rem',
+              height: '4.5rem',
+              overflow: 'hidden'
+            }}
           >
             <TextType
               text={subheaders}

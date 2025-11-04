@@ -7,9 +7,7 @@ import dynamic from 'next/dynamic'
 const Hero = dynamic(() => import('@sections/Hero'), {
   ssr: true,
   loading: () => (
-    <div className="min-h-screen bg-black flex items-center justify-center">
-      <h1 className="text-5xl font-bold text-white">DevX Group</h1>
-    </div>
+    <div className="min-h-screen bg-black" />
   ),
 })
 
@@ -31,7 +29,6 @@ const DevelopmentToolsSection = dynamic(() => import('@sections/DevelopmentTools
 export default function HomePageClient() {
   const [isLoaded, setIsLoaded] = useState(false)
   const [navbarReady, setNavbarReady] = useState(false)
-  const [showDeferredSections, setShowDeferredSections] = useState(false)
 
   // Performance monitoring function
   const logPerformance = useCallback((section: string) => {
@@ -105,9 +102,7 @@ export default function HomePageClient() {
   }, [])
 
   useEffect(() => {
-    // Show deferred sections immediately for better performance
-    setShowDeferredSections(true)
-    logPerformance('deferred-sections')
+    logPerformance('page-ready')
   }, [logPerformance])
 
   return (
@@ -119,13 +114,9 @@ export default function HomePageClient() {
       style={{ backgroundColor: '#000000' }}
     >
       <Hero />
-      {showDeferredSections && (
-        <>
-          <FeaturesSection />
-          <ProcessSection />
-          <DevelopmentToolsSection />
-        </>
-      )}
+      <FeaturesSection />
+      <ProcessSection />
+      <DevelopmentToolsSection />
     </main>
   )
 }
