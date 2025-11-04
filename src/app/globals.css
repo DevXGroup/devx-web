@@ -74,14 +74,13 @@ html::before {
 
 /* Prevent navbar flash on home page - hide immediately */
 [data-page='home'] {
-  opacity: 0 !important;
+  opacity: 1 !important; /* Changed from 0 for better LCP */
   background-color: #000000 !important;
 }
 
 [data-page='home'].loaded {
   opacity: 1 !important;
   background-color: #000000 !important;
-  transition: opacity 0.8s ease-in;
 }
 
 /* Force black background on home route before hydration */
@@ -1548,4 +1547,49 @@ a.button,
     -webkit-mask-image: -webkit-radial-gradient(white, black);
     border-radius: 50%; /* Ensure circular shape for proper glow */
   }
+}
+
+/* Performance optimizations for Core Web Vitals */
+
+/* Ensure hero title has reserved space to prevent CLS */
+.hero-title {
+  contain: layout;
+  min-height: 5rem;
+  max-height: 5rem;
+}
+
+/* Optimize typewriter text container to prevent CLS */
+.typewriter-text {
+  contain: layout style;
+  display: block;
+  min-height: 2.5rem;
+}
+
+/* Optimize will-change for animated elements */
+.hero-title,
+.typewriter-text,
+[class*="motion-"] {
+  will-change: auto; /* Let browser decide */
+}
+
+/* Prevent font loading from causing CLS */
+@font-face {
+  font-display: optional;
+}
+
+/* Add containment hints for better rendering performance */
+/* Removed section containment as it was causing visibility issues */
+
+/* Optimize background animations to not cause repaints */
+canvas,
+[class*="cosmic"],
+[class*="shooting-star"] {
+  contain: strict;
+  content-visibility: auto;
+}
+
+/* Planet needs overflow:visible for glow, so no containment */
+[class*="planet"] {
+  contain: none;
+  overflow: visible;
 }

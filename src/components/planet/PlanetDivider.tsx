@@ -1,11 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 
 /**
  * Lightweight PNG-based planet divider
  * - Uses moon PNG image with 1/2 visible (bottom half)
- * - Continuous rotation with CSS animation
+ * - Continuous rotation with CSS animation (pauses when out of view)
  * - Subtle greenish-yellow grayish glow directly on the image
  * - Scroll-based opacity: fully visible in hero (68%), fades out while moving down on scroll
  * - Scroll-based movement (moves down as you scroll, with delay)
@@ -15,6 +15,8 @@ export default function PlanetDivider() {
   const [mounted, setMounted] = useState(false)
   const [scrollY, setScrollY] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
+  const [isInView, setIsInView] = useState(true)
+  const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setMounted(true)
@@ -44,6 +46,30 @@ export default function PlanetDivider() {
     }
   }, [])
 
+  // Intersection observer to pause rotation when out of view
+  useEffect(() => {
+    const element = containerRef.current
+    if (!element) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsInView(entry.isIntersecting)
+        })
+      },
+      {
+        threshold: 0.1, // Trigger when 10% visible
+        rootMargin: '100px', // Start observing 100px before entering viewport
+      }
+    )
+
+    observer.observe(element)
+
+    return () => {
+      observer.unobserve(element)
+    }
+  }, [mounted])
+
   if (!mounted) return null
 
   // Responsive sizing
@@ -67,6 +93,7 @@ export default function PlanetDivider() {
 
   return (
     <div
+      ref={containerRef}
       className="relative w-full mx-auto pointer-events-none"
       style={{
         height: `${containerHeight}px`,
@@ -134,6 +161,7 @@ export default function PlanetDivider() {
           width: 100%;
           height: 100%;
           animation: rotate-planet ${isMobile ? '140s' : '100s'} linear infinite;
+          animation-play-state: ${isInView ? 'running' : 'paused'};
           /* Hardware acceleration for smooth rotation */
           transform: translateZ(0);
           will-change: transform;

@@ -19,18 +19,23 @@ import { Partytown } from '@qwik.dev/partytown/react'
 import { createOgImageUrl, createTwitterImageUrl, getSiteUrl } from '@/lib/og'
 
 // Self-hosted fonts via next/font for better performance
+// Using 'optional' for better CLS - font won't swap if already rendered
 const ibmPlexMono = IBM_Plex_Mono({
   weight: ['400', '600'],
   subsets: ['latin'],
   variable: '--font-ibm-plex-mono',
-  display: 'swap',
+  display: 'optional', // Changed from 'swap' to prevent CLS from font loading
+  preload: true,
+  fallback: ['ui-monospace', 'Menlo', 'Monaco', 'Courier New', 'monospace'],
 })
 
 const ibmPlexSans = IBM_Plex_Sans({
   weight: ['400', '600'],
   subsets: ['latin'],
   variable: '--font-ibm-plex-sans',
-  display: 'swap',
+  display: 'optional', // Changed from 'swap' to prevent CLS from font loading
+  preload: true,
+  fallback: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
 })
 
 const siteUrl = getSiteUrl()
