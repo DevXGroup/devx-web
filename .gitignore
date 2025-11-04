@@ -45,6 +45,7 @@ next-env.d.ts
 
 # AI MDs
 CLAUDE.md
+AGENTS.md
 
 # Claude Code CLI directory
 .claude/
