@@ -257,8 +257,7 @@ SENTRY_AUTH_TOKEN=your_token_here
 - [React Three Fiber](https://docs.pmnd.rs/react-three-fiber)
 
 ### Project Files
-- See `CLAUDE.md` for detailed development guidelines
-- Contact DevX Group for internal documentation
+- Contact DevX Group for internal development guidelines and documentation
 
 ---
 
