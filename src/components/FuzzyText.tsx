@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useEffect, useRef } from 'react'
 
 interface FuzzyTextProps {
@@ -38,10 +40,20 @@ const FuzzyText: React.FC<FuzzyTextProps> = ({
       const ctx = canvas.getContext('2d')
       if (!ctx) return
 
-      const computedFontFamily =
+      const resolveCssVariables = (value: string) => {
+        if (!value.includes('var(')) return value
+        const rootStyles = window.getComputedStyle(document.documentElement)
+        return value.replace(/var\((--[^)]+)\)/g, (_, varName) => {
+          const resolved = rootStyles.getPropertyValue(varName.trim())
+          return resolved ? resolved.trim() : ''
+        })
+      }
+
+      const baseFontFamily =
         fontFamily === 'inherit'
           ? window.getComputedStyle(canvas).fontFamily || 'sans-serif'
           : fontFamily
+      const computedFontFamily = resolveCssVariables(baseFontFamily) || 'sans-serif'
 
       let numericFontSize: number
       if (typeof fontSize === 'number') {
@@ -67,12 +79,20 @@ const FuzzyText: React.FC<FuzzyTextProps> = ({
       const metrics = offCtx.measureText(text)
 
       const actualLeft = metrics.actualBoundingBoxLeft ?? 0
-      const actualRight = metrics.actualBoundingBoxRight ?? metrics.width
-      const actualAscent = metrics.actualBoundingBoxAscent ?? numericFontSize
-      const actualDescent = metrics.actualBoundingBoxDescent ?? numericFontSize * 0.2
+      const rawActualRight = metrics.actualBoundingBoxRight
+      const actualRight =
+        rawActualRight && rawActualRight > 0 ? rawActualRight : metrics.width
+      const rawActualAscent = metrics.actualBoundingBoxAscent
+      const actualAscent =
+        rawActualAscent && rawActualAscent > 0 ? rawActualAscent : numericFontSize
+      const rawActualDescent = metrics.actualBoundingBoxDescent
+      const actualDescent =
+        rawActualDescent && rawActualDescent > 0
+          ? rawActualDescent
+          : numericFontSize * 0.2
 
-      const textBoundingWidth = Math.ceil(actualLeft + actualRight)
-      const tightHeight = Math.ceil(actualAscent + actualDescent)
+      const textBoundingWidth = Math.max(1, Math.ceil(actualLeft + actualRight))
+      const tightHeight = Math.max(1, Math.ceil(actualAscent + actualDescent))
 
       const extraWidthBuffer = 10
       const offscreenWidth = textBoundingWidth + extraWidthBuffer
@@ -88,8 +108,12 @@ const FuzzyText: React.FC<FuzzyTextProps> = ({
 
       const horizontalMargin = 50
       const verticalMargin = 0
-      canvas.width = offscreenWidth + horizontalMargin * 2
-      canvas.height = tightHeight + verticalMargin * 2
+      const finalWidth = offscreenWidth + horizontalMargin * 2
+      const finalHeight = tightHeight + verticalMargin * 2
+      canvas.width = finalWidth
+      canvas.height = finalHeight
+      canvas.style.width = `${finalWidth}px`
+      canvas.style.height = `${finalHeight}px`
       ctx.translate(horizontalMargin, verticalMargin)
 
       const interactiveLeft = horizontalMargin + xOffset
