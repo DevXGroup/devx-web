@@ -22,6 +22,11 @@ body {
   --font-ibm-plex-mono: 'IBM Plex Mono', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 }
 
+/* Fix deprecated overflow:visible on replaced elements (img, video, canvas) */
+img, video, canvas {
+  overflow: clip;
+}
+
 /* Mobile-specific optimizations */
 @media (max-width: 650px) {
 
