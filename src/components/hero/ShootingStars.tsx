@@ -85,24 +85,17 @@ export default function ShootingStars() {
     }
     const gradientPattern = createGradientPattern()
 
-    // Get display dimensions (without DPR scaling)
-    const getDisplaySize = () => ({
-      width: canvas.getBoundingClientRect().width,
-      height: canvas.getBoundingClientRect().height,
-    })
-
     // Create stars with randomized directions - reduced to 4 total
     for (let i = 0; i < 4; i++) {
       // Randomize direction by setting different speedX and speedY values
       const angle = Math.random() * Math.PI * 2 // Random angle in radians
       const speed = Math.random() * 2 + 1 // Slower base speed (1-3 instead of 2-6)
-      const displaySize = getDisplaySize()
       const cosAngle = Math.cos(angle)
       const sinAngle = Math.sin(angle)
 
       stars.push({
-        x: Math.random() * displaySize.width,
-        y: (Math.random() * displaySize.height) / 2, // Only in top half of screen
+        x: Math.random() * width,
+        y: (Math.random() * height) / 2, // Only in top half of screen
         length: Math.random() * 80 + 40,
         speedX: cosAngle * speed, // X component of velocity
         speedY: sinAngle * speed, // Y component of velocity
@@ -179,7 +172,13 @@ export default function ShootingStars() {
         }
 
         // Reset star if it goes off screen
-        if (star.x < 0 || star.x > width || star.y < 0 || star.y > height) {
+        const OFFSCREEN_MARGIN = 40
+        if (
+          star.x < -OFFSCREEN_MARGIN ||
+          star.x > width + OFFSCREEN_MARGIN ||
+          star.y < -OFFSCREEN_MARGIN ||
+          star.y > height + OFFSCREEN_MARGIN
+        ) {
           star.active = false
           star.delay = Math.random() * 4000 + 3000 // Random delay 3-7 seconds before reappearing
 
