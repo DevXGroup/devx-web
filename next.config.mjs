@@ -288,6 +288,11 @@ const sentryWebpackPluginOptions = {
 
   // Disable automatic client instrumentation to fix Next.js 15.5.4 compatibility
   autoInstrumentAppDirectory: false,
+
+  // Suppress source map warnings for dynamic chunks
+  errorHandler: (err, invokeErr, compilation) => {
+    compilation.warnings.push('Sentry CLI Plugin: ' + err.message)
+  },
 };
 
 // Only run the webpack plugin (which performs network calls) when CI is present
