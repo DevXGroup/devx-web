@@ -85,54 +85,80 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.lineWidth = Math.max(0.5, 0.5 * dpr);
 
-      const startX = Math.floor(gridOffset.current.x / scaledSquareSize) * scaledSquareSize;
-      const startY = Math.floor(gridOffset.current.y / scaledSquareSize) * scaledSquareSize;
+      const startX = Math.floor(gridOffset.current.x / scaledSquareSize);
+      const startY = Math.floor(gridOffset.current.y / scaledSquareSize);
       const endX = Math.ceil((gridOffset.current.x + canvas.width) / scaledSquareSize);
       const endY = Math.ceil((gridOffset.current.y + canvas.height) / scaledSquareSize);
 
-      for (let gridX = startX; gridX < endX; gridX++) {
-        for (let gridY = startY; gridY < endY; gridY++) {
-          const squareKey = `${gridX}-${gridY}`;
-          const squareX = gridX * scaledSquareSize - gridOffset.current.x;
-          const squareY = gridY * scaledSquareSize - gridOffset.current.y;
+      // for (let gridX = startX; gridX < endX; gridX++) {
+      //   for (let gridY = startY; gridY < endY; gridY++) {
+      //     const squareKey = `${gridX}-${gridY}`;
+      //     const squareX = gridX * scaledSquareSize - gridOffset.current.x;
+      //     const squareY = gridY * scaledSquareSize - gridOffset.current.y;
 
-          const isHovered = hoveredSquareRef.current &&
-            gridX === hoveredSquareRef.current.x &&
-            gridY === hoveredSquareRef.current.y;
+      //     const isHovered = hoveredSquareRef.current &&
+      //       gridX === hoveredSquareRef.current.x &&
+      //       gridY === hoveredSquareRef.current.y;
 
-          const isFlickering = randomFlicker && flickerSquaresRef.current.has(squareKey);
+      //     const isFlickering = randomFlicker && flickerSquaresRef.current.has(squareKey);
 
-          if (isHovered) {
-            // Enhanced hover/flicker effect with glow
-            ctx.fillStyle = hoverFillColor;
-            ctx.shadowColor = typeof borderColor === 'string' ? borderColor : '#FFD700';
-            ctx.shadowBlur = 8;
-            ctx.fillRect(squareX, squareY, scaledSquareSize, scaledSquareSize);
-            ctx.shadowBlur = 0;
-          } else if (isFlickering) {
+      //     if (isHovered) {
+      //       // Enhanced hover/flicker effect with glow
+      //       ctx.fillStyle = hoverFillColor;
+      //       ctx.shadowColor = typeof borderColor === 'string' ? borderColor : '#FFD700';
+      //       ctx.shadowBlur = 8;
+      //       ctx.fillRect(squareX, squareY, scaledSquareSize, scaledSquareSize);
+      //       ctx.shadowBlur = 0;
+      //     } else if (isFlickering) {
+      //       ctx.fillStyle = hoverFillColor;
+      //       ctx.fillRect(squareX, squareY, scaledSquareSize, scaledSquareSize);
+      //     }
+
+      //     // ctx.strokeStyle = borderColor;
+      //     // ctx.strokeRect(squareX, squareY, scaledSquareSize, scaledSquareSize);
+      //   }
+      // }
+
+      if (randomFlicker) {
+        flickerSquaresRef.current.forEach((key) => {
+          const [gx, gy] = key.split("-").map(Number);
+          const squareX = gx! * scaledSquareSize - gridOffset.current.x;
+          const squareY = gy! * scaledSquareSize - gridOffset.current.y;
+          if (squareX + scaledSquareSize > 0 && squareX < canvas.width && squareY + scaledSquareSize > 0 && squareY < canvas.height) {
             ctx.fillStyle = hoverFillColor;
             ctx.fillRect(squareX, squareY, scaledSquareSize, scaledSquareSize);
           }
+        });
+      }
 
-          // ctx.strokeStyle = borderColor;
-          // ctx.strokeRect(squareX, squareY, scaledSquareSize, scaledSquareSize);
+      if (hoveredSquareRef.current) {
+        const gx = hoveredSquareRef.current.x;
+        const gy = hoveredSquareRef.current.y;
+        const squareX = gx * scaledSquareSize - gridOffset.current.x;
+        const squareY = gy * scaledSquareSize - gridOffset.current.y;
+        if (squareX + scaledSquareSize > 0 && squareX < canvas.width && squareY + scaledSquareSize > 0 && squareY < canvas.height) {
+          ctx.fillStyle = hoverFillColor;
+          ctx.shadowColor = typeof borderColor === "string" ? borderColor : "#FFD700";
+          ctx.shadowBlur = 8;
+          ctx.fillRect(squareX, squareY, scaledSquareSize, scaledSquareSize);
+          ctx.shadowBlur = 0;
         }
       }
 
       ctx.beginPath();
 
       // Vertical lines
-      for (let gridX = startX; gridX <= endX + 1; gridX++) {
+      for (let gridX = startX; gridX <= endX; gridX++) {
         const x = gridX * scaledSquareSize - gridOffset.current.x;
-        ctx.moveTo(x, startY * scaledSquareSize - gridOffset.current.y);
-        ctx.lineTo(x, (endY + 1) * scaledSquareSize - gridOffset.current.y);
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvas.height);
       }
 
       // Horizontal lines
-      for (let gridY = startY; gridY <= endY + 1; gridY++) {
+      for (let gridY = startY; gridY <= endY; gridY++) {
         const y = gridY * scaledSquareSize - gridOffset.current.y;
-        ctx.moveTo(startX * scaledSquareSize - gridOffset.current.x, y);
-        ctx.lineTo((endX + 1) * scaledSquareSize - gridOffset.current.x, y);
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
       }
 
       ctx.strokeStyle = borderColor;
@@ -161,6 +187,11 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
       }
     };
 
+    let flickerIntervalId: any = null;
+    if (randomFlicker) {
+      flickerIntervalId = window.setInterval(updateFlickerSquares, flickerInterval);
+    }
+
     const updateAnimation = () => {
       const effectiveSpeed = Math.max(speed, 0.1) * dpr;
       switch (direction) {
@@ -182,10 +213,6 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
           break;
         default:
           break;
-      }
-
-      if (randomFlicker) {
-        updateFlickerSquares();
       }
 
       drawGrid();
@@ -266,6 +293,11 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
         }}
       ></canvas>
       {/* CSS-based gradient overlay for mobile (better performance than canvas) */}
+      {/*<div className="absolute inset-0" style={{
+        backgroundImage: 'repeating-linear-gradient(to right, #999 0 2px, transparent 1px 40px), repeating-linear-gradient(to bottom, #999 0 1px, transparent 2px 40px)',
+        backgroundPosition: '0 0',
+        backgroundSize: '40px 40px',
+      }} />*/}
       {showRadialGradient && (
         <div
           className="absolute inset-0 pointer-events-none"
