@@ -164,7 +164,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     float colorVal = 1.0 - line_strength;
 
     // Normalize color values to prevent over-saturation in Safari
-    // commented this line since it's a over calculation;   normalize(uColor) * length(uColor) == uColor
+    // commented this line since it's an over calculation;   normalize(uColor) * length(uColor) == uColor
     // vec3 normalizedColor = normalize(uColor) * length(uColor) * 0.3;
 
     // Apply gamma correction for consistent appearance across browsers

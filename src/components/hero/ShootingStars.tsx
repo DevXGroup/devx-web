@@ -139,6 +139,7 @@ export default function ShootingStars() {
             // Reset position when activating
             star.x = Math.random() * width
             star.y = (Math.random() * height) / 3
+            star.opacity = 0
           }
           return
         }
