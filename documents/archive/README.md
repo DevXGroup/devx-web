@@ -1,1 +1,0 @@
-This folder archives legacy documentation that has been superseded by internal consolidated guides. Files here are intentionally excluded from version control by the repo-wide .gitignore (/documents is ignored).
