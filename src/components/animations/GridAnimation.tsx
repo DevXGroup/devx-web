@@ -1,3 +1,4 @@
+import { useInView } from "framer-motion";
 import React, { useRef, useEffect } from "react";
 
 type CanvasStrokeStyle = string | CanvasGradient | CanvasPattern;
@@ -30,6 +31,7 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
   maxFlickerSquares = 5,
   showRadialGradient = true,
 }) => {
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const requestRef = useRef<number | null>(null);
   const numSquaresX = useRef<number>(0);
@@ -40,6 +42,13 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
   const lastFlickerTimeRef = useRef<number>(0);
   const gradientRef = useRef<CanvasGradient | null>(null);
   const isMobileRef = useRef<boolean>(false);
+  const isPausedRef = useRef<boolean>(false);
+
+  const isInView = useInView(wrapperRef, { once: false, margin: "-40px" });
+
+  useEffect(() => {
+    isPausedRef.current = !isInView;
+  }, [isInView])
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -195,29 +204,32 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
     }
 
     const updateAnimation = () => {
-      const effectiveSpeed = Math.max(speed, 0.1) * dpr;
-      switch (direction) {
-        case "right":
-          gridOffset.current.x -= effectiveSpeed;
-          break;
-        case "left":
-          gridOffset.current.x += effectiveSpeed;
-          break;
-        case "up":
-          gridOffset.current.y += effectiveSpeed;
-          break;
-        case "down":
-          gridOffset.current.y -= effectiveSpeed;
-          break;
-        case "diagonal":
-          gridOffset.current.x -= effectiveSpeed;
-          gridOffset.current.y -= effectiveSpeed;
-          break;
-        default:
-          break;
+      if (!isPausedRef.current) {
+        const effectiveSpeed = Math.max(speed, 0.1) * dpr;
+        switch (direction) {
+          case "right":
+            gridOffset.current.x -= effectiveSpeed;
+            break;
+          case "left":
+            gridOffset.current.x += effectiveSpeed;
+            break;
+          case "up":
+            gridOffset.current.y += effectiveSpeed;
+            break;
+          case "down":
+            gridOffset.current.y -= effectiveSpeed;
+            break;
+          case "diagonal":
+            gridOffset.current.x -= effectiveSpeed;
+            gridOffset.current.y -= effectiveSpeed;
+            break;
+          default:
+            break;
+        }
+
+        drawGrid();
       }
 
-      drawGrid();
       requestRef.current = requestAnimationFrame(updateAnimation);
     };
 
@@ -284,7 +296,7 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
   }, [direction, speed, borderColor, hoverFillColor, squareSize, randomFlicker, flickerInterval, maxFlickerSquares, showRadialGradient]);
 
   return (
-    <div className="relative w-full h-full">
+    <div ref={wrapperRef} className="relative w-full h-full">
       <canvas
         ref={canvasRef}
         className="w-full h-full border-none block"
