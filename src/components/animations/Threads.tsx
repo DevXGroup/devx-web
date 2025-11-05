@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { Renderer, Program, Mesh, Triangle, Color } from 'ogl'
 import { useInView } from 'framer-motion'
+import { usePerformanceOptimizedAnimation } from '@/hooks/use-performance-optimized-animation'
 
 interface ThreadsProps {
   color?: [number, number, number]
@@ -117,8 +118,8 @@ float lineFn(vec2 st, float width, float perc, float offset, vec2 mouse, float t
     float blur = smoothstep(split_point, split_point + 0.05, st.x) * perc;
 
     float xnoise = mix(
-        Simplex2D(vec2(time_scaled, st.x + perc) * 2.5) * 0.6,
-        Simplex2D(vec2(time_scaled, st.x + time_scaled) * 0.6 * 3.5) / 1.5,
+        Simplex2D(vec2(time_scaled, st.x + perc) * 2.0) * 0.75,
+        Simplex2D(vec2(time_scaled, st.x + time_scaled) * 0.8) * 0.75 / 1.5,
         st.x * 0.3
     );
 
@@ -188,6 +189,7 @@ const Threads: React.FC<ThreadsProps> = ({
   const animationFrameId = useRef<number | undefined>(undefined)
   const isInView = useInView(containerRef, { once: false, margin: '-100px' })
   const isPaused = useRef(false)
+  const { isMobile, isLowPower } = usePerformanceOptimizedAnimation()
 
   useEffect(() => {
     isPaused.current = !isInView
@@ -202,7 +204,8 @@ const Threads: React.FC<ThreadsProps> = ({
       container.removeChild(container.firstChild)
     }
 
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const dpr = isMobile || isLowPower ? 1 : Math.min(window.devicePixelRatio || 1, 2)
+
     const renderer = new Renderer({
       alpha: true,
       preserveDrawingBuffer: true,
@@ -323,7 +326,7 @@ const Threads: React.FC<ThreadsProps> = ({
         console.warn('WebGL cleanup warning:', error)
       }
     }
-  }, [color, amplitude, distance, enableMouseInteraction])
+  }, [color, amplitude, distance, enableMouseInteraction, isMobile, isLowPower])
 
   return (
     <div
