@@ -5,6 +5,7 @@ import { useEffect, useState, useCallback, useRef, useMemo } from 'react'
 import Image from 'next/image'
 import seedrandom from 'seedrandom'
 import LogoLoop from '@animations/LogoLoop'
+import { StarTwinklingField } from '../animations/StarTwinklingField'
 
 const buildIconPath = (file: string) => `/images/tech/${file}`
 
@@ -208,7 +209,7 @@ export default function DevelopmentTools() {
     setMounted(true)
     // Detect mobile devices for performance optimization
     setIsMobile(
-      typeof window !== 'undefined' && 
+      typeof window !== 'undefined' &&
       (window.innerWidth < 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
     )
   }, [])
@@ -219,7 +220,7 @@ export default function DevelopmentTools() {
     const handleResize = () => {
       setViewportWidth(window.innerWidth)
       setIsMobile(
-        window.innerWidth < 768 || 
+        window.innerWidth < 768 ||
         /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
       )
     }
@@ -458,65 +459,8 @@ export default function DevelopmentTools() {
     <LayoutGroup>
       {/* Optimized height for better spacing with extra bottom padding for tablets */}
       <div ref={sectionRef} className="relative w-full bg-black z-[150]">
-        {/* Enhanced stars with optimized twinkly animation - using transform for better performance */}
-        {stars.map((star) => (
-          <motion.div
-            key={star.id}
-            className="absolute rounded-full will-change-transform"
-            style={{
-              width: `${star.width}px`,
-              height: `${star.height}px`,
-              left: `${star.left}%`,
-              top: `${star.top}%`,
-              boxShadow: star.boxShadow,
-              backgroundColor: star.isBrightStar ? 'rgba(255, 255, 255, 0.7)' : 'rgba(255, 255, 255, 0.5)',
-            }}
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ 
-              opacity: star.isBrightStar 
-                ? [0, 0.3, 0.7, 0.3, 0]  // Less dramatic on mobile
-                : [0.1, star.twinkleIntensity * 0.8, 0.1, star.twinkleIntensity * 0.5, 0.1], // Less variation
-              scale: star.isBrightStar 
-                ? [0.5, 1.1, 1.3, 1.1, 0.5]  // Less scale variation on mobile
-                : [0.7, 1.0, 0.8, 0.9, 0.7], // Less scale variation on mobile
-            }}
-            transition={{
-              duration: star.duration,
-              repeat: Number.POSITIVE_INFINITY,
-              repeatType: 'reverse',
-              delay: star.delay,
-              ease: 'easeInOut',
-            }}
-          />
-        ))}
+        <StarTwinklingField />
 
-        {/* Additional twinkly stars for extra sparkle effect - responsive count for performance */}
-        {!isMobile && stars.slice(0, 12).map((star, idx) => (
-          <motion.div
-            key={`twinkle-${star.id}`}
-            className="absolute rounded-full will-change-transform"
-            style={{
-              width: `${star.width * 0.6}px`,
-              height: `${star.height * 0.6}px`,
-              left: `${(star.left + 7) % 100}%`, // Slightly offset position
-              top: `${(star.top + 7) % 100}%`,
-              boxShadow: `0 0 ${star.width * 1.5}px rgba(255, 255, 255, 0.4)`,
-              backgroundColor: 'rgba(255, 255, 255, 0.4)',
-            }}
-            initial={{ opacity: 0 }}
-            animate={{ 
-              opacity: [0, 0.5, 0, 0.3, 0],
-              scale: [0.5, 1.3, 0.3, 1.0, 0.5],
-            }}
-            transition={{
-              duration: star.duration * 0.8, // Different timing for the extra sparkle
-              repeat: Number.POSITIVE_INFINITY,
-              repeatType: 'reverse',
-              delay: star.delay + 1.5,
-              ease: 'easeInOut',
-            }}
-          />
-        ))}
         {/* Title section */}
         <div className="py-30 md:py-0 mt-24 md:mt-36 mb-16 md:mb-24">
           <div className="container mx-auto px-4">
@@ -542,7 +486,7 @@ export default function DevelopmentTools() {
             rounded-full bg-black text-white flex items-center justify-center text-center p-3 sm:p-4 md:p-5 shadow-md"
             style={{ top: `calc(50% + ${outerMetrics.offset + 70}px)` }}
           >
-            {/* 
+            {/*
             Pulsing outer border - enhanced for tablet visibility
           */}
             <motion.div
@@ -565,7 +509,7 @@ export default function DevelopmentTools() {
               }}
             />
 
-            {/* 
+            {/*
             "Black hole lines" inside => rotating arcs with motion blur trails
           */}
             <motion.div
@@ -648,8 +592,8 @@ export default function DevelopmentTools() {
               </svg>
             </motion.div>
 
-            {/* 
-            AnimatePresence for the tool's name/desc in center 
+            {/*
+            AnimatePresence for the tool's name/desc in center
           */}
             <AnimatePresence mode="wait">
               <motion.div
