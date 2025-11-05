@@ -107,7 +107,7 @@ export function useCanvas({
         // time updates only when the canvas is in view
         state.time += deltaTime / 1000 // to seconds
         renderFrameRef.current(createStateEventArgs())
-      } else if (isInView || (!state.isPreloaded && preload)) {
+      } else if (preload && !state.isPreloaded) {
         // Preload it!
         state.isPreloaded = true
         renderFrameRef.current(createStateEventArgs())
