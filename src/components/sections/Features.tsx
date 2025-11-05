@@ -193,12 +193,12 @@ export default function Features() {
       setViewportWidth(window.innerWidth);
       // Update isMobile if needed
     };
-    
+
     if (typeof window !== 'undefined') {
       window.addEventListener('resize', handleResize);
       return () => window.removeEventListener('resize', handleResize);
     }
-    
+
     // Return undefined when window is not available
     return undefined;
   }, []);
@@ -240,20 +240,20 @@ export default function Features() {
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: false, amount: 0.1 }}
-      transition={{ 
-        duration: shouldOptimizeAnimations ? 0.4 : 0.8, 
-        ease: 'easeOut' 
+      transition={{
+        duration: shouldOptimizeAnimations ? 0.4 : 0.8,
+        ease: 'easeOut'
       }}
     >
       {/* Gradient transition from black to purple */}
       <div className="absolute top-0 left-0 right-0 h-2 md:h-40 bg-gradient-to-b from-black to-transparent z-[1] pointer-events-none" />
 
       {/* Full-screen Grid Background for entire section */}
-      <div className="absolute inset-0 w-full h-full opacity-40 z-[0] pointer-events-auto">
+      <div className="absolute inset-0 w-full h-full opacity-50 md:opacity-40 z-[0] pointer-events-auto">
         <GridAnimation
           direction="diagonal"
           speed={0.3}
-          borderColor="rgba(204, 255, 0, 0.65)"
+          borderColor="rgba(204, 255, 0, 1)"
           squareSize={36}
           hoverFillColor="rgba(157, 78, 221, 0.45)"
           randomFlicker={false}
@@ -266,9 +266,9 @@ export default function Features() {
         initial="hidden"
         animate={isInView ? 'visible' : 'hidden'}
         className="relative container mx-auto px-4 z-[3] max-w-6xl select-text"
-        transition={{ 
-          duration: shouldOptimizeAnimations ? 0.3 : 0.5, 
-          ease: 'easeOut' 
+        transition={{
+          duration: shouldOptimizeAnimations ? 0.3 : 0.5,
+          ease: 'easeOut'
         }}
       >
         {/* Hire Developers Section */}
@@ -312,7 +312,7 @@ export default function Features() {
                 <RotatingText
                   texts={subheaders}
                   rotationInterval={shouldOptimizeAnimations ? 4000 : (shouldReduceMotion ? 2500 : 3000)} // Slower on low performance
-                  transition={{ 
+                  transition={{
                     type: shouldOptimizeAnimations ? 'tween' : 'spring', // Simpler transition on low performance
                     ...(shouldOptimizeAnimations ? {} : { stiffness: 200, damping: 20 })
                   }}

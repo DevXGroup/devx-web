@@ -162,6 +162,8 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
       }
 
       ctx.strokeStyle = borderColor;
+      ctx.shadowBlur = 0;
+      ctx.shadowColor = '';
       ctx.stroke();
 
       // Use cached gradient on desktop only (skip on mobile for performance)
@@ -302,7 +304,7 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'radial-gradient(circle, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.65) 35%, rgba(0,0,0,0.25) 65%, rgba(0,0,0,0) 100%)',
+            background: 'radial-gradient(circle, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.65) 25%, rgba(0,0,0,0.25) 45%, rgba(0,0,0,0) 100%)',
             mixBlendMode: 'normal',
             opacity: 1,
           }}
