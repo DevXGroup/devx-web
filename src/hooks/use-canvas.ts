@@ -22,7 +22,7 @@ export function useCanvas({
   renderFrame = () => {},
   preload = true,
   useInViewOptions,
-  resizeDebounceTime = 150,
+  resizeDebounceTime = 50,
 }: UseCanvasOptions) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const isInView = useInView(canvasRef, useInViewOptions)
