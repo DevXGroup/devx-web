@@ -135,6 +135,7 @@ export default function PlanetDivider() {
                 width="768"
                 height="768"
                 alt=""
+                fetchPriority='high'
                 loading="lazy"
                 decoding="async"
                 className="planet-sphere"
