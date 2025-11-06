@@ -1,5 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { Renderer, Program, Mesh, Triangle, Color } from 'ogl'
+import { useInView } from 'framer-motion'
+import { usePerformanceOptimizedAnimation } from '@/hooks/use-performance-optimized-animation'
 
 interface ThreadsProps {
   color?: [number, number, number]
@@ -8,32 +10,7 @@ interface ThreadsProps {
   enableMouseInteraction?: boolean
 }
 
-const vertexShader = `
-attribute vec2 position;
-attribute vec2 uv;
-varying vec2 vUv;
-void main() {
-  vUv = uv;
-  gl_Position = vec4(position, 0.0, 1.0);
-}
-`
-
-const fragmentShader = `
-precision highp float;
-
-uniform float iTime;
-uniform vec3 iResolution;
-uniform vec3 uColor;
-uniform float uAmplitude;
-uniform float uDistance;
-uniform vec2 uMouse;
-
-#define PI 3.1415926538
-
-const int u_line_count = 40;
-const float u_line_width = 7.0;
-const float u_line_blur = 10.0;
-
+const perlinNoiseShader = `
 float Perlin2D(vec2 P) {
     vec2 Pi = floor(P);
     vec4 Pf_Pfmin1 = P.xyxy - vec4(Pi, Pi + 1.0);
@@ -50,10 +27,79 @@ float Perlin2D(vec2 P) {
         * (grad_x * Pf_Pfmin1.xzxz + grad_y * Pf_Pfmin1.yyww);
     grad_results *= 1.4142135623730950;
     vec2 blend = Pf_Pfmin1.xy * Pf_Pfmin1.xy * Pf_Pfmin1.xy
-               * (Pf_Pfmin1.xy * (Pf_Pfmin1.xy * 6.0 - 15.0) + 10.0);
+                * (Pf_Pfmin1.xy * (Pf_Pfmin1.xy * 6.0 - 15.0) + 10.0);
     vec4 blend2 = vec4(blend, vec2(1.0 - blend));
     return dot(grad_results, blend2.zxzx * blend2.wwyy);
 }
+`
+
+const simplexNoiseShader = `
+vec3 mod289(vec3 x) {
+  return x - floor(x * (1.0 / 289.0)) * 289.0;
+}
+vec2 mod289(vec2 x) {
+  return x - floor(x * (1.0 / 289.0)) * 289.0;
+}
+vec3 permute(vec3 x) {
+  return mod289(((x*34.0)+1.0)*x);
+}
+float Simplex2D(vec2 v)
+{
+  const vec4 C = vec4(0.211324865405187,  // (3.0-sqrt(3.0))/6.0
+                      0.366025403784439,  // 0.5*(sqrt(3.0)-1.0)
+                      -0.577350269189626,  // -1.0 + 2.0 * C.x
+                      0.024390243902439); // 1.0 / 41.0
+  vec2 i  = floor(v + dot(v, C.yy) );
+  vec2 x0 = v -   i + dot(i, C.xx);
+  vec2 i1;
+  i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+  vec4 x12 = x0.xyxy + C.xxzz;
+  x12.xy -= i1;
+  i = mod289(i);
+  vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 ))
+	+ i.x + vec3(0.0, i1.x, 1.0 ));
+  vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
+  m = m*m ;
+  m = m*m ;
+  vec3 x = 2.0 * fract(p * C.www) - 1.0;
+  vec3 h = abs(x) - 0.5;
+  vec3 ox = floor(x + 0.5);
+  vec3 a0 = x - ox;
+  m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );
+  vec3 g;
+  g.x  = a0.x  * x0.x  + h.x  * x0.y;
+  g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+  return 130.0 * dot(m, g);
+}
+`
+
+const vertexShader = `
+attribute vec2 position;
+attribute vec2 uv;
+varying vec2 vUv;
+void main() {
+  vUv = uv;
+  gl_Position = vec4(position, 0.0, 1.0);
+}
+`
+
+const fragmentShader = `
+precision mediump float;
+
+uniform float iTime;
+uniform vec3 iResolution;
+uniform vec3 uColor;
+uniform float uAmplitude;
+uniform float uDistance;
+uniform vec2 uMouse;
+
+#define PI 3.1415926538
+
+const int u_line_count = 40;
+const float u_line_width = 7.0;
+const float u_line_blur = 10.0;
+
+${simplexNoiseShader}
 
 float pixel(float count, vec2 resolution) {
     return (1.0 / max(resolution.x, resolution.y)) * count;
@@ -72,8 +118,8 @@ float lineFn(vec2 st, float width, float perc, float offset, vec2 mouse, float t
     float blur = smoothstep(split_point, split_point + 0.05, st.x) * perc;
 
     float xnoise = mix(
-        Perlin2D(vec2(time_scaled, st.x + perc) * 2.5),
-        Perlin2D(vec2(time_scaled, st.x + time_scaled) * 3.5) / 1.5,
+        Simplex2D(vec2(time_scaled, st.x + perc) * 2.0) * 0.75,
+        Simplex2D(vec2(time_scaled, st.x + time_scaled) * 0.8) * 0.75 / 1.5,
         st.x * 0.3
     );
 
@@ -119,10 +165,11 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     float colorVal = 1.0 - line_strength;
 
     // Normalize color values to prevent over-saturation in Safari
-    vec3 normalizedColor = normalize(uColor) * length(uColor) * 0.3;
+    // commented this line since it's an over calculation;   normalize(uColor) * length(uColor) == uColor
+    // vec3 normalizedColor = normalize(uColor) * length(uColor) * 0.3;
 
     // Apply gamma correction for consistent appearance across browsers
-    vec3 finalColor = pow(normalizedColor * colorVal, vec3(1.0/2.2));
+    vec3 finalColor = pow(uColor * colorVal * 0.3, vec3(1.0/2.2));
 
     fragColor = vec4(finalColor, colorVal);
 }
@@ -140,6 +187,13 @@ const Threads: React.FC<ThreadsProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const animationFrameId = useRef<number | undefined>(undefined)
+  const isInView = useInView(containerRef, { once: false, margin: '-100px' })
+  const isPaused = useRef(false)
+  const { isMobile, isLowPower } = usePerformanceOptimizedAnimation()
+
+  useEffect(() => {
+    isPaused.current = !isInView
+  }, [isInView])
 
   useEffect(() => {
     if (!containerRef.current) return
@@ -150,22 +204,25 @@ const Threads: React.FC<ThreadsProps> = ({
       container.removeChild(container.firstChild)
     }
 
+    const dpr = isMobile || isLowPower ? 1 : Math.min(window.devicePixelRatio || 1, 2)
+
     const renderer = new Renderer({
       alpha: true,
       preserveDrawingBuffer: true,
       // Force consistent color handling across browsers
-      premultipliedAlpha: false
+      premultipliedAlpha: false,
+      dpr,
     })
     const gl = renderer.gl
     gl.clearColor(0, 0, 0, 0)
     gl.enable(gl.BLEND)
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
-    
+
     // Set canvas properties with conditional mouse interaction
     gl.canvas.style.pointerEvents = enableMouseInteraction ? 'auto' : 'none'
     gl.canvas.style.isolation = 'isolate'
     gl.canvas.style.willChange = 'transform'
-    
+
     container.appendChild(gl.canvas)
 
     const geometry = new Triangle(gl)
@@ -187,7 +244,9 @@ const Threads: React.FC<ThreadsProps> = ({
     const mesh = new Mesh(gl, { geometry, program })
 
     function resize() {
-      const { clientWidth, clientHeight } = container
+      let { clientWidth, clientHeight } = container
+      clientWidth*=dpr
+      clientHeight*=dpr
       renderer.setSize(clientWidth, clientHeight)
       program.uniforms.iResolution.value.r = clientWidth
       program.uniforms.iResolution.value.g = clientHeight
@@ -214,6 +273,11 @@ const Threads: React.FC<ThreadsProps> = ({
     }
 
     function update(t: number) {
+      if (isPaused.current) {
+        animationFrameId.current = requestAnimationFrame(update)
+        return;
+      }
+
       if (enableMouseInteraction) {
         const smoothing = 0.05
         if (currentMouse[0] !== undefined && targetMouse[0] !== undefined) {
@@ -240,14 +304,14 @@ const Threads: React.FC<ThreadsProps> = ({
         cancelAnimationFrame(animationFrameId.current)
         animationFrameId.current = undefined
       }
-      
+
       window.removeEventListener('resize', resize)
 
       if (enableMouseInteraction) {
         container.removeEventListener('mousemove', handleMouseMove)
         container.removeEventListener('mouseleave', handleMouseLeave)
       }
-      
+
       // Proper WebGL cleanup to prevent interference with other WebGL contexts
       try {
         if (mesh) mesh.program.gl.deleteProgram(mesh.program.program)
@@ -262,7 +326,7 @@ const Threads: React.FC<ThreadsProps> = ({
         console.warn('WebGL cleanup warning:', error)
       }
     }
-  }, [color, amplitude, distance, enableMouseInteraction])
+  }, [color, amplitude, distance, enableMouseInteraction, isMobile, isLowPower])
 
   return (
     <div
