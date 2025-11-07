@@ -127,7 +127,7 @@ const nextConfig = {
               "font-src 'self' data: https://fonts.gstatic.com",
               "img-src 'self' data: blob: https://www.google-analytics.com https://www.googletagmanager.com https://hebbkx1anhila5yf.public.blob.vercel-storage.com",
               "connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://api.calendly.com https://data.pendo.io https://*.ingest.us.sentry.io https://vitals.vercel-insights.com https://va.vercel-scripts.com https://vercel.live",
-              "frame-src 'self' https://calendly.com https://js.stripe.com https://www.recaptcha.net",
+              "frame-src 'self' https://calendly.com https://js.stripe.com https://www.recaptcha.net https://vercel.live",
               "worker-src 'self' blob:",
               "child-src 'self' blob:",
               "object-src 'none'",
