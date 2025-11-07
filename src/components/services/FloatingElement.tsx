@@ -1,5 +1,5 @@
-"use client"
-import { motion } from "framer-motion"
+'use client'
+import { motion } from 'framer-motion'
 
 interface FloatingElementProps {
   delay?: number
@@ -14,7 +14,7 @@ export default function FloatingElement({
   delay = 0,
   duration = 10,
   size = 300,
-  color = "#4CD787",
+  color = '#4CD787',
   left,
   top,
 }: FloatingElementProps) {
@@ -37,8 +37,8 @@ export default function FloatingElement({
         duration,
         delay,
         repeat: Number.POSITIVE_INFINITY,
-        repeatType: "loop",
-        ease: "linear",
+        repeatType: 'loop',
+        ease: 'linear',
       }}
     />
   )

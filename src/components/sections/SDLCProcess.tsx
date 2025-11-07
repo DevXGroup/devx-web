@@ -1,19 +1,31 @@
-"use client"
+'use client'
 
-import { animate, motion } from "framer-motion"
-import { useEffect, useRef, useState } from "react"
-import { FileSearch, Pencil, Code, TestTube, Rocket, Settings } from "lucide-react"
+import { animate, motion } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
+import { FileSearch, Pencil, Code, TestTube, Rocket, Settings } from 'lucide-react'
 
 const sdlcSteps = [
-  { name: "Discovery", icon: FileSearch },
-  { name: "Design", icon: Pencil },
-  { name: "Development", icon: Code },
-  { name: "Testing", icon: TestTube },
-  { name: "Launch", icon: Rocket },
-  { name: "Maintenance", icon: Settings },
+  { name: 'Discovery', icon: FileSearch },
+  { name: 'Design', icon: Pencil },
+  { name: 'Development', icon: Code },
+  { name: 'Testing', icon: TestTube },
+  { name: 'Launch', icon: Rocket },
+  { name: 'Maintenance', icon: Settings },
 ]
 
-const AnimatedIcon = ({ Icon, isActive, isComplete, progress, index }: { Icon: any, isActive: boolean, isComplete: boolean, progress: number, index: number }) => {
+const AnimatedIcon = ({
+  Icon,
+  isActive,
+  isComplete,
+  progress,
+  index,
+}: {
+  Icon: any
+  isActive: boolean
+  isComplete: boolean
+  progress: number
+  index: number
+}) => {
   return (
     <div className="relative">
       <svg className="w-12 h-12 sm:w-16 sm:h-16 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -21,32 +33,32 @@ const AnimatedIcon = ({ Icon, isActive, isComplete, progress, index }: { Icon: a
           cx="24"
           cy="24"
           r="22"
-          stroke={isComplete || progress === 1 ? "#4CD787" : "yellow"}
+          stroke={isComplete || progress === 1 ? '#4CD787' : 'yellow'}
           strokeWidth="3"
           fill="none"
           className="sm:hidden"
           initial={{ pathLength: isComplete || progress === 1 ? 1 : 0 }}
           animate={{ pathLength: isComplete || progress === 1 ? 1 : progress }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
-          style={{ visibility: "visible" }}
+          transition={{ duration: 0.8, ease: 'easeInOut' }}
+          style={{ visibility: 'visible' }}
         />
         <motion.circle
           cx="32"
           cy="32"
           r="30"
-          stroke={isComplete || progress === 1 ? "#4CD787" : "yellow"}
+          stroke={isComplete || progress === 1 ? '#4CD787' : 'yellow'}
           strokeWidth="4"
           fill="none"
           className="hidden sm:block"
           initial={{ pathLength: isComplete || progress === 1 ? 1 : 0 }}
           animate={{ pathLength: isComplete || progress === 1 ? 1 : progress }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
-          style={{ visibility: "visible" }}
+          transition={{ duration: 0.8, ease: 'easeInOut' }}
+          style={{ visibility: 'visible' }}
         />
       </svg>
       <motion.div
         className={`w-9 h-9 sm:w-12 sm:h-12 rounded-full flex items-center justify-center ${
-          isComplete || progress === 1 ? "bg-[#4CD787]" : "bg-yellow-400"
+          isComplete || progress === 1 ? 'bg-[#4CD787]' : 'bg-yellow-400'
         }`}
         animate={{
           scale: isActive ? [1, 1.05, 1] : 1,
@@ -54,14 +66,14 @@ const AnimatedIcon = ({ Icon, isActive, isComplete, progress, index }: { Icon: a
         transition={{
           duration: 1,
           repeat: isActive ? Number.POSITIVE_INFINITY : 0,
-          repeatType: "reverse",
-          ease: "easeInOut",
+          repeatType: 'reverse',
+          ease: 'easeInOut',
         }}
-        style={{ visibility: "visible" }}
+        style={{ visibility: 'visible' }}
       >
         <Icon
-          className={`w-4 h-4 sm:w-6 sm:h-6 ${isComplete || progress === 1 ? "" : "text-black"}`}
-          style={{ color: isComplete || progress === 1 ? "#228B22" : undefined }}
+          className={`w-4 h-4 sm:w-6 sm:h-6 ${isComplete || progress === 1 ? '' : 'text-black'}`}
+          style={{ color: isComplete || progress === 1 ? '#228B22' : undefined }}
         />
       </motion.div>
     </div>
@@ -83,32 +95,36 @@ const ConnectingLine = ({
   return (
     <div
       className="absolute h-0.5 overflow-hidden"
-      style={{ left: `${metrics.left}px`, width: `${Math.max(metrics.width, 0)}px`, top: `${metrics.top}px` }}
+      style={{
+        left: `${metrics.left}px`,
+        width: `${Math.max(metrics.width, 0)}px`,
+        top: `${metrics.top}px`,
+      }}
     >
       <motion.div
         className="h-full bg-gradient-to-r from-[#8B5CF6] via-[#EC4899] to-[#3B82F6]"
         style={{
           originX: 0,
           scaleX: lineProgress,
-          visibility: "visible",
+          visibility: 'visible',
         }}
-        transition={{ duration: 1.0, ease: "easeInOut" }}  // Slower animation (0.5 -> 1.0)
+        transition={{ duration: 1.0, ease: 'easeInOut' }} // Slower animation (0.5 -> 1.0)
       />
       <motion.div
         className="absolute top-0 left-0 right-0 h-full"
         style={{
-          background: "linear-gradient(90deg, transparent, white, transparent)",
-          backgroundSize: "200% 100%",
+          background: 'linear-gradient(90deg, transparent, white, transparent)',
+          backgroundSize: '200% 100%',
           opacity: 0.3,
-          visibility: "visible",
+          visibility: 'visible',
         }}
         animate={{
-          x: ["-100%", "100%"],
+          x: ['-100%', '100%'],
         }}
         transition={{
-          duration: 5,  // Slower animation (3 -> 5)
+          duration: 5, // Slower animation (3 -> 5)
           repeat: Number.POSITIVE_INFINITY,
-          ease: "linear",
+          ease: 'linear',
         }}
       />
     </div>
@@ -154,7 +170,7 @@ export default function SDLCProcess() {
       const leftCenter = firstRect.left + firstRect.width / 2 - containerRect.left
       const rightCenter = lastRect.left + lastRect.width / 2 - containerRect.left
       const width = Math.max(rightCenter - leftCenter, 0)
-      const topCenter = firstRect.height / 2 + 15  // Moved down 5px from 10 to 15
+      const topCenter = firstRect.height / 2 + 15 // Moved down 5px from 10 to 15
 
       setLineMetrics({ left: leftCenter, width, top: topCenter })
     }
@@ -188,7 +204,7 @@ export default function SDLCProcess() {
       },
       {
         threshold: 0.3,
-        rootMargin: '50px 0px 50px 0px'
+        rootMargin: '50px 0px 50px 0px',
       }
     )
 
@@ -223,7 +239,7 @@ export default function SDLCProcess() {
 
         const controls = animate(0, 1, {
           duration: 0.8, // Consistent timing for all steps
-          ease: "easeInOut",
+          ease: 'easeInOut',
           onUpdate: (value) => {
             if (!cancelledRef.current) setProgress(value)
           },
@@ -308,8 +324,8 @@ export default function SDLCProcess() {
               <p
                 className={`text-[10px] sm:text-xs md:text-sm font-['IBM_Plex_Mono'] text-center mt-2 sm:mt-3 md:mt-4 ${
                   completedSteps.has(index)
-                    ? "font-bold text-[#4CD787] drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]"
-                    : "font-light text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]"
+                    ? 'font-bold text-[#4CD787] drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]'
+                    : 'font-light text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]'
                 }`}
               >
                 {step.name}

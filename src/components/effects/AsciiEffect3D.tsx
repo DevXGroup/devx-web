@@ -344,7 +344,21 @@ export default function AsciiEffect3D({
 
     init()
     return cleanup
-  }, [H, color, charSize, opacity, showBase, sphereRadius, charSet, lighting, lightScale, ambient, enableDragRotate, enableZoom, rotateSpeed])
+  }, [
+    H,
+    color,
+    charSize,
+    opacity,
+    showBase,
+    sphereRadius,
+    charSet,
+    lighting,
+    lightScale,
+    ambient,
+    enableDragRotate,
+    enableZoom,
+    rotateSpeed,
+  ])
 
   // Update lighting direction/intensity on prop change
   useEffect(() => {

@@ -99,7 +99,8 @@ const TextPressure: React.FC<TextPressureProps> = ({
   const setSize = useCallback(() => {
     if (!containerRef.current || !titleRef.current) return
 
-    let containerW = 300, containerH = 100
+    let containerW = 300,
+      containerH = 100
     try {
       const rect = containerRef.current.getBoundingClientRect()
       containerW = rect.width
@@ -210,13 +211,17 @@ const TextPressure: React.FC<TextPressureProps> = ({
   return (
     <div ref={containerRef} className="relative w-full h-full overflow-hidden bg-transparent">
       <style>{`
-        ${fontUrl ? `
+        ${
+          fontUrl
+            ? `
         @font-face {
           font-family: '${fontFamily}';
           src: url('${fontUrl}');
           font-style: normal;
         }
-        ` : ''}
+        `
+            : ''
+        }
         .stroke span {
           position: relative;
           color: ${textColor};

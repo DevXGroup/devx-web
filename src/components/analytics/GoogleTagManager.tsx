@@ -15,7 +15,7 @@ export const trackEvent = (eventName: string, parameters?: Record<string, any>) 
       event_category: 'engagement',
       event_label: parameters?.label || '',
       value: parameters?.value || 0,
-      ...parameters
+      ...parameters,
     })
   }
 }
@@ -26,7 +26,7 @@ export const trackPageView = (url: string, title?: string) => {
     window.gtag('config', gaId, {
       page_title: title || document.title,
       page_location: url,
-      send_page_view: true
+      send_page_view: true,
     })
   }
 }
@@ -36,7 +36,7 @@ export const trackConversion = (conversionId: string, conversionLabel: string, v
     window.gtag('event', 'conversion', {
       send_to: `${conversionId}/${conversionLabel}`,
       value: value || 1,
-      currency: 'USD'
+      currency: 'USD',
     })
   }
 }
@@ -46,7 +46,7 @@ export const trackFormSubmission = (formName: string, formData?: Record<string, 
     event_category: 'form',
     event_label: formName,
     form_name: formName,
-    ...formData
+    ...formData,
   })
 }
 
@@ -54,6 +54,6 @@ export const trackCalendlyBooking = () => {
   trackEvent('calendly_booking', {
     event_category: 'lead_generation',
     event_label: 'calendly_consultation',
-    value: 1
+    value: 1,
   })
 }

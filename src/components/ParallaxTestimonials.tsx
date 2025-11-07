@@ -262,8 +262,8 @@ function TestimonialCard({
                 index % 3 === 0
                   ? 'linear-gradient(135deg, #a855f7, #c084fc)'
                   : index % 3 === 1
-                  ? 'linear-gradient(135deg, #9333ea, #a855f7)'
-                  : 'linear-gradient(135deg, #7e22ce, #9333ea)',
+                    ? 'linear-gradient(135deg, #9333ea, #a855f7)'
+                    : 'linear-gradient(135deg, #7e22ce, #9333ea)',
             }}
           />
           {/* Initial letter */}
@@ -322,8 +322,8 @@ function TestimonialCard({
                 index % 3 === 0
                   ? 'rgba(168, 85, 247, 0.3)'
                   : index % 3 === 1
-                  ? 'rgba(147, 51, 234, 0.3)'
-                  : 'rgba(126, 34, 206, 0.3)'
+                    ? 'rgba(147, 51, 234, 0.3)'
+                    : 'rgba(126, 34, 206, 0.3)'
               }`,
             }}
           />

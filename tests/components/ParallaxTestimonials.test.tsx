@@ -18,14 +18,14 @@ describe('ParallaxTestimonials', () => {
 
   it('renders the component with title and description', () => {
     renderWithProviders(<ParallaxTestimonials />)
-    
+
     expect(screen.getByText('What Our Clients Say')).toBeInTheDocument()
     expect(screen.getByText(/Don't just take our word for it/)).toBeInTheDocument()
   })
 
   it('renders all testimonial cards', () => {
     renderWithProviders(<ParallaxTestimonials />)
-    
+
     // Check for all testimonial authors
     expect(screen.getByText('Chamrosh Inc Founder/CEO')).toBeInTheDocument()
     expect(screen.getByText('Lazurd Inc CEO')).toBeInTheDocument()
@@ -34,7 +34,7 @@ describe('ParallaxTestimonials', () => {
 
   it('renders testimonial quotes', () => {
     renderWithProviders(<ParallaxTestimonials />)
-    
+
     expect(
       screen.getByText(/DevX Group has been assisting our company for the past three years/i)
     ).toBeInTheDocument()
@@ -48,7 +48,7 @@ describe('ParallaxTestimonials', () => {
 
   it('renders company positions', () => {
     renderWithProviders(<ParallaxTestimonials />)
-    
+
     expect(screen.getByText('Founder/CEO, Chamrosh Inc')).toBeInTheDocument()
     expect(screen.getByText('CEO, Lazurd Inc')).toBeInTheDocument()
     expect(screen.getByText('CEO, Lawazm Inc')).toBeInTheDocument()
@@ -56,12 +56,14 @@ describe('ParallaxTestimonials', () => {
 
   it('expands truncated testimonials when clicking Read more', () => {
     renderWithProviders(<ParallaxTestimonials />)
-    
+
     const readMoreButton = screen.getAllByRole('button', { name: /read more/i })[0]
     fireEvent.click(readMoreButton)
 
     expect(
-      screen.getByText(/We strongly recommend them to knowledgeable clients seeking a highly productive/i)
+      screen.getByText(
+        /We strongly recommend them to knowledgeable clients seeking a highly productive/i
+      )
     ).toBeInTheDocument()
   })
 })
