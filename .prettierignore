@@ -1,0 +1,7 @@
+.next
+coverage
+node_modules
+pnpm-lock.yaml
+public
+test-results
+.playwright-mcp

@@ -17,8 +17,8 @@ const viewports = [
 async function injectFirstPaintLogger(page: Page) {
   await page.addInitScript(() => {
     // Mark as hard refresh via cache busting
-    (window as any).__AUDIT__ = { started: Date.now() }
-    
+    ;(window as any).__AUDIT__ = { started: Date.now() }
+
     // Monkey-patch getBoundingClientRect to catch 0-size during early measure
     const origGetBCR = Element.prototype.getBoundingClientRect
     ;(window as any).__AUDIT_LOGS__ = [] as any[]
@@ -117,13 +117,19 @@ for (const vp of viewports) {
 
         // Collect logs
         const logs = await page.evaluate(() => (window as any).__AUDIT_GET__?.())
-        test.info().attach('audit.json', { body: Buffer.from(JSON.stringify(logs, null, 2)), contentType: 'application/json' })
+        test.info().attach('audit.json', {
+          body: Buffer.from(JSON.stringify(logs, null, 2)),
+          contentType: 'application/json',
+        })
 
         // Save to file system as well (via console for CI logs)
         console.log(`[AUDIT] ${url} ->`, JSON.stringify(logs))
 
         // Screenshot
-        await page.screenshot({ path: `tests/audit/artifacts/${p.name}-${vp.name}-${browserName}.png`, fullPage: true })
+        await page.screenshot({
+          path: `tests/audit/artifacts/${p.name}-${vp.name}-${browserName}.png`,
+          fullPage: true,
+        })
 
         // Basic sanity: ensure root has size
         const rootSize = await page.evaluate(() => {
@@ -137,4 +143,3 @@ for (const vp of viewports) {
     }
   })
 }
-

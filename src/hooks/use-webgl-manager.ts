@@ -9,7 +9,7 @@ const MAX_CONTEXTS = 4 // Limit concurrent WebGL contexts
 
 export function useWebGLManager() {
   const canCreateContext = activeContexts < MAX_CONTEXTS
-  
+
   const registerContext = () => {
     if (canCreateContext) {
       activeContexts++
@@ -17,18 +17,18 @@ export function useWebGLManager() {
     }
     return false
   }
-  
+
   const unregisterContext = () => {
     if (activeContexts > 0) {
       activeContexts--
     }
   }
-  
+
   return {
     canCreateContext,
     registerContext,
     unregisterContext,
-    activeContexts
+    activeContexts,
   }
 }
 

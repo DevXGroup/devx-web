@@ -24,9 +24,7 @@ function isElementFullyOut(node: HTMLElement) {
   return rect.bottom <= 0 || rect.top >= viewportHeight
 }
 
-export function useScrollAnimation<T extends HTMLElement>(
-  options?: UseScrollAnimationOptions
-) {
+export function useScrollAnimation<T extends HTMLElement>(options?: UseScrollAnimationOptions) {
   const {
     margin = '-15% 0px -15% 0px',
     amount = 0.35,
@@ -68,18 +66,21 @@ export function useScrollAnimation<T extends HTMLElement>(
         clearTimeout(enterTimeoutRef.current)
       }
 
-      enterTimeoutRef.current = setTimeout(() => {
-        const current = elementRef.current
-        if (!current) {
-          return
-        }
+      enterTimeoutRef.current = setTimeout(
+        () => {
+          const current = elementRef.current
+          if (!current) {
+            return
+          }
 
-        current.classList.remove(animationClass)
-        void current.offsetWidth
-        current.classList.add(animationClass)
-        hasTriggeredRef.current = true
-        enterTimeoutRef.current = null
-      }, Math.max(reflowDelay, 0))
+          current.classList.remove(animationClass)
+          void current.offsetWidth
+          current.classList.add(animationClass)
+          hasTriggeredRef.current = true
+          enterTimeoutRef.current = null
+        },
+        Math.max(reflowDelay, 0)
+      )
     }
   }, [animationClass, disabled, isInView, reflowDelay])
 
@@ -104,18 +105,21 @@ export function useScrollAnimation<T extends HTMLElement>(
           clearTimeout(resetTimeoutRef.current)
         }
 
-        resetTimeoutRef.current = setTimeout(() => {
-          const current = elementRef.current
-          if (!current) {
+        resetTimeoutRef.current = setTimeout(
+          () => {
+            const current = elementRef.current
+            if (!current) {
+              hasTriggeredRef.current = false
+              resetTimeoutRef.current = null
+              return
+            }
+
+            current.classList.remove(animationClass)
             hasTriggeredRef.current = false
             resetTimeoutRef.current = null
-            return
-          }
-
-          current.classList.remove(animationClass)
-          hasTriggeredRef.current = false
-          resetTimeoutRef.current = null
-        }, Math.max(resetDelay, 0))
+          },
+          Math.max(resetDelay, 0)
+        )
       }
     }
 

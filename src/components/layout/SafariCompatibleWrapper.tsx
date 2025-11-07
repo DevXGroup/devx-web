@@ -1,7 +1,7 @@
-"use client"
+'use client'
 
-import { ReactNode, useEffect, useState } from "react"
-import { useSafariDetection } from "@/hooks/use-safari-detection"
+import { ReactNode, useEffect, useState } from 'react'
+import { useSafariDetection } from '@/hooks/use-safari-detection'
 
 interface SafariCompatibleWrapperProps {
   children: ReactNode
@@ -10,11 +10,11 @@ interface SafariCompatibleWrapperProps {
   className?: string
 }
 
-export default function SafariCompatibleWrapper({ 
-  children, 
-  fallback = null, 
+export default function SafariCompatibleWrapper({
+  children,
+  fallback = null,
   delay = 0,
-  className = ""
+  className = '',
 }: SafariCompatibleWrapperProps) {
   const { isSafari, isClient } = useSafariDetection()
   const [isReady, setIsReady] = useState(false)
@@ -23,7 +23,7 @@ export default function SafariCompatibleWrapper({
     if (!isClient) return
 
     const safariDelay = isSafari ? Math.max(delay, 800) : delay
-    
+
     const timer = setTimeout(() => {
       setIsReady(true)
     }, safariDelay)

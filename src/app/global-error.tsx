@@ -79,9 +79,10 @@ export default function GlobalError({
             transition={{ delay: 0.5, duration: 0.8 }}
           >
             <p className="text-white/70 text-lg md:text-xl max-w-2xl mx-auto font-['IBM_Plex_Sans'] leading-relaxed">
-              A critical system error has occurred. The application encountered an unrecoverable error.
+              A critical system error has occurred. The application encountered an unrecoverable
+              error.
             </p>
-            
+
             {error.digest && (
               <p className="text-white/50 text-sm font-['IBM_Plex_Mono'] bg-red-500/10 border border-red-500/20 px-4 py-2 rounded-lg inline-block">
                 Critical Error ID: {error.digest}
@@ -102,9 +103,9 @@ export default function GlobalError({
             >
               Force Restart
             </button>
-            
+
             <button
-              onClick={() => window.location.href = '/home'}
+              onClick={() => (window.location.href = '/home')}
               className="border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black px-8 py-3 rounded-lg transition-all duration-200 transform hover:scale-105 font-['IBM_Plex_Mono'] font-medium"
             >
               Emergency Exit
