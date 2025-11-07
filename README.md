@@ -159,3 +159,4 @@ Distributed under the MIT License. See `LICENSE` for details.
 ## Maintainers
 
 - Max Sheikhizadeh (Principal Contributor)
+- Ali Sheikhizadeh (Contributor)
