@@ -14,14 +14,11 @@ import ShinyText from '@/components/ui/ShinyText'
 const DynamicCosmicStars = dynamic(() => import('../hero/CosmicStars'), {
   ssr: false,
   loading: () => (
-    <div
-      className="absolute inset-0 bg-black"
-      style={{ minHeight: '100vh', width: '100%' }}
-    />
+    <div className="absolute inset-0 bg-black" style={{ minHeight: '100vh', width: '100%' }} />
   ),
 })
 const DynamicPlanetDivider = dynamic(
-  () => import('../planet/PlanetDivider').then(mod => ({ default: mod.default })),
+  () => import('../planet/PlanetDivider').then((mod) => ({ default: mod.default })),
   {
     ssr: false,
     loading: () => (
@@ -29,19 +26,16 @@ const DynamicPlanetDivider = dynamic(
         className="absolute bottom-0 left-0 w-full"
         style={{ height: '350px', background: 'transparent' }}
       />
-    )
+    ),
   }
 )
 const DynamicShootingStars = dynamic(
-  () => import('../hero/ShootingStars').then(mod => ({ default: mod.default })),
+  () => import('../hero/ShootingStars').then((mod) => ({ default: mod.default })),
   {
     ssr: false,
     loading: () => (
-      <div
-        className="absolute inset-0"
-        style={{ minHeight: '100vh', width: '100%' }}
-      />
-    )
+      <div className="absolute inset-0" style={{ minHeight: '100vh', width: '100%' }} />
+    ),
   }
 )
 
@@ -60,23 +54,23 @@ const subheaders = [
 
 // Optimized animation variants for better performance and LCP
 const containerVariants = {
-  hidden: { opacity: 1 },  // Immediate visibility for better FCP/LCP
+  hidden: { opacity: 1 }, // Immediate visibility for better FCP/LCP
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0,  // No stagger for instant visibility
-      delayChildren: 0,    // No delay for faster FCP
+      staggerChildren: 0, // No stagger for instant visibility
+      delayChildren: 0, // No delay for faster FCP
     },
   },
 }
 
 const itemVariants = {
-  hidden: { opacity: 1, y: 0 },  // Immediate visibility for better FCP/LCP
+  hidden: { opacity: 1, y: 0 }, // Immediate visibility for better FCP/LCP
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0,  // Instant for better FCP
+      duration: 0, // Instant for better FCP
     },
   },
 }
@@ -85,7 +79,7 @@ const buttonVariants = {
   rest: { scale: 1 },
   hover: {
     scale: 1.02,
-    transition: { duration: 0.2 },  // Reduced from 0.3
+    transition: { duration: 0.2 }, // Reduced from 0.3
   },
   tap: { scale: 0.98 },
 }
@@ -101,7 +95,7 @@ export default function Hero() {
 
   // Intersection observer to load 3D components only when visible
   const sectionRef = useRef<HTMLElement>(null)
-  const isInView = useInView(sectionRef, { once: true, margin: "200px" })
+  const isInView = useInView(sectionRef, { once: true, margin: '200px' })
 
   // Function to navigate to the portfolio page
   const navigateToPortfolio = useCallback(() => {
@@ -128,7 +122,10 @@ export default function Hero() {
   }, [controls])
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-black">
+    <section
+      ref={sectionRef}
+      className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-black"
+    >
       {/* Cosmic Stars Background - Lightweight CSS-based stars */}
       <ClientOnly>
         {enableCosmicStars && (
@@ -139,9 +136,7 @@ export default function Hero() {
       </ClientOnly>
 
       {/* Shooting Stars - Only rendered on client */}
-      <ClientOnly>
-        {enableShootingStars && <DynamicShootingStars />}
-      </ClientOnly>
+      <ClientOnly>{enableShootingStars && <DynamicShootingStars />}</ClientOnly>
 
       {/* Content */}
       <motion.div
@@ -160,8 +155,8 @@ export default function Hero() {
               style={{
                 willChange: 'auto', // Changed from 'opacity, transform' for better LCP
                 minHeight: '5rem',
-                maxHeight: '5rem',  // Prevent expansion
-                height: '5rem',     // Fixed height to prevent CLS
+                maxHeight: '5rem', // Prevent expansion
+                height: '5rem', // Fixed height to prevent CLS
               }}
             >
               <span
@@ -201,9 +196,9 @@ export default function Hero() {
                   <div className="absolute inset-0 hidden sm:block opacity-30">
                     <div
                       className={`absolute inset-0 bg-gradient-to-br from-[#4CD787]/8 via-transparent to-[#ccff00]/8 ${isMobile ? '' : 'animate-pulse'}`}
-                      style={{ 
+                      style={{
                         animationDuration: '4s',
-                        animationPlayState: isMobile ? 'paused' : 'running'
+                        animationPlayState: isMobile ? 'paused' : 'running',
                       }}
                     />
                   </div>
@@ -248,15 +243,15 @@ export default function Hero() {
               minHeight: '4.5rem',
               maxHeight: '4.5rem',
               height: '4.5rem',
-              overflow: 'hidden'
+              overflow: 'hidden',
             }}
           >
             <TextType
               text={subheaders}
               as="p"
-              typingSpeed={shouldReduceMotion ? 40 : (isMobile ? 60 : 80)} // Slower on mobile
-              deletingSpeed={shouldReduceMotion ? 25 : (isMobile ? 35 : 50)} // Slower on mobile
-              pauseDuration={shouldReduceMotion ? 800 : (isMobile ? 2500 : 2000)} // Longer on mobile
+              typingSpeed={shouldReduceMotion ? 40 : isMobile ? 60 : 80} // Slower on mobile
+              deletingSpeed={shouldReduceMotion ? 25 : isMobile ? 35 : 50} // Slower on mobile
+              pauseDuration={shouldReduceMotion ? 800 : isMobile ? 2500 : 2000} // Longer on mobile
               className="font-mono typewriter-text tracking-[0.08em] text-center mx-auto leading-tight"
               showCursor={true}
               cursorCharacter="_"
@@ -282,7 +277,7 @@ export default function Hero() {
                 target="_blank"
                 rel="noopener noreferrer"
                 color="#ccff00"
-                speed={isMobile ? "5s" : "3s"} // Slower animation on mobile
+                speed={isMobile ? '5s' : '3s'} // Slower animation on mobile
                 className="font-mono font-semibold text-base sm:text-md md:text-md px-6 py-3 sm:px-8 sm:py-3 min-h-[44px] flex items-center justify-center"
                 aria-label="Book a free consultation call with DevX Group"
               >
@@ -299,7 +294,7 @@ export default function Hero() {
               <StarBorder
                 onClick={navigateToPortfolio}
                 color="#e534eb"
-                speed={isMobile ? "6s" : "4s"} // Slower animation on mobile
+                speed={isMobile ? '6s' : '4s'} // Slower animation on mobile
                 className="font-mono font-semibold text-base sm:text-md md:text-md px-6 py-3 sm:px-8 sm:py-3 min-h-[44px] flex items-center justify-center"
                 aria-label="View DevX Group portfolio"
               >

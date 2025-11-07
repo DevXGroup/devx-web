@@ -47,10 +47,10 @@ const ShapeBlur = ({
       variation === 0
         ? 'none'
         : variation === 1
-        ? 'radial-gradient(circle, black 60%, transparent 80%)'
-        : variation === 2
-        ? 'radial-gradient(circle, transparent 55%, black 58%, black 62%, transparent 65%)'
-        : 'polygon(50% 0%, 0% 100%, 100% 100%)',
+          ? 'radial-gradient(circle, black 60%, transparent 80%)'
+          : variation === 2
+            ? 'radial-gradient(circle, transparent 55%, black 58%, black 62%, transparent 65%)'
+            : 'polygon(50% 0%, 0% 100%, 100% 100%)',
   }
 
   return (

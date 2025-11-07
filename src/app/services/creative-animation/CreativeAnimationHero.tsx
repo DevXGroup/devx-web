@@ -2,13 +2,7 @@
 
 import { useEffect, useRef, useState, useMemo } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { 
-  OrbitControls, 
-  Sphere, 
-  MeshDistortMaterial, 
-  Stars, 
-  Float
-} from '@react-three/drei'
+import { OrbitControls, Sphere, MeshDistortMaterial, Stars, Float } from '@react-three/drei'
 import * as THREE from 'three'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import DevXEnvironment from '@/components/3d/DevXEnvironment'
@@ -35,21 +29,21 @@ function AnimatedPlanet() {
     if (meshRef.current && materialRef.current) {
       // Igloo-style morphing based on scroll
       const time = state.clock.getElapsedTime()
-      
+
       // Base rotation
       meshRef.current.rotation.x = Math.sin(time * 0.3) * 0.1
       meshRef.current.rotation.y += delta * 0.2
       meshRef.current.rotation.z = Math.cos(time * 0.2) * 0.05
-      
+
       // Scroll-reactive morphing (igloo style)
       const morphIntensity = 0.3 + scroll * 0.7
       materialRef.current.distort = morphIntensity
       materialRef.current.speed = 1 + scroll * 2
-      
+
       // Scale changes with scroll
       const scale = 1 + scroll * 0.5
       meshRef.current.scale.setScalar(scale)
-      
+
       // Color shifts based on scroll (igloo-style palette)
       const hue = (time * 0.1 + scroll * 2) % 1
       materialRef.current.color.setHSL(hue, 0.8, 0.6)
@@ -57,11 +51,7 @@ function AnimatedPlanet() {
   })
 
   return (
-    <Float
-      speed={2}
-      rotationIntensity={0.5}
-      floatIntensity={0.5}
-    >
+    <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
       <Sphere ref={meshRef} args={[2, 64, 64]} position={[0, 0, 0]}>
         <MeshDistortMaterial
           ref={materialRef}
@@ -96,11 +86,11 @@ function ReactiveParticles() {
   useFrame((state) => {
     if (groupRef.current) {
       const time = state.clock.getElapsedTime()
-      
+
       // Rotate particle system
       groupRef.current.rotation.y = time * 0.05 + scroll * Math.PI
       groupRef.current.rotation.x = Math.sin(time * 0.1) * 0.1
-      
+
       // Scale based on scroll
       const scale = 1 + scroll * 0.5
       groupRef.current.scale.setScalar(scale)
@@ -115,8 +105,8 @@ function ReactiveParticles() {
         position: [
           (Math.random() - 0.5) * 20,
           (Math.random() - 0.5) * 20,
-          (Math.random() - 0.5) * 20
-        ] as [number, number, number]
+          (Math.random() - 0.5) * 20,
+        ] as [number, number, number],
       })
     }
     return particleArray
@@ -127,11 +117,7 @@ function ReactiveParticles() {
       {particles.map((particle, index) => (
         <mesh key={index} position={particle.position}>
           <sphereGeometry args={[0.02, 8, 8]} />
-          <meshBasicMaterial
-            color="#ffffff"
-            transparent
-            opacity={0.6}
-          />
+          <meshBasicMaterial color="#ffffff" transparent opacity={0.6} />
         </mesh>
       ))}
     </group>
@@ -171,8 +157,6 @@ function FloatingGeometry() {
   return (
     <group ref={groupRef}>
       {shapes.map((shape, index) => {
-        
-        
         return (
           <Float key={index} speed={1 + index * 0.5} rotationIntensity={1} floatIntensity={0.5}>
             <mesh position={shape.position as [number, number, number]}>
@@ -180,9 +164,9 @@ function FloatingGeometry() {
               {shape.type === 'octahedron' && <octahedronGeometry args={[0.3]} />}
               {shape.type === 'tetrahedron' && <tetrahedronGeometry args={[0.4]} />}
               {shape.type === 'icosahedron' && <icosahedronGeometry args={[0.3]} />}
-              <meshStandardMaterial 
-                color={shape.color} 
-                transparent 
+              <meshStandardMaterial
+                color={shape.color}
+                transparent
                 opacity={0.8}
                 metalness={0.5}
                 roughness={0.2}
@@ -203,19 +187,19 @@ function Scene() {
       <ambientLight intensity={0.2} />
       <directionalLight position={[10, 10, 5]} intensity={1} />
       <pointLight position={[-10, -10, -5]} intensity={0.5} color="#ccff00" />
-      
+
       {/* Main animated planet */}
       <AnimatedPlanet />
-      
+
       {/* Floating geometric shapes */}
       <FloatingGeometry />
-      
+
       {/* Reactive particle system */}
       <ReactiveParticles />
-      
+
       {/* Background stars */}
       <Stars radius={50} depth={50} count={2000} factor={4} saturation={0} fade />
-      
+
       {/* Camera controls */}
       <OrbitControls
         enablePan={false}
@@ -235,7 +219,7 @@ export default function CreativeAnimationHero() {
   const containerRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start start", "end start"]
+    offset: ['start start', 'end start'],
   })
 
   // Transform scroll into various animation values
@@ -245,7 +229,7 @@ export default function CreativeAnimationHero() {
   return (
     <>
       {/* Main hero section */}
-      <motion.div 
+      <motion.div
         ref={containerRef}
         className="relative h-screen w-full overflow-hidden"
         style={{ opacity, scale }}
@@ -292,16 +276,16 @@ export default function CreativeAnimationHero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1, duration: 1 }}
           >
-            <motion.h1 
+            <motion.h1
               className="text-7xl md:text-9xl font-['IBM_Plex_Mono'] font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-orange-300 to-pink-300 mb-6"
               style={{
                 textShadow: '0 0 40px rgba(255,255,255,0.3)',
-                WebkitTextStroke: '1px rgba(255,255,255,0.1)'
+                WebkitTextStroke: '1px rgba(255,255,255,0.1)',
               }}
             >
               Creative
             </motion.h1>
-            <motion.p 
+            <motion.p
               className="text-2xl md:text-3xl font-['IBM_Plex_Sans'] font-light text-white/90"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -327,16 +311,16 @@ export default function CreativeAnimationHero() {
               Motion Design & Animation
             </h2>
             <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto leading-relaxed font-['IBM_Plex_Sans'] mb-12">
-              Professional animation services for brands, featuring fluid motion graphics, 
+              Professional animation services for brands, featuring fluid motion graphics,
               interactive elements, and engaging visual storytelling that captivates audiences.
             </p>
-            
+
             {/* Feature highlights */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
               {[
                 { title: 'Logo Animations', desc: 'Dynamic brand reveals' },
                 { title: 'UI Micro-interactions', desc: 'Smooth user experiences' },
-                { title: '3D Visualizations', desc: 'Immersive storytelling' }
+                { title: '3D Visualizations', desc: 'Immersive storytelling' },
               ].map((feature, index) => (
                 <motion.div
                   key={feature.title}
@@ -349,21 +333,19 @@ export default function CreativeAnimationHero() {
                   <h3 className="text-lg font-['IBM_Plex_Mono'] font-semibold text-orange-400 mb-2">
                     {feature.title}
                   </h3>
-                  <p className="text-white/70 font-['IBM_Plex_Sans']">
-                    {feature.desc}
-                  </p>
+                  <p className="text-white/70 font-['IBM_Plex_Sans']">{feature.desc}</p>
                 </motion.div>
               ))}
             </div>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a 
+              <a
                 href="/contact"
                 className="bg-gradient-to-r from-orange-400 to-pink-400 text-black px-8 py-4 rounded-lg font-['IBM_Plex_Mono'] font-semibold hover:scale-105 transition-transform duration-300 inline-flex items-center justify-center"
               >
                 Start Your Project
               </a>
-              <a 
+              <a
                 href="/portfolio"
                 className="border-2 border-orange-400 text-orange-400 px-8 py-4 rounded-lg font-['IBM_Plex_Mono'] font-semibold hover:bg-orange-400 hover:text-black transition-all duration-300 inline-flex items-center justify-center"
               >
