@@ -149,14 +149,7 @@ interface FloatingParticleConfig {
   duration: number
 }
 
-const FloatingParticle = ({
-  delay,
-  size,
-  color,
-  left,
-  top,
-  duration,
-}: FloatingParticleConfig) => (
+const FloatingParticle = ({ delay, size, color, left, top, duration }: FloatingParticleConfig) => (
   <motion.div
     className="absolute rounded-full opacity-20"
     style={{
@@ -255,7 +248,6 @@ function PricingCard({ plan }: PricingCardProps) {
         }
         transition={{ duration: 3, repeat: Infinity }}
       />
-
 
       <div className="relative z-10 p-6 flex flex-col h-full">
         {/* Header section */}

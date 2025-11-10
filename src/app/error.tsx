@@ -83,7 +83,7 @@ export default function Error({
           <p className="text-white/70 text-lg md:text-xl max-w-2xl mx-auto font-['IBM_Plex_Sans'] leading-relaxed">
             An unexpected error occurred while processing your request.
           </p>
-          
+
           {error.digest && (
             <p className="text-white/50 text-sm font-['IBM_Plex_Mono'] bg-white/5 px-4 py-2 rounded-lg inline-block">
               Error ID: {error.digest}
@@ -104,14 +104,14 @@ export default function Error({
           >
             Try Again
           </button>
-          
+
           <Link
             href="/home"
             className="border border-orange-400 text-orange-400 hover:bg-orange-400 hover:text-black px-8 py-3 rounded-lg transition-all duration-200 transform hover:scale-105 font-['IBM_Plex_Mono'] font-medium"
           >
             ← Back to Home
           </Link>
-          
+
           <Link
             href="/contact"
             className="text-white/60 hover:text-white px-6 py-3 rounded-lg transition-all duration-200 font-['IBM_Plex_Sans'] underline underline-offset-4"

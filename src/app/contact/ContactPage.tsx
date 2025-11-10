@@ -1,13 +1,6 @@
 'use client'
 
-import {
-  useState,
-  useEffect,
-  useRef,
-  useCallback,
-  type ChangeEvent,
-  type FormEvent,
-} from 'react'
+import { useState, useEffect, useRef, useCallback, type ChangeEvent, type FormEvent } from 'react'
 import { motion, useReducedMotion, useInView } from 'framer-motion'
 import {
   Phone,
@@ -215,13 +208,13 @@ export default function ContactPage() {
     }
 
     updateHeight()
-    
+
     try {
       window.addEventListener('resize', updateHeight)
     } catch (error) {
       console.error('Failed to add resize event listener:', error)
     }
-    
+
     try {
       window.addEventListener('orientationchange', updateHeight)
     } catch (error) {
@@ -234,7 +227,7 @@ export default function ContactPage() {
       } catch (error) {
         console.error('Failed to remove resize event listener:', error)
       }
-      
+
       try {
         window.removeEventListener('orientationchange', updateHeight)
       } catch (error) {
@@ -525,7 +518,7 @@ export default function ContactPage() {
     if (form && typeof form.querySelector === 'function') {
       submitButton = form.querySelector('button[type="submit"]') as HTMLButtonElement | null
     }
-    
+
     if (submitButton && typeof submitButton.getBoundingClientRect === 'function') {
       const rect = submitButton.getBoundingClientRect()
       setConfettiOrigin({
@@ -558,10 +551,12 @@ export default function ContactPage() {
           data = await response.json()
         } catch {
           // If response.json() fails, set a default error
-          setSubmitError('We could not send your message. Please try again or email support@devxgroup.io.')
+          setSubmitError(
+            'We could not send your message. Please try again or email support@devxgroup.io.'
+          )
           return
         }
-        
+
         const apiErrors = (data?.errors ?? {}) as Record<string, string[]>
         const nextErrors: Record<string, string> = {}
         if (apiErrors.name?.[0]) nextErrors.name = apiErrors.name[0]
@@ -594,7 +589,11 @@ export default function ContactPage() {
   }
 
   const handleCopyExample = useCallback(async () => {
-    if (typeof navigator === 'undefined' || !navigator.clipboard || typeof navigator.clipboard.writeText !== 'function') {
+    if (
+      typeof navigator === 'undefined' ||
+      !navigator.clipboard ||
+      typeof navigator.clipboard.writeText !== 'function'
+    ) {
       return
     }
 

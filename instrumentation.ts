@@ -49,57 +49,56 @@ const redactEvent = (event: any) => {
 }
 
 export async function register() {
-  const dsn = process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN;
+  const dsn = process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN
 
   // Only initialize Sentry if DSN is provided
-  if (!dsn) return;
+  if (!dsn) return
 
-  if (process.env.NEXT_RUNTIME === "nodejs") {
+  if (process.env.NEXT_RUNTIME === 'nodejs') {
     // Server-side instrumentation
-    const Sentry = await import("@sentry/nextjs");
+    const Sentry = await import('@sentry/nextjs')
 
     Sentry.init({
       dsn,
       tracesSampleRate: 1.0,
-      debug: process.env.NODE_ENV === "development",
+      debug: process.env.NODE_ENV === 'development',
 
-      ignoreErrors: [
-        "ECONNREFUSED",
-        "ENOTFOUND",
-        "HMR",
-      ],
+      ignoreErrors: ['ECONNREFUSED', 'ENOTFOUND', 'HMR'],
 
       beforeSend(event, _hint) {
-        if (process.env.NODE_ENV === "development" && !process.env.SENTRY_DEBUG) {
-          return null;
+        if (process.env.NODE_ENV === 'development' && !process.env.SENTRY_DEBUG) {
+          return null
         }
-        
+
         // Filter out Chrome extension runtime errors that occur on non-Chrome browsers
-        if (event.exception?.values?.some(exception => 
-          exception.value?.includes('runtime.sendMessage') && 
-          exception.value?.includes('Tab not found')
-        )) {
-          return null;
+        if (
+          event.exception?.values?.some(
+            (exception) =>
+              exception.value?.includes('runtime.sendMessage') &&
+              exception.value?.includes('Tab not found')
+          )
+        ) {
+          return null
         }
-        
-        return redactEvent(event);
+
+        return redactEvent(event)
       },
-    });
+    })
   }
 
-  if (process.env.NEXT_RUNTIME === "edge") {
+  if (process.env.NEXT_RUNTIME === 'edge') {
     // Edge runtime instrumentation
-    const Sentry = await import("@sentry/nextjs");
+    const Sentry = await import('@sentry/nextjs')
 
     Sentry.init({
       dsn,
       tracesSampleRate: 1.0,
-      debug: process.env.NODE_ENV === "development",
+      debug: process.env.NODE_ENV === 'development',
 
       beforeSend(event) {
-        return redactEvent(event);
+        return redactEvent(event)
       },
-    });
+    })
   }
 }
 
@@ -107,15 +106,15 @@ export async function onRequestError(
   err: Error,
   request: Request,
   context: {
-    routerKind: "Pages Router" | "App Router";
-    routePath: string;
-    routeType: "render" | "route" | "action" | "middleware";
+    routerKind: 'Pages Router' | 'App Router'
+    routePath: string
+    routeType: 'render' | 'route' | 'action' | 'middleware'
   }
 ) {
   // Only capture errors if Sentry DSN is configured
-  if (!process.env.NEXT_PUBLIC_SENTRY_DSN) return;
+  if (!process.env.NEXT_PUBLIC_SENTRY_DSN) return
 
-  const Sentry = await import("@sentry/nextjs");
+  const Sentry = await import('@sentry/nextjs')
   // Cast request to any to avoid type issues with Sentry's RequestInfo type
-  Sentry.captureRequestError(err, request as any, context);
+  Sentry.captureRequestError(err, request as any, context)
 }

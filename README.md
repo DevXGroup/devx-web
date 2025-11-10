@@ -27,18 +27,21 @@ The application showcases the DevX Group portfolio, services, and lead-generatio
 ## Tech Stack
 
 ### Core
+
 - Framework: Next.js 15.5.6 (App Router) on React 19.1.1
 - Language: TypeScript (strict mode)
 - Package manager: pnpm >= 10.19
 - Runtime: Node.js >= 20.11 < 23
 
 ### UI & Interactions
+
 - Styling: Tailwind CSS 4.1 with IBM Plex Sans and IBM Plex Mono
 - Components: Radix UI primitives, Lucide React icons
 - Motion & 3D: Framer Motion, GSAP, Three.js, React Three Fiber
 - Forms: React Hook Form + Zod validation
 
 ### Tooling & Integrations
+
 - Testing: Jest + Testing Library, Playwright E2E suites
 - Monitoring: Sentry, Vercel Analytics, Vercel Speed Insights
 - Communications: Nodemailer transport, Calendly widget
@@ -77,6 +80,7 @@ Path aliases (`@/*`, `@animations/*`, `@layout/*`, `@sections/*`, `@3d/*`) keep 
 ## Getting Started
 
 ### Prerequisites
+
 - Node.js >= 20.11 and < 23
 - pnpm >= 10.19 (enable via `corepack enable pnpm` if needed)
 
@@ -159,3 +163,4 @@ Distributed under the MIT License. See `LICENSE` for details.
 ## Maintainers
 
 - Max Sheikhizadeh (Principal Contributor)
+- Ali Sheikhizadeh (Contributor)

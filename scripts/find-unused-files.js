@@ -92,8 +92,10 @@ for (const [alias, targetArr] of Object.entries(aliasPaths)) {
   // Build a regex and a mapper
   const star = alias.endsWith('/*')
   const aliasPrefix = star ? alias.slice(0, -2) : alias
-  const re = new RegExp('^' + aliasPrefix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + (star ? '\\/(.+)$' : '$'))
-  const targets = targetArr.map(t => ({
+  const re = new RegExp(
+    '^' + aliasPrefix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + (star ? '\\/(.+)$' : '$')
+  )
+  const targets = targetArr.map((t) => ({
     star: t.endsWith('/*'),
     prefix: path.resolve(baseUrl, t.replace(/\*$|\/$/g, '')),
   }))
@@ -161,7 +163,8 @@ function resolveImport(fromFile, spec) {
   return null
 }
 
-const IMPORT_RE = /import\s+(?:type\s+)?[^'"()]*?from\s*['\"]([^'\"]+)['\"];?|import\s*\(\s*['\"]([^'\"]+)['\"]\s*\)/g
+const IMPORT_RE =
+  /import\s+(?:type\s+)?[^'"()]*?from\s*['\"]([^'\"]+)['\"];?|import\s*\(\s*['\"]([^'\"]+)['\"]\s*\)/g
 const EXPORT_FROM_RE = /export\s+[^'"()]*?from\s*['\"]([^'\"]+)['\"]/g
 const CSS_IMPORT_RE = /@import\s+['\"]([^'\"]+)['\"]/g
 

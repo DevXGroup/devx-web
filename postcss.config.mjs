@@ -4,6 +4,6 @@ const config = {
     '@tailwindcss/postcss': {},
     autoprefixer: {},
   },
-};
+}
 
-export default config;
+export default config

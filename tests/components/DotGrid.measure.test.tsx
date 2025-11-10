@@ -7,7 +7,17 @@ import DotGrid from '@sections/DotGrid'
 function mockElementSize(el: HTMLElement, { width, height }: { width: number; height: number }) {
   Object.defineProperty(el, 'getBoundingClientRect', {
     configurable: true,
-    value: () => ({ width, height, top: 0, left: 0, right: width, bottom: height, x: 0, y: 0, toJSON: () => {} }),
+    value: () => ({
+      width,
+      height,
+      top: 0,
+      left: 0,
+      right: width,
+      bottom: height,
+      x: 0,
+      y: 0,
+      toJSON: () => {},
+    }),
   })
   Object.defineProperty(el, 'clientWidth', { value: width, configurable: true })
   Object.defineProperty(el, 'clientHeight', { value: height, configurable: true })

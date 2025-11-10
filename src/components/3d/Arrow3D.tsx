@@ -1,10 +1,10 @@
-"use client"
+'use client'
 
-import { useRef, useEffect, useState } from "react"
-import { Canvas, useFrame } from "@react-three/fiber"
-import { MeshTransmissionMaterial, PerspectiveCamera } from "@react-three/drei"
-import { type Mesh, Shape } from "three"
-import DevXEnvironment from "./DevXEnvironment"
+import { useRef, useEffect, useState } from 'react'
+import { Canvas, useFrame } from '@react-three/fiber'
+import { MeshTransmissionMaterial, PerspectiveCamera } from '@react-three/drei'
+import { type Mesh, Shape } from 'three'
+import DevXEnvironment from './DevXEnvironment'
 
 function Arrow() {
   const meshRef = useRef<Mesh>(null!)
@@ -43,8 +43,13 @@ function Arrow() {
   }
 
   return (
-    <mesh ref={meshRef} rotation={[rotationX, Math.PI / 6, 0]} position={[0, positionY, 0]} scale={[1.5, 1.5, 1.5]}>
-      {" "}
+    <mesh
+      ref={meshRef}
+      rotation={[rotationX, Math.PI / 6, 0]}
+      position={[0, positionY, 0]}
+      scale={[1.5, 1.5, 1.5]}
+    >
+      {' '}
       {/* Increased scale */}
       <extrudeGeometry args={[arrowShape, extrudeSettings]} />
       <MeshTransmissionMaterial
@@ -70,7 +75,7 @@ function Arrow() {
 export default function Arrow3D() {
   return (
     <div className="w-full h-60">
-      {" "}
+      {' '}
       {/* Increased height from h-40 to h-60 */}
       <Canvas>
         <PerspectiveCamera makeDefault position={[0, -6, 9]} /> {/* Adjusted camera position */}

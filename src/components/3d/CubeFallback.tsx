@@ -1,15 +1,15 @@
-"use client"
+'use client'
 
-import { motion } from "framer-motion"
-import { useState, useEffect } from "react"
+import { motion } from 'framer-motion'
+import { useState, useEffect } from 'react'
 
 const faces = [
-  { text: "Custom Software", color: "#8A2BE2" },
-  { text: "Expert Solutions", color: "#9932CC" },
-  { text: "Fast Results", color: "#9370DB" },
-  { text: "Competitive Rates", color: "#BA55D3" },
-  { text: "Bring Your Vision", color: "#DA70D6" },
-  { text: "To Life", color: "#EE82EE" },
+  { text: 'Custom Software', color: '#8A2BE2' },
+  { text: 'Expert Solutions', color: '#9932CC' },
+  { text: 'Fast Results', color: '#9370DB' },
+  { text: 'Competitive Rates', color: '#BA55D3' },
+  { text: 'Bring Your Vision', color: '#DA70D6' },
+  { text: 'To Life', color: '#EE82EE' },
 ]
 
 export default function CubeFallback() {
@@ -42,7 +42,7 @@ export default function CubeFallback() {
           transition={{
             duration: 3,
             repeat: Number.POSITIVE_INFINITY,
-            repeatType: "reverse",
+            repeatType: 'reverse',
           }}
         />
 
@@ -54,8 +54,8 @@ export default function CubeFallback() {
               className="absolute inset-0 flex items-center justify-center rounded-xl border-2 border-white/20 backdrop-blur-sm safari-fix"
               style={{
                 backgroundColor: face.color,
-                WebkitBackfaceVisibility: "hidden",
-                backfaceVisibility: "hidden",
+                WebkitBackfaceVisibility: 'hidden',
+                backfaceVisibility: 'hidden',
               }}
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{
@@ -65,15 +65,15 @@ export default function CubeFallback() {
               }}
               transition={{
                 duration: 0.5,
-                ease: "easeInOut",
+                ease: 'easeInOut',
               }}
             >
               <div className="text-center p-6">
                 <h3
                   className="text-2xl font-bold text-white mb-2"
                   style={{
-                    textShadow: "0 1px 2px rgba(0,0,0,0.5)",
-                    WebkitTextStroke: "0.5px rgba(0,0,0,0.2)", // Safari text enhancement
+                    textShadow: '0 1px 2px rgba(0,0,0,0.5)',
+                    WebkitTextStroke: '0.5px rgba(0,0,0,0.2)', // Safari text enhancement
                   }}
                 >
                   {face.text}
@@ -94,7 +94,7 @@ export default function CubeFallback() {
           transition={{
             duration: 2,
             repeat: Number.POSITIVE_INFINITY,
-            repeatType: "reverse",
+            repeatType: 'reverse',
           }}
         />
         <motion.div
@@ -106,7 +106,7 @@ export default function CubeFallback() {
           transition={{
             duration: 2,
             repeat: Number.POSITIVE_INFINITY,
-            repeatType: "reverse",
+            repeatType: 'reverse',
             delay: 0.5,
           }}
         />

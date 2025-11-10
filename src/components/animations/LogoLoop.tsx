@@ -84,7 +84,7 @@ export default function LogoLoop({ logos, speed = 15 }: LogoLoopProps) {
     }
   }, [])
 
-  const scrollerStyles: (CSSProperties & { '--scroll-distance'?: string }) = {
+  const scrollerStyles: CSSProperties & { '--scroll-distance'?: string } = {
     animationName: scrollDistance > 0 ? 'scroll' : 'none',
     animationDuration: `${speed}s`,
     animationTimingFunction: 'linear',
@@ -125,7 +125,9 @@ export default function LogoLoop({ logos, speed = 15 }: LogoLoopProps) {
                 <div className="relative flex flex-col items-center gap-3">
                   <div
                     className={`relative flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 transition-all duration-500 ${
-                      shouldApplyGrayscale ? 'grayscale group-hover/item:grayscale-0' : 'grayscale-0'
+                      shouldApplyGrayscale
+                        ? 'grayscale group-hover/item:grayscale-0'
+                        : 'grayscale-0'
                     } ${logo.loopWrapperClassName ?? ''}`}
                     style={{ background: 'transparent' }}
                   >
