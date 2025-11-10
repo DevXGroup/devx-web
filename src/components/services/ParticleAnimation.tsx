@@ -1,8 +1,8 @@
-"use client"
+'use client'
 
-import { useRef, useEffect } from "react"
+import { useRef, useEffect } from 'react'
 
-export default function ParticleAnimation({ color = "#4CD787", density = 50, speed = 0.7 }) {
+export default function ParticleAnimation({ color = '#4CD787', density = 50, speed = 0.7 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const particlesRef = useRef<any[]>([])
   const requestRef = useRef<number | null>(null)
@@ -11,7 +11,7 @@ export default function ParticleAnimation({ color = "#4CD787", density = 50, spe
     const canvas = canvasRef.current
     if (!canvas) return
 
-    const ctx = canvas.getContext("2d", { alpha: true })
+    const ctx = canvas.getContext('2d', { alpha: true })
     if (!ctx) return
 
     // Set canvas dimensions
@@ -74,7 +74,7 @@ export default function ParticleAnimation({ color = "#4CD787", density = 50, spe
     }
     particlesRef.current = particles
 
-    let previousTime = 0;
+    let previousTime = 0
     // Animation loop with throttling
     const animate = (timestamp: DOMHighResTimeStamp) => {
       const deltaTime = timestamp - previousTime
@@ -107,10 +107,10 @@ export default function ParticleAnimation({ color = "#4CD787", density = 50, spe
       }
     }, 200)
 
-    window.addEventListener("resize", handleResize)
+    window.addEventListener('resize', handleResize)
 
     return () => {
-      window.removeEventListener("resize", handleResize)
+      window.removeEventListener('resize', handleResize)
       if (requestRef.current) {
         cancelAnimationFrame(requestRef.current)
       }
@@ -130,5 +130,10 @@ export default function ParticleAnimation({ color = "#4CD787", density = 50, spe
     }
   }
 
-  return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none z-0 opacity-60" />
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 w-full h-full pointer-events-none z-0 opacity-60"
+    />
+  )
 }

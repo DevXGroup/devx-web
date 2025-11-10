@@ -80,16 +80,13 @@ const FuzzyText: React.FC<FuzzyTextProps> = ({
 
       const actualLeft = metrics.actualBoundingBoxLeft ?? 0
       const rawActualRight = metrics.actualBoundingBoxRight
-      const actualRight =
-        rawActualRight && rawActualRight > 0 ? rawActualRight : metrics.width
+      const actualRight = rawActualRight && rawActualRight > 0 ? rawActualRight : metrics.width
       const rawActualAscent = metrics.actualBoundingBoxAscent
       const actualAscent =
         rawActualAscent && rawActualAscent > 0 ? rawActualAscent : numericFontSize
       const rawActualDescent = metrics.actualBoundingBoxDescent
       const actualDescent =
-        rawActualDescent && rawActualDescent > 0
-          ? rawActualDescent
-          : numericFontSize * 0.2
+        rawActualDescent && rawActualDescent > 0 ? rawActualDescent : numericFontSize * 0.2
 
       const textBoundingWidth = Math.max(1, Math.ceil(actualLeft + actualRight))
       const tightHeight = Math.max(1, Math.ceil(actualAscent + actualDescent))

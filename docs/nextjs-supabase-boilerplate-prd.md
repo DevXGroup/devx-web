@@ -1,25 +1,29 @@
 # Next.js + Supabase Boilerplate PRD for DevX-Class Marketing Apps
 
 ## 1. Purpose & Context
+
 - **Objective**: Provide AI agents with a reusable blueprint to create high-end marketing/web apps mirroring the DevX Group production experience while allowing rapid content, font, and color swaps.
 - **Source of Truth**: Current DevX Group website built with Next.js App Router, React 19, Tailwind CSS 4, extensive motion/3D layers, and analytics instrumentation.
 - **Scope**: Full-stack boilerplate including polished marketing site, animated hero and section transitions, contact and scheduling flows, and Supabase-backed authentication/profile storage (extendable to future product features).
 - **Out of Scope**: Payments, complex dashboards, or CMS authoring. Agents may stub these as future enhancements.
 
 ## 2. Target Users & Jobs-To-Be-Done
-| Persona | Goals | Critical Needs |
-| --- | --- | --- |
-| Prospective clients / leads | Discover services, view work, book intro call | Fast first paint, wow-factor hero, proof of work, frictionless scheduling |
-| Returning collaborators | Validate credibility, locate resources | Consistent navigation, up-to-date portfolio, legal docs |
-| Authenticated beta testers (future) | Access gated demos/resources | Supabase login, role-based routing, secure API surface |
+
+| Persona                             | Goals                                         | Critical Needs                                                            |
+| ----------------------------------- | --------------------------------------------- | ------------------------------------------------------------------------- |
+| Prospective clients / leads         | Discover services, view work, book intro call | Fast first paint, wow-factor hero, proof of work, frictionless scheduling |
+| Returning collaborators             | Validate credibility, locate resources        | Consistent navigation, up-to-date portfolio, legal docs                   |
+| Authenticated beta testers (future) | Access gated demos/resources                  | Supabase login, role-based routing, secure API surface                    |
 
 ## 3. Experience Pillars
+
 1. **Instant credibility** via high-contrast dark theme, glitch hero, and 3D/motion micro-interactions.
 2. **Guided storytelling** across Home, About, Services, Portfolio, Pricing, and Contact pages with reusable section primitives.
 3. **Performance-first**: optimized fonts, lazy hydration of heavy effects, Lenis smooth scrolling, analytics instrumentation.
 4. **Auth-ready foundation**: Supabase email/password + magic link login, persistent session helpers, profile table ready for gated features.
 
 ## 4. Technology Stack Requirements
+
 - **Framework**: Next.js 15 App Router, React 19, TypeScript strict.
 - **Styling**: Tailwind CSS 4 with custom `globals.css` typography and theme tokens. Permit theme overrides through Tailwind config + CSS variables.
 - **Motion & Effects**:
@@ -37,24 +41,27 @@
 - **Tooling**: pnpm, ESLint (`next/core-web-vitals`), Jest + Testing Library, Playwright suites.
 
 ## 5. Information Architecture & Page Contracts
-| Route | Purpose | Key Modules |
-| --- | --- | --- |
-| `/` (Home) | High-impact hero, service highlights, marquee of capabilities, proof/social proof, CTA to contact | `EntryPage`, glitch canvas, metrics counters, Lenis smoothing, call-to-action components |
-| `/about` | Company story, leadership spotlight, values timeline | Animated timelines, image reveals, testimonial sliders |
-| `/portfolio` | Case studies grid with hover motion and modal details | Portfolio cards with 3D tilt, lightbox or modal using Radix Dialog |
-| `/pricing` | Tiered pricing with toggles, FAQ accordion, CTA | Radix Tabs, Accordion, callout banners |
-| `/services/creative-animation` | Deep dive service microsite with segmented sections | Section layout primitives, GSAP scroll scrubbing, sticky navigation |
-| `/contact` | Contact form (React Hook Form + Zod), embedded Calendly iframe, location/map | Form validation, Sonner toasts, fallback email handler |
-| `/privacy`, `/terms` | Legal copy with typographic rhythm | Markdown/MDX renderer using shared typography classes |
-| `/dev-features` | Playground for future experiments; optional in production |
-| `/auth/*` (to add) | Supabase-powered sign in/up, magic link confirmation, account settings | Supabase auth UI components, server actions for session handling |
+
+| Route                          | Purpose                                                                                           | Key Modules                                                                              |
+| ------------------------------ | ------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `/` (Home)                     | High-impact hero, service highlights, marquee of capabilities, proof/social proof, CTA to contact | `EntryPage`, glitch canvas, metrics counters, Lenis smoothing, call-to-action components |
+| `/about`                       | Company story, leadership spotlight, values timeline                                              | Animated timelines, image reveals, testimonial sliders                                   |
+| `/portfolio`                   | Case studies grid with hover motion and modal details                                             | Portfolio cards with 3D tilt, lightbox or modal using Radix Dialog                       |
+| `/pricing`                     | Tiered pricing with toggles, FAQ accordion, CTA                                                   | Radix Tabs, Accordion, callout banners                                                   |
+| `/services/creative-animation` | Deep dive service microsite with segmented sections                                               | Section layout primitives, GSAP scroll scrubbing, sticky navigation                      |
+| `/contact`                     | Contact form (React Hook Form + Zod), embedded Calendly iframe, location/map                      | Form validation, Sonner toasts, fallback email handler                                   |
+| `/privacy`, `/terms`           | Legal copy with typographic rhythm                                                                | Markdown/MDX renderer using shared typography classes                                    |
+| `/dev-features`                | Playground for future experiments; optional in production                                         |
+| `/auth/*` (to add)             | Supabase-powered sign in/up, magic link confirmation, account settings                            | Supabase auth UI components, server actions for session handling                         |
 
 ### Shared Layout & Chrome
+
 - `src/app/layout.tsx` wraps pages with fonts (`IBM Plex Sans/Mono` via `next/font`), analytics scripts, structured data, and `ConditionalLayout` for Nav/Footer.
 - Global components: `Navbar`, `Footer`, `GlobalTransition`, `ScrollToTop`, `BrowserCompatibilityDetector`, `DevToolsErrorSuppressor`.
 - Maintain dark background, highlight gradients, and 3D accent objects consistent across routes.
 
 ## 6. Supabase Authentication & Data Model
+
 1. **Dependencies**: add `@supabase/supabase-js`, `@supabase/auth-helpers-nextjs`, `@supabase/ssr`.
 2. **Environment Variables** (stored in `.env.local`):
    - `NEXT_PUBLIC_SUPABASE_URL`
@@ -71,6 +78,7 @@
    - OAuth provider stubs (Google, GitHub) included but optional.
    - Protect private routes via middleware (`middleware.ts`) using `createServerClient` to check session; redirect unauthenticated users to `/auth/login`.
 5. **Database Schema** (SQL migration example):
+
    ```sql
    create table public.profiles (
      id uuid primary key references auth.users(id) on delete cascade,
@@ -99,6 +107,7 @@
    create policy "Users can read own audit logs" on public.audit_logs
      for select using (auth.uid() = user_id);
    ```
+
 6. **UI Requirements**:
    - `/auth/login`: card with brand visuals, email/password form, SSO buttons, link to sign-up and magic link.
    - `/auth/register`: capture name + email + password; on success create `profiles` row via server action.
@@ -112,6 +121,7 @@
    - Extend Playwright flows to cover login, logout, gated page access.
 
 ## 7. Content & Theming Controls
+
 - **Fonts**: default IBM Plex Sans/Mono. Allow overrides by updating `next/font` config in `app/layout.tsx`. Document alternative pairings (e.g., Geist, Inter) and ensure fallback stacks specified.
 - **Color System**: centralize tokens in `tailwind.config.js` (`colors`, `gradients`, `shadows`). Provide JSON-like export for AI agents to swap brand palette quickly.
 - **Copy**: maintain structured data files (e.g., `src/data/hero.ts`, `src/data/portfolioProjects.ts`). Agents update text by editing these exports instead of components.
@@ -119,6 +129,7 @@
 - **SEO Metadata**: All pages define `metadata` exports using helper functions from `src/lib/og`. Agents update `eyebrow`, `title`, `subtitle`, `focus` arrays to generate OG/Twitter images.
 
 ## 8. Motion, 3D, and Interaction Guidelines
+
 - Keep hero glitch canvas and decrypted text reveal as signature elements. Provide configuration props for glitch speed, colors, vignette toggles.
 - Use Framer Motion variants for staggered section reveals; prefer reduced-motion checks (`useReducedMotion`) to disable heavy effects.
 - 3D scenes (React Three Fiber) should lazy load on viewport entry and offer fallback poster images for SSR.
@@ -127,6 +138,7 @@
 - Provide accessible alternatives: ensure focus states visible, animations do not block interaction, and motion respects prefers-reduced-motion.
 
 ## 9. Analytics, Observability & Compliance
+
 - Maintain GA4 + GTM script injection (lazy load) and noscript iframe as in production layout.
 - Keep Vercel Analytics + Speed Insights components mounted.
 - Sentry instrumentation remains active; include DSN env var placeholder.
@@ -135,6 +147,7 @@
 - Ensure legal pages (`/privacy`, `/terms`) use accessible typography and anchor linking for subsections.
 
 ## 10. Accessibility & Performance Criteria
+
 - LCP < 2.5s on desktop/mobile; fonts preloaded via `next/font`.
 - CLS near zero: avoid layout shifts by reserving space for async assets.
 - Use Next.js `Image` for responsive imagery.
@@ -142,6 +155,7 @@
 - Write Playwright accessibility audit (`tests/audit/`) to validate `aria` attributes and color contrast.
 
 ## 11. Implementation Blueprint for Agents
+
 1. **Bootstrap**: `pnpm dlx create-next-app@latest` with App Router + TypeScript, install dependencies list above plus Supabase packages.
 2. **Project Setup**:
    - Configure Tailwind CSS 4, copy `globals.css`, typography, and `tailwind.config.js` tokens.
@@ -162,6 +176,7 @@
 9. **Deployment**: Document Vercel deployment steps, env variables, and Supabase project linking.
 
 ## 12. Customization Guidelines
+
 - **Theme Switch**: Provide `ThemeProvider` using `next-themes`; allow toggling between dark/light while keeping dark as default.
 - **Brand Swap Checklist**:
   1. Update colors in Tailwind config + CSS variables.
@@ -173,12 +188,14 @@
 - **Plugin Hooks**: Document GSAP plugin registration, R3F postprocessing pipeline, and how to disable features for lighter builds.
 
 ## 13. Deliverables & Acceptance Criteria
+
 - ✅ Repository containing Next.js project with described architecture, Supabase auth, and content modules ready for customization.
 - ✅ Documentation for environment setup, theming overrides, and motion controls.
 - ✅ Test coverage for critical flows (nav, contact, auth) with green CI (`pnpm lint`, `pnpm test`, `pnpm build`).
 - ✅ Deployment instructions validated on Vercel + Supabase.
 
 ## 14. Future Extensions (Optional Backlog)
+
 - Multi-tenant workspace dashboards using Supabase Row Level Security.
 - Stripe billing integration for pricing tiers.
 - CMS bridge (e.g., Sanity) syncing to `src/data` via build-time fetch.

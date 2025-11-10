@@ -1,16 +1,22 @@
-import React from 'react';
+import React from 'react'
 
 interface ShinyTextProps {
-  text: string;
-  disabled?: boolean;
-  speed?: number;
-  delay?: number;
-  className?: string;
+  text: string
+  disabled?: boolean
+  speed?: number
+  delay?: number
+  className?: string
 }
 
-const ShinyText: React.FC<ShinyTextProps> = ({ text, disabled = false, speed = 5, delay = 0, className = '' }) => {
-  const animationDuration = `${speed}s`;
-  const animationDelay = `${delay}s`;
+const ShinyText: React.FC<ShinyTextProps> = ({
+  text,
+  disabled = false,
+  speed = 5,
+  delay = 0,
+  className = '',
+}) => {
+  const animationDuration = `${speed}s`
+  const animationDelay = `${delay}s`
 
   return (
     <div
@@ -21,12 +27,12 @@ const ShinyText: React.FC<ShinyTextProps> = ({ text, disabled = false, speed = 5
         backgroundSize: '200% 100%',
         WebkitBackgroundClip: 'text',
         animationDuration: animationDuration,
-        animationDelay: animationDelay
+        animationDelay: animationDelay,
       }}
     >
       {text}
     </div>
-  );
-};
+  )
+}
 
-export default ShinyText;
+export default ShinyText

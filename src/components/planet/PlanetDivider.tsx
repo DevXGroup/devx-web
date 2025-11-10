@@ -175,12 +175,10 @@ export default function PlanetDivider() {
           height: 100%;
           position: relative;
           /* Apply the glow effect to the container to prevent square clipping */
-          filter:
-            drop-shadow(0 0 40px rgba(180, 200, 160, 0.2))
+          filter: drop-shadow(0 0 40px rgba(180, 200, 160, 0.2))
             drop-shadow(0 0 70px rgba(170, 190, 150, 0.14))
             drop-shadow(0 0 100px rgba(160, 180, 140, 0.08));
-          -webkit-filter:
-            drop-shadow(0 0 40px rgba(180, 200, 160, 0.2))
+          -webkit-filter: drop-shadow(0 0 40px rgba(180, 200, 160, 0.2))
             drop-shadow(0 0 70px rgba(170, 190, 150, 0.14))
             drop-shadow(0 0 100px rgba(160, 180, 140, 0.08));
           border-radius: 50%;
@@ -250,12 +248,10 @@ export default function PlanetDivider() {
         /* Mobile optimizations - more subtle glow */
         @media screen and (max-width: 767px) {
           .planet-glow-container {
-            filter:
-              drop-shadow(0 0 35px rgba(180, 200, 160, 0.18))
+            filter: drop-shadow(0 0 35px rgba(180, 200, 160, 0.18))
               drop-shadow(0 0 60px rgba(170, 190, 150, 0.12))
               drop-shadow(0 0 85px rgba(160, 180, 140, 0.07)) !important;
-            -webkit-filter:
-              drop-shadow(0 0 35px rgba(180, 200, 160, 0.18))
+            -webkit-filter: drop-shadow(0 0 35px rgba(180, 200, 160, 0.18))
               drop-shadow(0 0 60px rgba(170, 190, 150, 0.12))
               drop-shadow(0 0 85px rgba(160, 180, 140, 0.07)) !important;
           }

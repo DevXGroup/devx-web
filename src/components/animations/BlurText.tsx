@@ -1,33 +1,33 @@
-import { motion } from 'framer-motion';
-import { useEffect, useRef, useState, useMemo } from 'react';
+import { motion } from 'framer-motion'
+import { useEffect, useRef, useState, useMemo } from 'react'
 
 interface BlurTextProps {
-  text?: string;
-  delay?: number;
-  className?: string;
-  animateBy?: 'words' | 'letters';
-  direction?: 'top' | 'bottom' | 'left' | 'right';
-  threshold?: number;
-  rootMargin?: string;
-  animationFrom?: Record<string, any>;
-  animationTo?: Record<string, any>[];
-  easing?: (t: number) => number;
-  onAnimationComplete?: () => void;
-  stepDuration?: number;
+  text?: string
+  delay?: number
+  className?: string
+  animateBy?: 'words' | 'letters'
+  direction?: 'top' | 'bottom' | 'left' | 'right'
+  threshold?: number
+  rootMargin?: string
+  animationFrom?: Record<string, any>
+  animationTo?: Record<string, any>[]
+  easing?: (t: number) => number
+  onAnimationComplete?: () => void
+  stepDuration?: number
 }
 
-const buildKeyframes = (from: Record<string, any>, steps: Record<string, any>[]): Record<string, any[]> => {
-  const keys = new Set([
-    ...Object.keys(from),
-    ...steps.flatMap((s) => Object.keys(s)),
-  ]);
+const buildKeyframes = (
+  from: Record<string, any>,
+  steps: Record<string, any>[]
+): Record<string, any[]> => {
+  const keys = new Set([...Object.keys(from), ...steps.flatMap((s) => Object.keys(s))])
 
-  const keyframes: Record<string, any[]> = {};
+  const keyframes: Record<string, any[]> = {}
   keys.forEach((k) => {
-    keyframes[k] = [from[k], ...steps.map((s) => s[k])];
-  });
-  return keyframes;
-};
+    keyframes[k] = [from[k], ...steps.map((s) => s[k])]
+  })
+  return keyframes
+}
 
 const BlurText = ({
   text = '',
@@ -43,26 +43,26 @@ const BlurText = ({
   onAnimationComplete,
   stepDuration = 0.35,
 }: BlurTextProps) => {
-  const elements = animateBy === 'words' ? text.split(' ') : text.split('');
-  const [inView, setInView] = useState(false);
-  const ref = useRef<HTMLParagraphElement>(null);
+  const elements = animateBy === 'words' ? text.split(' ') : text.split('')
+  const [inView, setInView] = useState(false)
+  const ref = useRef<HTMLParagraphElement>(null)
 
   useEffect(() => {
-    if (!ref.current) return;
+    if (!ref.current) return
     const observer = new IntersectionObserver(
       (entries) => {
-        const entry = entries[0];
+        const entry = entries[0]
         if (entry?.isIntersecting && ref.current) {
-          setInView(true);
-          observer.unobserve(ref.current);
+          setInView(true)
+          observer.unobserve(ref.current)
         }
       },
       { threshold, rootMargin }
-    );
-    observer.observe(ref.current);
-    return () => observer.disconnect();
+    )
+    observer.observe(ref.current)
+    return () => observer.disconnect()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [threshold, rootMargin]);
+  }, [threshold, rootMargin])
 
   const defaultFrom = useMemo(
     () =>
@@ -70,7 +70,7 @@ const BlurText = ({
         ? { filter: 'blur(10px)', opacity: 0, y: -50 }
         : { filter: 'blur(10px)', opacity: 0, y: 50 },
     [direction]
-  );
+  )
 
   const defaultTo = useMemo(
     () => [
@@ -82,41 +82,38 @@ const BlurText = ({
       { filter: 'blur(0px)', opacity: 1, y: 0 },
     ],
     [direction]
-  );
+  )
 
-  const fromSnapshot = animationFrom ?? defaultFrom;
-  const toSnapshots = animationTo ?? defaultTo;
+  const fromSnapshot = animationFrom ?? defaultFrom
+  const toSnapshots = animationTo ?? defaultTo
 
-  const stepCount = toSnapshots.length + 1;
-  const totalDuration = stepDuration * (stepCount - 1);
+  const stepCount = toSnapshots.length + 1
+  const totalDuration = stepDuration * (stepCount - 1)
   const times = Array.from({ length: stepCount }, (_, i) =>
     stepCount === 1 ? 0 : i / (stepCount - 1)
-  );
+  )
 
   return (
-    <p
-      ref={ref}
-      className={`blur-text ${className} flex flex-wrap`}
-    >
+    <p ref={ref} className={`blur-text ${className} flex flex-wrap`}>
       {elements.map((segment, index) => {
-        const animateKeyframes = buildKeyframes(fromSnapshot, toSnapshots);
+        const animateKeyframes = buildKeyframes(fromSnapshot, toSnapshots)
 
         const spanTransition = {
           duration: totalDuration,
           times,
           delay: (index * delay) / 1000,
           ease: easing,
-        };
+        }
 
         const motionProps: any = {
-          className: "inline-block will-change-[transform,filter,opacity]",
+          className: 'inline-block will-change-[transform,filter,opacity]',
           initial: fromSnapshot,
           animate: inView ? animateKeyframes : fromSnapshot,
           transition: spanTransition,
-        };
+        }
 
         if (index === elements.length - 1 && onAnimationComplete) {
-          motionProps.onAnimationComplete = onAnimationComplete;
+          motionProps.onAnimationComplete = onAnimationComplete
         }
 
         return (
@@ -124,10 +121,10 @@ const BlurText = ({
             {segment === ' ' ? '\u00A0' : segment}
             {animateBy === 'words' && index < elements.length - 1 && '\u00A0'}
           </motion.span>
-        );
+        )
       })}
     </p>
-  );
-};
+  )
+}
 
-export default BlurText;
+export default BlurText

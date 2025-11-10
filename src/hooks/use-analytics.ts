@@ -7,7 +7,7 @@ import {
   trackPageView,
   trackConversion,
   trackFormSubmission,
-  trackCalendlyBooking
+  trackCalendlyBooking,
 } from '@/components/analytics/GoogleTagManager'
 
 /**
@@ -43,36 +43,36 @@ export function useAnalytics() {
     trackButtonClick: (buttonName: string, extraData?: Record<string, any>) => {
       trackEvent('button_click', {
         button_name: buttonName,
-        ...extraData
+        ...extraData,
       })
     },
 
     trackLinkClick: (linkUrl: string, linkText?: string) => {
       trackEvent('link_click', {
         link_url: linkUrl,
-        link_text: linkText
+        link_text: linkText,
       })
     },
 
     trackScrollDepth: (depth: number) => {
       trackEvent('scroll_depth', {
         scroll_depth: depth,
-        event_category: 'engagement'
+        event_category: 'engagement',
       })
     },
 
     trackVideoPlay: (videoTitle: string) => {
       trackEvent('video_play', {
         video_title: videoTitle,
-        event_category: 'engagement'
+        event_category: 'engagement',
       })
     },
 
     trackDownload: (fileName: string) => {
       trackEvent('file_download', {
         file_name: fileName,
-        event_category: 'engagement'
+        event_category: 'engagement',
       })
-    }
+    },
   }
 }

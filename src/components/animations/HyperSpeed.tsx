@@ -940,17 +940,11 @@ function resizeRendererToDisplaySize(
 ) {
   const canvas = renderer.domElement
   const parent = canvas.parentElement
-  const cssWidth =
-    canvas.clientWidth ||
-    parent?.clientWidth ||
-    window.innerWidth ||
-    1
-  const cssHeight =
-    canvas.clientHeight ||
-    parent?.clientHeight ||
-    window.innerHeight ||
-    1
-  const pixelRatio = renderer.getPixelRatio ? renderer.getPixelRatio() : window.devicePixelRatio || 1
+  const cssWidth = canvas.clientWidth || parent?.clientWidth || window.innerWidth || 1
+  const cssHeight = canvas.clientHeight || parent?.clientHeight || window.innerHeight || 1
+  const pixelRatio = renderer.getPixelRatio
+    ? renderer.getPixelRatio()
+    : window.devicePixelRatio || 1
   const width = Math.max(1, Math.floor(cssWidth * pixelRatio))
   const height = Math.max(1, Math.floor(cssHeight * pixelRatio))
   const needResize = canvas.width !== width || canvas.height !== height
@@ -1013,7 +1007,7 @@ class App {
       alpha: true,
       preserveDrawingBuffer: false,
       failIfMajorPerformanceCaveat: false,
-      powerPreference: 'high-performance'
+      powerPreference: 'high-performance',
     })
     this.renderer.setSize(safeWidth, safeHeight, false)
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
@@ -1037,12 +1031,7 @@ class App {
     this.renderer.domElement.setAttribute('aria-hidden', 'true')
     ;(this.renderer.domElement as HTMLCanvasElement).tabIndex = -1
 
-    this.camera = new THREE.PerspectiveCamera(
-      options.fov,
-      safeWidth / safeHeight,
-      0.1,
-      10000
-    )
+    this.camera = new THREE.PerspectiveCamera(options.fov, safeWidth / safeHeight, 0.1, 10000)
     this.camera.position.z = -5
     this.camera.position.y = 8
     this.camera.position.x = 0
