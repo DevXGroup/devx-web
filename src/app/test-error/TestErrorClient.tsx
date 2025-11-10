@@ -13,9 +13,7 @@ export default function TestErrorClient() {
   return (
     <div className="min-h-screen bg-black flex flex-col items-center justify-center p-8">
       <div className="text-center space-y-6 max-w-md">
-        <h1 className="text-white text-3xl font-['IBM_Plex_Mono'] font-bold">
-          Error Page Test
-        </h1>
+        <h1 className="text-white text-3xl font-['IBM_Plex_Mono'] font-bold">Error Page Test</h1>
 
         <p className="text-white/70 font-['IBM_Plex_Sans']">
           Use these buttons to test the different error pages with FuzzyText effects:

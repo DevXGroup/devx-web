@@ -238,13 +238,13 @@ const DotGrid = ({
   useEffect(() => {
     // Use multiple strategies to ensure proper initialization
     let timeouts: NodeJS.Timeout[] = []
-    
+
     // Immediate attempt
     buildGrid()
-    
+
     // Progressive delays to catch different initialization phases
     const delays = [50, 150, 300, 500, 800]
-    delays.forEach(delay => {
+    delays.forEach((delay) => {
       const timeout = setTimeout(() => {
         buildGrid()
       }, delay)
@@ -319,7 +319,7 @@ const DotGrid = ({
     const stopWatchdog = startSizingWatchdog()
 
     return () => {
-      timeouts.forEach(timeout => clearTimeout(timeout))
+      timeouts.forEach((timeout) => clearTimeout(timeout))
       if (ro) ro.disconnect()
       else if (typeof window !== 'undefined' && resizeHandlerRef.current) {
         ;(
@@ -343,20 +343,20 @@ const DotGrid = ({
       const canvas = canvasRef.current
       if (!canvas) return
 
-      let target: HTMLElement | null = canvas;
-      let offsetX = 0;
-      let offsetY = 0;
+      let target: HTMLElement | null = canvas
+      let offsetX = 0
+      let offsetY = 0
 
       while (target) {
-        offsetX += target.offsetLeft;
-        offsetY += target.offsetTop;
-        target = target.offsetParent as HTMLElement | null;
+        offsetX += target.offsetLeft
+        offsetY += target.offsetTop
+        target = target.offsetParent as HTMLElement | null
       }
 
-      const x = e.pageX - offsetX;
-      const y = e.pageY - offsetY;
+      const x = e.pageX - offsetX
+      const y = e.pageY - offsetY
 
-      const rect = canvas.getBoundingClientRect();
+      const rect = canvas.getBoundingClientRect()
       // Check if pointer is within canvas bounds with small margin
       if (x < -10 || y < -10 || x > rect.width + 10 || y > rect.height + 10) return
 
@@ -424,18 +424,18 @@ const DotGrid = ({
       const canvas = canvasRef.current
       if (!canvas) return
 
-      let target: HTMLElement | null = canvas;
-      let offsetX = 0;
-      let offsetY = 0;
+      let target: HTMLElement | null = canvas
+      let offsetX = 0
+      let offsetY = 0
 
       while (target) {
-        offsetX += target.offsetLeft;
-        offsetY += target.offsetTop;
-        target = target.offsetParent as HTMLElement | null;
+        offsetX += target.offsetLeft
+        offsetY += target.offsetTop
+        target = target.offsetParent as HTMLElement | null
       }
 
-      const cx = e.pageX - offsetX;
-      const cy = e.pageY - offsetY;
+      const cx = e.pageX - offsetX
+      const cy = e.pageY - offsetY
 
       for (const dot of dotsRef.current) {
         const dist = Math.hypot(dot.cx - cx, dot.cy - cy)

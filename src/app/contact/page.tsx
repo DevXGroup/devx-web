@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import ContactPage from "./ContactPage"
+import ContactPage from './ContactPage'
 import { createOgImageUrl, createTwitterImageUrl, getSiteUrl } from '@/lib/og'
 
 const siteUrl = getSiteUrl()
@@ -26,11 +26,20 @@ const twitterImage = createTwitterImageUrl(
 
 export const metadata: Metadata = {
   title: 'Contact DevX Group | Get a Free Software Development Consultation',
-  description: 'Contact DevX Group for your software development needs. Schedule a free consultation, get a custom quote, or discuss your project requirements. Phone: +1 (442) 544-0591',
-  keywords: ['contact devx group', 'software development consultation', 'free consultation', 'custom quote', 'san diego software developers', 'project requirements'],
+  description:
+    'Contact DevX Group for your software development needs. Schedule a free consultation, get a custom quote, or discuss your project requirements. Phone: +1 (442) 544-0591',
+  keywords: [
+    'contact devx group',
+    'software development consultation',
+    'free consultation',
+    'custom quote',
+    'san diego software developers',
+    'project requirements',
+  ],
   openGraph: {
     title: 'Contact DevX Group | Get a Free Software Development Consultation',
-    description: 'Contact DevX Group for your software development needs. Schedule a free consultation, get a custom quote, or discuss your project requirements.',
+    description:
+      'Contact DevX Group for your software development needs. Schedule a free consultation, get a custom quote, or discuss your project requirements.',
     url: pageUrl,
     siteName: 'DevX Group',
     images: [
@@ -47,7 +56,8 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Contact DevX Group | Free Software Development Consultation',
-    description: 'Contact DevX Group for your software development needs. Schedule a free consultation or get a custom quote.',
+    description:
+      'Contact DevX Group for your software development needs. Schedule a free consultation or get a custom quote.',
     images: [twitterImage],
   },
   alternates: {

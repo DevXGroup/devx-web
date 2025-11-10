@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import { useFontEnforcer } from "@/hooks/use-font-enforcer"
+import { useFontEnforcer } from '@/hooks/use-font-enforcer'
 
 export function FontEnforcer() {
   useFontEnforcer()

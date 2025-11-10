@@ -3,43 +3,45 @@
 /* Main Headings - Hero titles - Mobile optimized with minimum 16px base */
 .heading-hero {
   @apply text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold;
-  font-family: var(--font-ibm-plex-mono), ui-monospace, "SF Mono", monospace;
+  font-family: var(--font-ibm-plex-mono), ui-monospace, 'SF Mono', monospace;
   font-weight: 700;
   line-height: 1.2;
   letter-spacing: 0.02em;
-  text-shadow: 0 4px 12px rgba(0,0,0,0.9), 0 2px 6px rgba(0,0,0,0.7);
-  -webkit-text-stroke: 0.5px rgba(255,255,255,0.1);
+  text-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.9),
+    0 2px 6px rgba(0, 0, 0, 0.7);
+  -webkit-text-stroke: 0.5px rgba(255, 255, 255, 0.1);
 }
 
 /* Section Headings - H1 equivalents */
 .heading-section {
   @apply text-3xl md:text-4xl lg:text-5xl font-bold;
-  font-family: var(--font-ibm-plex-mono), ui-monospace, "SF Mono", monospace;
+  font-family: var(--font-ibm-plex-mono), ui-monospace, 'SF Mono', monospace;
   font-weight: 700;
   line-height: 1.2;
   letter-spacing: 0.015em;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-  -webkit-text-stroke: 1px rgba(0,0,0,0.3);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  -webkit-text-stroke: 1px rgba(0, 0, 0, 0.3);
 }
 
 /* Subsection Headings - H2 equivalents */
 .heading-subsection {
   @apply text-2xl md:text-3xl lg:text-4xl font-semibold;
-  font-family: var(--font-ibm-plex-mono), ui-monospace, "SF Mono", monospace;
+  font-family: var(--font-ibm-plex-mono), ui-monospace, 'SF Mono', monospace;
   font-weight: 600;
   line-height: 1.3;
   letter-spacing: 0.01em;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 /* Card/Component Headings - H3 equivalents */
 .heading-component {
   @apply text-xl md:text-2xl font-semibold;
-  font-family: var(--font-ibm-plex-mono), ui-monospace, "SF Mono", monospace;
+  font-family: var(--font-ibm-plex-mono), ui-monospace, 'SF Mono', monospace;
   font-weight: 600;
   line-height: 1.4;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-  -webkit-text-stroke: 0.5px rgba(0,0,0,0.2);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.2);
 }
 
 /* Body Text - Large */
@@ -49,7 +51,9 @@
   font-weight: 300;
   line-height: 1.7;
   letter-spacing: 0.015em;
-  text-shadow: 0 3px 12px rgba(0,0,0,0.95), 0 2px 6px rgba(0,0,0,0.85);
+  text-shadow:
+    0 3px 12px rgba(0, 0, 0, 0.95),
+    0 2px 6px rgba(0, 0, 0, 0.85);
 }
 
 /* Body Text - Regular - Minimum 16px for mobile readability */
@@ -60,7 +64,7 @@
   font-weight: 400;
   line-height: 1.6;
   letter-spacing: 0.01em;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 /* Body Text - Small */
@@ -69,7 +73,7 @@
   font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
   font-weight: 300;
   line-height: 1.5;
-  text-shadow: 0 1px 1px rgba(0,0,0,0.3);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
 }
 
 /* Color Variants - Optimized for readability */
@@ -88,11 +92,11 @@
 }
 
 .text-accent-green {
-  color: #4CD787;
+  color: #4cd787;
 }
 
 .text-accent-gold {
-  color: #FFD700;
+  color: #ffd700;
 }
 
 .text-accent-purple {
@@ -100,7 +104,7 @@
 }
 
 .text-accent-blue {
-  color: #4834D4;
+  color: #4834d4;
 }
 
 /* Responsive Typography Utilities */
@@ -108,15 +112,15 @@
   .heading-hero {
     @apply text-3xl;
   }
-  
+
   .heading-section {
     @apply text-2xl;
   }
-  
+
   .heading-subsection {
     @apply text-xl;
   }
-  
+
   .text-body-large {
     @apply text-base;
   }

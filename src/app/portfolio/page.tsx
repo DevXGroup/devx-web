@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import PortfolioPage from "./PortfolioPage"
+import PortfolioPage from './PortfolioPage'
 import { createOgImageUrl, createTwitterImageUrl, getSiteUrl } from '@/lib/og'
 
 const siteUrl = getSiteUrl()
@@ -26,11 +26,24 @@ const twitterImage = createTwitterImageUrl(
 
 export const metadata: Metadata = {
   title: 'Portfolio | Software Development Projects & Case Studies | DevX Group',
-  description: 'Explore DevX Group\'s portfolio of successful software development projects including e-commerce platforms, mobile apps, AI solutions, Agentic AI implementations, RAG systems, and digital transformation case studies.',
-  keywords: ['portfolio', 'software development projects', 'case studies', 'e-commerce platforms', 'mobile applications', 'ai solutions', 'project showcase', 'agentic AI projects', 'RAG implementation', 'AI automation case studies'],
+  description:
+    "Explore DevX Group's portfolio of successful software development projects including e-commerce platforms, mobile apps, AI solutions, Agentic AI implementations, RAG systems, and digital transformation case studies.",
+  keywords: [
+    'portfolio',
+    'software development projects',
+    'case studies',
+    'e-commerce platforms',
+    'mobile applications',
+    'ai solutions',
+    'project showcase',
+    'agentic AI projects',
+    'RAG implementation',
+    'AI automation case studies',
+  ],
   openGraph: {
     title: 'Portfolio | Software Development Projects & Case Studies | DevX Group',
-    description: 'Explore DevX Group\'s portfolio of successful software development projects including e-commerce platforms, mobile apps, AI solutions, and digital transformation case studies.',
+    description:
+      "Explore DevX Group's portfolio of successful software development projects including e-commerce platforms, mobile apps, AI solutions, and digital transformation case studies.",
     url: pageUrl,
     siteName: 'DevX Group',
     images: [
@@ -47,7 +60,8 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Portfolio | DevX Group Software Development Projects',
-    description: 'Explore successful software development projects including e-commerce platforms, mobile apps, and AI solutions.',
+    description:
+      'Explore successful software development projects including e-commerce platforms, mobile apps, and AI solutions.',
     images: [twitterImage],
   },
   alternates: {

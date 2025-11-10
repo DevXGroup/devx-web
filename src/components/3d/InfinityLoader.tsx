@@ -1,18 +1,18 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import { useRef, useEffect } from "react"
-import { Canvas, useFrame, useThree } from "@react-three/fiber"
-import { PerspectiveCamera, MeshTransmissionMaterial } from "@react-three/drei"
-import * as THREE from "three"
-import DevXEnvironment from "./DevXEnvironment"
+import { useState } from 'react'
+import { useRef, useEffect } from 'react'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import { PerspectiveCamera, MeshTransmissionMaterial } from '@react-three/drei'
+import * as THREE from 'three'
+import DevXEnvironment from './DevXEnvironment'
 
 // Create an infinity curve using a parametric formula
 class InfinityCurve extends THREE.Curve<THREE.Vector3> {
   constructor(
     public width = 3.0,
     public height = 2.5, // Increased height to make the infinity sign wider vertically
-    public zOffset = 0.2,
+    public zOffset = 0.2
   ) {
     super()
   }
@@ -20,7 +20,8 @@ class InfinityCurve extends THREE.Curve<THREE.Vector3> {
   getPoint(t: number, optionalTarget = new THREE.Vector3()) {
     const angle = 2 * Math.PI * t
     const x = (Math.sin(angle) * this.width) / (1 + Math.cos(angle) * Math.cos(angle))
-    const y = (Math.cos(angle) * Math.sin(angle) * this.height) / (1 + Math.cos(angle) * Math.cos(angle))
+    const y =
+      (Math.cos(angle) * Math.sin(angle) * this.height) / (1 + Math.cos(angle) * Math.cos(angle))
     const z = Math.sin(2 * angle) * this.zOffset
     return optionalTarget.set(x, y, z)
   }
@@ -86,12 +87,18 @@ function InfinityMesh() {
   const radialSegments = 64
   const tubularSegments = 128
 
-  const tubeGeometry = new THREE.TubeGeometry(curve, tubularSegments, tubeRadius, radialSegments, false)
+  const tubeGeometry = new THREE.TubeGeometry(
+    curve,
+    tubularSegments,
+    tubeRadius,
+    radialSegments,
+    false
+  )
 
   // Color transition values
-  const colorA = new THREE.Color("#CCFF00") // Logo color (robinhood)
-  const colorB = new THREE.Color("#4CD787") // Secondary color
-  const colorC = new THREE.Color("#4834D4") // Third color for transition
+  const colorA = new THREE.Color('#CCFF00') // Logo color (robinhood)
+  const colorB = new THREE.Color('#4CD787') // Secondary color
+  const colorC = new THREE.Color('#4834D4') // Third color for transition
 
   // Rotation animation
   useFrame((state) => {
@@ -218,7 +225,14 @@ export default function InfinityLoader() {
           <PerspectiveCamera makeDefault position={[0, 0, 6]} fov={40} />
           <DevXEnvironment variant="studio" intensity={1.2} />
           <ambientLight intensity={0.5} />
-          <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} castShadow color="#CCFF00" />
+          <spotLight
+            position={[10, 10, 10]}
+            angle={0.15}
+            penumbra={1}
+            intensity={1}
+            castShadow
+            color="#CCFF00"
+          />
           <InfinityMesh />
         </Canvas>
       </div>

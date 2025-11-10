@@ -1,4 +1,4 @@
-import { withSentryConfig } from "@sentry/nextjs";
+import { withSentryConfig } from '@sentry/nextjs'
 import bundleAnalyzer from '@next/bundle-analyzer'
 import path from 'node:path'
 
@@ -32,7 +32,14 @@ const withBundleAnalyzer = bundleAnalyzer({ enabled: process.env.ANALYZE === 'tr
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    optimizePackageImports: ['framer-motion', 'lucide-react', '@radix-ui/react-icons', 'three', '@react-three/fiber', '@react-three/drei'],
+    optimizePackageImports: [
+      'framer-motion',
+      'lucide-react',
+      '@radix-ui/react-icons',
+      'three',
+      '@react-three/fiber',
+      '@react-three/drei',
+    ],
   },
   // Explicitly set the output file tracing root to silence lockfile warning
   outputFileTracingRoot: path.join(process.cwd()),
@@ -127,12 +134,12 @@ const nextConfig = {
               "font-src 'self' data: https://fonts.gstatic.com",
               "img-src 'self' data: blob: https://www.google-analytics.com https://www.googletagmanager.com https://hebbkx1anhila5yf.public.blob.vercel-storage.com",
               "connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://api.calendly.com https://data.pendo.io https://*.ingest.us.sentry.io https://vitals.vercel-insights.com https://va.vercel-scripts.com https://vercel.live",
-              "frame-src 'self' https://calendly.com https://js.stripe.com https://www.recaptcha.net",
+              "frame-src 'self' https://calendly.com https://js.stripe.com https://www.recaptcha.net https://vercel.live",
               "worker-src 'self' blob:",
               "child-src 'self' blob:",
               "object-src 'none'",
               "base-uri 'self'",
-              "form-action 'self'"
+              "form-action 'self'",
             ].join('; '),
           },
         ],
@@ -232,9 +239,8 @@ const nextConfig = {
       config.entry = async () => {
         const resolvedEntry =
           typeof originalEntry === 'function' ? await originalEntry() : originalEntry
-        const entries = Array.isArray(resolvedEntry) || typeof resolvedEntry === 'object'
-          ? resolvedEntry
-          : {}
+        const entries =
+          Array.isArray(resolvedEntry) || typeof resolvedEntry === 'object' ? resolvedEntry : {}
 
         if (entries && typeof entries === 'object') {
           for (const key of Object.keys(entries)) {
@@ -270,7 +276,7 @@ const sentryWebpackPluginOptions = {
   authToken: process.env.SENTRY_AUTH_TOKEN,
 
   // Only upload source maps in production
-  silent: process.env.NODE_ENV !== "production",
+  silent: process.env.NODE_ENV !== 'production',
 
   // Upload source maps during build
   hideSourceMaps: true,
@@ -280,11 +286,11 @@ const sentryWebpackPluginOptions = {
   widenClientFileUpload: true,
 
   // Tunnel Sentry requests through Next.js rewrite to avoid ad-blockers
-  tunnelRoute: "/monitoring",
+  tunnelRoute: '/monitoring',
 
   // Disable Sentry during development builds
-  autoInstrumentServerFunctions: process.env.NODE_ENV === "production",
-  autoInstrumentMiddleware: process.env.NODE_ENV === "production",
+  autoInstrumentServerFunctions: process.env.NODE_ENV === 'production',
+  autoInstrumentMiddleware: process.env.NODE_ENV === 'production',
 
   // Disable automatic client instrumentation to fix Next.js 15.5.4 compatibility
   autoInstrumentAppDirectory: false,
@@ -293,15 +299,15 @@ const sentryWebpackPluginOptions = {
   errorHandler: (err, invokeErr, compilation) => {
     compilation.warnings.push('Sentry CLI Plugin: ' + err.message)
   },
-};
+}
 
 // Only run the webpack plugin (which performs network calls) when CI is present
-const enableSentryWebpackPlugin = process.env.CI === "true" || process.env.CI === "1";
+const enableSentryWebpackPlugin = process.env.CI === 'true' || process.env.CI === '1'
 
 const configWithAnalyzer = withBundleAnalyzer(nextConfig)
 
 const exportedConfig = enableSentryWebpackPlugin
   ? withSentryConfig(configWithAnalyzer, sentryWebpackPluginOptions)
-  : configWithAnalyzer;
+  : configWithAnalyzer
 
-export default exportedConfig;
+export default exportedConfig

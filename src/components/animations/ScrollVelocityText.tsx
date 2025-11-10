@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import React, { useRef, useLayoutEffect, useState } from "react"
+import React, { useRef, useLayoutEffect, useState } from 'react'
 import {
   motion,
   useScroll,
@@ -9,7 +9,7 @@ import {
   useMotionValue,
   useVelocity,
   useAnimationFrame,
-} from "framer-motion"
+} from 'framer-motion'
 
 interface VelocityMapping {
   input: [number, number]
@@ -37,8 +37,8 @@ function useElementWidth<T extends HTMLElement>(ref: React.RefObject<T | null>):
       }
     }
     updateWidth()
-    window.addEventListener("resize", updateWidth)
-    return () => window.removeEventListener("resize", updateWidth)
+    window.addEventListener('resize', updateWidth)
+    return () => window.removeEventListener('resize', updateWidth)
   }, [ref])
 
   return width
@@ -47,7 +47,7 @@ function useElementWidth<T extends HTMLElement>(ref: React.RefObject<T | null>):
 export default function ScrollVelocityText({
   children,
   baseVelocity = 50, // Reduced default speed
-  className = "",
+  className = '',
   scrollContainerRef,
   damping = 30,
   stiffness = 300,
@@ -55,9 +55,7 @@ export default function ScrollVelocityText({
   velocityMapping = { input: [0, 1000], output: [0, 1.5] }, // Further reduced output range
 }: ScrollVelocityTextProps) {
   const baseX = useMotionValue(0)
-  const scrollOptions = scrollContainerRef
-    ? { container: scrollContainerRef }
-    : {}
+  const scrollOptions = scrollContainerRef ? { container: scrollContainerRef } : {}
   const { scrollY } = useScroll(scrollOptions)
   const scrollVelocity = useVelocity(scrollY)
   const smoothVelocity = useSpring(scrollVelocity, {
@@ -81,7 +79,7 @@ export default function ScrollVelocityText({
   }
 
   const x = useTransform(baseX, (v) => {
-    if (copyWidth === 0) return "0px"
+    if (copyWidth === 0) return '0px'
     return `${wrap(-copyWidth, 0, v)}px`
   })
 
@@ -90,10 +88,10 @@ export default function ScrollVelocityText({
     // Safari safety check: delta can be undefined
     const safeDelta = delta || 16.67 // fallback to ~60fps (16.67ms per frame)
     let moveBy = directionFactor.current * baseVelocity * (safeDelta / 1000)
-    
+
     // Get current velocity factor
     const currentVelocity = velocityFactor.get()
-    
+
     // Smooth direction changes to prevent stuttering
     if (Math.abs(currentVelocity) > 0.1) {
       if (currentVelocity < 0) {
@@ -111,11 +109,7 @@ export default function ScrollVelocityText({
   const spans = []
   for (let i = 0; i < numCopies; i++) {
     spans.push(
-      <span
-        className="flex-shrink-0"
-        key={i}
-        ref={i === 0 ? copyRef : null}
-      >
+      <span className="flex-shrink-0" key={i} ref={i === 0 ? copyRef : null}>
         {children.map((child, childIndex) => (
           <span key={`${i}-${childIndex}`} className="mx-4">
             {child}
@@ -127,24 +121,23 @@ export default function ScrollVelocityText({
 
   return (
     <div className={`w-full overflow-hidden relative ${className}`}>
-      <motion.div
-        className="flex whitespace-nowrap items-center"
-        style={{ x }}
-      >
+      <motion.div className="flex whitespace-nowrap items-center" style={{ x }}>
         {spans}
       </motion.div>
       {/* Left fade-out gradient */}
-      <div 
+      <div
         className="absolute top-0 left-0 w-32 md:w-48 lg:w-64 h-full pointer-events-none z-10"
         style={{
-          background: 'linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 20%, rgba(0,0,0,0.4) 60%, transparent 100%)'
+          background:
+            'linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 20%, rgba(0,0,0,0.4) 60%, transparent 100%)',
         }}
       />
       {/* Right fade-out gradient */}
-      <div 
+      <div
         className="absolute top-0 right-0 w-32 md:w-48 lg:w-64 h-full pointer-events-none z-10"
         style={{
-          background: 'linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 20%, rgba(0,0,0,0.4) 60%, transparent 100%)'
+          background:
+            'linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 20%, rgba(0,0,0,0.4) 60%, transparent 100%)',
         }}
       />
     </div>

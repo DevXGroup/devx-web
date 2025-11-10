@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import { useEffect } from "react"
+import { useEffect } from 'react'
 
 /**
  * Hook to ensure font consistency across the application
@@ -18,7 +18,7 @@ export function useFontConsistency() {
 
       // Apply to all text elements to ensure consistency
       const textElements = document.querySelectorAll(
-        "h1, h2, h3, h4, h5, h6, p, span, div, a, button, input, textarea, select, li",
+        'h1, h2, h3, h4, h5, h6, p, span, div, a, button, input, textarea, select, li'
       )
       textElements.forEach((el) => {
         ;(el as HTMLElement).style.fontFamily = fontFamily
@@ -35,11 +35,11 @@ export function useFontConsistency() {
     document.fonts.ready.then(applyFontConsistency)
 
     // Apply on window load to catch any late-loading elements
-    window.addEventListener("load", applyFontConsistency)
+    window.addEventListener('load', applyFontConsistency)
 
     return () => {
       clearTimeout(timeout)
-      window.removeEventListener("load", applyFontConsistency)
+      window.removeEventListener('load', applyFontConsistency)
     }
   }, [])
 }
