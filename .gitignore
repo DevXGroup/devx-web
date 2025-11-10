@@ -47,9 +47,8 @@ next-env.d.ts
 CLAUDE.md
 AGENTS.md
 
-# Internal documentation
+# Internal documentation (do not commit)
 documents/
-docs/
 
 # Claude Code CLI directory
 .claude/
