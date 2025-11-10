@@ -279,15 +279,157 @@ This analyzes commits and creates a release without merging through main.
 
 ---
 
+## Maintainer Direct Push Workflow (Optional)
+
+Maintainers and repository admins can push directly to main without creating a pull request. This is useful for:
+- Hot fixes that need immediate deployment
+- Critical security patches
+- Emergency rollbacks
+- Urgent bug fixes
+
+**Important:** Direct pushes bypass code review, so use responsibly and only when necessary.
+
+### How Direct Push Works
+
+The CI/CD pipeline runs **exactly the same way** for direct pushes as for PR merges:
+
+1. **You push directly to main:**
+   ```bash
+   git push origin main
+   ```
+
+2. **GitHub Actions automatically:**
+   - Runs quality gate (formatting, linting, tests, build)
+   - If all checks pass → runs semantic-release
+   - Semantic-release bumps version, updates CHANGELOG, creates release
+   - Vercel deploys to production
+
+3. **Result:** Same release and deployment as PR workflow, but faster
+
+### Steps for Direct Push
+
+#### 1. Verify Changes Locally
+
+Before pushing, ensure everything passes:
+
+```bash
+pnpm format:check    # Check formatting
+pnpm lint            # Check linting
+pnpm test            # Run tests
+pnpm build           # Build production bundle
+```
+
+Or all at once:
+```bash
+pnpm lint && pnpm test && pnpm build
+```
+
+#### 2. Commit with Conventional Format
+
+**This is critical** - the commit message determines the version bump:
+
+```bash
+# Critical security patch (patch version: 1.0.0 → 1.0.1)
+git commit -m "fix: critical security vulnerability in authentication"
+
+# Urgent hotfix (patch version)
+git commit -m "fix: resolve production database connection issue"
+
+# New feature (minor version: 1.0.0 → 1.1.0)
+git commit -m "feat: add emergency shutdown endpoint"
+
+# Performance improvement (no version bump, but in changelog)
+git commit -m "perf: optimize database queries for faster response"
+```
+
+#### 3. Push Directly to Main
+
+```bash
+git push origin main
+```
+
+#### 4. Monitor GitHub Actions
+
+Go to GitHub Actions tab to monitor:
+- Quality gate job (should take 2-3 minutes)
+- Release job (automatic if quality-gate passes)
+- Check the logs if anything fails
+
+#### 5. Verify Deployment
+
+- Check GitHub Releases tab - new release should appear
+- Check Vercel dashboard - production deployment should complete
+- Verify changes are live on production website
+
+### When NOT to Use Direct Push
+
+Use PR workflow instead when:
+- Code is non-critical or can wait for review
+- You want code review (recommended for all non-emergency changes)
+- It's a new feature (always use PR for visibility)
+- Multiple commits (organize with PR for clarity)
+- You want team discussion (use PR)
+
+### Commit Message Examples for Direct Push
+
+**Good ✅:**
+```bash
+fix: resolve database connection timeout in production
+fix: patch XSS vulnerability in user input
+feat: add emergency API endpoint
+perf: optimize caching strategy
+```
+
+**Bad ❌:**
+```bash
+git push without committing anything
+git commit -m "hotfix" (not specific enough)
+git commit -m "WIP" (not following format)
+git commit -m "emergency fix" (no type specified)
+```
+
+### Version Bumping with Direct Push
+
+Same rules apply as PR workflow:
+
+| Commit Type | Version Change | Example |
+|---|---|---|
+| `fix:` | Patch (1.0.0 → 1.0.1) | Critical hotfix |
+| `feat:` | Minor (1.0.0 → 1.1.0) | New endpoint |
+| `refactor:` | No bump | Code cleanup |
+| `perf:` | No bump | Optimization |
+
+### Rollback If Needed
+
+If something goes wrong after direct push:
+
+```bash
+# Find the problematic commit
+git log --oneline
+
+# Revert it
+git revert <commit-hash>
+
+# Push the revert commit (triggers CI/CD again)
+git push origin main
+```
+
+---
+
 ## Summary
 
-The workflow is simple:
-
+### Contributor Workflow (Recommended)
 1. **Create branch** → Make commits with conventional format
 2. **Push → Create PR** → Wait for CI checks
-3. **Merge to main** → Automatic release happens
-4. **Vercel deploys** → Code in production
+3. **Get code review** → Merge to main
+4. **Automatic release happens** → Vercel deploys
 
-The semantic-release pipeline handles everything automatically once CI passes!
+### Maintainer Direct Push (When Needed)
+1. **Verify locally** → All checks pass
+2. **Commit** → Conventional format
+3. **Push to main** → Triggers CI/CD automatically
+4. **Monitor** → Verify release and deployment
+
+The semantic-release pipeline handles everything automatically!
 
 **Key rule:** Use proper commit messages (`feat:`, `fix:`, etc.) and everything else happens automatically.
