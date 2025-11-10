@@ -99,22 +99,22 @@ html:has(main[data-page='home']) {
 
 /* Hide navbar during home page transition */
 .navbar-hidden nav,
-.navbar-hidden .navbar-container,
-body:has(main[data-page='home']) nav,
-body:has(main[data-page='home']) .navbar-container {
+.navbar-hidden .navbar-container {
   visibility: hidden !important;
   opacity: 0 !important;
   pointer-events: none !important;
   transition: opacity 0.3s ease-in-out;
 }
 
-body:has(main[data-page='home'].navbar-ready) nav,
-body:has(main[data-page='home'].navbar-ready) .navbar-container,
+/* Show navbar when ready (on home page or with navbar-visible class) */
+main[data-page='home'].navbar-ready nav,
+main[data-page='home'].navbar-ready .navbar-container,
 .navbar-hidden.navbar-visible nav,
 .navbar-hidden.navbar-visible .navbar-container {
   visibility: visible !important;
   opacity: 1 !important;
   pointer-events: auto !important;
+  transition: opacity 0.3s ease-in-out;
 }
 
 /* Portfolio Page Animations */
