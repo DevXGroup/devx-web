@@ -128,7 +128,8 @@ export default function Process() {
                 How It Works
               </h2>
               <p className="text-base sm:text-lg md:text-xl text-foreground/80 max-w-3xl mx-auto font-['IBM_Plex_Mono'] font-light px-4 leading-relaxed">
-                Simple steps to bring your software vision to life from idea to launch in record time.
+                Simple steps to bring your software vision to life from idea to launch in record
+                time.
               </p>
             </div>
           </div>
@@ -147,14 +148,14 @@ export default function Process() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: false, amount: 0.2 }}
-              transition={{ 
-                duration: 0.6, 
-                ease: "easeOut", 
-                delay: index * 0.15
+              transition={{
+                duration: 0.6,
+                ease: 'easeOut',
+                delay: index * 0.15,
               }}
-              whileHover={{ 
+              whileHover={{
                 y: -10,
-                scale: 1.02
+                scale: 1.02,
               }}
               whileTap={{ scale: 0.98 }}
               className="relative group rounded-xl p-[2px] cursor-pointer"
@@ -164,7 +165,8 @@ export default function Process() {
               <div
                 className="absolute inset-0 rounded-xl transition-opacity duration-700"
                 style={{
-                  background: 'linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05))',
+                  background:
+                    'linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05))',
                 }}
               />
 

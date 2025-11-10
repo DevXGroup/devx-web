@@ -179,10 +179,21 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
     default: 'DevX Group - Elite Software Development Team | Custom Applications & AI Solutions',
-    template: '%s | DevX Group'
+    template: '%s | DevX Group',
   },
-  description: 'DevX Group delivers elite software development services including custom applications, AI/ML solutions, IoT hardware integration, and digital transformation. Build, launch, and scale your vision with our expert team.',
-  keywords: ['software development', 'custom applications', 'AI solutions', 'ML', 'IoT', 'digital transformation', 'web development', 'mobile apps', 'San Diego'],
+  description:
+    'DevX Group delivers elite software development services including custom applications, AI/ML solutions, IoT hardware integration, and digital transformation. Build, launch, and scale your vision with our expert team.',
+  keywords: [
+    'software development',
+    'custom applications',
+    'AI solutions',
+    'ML',
+    'IoT',
+    'digital transformation',
+    'web development',
+    'mobile apps',
+    'San Diego',
+  ],
   authors: [{ name: 'DevX Group LLC' }],
   creator: 'DevX Group LLC',
   publisher: 'DevX Group LLC',
@@ -203,7 +214,8 @@ export const metadata: Metadata = {
     url: siteUrl,
     siteName: 'DevX Group',
     title: 'DevX Group - Elite Software Development Team | Custom Applications & AI Solutions',
-    description: 'DevX Group delivers elite software development services including custom applications, AI/ML solutions, IoT hardware integration, and digital transformation.',
+    description:
+      'DevX Group delivers elite software development services including custom applications, AI/ML solutions, IoT hardware integration, and digital transformation.',
     images: [
       {
         url: defaultOgImage,
@@ -216,7 +228,8 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'DevX Group - Elite Software Development Team',
-    description: 'Elite software development services including custom applications, AI/ML solutions, and digital transformation.',
+    description:
+      'Elite software development services including custom applications, AI/ML solutions, and digital transformation.',
     images: [defaultTwitterImage],
     creator: '@devxgroup',
     site: '@devxgroup',
@@ -232,14 +245,10 @@ export const metadata: Metadata = {
     icon: [
       { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
       { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
-      { url: '/favicon.ico', sizes: 'any' }
+      { url: '/favicon.ico', sizes: 'any' },
     ],
-    apple: [
-      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }
-    ],
-    other: [
-      { rel: 'mask-icon', url: '/safari-pinned-tab.svg', color: '#4CD787' }
-    ]
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
+    other: [{ rel: 'mask-icon', url: '/safari-pinned-tab.svg', color: '#4CD787' }],
   },
   other: {
     'msapplication-TileColor': '#4CD787',
@@ -279,7 +288,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         {/* Partytown for offloading third-party scripts */}
         <Partytown debug={false} forward={['dataLayer.push', 'gtag']} />
       </head>
-      <body className={`${ibmPlexSans.variable} ${ibmPlexMono.variable} bg-black text-white font-sans antialiased`} style={{ backgroundColor: '#000000', transition: 'none', paddingTop: '64px' }} suppressHydrationWarning>
+      <body
+        className={`${ibmPlexSans.variable} ${ibmPlexMono.variable} bg-black text-white font-sans antialiased`}
+        style={{ backgroundColor: '#000000', transition: 'none', paddingTop: '64px' }}
+        suppressHydrationWarning
+      >
         {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe
@@ -303,7 +316,7 @@ new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','${gtmId}');
-            `.trim()
+            `.trim(),
           }}
         />
 
@@ -327,7 +340,7 @@ gtag('config', '${gaId}', {
   page_path: window.location.pathname,
   send_page_view: true
 });
-            `.trim()
+            `.trim(),
           }}
         />
 

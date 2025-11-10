@@ -49,6 +49,7 @@ AGENTS.md
 
 # Internal documentation
 documents/
+docs/
 
 # Claude Code CLI directory
 .claude/

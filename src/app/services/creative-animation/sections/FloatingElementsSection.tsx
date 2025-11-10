@@ -44,7 +44,7 @@ const FloatingElementsSection = () => {
 
     const initialElements: FloatingElement[] = []
     const colors = ['#4CD787', '#9d4edd', '#4834D4', '#FFD700', '#ff6b6b', '#4ecdc4']
-    
+
     for (let i = 0; i < 12; i++) {
       initialElements.push({
         id: i,
@@ -55,10 +55,10 @@ const FloatingElementsSection = () => {
         size: Math.random() * 40 + 20,
         color: colors[Math.floor(Math.random() * colors.length)] || '#4CD787',
         mass: Math.random() * 5 + 1,
-        attraction: Math.random() * 0.0001 + 0.00005
+        attraction: Math.random() * 0.0001 + 0.00005,
       })
     }
-    
+
     setElements(initialElements)
   }, [containerSize])
 
@@ -97,17 +97,17 @@ const FloatingElementsSection = () => {
 
     const animate = (currentTime: number) => {
       if (currentTime - lastTime >= frameTime) {
-        setElements(prevElements => 
-          prevElements.map(element => {
+        setElements((prevElements) =>
+          prevElements.map((element) => {
             let { x, y, vx, vy } = element
-            
+
             // Mouse attraction
             const dx = mousePos.x - x
             const dy = mousePos.y - y
             const distance = Math.sqrt(dx * dx + dy * dy)
-            
+
             if (distance > 0) {
-              const force = element.attraction * element.mass / (distance * distance)
+              const force = (element.attraction * element.mass) / (distance * distance)
               const angle = Math.atan2(dy, dx)
               vx += Math.cos(angle) * force * 100
               vy += Math.sin(angle) * force * 100
@@ -165,7 +165,7 @@ const FloatingElementsSection = () => {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-    }
+    },
   }
 
   const itemVariants = {
@@ -173,12 +173,12 @@ const FloatingElementsSection = () => {
     visible: {
       opacity: 1,
       y: 0,
-    }
+    },
   }
 
   return (
-    <section 
-      ref={sectionRef} 
+    <section
+      ref={sectionRef}
       className="min-h-screen bg-gradient-to-br from-black via-indigo-900/20 to-black relative overflow-hidden flex items-center justify-center"
     >
       <div className="container mx-auto px-4 relative z-10">
@@ -201,39 +201,33 @@ const FloatingElementsSection = () => {
               </span>
             </motion.h2>
 
-            <motion.p
-              variants={itemVariants}
-              className="text-white/70 text-lg leading-relaxed"
-            >
-              Elements that respond to natural physics create intuitive and delightful user experiences. 
-              Watch as objects attract, repel, and bounce with realistic movement.
+            <motion.p variants={itemVariants} className="text-white/70 text-lg leading-relaxed">
+              Elements that respond to natural physics create intuitive and delightful user
+              experiences. Watch as objects attract, repel, and bounce with realistic movement.
             </motion.p>
 
-            <motion.div
-              variants={itemVariants}
-              className="space-y-6"
-            >
+            <motion.div variants={itemVariants} className="space-y-6">
               {[
                 {
                   title: 'Gravitational Pull',
                   description: 'Elements attracted to mouse cursor with realistic physics',
-                  value: '✨ Interactive'
+                  value: '✨ Interactive',
                 },
                 {
                   title: 'Collision Detection',
                   description: 'Bouncing and collision effects with momentum preservation',
-                  value: '🎯 Precise'
+                  value: '🎯 Precise',
                 },
                 {
                   title: 'Fluid Dynamics',
                   description: 'Smooth, natural movement that feels alive',
-                  value: '🌊 Organic'
+                  value: '🌊 Organic',
                 },
                 {
                   title: 'Performance',
                   description: '60fps animations with optimized rendering',
-                  value: '⚡ Fast'
-                }
+                  value: '⚡ Fast',
+                },
               ].map((feature) => (
                 <motion.div
                   key={feature.title}
@@ -245,9 +239,7 @@ const FloatingElementsSection = () => {
                     <h3 className="text-white font-semibold">{feature.title}</h3>
                     <p className="text-white/60 text-sm">{feature.description}</p>
                   </div>
-                  <div className="text-indigo-400 font-mono text-sm">
-                    {feature.value}
-                  </div>
+                  <div className="text-indigo-400 font-mono text-sm">{feature.value}</div>
                 </motion.div>
               ))}
             </motion.div>
@@ -263,15 +255,13 @@ const FloatingElementsSection = () => {
           </motion.div>
 
           {/* Right side - Physics Animation */}
-          <motion.div
-            variants={itemVariants}
-            className="relative order-1 lg:order-2"
-          >
-            <div 
+          <motion.div variants={itemVariants} className="relative order-1 lg:order-2">
+            <div
               ref={containerRef}
               className="relative w-full h-96 lg:h-[500px] bg-gradient-to-br from-indigo-900/30 to-purple-900/30 rounded-2xl border border-white/20 overflow-hidden cursor-crosshair"
-              style={{ 
-                background: 'radial-gradient(circle at center, rgba(67, 56, 202, 0.2) 0%, rgba(0, 0, 0, 0.3) 70%)',
+              style={{
+                background:
+                  'radial-gradient(circle at center, rgba(67, 56, 202, 0.2) 0%, rgba(0, 0, 0, 0.3) 70%)',
               }}
             >
               {/* Floating elements */}
@@ -296,12 +286,12 @@ const FloatingElementsSection = () => {
                     scale: {
                       duration: 2 + Math.random() * 2,
                       repeat: Infinity,
-                      ease: "easeInOut",
+                      ease: 'easeInOut',
                     },
                     rotate: {
                       duration: 10 + Math.random() * 10,
                       repeat: Infinity,
-                      ease: "linear",
+                      ease: 'linear',
                     },
                   }}
                 />
@@ -321,7 +311,7 @@ const FloatingElementsSection = () => {
                 transition={{
                   duration: 2,
                   repeat: Infinity,
-                  ease: "easeInOut",
+                  ease: 'easeInOut',
                 }}
               />
 
@@ -330,7 +320,7 @@ const FloatingElementsSection = () => {
                 <svg width="100%" height="100%" className="w-full h-full">
                   <defs>
                     <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" strokeWidth="1"/>
+                      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" strokeWidth="1" />
                     </pattern>
                   </defs>
                   <rect width="100%" height="100%" fill="url(#grid)" />
@@ -366,7 +356,7 @@ const FloatingElementsSection = () => {
               duration: Math.random() * 4 + 2,
               repeat: Infinity,
               delay: Math.random() * 3,
-              ease: "easeInOut"
+              ease: 'easeInOut',
             }}
           />
         ))}

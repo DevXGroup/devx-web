@@ -27,11 +27,11 @@ const ExplosiveCTASection = () => {
   const createExplosion = (x: number, y: number) => {
     const newParticles: Particle[] = []
     const colors = ['#4CD787', '#9d4edd', '#4834D4', '#FFD700', '#ff6b6b', '#4ecdc4']
-    
+
     for (let i = 0; i < 50; i++) {
       const angle = (Math.PI * 2 * i) / 50
       const velocity = Math.random() * 8 + 2
-      
+
       newParticles.push({
         id: Date.now() + i,
         x,
@@ -41,13 +41,13 @@ const ExplosiveCTASection = () => {
         life: 0,
         maxLife: Math.random() * 60 + 40,
         color: colors[Math.floor(Math.random() * colors.length)] || '#4CD787',
-        size: Math.random() * 4 + 2
+        size: Math.random() * 4 + 2,
       })
     }
-    
-    setParticles(prev => [...prev, ...newParticles])
+
+    setParticles((prev) => [...prev, ...newParticles])
     setIsExploding(true)
-    
+
     setTimeout(() => setIsExploding(false), 1000)
   }
 
@@ -71,10 +71,10 @@ const ExplosiveCTASection = () => {
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight)
-      
-      setParticles(prevParticles => 
+
+      setParticles((prevParticles) =>
         prevParticles
-          .map(particle => {
+          .map((particle) => {
             // Update particle physics
             const newParticle = {
               ...particle,
@@ -82,11 +82,11 @@ const ExplosiveCTASection = () => {
               y: particle.y + particle.vy,
               life: particle.life + 1,
               vy: particle.vy + 0.1, // gravity
-              vx: particle.vx * 0.99 // friction
+              vx: particle.vx * 0.99, // friction
             }
-            
+
             // Draw particle
-            const opacity = 1 - (newParticle.life / newParticle.maxLife)
+            const opacity = 1 - newParticle.life / newParticle.maxLife
             ctx.save()
             ctx.globalAlpha = opacity
             ctx.fillStyle = newParticle.color
@@ -96,12 +96,12 @@ const ExplosiveCTASection = () => {
             ctx.arc(newParticle.x, newParticle.y, newParticle.size, 0, Math.PI * 2)
             ctx.fill()
             ctx.restore()
-            
+
             return newParticle
           })
-          .filter(particle => particle.life < particle.maxLife)
+          .filter((particle) => particle.life < particle.maxLife)
       )
-      
+
       animationId = requestAnimationFrame(animate)
     }
 
@@ -123,7 +123,7 @@ const ExplosiveCTASection = () => {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-    }
+    },
   }
 
   const itemVariants = {
@@ -131,7 +131,7 @@ const ExplosiveCTASection = () => {
     visible: {
       opacity: 1,
       y: 0,
-    }
+    },
   }
 
   const explosiveVariants = {
@@ -141,12 +141,12 @@ const ExplosiveCTASection = () => {
     },
     tap: {
       scale: 0.95,
-    }
+    },
   }
 
   return (
-    <section 
-      ref={sectionRef} 
+    <section
+      ref={sectionRef}
       className="min-h-screen bg-gradient-to-br from-black via-red-900/20 to-black relative overflow-hidden flex items-center justify-center"
     >
       {/* Particle Canvas */}
@@ -170,7 +170,7 @@ const ExplosiveCTASection = () => {
           >
             Ready to
             <br />
-            <motion.span 
+            <motion.span
               className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-yellow-400 to-orange-400"
               animate={{
                 backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
@@ -178,10 +178,10 @@ const ExplosiveCTASection = () => {
               transition={{
                 duration: 3,
                 repeat: Infinity,
-                ease: "linear"
+                ease: 'linear',
               }}
               style={{
-                backgroundSize: '200% 200%'
+                backgroundSize: '200% 200%',
               }}
             >
               Explode
@@ -194,8 +194,8 @@ const ExplosiveCTASection = () => {
             variants={itemVariants}
             className="text-white/70 text-xl leading-relaxed mb-12 max-w-2xl mx-auto"
           >
-            Transform your vision into explosive visual experiences that captivate, 
-            engage, and convert. Let&apos;s create something extraordinary together.
+            Transform your vision into explosive visual experiences that captivate, engage, and
+            convert. Let&apos;s create something extraordinary together.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -228,7 +228,7 @@ const ExplosiveCTASection = () => {
                 }}
                 transition={{ duration: 0.5 }}
               />
-              
+
               {/* Ripple effect */}
               <motion.div
                 className="absolute inset-0 rounded-full bg-white/30"
@@ -239,13 +239,11 @@ const ExplosiveCTASection = () => {
                 transition={{
                   duration: 1.5,
                   repeat: Infinity,
-                  ease: "easeOut"
+                  ease: 'easeOut',
                 }}
               />
-              
-              <span className="relative z-10 flex items-center gap-2">
-                🚀 Start Your Project
-              </span>
+
+              <span className="relative z-10 flex items-center gap-2">🚀 Start Your Project</span>
             </motion.button>
 
             {/* Secondary button */}
@@ -269,18 +267,18 @@ const ExplosiveCTASection = () => {
               {
                 icon: '⚡',
                 title: 'Lightning Fast',
-                description: '24-48 hour turnaround for most projects'
+                description: '24-48 hour turnaround for most projects',
               },
               {
                 icon: '🎨',
                 title: 'Creative Excellence',
-                description: 'Award-winning designs that stand out'
+                description: 'Award-winning designs that stand out',
               },
               {
                 icon: '🔥',
                 title: 'Explosive Results',
-                description: 'Proven to increase engagement by 300%'
-              }
+                description: 'Proven to increase engagement by 300%',
+              },
             ].map((feature, index) => (
               <motion.div
                 key={feature.title}
@@ -293,7 +291,7 @@ const ExplosiveCTASection = () => {
                   className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-orange-500/10 opacity-0 group-hover:opacity-100"
                   transition={{ duration: 0.3 }}
                 />
-                
+
                 <div className="relative z-10">
                   <motion.div
                     className="text-4xl mb-4"

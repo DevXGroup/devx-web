@@ -1,10 +1,16 @@
-"use client"
+'use client'
 
-import type React from "react"
-import { useRef, useState } from "react"
-import { motion } from "framer-motion"
+import type React from 'react'
+import { useRef, useState } from 'react'
+import { motion } from 'framer-motion'
 
-export default function MagneticIcon({ children, strength = 30 }: { children: React.ReactNode; strength?: number }) {
+export default function MagneticIcon({
+  children,
+  strength = 30,
+}: {
+  children: React.ReactNode
+  strength?: number
+}) {
   const iconRef = useRef<HTMLDivElement>(null)
   const [position, setPosition] = useState({ x: 0, y: 0 })
 
@@ -46,7 +52,7 @@ export default function MagneticIcon({ children, strength = 30 }: { children: Re
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       animate={{ x: position.x, y: position.y }}
-      transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
+      transition={{ type: 'spring', stiffness: 150, damping: 15, mass: 0.1 }}
       className="relative"
     >
       {children}

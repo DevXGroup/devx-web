@@ -110,34 +110,88 @@ export default function CosmicStars() {
             radial-gradient(1px 1px at 70% 90%, white, transparent),
             radial-gradient(1px 1px at 30% 20%, white, transparent),
             radial-gradient(1px 1px at 55% 60%, white, transparent);
-          background-size: 200% 200%, 200% 200%, 200% 200%, 200% 200%, 200% 200%, 200% 200%,
-                           200% 200%, 200% 200%, 200% 200%, 200% 200%, 200% 200%, 200% 200%,
-                           200% 200%, 200% 200%, 200% 200%, 200% 200%, 200% 200%, 200% 200%;
-          background-position: 0% 0%, 100% 100%, 50% 50%, 20% 80%, 80% 20%, 40% 60%,
-                              60% 40%, 10% 90%, 90% 10%, 30% 70%, 70% 30%, 15% 15%,
-                              85% 85%, 25% 45%, 65% 75%, 45% 25%, 75% 65%, 35% 55%;
+          background-size:
+            200% 200%,
+            200% 200%,
+            200% 200%,
+            200% 200%,
+            200% 200%,
+            200% 200%,
+            200% 200%,
+            200% 200%,
+            200% 200%,
+            200% 200%,
+            200% 200%,
+            200% 200%,
+            200% 200%,
+            200% 200%,
+            200% 200%,
+            200% 200%,
+            200% 200%,
+            200% 200%;
+          background-position:
+            0% 0%,
+            100% 100%,
+            50% 50%,
+            20% 80%,
+            80% 20%,
+            40% 60%,
+            60% 40%,
+            10% 90%,
+            90% 10%,
+            30% 70%,
+            70% 30%,
+            15% 15%,
+            85% 85%,
+            25% 45%,
+            65% 75%,
+            45% 25%,
+            75% 65%,
+            35% 55%;
           opacity: 0.6;
         }
 
         /* Small stars - mostly static with very subtle variations */
         .stars-small {
           background-image:
-            radial-gradient(1.5px 1.5px at 18% 25%, rgba(255,255,255,0.9), transparent),
-            radial-gradient(1.5px 1.5px at 82% 55%, rgba(255,255,255,0.8), transparent),
-            radial-gradient(1.5px 1.5px at 45% 75%, rgba(255,255,255,0.85), transparent),
-            radial-gradient(1.5px 1.5px at 68% 35%, rgba(255,255,255,0.9), transparent),
-            radial-gradient(1.5px 1.5px at 22% 88%, rgba(255,255,255,0.8), transparent),
-            radial-gradient(1.5px 1.5px at 92% 12%, rgba(255,255,255,0.85), transparent),
-            radial-gradient(1.5px 1.5px at 38% 48%, rgba(255,255,255,0.9), transparent),
-            radial-gradient(1.5px 1.5px at 72% 68%, rgba(255,255,255,0.8), transparent),
-            radial-gradient(1.5px 1.5px at 12% 62%, rgba(255,255,255,0.85), transparent),
-            radial-gradient(1.5px 1.5px at 58% 18%, rgba(255,255,255,0.9), transparent),
-            radial-gradient(1.5px 1.5px at 88% 78%, rgba(255,255,255,0.8), transparent),
-            radial-gradient(1.5px 1.5px at 28% 38%, rgba(255,255,255,0.85), transparent);
-          background-size: 300% 300%, 300% 300%, 300% 300%, 300% 300%, 300% 300%, 300% 300%,
-                           300% 300%, 300% 300%, 300% 300%, 300% 300%, 300% 300%, 300% 300%;
-          background-position: 18% 25%, 82% 55%, 45% 75%, 68% 35%, 22% 88%, 92% 12%,
-                              38% 48%, 72% 68%, 12% 62%, 58% 18%, 88% 78%, 28% 38%;
+            radial-gradient(1.5px 1.5px at 18% 25%, rgba(255, 255, 255, 0.9), transparent),
+            radial-gradient(1.5px 1.5px at 82% 55%, rgba(255, 255, 255, 0.8), transparent),
+            radial-gradient(1.5px 1.5px at 45% 75%, rgba(255, 255, 255, 0.85), transparent),
+            radial-gradient(1.5px 1.5px at 68% 35%, rgba(255, 255, 255, 0.9), transparent),
+            radial-gradient(1.5px 1.5px at 22% 88%, rgba(255, 255, 255, 0.8), transparent),
+            radial-gradient(1.5px 1.5px at 92% 12%, rgba(255, 255, 255, 0.85), transparent),
+            radial-gradient(1.5px 1.5px at 38% 48%, rgba(255, 255, 255, 0.9), transparent),
+            radial-gradient(1.5px 1.5px at 72% 68%, rgba(255, 255, 255, 0.8), transparent),
+            radial-gradient(1.5px 1.5px at 12% 62%, rgba(255, 255, 255, 0.85), transparent),
+            radial-gradient(1.5px 1.5px at 58% 18%, rgba(255, 255, 255, 0.9), transparent),
+            radial-gradient(1.5px 1.5px at 88% 78%, rgba(255, 255, 255, 0.8), transparent),
+            radial-gradient(1.5px 1.5px at 28% 38%, rgba(255, 255, 255, 0.85), transparent);
+          background-size:
+            300% 300%,
+            300% 300%,
+            300% 300%,
+            300% 300%,
+            300% 300%,
+            300% 300%,
+            300% 300%,
+            300% 300%,
+            300% 300%,
+            300% 300%,
+            300% 300%,
+            300% 300%;
+          background-position:
+            18% 25%,
+            82% 55%,
+            45% 75%,
+            68% 35%,
+            22% 88%,
+            92% 12%,
+            38% 48%,
+            72% 68%,
+            12% 62%,
+            58% 18%,
+            88% 78%,
+            28% 38%;
           opacity: 0.7;
         }
 
@@ -156,17 +210,18 @@ export default function CosmicStars() {
         /* Individual bright stars - noticeable twinkling with staggered delays */
         .star-bright {
           position: absolute;
-          background: radial-gradient(circle, rgba(255,255,255,1), transparent);
+          background: radial-gradient(circle, rgba(255, 255, 255, 1), transparent);
           border-radius: 50%;
           animation: twinkle-bright ease-in-out infinite;
           opacity: 0.9;
           pointer-events: none;
-          box-shadow: 0 0 4px rgba(255,255,255,0.5);
+          box-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
         }
 
         /* Subtle twinkling animation for medium stars */
         @keyframes twinkle-subtle {
-          0%, 100% {
+          0%,
+          100% {
             opacity: 0.8;
             transform: scale(1);
           }
@@ -178,7 +233,8 @@ export default function CosmicStars() {
 
         /* More pronounced twinkling for bright stars */
         @keyframes twinkle-bright {
-          0%, 100% {
+          0%,
+          100% {
             opacity: 0.9;
             transform: scale(1);
             filter: brightness(1);

@@ -1,10 +1,10 @@
-"use client"
+'use client'
 
-import { useRef, useEffect, useState } from "react"
-import { Canvas, useFrame } from "@react-three/fiber"
-import { PerspectiveCamera, MeshTransmissionMaterial } from "@react-three/drei"
-import { Vector3, Curve, TubeGeometry, type Mesh, SphereGeometry } from "three"
-import DevXEnvironment from "./DevXEnvironment"
+import { useRef, useEffect, useState } from 'react'
+import { Canvas, useFrame } from '@react-three/fiber'
+import { PerspectiveCamera, MeshTransmissionMaterial } from '@react-three/drei'
+import { Vector3, Curve, TubeGeometry, type Mesh, SphereGeometry } from 'three'
+import DevXEnvironment from './DevXEnvironment'
 
 export default function InfinityLogo() {
   const [isMounted, setIsMounted] = useState(false)
@@ -23,12 +23,12 @@ export default function InfinityLogo() {
     }
 
     const container = containerRef.current
-    container.addEventListener("wheel", preventDefault, { passive: false })
-    container.addEventListener("touchmove", preventDefault, { passive: false })
+    container.addEventListener('wheel', preventDefault, { passive: false })
+    container.addEventListener('touchmove', preventDefault, { passive: false })
 
     return () => {
-      container.removeEventListener("wheel", preventDefault)
-      container.removeEventListener("touchmove", preventDefault)
+      container.removeEventListener('wheel', preventDefault)
+      container.removeEventListener('touchmove', preventDefault)
     }
   }, [isInteracting])
 
@@ -48,7 +48,7 @@ export default function InfinityLogo() {
       },
       {
         threshold: 0.05,
-        rootMargin: '300px 0px 300px 0px'
+        rootMargin: '300px 0px 300px 0px',
       }
     )
 
@@ -64,31 +64,50 @@ export default function InfinityLogo() {
         ref={containerRef}
         className="relative w-full h-full"
         style={{
-          cursor: "grab",
+          cursor: 'grab',
         }}
       >
         {isVisible ? (
           <Canvas
             shadows
-            style={{ width: "100%", height: "100%" }}
+            style={{ width: '100%', height: '100%' }}
             onContextMenu={(e) => e.preventDefault()}
-        >
-          <PerspectiveCamera makeDefault position={[0, 0, 10]} />
-          <DevXEnvironment variant="studio" intensity={1.2} />
-          <ambientLight intensity={0.5} />
-          <directionalLight
-            castShadow
-            position={[5, 10, 5]}
-            intensity={1.5}
-            shadow-mapSize-width={1024}
-            shadow-mapSize-height={1024}
-          />
-          <spotLight position={[10, 10, 10]} angle={0.25} penumbra={1} intensity={1} castShadow color="#CCFF00" />
-          <pointLight position={[3, 2, 3]} intensity={2} color="#CCFF00" distance={15} decay={2} />
-          <pointLight position={[-3, -2, 4]} intensity={1.5} color="#4CD787" distance={12} decay={2} />
+          >
+            <PerspectiveCamera makeDefault position={[0, 0, 10]} />
+            <DevXEnvironment variant="studio" intensity={1.2} />
+            <ambientLight intensity={0.5} />
+            <directionalLight
+              castShadow
+              position={[5, 10, 5]}
+              intensity={1.5}
+              shadow-mapSize-width={1024}
+              shadow-mapSize-height={1024}
+            />
+            <spotLight
+              position={[10, 10, 10]}
+              angle={0.25}
+              penumbra={1}
+              intensity={1}
+              castShadow
+              color="#CCFF00"
+            />
+            <pointLight
+              position={[3, 2, 3]}
+              intensity={2}
+              color="#CCFF00"
+              distance={15}
+              decay={2}
+            />
+            <pointLight
+              position={[-3, -2, 4]}
+              intensity={1.5}
+              color="#4CD787"
+              distance={12}
+              decay={2}
+            />
 
-          <InfinityMesh setIsInteracting={setIsInteracting} />
-        </Canvas>
+            <InfinityMesh setIsInteracting={setIsInteracting} />
+          </Canvas>
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-gray-900 to-black flex items-center justify-center">
             <div className="text-gray-400 text-sm">Loading 3D...</div>
@@ -113,7 +132,7 @@ function InfinityMesh({ setIsInteracting }: { setIsInteracting: (value: boolean)
     constructor(
       public width = 3.5,
       public height = 3.5,
-      public zOffset = 0.2,
+      public zOffset = 0.2
     ) {
       super()
     }
@@ -121,7 +140,8 @@ function InfinityMesh({ setIsInteracting }: { setIsInteracting: (value: boolean)
     getPoint(t: number, optionalTarget = new Vector3()) {
       const angle = 2 * Math.PI * t
       const x = (Math.sin(angle) * this.width) / (1 + Math.cos(angle) * Math.cos(angle))
-      const y = (Math.cos(angle) * Math.sin(angle) * this.height) / (1 + Math.cos(angle) * Math.cos(angle))
+      const y =
+        (Math.cos(angle) * Math.sin(angle) * this.height) / (1 + Math.cos(angle) * Math.cos(angle))
       const z = Math.sin(2 * angle) * this.zOffset
       return optionalTarget.set(x, y, z)
     }
@@ -151,7 +171,7 @@ function InfinityMesh({ setIsInteracting }: { setIsInteracting: (value: boolean)
     }
 
     // Change cursor style
-    document.body.style.cursor = "grabbing"
+    document.body.style.cursor = 'grabbing'
   }
 
   const onPointerUp = (e: any) => {
@@ -175,7 +195,7 @@ function InfinityMesh({ setIsInteracting }: { setIsInteracting: (value: boolean)
     }
 
     // Restore cursor style
-    document.body.style.cursor = "grab"
+    document.body.style.cursor = 'grab'
   }
 
   const onPointerMove = (e: any) => {

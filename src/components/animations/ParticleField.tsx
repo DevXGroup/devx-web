@@ -1,7 +1,7 @@
-"use client"
+'use client'
 
-import { useEffect, useRef } from "react"
-import { motion, useReducedMotion } from "framer-motion"
+import { useEffect, useRef } from 'react'
+import { motion, useReducedMotion } from 'framer-motion'
 
 interface Particle {
   x: number
@@ -21,10 +21,10 @@ interface ParticleFieldProps {
   colors?: string[]
 }
 
-export default function ParticleField({ 
-  className = "", 
+export default function ParticleField({
+  className = '',
   particleCount = 50,
-  colors = ["#4CD787", "#4834D4", "#FFD700", "#9d4edd"]
+  colors = ['#4CD787', '#4834D4', '#FFD700', '#9d4edd'],
 }: ParticleFieldProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const animationRef = useRef<number | undefined>(undefined)
@@ -38,15 +38,15 @@ export default function ParticleField({
     const canvas = canvasRef.current
     if (!canvas) return
 
-    const ctx = canvas.getContext("2d")
+    const ctx = canvas.getContext('2d')
     if (!ctx) return
 
     const resizeCanvas = () => {
       const rect = canvas.getBoundingClientRect()
       canvas.width = rect.width * window.devicePixelRatio
       canvas.height = rect.height * window.devicePixelRatio
-      canvas.style.width = rect.width + "px"
-      canvas.style.height = rect.height + "px"
+      canvas.style.width = rect.width + 'px'
+      canvas.style.height = rect.height + 'px'
       ctx.scale(window.devicePixelRatio, window.devicePixelRatio)
     }
 
@@ -59,7 +59,7 @@ export default function ParticleField({
       opacity: Math.random() * 0.5 + 0.2,
       color: colors[Math.floor(Math.random() * colors.length)] || '#4CD787',
       life: 0,
-      maxLife: Math.random() * 200 + 100
+      maxLife: Math.random() * 200 + 100,
     })
 
     const initParticles = () => {
@@ -77,7 +77,7 @@ export default function ParticleField({
         const dx = mouseRef.current.x - particle.x
         const dy = mouseRef.current.y - particle.y
         const distance = Math.sqrt(dx * dx + dy * dy)
-        
+
         if (distance < 100) {
           const force = (100 - distance) / 100
           particle.vx += dx * force * 0.0002
@@ -99,7 +99,7 @@ export default function ParticleField({
 
     const drawParticles = () => {
       ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight)
-      
+
       // Draw connections
       particlesRef.current.forEach((particle, i) => {
         for (let j = i + 1; j < particlesRef.current.length; j++) {
@@ -108,9 +108,9 @@ export default function ParticleField({
           const dx = particle.x - other.x
           const dy = particle.y - other.y
           const distance = Math.sqrt(dx * dx + dy * dy)
-          
+
           if (distance < 80) {
-            const opacity = (80 - distance) / 80 * 0.1
+            const opacity = ((80 - distance) / 80) * 0.1
             ctx.strokeStyle = `rgba(76, 215, 135, ${opacity})`
             ctx.lineWidth = 0.5
             ctx.beginPath()
@@ -122,14 +122,18 @@ export default function ParticleField({
       })
 
       // Draw particles
-      particlesRef.current.forEach(particle => {
+      particlesRef.current.forEach((particle) => {
         const gradient = ctx.createRadialGradient(
-          particle.x, particle.y, 0,
-          particle.x, particle.y, particle.size
+          particle.x,
+          particle.y,
+          0,
+          particle.x,
+          particle.y,
+          particle.size
         )
-        gradient.addColorStop(0, particle.color + "80")
-        gradient.addColorStop(1, particle.color + "00")
-        
+        gradient.addColorStop(0, particle.color + '80')
+        gradient.addColorStop(1, particle.color + '00')
+
         ctx.fillStyle = gradient
         ctx.beginPath()
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
@@ -158,15 +162,15 @@ export default function ParticleField({
     initParticles()
     animate()
 
-    window.addEventListener("resize", handleResize)
-    canvas.addEventListener("mousemove", handleMouseMove)
+    window.addEventListener('resize', handleResize)
+    canvas.addEventListener('mousemove', handleMouseMove)
 
     return () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current)
       }
-      window.removeEventListener("resize", handleResize)
-      canvas.removeEventListener("mousemove", handleMouseMove)
+      window.removeEventListener('resize', handleResize)
+      canvas.removeEventListener('mousemove', handleMouseMove)
     }
   }, [shouldReduceMotion, particleCount, colors])
 
@@ -183,7 +187,7 @@ export default function ParticleField({
       <canvas
         ref={canvasRef}
         className="absolute inset-0 w-full h-full"
-        style={{ mixBlendMode: "screen" }}
+        style={{ mixBlendMode: 'screen' }}
       />
     </div>
   )

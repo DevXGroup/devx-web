@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import { useEffect } from "react"
+import { useEffect } from 'react'
 
 /**
  * Suppresses known React DevTools extension errors that occur with React 19
@@ -41,11 +41,8 @@ export function DevToolsErrorSuppressor() {
     window.onerror = function (msg, url, line, col, error) {
       // Check for Chrome extension runtime errors on non-Chrome browsers
       const errorMessage = typeof msg === 'string' ? msg : (error && error.message) || ''
-      
-      if (
-        errorMessage.includes('runtime.sendMessage') &&
-        errorMessage.includes('Tab not found')
-      ) {
+
+      if (errorMessage.includes('runtime.sendMessage') && errorMessage.includes('Tab not found')) {
         return true // Suppress the error
       }
 

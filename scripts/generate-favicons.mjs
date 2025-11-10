@@ -79,7 +79,7 @@ async function main() {
   await generateIco(64)
 }
 
-main().catch(error => {
+main().catch((error) => {
   console.error(error)
   process.exitCode = 1
 })

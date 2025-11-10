@@ -1,74 +1,114 @@
-"use client"
+'use client'
 
-import React, { useState, useEffect } from "react"
-import { motion } from "framer-motion"
-import { Code2, Rocket, Database, Cloud, Brain, Cog, Smartphone, Globe, Cpu } from "lucide-react"
-import Link from "next/link"
+import React, { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
+import { Code2, Rocket, Database, Cloud, Brain, Cog, Smartphone, Globe, Cpu } from 'lucide-react'
+import Link from 'next/link'
 
 // Service data
 const services = [
   {
     icon: Code2,
-    name: "Custom Software",
-    description: "Tailored software solutions that perfectly align with your business needs.",
-    color: "#4CD787",
-    features: ["Full-stack Development", "API Integration", "Legacy Modernization", "Custom CRM & ERP"],
+    name: 'Custom Software',
+    description: 'Tailored software solutions that perfectly align with your business needs.',
+    color: '#4CD787',
+    features: [
+      'Full-stack Development',
+      'API Integration',
+      'Legacy Modernization',
+      'Custom CRM & ERP',
+    ],
   },
   {
     icon: Brain,
-    name: "AI & ML",
-    description: "Harness the power of artificial intelligence to transform your business.",
-    color: "#9d4edd",
-    features: ["Predictive Analytics", "Natural Language Processing", "Computer Vision", "Machine Learning Models"],
+    name: 'AI & ML',
+    description: 'Harness the power of artificial intelligence to transform your business.',
+    color: '#9d4edd',
+    features: [
+      'Predictive Analytics',
+      'Natural Language Processing',
+      'Computer Vision',
+      'Machine Learning Models',
+    ],
   },
   {
     icon: Cloud,
-    name: "Cloud Solutions",
-    description: "Leverage cloud technology to scale your business efficiently.",
-    color: "#4834D4",
-    features: ["Cloud Migration", "Cloud-Native Development", "Serverless Architecture", "Infrastructure Management"],
+    name: 'Cloud Solutions',
+    description: 'Leverage cloud technology to scale your business efficiently.',
+    color: '#4834D4',
+    features: [
+      'Cloud Migration',
+      'Cloud-Native Development',
+      'Serverless Architecture',
+      'Infrastructure Management',
+    ],
   },
   {
     icon: Smartphone,
-    name: "Mobile Apps",
-    description: "Create engaging mobile experiences with native and cross-platform applications.",
-    color: "#FFD700",
-    features: ["iOS Development", "Android Development", "Cross-platform Solutions", "Mobile App Strategy"],
+    name: 'Mobile Apps',
+    description: 'Create engaging mobile experiences with native and cross-platform applications.',
+    color: '#FFD700',
+    features: [
+      'iOS Development',
+      'Android Development',
+      'Cross-platform Solutions',
+      'Mobile App Strategy',
+    ],
   },
   {
     icon: Database,
-    name: "Database",
-    description: "Design and implement robust database solutions for optimal performance.",
-    color: "#ff6b6b",
-    features: ["Database Design", "Data Migration", "Performance Optimization", "Data Security"],
+    name: 'Database',
+    description: 'Design and implement robust database solutions for optimal performance.',
+    color: '#ff6b6b',
+    features: ['Database Design', 'Data Migration', 'Performance Optimization', 'Data Security'],
   },
   {
     icon: Globe,
-    name: "Web Development",
-    description: "Build powerful web applications that drive your business forward.",
-    color: "#4CD787",
-    features: ["Frontend Development", "Backend Development", "E-commerce Solutions", "Progressive Web Apps"],
+    name: 'Web Development',
+    description: 'Build powerful web applications that drive your business forward.',
+    color: '#4CD787',
+    features: [
+      'Frontend Development',
+      'Backend Development',
+      'E-commerce Solutions',
+      'Progressive Web Apps',
+    ],
   },
   {
     icon: Cog,
-    name: "DevOps",
-    description: "Streamline your development and operations with our DevOps expertise.",
-    color: "#4834D4",
-    features: ["CI/CD Implementation", "Infrastructure as Code", "Container Orchestration", "Monitoring & Logging"],
+    name: 'DevOps',
+    description: 'Streamline your development and operations with our DevOps expertise.',
+    color: '#4834D4',
+    features: [
+      'CI/CD Implementation',
+      'Infrastructure as Code',
+      'Container Orchestration',
+      'Monitoring & Logging',
+    ],
   },
   {
     icon: Rocket,
-    name: "Digital Transformation",
-    description: "Transform your business with modern digital solutions.",
-    color: "#FFD700",
-    features: ["Digital Strategy", "Process Automation", "Technology Migration", "Digital Innovation"],
+    name: 'Digital Transformation',
+    description: 'Transform your business with modern digital solutions.',
+    color: '#FFD700',
+    features: [
+      'Digital Strategy',
+      'Process Automation',
+      'Technology Migration',
+      'Digital Innovation',
+    ],
   },
   {
     icon: Cpu,
-    name: "IoT Hardware",
-    description: "Bridge the physical and digital worlds with our IoT hardware design expertise.",
-    color: "#9d4edd",
-    features: ["IoT Device Development", "Sensor Integration", "Embedded Systems", "Edge Computing"],
+    name: 'IoT Hardware',
+    description: 'Bridge the physical and digital worlds with our IoT hardware design expertise.',
+    color: '#9d4edd',
+    features: [
+      'IoT Device Development',
+      'Sensor Integration',
+      'Embedded Systems',
+      'Edge Computing',
+    ],
   },
 ]
 
@@ -94,11 +134,11 @@ export default function ServiceShowcase3D() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1, duration: 0.5 }}
               className={`relative rounded-lg p-4 cursor-pointer transition-all duration-300 ${
-                selectedService === index ? "ring-2" : "hover:bg-white/5"
+                selectedService === index ? 'ring-2' : 'hover:bg-white/5'
               }`}
               style={{
-                boxShadow: selectedService === index ? `0 0 15px ${service.color}40` : "none",
-                borderColor: selectedService === index ? service.color : "transparent",
+                boxShadow: selectedService === index ? `0 0 15px ${service.color}40` : 'none',
+                borderColor: selectedService === index ? service.color : 'transparent',
               }}
               onClick={() => setSelectedService(selectedService === index ? null : index)}
             >
@@ -110,7 +150,7 @@ export default function ServiceShowcase3D() {
                   {React.createElement(service.icon, {
                     size: 24,
                     color: service.color,
-                    className: "drop-shadow-glow",
+                    className: 'drop-shadow-glow',
                     style: { filter: `drop-shadow(0 0 3px ${service.color}80)` },
                   })}
                 </div>
@@ -125,7 +165,7 @@ export default function ServiceShowcase3D() {
           initial={{ opacity: 0, height: 0 }}
           animate={{
             opacity: selectedService !== null ? 1 : 0,
-            height: selectedService !== null ? "auto" : 0,
+            height: selectedService !== null ? 'auto' : 0,
           }}
           transition={{ duration: 0.3 }}
           className="mt-8 overflow-hidden"
@@ -137,9 +177,12 @@ export default function ServiceShowcase3D() {
                   className="w-12 h-12 rounded-full flex items-center justify-center"
                   style={{ backgroundColor: services[selectedService].color }}
                 >
-                  {React.createElement(services[selectedService].icon, { size: 24, color: "#000" })}
+                  {React.createElement(services[selectedService].icon, { size: 24, color: '#000' })}
                 </div>
-                <h3 className="text-xl font-bold" style={{ color: services[selectedService].color }}>
+                <h3
+                  className="text-xl font-bold"
+                  style={{ color: services[selectedService].color }}
+                >
                   {services[selectedService].name}
                 </h3>
               </div>

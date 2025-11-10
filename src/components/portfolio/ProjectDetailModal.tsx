@@ -111,7 +111,7 @@ const ProjectDetailModal = ({ project, isOpen, onClose }: ProjectDetailModalProp
           />
 
           {/* Modal Container */}
-          <div 
+          <div
             className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-20"
             onClick={(e) => {
               // Close modal when clicking outside the modal content
@@ -128,8 +128,8 @@ const ProjectDetailModal = ({ project, isOpen, onClose }: ProjectDetailModalProp
               className="relative w-full max-w-6xl max-h-[96vh] md:max-h-[94vh] lg:max-h-[90vh] h-[calc(100vh-4rem)] bg-black/90 backdrop-blur-xl border border-white/20 rounded-3xl overflow-y-auto"
               onClick={(e) => e.stopPropagation()}
             >
-                {/* Header */}
-                <div className="relative h-80 overflow-hidden">
+              {/* Header */}
+              <div className="relative h-80 overflow-hidden">
                 <Image
                   src={project.images.banner}
                   alt={project.title}
@@ -145,7 +145,7 @@ const ProjectDetailModal = ({ project, isOpen, onClose }: ProjectDetailModalProp
                   whileHover={{
                     scale: 1.1,
                     backgroundColor: 'rgba(239, 68, 68, 0.8)',
-                    borderColor: 'rgba(239, 68, 68, 0.8)'
+                    borderColor: 'rgba(239, 68, 68, 0.8)',
                   }}
                   whileTap={{ scale: 0.9 }}
                   title="Close modal (ESC key or click outside)"
@@ -185,7 +185,9 @@ const ProjectDetailModal = ({ project, isOpen, onClose }: ProjectDetailModalProp
                       whileHover={{ scale: 1.05 }}
                     >
                       <Award size={16} className="text-blue-400" />
-                      <span className="text-sm font-semibold text-blue-400">{project.metrics.marketPosition}</span>
+                      <span className="text-sm font-semibold text-blue-400">
+                        {project.metrics.marketPosition}
+                      </span>
                     </motion.div>
                   )}
                 </div>
