@@ -1,9 +1,9 @@
-"use client"
+'use client'
 
-import { Environment, Lightformer } from "@react-three/drei"
+import { Environment, Lightformer } from '@react-three/drei'
 
 interface DevXEnvironmentProps {
-  variant?: "studio" | "night"
+  variant?: 'studio' | 'night'
   intensity?: number
 }
 
@@ -11,9 +11,12 @@ interface DevXEnvironmentProps {
  * Shared HDR-less environment lighting built with Lightformers.
  * Avoids remote HDR fetches while keeping reflective materials lively.
  */
-export default function DevXEnvironment({ variant = "studio", intensity = 1 }: DevXEnvironmentProps) {
+export default function DevXEnvironment({
+  variant = 'studio',
+  intensity = 1,
+}: DevXEnvironmentProps) {
   const baseIntensity = intensity
-  const isNight = variant === "night"
+  const isNight = variant === 'night'
 
   return (
     <Environment resolution={256} frames={Infinity} background={false}>
@@ -24,7 +27,7 @@ export default function DevXEnvironment({ variant = "studio", intensity = 1 }: D
           rotation-x={Math.PI / 2}
           position={[0, isNight ? 6 : 4, 0]}
           scale={[12, 12, 1]}
-          color={isNight ? "#221c4d" : "#f7f5ff"}
+          color={isNight ? '#221c4d' : '#f7f5ff'}
         />
         <Lightformer
           form="rect"
@@ -32,7 +35,7 @@ export default function DevXEnvironment({ variant = "studio", intensity = 1 }: D
           position={[6, 2, -4]}
           rotation={[0, Math.PI / 4, 0]}
           scale={[8, 5, 1]}
-          color={isNight ? "#4CD787" : "#CCFF00"}
+          color={isNight ? '#4CD787' : '#CCFF00'}
         />
         <Lightformer
           form="rect"
@@ -40,7 +43,7 @@ export default function DevXEnvironment({ variant = "studio", intensity = 1 }: D
           position={[-6, -2, 4]}
           rotation={[0, -Math.PI / 4, 0]}
           scale={[7, 4, 1]}
-          color={isNight ? "#4834D4" : "#9d4edd"}
+          color={isNight ? '#4834D4' : '#9d4edd'}
         />
         <Lightformer
           form="ring"
@@ -48,7 +51,7 @@ export default function DevXEnvironment({ variant = "studio", intensity = 1 }: D
           rotation-y={Math.PI / 2}
           position={[0, 0, isNight ? 8 : 6]}
           scale={[10, 10, 1]}
-          color={isNight ? "#CFB53B" : "#ffffff"}
+          color={isNight ? '#CFB53B' : '#ffffff'}
         />
       </group>
     </Environment>

@@ -26,7 +26,7 @@ const CreativeGallerySection = () => {
       description: 'Dynamic logo reveal with particle effects and smooth transitions',
       color: '#4CD787',
       preview: 'LOGO',
-      tech: ['After Effects', 'Lottie', 'WebGL']
+      tech: ['After Effects', 'Lottie', 'WebGL'],
     },
     {
       id: 2,
@@ -35,7 +35,7 @@ const CreativeGallerySection = () => {
       description: 'Morphing text effects with fluid dynamics and color transitions',
       color: '#9d4edd',
       preview: 'TEXT',
-      tech: ['Three.js', 'GSAP', 'Canvas']
+      tech: ['Three.js', 'GSAP', 'Canvas'],
     },
     {
       id: 3,
@@ -44,7 +44,7 @@ const CreativeGallerySection = () => {
       description: 'Subtle animations that enhance user experience and engagement',
       color: '#4834D4',
       preview: 'UI/UX',
-      tech: ['Framer Motion', 'React', 'CSS']
+      tech: ['Framer Motion', 'React', 'CSS'],
     },
     {
       id: 4,
@@ -53,7 +53,7 @@ const CreativeGallerySection = () => {
       description: '360° product visualization with interactive controls',
       color: '#FFD700',
       preview: '3D',
-      tech: ['Three.js', 'Blender', 'WebGL']
+      tech: ['Three.js', 'Blender', 'WebGL'],
     },
     {
       id: 5,
@@ -62,7 +62,7 @@ const CreativeGallerySection = () => {
       description: 'Animated charts and graphs that tell compelling stories',
       color: '#ff6b6b',
       preview: 'DATA',
-      tech: ['D3.js', 'SVG', 'Animation']
+      tech: ['D3.js', 'SVG', 'Animation'],
     },
     {
       id: 6,
@@ -71,8 +71,8 @@ const CreativeGallerySection = () => {
       description: 'Creative loading animations that keep users engaged',
       color: '#4ecdc4',
       preview: 'LOAD',
-      tech: ['CSS', 'SVG', 'JavaScript']
-    }
+      tech: ['CSS', 'SVG', 'JavaScript'],
+    },
   ]
 
   useEffect(() => {
@@ -85,7 +85,7 @@ const CreativeGallerySection = () => {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-    }
+    },
   }
 
   const itemVariants = {
@@ -94,35 +94,28 @@ const CreativeGallerySection = () => {
       opacity: 1,
       y: 0,
       scale: 1,
-    }
+    },
   }
 
   return (
-    <section 
-      ref={sectionRef} 
+    <section
+      ref={sectionRef}
       className="bg-gradient-to-br from-black via-gray-900/50 to-black relative overflow-hidden py-16"
     >
       <div className="container mx-auto px-4 max-w-6xl relative z-10">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate={controls}
-        >
+        <motion.div variants={containerVariants} initial="hidden" animate={controls}>
           {/* Section Header */}
-          <motion.div
-            variants={itemVariants}
-            className="text-center mb-12"
-          >
+          <motion.div variants={itemVariants} className="text-center mb-12">
             <h2 className="text-5xl md:text-7xl font-['IBM_Plex_Mono'] font-bold text-center mb-8">
               <span className="text-white block">Creative</span>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-pink-400 to-purple-400 block">
                 Showcase
               </span>
             </h2>
-            
+
             <p className="text-white/80 text-xl max-w-3xl mx-auto leading-relaxed font-['IBM_Plex_Sans'] text-center">
-              Explore our portfolio of animation work across different categories. 
-              Each piece demonstrates our expertise in creating memorable visual experiences.
+              Explore our portfolio of animation work across different categories. Each piece
+              demonstrates our expertise in creating memorable visual experiences.
             </p>
           </motion.div>
 
@@ -141,10 +134,10 @@ const CreativeGallerySection = () => {
               >
                 <div className="relative h-72 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-lg rounded-2xl border border-white/20 overflow-hidden group-hover:border-white/30 transition-all duration-300">
                   {/* Preview area */}
-                  <div 
+                  <div
                     className="h-full flex items-center justify-center relative"
                     style={{
-                      background: `linear-gradient(135deg, ${item.color}20 0%, ${item.color}05 100%)`
+                      background: `linear-gradient(135deg, ${item.color}20 0%, ${item.color}05 100%)`,
                     }}
                   >
                     {/* Static preview text with subtle hover effect */}
@@ -152,7 +145,7 @@ const CreativeGallerySection = () => {
                       className="text-4xl font-bold font-mono text-white/90 text-center"
                       whileHover={{
                         scale: 1.05,
-                        color: item.color
+                        color: item.color,
                       }}
                       transition={{ duration: 0.2 }}
                     >
@@ -163,7 +156,7 @@ const CreativeGallerySection = () => {
                     <div
                       className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-300"
                       style={{
-                        background: `radial-gradient(circle, ${item.color} 0%, transparent 70%)`
+                        background: `radial-gradient(circle, ${item.color} 0%, transparent 70%)`,
                       }}
                     />
 
@@ -179,20 +172,24 @@ const CreativeGallerySection = () => {
                       transition={{ delay: index * 0.1 }}
                     >
                       <div className="mb-3">
-                        <h3 className="text-white font-['IBM_Plex_Mono'] font-semibold text-lg mb-2">{item.title}</h3>
-                        <span 
+                        <h3 className="text-white font-['IBM_Plex_Mono'] font-semibold text-lg mb-2">
+                          {item.title}
+                        </h3>
+                        <span
                           className="text-xs px-3 py-1 rounded-full font-['IBM_Plex_Mono'] inline-block"
                           style={{ backgroundColor: `${item.color}30`, color: item.color }}
                         >
                           {item.category}
                         </span>
                       </div>
-                      <p className="text-white/80 text-sm mb-3 leading-relaxed font-['IBM_Plex_Sans']">{item.description}</p>
-                      
+                      <p className="text-white/80 text-sm mb-3 leading-relaxed font-['IBM_Plex_Sans']">
+                        {item.description}
+                      </p>
+
                       {/* Tech stack */}
                       <div className="flex flex-wrap gap-1">
                         {item.tech.map((tech) => (
-                          <span 
+                          <span
                             key={tech}
                             className="text-xs bg-white/10 text-white/80 px-2 py-1 rounded font-['IBM_Plex_Mono']"
                           >
@@ -207,7 +204,7 @@ const CreativeGallerySection = () => {
                   <div
                     className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-opacity-50 transition-all duration-300"
                     style={{
-                      borderColor: `${item.color}50`
+                      borderColor: `${item.color}50`,
                     }}
                   />
                 </div>
@@ -221,11 +218,12 @@ const CreativeGallerySection = () => {
             className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center"
           >
             {[
-                            { number: '50+', label: 'Projects Completed' },
-                            { number: '15+', label: 'Animation Types' },
-                            { number: '99%', label: 'Client Satisfaction' },
-                            { number: '24/7', label: 'Creative Support' }
-                          ].map((stat) => (              <motion.div
+              { number: '50+', label: 'Projects Completed' },
+              { number: '15+', label: 'Animation Types' },
+              { number: '99%', label: 'Client Satisfaction' },
+              { number: '24/7', label: 'Creative Support' },
+            ].map((stat) => (
+              <motion.div
                 key={stat.label}
                 variants={itemVariants}
                 className="bg-white/5 backdrop-blur-lg rounded-xl p-5 border border-white/10 hover:bg-white/10 transition-all duration-300"
@@ -239,7 +237,6 @@ const CreativeGallerySection = () => {
           </motion.div>
         </motion.div>
       </div>
-
 
       {/* Subtle background decoration */}
       <div className="absolute inset-0 pointer-events-none opacity-30">

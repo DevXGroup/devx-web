@@ -38,7 +38,17 @@ function mockElementSize(el: HTMLElement, { width, height }: { width: number; he
   Object.defineProperty(el, 'clientHeight', { value: height, configurable: true })
   Object.defineProperty(el, 'getBoundingClientRect', {
     configurable: true,
-    value: () => ({ width, height, top: 0, left: 0, right: width, bottom: height, x: 0, y: 0, toJSON: () => {} }),
+    value: () => ({
+      width,
+      height,
+      top: 0,
+      left: 0,
+      right: width,
+      bottom: height,
+      x: 0,
+      y: 0,
+      toJSON: () => {},
+    }),
   })
 }
 
@@ -64,7 +74,9 @@ describe('RippleGrid measuring', () => {
       expect(container.querySelector('canvas')).toBeInTheDocument()
     })
 
-    const oglMock = jest.requireMock('ogl') as { __rendererInstances: Array<{ setSize: jest.Mock }> }
+    const oglMock = jest.requireMock('ogl') as {
+      __rendererInstances: Array<{ setSize: jest.Mock }>
+    }
     const rendererInstance = oglMock.__rendererInstances[0]
     expect(rendererInstance.setSize).toHaveBeenCalledWith(400, 250)
   })
@@ -80,7 +92,9 @@ describe('RippleGrid measuring', () => {
     mockElementSize(container, { width: 320, height: 180 })
 
     await waitFor(() => {
-      const oglMock = jest.requireMock('ogl') as { __rendererInstances: Array<{ setSize: jest.Mock }> }
+      const oglMock = jest.requireMock('ogl') as {
+        __rendererInstances: Array<{ setSize: jest.Mock }>
+      }
       const rendererInstance = oglMock.__rendererInstances[0]
       expect(rendererInstance.setSize).toHaveBeenCalledWith(320, 180)
     })

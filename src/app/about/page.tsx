@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import AboutPage from "./AboutPage"
+import AboutPage from './AboutPage'
 import { createOgImageUrl, createTwitterImageUrl, getSiteUrl } from '@/lib/og'
 
 const siteUrl = getSiteUrl()
@@ -26,11 +26,20 @@ const twitterImage = createTwitterImageUrl(
 
 export const metadata: Metadata = {
   title: 'About DevX Group | Elite Software Development Team | San Diego, California',
-  description: 'Learn about DevX Group LLC - an elite software development team based in San Diego, California. Meet our experienced developers and discover our mission to build, launch, and scale innovative software solutions.',
-  keywords: ['about devx group', 'software development team', 'san diego developers', 'elite programmers', 'custom software company', 'ai ml experts'],
+  description:
+    'Learn about DevX Group LLC - an elite software development team based in San Diego, California. Meet our experienced developers and discover our mission to build, launch, and scale innovative software solutions.',
+  keywords: [
+    'about devx group',
+    'software development team',
+    'san diego developers',
+    'elite programmers',
+    'custom software company',
+    'ai ml experts',
+  ],
   openGraph: {
     title: 'About DevX Group | Elite Software Development Team | San Diego, California',
-    description: 'Learn about DevX Group LLC - an elite software development team based in San Diego, California. Meet our experienced developers and discover our mission.',
+    description:
+      'Learn about DevX Group LLC - an elite software development team based in San Diego, California. Meet our experienced developers and discover our mission.',
     url: pageUrl,
     siteName: 'DevX Group',
     images: [
@@ -47,7 +56,8 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'About DevX Group | Elite Software Development Team',
-    description: 'Learn about DevX Group LLC - elite software development team based in San Diego, California.',
+    description:
+      'Learn about DevX Group LLC - elite software development team based in San Diego, California.',
     images: [twitterImage],
   },
   alternates: {

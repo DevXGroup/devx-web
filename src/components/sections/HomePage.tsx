@@ -1,9 +1,9 @@
-"use client"
+'use client'
 
-import Hero from "@/components/sections/Hero"
-import Features from "@/components/sections/Features"
-import Technologies from "@/components/sections/Technologies"
-import Process from "@/components/sections/Process"
+import Hero from '@/components/sections/Hero'
+import Features from '@/components/sections/Features'
+import Technologies from '@/components/sections/Technologies'
+import Process from '@/components/sections/Process'
 
 export default function HomePage() {
   return (

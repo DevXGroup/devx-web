@@ -4,7 +4,9 @@ import ModernCube3D from '@3d/ModernCube'
 
 // Mock @react-three/fiber and @react-three/drei
 jest.mock('@react-three/fiber', () => ({
-  Canvas: ({ children }: { children: React.ReactNode }) => <div data-testid="canvas">{children}</div>,
+  Canvas: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="canvas">{children}</div>
+  ),
   useFrame: jest.fn(),
   useThree: () => ({
     viewport: { width: 10 },
@@ -18,7 +20,9 @@ jest.mock('@react-three/drei', () => ({
   Edges: () => <div data-testid="edges" />,
   Text: ({ children }: { children: React.ReactNode }) => <div data-testid="text">{children}</div>,
   Sparkles: () => <div data-testid="sparkles" />,
-  RoundedBox: ({ children }: { children: React.ReactNode }) => <div data-testid="rounded-box">{children}</div>,
+  RoundedBox: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="rounded-box">{children}</div>
+  ),
   PerspectiveCamera: () => <div data-testid="perspective-camera" />,
 }))
 
@@ -62,10 +66,10 @@ describe('ModernCube3D', () => {
 
   it('renders cube faces with correct text', async () => {
     await renderCube()
-    
+
     const texts = await screen.findAllByTestId('text')
     expect(texts).toHaveLength(6) // 6 faces of the cube
-    
+
     // Check for some of the face texts
     expect(screen.getByText('Custom Software')).toBeInTheDocument()
     expect(screen.getByText('Expert Solutions')).toBeInTheDocument()
@@ -81,7 +85,7 @@ describe('ModernCube3D', () => {
 
   it('renders the main cube structure', async () => {
     await renderCube()
-    
+
     expect(await screen.findByTestId('rounded-box')).toBeInTheDocument()
   })
 

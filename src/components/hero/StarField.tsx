@@ -212,10 +212,7 @@ function SimpleStarLayer({
 
         const finalAlpha = Math.min(
           1,
-          Math.max(
-            0.08,
-            baseValue + amplitudeValue * intensity + sparkle * amplitudeValue
-          )
+          Math.max(0.08, baseValue + amplitudeValue * intensity + sparkle * amplitudeValue)
         )
 
         twinkleProfiles.alpha[i] = finalAlpha
@@ -318,8 +315,8 @@ function BrightStarsLayer({
         color: (Math.random() < 0.8
           ? [1, 1, 1]
           : Math.random() < 0.5
-          ? [0.9, 0.95, 1]
-          : [1, 0.95, 0.85]) as [number, number, number], // White, blue-white, or yellow-white
+            ? [0.9, 0.95, 1]
+            : [1, 0.95, 0.85]) as [number, number, number], // White, blue-white, or yellow-white
       })
     }
     return data

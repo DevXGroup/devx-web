@@ -1,7 +1,7 @@
-"use client";
+'use client'
 
-import * as Sentry from "@sentry/react";
-import { Button } from "@/components/ui/button";
+import * as Sentry from '@sentry/react'
+import { Button } from '@/components/ui/button'
 
 export default function SentryExamplePage() {
   return (
@@ -14,8 +14,8 @@ export default function SentryExamplePage() {
 
         <Button
           onClick={() => {
-            Sentry.captureMessage("Test message from Sentry example page", "info");
-            throw new Error("Sentry Test Error - This is intentional!");
+            Sentry.captureMessage('Test message from Sentry example page', 'info')
+            throw new Error('Sentry Test Error - This is intentional!')
           }}
           className="w-full bg-theme-green hover:bg-theme-green/90 text-black font-semibold"
         >
@@ -25,8 +25,8 @@ export default function SentryExamplePage() {
         <div className="mt-6 space-y-3">
           <Button
             onClick={() => {
-              Sentry.captureMessage("Manual test message", "info");
-              alert("Message sent to Sentry!");
+              Sentry.captureMessage('Manual test message', 'info')
+              alert('Message sent to Sentry!')
             }}
             variant="outline"
             className="w-full border-gray-600 text-white hover:bg-gray-700"
@@ -36,8 +36,8 @@ export default function SentryExamplePage() {
 
           <Button
             onClick={() => {
-              Sentry.captureException(new Error("Manual exception test"));
-              alert("Exception sent to Sentry!");
+              Sentry.captureException(new Error('Manual exception test'))
+              alert('Exception sent to Sentry!')
             }}
             variant="outline"
             className="w-full border-gray-600 text-white hover:bg-gray-700"
@@ -48,7 +48,7 @@ export default function SentryExamplePage() {
           <Button
             onClick={() => {
               // @ts-ignore - Intentional undefined function call
-              myUndefinedFunction();
+              myUndefinedFunction()
             }}
             variant="outline"
             className="w-full border-gray-600 text-white hover:bg-gray-700"
@@ -59,7 +59,7 @@ export default function SentryExamplePage() {
 
         <div className="mt-6 p-4 bg-gray-900/50 rounded border border-gray-700">
           <p className="text-xs text-gray-400">
-            <strong className="text-white">Note:</strong> Check your Sentry dashboard at{" "}
+            <strong className="text-white">Note:</strong> Check your Sentry dashboard at{' '}
             <a
               href="https://devx-group-llc.sentry.io/issues/"
               target="_blank"
@@ -67,11 +67,11 @@ export default function SentryExamplePage() {
               className="text-theme-green hover:underline"
             >
               sentry.io
-            </a>
-            {" "}to see the captured errors.
+            </a>{' '}
+            to see the captured errors.
           </p>
         </div>
       </div>
     </div>
-  );
+  )
 }

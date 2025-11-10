@@ -186,7 +186,6 @@ const Confetti = ({
         className="fixed inset-0 pointer-events-none z-50"
       >
         <canvas ref={canvasRef} className="w-full h-full" style={{ pointerEvents: 'none' }} />
-
       </motion.div>
     </AnimatePresence>
   )

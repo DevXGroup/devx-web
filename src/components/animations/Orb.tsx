@@ -205,7 +205,7 @@ export default function Orb({
     gl.clearColor(0, 0, 0, 0)
     gl.enable(gl.BLEND)
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
-    
+
     // Enhanced canvas styling to prevent white square flashing
     gl.canvas.style.background = 'transparent'
     gl.canvas.style.pointerEvents = 'none'
@@ -213,7 +213,7 @@ export default function Orb({
     gl.canvas.style.width = '100%'
     gl.canvas.style.height = '100%'
     gl.canvas.style.objectFit = 'cover'
-    
+
     container.appendChild(gl.canvas)
 
     const geometry = new Triangle(gl)
@@ -239,17 +239,17 @@ export default function Orb({
       const dpr = Math.min(window.devicePixelRatio || 1, 2) // Limit DPR to prevent performance issues
       const width = container.clientWidth
       const height = container.clientHeight
-      
+
       // Ensure minimum size to prevent rendering issues
       if (width <= 0 || height <= 0) return
-      
+
       renderer.setSize(width * dpr, height * dpr)
       gl.canvas.style.width = width + 'px'
       gl.canvas.style.height = height + 'px'
-      
+
       // Clear the canvas to prevent flashing
       gl.clear(gl.COLOR_BUFFER_BIT)
-      
+
       program.uniforms.iResolution.value.set(
         gl.canvas.width,
         gl.canvas.height,

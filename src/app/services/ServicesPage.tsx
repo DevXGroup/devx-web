@@ -416,7 +416,10 @@ export default function ServicesPage() {
       </div>
 
       {/* Scroll Velocity Animation */}
-      <section ref={velocityRef} className="relative overflow-hidden pt-4 pb-4 md:pt-6 md:pb-6 bg-black">
+      <section
+        ref={velocityRef}
+        className="relative overflow-hidden pt-4 pb-4 md:pt-6 md:pb-6 bg-black"
+      >
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{
@@ -924,7 +927,8 @@ export default function ServicesPage() {
                   <motion.div
                     className="absolute inset-0 rounded-2xl pointer-events-none z-0"
                     style={{
-                      background: 'radial-gradient(circle at center, #06B6D410 0%, transparent 70%)',
+                      background:
+                        'radial-gradient(circle at center, #06B6D410 0%, transparent 70%)',
                     }}
                     initial={{ opacity: 0 }}
                     whileHover={{ opacity: 1 }}

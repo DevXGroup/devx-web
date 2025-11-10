@@ -195,7 +195,7 @@ export default function BraidedRopeAnimation({ className = '' }: BraidedRopeAnim
       <div className="absolute inset-0 pointer-events-none z-10 bg-gradient-to-b from-black/80 via-transparent to-black/80" />
       <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-black to-transparent pointer-events-none z-10 h-48" />
       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent pointer-events-none z-10 h-48" />
-      
+
       {/* Additional fade-in for rope end point on larger screens */}
       <div className="absolute top-[45%] left-0 right-0 bg-gradient-to-b from-black via-black/80 to-transparent pointer-events-none z-10 h-48 hidden md:block" />
       <div className="absolute top-[50%] left-0 right-0 bg-gradient-to-b from-black/60 to-transparent pointer-events-none z-10 h-24 hidden md:block" />
