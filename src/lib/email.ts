@@ -7,14 +7,8 @@ interface ContactEmailPayload {
   source: 'footer' | 'contact-page' | 'unknown'
 }
 
-const {
-  SMTP_HOST,
-  SMTP_PORT,
-  SMTP_USER,
-  SMTP_PASS,
-  CONTACT_FORWARD_TO,
-  CONTACT_FROM_EMAIL,
-} = process.env
+const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, CONTACT_FORWARD_TO, CONTACT_FROM_EMAIL } =
+  process.env
 
 const SUPPORT_EMAIL_FALLBACK = 'support@devxgroup.io'
 
@@ -64,7 +58,11 @@ export async function sendContactEmail(payload: ContactEmailPayload) {
   })()
 
   const subject = `DevX Website Inquiry (${
-    payload.source === 'footer' ? 'Footer' : payload.source === 'contact-page' ? 'Contact Page' : 'Website'
+    payload.source === 'footer'
+      ? 'Footer'
+      : payload.source === 'contact-page'
+        ? 'Contact Page'
+        : 'Website'
   })`
 
   const plainText = [

@@ -1,9 +1,9 @@
-"use client"
+'use client'
 
-import { useRef, Suspense } from "react"
-import { useFrame } from "@react-three/fiber"
-import { Sphere, Sparkles } from "@react-three/drei"
-import { AdditiveBlending, Color, Vector3 } from "three"
+import { useRef, Suspense } from 'react'
+import { useFrame } from '@react-three/fiber'
+import { Sphere, Sparkles } from '@react-three/drei'
+import { AdditiveBlending, Color, Vector3 } from 'three'
 
 // Refined blob material with enhanced effects
 function RefinedBlobMaterial({ scrollY }: { scrollY: number }) {
@@ -40,7 +40,7 @@ function RefinedBlobMaterial({ scrollY }: { scrollY: number }) {
 
     // Enhanced organic noise variation for more blob-like movement
     uniforms.uNoiseFreq.value = 0.25 + Math.sin(time * 0.012) * 0.03
-    uniforms.uNoiseAmp.value = 0.10 + Math.sin(time * 0.018) * 0.008
+    uniforms.uNoiseAmp.value = 0.1 + Math.sin(time * 0.018) * 0.008
 
     // Very slow hue shift
     uniforms.uHueShift.value = (Math.sin(time * 0.008) * 0.5 + 0.5) * 0.04
@@ -357,7 +357,7 @@ function RefinedBlob({
     const positions = new Float32Array(particleCount * 3)
     for (let i = 0; i < particleCount; i++) {
       const theta = Math.random() * Math.PI * 2
-      const phi = Math.acos((Math.random() * 2) - 1)
+      const phi = Math.acos(Math.random() * 2 - 1)
       const r = 0.5 + Math.random() * 0.3 // Tighter radius: 0.5 to 0.8
 
       positions[i * 3] = r * Math.sin(phi) * Math.cos(theta)
@@ -378,10 +378,9 @@ function RefinedBlob({
   const viewportScale = Math.max(0.5, Math.min(2.0, viewport.width / 1200))
   const circleRadius = useRef((0.8 + Math.random() * 1.0) * viewportScale).current // Responsive radius
   const originalPositionVector = useRef(
-    new Vector3(originalPosition[0], originalPosition[1], originalPosition[2]),
+    new Vector3(originalPosition[0], originalPosition[1], originalPosition[2])
   ).current
   const circleSpeed = useRef(0.4 + Math.random() * 0.3).current // Faster, more fluid circular movement
-
 
   useFrame((state) => {
     if (mesh.current && groupRef.current) {
@@ -406,7 +405,11 @@ function RefinedBlob({
       const baseZOffset = Math.sin(angle * 1.3) * circleRadius * 0.5
 
       // Position calculation - keep blobs on left side with responsive constraints
-      let leftBoundary, rightBoundary, responsiveXOffset, viewportTopBoundary, viewportBottomBoundary
+      let leftBoundary,
+        rightBoundary,
+        responsiveXOffset,
+        viewportTopBoundary,
+        viewportBottomBoundary
 
       if (viewport.width < 768) {
         // Mobile: tighter constraints
@@ -438,7 +441,8 @@ function RefinedBlob({
       groupRef.current.position.z = circleCenter.z + baseZOffset
 
       // Enhanced vertical movement for more fluid motion
-      const verticalMovement = ((Math.sin(time * 0.3) * 1.8 * viewport.height) / 12) * amplitudeFactor
+      const verticalMovement =
+        ((Math.sin(time * 0.3) * 1.8 * viewport.height) / 12) * amplitudeFactor
       const scrollInfluence = -scrollY * 0.005 * (1 + index * 0.1)
 
       groupRef.current.position.y += verticalMovement + scrollInfluence
@@ -470,11 +474,14 @@ function RefinedBlob({
       // Hide blobs when globe is fully visible (starts hiding around scroll 200, fully hidden by 400)
       const globeVisibilityThreshold = 200
       const globeFullyVisibleAt = 400
-      const blobOpacity = scrollY < globeVisibilityThreshold
-        ? 1
-        : scrollY > globeFullyVisibleAt
-          ? 0
-          : 1 - ((scrollY - globeVisibilityThreshold) / (globeFullyVisibleAt - globeVisibilityThreshold))
+      const blobOpacity =
+        scrollY < globeVisibilityThreshold
+          ? 1
+          : scrollY > globeFullyVisibleAt
+            ? 0
+            : 1 -
+              (scrollY - globeVisibilityThreshold) /
+                (globeFullyVisibleAt - globeVisibilityThreshold)
 
       // Only render if in viewport and opacity > 0
       groupRef.current.visible = isInViewport && blobOpacity > 0.01
@@ -484,11 +491,14 @@ function RefinedBlob({
         particlesRef.current.rotation.x = -time * 0.035
         particlesRef.current.rotation.y = -time * 0.045
 
-        const opacityAttribute = particlesRef.current.geometry.getAttribute("opacity")
+        const opacityAttribute = particlesRef.current.geometry.getAttribute('opacity')
         for (let i = 0; i < particleCount; i++) {
           const noise = Math.sin(time + i * 0.1) * 0.5 + 0.5
           const opacityFactor = 1 + Math.sin(time * 0.15) * 0.2
-          opacityAttribute.setX(i, noise * 0.15 * opacityFactor * (1 - normalizedScrollFactor * 0.1))
+          opacityAttribute.setX(
+            i,
+            noise * 0.15 * opacityFactor * (1 - normalizedScrollFactor * 0.1)
+          )
         }
         opacityAttribute.needsUpdate = true
       }
@@ -561,7 +571,14 @@ function RefinedBlob({
           }}
         />
       </points>
-      <Sparkles count={10} scale={size * 0.7} size={4} speed={0.15} opacity={0.08} color="#4cd787" />
+      <Sparkles
+        count={10}
+        scale={size * 0.7}
+        size={4}
+        speed={0.15}
+        opacity={0.08}
+        color="#4cd787"
+      />
     </group>
   )
 }
@@ -613,7 +630,7 @@ export default function AnimatedBlob({
         index,
         convergencePhase: Math.random() * Math.PI * 2,
       }
-    }),
+    })
   ).current
 
   return (

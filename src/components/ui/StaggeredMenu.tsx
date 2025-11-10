@@ -106,7 +106,9 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
       // Use a longer delay and ensure proper layer initialization
       const initializeLayers = () => {
         if (preContainer) {
-          const preLayers = Array.from(preContainer.querySelectorAll('.sm-prelayer')) as HTMLElement[]
+          const preLayers = Array.from(
+            preContainer.querySelectorAll('.sm-prelayer')
+          ) as HTMLElement[]
           preLayerElsRef.current = preLayers
 
           if (preLayers.length) {
@@ -119,11 +121,10 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
             })
 
             // Double force reflow to ensure styles are applied
-            preLayers.forEach(layer => {
+            preLayers.forEach((layer) => {
               layer.offsetHeight
               layer.getBoundingClientRect()
             })
-
           }
         }
       }
@@ -155,11 +156,11 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
         immediateRender: true,
         willChange: 'transform',
         backfaceVisibility: 'hidden',
-        WebkitBackfaceVisibility: 'hidden'
+        WebkitBackfaceVisibility: 'hidden',
       })
 
       // Multiple reflow forces to ensure proper positioning
-      layers.forEach(layer => {
+      layers.forEach((layer) => {
         layer.offsetHeight
         layer.getBoundingClientRect()
         // Double check that the positioning took effect
@@ -636,7 +637,9 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
                       href={it.link}
                       aria-label={it.ariaLabel}
                       data-index={idx + 1}
-                      style={it.hoverColor ? { ['--item-hover-color' as any]: it.hoverColor } : undefined}
+                      style={
+                        it.hoverColor ? { ['--item-hover-color' as any]: it.hoverColor } : undefined
+                      }
                       onClick={(e) => {
                         if (currentPath === it.link && onLinkClick) {
                           e.preventDefault()

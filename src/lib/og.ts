@@ -9,7 +9,11 @@ export interface OgImageOptions {
   focus?: string[]
 }
 
-const createAbsoluteUrl = (pathname: string, baseUrl = DEFAULT_SITE_URL, options?: OgImageOptions) => {
+const createAbsoluteUrl = (
+  pathname: string,
+  baseUrl = DEFAULT_SITE_URL,
+  options?: OgImageOptions
+) => {
   const url = new URL(pathname, baseUrl)
 
   if (options) {

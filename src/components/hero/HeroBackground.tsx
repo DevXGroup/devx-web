@@ -1,17 +1,17 @@
-"use client"
+'use client'
 
-import { useRef, useEffect, useState } from "react"
-import { Canvas, useThree } from "@react-three/fiber"
-import dynamic from "next/dynamic"
+import { useRef, useEffect, useState } from 'react'
+import { Canvas, useThree } from '@react-three/fiber'
+import dynamic from 'next/dynamic'
 
 // Dynamically import components that use browser APIs
-const EnhancedStarfield = dynamic(() => import("./StarField"), { 
+const EnhancedStarfield = dynamic(() => import('./StarField'), {
   ssr: false,
-  loading: () => null
+  loading: () => null,
 })
-const AnimatedBlob = dynamic(() => import("./AnimatedBlob"), { 
+const AnimatedBlob = dynamic(() => import('./AnimatedBlob'), {
   ssr: false,
-  loading: () => null
+  loading: () => null,
 })
 
 function Scene() {
@@ -42,18 +42,18 @@ function Scene() {
       }, 250)
     }
 
-    window.addEventListener("scroll", handleScroll, { passive: true })
-    window.addEventListener("resize", handleResize, { passive: true })
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('resize', handleResize, { passive: true })
     return () => {
-      window.removeEventListener("scroll", handleScroll)
-      window.removeEventListener("resize", handleResize)
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', handleResize)
       clearTimeout(resizeTimeoutRef.current)
     }
   }, [isResizing])
 
   return (
     <>
-      <color attach="background" args={["#000000"]} />
+      <color attach="background" args={['#000000']} />
       <ambientLight intensity={0.18} />
       <pointLight position={[10, 10, 10]} intensity={1.0} />
       <pointLight position={[-8, -5, 8]} intensity={0.6} color="#4cd787" />
@@ -98,7 +98,7 @@ export default function HeroBackground() {
       },
       {
         threshold: 0.1,
-        rootMargin: '100px 0px 100px 0px'
+        rootMargin: '100px 0px 100px 0px',
       }
     )
 

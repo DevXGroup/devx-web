@@ -7,6 +7,7 @@ This project uses both **Google Tag Manager (GTM)** and **Google Analytics 4 (GA
 ### Configuration
 
 Environment variables in `.env.local`:
+
 - `NEXT_PUBLIC_GTM_ID=GTM-TBDBXQWX` - Google Tag Manager ID
 - `NEXT_PUBLIC_GA_MEASUREMENT_ID=G-GXG9QQLB7C` - GA4 Measurement ID
 
@@ -15,6 +16,7 @@ Environment variables in `.env.local`:
 ### 1. Core Setup (Automatic)
 
 Both GTM and GA4 scripts are loaded automatically in `src/app/layout.tsx`:
+
 - GTM for advanced tag management and marketing pixels
 - GA4 for direct analytics tracking
 - Uses Next.js `<Script>` component with `strategy="afterInteractive"` for optimal performance
@@ -24,16 +26,18 @@ Both GTM and GA4 scripts are loaded automatically in `src/app/layout.tsx`:
 Located in `src/components/analytics/GoogleTagManager.tsx`:
 
 #### Basic Event Tracking
+
 ```typescript
 import { trackEvent } from '@/components/analytics/GoogleTagManager'
 
 trackEvent('button_click', {
   button_name: 'signup_cta',
-  button_location: 'hero_section'
+  button_location: 'hero_section',
 })
 ```
 
 #### Page View Tracking
+
 ```typescript
 import { trackPageView } from '@/components/analytics/GoogleTagManager'
 
@@ -41,16 +45,18 @@ trackPageView('/about', 'About Us Page')
 ```
 
 #### Form Submission Tracking
+
 ```typescript
 import { trackFormSubmission } from '@/components/analytics/GoogleTagManager'
 
 trackFormSubmission('contact_form', {
   form_location: 'contact_page',
-  form_type: 'inquiry'
+  form_type: 'inquiry',
 })
 ```
 
 #### Conversion Tracking
+
 ```typescript
 import { trackConversion } from '@/components/analytics/GoogleTagManager'
 
@@ -58,6 +64,7 @@ trackConversion('AW-XXXXXXX', 'contact_form_conversion', 100)
 ```
 
 #### Calendly Booking Tracking
+
 ```typescript
 import { trackCalendlyBooking } from '@/components/analytics/GoogleTagManager'
 
@@ -69,6 +76,7 @@ trackCalendlyBooking()
 For easier usage, use the custom hooks in `src/hooks/use-analytics.ts`:
 
 #### Automatic Page Tracking
+
 ```typescript
 'use client'
 import { usePageTracking } from '@/hooks/use-analytics'
@@ -81,6 +89,7 @@ export default function MyPage() {
 ```
 
 #### Manual Event Tracking
+
 ```typescript
 'use client'
 import { useAnalytics } from '@/hooks/use-analytics'
@@ -100,6 +109,7 @@ export default function MyComponent() {
 ```
 
 #### Available Hook Methods
+
 ```typescript
 const analytics = useAnalytics()
 
@@ -116,6 +126,7 @@ analytics.trackCalendlyBooking()
 ## Best Practices
 
 ### 1. Track Important User Actions
+
 - Button clicks (CTA buttons, navigation)
 - Form submissions
 - Video plays
@@ -124,11 +135,13 @@ analytics.trackCalendlyBooking()
 - Link clicks to external sites
 
 ### 2. Use Consistent Naming
+
 - Use snake_case for event names: `button_click`, `form_submit`
 - Use descriptive names: `pricing_page_cta_click` vs `click1`
 - Include context in parameters: `{ button_location: 'hero_section' }`
 
 ### 3. Don't Over-Track
+
 - Avoid tracking every single interaction
 - Focus on business-critical events
 - Consider performance impact
@@ -136,6 +149,7 @@ analytics.trackCalendlyBooking()
 ### 4. Test Your Tracking
 
 #### Local Testing
+
 1. Install Google Tag Assistant browser extension
 2. Run your dev server: `pnpm run dev`
 3. Open browser console and check for:
@@ -144,6 +158,7 @@ analytics.trackCalendlyBooking()
    - Network requests to `google-analytics.com` and `googletagmanager.com`
 
 #### Production Testing
+
 1. Deploy to production
 2. Use Google Analytics Realtime view
 3. Trigger events and verify they appear in GA4
@@ -152,6 +167,7 @@ analytics.trackCalendlyBooking()
 ## Common Patterns
 
 ### Track CTA Button Clicks
+
 ```typescript
 <button onClick={() => analytics.trackButtonClick('get_started', {
   location: 'hero',
@@ -162,6 +178,7 @@ analytics.trackCalendlyBooking()
 ```
 
 ### Track Form Submissions
+
 ```typescript
 const handleSubmit = async (data) => {
   // Submit form
@@ -170,12 +187,13 @@ const handleSubmit = async (data) => {
   // Track success
   analytics.trackFormSubmission('contact_form', {
     form_location: 'contact_page',
-    has_message: !!data.message
+    has_message: !!data.message,
   })
 }
 ```
 
 ### Track External Link Clicks
+
 ```typescript
 <a
   href="https://external-site.com"
@@ -187,6 +205,7 @@ const handleSubmit = async (data) => {
 ```
 
 ### Track Calendly Widget Events
+
 ```typescript
 useEffect(() => {
   const handleCalendlyEvent = (e) => {
@@ -203,6 +222,7 @@ useEffect(() => {
 ## Debugging
 
 ### Check if Analytics is Loaded
+
 ```javascript
 // In browser console
 console.log(window.dataLayer) // Should show array
@@ -210,6 +230,7 @@ console.log(window.gtag) // Should show function
 ```
 
 ### View DataLayer Events
+
 ```javascript
 // In browser console
 window.dataLayer.forEach((event, index) => {
@@ -243,5 +264,6 @@ window.dataLayer.forEach((event, index) => {
 ## Support
 
 For questions about analytics setup, contact the development team or refer to:
+
 - [Google Analytics 4 Documentation](https://support.google.com/analytics/answer/10089681)
 - [Google Tag Manager Documentation](https://support.google.com/tagmanager)

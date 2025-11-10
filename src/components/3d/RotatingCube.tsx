@@ -1,11 +1,11 @@
-"use client"
+'use client'
 
-import { useRef, useState, useMemo, useEffect } from "react"
-import { Canvas, useFrame, useThree } from "@react-three/fiber"
-import { MeshStandardMaterial, Vector3, MathUtils, AdditiveBlending, Mesh } from "three"
-import { Edges, OrbitControls, Text, Float, Sparkles, RoundedBox } from "@react-three/drei"
-import CubeFallback from "./CubeFallback"
-import DevXEnvironment from "./DevXEnvironment"
+import { useRef, useState, useMemo, useEffect } from 'react'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import { MeshStandardMaterial, Vector3, MathUtils, AdditiveBlending, Mesh } from 'three'
+import { Edges, OrbitControls, Text, Float, Sparkles, RoundedBox } from '@react-three/drei'
+import CubeFallback from './CubeFallback'
+import DevXEnvironment from './DevXEnvironment'
 
 interface CubeFaceProps {
   position: [number, number, number]
@@ -40,16 +40,16 @@ function CubeFace({ position, rotation, text, color, onClick, isActive, index }:
         onPointerOver={(e) => {
           e.stopPropagation()
           setHovered(true)
-          document.body.style.cursor = "pointer"
+          document.body.style.cursor = 'pointer'
         }}
         onPointerOut={() => {
           setHovered(false)
-          document.body.style.cursor = "auto"
+          document.body.style.cursor = 'auto'
         }}
       >
         <planeGeometry args={[2.8, 2.8]} />
         <meshStandardMaterial
-          color={hovered || isActive ? color : "#222"}
+          color={hovered || isActive ? color : '#222'}
           transparent
           opacity={0.1}
           roughness={0.3}
@@ -59,7 +59,7 @@ function CubeFace({ position, rotation, text, color, onClick, isActive, index }:
       <Text
         position={[0, 0, 0.1]}
         fontSize={0.3}
-        color={hovered || isActive ? "#ffffff" : "#aaaaaa"}
+        color={hovered || isActive ? '#ffffff' : '#aaaaaa'}
         anchorX="center"
         anchorY="middle"
         maxWidth={2.5}
@@ -75,16 +75,24 @@ function CubeFace({ position, rotation, text, color, onClick, isActive, index }:
 }
 
 // Particle trail effect
-function ParticleTrail({ count = 200, color = "#4CD787" }) {
-  return <Sparkles count={count} scale={[6, 6, 6]} size={0.4} speed={0.3} opacity={0.5} color={color} />
+function ParticleTrail({ count = 200, color = '#4CD787' }) {
+  return (
+    <Sparkles count={count} scale={[6, 6, 6]} size={0.4} speed={0.3} opacity={0.5} color={color} />
+  )
 }
 
 // Glowing edges effect
-function GlowingEdges({ color = "#4CD787", thickness = 0.02, glow = 0.5 }) {
+function GlowingEdges({ color = '#4CD787', thickness = 0.02, glow = 0.5 }) {
   return (
     <mesh>
       <boxGeometry args={[3.05, 3.05, 3.05]} />
-      <meshBasicMaterial color={color} transparent opacity={glow} blending={AdditiveBlending} wireframe />
+      <meshBasicMaterial
+        color={color}
+        transparent
+        opacity={glow}
+        blending={AdditiveBlending}
+        wireframe
+      />
     </mesh>
   )
 }
@@ -101,7 +109,7 @@ function ModernCube() {
   // Modern material with gradient and reflections
   const cubeMaterial = useMemo(() => {
     const material = new MeshStandardMaterial({
-      color: "#1a1a2e",
+      color: '#1a1a2e',
       metalness: 0.9,
       roughness: 0.1,
       envMapIntensity: 1,
@@ -131,7 +139,7 @@ function ModernCube() {
         float rimLight = 1.0 - max(0.0, dot(normalize(vViewPosition), vNormal));
         rimLight = pow(rimLight, 3.0);
         gl_FragColor.rgb += vec3(0.5, 0.7, 1.0) * rimLight * 0.3;
-        `,
+        `
       )
     }
     return material
@@ -139,12 +147,32 @@ function ModernCube() {
 
   // Cube face data
   const faces = [
-    { position: [0, 0, 1.51], rotation: [0, 0, 0], text: "Custom Software", color: "#4CD787" },
-    { position: [0, 0, -1.51], rotation: [0, Math.PI, 0], text: "Expert Solutions", color: "#FFD700" },
-    { position: [1.51, 0, 0], rotation: [0, Math.PI / 2, 0], text: "Fast Results", color: "#9d4edd" },
-    { position: [-1.51, 0, 0], rotation: [0, -Math.PI / 2, 0], text: "Competitive Rates", color: "#4834D4" },
-    { position: [0, 1.51, 0], rotation: [-Math.PI / 2, 0, 0], text: "Bring Your Vision", color: "#ff6b6b" },
-    { position: [0, -1.51, 0], rotation: [Math.PI / 2, 0, 0], text: "To Life", color: "#48bfe3" },
+    { position: [0, 0, 1.51], rotation: [0, 0, 0], text: 'Custom Software', color: '#4CD787' },
+    {
+      position: [0, 0, -1.51],
+      rotation: [0, Math.PI, 0],
+      text: 'Expert Solutions',
+      color: '#FFD700',
+    },
+    {
+      position: [1.51, 0, 0],
+      rotation: [0, Math.PI / 2, 0],
+      text: 'Fast Results',
+      color: '#9d4edd',
+    },
+    {
+      position: [-1.51, 0, 0],
+      rotation: [0, -Math.PI / 2, 0],
+      text: 'Competitive Rates',
+      color: '#4834D4',
+    },
+    {
+      position: [0, 1.51, 0],
+      rotation: [-Math.PI / 2, 0, 0],
+      text: 'Bring Your Vision',
+      color: '#ff6b6b',
+    },
+    { position: [0, -1.51, 0], rotation: [Math.PI / 2, 0, 0], text: 'To Life', color: '#48bfe3' },
   ]
 
   // Handle face click
@@ -175,16 +203,18 @@ function ModernCube() {
 
     // If a face is active, smoothly rotate to face it
     if (activeFace !== null && !hovered && faces[activeFace]) {
-      const targetPosition = new Vector3(...faces[activeFace].position).normalize().multiplyScalar(0.1)
+      const targetPosition = new Vector3(...faces[activeFace].position)
+        .normalize()
+        .multiplyScalar(0.1)
       mesh.current.rotation.x = MathUtils.lerp(
         mesh.current.rotation.x,
         Math.atan2(targetPosition.y, targetPosition.z),
-        0.05,
+        0.05
       )
       mesh.current.rotation.y = MathUtils.lerp(
         mesh.current.rotation.y,
         Math.atan2(targetPosition.x, targetPosition.z),
-        0.05,
+        0.05
       )
     }
   })
@@ -192,7 +222,12 @@ function ModernCube() {
   return (
     <group>
       {/* Main cube */}
-      <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.5} enabled={!clicked && autoRotate}>
+      <Float
+        speed={1.5}
+        rotationIntensity={0.2}
+        floatIntensity={0.5}
+        enabled={!clicked && autoRotate}
+      >
         <mesh
           ref={mesh}
           scale={clicked ? 1.1 : hovered ? 1.05 : 1}
@@ -211,7 +246,13 @@ function ModernCube() {
           <Edges
             scale={1.01}
             threshold={15}
-            color={hovered ? "#ffffff" : activeFace !== null && faces[activeFace] ? faces[activeFace].color : "#FFD700"}
+            color={
+              hovered
+                ? '#ffffff'
+                : activeFace !== null && faces[activeFace]
+                  ? faces[activeFace].color
+                  : '#FFD700'
+            }
           />
 
           {/* Interactive faces */}
@@ -231,10 +272,16 @@ function ModernCube() {
       </Float>
 
       {/* Particle effects */}
-      <ParticleTrail count={isMobile ? 100 : 200} color={activeFace !== null && faces[activeFace] ? faces[activeFace].color : "#4CD787"} />
+      <ParticleTrail
+        count={isMobile ? 100 : 200}
+        color={activeFace !== null && faces[activeFace] ? faces[activeFace].color : '#4CD787'}
+      />
 
       {/* Glowing edges effect */}
-      <GlowingEdges color={activeFace !== null && faces[activeFace] ? faces[activeFace].color : "#4CD787"} glow={hovered ? 0.7 : 0.3} />
+      <GlowingEdges
+        color={activeFace !== null && faces[activeFace] ? faces[activeFace].color : '#4CD787'}
+        glow={hovered ? 0.7 : 0.3}
+      />
     </group>
   )
 }
@@ -250,14 +297,15 @@ export default function RotatingCube() {
 
     // Detect Safari
     const isSafariBrowser =
-      /^((?!chrome|android).)*safari/i.test(navigator.userAgent) || /iPad|iPhone|iPod/.test(navigator.userAgent)
+      /^((?!chrome|android).)*safari/i.test(navigator.userAgent) ||
+      /iPad|iPhone|iPod/.test(navigator.userAgent)
 
     setIsSafari(isSafariBrowser)
 
     // Check WebGL support
     try {
-      const canvas = document.createElement("canvas")
-      const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl")
+      const canvas = document.createElement('canvas')
+      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
       setWebGLFailed(!gl)
     } catch (e) {
       setWebGLFailed(true)
@@ -281,7 +329,7 @@ export default function RotatingCube() {
         dpr={[1, 2]} // Optimize for high-DPI displays
         gl={{ antialias: true, alpha: true }}
       >
-        <color attach="background" args={["#000000"]} />
+        <color attach="background" args={['#000000']} />
 
         {/* Lighting setup */}
         <ambientLight intensity={0.5} />

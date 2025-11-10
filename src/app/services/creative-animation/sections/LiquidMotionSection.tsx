@@ -38,35 +38,36 @@ const LiquidMotionSection = () => {
     const radius = 150 + Math.sin(time * 0.001) * 30
     const centerX = 300 + mousePos.x * mouseInfluence
     const centerY = 300 + mousePos.y * mouseInfluence
-    
+
     let path = `M`
-    
+
     for (let i = 0; i <= points; i++) {
       const angle = (i / points) * Math.PI * 2
       const noise = Math.sin(time * 0.002 + i * 0.5) * 20
       const mouseNoise = Math.sin(time * 0.003 + i + mousePos.x * 10) * mouseInfluence * 0.3
-      
+
       const x = centerX + Math.cos(angle) * (radius + noise + mouseNoise)
       const y = centerY + Math.sin(angle) * (radius + noise + mouseNoise)
-      
+
       if (i === 0) {
         path += `${x},${y}`
       } else {
         const prevAngle = ((i - 1) / points) * Math.PI * 2
         const prevNoise = Math.sin(time * 0.002 + (i - 1) * 0.5) * 20
-        const prevMouseNoise = Math.sin(time * 0.003 + (i - 1) + mousePos.x * 10) * mouseInfluence * 0.3
+        const prevMouseNoise =
+          Math.sin(time * 0.003 + (i - 1) + mousePos.x * 10) * mouseInfluence * 0.3
         const prevX = centerX + Math.cos(prevAngle) * (radius + prevNoise + prevMouseNoise)
         const prevY = centerY + Math.sin(prevAngle) * (radius + prevNoise + prevMouseNoise)
-        
+
         const cpX1 = prevX + Math.cos(prevAngle + Math.PI / 2) * 30
         const cpY1 = prevY + Math.sin(prevAngle + Math.PI / 2) * 30
         const cpX2 = x - Math.cos(angle + Math.PI / 2) * 30
         const cpY2 = y - Math.sin(angle + Math.PI / 2) * 30
-        
+
         path += ` C${cpX1},${cpY1} ${cpX2},${cpY2} ${x},${y}`
       }
     }
-    
+
     return path + ' Z'
   }
 
@@ -74,7 +75,7 @@ const LiquidMotionSection = () => {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-    }
+    },
   }
 
   const itemVariants = {
@@ -82,12 +83,12 @@ const LiquidMotionSection = () => {
     visible: {
       opacity: 1,
       x: 0,
-    }
+    },
   }
 
   return (
-    <section 
-      ref={sectionRef} 
+    <section
+      ref={sectionRef}
       className="min-h-screen bg-gradient-to-br from-black via-green-900/20 to-black relative overflow-hidden flex items-center justify-center"
     >
       <div className="container mx-auto px-4 relative z-10">
@@ -98,10 +99,7 @@ const LiquidMotionSection = () => {
           className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
         >
           {/* Left side - Liquid SVG Animation */}
-          <motion.div
-            variants={itemVariants}
-            className="relative order-2 lg:order-1"
-          >
+          <motion.div variants={itemVariants} className="relative order-2 lg:order-1">
             <div className="relative w-full h-96 lg:h-[500px] flex items-center justify-center">
               <svg
                 ref={svgRef}
@@ -116,7 +114,7 @@ const LiquidMotionSection = () => {
                     <stop offset="50%" stopColor="#2196F3" />
                     <stop offset="100%" stopColor="#9C27B0" />
                   </linearGradient>
-                  
+
                   <linearGradient id="liquidGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor="#FF6B6B" />
                     <stop offset="50%" stopColor="#4ECDC4" />
@@ -124,10 +122,10 @@ const LiquidMotionSection = () => {
                   </linearGradient>
 
                   <filter id="glow">
-                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-                    <feMerge> 
-                      <feMergeNode in="coloredBlur"/>
-                      <feMergeNode in="SourceGraphic"/>
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+                    <feMerge>
+                      <feMergeNode in="coloredBlur" />
+                      <feMergeNode in="SourceGraphic" />
                     </feMerge>
                   </filter>
                 </defs>
@@ -144,12 +142,12 @@ const LiquidMotionSection = () => {
                       generateBlobPath(2000, 50),
                       generateBlobPath(3000, 50),
                       generateBlobPath(0, 50),
-                    ]
+                    ],
                   }}
                   transition={{
                     duration: 8,
                     repeat: Infinity,
-                    ease: "linear"
+                    ease: 'linear',
                   }}
                 />
 
@@ -166,12 +164,12 @@ const LiquidMotionSection = () => {
                       generateBlobPath(2500, 30),
                       generateBlobPath(3500, 30),
                       generateBlobPath(500, 30),
-                    ]
+                    ],
                   }}
                   transition={{
                     duration: 10,
                     repeat: Infinity,
-                    ease: "linear"
+                    ease: 'linear',
                   }}
                 />
 
@@ -188,19 +186,15 @@ const LiquidMotionSection = () => {
                       cy: [
                         100 + Math.sin(i) * 100,
                         500 + Math.sin(i) * 50,
-                        100 + Math.sin(i) * 100
+                        100 + Math.sin(i) * 100,
                       ],
-                      r: [
-                        10 + i * 5,
-                        20 + i * 3,
-                        10 + i * 5
-                      ]
+                      r: [10 + i * 5, 20 + i * 3, 10 + i * 5],
                     }}
                     transition={{
                       duration: 3 + i,
                       repeat: Infinity,
-                      ease: "easeInOut",
-                      delay: i * 0.5
+                      ease: 'easeInOut',
+                      delay: i * 0.5,
                     }}
                   />
                 ))}
@@ -221,35 +215,28 @@ const LiquidMotionSection = () => {
               </span>
             </motion.h2>
 
-            <motion.p
-              variants={itemVariants}
-              className="text-white/70 text-lg leading-relaxed"
-            >
-              Organic, fluid animations that mimic natural movement. 
-              Perfect for brand reveals, transitions, and creating emotional connections 
-              through beautiful motion design.
+            <motion.p variants={itemVariants} className="text-white/70 text-lg leading-relaxed">
+              Organic, fluid animations that mimic natural movement. Perfect for brand reveals,
+              transitions, and creating emotional connections through beautiful motion design.
             </motion.p>
 
-            <motion.div
-              variants={itemVariants}
-              className="space-y-6"
-            >
+            <motion.div variants={itemVariants} className="space-y-6">
               {[
                 {
                   title: 'Organic Movement',
                   description: 'Natural fluid dynamics that feel alive and responsive',
-                  progress: 95
+                  progress: 95,
                 },
                 {
                   title: 'Brand Integration',
                   description: 'Custom liquid effects that match your brand colors',
-                  progress: 88
+                  progress: 88,
                 },
                 {
                   title: 'Performance',
                   description: 'Optimized SVG animations for smooth 60fps experience',
-                  progress: 92
-                }
+                  progress: 92,
+                },
               ].map((item, index) => (
                 <motion.div
                   key={item.title}
@@ -305,7 +292,7 @@ const LiquidMotionSection = () => {
               duration: Math.random() * 4 + 3,
               repeat: Infinity,
               delay: Math.random() * 3,
-              ease: "easeInOut"
+              ease: 'easeInOut',
             }}
           />
         ))}

@@ -1,7 +1,7 @@
-"use client"
+'use client'
 
-import { useEffect, useState, useRef } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { useEffect, useState, useRef } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 interface Splash {
   id: number
@@ -15,10 +15,10 @@ interface SplashCursorProps {
   splashColor?: string
 }
 
-export default function SplashCursor({ 
-  children, 
-  className = "",
-  splashColor = "#4CD787"
+export default function SplashCursor({
+  children,
+  className = '',
+  splashColor = '#4CD787',
 }: SplashCursorProps) {
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
   const [isHovered, setIsHovered] = useState(false)
@@ -53,30 +53,30 @@ export default function SplashCursor({
           x: e.clientX - rect.left,
           y: e.clientY - rect.top,
         }
-        
-        setSplashes(prev => [...prev, newSplash])
-        
+
+        setSplashes((prev) => [...prev, newSplash])
+
         // Remove splash after animation
         setTimeout(() => {
-          setSplashes(prev => prev.filter(splash => splash.id !== newSplash.id))
+          setSplashes((prev) => prev.filter((splash) => splash.id !== newSplash.id))
         }, 800)
       }
     }
 
     const container = containerRef.current
     if (container) {
-      container.addEventListener("mousemove", handleMouseMove)
-      container.addEventListener("mouseenter", handleMouseEnter)
-      container.addEventListener("mouseleave", handleMouseLeave)
-      container.addEventListener("click", handleClick)
+      container.addEventListener('mousemove', handleMouseMove)
+      container.addEventListener('mouseenter', handleMouseEnter)
+      container.addEventListener('mouseleave', handleMouseLeave)
+      container.addEventListener('click', handleClick)
     }
 
     return () => {
       if (container) {
-        container.removeEventListener("mousemove", handleMouseMove)
-        container.removeEventListener("mouseenter", handleMouseEnter)
-        container.removeEventListener("mouseleave", handleMouseLeave)
-        container.removeEventListener("click", handleClick)
+        container.removeEventListener('mousemove', handleMouseMove)
+        container.removeEventListener('mouseenter', handleMouseEnter)
+        container.removeEventListener('mouseleave', handleMouseLeave)
+        container.removeEventListener('click', handleClick)
       }
     }
   }, [])
@@ -84,7 +84,7 @@ export default function SplashCursor({
   return (
     <div ref={containerRef} className={`relative ${className}`}>
       {children}
-      
+
       {/* Custom Cursor */}
       <AnimatePresence>
         {isHovered && (
@@ -113,7 +113,7 @@ export default function SplashCursor({
               transition={{
                 duration: 2,
                 repeat: Infinity,
-                ease: "easeInOut",
+                ease: 'easeInOut',
               }}
             />
           </motion.div>
@@ -128,7 +128,7 @@ export default function SplashCursor({
             initial={{ scale: 0, opacity: 1 }}
             animate={{ scale: 3, opacity: 0 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
             className="absolute pointer-events-none z-40 rounded-full border-2"
             style={{
               left: splash.x - 20,

@@ -34,13 +34,13 @@ const Interactive3DShowcase = () => {
 
     const canvas = canvasRef.current
     const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
-    
+
     if (!gl) {
       setWebglSupported(false)
       setWebglError('WebGL is not supported by your browser')
       return
     }
-    
+
     setWebglSupported(true)
     const webglContext = gl as WebGLRenderingContext
 
@@ -132,10 +132,10 @@ const Interactive3DShowcase = () => {
     function createShader(gl: WebGLRenderingContext, type: number, source: string) {
       const shader = gl.createShader(type)
       if (!shader) return null
-      
+
       gl.shaderSource(shader, source)
       gl.compileShader(shader)
-      
+
       if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
         const error = gl.getShaderInfoLog(shader)
         console.error('Shader compilation error:', error)
@@ -143,24 +143,28 @@ const Interactive3DShowcase = () => {
         gl.deleteShader(shader)
         return null
       }
-      
+
       return shader
     }
 
     // Create shaders
     const vertexShader = createShader(webglContext, webglContext.VERTEX_SHADER, vertexShaderSource)
-    const fragmentShader = createShader(webglContext, webglContext.FRAGMENT_SHADER, fragmentShaderSource)
-    
+    const fragmentShader = createShader(
+      webglContext,
+      webglContext.FRAGMENT_SHADER,
+      fragmentShaderSource
+    )
+
     if (!vertexShader || !fragmentShader) return
 
     // Create program
     const program = webglContext.createProgram()
     if (!program) return
-    
+
     webglContext.attachShader(program, vertexShader)
     webglContext.attachShader(program, fragmentShader)
     webglContext.linkProgram(program)
-    
+
     if (!webglContext.getProgramParameter(program, webglContext.LINK_STATUS)) {
       const error = webglContext.getProgramInfoLog(program)
       console.error('Program linking error:', error)
@@ -177,14 +181,24 @@ const Interactive3DShowcase = () => {
     // Create buffer
     const positionBuffer = webglContext.createBuffer()
     webglContext.bindBuffer(webglContext.ARRAY_BUFFER, positionBuffer)
-    webglContext.bufferData(webglContext.ARRAY_BUFFER, new Float32Array([
-      0, 0,
-      canvas.width, 0,
-      0, canvas.height,
-      0, canvas.height,
-      canvas.width, 0,
-      canvas.width, canvas.height,
-    ]), webglContext.STATIC_DRAW)
+    webglContext.bufferData(
+      webglContext.ARRAY_BUFFER,
+      new Float32Array([
+        0,
+        0,
+        canvas.width,
+        0,
+        0,
+        canvas.height,
+        0,
+        canvas.height,
+        canvas.width,
+        0,
+        canvas.width,
+        canvas.height,
+      ]),
+      webglContext.STATIC_DRAW
+    )
 
     let startTime = Date.now()
     let animationId: number
@@ -194,19 +208,19 @@ const Interactive3DShowcase = () => {
 
       webglContext.clearColor(0, 0, 0, 1)
       webglContext.clear(webglContext.COLOR_BUFFER_BIT)
-      
+
       webglContext.useProgram(program)
-      
+
       webglContext.enableVertexAttribArray(positionLocation)
       webglContext.bindBuffer(webglContext.ARRAY_BUFFER, positionBuffer)
       webglContext.vertexAttribPointer(positionLocation, 2, webglContext.FLOAT, false, 0, 0)
-      
+
       webglContext.uniform2f(resolutionLocation, canvas.width, canvas.height)
       webglContext.uniform2f(mouseLocation, mousePos.x, mousePos.y)
       webglContext.uniform1f(timeLocation, Date.now() - startTime)
-      
+
       webglContext.drawArrays(webglContext.TRIANGLES, 0, 6)
-      
+
       animationId = requestAnimationFrame(render)
     }
 
@@ -228,7 +242,7 @@ const Interactive3DShowcase = () => {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-    }
+    },
   }
 
   const itemVariants = {
@@ -236,12 +250,12 @@ const Interactive3DShowcase = () => {
     visible: {
       opacity: 1,
       y: 0,
-    }
+    },
   }
 
   return (
-    <section 
-      ref={sectionRef} 
+    <section
+      ref={sectionRef}
       className="min-h-screen bg-gradient-to-br from-black via-blue-900/20 to-black relative overflow-hidden flex items-center justify-center"
     >
       <div className="container mx-auto px-4 relative z-10">
@@ -264,23 +278,17 @@ const Interactive3DShowcase = () => {
               </span>
             </motion.h2>
 
-            <motion.p
-              variants={itemVariants}
-              className="text-white/70 text-lg leading-relaxed"
-            >
-              Immersive WebGL experiences that respond to user interaction. 
-              Custom shaders and 3D graphics that create unforgettable brand moments.
+            <motion.p variants={itemVariants} className="text-white/70 text-lg leading-relaxed">
+              Immersive WebGL experiences that respond to user interaction. Custom shaders and 3D
+              graphics that create unforgettable brand moments.
             </motion.p>
 
-            <motion.div
-              variants={itemVariants}
-              className="grid grid-cols-2 gap-6"
-            >
+            <motion.div variants={itemVariants} className="grid grid-cols-2 gap-6">
               {[
                 { label: 'WebGL Shaders', value: '100%' },
                 { label: 'Real-time 3D', value: '60fps' },
                 { label: 'Interactive', value: 'Mouse' },
-                { label: 'Performance', value: 'Optimized' }
+                { label: 'Performance', value: 'Optimized' },
               ].map((stat) => (
                 <motion.div
                   key={stat.label}
@@ -296,25 +304,22 @@ const Interactive3DShowcase = () => {
           </motion.div>
 
           {/* Right side - Interactive Canvas */}
-          <motion.div
-            variants={itemVariants}
-            className="relative"
-          >
+          <motion.div variants={itemVariants} className="relative">
             <div className="relative w-full h-96 lg:h-[500px] rounded-2xl overflow-hidden border border-white/20">
               {webglSupported === false ? (
-                <div 
+                <div
                   className="w-full h-full flex flex-col items-center justify-center cursor-crosshair"
-                  style={{ 
+                  style={{
                     background: 'linear-gradient(45deg, #1a1a2e, #16213e)',
-                    filter: 'drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5))'
+                    filter: 'drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5))',
                   }}
                 >
                   <div className="text-center space-y-4 p-8">
                     <div className="text-6xl mb-4">⚠️</div>
                     <h3 className="text-white text-xl font-semibold mb-2">WebGL Not Supported</h3>
                     <p className="text-white/70 text-sm max-w-md">
-                      Your browser doesn&apos;t support WebGL, which is required for this 3D experience.
-                      Try updating your browser or enabling hardware acceleration.
+                      Your browser doesn&apos;t support WebGL, which is required for this 3D
+                      experience. Try updating your browser or enabling hardware acceleration.
                     </p>
                     {webglError && (
                       <details className="text-white/50 text-xs mt-4">
@@ -328,13 +333,13 @@ const Interactive3DShowcase = () => {
                 <canvas
                   ref={canvasRef}
                   className="w-full h-full cursor-crosshair"
-                  style={{ 
+                  style={{
                     background: 'linear-gradient(45deg, #1a1a2e, #16213e)',
-                    filter: 'drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5))'
+                    filter: 'drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5))',
                   }}
                 />
               )}
-              
+
               {/* Overlay instructions */}
               <div className="absolute bottom-4 left-4 text-white/60 text-sm font-mono">
                 Move mouse to interact →
