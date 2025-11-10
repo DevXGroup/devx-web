@@ -1,70 +1,28 @@
 'use client'
 
 import { useRef, useEffect, useState } from 'react'
-import { Canvas, useThree } from '@react-three/fiber'
+import { Canvas, extend, useThree } from '@react-three/fiber'
+import { AnimatedBlob } from './AnimatedBlob'
 import dynamic from 'next/dynamic'
+
+// extend({ Canvas })
 
 // Dynamically import components that use browser APIs
 const EnhancedStarfield = dynamic(() => import('./StarField'), {
   ssr: false,
   loading: () => null,
 })
-const AnimatedBlob = dynamic(() => import('./AnimatedBlob'), {
-  ssr: false,
-  loading: () => null,
-})
 
 function Scene() {
-  const { viewport } = useThree()
-  const [scrollY, setScrollY] = useState(0)
-  const [isClient, setIsClient] = useState(false)
-  const [isVisible, setIsVisible] = useState(false)
-  const [isResizing, setIsResizing] = useState(false)
-  const mounted = useRef(false)
-  const resizeTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined)
+  return <>
+        <color attach="background" args={['#000000']} />
+        <ambientLight intensity={0.18} />
+        <pointLight position={[10, 10, 10]} intensity={1.0} />
+        <pointLight position={[-8, -5, 8]} intensity={0.6} color="#4cd787" />
 
-  useEffect(() => {
-    if (mounted.current) return
-    mounted.current = true
-    setIsClient(true)
-
-    const handleScroll = () => {
-      if (!isResizing) {
-        setScrollY(window.scrollY)
-      }
-    }
-
-    const handleResize = () => {
-      setIsResizing(true)
-      clearTimeout(resizeTimeoutRef.current)
-      resizeTimeoutRef.current = setTimeout(() => {
-        setIsResizing(false)
-      }, 250)
-    }
-
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    window.addEventListener('resize', handleResize, { passive: true })
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-      window.removeEventListener('resize', handleResize)
-      clearTimeout(resizeTimeoutRef.current)
-    }
-  }, [isResizing])
-
-  return (
-    <>
-      <color attach="background" args={['#000000']} />
-      <ambientLight intensity={0.18} />
-      <pointLight position={[10, 10, 10]} intensity={1.0} />
-      <pointLight position={[-8, -5, 8]} intensity={0.6} color="#4cd787" />
-      {isClient && (
-        <>
-          <EnhancedStarfield viewport={viewport} />
-          <AnimatedBlob scrollY={scrollY} viewport={viewport} />
-        </>
-      )}
-    </>
-  )
+        {/*<EnhancedStarfield />*/}
+        <AnimatedBlob />
+      </>
 }
 
 export default function HeroBackground() {
@@ -106,23 +64,19 @@ export default function HeroBackground() {
     return () => observer.disconnect()
   }, [isMounted])
 
-  if (!isMounted || !shouldRender) {
-    return (
-      <div ref={containerRef} className="absolute inset-0 w-full h-full bg-black">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 to-purple-900/10" />
-      </div>
-    )
-  }
+  // if (!isMounted || !shouldRender) {
+  //   return (
+  //     <div ref={containerRef} className="absolute inset-0 w-full h-full bg-black">
+  //       <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 to-purple-900/10" />
+  //     </div>
+  //   )
+  // }
 
   return (
     <div ref={containerRef} className="absolute inset-0 w-full h-full">
-      {isVisible ? (
-        <Canvas camera={{ position: [0, 0, 10], fov: 55 }}>
-          <Scene />
-        </Canvas>
-      ) : (
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 to-purple-900/10" />
-      )}
+      <Canvas camera={{ position: [0, 0, 10], fov: 55 }}>
+        <Scene />
+      </Canvas>
     </div>
   )
 }

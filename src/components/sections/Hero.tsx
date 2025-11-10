@@ -17,6 +17,14 @@ const DynamicCosmicStars = dynamic(() => import('../hero/CosmicStars'), {
     <div className="absolute inset-0 bg-black" style={{ minHeight: '100vh', width: '100%' }} />
   ),
 })
+
+const DynamicHeroBackground = dynamic(() => import('../hero/HeroBackground'), {
+  ssr: false,
+  loading: () => (
+    <div className="absolute inset-0 bg-black" style={{ minHeight: '100vh', width: '100%' }} />
+  ),
+})
+
 const DynamicPlanetDivider = dynamic(
   () => import('../planet/PlanetDivider').then((mod) => ({ default: mod.default })),
   {
@@ -128,9 +136,14 @@ export default function Hero() {
     >
       {/* Cosmic Stars Background - Lightweight CSS-based stars */}
       <ClientOnly>
-        {enableCosmicStars && (
+        {/*{enableCosmicStars && (
           <div className="absolute inset-0 w-full h-full z-[1]">
             <DynamicCosmicStars />
+          </div>
+        )}*/}
+        {enableCosmicStars && (
+          <div className="absolute inset-0 w-full h-full z-[1]">
+            <DynamicHeroBackground />
           </div>
         )}
       </ClientOnly>
