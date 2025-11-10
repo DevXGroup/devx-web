@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import ServicesPage from "./ServicesPage"
+import ServicesPage from './ServicesPage'
 import { createOgImageUrl, createTwitterImageUrl, getSiteUrl } from '@/lib/og'
 
 const siteUrl = getSiteUrl()
@@ -26,11 +26,30 @@ const twitterImage = createTwitterImageUrl(
 
 export const metadata: Metadata = {
   title: 'Software Development Services | Web Apps, Mobile Apps, AI & IoT Solutions',
-  description: 'Comprehensive software development services including web applications, mobile apps, AI/ML solutions, Agentic AI, RAG implementation, IoT hardware integration, and digital transformation. Expert developers delivering scalable solutions.',
-  keywords: ['software development services', 'web applications', 'mobile apps', 'AI solutions', 'ML development', 'IoT integration', 'digital transformation', 'custom software', 'agentic AI', 'RAG', 'retrieval augmented generation', 'AI agents', 'workflow automation', 'n8n', 'make', 'zapier'],
+  description:
+    'Comprehensive software development services including web applications, mobile apps, AI/ML solutions, Agentic AI, RAG implementation, IoT hardware integration, and digital transformation. Expert developers delivering scalable solutions.',
+  keywords: [
+    'software development services',
+    'web applications',
+    'mobile apps',
+    'AI solutions',
+    'ML development',
+    'IoT integration',
+    'digital transformation',
+    'custom software',
+    'agentic AI',
+    'RAG',
+    'retrieval augmented generation',
+    'AI agents',
+    'workflow automation',
+    'n8n',
+    'make',
+    'zapier',
+  ],
   openGraph: {
     title: 'Software Development Services | Web Apps, Mobile Apps, AI & IoT Solutions',
-    description: 'Comprehensive software development services including web applications, mobile apps, AI/ML solutions, IoT hardware integration, and digital transformation.',
+    description:
+      'Comprehensive software development services including web applications, mobile apps, AI/ML solutions, IoT hardware integration, and digital transformation.',
     url: pageUrl,
     siteName: 'DevX Group',
     images: [
@@ -47,7 +66,8 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Software Development Services | DevX Group',
-    description: 'Comprehensive software development services including web apps, mobile apps, AI/ML solutions, and IoT integration.',
+    description:
+      'Comprehensive software development services including web apps, mobile apps, AI/ML solutions, and IoT integration.',
     images: [twitterImage],
   },
   alternates: {

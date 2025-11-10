@@ -263,25 +263,26 @@ const DeliveryCard = ({ text, color, icon: Icon, index }: DeliveryItem & { index
     >
       {/* Large decorative icon on the side */}
       <div className="relative flex-shrink-0 z-10">
-                  <div
-                    className="w-24 h-24 md:w-40 md:h-40 rounded-2xl flex items-center justify-center relative"
-                    style={{
-                      background: `linear-gradient(135deg, ${withAlpha(accent, 0.18)} 0%, ${withAlpha(
-                        accent,
-                        0.08
-                      )} 100%)`,
-                      border: `2px solid ${withAlpha(accent, 0.45)}`,
-                    }}
-                  >
-                    {/* Icon glow effect */}
-                    <div
-                      className="absolute inset-0 rounded-2xl opacity-40 blur-xl"
-                      style={{ backgroundColor: accent }}
-                    />
-                    <div style={{ color: accent, filter: 'drop-shadow(0 0 10px rgba(0,0,0,0.6))' }}>
-                      <Icon className="w-12 h-12 md:w-20 md:h-20 relative z-10" />
-                    </div>
-                  </div>      </div>
+        <div
+          className="w-24 h-24 md:w-40 md:h-40 rounded-2xl flex items-center justify-center relative"
+          style={{
+            background: `linear-gradient(135deg, ${withAlpha(accent, 0.18)} 0%, ${withAlpha(
+              accent,
+              0.08
+            )} 100%)`,
+            border: `2px solid ${withAlpha(accent, 0.45)}`,
+          }}
+        >
+          {/* Icon glow effect */}
+          <div
+            className="absolute inset-0 rounded-2xl opacity-40 blur-xl"
+            style={{ backgroundColor: accent }}
+          />
+          <div style={{ color: accent, filter: 'drop-shadow(0 0 10px rgba(0,0,0,0.6))' }}>
+            <Icon className="w-12 h-12 md:w-20 md:h-20 relative z-10" />
+          </div>
+        </div>{' '}
+      </div>
 
       {/* Text content on opposite side */}
       <div
@@ -424,7 +425,7 @@ const VisionMissionCard = ({
   const isMobile = useIsMobile()
   const ref = useRef(null)
   const isInViewForFadeIn = useInView(ref, { once: true })
-  const isInViewForHover = useInView(ref, { once: false, margin: "-40% 0px -40% 0px" })
+  const isInViewForHover = useInView(ref, { once: false, margin: '-40% 0px -40% 0px' })
 
   void accentColor
   void isHovered
@@ -479,7 +480,7 @@ const StatCounter = ({ number, label }: { number: string | number; label: string
 
   const countValue = useMotionValue(numericTarget)
   const [displayValue, setDisplayValue] = useState(() =>
-    decimalPlaces > 0 ? numericTarget.toFixed(decimalPlaces) : Math.round(numericTarget).toString(),
+    decimalPlaces > 0 ? numericTarget.toFixed(decimalPlaces) : Math.round(numericTarget).toString()
   )
 
   const animationRef = useRef<ReturnType<typeof animate> | null>(null)
@@ -493,7 +494,7 @@ const StatCounter = ({ number, label }: { number: string | number; label: string
       }
       return Math.round(value).toString()
     },
-    [decimalPlaces],
+    [decimalPlaces]
   )
 
   const stopActiveAnimation = useCallback(() => {
@@ -521,7 +522,7 @@ const StatCounter = ({ number, label }: { number: string | number; label: string
       animationRef.current = controls
       await controls.finished
     },
-    [countValue, formatValue, shouldReduceMotion, stopActiveAnimation],
+    [countValue, formatValue, shouldReduceMotion, stopActiveAnimation]
   )
 
   const runCountUp = useCallback(async () => {
@@ -560,14 +561,13 @@ const StatCounter = ({ number, label }: { number: string | number; label: string
     () => () => {
       stopActiveAnimation()
     },
-    [stopActiveAnimation],
+    [stopActiveAnimation]
   )
 
   const handleMouseEnter = useCallback(() => {
     if (shouldReduceMotion) return
     const currentSequence = hoverSequenceRef.current + 1
     hoverSequenceRef.current = currentSequence
-
     ;(async () => {
       await animateTo(0, { duration: 0.45, ease: 'easeInOut' })
       if (hoverSequenceRef.current !== currentSequence) return
@@ -787,15 +787,13 @@ export default function AboutPage() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 items-stretch">
               <StatCounter number="30+" label="Happy Clients" />
-              <StatCounter
-                number="15+"
-                label="Technical Experience"
-              />
+              <StatCounter number="15+" label="Technical Experience" />
               <StatCounter number="40+" label="Projects Completed" />
               <StatCounter number="23" label="Team Members" />
             </div>
             <p className="text-xs text-white/60 text-center mt-4">
-              DevX Group LLC has been in business for 2+ years with a seasoned senior engineering team.
+              DevX Group LLC has been in business for 2+ years with a seasoned senior engineering
+              team.
             </p>
           </AnimatedSection>
         </div>

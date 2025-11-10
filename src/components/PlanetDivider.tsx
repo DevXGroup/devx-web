@@ -86,31 +86,31 @@ export default function PlanetDivider() {
                 type="image/webp"
               />
               <img
-              src="/moon_hero_768.png"
-              srcSet="/moon_hero_768.png 768w, /moon_hero_512.png 512w"
-              sizes={isMobile ? '360px' : '700px'}
-              width="768"
-              height="768"
-              alt=""
-              loading="lazy"
-              decoding="async"
-              className="planet-sphere"
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'contain',
-                opacity: 0.8, // 80% opacity on the image
-                // Ensure proper rendering in Safari and other browsers
-                transform: 'translateZ(0)',
-                WebkitTransform: 'translateZ(0)',
-                backfaceVisibility: 'hidden',
-                WebkitBackfaceVisibility: 'hidden',
-                willChange: 'filter, opacity',
-              }}
-            />
-          </picture>
+                src="/moon_hero_768.png"
+                srcSet="/moon_hero_768.png 768w, /moon_hero_512.png 512w"
+                sizes={isMobile ? '360px' : '700px'}
+                width="768"
+                height="768"
+                alt=""
+                loading="lazy"
+                decoding="async"
+                className="planet-sphere"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain',
+                  opacity: 0.8, // 80% opacity on the image
+                  // Ensure proper rendering in Safari and other browsers
+                  transform: 'translateZ(0)',
+                  WebkitTransform: 'translateZ(0)',
+                  backfaceVisibility: 'hidden',
+                  WebkitBackfaceVisibility: 'hidden',
+                  willChange: 'filter, opacity',
+                }}
+              />
+            </picture>
+          </div>
         </div>
-      </div>
       </div>
 
       <style jsx>{`
@@ -129,13 +129,11 @@ export default function PlanetDivider() {
           width: 100%;
           height: 100%;
           /* Apply the glow effect to the container to prevent square clipping */
-          filter: 
-            drop-shadow(0 0 60px rgba(180, 200, 160, 0.25))
+          filter: drop-shadow(0 0 60px rgba(180, 200, 160, 0.25))
             drop-shadow(0 0 100px rgba(170, 190, 150, 0.18))
             drop-shadow(0 0 140px rgba(160, 180, 140, 0.12))
             drop-shadow(0 0 180px rgba(150, 170, 130, 0.08));
-          -webkit-filter: 
-            drop-shadow(0 0 60px rgba(180, 200, 160, 0.25))
+          -webkit-filter: drop-shadow(0 0 60px rgba(180, 200, 160, 0.25))
             drop-shadow(0 0 100px rgba(170, 190, 150, 0.18))
             drop-shadow(0 0 140px rgba(160, 180, 140, 0.12))
             drop-shadow(0 0 180px rgba(150, 170, 130, 0.08));
@@ -185,29 +183,25 @@ export default function PlanetDivider() {
         /* Mobile optimizations - more subtle glow */
         @media screen and (max-width: 767px) {
           .planet-glow-container {
-            filter:
-              drop-shadow(0 0 50px rgba(180, 200, 160, 0.22))
+            filter: drop-shadow(0 0 50px rgba(180, 200, 160, 0.22))
               drop-shadow(0 0 90px rgba(170, 190, 150, 0.15))
               drop-shadow(0 0 130px rgba(160, 180, 140, 0.1)) !important;
-            -webkit-filter:
-              drop-shadow(0 0 50px rgba(180, 200, 160, 0.22))
+            -webkit-filter: drop-shadow(0 0 50px rgba(180, 200, 160, 0.22))
               drop-shadow(0 0 90px rgba(170, 190, 150, 0.15))
               drop-shadow(0 0 130px rgba(160, 180, 140, 0.1)) !important;
           }
         }
 
         /* Safari-specific fixes for glow effect */
-        @media not all and (min-resolution:.001dpcm) { 
+        @media not all and (min-resolution: 0.001dpcm) {
           @media {
             .planet-glow-container {
               /* Safari-specific filter adjustments for better glow rendering */
-              -webkit-filter: 
-                drop-shadow(0 0 60px rgba(180, 200, 160, 0.25))
+              -webkit-filter: drop-shadow(0 0 60px rgba(180, 200, 160, 0.25))
                 drop-shadow(0 0 100px rgba(170, 190, 150, 0.18))
                 drop-shadow(0 0 140px rgba(160, 180, 140, 0.12))
                 drop-shadow(0 0 180px rgba(150, 170, 130, 0.08));
-              filter: 
-                drop-shadow(0 0 60px rgba(180, 200, 160, 0.25))
+              filter: drop-shadow(0 0 60px rgba(180, 200, 160, 0.25))
                 drop-shadow(0 0 100px rgba(170, 190, 150, 0.18))
                 drop-shadow(0 0 140px rgba(160, 180, 140, 0.12))
                 drop-shadow(0 0 180px rgba(150, 170, 130, 0.08));
@@ -216,15 +210,13 @@ export default function PlanetDivider() {
               backface-visibility: hidden;
               border-radius: 50%;
             }
-            
+
             @media screen and (max-width: 767px) {
               .planet-glow-container {
-                -webkit-filter:
-                  drop-shadow(0 0 50px rgba(180, 200, 160, 0.22))
+                -webkit-filter: drop-shadow(0 0 50px rgba(180, 200, 160, 0.22))
                   drop-shadow(0 0 90px rgba(170, 190, 150, 0.15))
                   drop-shadow(0 0 130px rgba(160, 180, 140, 0.1)) !important;
-                filter:
-                  drop-shadow(0 0 50px rgba(180, 200, 160, 0.22))
+                filter: drop-shadow(0 0 50px rgba(180, 200, 160, 0.22))
                   drop-shadow(0 0 90px rgba(170, 190, 150, 0.15))
                   drop-shadow(0 0 130px rgba(160, 180, 140, 0.1)) !important;
               }

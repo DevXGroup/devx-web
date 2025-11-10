@@ -1,7 +1,7 @@
-"use client"
+'use client'
 
-import { motion } from "framer-motion"
-import { useEffect, useState } from "react"
+import { motion } from 'framer-motion'
+import { useEffect, useState } from 'react'
 
 interface MetallicHelixAnimationProps {
   className?: string
@@ -9,13 +9,13 @@ interface MetallicHelixAnimationProps {
   height?: number
 }
 
-export default function MetallicHelixAnimation({ 
-  className = "", 
-  width = 1400, 
-  height = 800 
+export default function MetallicHelixAnimation({
+  className = '',
+  width = 1400,
+  height = 800,
 }: MetallicHelixAnimationProps) {
   const [mounted, setMounted] = useState(false)
-  
+
   useEffect(() => {
     setMounted(true)
   }, [])
@@ -34,23 +34,23 @@ export default function MetallicHelixAnimation({
     const segments = 80
     const frequency = 3.2 // More twists for dramatic effect
     const slantAngle = 15 // Degrees of slant
-    
+
     for (let i = 0; i <= segments; i++) {
       const t = i / segments
-      const angle = (t * frequency * Math.PI * 2) + offset
-      
+      const angle = t * frequency * Math.PI * 2 + offset
+
       // Create slanted helix with stronger metallic curves
       const baseX = width / 2 + Math.cos(angle) * amplitude * (1 - t * 0.2)
-      const slantOffset = (height - (height * t)) * Math.tan((slantAngle * Math.PI) / 180) * 0.3
+      const slantOffset = (height - height * t) * Math.tan((slantAngle * Math.PI) / 180) * 0.3
       const x = isFinite(baseX + slantOffset) ? baseX + slantOffset : width / 2
-      
+
       // Start from top of viewport and go down
       const y = isFinite(height * t) ? height * t : 0
       const z = isFinite(Math.sin(angle) * 60) ? Math.sin(angle) * 60 : 0 // Enhanced depth for metallic effect
-      
+
       // Opacity fading towards top
       const opacity = Math.max(0.1, t * 0.9 + 0.1)
-      
+
       points.push({ x, y, z, t, angle, opacity })
     }
     return points
@@ -61,18 +61,18 @@ export default function MetallicHelixAnimation({
 
   // Create smooth curve path with enhanced metallic effect
   const createSmoothPath = (points: any[]) => {
-    if (points.length < 2) return ""
-    
+    if (points.length < 2) return ''
+
     // Ensure first point is valid
     const firstX = isFinite(points[0].x) ? points[0].x : 0
     const firstY = isFinite(points[0].y) ? points[0].y : 0
     let path = `M ${firstX} ${firstY}`
-    
+
     for (let i = 1; i < points.length; i++) {
       const prev = points[i - 1]
       const curr = points[i]
       const next = points[i + 1] || curr
-      
+
       // Validate all coordinates to prevent NaN
       const validCurrX = isFinite(curr.x) ? curr.x : prev.x
       const validCurrY = isFinite(curr.y) ? curr.y : prev.y
@@ -80,22 +80,22 @@ export default function MetallicHelixAnimation({
       const validNextY = isFinite(next.y) ? next.y : curr.y
       const validPrevX = isFinite(prev.x) ? prev.x : 0
       const validPrevY = isFinite(prev.y) ? prev.y : 0
-      
+
       // Enhanced control points for more dramatic metallic curves
       const cp1x = validPrevX + (validCurrX - validPrevX) * 0.4
       const cp1y = validPrevY + (validCurrY - validPrevY) * 0.4
       const cp2x = validCurrX - (validNextX - validCurrX) * 0.4
       const cp2y = validCurrY - (validNextY - validCurrY) * 0.4
-      
+
       // Final validation before adding to path
       const finalCP1X = isFinite(cp1x) ? cp1x : validPrevX
       const finalCP1Y = isFinite(cp1y) ? cp1y : validPrevY
       const finalCP2X = isFinite(cp2x) ? cp2x : validCurrX
       const finalCP2Y = isFinite(cp2y) ? cp2y : validCurrY
-      
+
       path += ` C ${finalCP1X} ${finalCP1Y}, ${finalCP2X} ${finalCP2Y}, ${validCurrX} ${validCurrY}`
     }
-    
+
     return path
   }
 
@@ -107,17 +107,17 @@ export default function MetallicHelixAnimation({
       {/* Fade out gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80 z-20 pointer-events-none" />
       <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-black to-transparent z-20 pointer-events-none" />
-      
+
       <motion.div
         initial={{ opacity: 0, scale: 0.9, x: 50 }}
         animate={{ opacity: 1, scale: 1, x: 0 }}
-        transition={{ duration: 1.5, ease: "easeOut" }}
+        transition={{ duration: 1.5, ease: 'easeOut' }}
         style={{
-          WebkitTransform: "translateZ(0)",
-          transform: "translateZ(0)",
-          WebkitBackfaceVisibility: "hidden",
-          backfaceVisibility: "hidden",
-          willChange: "transform, opacity",
+          WebkitTransform: 'translateZ(0)',
+          transform: 'translateZ(0)',
+          WebkitBackfaceVisibility: 'hidden',
+          backfaceVisibility: 'hidden',
+          willChange: 'transform, opacity',
         }}
         className="relative w-full h-full flex justify-center items-start"
       >
@@ -129,13 +129,13 @@ export default function MetallicHelixAnimation({
           style={{
             width: `${width}px`,
             height: `${height}px`,
-            shapeRendering: "geometricPrecision",
-            textRendering: "geometricPrecision",
-            imageRendering: "auto" as const,
-            WebkitTransform: "translateZ(0)",
-            transform: "translateZ(0)",
-            WebkitBackfaceVisibility: "hidden",
-            backfaceVisibility: "hidden",
+            shapeRendering: 'geometricPrecision',
+            textRendering: 'geometricPrecision',
+            imageRendering: 'auto' as const,
+            WebkitTransform: 'translateZ(0)',
+            transform: 'translateZ(0)',
+            WebkitBackfaceVisibility: 'hidden',
+            backfaceVisibility: 'hidden',
           }}
         >
           <defs>
@@ -150,7 +150,7 @@ export default function MetallicHelixAnimation({
               <stop offset="85%" stopColor="#BEBEBE" />
               <stop offset="100%" stopColor="#FFFFFF" />
             </linearGradient>
-            
+
             <linearGradient id="metallicRope2" x1="100%" y1="0%" x2="0%" y2="100%">
               <stop offset="0%" stopColor="#FFFFFF" />
               <stop offset="15%" stopColor="#9d4edd" />
@@ -169,7 +169,7 @@ export default function MetallicHelixAnimation({
               <stop offset="70%" stopColor="#FFD700" stopOpacity="0.4" />
               <stop offset="100%" stopColor="#4834D4" stopOpacity="0.1" />
             </radialGradient>
-            
+
             <radialGradient id="ropeHighlight2" cx="75%" cy="25%" r="75%">
               <stop offset="0%" stopColor="#FFFFFF" stopOpacity="1" />
               <stop offset="30%" stopColor="#9d4edd" stopOpacity="0.8" />
@@ -195,19 +195,42 @@ export default function MetallicHelixAnimation({
             </filter>
 
             <filter id="metallicShadow" x="-50%" y="-50%" width="200%" height="200%">
-              <feDropShadow dx="2" dy="4" stdDeviation="4" floodColor="#000000" floodOpacity="0.3"/>
+              <feDropShadow
+                dx="2"
+                dy="4"
+                stdDeviation="4"
+                floodColor="#000000"
+                floodOpacity="0.3"
+              />
             </filter>
 
             {/* Animation gradients for flowing effect */}
             <linearGradient id="flowingGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="#4CD787" stopOpacity="0">
-                <animate attributeName="stop-opacity" values="0;1;0" dur="3s" repeatCount="indefinite" />
+                <animate
+                  attributeName="stop-opacity"
+                  values="0;1;0"
+                  dur="3s"
+                  repeatCount="indefinite"
+                />
               </stop>
               <stop offset="50%" stopColor="#FFD700" stopOpacity="0.8">
-                <animate attributeName="stop-opacity" values="0.3;1;0.3" dur="3s" repeatCount="indefinite" begin="0.5s" />
+                <animate
+                  attributeName="stop-opacity"
+                  values="0.3;1;0.3"
+                  dur="3s"
+                  repeatCount="indefinite"
+                  begin="0.5s"
+                />
               </stop>
               <stop offset="100%" stopColor="#4834D4" stopOpacity="0">
-                <animate attributeName="stop-opacity" values="0;1;0" dur="3s" repeatCount="indefinite" begin="1s" />
+                <animate
+                  attributeName="stop-opacity"
+                  values="0;1;0"
+                  dur="3s"
+                  repeatCount="indefinite"
+                  begin="1s"
+                />
               </stop>
             </linearGradient>
           </defs>
@@ -221,16 +244,16 @@ export default function MetallicHelixAnimation({
             strokeLinecap="round"
             strokeLinejoin="round"
             opacity={0.3}
-            style={{ 
-              transform: "translate(4px, 6px)",
-              vectorEffect: "non-scaling-stroke",
+            style={{
+              transform: 'translate(4px, 6px)',
+              vectorEffect: 'non-scaling-stroke',
             }}
             initial={{ pathLength: 0 }}
             animate={{ pathLength: 1 }}
             transition={{
               duration: 3,
-              ease: "easeInOut",
-              delay: 0.1
+              ease: 'easeInOut',
+              delay: 0.1,
             }}
           />
 
@@ -242,16 +265,16 @@ export default function MetallicHelixAnimation({
             strokeLinecap="round"
             strokeLinejoin="round"
             opacity={0.3}
-            style={{ 
-              transform: "translate(4px, 6px)",
-              vectorEffect: "non-scaling-stroke",
+            style={{
+              transform: 'translate(4px, 6px)',
+              vectorEffect: 'non-scaling-stroke',
             }}
             initial={{ pathLength: 0 }}
             animate={{ pathLength: 1 }}
             transition={{
               duration: 3,
-              ease: "easeInOut",
-              delay: 0.5
+              ease: 'easeInOut',
+              delay: 0.5,
             }}
           />
 
@@ -268,11 +291,11 @@ export default function MetallicHelixAnimation({
             animate={{ pathLength: 1, opacity: 1 }}
             transition={{
               duration: 3,
-              ease: "easeInOut",
-              delay: 0.2
+              ease: 'easeInOut',
+              delay: 0.2,
             }}
             style={{
-              vectorEffect: "non-scaling-stroke",
+              vectorEffect: 'non-scaling-stroke',
             }}
           />
 
@@ -288,11 +311,11 @@ export default function MetallicHelixAnimation({
             animate={{ pathLength: 1, opacity: 1 }}
             transition={{
               duration: 3,
-              ease: "easeInOut",
-              delay: 0.6
+              ease: 'easeInOut',
+              delay: 0.6,
             }}
             style={{
-              vectorEffect: "non-scaling-stroke",
+              vectorEffect: 'non-scaling-stroke',
             }}
           />
 
@@ -308,11 +331,11 @@ export default function MetallicHelixAnimation({
             animate={{ pathLength: 1, opacity: 1 }}
             transition={{
               duration: 3,
-              ease: "easeInOut",
-              delay: 0.8
+              ease: 'easeInOut',
+              delay: 0.8,
             }}
             style={{
-              vectorEffect: "non-scaling-stroke",
+              vectorEffect: 'non-scaling-stroke',
             }}
           />
 
@@ -327,11 +350,11 @@ export default function MetallicHelixAnimation({
             animate={{ pathLength: 1, opacity: 1 }}
             transition={{
               duration: 3,
-              ease: "easeInOut",
-              delay: 1
+              ease: 'easeInOut',
+              delay: 1,
             }}
             style={{
-              vectorEffect: "non-scaling-stroke",
+              vectorEffect: 'non-scaling-stroke',
             }}
           />
 
@@ -348,11 +371,11 @@ export default function MetallicHelixAnimation({
             animate={{ pathLength: 1, opacity: 0.8 }}
             transition={{
               duration: 3,
-              ease: "easeInOut",
-              delay: 1.2
+              ease: 'easeInOut',
+              delay: 1.2,
             }}
             style={{
-              vectorEffect: "non-scaling-stroke",
+              vectorEffect: 'non-scaling-stroke',
             }}
           />
 
@@ -368,97 +391,97 @@ export default function MetallicHelixAnimation({
             animate={{ pathLength: 1, opacity: 0.8 }}
             transition={{
               duration: 3,
-              ease: "easeInOut",
-              delay: 1.4
+              ease: 'easeInOut',
+              delay: 1.4,
             }}
             style={{
-              vectorEffect: "non-scaling-stroke",
+              vectorEffect: 'non-scaling-stroke',
             }}
           />
 
           {/* Enhanced continuous flowing animation */}
           <motion.g
-            animate={{ 
+            animate={{
               rotate: [0, 360],
             }}
             transition={{
               duration: 25,
               repeat: Number.POSITIVE_INFINITY,
-              ease: "linear"
+              ease: 'linear',
             }}
-            style={{ transformOrigin: `${width/2}px ${height/2}px` }}
+            style={{ transformOrigin: `${width / 2}px ${height / 2}px` }}
           >
             {/* Enhanced rotating metallic highlights */}
             <motion.circle
-              cx={width/2 - 120}
-              cy={height/4}
+              cx={width / 2 - 120}
+              cy={height / 4}
               r="8"
               fill="url(#ropeHighlight1)"
               opacity={0.8}
-              animate={{ 
+              animate={{
                 scale: [1, 2, 1],
-                opacity: [0.8, 1, 0.8]
+                opacity: [0.8, 1, 0.8],
               }}
               transition={{
                 duration: 4,
                 repeat: Number.POSITIVE_INFINITY,
-                ease: "easeInOut"
+                ease: 'easeInOut',
               }}
               filter="url(#metallicGlow)"
             />
             <motion.circle
-              cx={width/2 + 120}
-              cy={height*3/4}
+              cx={width / 2 + 120}
+              cy={(height * 3) / 4}
               r="8"
               fill="url(#ropeHighlight2)"
               opacity={0.8}
-              animate={{ 
+              animate={{
                 scale: [2, 1, 2],
-                opacity: [1, 0.8, 1]
+                opacity: [1, 0.8, 1],
               }}
               transition={{
                 duration: 4,
                 repeat: Number.POSITIVE_INFINITY,
-                ease: "easeInOut",
-                delay: 2
+                ease: 'easeInOut',
+                delay: 2,
               }}
               filter="url(#metallicGlow)"
             />
-            
+
             {/* Additional metallic sparkles */}
             <motion.circle
-              cx={width/2}
-              cy={height/6}
+              cx={width / 2}
+              cy={height / 6}
               r="6"
               fill="#FFFFFF"
               opacity={0.9}
-              animate={{ 
+              animate={{
                 scale: [0.5, 1.8, 0.5],
-                opacity: [0.9, 1, 0.9]
+                opacity: [0.9, 1, 0.9],
               }}
               transition={{
                 duration: 5,
                 repeat: Number.POSITIVE_INFINITY,
-                ease: "easeInOut",
-                delay: 1
+                ease: 'easeInOut',
+                delay: 1,
               }}
               filter="url(#metallicGlow)"
             />
             <motion.circle
-              cx={width/2 - 80}
-              cy={height/2}
+              cx={width / 2 - 80}
+              cy={height / 2}
               r="5"
               fill="#FFD700"
               opacity={0.7}
-              animate={{ 
+              animate={{
                 scale: [1, 1.5, 1],
-                opacity: [0.7, 1, 0.7]
+                opacity: [0.7, 1, 0.7],
               }}
               transition={{
                 duration: 3.5,
                 repeat: Number.POSITIVE_INFINITY,
-                ease: "easeInOut",
-                delay: 3
+                ease: 'easeInOut',
+                delay: 3,
               }}
               filter="url(#metallicGlow)"
             />

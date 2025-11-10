@@ -31,7 +31,10 @@ async function expectCanvasMatchesParentFromLocator(locator: Locator) {
 async function expectWebGLCanvasAnimatingFromLocator(locator: Locator, page: Page) {
   // Sample a few pixels over time using WebGL readPixels; expect at least one pixel to change
   const samples1 = await locator.evaluate((canvas: HTMLCanvasElement) => {
-    const gl = (canvas.getContext('webgl') || canvas.getContext('webgl2')) as WebGLRenderingContext | WebGL2RenderingContext | null
+    const gl = (canvas.getContext('webgl') || canvas.getContext('webgl2')) as
+      | WebGLRenderingContext
+      | WebGL2RenderingContext
+      | null
     if (!gl) return null
     const w = canvas.clientWidth
     const h = canvas.clientHeight
@@ -55,7 +58,10 @@ async function expectWebGLCanvasAnimatingFromLocator(locator: Locator, page: Pag
   await page.waitForTimeout(350)
 
   const samples2 = await locator.evaluate((canvas: HTMLCanvasElement) => {
-    const gl = (canvas.getContext('webgl') || canvas.getContext('webgl2')) as WebGLRenderingContext | WebGL2RenderingContext | null
+    const gl = (canvas.getContext('webgl') || canvas.getContext('webgl2')) as
+      | WebGLRenderingContext
+      | WebGL2RenderingContext
+      | null
     if (!gl) return null
     const w = canvas.clientWidth
     const h = canvas.clientHeight
@@ -75,7 +81,9 @@ async function expectWebGLCanvasAnimatingFromLocator(locator: Locator, page: Pag
 
   expect(samples2).not.toBeNull()
 
-  let changed = (samples1 as number[][]).some((px, i) => px.some((c, j) => c !== (samples2 as number[][])[i]?.[j]))
+  let changed = (samples1 as number[][]).some((px, i) =>
+    px.some((c, j) => c !== (samples2 as number[][])[i]?.[j])
+  )
 
   if (!changed) {
     // Try to stimulate mouse interaction and sample again
@@ -84,7 +92,10 @@ async function expectWebGLCanvasAnimatingFromLocator(locator: Locator, page: Pag
       await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2)
       await page.waitForTimeout(500)
       const samples3 = await locator.evaluate((canvas: HTMLCanvasElement) => {
-        const gl = (canvas.getContext('webgl') || canvas.getContext('webgl2')) as WebGLRenderingContext | WebGL2RenderingContext | null
+        const gl = (canvas.getContext('webgl') || canvas.getContext('webgl2')) as
+          | WebGLRenderingContext
+          | WebGL2RenderingContext
+          | null
         if (!gl) return null
         const w = canvas.clientWidth
         const h = canvas.clientHeight
@@ -102,7 +113,9 @@ async function expectWebGLCanvasAnimatingFromLocator(locator: Locator, page: Pag
         return out
       })
       if (samples3) {
-        changed = (samples1 as number[][]).some((px, i) => px.some((c, j) => c !== (samples3 as number[][])[i]?.[j]))
+        changed = (samples1 as number[][]).some((px, i) =>
+          px.some((c, j) => c !== (samples3 as number[][])[i]?.[j])
+        )
       }
     }
   }
@@ -119,7 +132,9 @@ const breakpoints: { width: number; height: number }[] = [
 ]
 
 test.describe('Cross-browser / breakpoint QA', () => {
-  test('DotGrid squares fill 100% at breakpoints without flashing (Portfolio)', async ({ page }) => {
+  test('DotGrid squares fill 100% at breakpoints without flashing (Portfolio)', async ({
+    page,
+  }) => {
     const errors = await waitForNoConsoleErrors(page)
 
     for (const vp of breakpoints) {
@@ -140,21 +155,26 @@ test.describe('Cross-browser / breakpoint QA', () => {
       // Ensure it never collapses to 0x0 during quick resizes (flash check)
       const sizeSeries: { w: number; h: number }[] = []
       for (let i = 0; i < 3; i++) {
-        const sz = await firstCanvas.evaluate((c: HTMLCanvasElement) => ({ w: c.clientWidth, h: c.clientHeight }))
+        const sz = await firstCanvas.evaluate((c: HTMLCanvasElement) => ({
+          w: c.clientWidth,
+          h: c.clientHeight,
+        }))
         sizeSeries.push(sz)
         await page.waitForTimeout(50)
       }
-      expect(sizeSeries.every(s => s.w > 0 && s.h > 0)).toBeTruthy()
+      expect(sizeSeries.every((s) => s.w > 0 && s.h > 0)).toBeTruthy()
     }
 
     // Assert no console errors/hydration warnings
     const errorText = errors.join('\n')
     expect(errorText).not.toMatch(/hydration/i)
-    const filtered = errors.filter(e => !/downloadable font|fonts\.googleapis|sanitizer/i.test(e))
+    const filtered = errors.filter((e) => !/downloadable font|fonts\.googleapis|sanitizer/i.test(e))
     expect(filtered, `Console errors found on /portfolio:\n${filtered.join('\n')}`).toHaveLength(0)
   })
 
-  test('RippleGrid animates in About hero and Team Structure, no console errors', async ({ page }) => {
+  test('RippleGrid animates in About hero and Team Structure, no console errors', async ({
+    page,
+  }) => {
     const errors = await waitForNoConsoleErrors(page)
 
     for (const vp of breakpoints) {
@@ -184,8 +204,7 @@ test.describe('Cross-browser / breakpoint QA', () => {
     // Assert no console errors/hydration warnings
     const errorText = errors.join('\n')
     expect(errorText).not.toMatch(/hydration/i)
-    const filtered = errors.filter(e => !/downloadable font|fonts\.googleapis|sanitizer/i.test(e))
+    const filtered = errors.filter((e) => !/downloadable font|fonts\.googleapis|sanitizer/i.test(e))
     expect(filtered, `Console errors found on /about:\n${filtered.join('\n')}`).toHaveLength(0)
   })
 })
-

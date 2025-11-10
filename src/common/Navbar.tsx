@@ -159,14 +159,15 @@ export default function Navbar() {
     backdropFilter: supportsBackdropFilter ? 'blur(12px)' : 'none',
     WebkitBackdropFilter: supportsBackdropFilter ? 'blur(12px)' : 'none',
     borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-    boxShadow: isScrolled
-      ? '0 18px 40px rgba(0,0,0,0.35)'
-      : '0 12px 28px rgba(0,0,0,0.2)',
+    boxShadow: isScrolled ? '0 18px 40px rgba(0,0,0,0.35)' : '0 12px 28px rgba(0,0,0,0.2)',
     transition: 'background-color 0.3s ease, box-shadow 0.3s ease',
   }
 
   return (
-    <nav className={`fixed w-full z-[9999] transition-all duration-300 mt-0 top-0`} style={navbarStyle}>
+    <nav
+      className={`fixed w-full z-[9999] transition-all duration-300 mt-0 top-0`}
+      style={navbarStyle}
+    >
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-[14px]">
           <Link href="/home" aria-label="DevX Group LLC" className="flex-shrink-0 cursor-pointer">
@@ -489,22 +490,55 @@ export default function Navbar() {
           className="lg:hidden fixed top-0 left-0 w-full h-screen z-[9998]"
           style={{
             visibility: isOpen ? 'visible' : 'hidden',
-            pointerEvents: isOpen ? 'auto' : 'none'
+            pointerEvents: isOpen ? 'auto' : 'none',
           }}
         >
           <StaggeredMenu
             position="right"
             colors={['#8b5cf6', '#6b7280', '#f3f4f6', '#9333ea']}
             items={[
-              { label: 'Home', ariaLabel: 'Navigate to home page', link: '/home', hoverColor: '#ccff00' },
-              { label: 'Services', ariaLabel: 'Navigate to services page', link: '/services', hoverColor: '#c084fc' },
-              { label: 'Portfolio', ariaLabel: 'Navigate to portfolio page', link: '/portfolio', hoverColor: '#60a5fa' },
-              { label: 'About', ariaLabel: 'Navigate to about page', link: '/about', hoverColor: '#4ade80' },
-              { label: 'Pricing', ariaLabel: 'Navigate to pricing page', link: '/pricing', hoverColor: '#fb923c' },
-              { label: 'Contact', ariaLabel: 'Navigate to contact page', link: '/contact', hoverColor: '#fb7185' },
+              {
+                label: 'Home',
+                ariaLabel: 'Navigate to home page',
+                link: '/home',
+                hoverColor: '#ccff00',
+              },
+              {
+                label: 'Services',
+                ariaLabel: 'Navigate to services page',
+                link: '/services',
+                hoverColor: '#c084fc',
+              },
+              {
+                label: 'Portfolio',
+                ariaLabel: 'Navigate to portfolio page',
+                link: '/portfolio',
+                hoverColor: '#60a5fa',
+              },
+              {
+                label: 'About',
+                ariaLabel: 'Navigate to about page',
+                link: '/about',
+                hoverColor: '#4ade80',
+              },
+              {
+                label: 'Pricing',
+                ariaLabel: 'Navigate to pricing page',
+                link: '/pricing',
+                hoverColor: '#fb923c',
+              },
+              {
+                label: 'Contact',
+                ariaLabel: 'Navigate to contact page',
+                link: '/contact',
+                hoverColor: '#fb7185',
+              },
             ]}
             socialItems={[
-              { label: '💬 Free Consultation', link: 'https://calendly.com/a-sheikhizadeh/devx-group-llc-representative' },
+              {
+                label: '💬 Free Consultation',
+                link: 'https://calendly.com/a-sheikhizadeh/devx-group-llc-representative',
+              },
             ]}
             displaySocials={true}
             displayItemNumbering={true}

@@ -23,7 +23,7 @@ function Cube3D({ x, y, size, delay }: { x: number; y: number; size: number; del
         transition={{
           duration: 4,
           repeat: Infinity,
-          repeatType: "reverse",
+          repeatType: 'reverse',
           delay: delay,
         }}
       />
@@ -42,7 +42,7 @@ function Cube3D({ x, y, size, delay }: { x: number; y: number; size: number; del
         transition={{
           duration: 4,
           repeat: Infinity,
-          repeatType: "reverse",
+          repeatType: 'reverse',
           delay: delay + 0.2,
         }}
       />
@@ -61,7 +61,7 @@ function Cube3D({ x, y, size, delay }: { x: number; y: number; size: number; del
         transition={{
           duration: 4,
           repeat: Infinity,
-          repeatType: "reverse",
+          repeatType: 'reverse',
           delay: delay + 0.1,
         }}
       />
@@ -78,7 +78,7 @@ function Cube3D({ x, y, size, delay }: { x: number; y: number; size: number; del
         transition={{
           duration: 4,
           repeat: Infinity,
-          repeatType: "reverse",
+          repeatType: 'reverse',
           delay: delay + 0.15,
         }}
       />
@@ -95,7 +95,7 @@ function Cube3D({ x, y, size, delay }: { x: number; y: number; size: number; del
         transition={{
           duration: 4,
           repeat: Infinity,
-          repeatType: "reverse",
+          repeatType: 'reverse',
           delay: delay + 0.2,
         }}
       />
@@ -112,7 +112,7 @@ function Cube3D({ x, y, size, delay }: { x: number; y: number; size: number; del
         transition={{
           duration: 4,
           repeat: Infinity,
-          repeatType: "reverse",
+          repeatType: 'reverse',
           delay: delay + 0.25,
         }}
       />
@@ -187,7 +187,7 @@ export default function GridBackground3D() {
         transition={{
           duration: 20,
           repeat: Infinity,
-          ease: "easeInOut",
+          ease: 'easeInOut',
         }}
       >
         <motion.div
@@ -208,13 +208,7 @@ export default function GridBackground3D() {
             style={{ transform: 'translateZ(0)' }}
           >
             {cubes.map((cube, index) => (
-              <Cube3D
-                key={index}
-                x={cube.x}
-                y={cube.y}
-                size={cubeSize}
-                delay={cube.delay}
-              />
+              <Cube3D key={index} x={cube.x} y={cube.y} size={cubeSize} delay={cube.delay} />
             ))}
           </svg>
 
@@ -222,7 +216,8 @@ export default function GridBackground3D() {
           <motion.div
             className="absolute inset-0 pointer-events-none"
             style={{
-              background: 'radial-gradient(ellipse at center, rgba(204, 255, 0, 0.03) 0%, transparent 60%)',
+              background:
+                'radial-gradient(ellipse at center, rgba(204, 255, 0, 0.03) 0%, transparent 60%)',
             }}
             animate={{
               opacity: [0.3, 0.5, 0.3],
@@ -230,7 +225,7 @@ export default function GridBackground3D() {
             transition={{
               duration: 4,
               repeat: Infinity,
-              repeatType: "reverse",
+              repeatType: 'reverse',
             }}
           />
         </motion.div>

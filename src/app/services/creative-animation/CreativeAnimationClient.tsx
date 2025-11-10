@@ -16,52 +16,54 @@ const CreativeAnimationHero = dynamic(() => import('./CreativeAnimationHero'), {
 // Dynamic imports for performance-heavy animation sections
 const MorphingTextSection = dynamic(() => import('./sections/MorphingTextSection'), {
   ssr: false,
-  loading: () => <div className="h-screen bg-black" />
+  loading: () => <div className="h-screen bg-black" />,
 })
 
 const Interactive3DShowcase = dynamic(() => import('./sections/Interactive3DShowcase'), {
   ssr: false,
-  loading: () => <div className="h-screen bg-black" />
+  loading: () => <div className="h-screen bg-black" />,
 })
 
 const LiquidMotionSection = dynamic(() => import('./sections/LiquidMotionSection'), {
   ssr: false,
-  loading: () => <div className="h-screen bg-black" />
+  loading: () => <div className="h-screen bg-black" />,
 })
 
 const ScrollTriggeredShowcase = dynamic(() => import('./sections/ScrollTriggeredShowcase'), {
   ssr: false,
-  loading: () => <div className="h-screen bg-black" />
+  loading: () => <div className="h-screen bg-black" />,
 })
 
 const FloatingElementsSection = dynamic(() => import('./sections/FloatingElementsSection'), {
   ssr: false,
-  loading: () => <div className="h-screen bg-black" />
+  loading: () => <div className="h-screen bg-black" />,
 })
 
 const CreativeGallerySection = dynamic(() => import('./sections/CreativeGallerySection'), {
   ssr: false,
-  loading: () => <div className="h-screen bg-black" />
+  loading: () => <div className="h-screen bg-black" />,
 })
 
 const ExplosiveCTASection = dynamic(() => import('./sections/ExplosiveCTASection'), {
   ssr: false,
-  loading: () => <div className="h-screen bg-black" />
+  loading: () => <div className="h-screen bg-black" />,
 })
 
 const FluidCursorSection = dynamic(() => import('./sections/FluidCursorSection'), {
   ssr: false,
-  loading: () => <div className="h-screen bg-black" />
+  loading: () => <div className="h-screen bg-black" />,
 })
 
 export default function CreativeAnimationClient() {
   return (
     <main className="bg-black min-h-screen">
-      <Suspense fallback={
-        <div className="min-h-screen bg-black flex items-center justify-center">
-          <div className="text-white text-xl font-mono">Initializing...</div>
-        </div>
-      }>
+      <Suspense
+        fallback={
+          <div className="min-h-screen bg-black flex items-center justify-center">
+            <div className="text-white text-xl font-mono">Initializing...</div>
+          </div>
+        }
+      >
         <CreativeAnimationHero />
       </Suspense>
 

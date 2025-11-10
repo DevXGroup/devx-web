@@ -340,8 +340,6 @@ function ServiceIcon({
   )
 }
 
-
-
 export default function PortfolioPage() {
   const shouldReduceMotion = useReducedMotion()
   const pathname = usePathname()

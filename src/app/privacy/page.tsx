@@ -1,14 +1,6 @@
 import type { ReactNode } from 'react'
 import { Metadata } from 'next'
-import {
-  ShieldCheck,
-  Network,
-  Sparkles,
-  UserCheck,
-  FileText,
-  Lock,
-  Globe,
-} from 'lucide-react'
+import { ShieldCheck, Network, Sparkles, UserCheck, FileText, Lock, Globe } from 'lucide-react'
 import { createOgImageUrl, createTwitterImageUrl, getSiteUrl } from '@/lib/og'
 
 const siteUrl = getSiteUrl()
@@ -118,16 +110,16 @@ const sections: Section[] = [
     title: 'Who We Are',
     paragraphs: [
       <>
-        DevX Group LLC (<strong>&quot;DevX Group&quot;</strong>, <strong>&quot;we&quot;</strong>,
-        or <strong>&quot;us&quot;</strong>) builds custom software, immersive experiences, AI-enabled
-        platforms, and connected hardware for clients across finance, health, media, and emerging tech.
-        This Privacy Policy explains how we safeguard personal data and product IP when you visit our
-        site, schedule time, or engage our team.
+        DevX Group LLC (<strong>&quot;DevX Group&quot;</strong>, <strong>&quot;we&quot;</strong>, or{' '}
+        <strong>&quot;us&quot;</strong>) builds custom software, immersive experiences, AI-enabled
+        platforms, and connected hardware for clients across finance, health, media, and emerging
+        tech. This Privacy Policy explains how we safeguard personal data and product IP when you
+        visit our site, schedule time, or engage our team.
       </>,
       <>
-        By accessing our website or services you acknowledge that you understand this policy. We deliver
-        projects from the United States with globally distributed talent and apply the same controls across
-        every region in which we operate.
+        By accessing our website or services you acknowledge that you understand this policy. We
+        deliver projects from the United States with globally distributed talent and apply the same
+        controls across every region in which we operate.
       </>,
     ],
   },
@@ -137,8 +129,8 @@ const sections: Section[] = [
     title: 'Information We Collect',
     paragraphs: [
       <>
-        We only collect the data needed to scope engagements, manage delivery, and support your team.
-        This information falls into the categories below.
+        We only collect the data needed to scope engagements, manage delivery, and support your
+        team. This information falls into the categories below.
       </>,
     ],
     columns: [
@@ -146,10 +138,12 @@ const sections: Section[] = [
         title: 'Business Contact Data',
         items: [
           <>
-            Identity details such as name, role, company, and preferred contact channels gathered via
-            our forms, Calendly scheduling, or live events.
+            Identity details such as name, role, company, and preferred contact channels gathered
+            via our forms, Calendly scheduling, or live events.
           </>,
-          <>Conversation history, project briefs, and feedback shared during discovery or delivery.</>,
+          <>
+            Conversation history, project briefs, and feedback shared during discovery or delivery.
+          </>,
         ],
       },
       {
@@ -173,8 +167,8 @@ const sections: Section[] = [
             captured with privacy-aware analytics (Google Analytics 4, Segment).
           </>,
           <>
-            Product performance metrics (e.g., Sentry, LogRocket) only when expressly authorized in a
-            project agreement.
+            Product performance metrics (e.g., Sentry, LogRocket) only when expressly authorized in
+            a project agreement.
           </>,
         ],
       },
@@ -186,8 +180,8 @@ const sections: Section[] = [
     title: 'How We Use Information',
     paragraphs: [
       <>
-        We process personal information to deliver world-class software while preserving the confidentiality
-        of sensitive business data.
+        We process personal information to deliver world-class software while preserving the
+        confidentiality of sensitive business data.
       </>,
     ],
     bullets: [
@@ -195,8 +189,8 @@ const sections: Section[] = [
         label: 'Collaboration & Delivery',
         body: (
           <>
-            Coordinate project teams, manage sprint rituals, share prototypes, and provide ongoing success
-            support.
+            Coordinate project teams, manage sprint rituals, share prototypes, and provide ongoing
+            success support.
           </>
         ),
       },
@@ -204,8 +198,8 @@ const sections: Section[] = [
         label: 'Product Research & Improvement',
         body: (
           <>
-            Analyze aggregated usage to improve our methodologies, design systems, and accelerators without
-            exposing individual client details.
+            Analyze aggregated usage to improve our methodologies, design systems, and accelerators
+            without exposing individual client details.
           </>
         ),
       },
@@ -213,21 +207,26 @@ const sections: Section[] = [
         label: 'Security Monitoring',
         body: (
           <>
-            Detect unauthorized access, enforce zero-trust policies, and maintain audit trails required by
-            enterprise procurement.
+            Detect unauthorized access, enforce zero-trust policies, and maintain audit trails
+            required by enterprise procurement.
           </>
         ),
       },
       {
         label: 'Legal & Compliance',
-        body: <>Meet regulatory obligations, respond to lawful requests, and maintain accurate tax records.</>,
+        body: (
+          <>
+            Meet regulatory obligations, respond to lawful requests, and maintain accurate tax
+            records.
+          </>
+        ),
       },
       {
         label: 'Consent-Based Marketing',
         body: (
           <>
-            Send thought leadership or event updates only when you opt in. You can unsubscribe from any
-            non-essential communication at any time.
+            Send thought leadership or event updates only when you opt in. You can unsubscribe from
+            any non-essential communication at any time.
           </>
         ),
       },
@@ -239,14 +238,23 @@ const sections: Section[] = [
     title: 'Legal Basis for Processing',
     paragraphs: [
       <>
-        When required by applicable law (including GDPR), we rely on the following legal bases to process
-        personal data:
+        When required by applicable law (including GDPR), we rely on the following legal bases to
+        process personal data:
       </>,
     ],
     bullets: [
-      { label: 'Contractual necessity', body: <>To deliver services defined in mutual agreements.</> },
-      { label: 'Legitimate interests', body: <>To secure our systems, improve the platform, and grow our practice.</> },
-      { label: 'Consent', body: <>For optional uses like marketing communications or user research recordings.</> },
+      {
+        label: 'Contractual necessity',
+        body: <>To deliver services defined in mutual agreements.</>,
+      },
+      {
+        label: 'Legitimate interests',
+        body: <>To secure our systems, improve the platform, and grow our practice.</>,
+      },
+      {
+        label: 'Consent',
+        body: <>For optional uses like marketing communications or user research recordings.</>,
+      },
       {
         label: 'Legal obligation',
         body: <>To comply with tax, accounting, export control, and other legal requirements.</>,
@@ -259,19 +267,24 @@ const sections: Section[] = [
     title: 'Data Security & Retention',
     paragraphs: [
       <>
-        Security is built into every DevX Group engagement. We maintain layered safeguards and audit trails
-        appropriate for large enterprise programs.
+        Security is built into every DevX Group engagement. We maintain layered safeguards and audit
+        trails appropriate for large enterprise programs.
       </>,
     ],
     columns: [
       {
         title: 'Controls We Maintain',
         items: [
-          <>Encrypted storage, MFA, and role-based access for all collaboration tools and infrastructure.</>,
-          <>Code and design repositories isolated per client with continuous vulnerability scanning.</>,
           <>
-            Background-checked talent, confidentiality agreements, and secure device management for every
-            contributor.
+            Encrypted storage, MFA, and role-based access for all collaboration tools and
+            infrastructure.
+          </>,
+          <>
+            Code and design repositories isolated per client with continuous vulnerability scanning.
+          </>,
+          <>
+            Background-checked talent, confidentiality agreements, and secure device management for
+            every contributor.
           </>,
         ],
       },
@@ -279,12 +292,12 @@ const sections: Section[] = [
         title: 'Retention Approach',
         items: [
           <>
-            Project data retained for the term of our engagement plus the period required to meet legal,
-            accounting, or audit obligations.
+            Project data retained for the term of our engagement plus the period required to meet
+            legal, accounting, or audit obligations.
           </>,
           <>
-            Marketing contact data retained until you unsubscribe or request deletion. Logs and telemetry are
-            minimized and rotated.
+            Marketing contact data retained until you unsubscribe or request deletion. Logs and
+            telemetry are minimized and rotated.
           </>,
         ],
       },
@@ -296,8 +309,8 @@ const sections: Section[] = [
     title: 'How We Work with Third Parties',
     paragraphs: [
       <>
-        We partner with specialized platforms to streamline delivery. Each vendor is vetted for security and
-        contractual compliance, and only the minimum required data is shared.
+        We partner with specialized platforms to streamline delivery. Each vendor is vetted for
+        security and contractual compliance, and only the minimum required data is shared.
       </>,
     ],
     bullets: [
@@ -305,8 +318,8 @@ const sections: Section[] = [
         label: 'Scheduling & Communication',
         body: (
           <>
-            Calendly, Google Workspace, Slack, Zoom — used for meetings, notifications, and collaboration with
-            your consent.
+            Calendly, Google Workspace, Slack, Zoom — used for meetings, notifications, and
+            collaboration with your consent.
           </>
         ),
       },
@@ -314,8 +327,8 @@ const sections: Section[] = [
         label: 'Product Development Tools',
         body: (
           <>
-            Linear, Notion, Jira, GitHub, Figma, Webflow, and similar systems that support agile delivery and
-            design reviews.
+            Linear, Notion, Jira, GitHub, Figma, Webflow, and similar systems that support agile
+            delivery and design reviews.
           </>
         ),
       },
@@ -323,8 +336,8 @@ const sections: Section[] = [
         label: 'Operations & Finance',
         body: (
           <>
-            Stripe, QuickBooks, Gusto, and other processors that enable invoicing, payments, and compliance
-            reporting.
+            Stripe, QuickBooks, Gusto, and other processors that enable invoicing, payments, and
+            compliance reporting.
           </>
         ),
       },
@@ -332,8 +345,8 @@ const sections: Section[] = [
         label: 'Analytics & Quality',
         body: (
           <>
-            Google Analytics 4, Segment, Sentry, LogRocket, and Playwright audit tooling — configured with IP
-            anonymization and data minimization wherever available.
+            Google Analytics 4, Segment, Sentry, LogRocket, and Playwright audit tooling —
+            configured with IP anonymization and data minimization wherever available.
           </>
         ),
       },
@@ -345,8 +358,8 @@ const sections: Section[] = [
     title: 'Responsible AI & Model Usage',
     paragraphs: [
       <>
-        Many engagements include AI co-pilots, generative models, or predictive analytics. We apply a strict
-        governance framework to keep your proprietary data secure.
+        Many engagements include AI co-pilots, generative models, or predictive analytics. We apply
+        a strict governance framework to keep your proprietary data secure.
       </>,
     ],
     bullets: [
@@ -354,8 +367,8 @@ const sections: Section[] = [
         label: 'Client Control',
         body: (
           <>
-            AI-assisted features are configured in private tenants or self-hosted environments. Training on
-            your datasets happens only with explicit approval.
+            AI-assisted features are configured in private tenants or self-hosted environments.
+            Training on your datasets happens only with explicit approval.
           </>
         ),
       },
@@ -363,8 +376,9 @@ const sections: Section[] = [
         label: 'Model Providers',
         body: (
           <>
-            When we leverage third-party models (OpenAI, Anthropic, Google Vertex, AWS Bedrock, etc.) we ensure
-            the provider contractually prohibits data retention for model improvement.
+            When we leverage third-party models (OpenAI, Anthropic, Google Vertex, AWS Bedrock,
+            etc.) we ensure the provider contractually prohibits data retention for model
+            improvement.
           </>
         ),
       },
@@ -372,8 +386,8 @@ const sections: Section[] = [
         label: 'Explainability & Audit',
         body: (
           <>
-            We document prompts, model versions, and evaluation metrics inside project workspaces so your legal,
-            compliance, and product teams maintain oversight.
+            We document prompts, model versions, and evaluation metrics inside project workspaces so
+            your legal, compliance, and product teams maintain oversight.
           </>
         ),
       },
@@ -385,21 +399,30 @@ const sections: Section[] = [
     title: 'Your Rights & Choices',
     paragraphs: [
       <>
-        Depending on where you reside, you may have rights to access, correct, export, or delete your personal
-        information. DevX Group responds to requests within the timelines defined by law.
+        Depending on where you reside, you may have rights to access, correct, export, or delete
+        your personal information. DevX Group responds to requests within the timelines defined by
+        law.
       </>,
     ],
     bullets: [
-      { label: 'Access & Portability', body: <>Request a copy of the information we hold about you.</> },
+      {
+        label: 'Access & Portability',
+        body: <>Request a copy of the information we hold about you.</>,
+      },
       { label: 'Rectification', body: <>Correct or update inaccurate or incomplete details.</> },
-      { label: 'Deletion', body: <>Ask us to delete personal data when it is no longer required.</> },
+      {
+        label: 'Deletion',
+        body: <>Ask us to delete personal data when it is no longer required.</>,
+      },
       {
         label: 'Restriction & Objection',
         body: <>Limit how we process data or object to processing based on legitimate interests.</>,
       },
       {
         label: 'Marketing Preferences',
-        body: <>Opt out of promotional messages directly from any email footer or by contacting us.</>,
+        body: (
+          <>Opt out of promotional messages directly from any email footer or by contacting us.</>
+        ),
       },
     ],
   },
@@ -409,13 +432,15 @@ const sections: Section[] = [
     title: 'Regional Disclosures',
     paragraphs: [
       <>
-        <strong>California (CCPA/CPRA):</strong> California residents can request disclosure of data categories we
-        collect, request deletion, and opt out of data sharing. We do not sell personal data.
+        <strong>California (CCPA/CPRA):</strong> California residents can request disclosure of data
+        categories we collect, request deletion, and opt out of data sharing. We do not sell
+        personal data.
       </>,
       <>
-        <strong>European Union & United Kingdom (GDPR/UK GDPR):</strong> DevX Group acts as a data controller for
-        marketing operations and as a data processor when delivering software on behalf of clients. You may file a
-        complaint with your local supervisory authority if you believe we have improperly handled your data.
+        <strong>European Union & United Kingdom (GDPR/UK GDPR):</strong> DevX Group acts as a data
+        controller for marketing operations and as a data processor when delivering software on
+        behalf of clients. You may file a complaint with your local supervisory authority if you
+        believe we have improperly handled your data.
       </>,
     ],
   },
@@ -425,11 +450,14 @@ const sections: Section[] = [
     title: 'Cookies & Similar Technologies',
     paragraphs: [
       <>
-        We use essential cookies to keep the website secure and remember form progress. Optional analytics cookies
-        help us understand the types of services visitors explore most — such as AI automation, immersive 3D
-        experiences, or platform modernization.
+        We use essential cookies to keep the website secure and remember form progress. Optional
+        analytics cookies help us understand the types of services visitors explore most — such as
+        AI automation, immersive 3D experiences, or platform modernization.
       </>,
-      <>You can adjust cookie preferences in your browser. Rejecting optional cookies will not block access to our site.</>,
+      <>
+        You can adjust cookie preferences in your browser. Rejecting optional cookies will not block
+        access to our site.
+      </>,
     ],
   },
   {
@@ -438,8 +466,9 @@ const sections: Section[] = [
     title: 'Policy Updates',
     paragraphs: [
       <>
-        We update this policy when we add new offerings, integrate critical tools, or respond to regulatory changes.
-        We will post the revised policy with a new effective date and, when material, notify subscribed clients.
+        We update this policy when we add new offerings, integrate critical tools, or respond to
+        regulatory changes. We will post the revised policy with a new effective date and, when
+        material, notify subscribed clients.
       </>,
     ],
   },
@@ -491,12 +520,24 @@ const sections: Section[] = [
     title: 'Talk to Our Privacy Team',
     paragraphs: [
       <>
-        We are happy to discuss security reviews, vendor questionnaires, or custom data processing agreements. Reach
-        us through any of the channels below:
+        We are happy to discuss security reviews, vendor questionnaires, or custom data processing
+        agreements. Reach us through any of the channels below:
       </>,
     ],
     bullets: [
-      { body: <>Email: <a className="text-emerald-300 hover:text-emerald-200" href="mailto:support@devxgroup.io">support@devxgroup.io</a></> },
+      {
+        body: (
+          <>
+            Email:{' '}
+            <a
+              className="text-emerald-300 hover:text-emerald-200"
+              href="mailto:support@devxgroup.io"
+            >
+              support@devxgroup.io
+            </a>
+          </>
+        ),
+      },
       { body: <>Phone: +1 (442) 544-0591</> },
       { body: <>Mailing Address: DevX Group LLC, San Diego, California, USA</> },
     ],
@@ -518,8 +559,8 @@ export default function PrivacyPage() {
             We protect your product IP with the same rigor we build it.
           </h1>
           <p className="mt-6 text-lg text-slate-300 sm:text-xl">
-            From AI copilots to immersive experiences, DevX Group keeps sensitive data, research, and customer
-            insights private at every step of delivery.
+            From AI copilots to immersive experiences, DevX Group keeps sensitive data, research,
+            and customer insights private at every step of delivery.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-4 text-sm text-slate-400">
