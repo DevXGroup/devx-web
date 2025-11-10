@@ -458,8 +458,46 @@ const sections: Section[] = [
     ],
   },
   {
-    id: 'contact',
+    id: 'acronyms',
     number: '14',
+    title: 'Acronym Reference',
+    paragraphs: [
+      <>
+        For your convenience, here are definitions of technical and business acronyms used throughout these terms:
+      </>,
+    ],
+    columns: [
+      {
+        title: 'Technical Terms',
+        items: [
+          <><strong>AI</strong> — Artificial Intelligence</>,
+          <><strong>API</strong> — Application Programming Interface</>,
+          <><strong>AWS</strong> — Amazon Web Services</>,
+          <><strong>DevOps</strong> — Development and Operations</>,
+          <><strong>IoT</strong> — Internet of Things</>,
+          <><strong>IP</strong> — Intellectual Property</>,
+          <><strong>ML</strong> — Machine Learning</>,
+          <><strong>QA</strong> — Quality Assurance</>,
+          <><strong>3D</strong> — Three-Dimensional</>,
+        ],
+      },
+      {
+        title: 'Business & Legal',
+        items: [
+          <><strong>ACH</strong> — Automated Clearing House</>,
+          <><strong>ISO 27001</strong> — International Organization for Standardization 27001</>,
+          <><strong>KPI</strong> — Key Performance Indicator</>,
+          <><strong>LLC</strong> — Limited Liability Company</>,
+          <><strong>SaaS</strong> — Software as a Service</>,
+          <><strong>SOC 2</strong> — Service Organization Control 2</>,
+          <><strong>SOW</strong> — Statement of Work</>,
+        ],
+      },
+    ],
+  },
+  {
+    id: 'contact',
+    number: '15',
     title: 'Contact & Notices',
     paragraphs: [
       <>
