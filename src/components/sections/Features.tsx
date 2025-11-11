@@ -253,10 +253,11 @@ export default function Features() {
         <GridAnimation
           direction="diagonal"
           speed={0.3}
-          borderColor="rgba(204, 255, 0, 1)"
           squareSize={36}
           hoverFillColor="rgba(157, 78, 221, 0.45)"
-          randomFlicker={false}
+          borderColor="rgba(204, 255, 0, 1)"
+          flickerColor='rgba(204, 255, 0, 0.4)'
+          randomFlicker={true}
         />
       </div>
 
