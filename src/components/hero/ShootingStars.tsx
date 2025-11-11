@@ -1,58 +1,12 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useCanvas } from '@/hooks/use-canvas'
+import { useEffect, useMemo, useRef } from 'react'
 
-export default function ShootingStars() {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-
-    const ctx = canvas.getContext('2d', {
-      alpha: true,
-      desynchronized: true, // Hint for better performance
-    })
-    if (!ctx) return
-
-    // Track if page is visible to pause animation when hidden
-    let isPageVisible = !document.hidden
-    let width = 0
-    let height = 0
-    let dpr = 1
-
-    // Set canvas dimensions to match window with proper DPR
-    const resizeCanvas = () => {
-      const rect = canvas.getBoundingClientRect()
-      dpr = Math.min(window.devicePixelRatio || 1, 2) // Cap at 2x for performance
-      width = rect.width
-      height = rect.height
-
-      canvas.width = rect.width * dpr
-      canvas.height = rect.height * dpr
-      canvas.style.width = `${rect.width}px`
-      canvas.style.height = `${rect.height}px`
-      ctx.scale(dpr, dpr)
-    }
-
-    // Throttled resize handler to prevent resize loops
-    let resizeTimeout: NodeJS.Timeout
-    const throttledResize = () => {
-      clearTimeout(resizeTimeout)
-      resizeTimeout = setTimeout(resizeCanvas, 150)
-    }
-
-    resizeCanvas()
-    window.addEventListener('resize', throttledResize)
-
-    // Visibility change handler to pause when tab is hidden
-    const handleVisibilityChange = () => {
-      isPageVisible = !document.hidden
-    }
-    document.addEventListener('visibilitychange', handleVisibilityChange)
-
-    // Star properties - REDUCED from 15 to 8
-    const stars: {
+export default function ShootingStars({ count = 4 }: { count?: number }) {
+  // Didn't used useMemo, because we update/randomize the stars when they go out of the screen (during frame render)
+  const starsRef = useRef<
+    {
       x: number
       y: number
       length: number
@@ -65,10 +19,37 @@ export default function ShootingStars() {
       cosAngle: number
       sinAngle: number
       opacity: number
-    }[] = []
+    }[]
+  >([])
 
-    // Pre-create a reusable gradient canvas for better performance
-    const createGradientPattern = () => {
+  useEffect(() => {
+    starsRef.current = []
+    for (let i = 0; i < count; i++) {
+      // Randomize direction by setting different speedX and speedY values
+      const angle = Math.random() * Math.PI * 2 // Random angle in radians
+      const speed = Math.random() * 3 + 2 // Slower base speed (1-3 instead of 2-6)
+      const cosAngle = Math.cos(angle)
+      const sinAngle = Math.sin(angle)
+
+      starsRef.current.push({
+        x: Math.random(),
+        y: Math.random() / 2, // Only in top half of screen
+        length: Math.random() * 80 + 40,
+        speedX: cosAngle * speed, // X component of velocity
+        speedY: sinAngle * speed, // Y component of velocity
+        size: Math.random() * 1.5 + 0.5,
+        active: false,
+        delay: i === 0 ? 0 : Math.random() * 6000 + 2000, // Random delay 2-8 seconds
+        angle,
+        cosAngle,
+        sinAngle,
+        opacity: 0,
+      })
+    }
+  }, [count])
+
+  const gradientPattern = useMemo(() => {
+    {
       const gradCanvas = document.createElement('canvas')
       gradCanvas.width = 200
       gradCanvas.height = 2
@@ -84,77 +65,44 @@ export default function ShootingStars() {
       gradCtx.fillRect(0, 0, 200, 2)
       return gradCanvas
     }
-    const gradientPattern = createGradientPattern()
+  }, [])
 
-    // Create stars with randomized directions - reduced to 4 total
-    for (let i = 0; i < 4; i++) {
-      // Randomize direction by setting different speedX and speedY values
-      const angle = Math.random() * Math.PI * 2 // Random angle in radians
-      const speed = Math.random() * 2 + 1 // Slower base speed (1-3 instead of 2-6)
-      const cosAngle = Math.cos(angle)
-      const sinAngle = Math.sin(angle)
-
-      stars.push({
-        x: Math.random() * width,
-        y: (Math.random() * height) / 2, // Only in top half of screen
-        length: Math.random() * 80 + 40,
-        speedX: cosAngle * speed, // X component of velocity
-        speedY: sinAngle * speed, // Y component of velocity
-        size: Math.random() * 1.5 + 0.5,
-        active: false,
-        delay: Math.random() * 6000 + 2000, // Random delay 2-8 seconds
-        angle,
-        cosAngle,
-        sinAngle,
-        opacity: 0,
-      })
-    }
-
-    let lastTime = 0
-    const animate = (time: number) => {
-      // Skip animation if page is not visible
-      if (!isPageVisible) {
-        lastTime = time
-        requestAnimationFrame(animate)
-        return
-      }
-
-      const deltaTime = time - lastTime
-      lastTime = time
-
-      // Clear canvas with faster method
+  const { canvasRef } = useCanvas({
+    preload: false,
+    renderFrame: ({ ctx, width, height, time }) => {
+      const stars = starsRef.current
       ctx.clearRect(0, 0, width, height)
 
-      // Count active stars
-      let activeStarCount = stars.filter((star) => star.active).length
+      if (!stars.length) return
 
       // Update and draw stars
       stars.forEach((star) => {
-        // Check if star should activate (limit to 2 active at a time)
         if (!star.active) {
-          star.delay -= deltaTime
-          if (star.delay <= 0 && activeStarCount < 2) {
+          star.delay -= time
+          if (star.delay <= 0) {
             star.active = true
-            activeStarCount++
             // Reset position when activating
-            star.x = Math.random() * width
-            star.y = (Math.random() * height) / 3
+            star.x = Math.random()
+            star.y = Math.random() / 2
             star.opacity = 0
           }
+
           return
         }
 
-        star.opacity += deltaTime * 0.001
+        star.opacity += time * 0.001
         const opacity = star.opacity * 0.8
 
         // Move star with separate X and Y speeds
-        star.x += star.speedX
-        star.y += star.speedY
+        star.x += star.speedX / width
+        star.y += star.speedY / height
+        const starX = star.x * width
+        const starY = star.y * height
 
         // Use optimized gradient drawing if available
         if (gradientPattern) {
           ctx.save()
-          ctx.translate(star.x, star.y)
+          ctx.translate(starX, starY)
           ctx.rotate(star.angle)
           ctx.globalAlpha = opacity
           // Draw backward (negative offset) so trail is behind the star
@@ -163,12 +111,12 @@ export default function ShootingStars() {
         } else {
           // Fallback to gradient creation (same as before)
 
-          const trailEndX = star.x - star.cosAngle * star.length
-          const trailEndY = star.y - star.sinAngle * star.length
+          const trailEndX = starX - star.cosAngle * star.length
+          const trailEndY = starY - star.sinAngle * star.length
 
           ctx.beginPath()
-          ctx.moveTo(star.x, star.y)
-          const gradient = ctx.createLinearGradient(star.x, star.y, trailEndX, trailEndY)
+          ctx.moveTo(starX, starY)
+          const gradient = ctx.createLinearGradient(starX, starY, trailEndX, trailEndY)
           gradient.addColorStop(0, `rgba(255, 255, 255, ${opacity})`)
           gradient.addColorStop(1, 'rgba(255, 255, 255, 0)')
           ctx.lineTo(trailEndX, trailEndY)
@@ -180,10 +128,10 @@ export default function ShootingStars() {
         // Reset star if it goes off screen
         const OFFSCREEN_MARGIN = star.length
         if (
-          star.x < -OFFSCREEN_MARGIN ||
-          star.x > width + OFFSCREEN_MARGIN ||
-          star.y < -OFFSCREEN_MARGIN ||
-          star.y > height + OFFSCREEN_MARGIN
+          starX < -OFFSCREEN_MARGIN ||
+          starX > width + OFFSCREEN_MARGIN ||
+          starY < -OFFSCREEN_MARGIN ||
+          starY > height + OFFSCREEN_MARGIN
         ) {
           star.active = false
           star.delay = Math.random() * 4000 + 3000 // Random delay 3-7 seconds before reappearing
@@ -198,19 +146,65 @@ export default function ShootingStars() {
           star.speedY = star.sinAngle * newSpeed
         }
       })
+    },
+  })
 
-      requestAnimationFrame(animate)
-    }
+  // useEffect(() => {
+  //   const canvas = canvasRef.current
+  //   if (!canvas) return
 
-    const animationId = requestAnimationFrame(animate)
+  //   // const ctx = canvas.getContext('2d', {
+  //   //   alpha: true,
+  //   //   desynchronized: true, // Hint for better performance
+  //   // })
+  //   // if (!ctx) return
 
-    return () => {
-      window.removeEventListener('resize', throttledResize)
-      document.removeEventListener('visibilitychange', handleVisibilityChange)
-      clearTimeout(resizeTimeout)
-      cancelAnimationFrame(animationId)
-    }
-  }, [])
+  //   // Track if page is visible to pause animation when hidden
+  //   // let isPageVisible = !document.hidden
+  //   // let width = 0
+  //   // let height = 0
+  //   // let dpr = 1
+
+  //   // // Set canvas dimensions to match window with proper DPR
+  //   // const resizeCanvas = () => {
+  //   //   const rect = canvas.getBoundingClientRect()
+  //   //   dpr = Math.min(window.devicePixelRatio || 1, 2) // Cap at 2x for performance
+  //   //   width = rect.width
+  //   //   height = rect.height
+
+  //   //   canvas.width = rect.width * dpr
+  //   //   canvas.height = rect.height * dpr
+  //   //   canvas.style.width = `${rect.width}px`
+  //   //   canvas.style.height = `${rect.height}px`
+  //   //   ctx.scale(dpr, dpr)
+  //   // }
+
+  //   let lastTime = 0
+  //   const animate = (time: number) => {
+  //     // Skip animation if page is not visible
+  //     if (!isPageVisible) {
+  //       lastTime = time
+  //       requestAnimationFrame(animate)
+  //       return
+  //     }
+
+  //     const deltaTime = time - lastTime
+  //     lastTime = time
+
+  //     // Clear canvas with faster method
+
+  //     requestAnimationFrame(animate)
+  //   }
+
+  //   const animationId = requestAnimationFrame(animate)
+
+  //   return () => {
+  //     window.removeEventListener('resize', throttledResize)
+  //     document.removeEventListener('visibilitychange', handleVisibilityChange)
+  //     clearTimeout(resizeTimeout)
+  //     cancelAnimationFrame(animationId)
+  //   }
+  // }, [])
 
   return (
     <canvas
