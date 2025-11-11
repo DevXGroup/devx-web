@@ -39,7 +39,7 @@ export default function ShootingStars({ count = 4 }: { count?: number }) {
         speedY: sinAngle * speed, // Y component of velocity
         size: Math.random() * 1.5 + 0.5,
         active: false,
-        delay: i === 0 ? 0 : Math.random() * 6000 + 2000, // Random delay 2-8 seconds
+        delay: i === 0 ? 0 : Math.random() * 3 + 1, // Random delay 1-4 seconds
         angle,
         cosAngle,
         sinAngle,
@@ -70,17 +70,17 @@ export default function ShootingStars({ count = 4 }: { count?: number }) {
   const { canvasRef } = useCanvas({
     preload: false,
     renderCondition: () => {
-      if (!starsRef.current.length) return false;
-      return true;
+      if (!starsRef.current.length) return false
+      return true
     },
-    renderFrame: ({ ctx, width, height, time }) => {
+    renderFrame: ({ ctx, width, height, time, delta }) => {
       const stars = starsRef.current
       ctx.clearRect(0, 0, width, height)
 
       // Update and draw stars
       stars.forEach((star) => {
         if (!star.active) {
-          star.delay -= time
+          star.delay -= delta
           if (star.delay <= 0) {
             star.active = true
             // Reset position when activating
@@ -92,7 +92,7 @@ export default function ShootingStars({ count = 4 }: { count?: number }) {
           return
         }
 
-        star.opacity += time * 0.001
+        star.opacity += delta * 0.5
         const opacity = star.opacity * 0.8
 
         // Move star with separate X and Y speeds
@@ -136,7 +136,7 @@ export default function ShootingStars({ count = 4 }: { count?: number }) {
           starY > height + OFFSCREEN_MARGIN
         ) {
           star.active = false
-          star.delay = Math.random() * 4000 + 3000 // Random delay 3-7 seconds before reappearing
+          star.delay = Math.random() * 3 + 1
 
           // Randomize direction again when resetting
           const newAngle = Math.random() * Math.PI * 2
