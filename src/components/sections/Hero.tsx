@@ -18,6 +18,13 @@ const DynamicCosmicStars = dynamic(() => import('../hero/CosmicStars'), {
   ),
 })
 
+const DynamicStarTwinklingField = dynamic(() => import('../animations/StarTwinklingField').then(v => v.StarTwinklingField), {
+  ssr: false,
+  loading: () => (
+    <div className="absolute inset-0 bg-black" style={{ minHeight: '100vh', width: '100%' }} />
+  ),
+})
+
 const DynamicHeroBackground = dynamic(() => import('../hero/HeroBackground'), {
   ssr: false,
   loading: () => (
@@ -143,6 +150,7 @@ export default function Hero() {
         )}*/}
         {enableCosmicStars && (
           <div className="absolute inset-0 w-full h-full z-[1]">
+            <DynamicStarTwinklingField className='z-1' count={50} />
             <DynamicHeroBackground />
           </div>
         )}

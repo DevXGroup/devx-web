@@ -85,7 +85,7 @@ const GridAnimation = ({
       if (!numSquaresX.current || !numSquaresY.current) return false
       return true
     },
-    renderFrame: ({ ctx, width, height, time, dpr }) => {
+    renderFrame: ({ ctx, width, height, time, delta, dpr }) => {
       ctx.clearRect(0, 0, width, height)
 
       const effectiveSpeed = Math.max(speed, 0.1) * dpr
@@ -115,8 +115,8 @@ const GridAnimation = ({
       // Flicker timer and calculation
 
       if (randomFlicker) {
-        timeSinceLastFlickerRef.current += time
-        if (timeSinceLastFlickerRef.current >= flickerInterval) {
+        timeSinceLastFlickerRef.current += delta
+        if (timeSinceLastFlickerRef.current >= (flickerInterval/1000)) {
           flickerSquaresRef.current.clear()
           const numToFlicker = Math.floor(Math.random() * maxFlickerSquares) + 1
           for (let i = 0; i < numToFlicker; i++) {
