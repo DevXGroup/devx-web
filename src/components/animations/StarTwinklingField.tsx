@@ -5,10 +5,12 @@ export function StarTwinklingField({
   minSize = 0.3,
   maxSize = 1.2,
   count = 240,
+  className
 }: {
   minSize?: number
   maxSize?: number
   count?: number
+  className?: string
 }) {
   const stars = useMemo(() => {
     const stars: {
@@ -69,7 +71,7 @@ export function StarTwinklingField({
   })
 
   return (
-    <div className="absolute inset-0 pointer-events-none -z-1">
+    <div className={`absolute inset-0 pointer-events-none ${className}`}>
       <canvas ref={canvasRef} className="w-full h-full" />
     </div>
   )

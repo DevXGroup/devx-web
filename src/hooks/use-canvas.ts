@@ -4,6 +4,7 @@ import { usePerformanceOptimizedAnimation } from './use-performance-optimized-an
 
 export interface UseCanvasRenderArgs {
   time: number
+  delta: number
   width: number
   height: number
   ctx: CanvasRenderingContext2D
@@ -57,11 +58,16 @@ export function useCanvas({
   const { isMobile } = usePerformanceOptimizedAnimation()
   const animationStateRef = useRef({
     time: 0,
+    delta: 0,
     lastRenderTimestamp: 0,
     frameId: 0,
     isAlive: false,
     isPaused: false,
     isPreloaded: false,
+  })
+  const mouseStateRef = useRef({
+    lastMouseEvent: null as MouseEvent | null,
+    wasMouseOverCanvas: false,
   })
   const dpr = useMemo(() => {
     if (typeof window === 'undefined') return 1
@@ -116,13 +122,43 @@ export function useCanvas({
 
     // Mouse Move Logic
 
+    const isMouseInsideRect = (event: MouseEvent, rect: DOMRect) => {
+      return (
+        event.clientX >= rect.left &&
+        event.clientX <= rect.right &&
+        event.clientY >= rect.top &&
+        event.clientY <= rect.bottom
+      )
+    }
+
     let lastMoveTime = 0
-    let lastMouseEvent: MouseEvent | null = null
-    let isMouseOverCanvas = false
-    const handleMouseEvent = (event: MouseEvent, type: MouseEventType) => {
+    let { wasMouseOverCanvas, lastMouseEvent } = mouseStateRef.current
+    const handleMouseEvent = (event: MouseEvent) => {
       if (!onMouse) return
 
       lastMouseEvent = event
+
+      if (animationStateRef.current.isPaused || !animationStateRef.current.isAlive) return
+
+      const rect = canvas.getBoundingClientRect()
+
+      const isNowOverCanvas = isMouseInsideRect(lastMouseEvent, rect)
+
+      let type: MouseEventType | null = null
+      if (!isNowOverCanvas && wasMouseOverCanvas) {
+        type = 'leave'
+      } else if (isNowOverCanvas && !wasMouseOverCanvas) {
+        type = 'enter'
+      } else if (isNowOverCanvas && wasMouseOverCanvas) {
+        type = 'move'
+      }
+
+      wasMouseOverCanvas = isNowOverCanvas
+
+      if (!type) {
+        // is not over the canvas, and it wasn't before; so ignore this event!
+        return
+      }
 
       // enter and leave should be called immediately; except move
       if (type === 'move') {
@@ -133,10 +169,6 @@ export function useCanvas({
         lastMoveTime = now
       }
 
-      if (type === 'enter') isMouseOverCanvas = true
-      if (type === 'leave') isMouseOverCanvas = false
-
-      const rect = canvas.getBoundingClientRect()
       const x = (event.clientX - rect.left) * (useDPR ? dpr : 1)
       const y = (event.clientY - rect.top) * (useDPR ? dpr : 1)
 
@@ -148,21 +180,10 @@ export function useCanvas({
         onMouse({ x, y, mouseEvent: event, type, dpr })
       }
     }
-    const handleMouseEnter = (e: MouseEvent) => {
-      handleMouseEvent(e, 'enter')
-    }
-    const handleMouseLeave = (e: MouseEvent) => {
-      handleMouseEvent(e, 'leave')
-    }
-    const handleMouseMove = (e: MouseEvent) => {
-      handleMouseEvent(e, 'move')
-    }
 
     // Only handle mouse if we have a mouse listener prop
     if (onMouse) {
-      canvas.addEventListener('mousemove', handleMouseMove)
-      canvas.addEventListener('mouseenter', handleMouseEnter)
-      canvas.addEventListener('mouseleave', handleMouseLeave)
+      window.addEventListener('mousemove', handleMouseEvent)
     }
 
     // Scroll Logic
@@ -171,41 +192,20 @@ export function useCanvas({
       if (!lastMouseEvent) return
       if (!onMouse) return
 
-      const rect = canvas.getBoundingClientRect()
-
-      // Check if the last known mouse position is within the canvas's NEW bounds
-      const isNowOver =
-        lastMouseEvent.clientX >= rect.left &&
-        lastMouseEvent.clientX <= rect.right &&
-        lastMouseEvent.clientY >= rect.top &&
-        lastMouseEvent.clientY <= rect.bottom
-
-      // Last status of the mouse position in relation to the canvas
-      const wasOver = isMouseOverCanvas
-
-      if (isNowOver && wasOver) {
-        // Was inside, still inside -> Fire a 'move' to update position
-        handleMouseEvent(lastMouseEvent, 'move')
-      } else if (!isNowOver && wasOver) {
-        // Was inside, now outside -> Fire a 'leave'
-        handleMouseEvent(lastMouseEvent, 'leave')
-      } else if (isNowOver && !wasOver) {
-        // Was outside, now inside -> Fire an 'enter'
-        handleMouseEvent(lastMouseEvent, 'enter')
-      }
+      handleMouseEvent(lastMouseEvent)
     }
 
-    let scrollTimer: any = null;
+    let scrollTimer: any = null
     let throttleScroll = false
     const handleScroll = () => {
-      if (throttleScroll) return;
+      if (throttleScroll) return
 
-      throttleScroll = true;
+      throttleScroll = true
 
       updateMousePositionOnScroll()
 
       scrollTimer = setTimeout(() => {
-        throttleScroll = false;
+        throttleScroll = false
       }, scrollThrottleTime)
     }
 
@@ -217,9 +217,7 @@ export function useCanvas({
     return () => {
       window.removeEventListener('resize', handleResize)
       if (onMouse) {
-        canvas.removeEventListener('mousemove', handleMouseMove)
-        canvas.removeEventListener('mouseenter', handleMouseEnter)
-        canvas.removeEventListener('mouseleave', handleMouseLeave)
+        window.removeEventListener('mousemove', handleMouseEvent)
         window.removeEventListener('scroll', handleScroll)
       }
 
@@ -238,6 +236,7 @@ export function useCanvas({
     const createStateEventArgs = () =>
       ({
         time: state.time,
+        delta: state.delta,
         width: canvas.width,
         height: canvas.height,
         canvas,
@@ -257,11 +256,12 @@ export function useCanvas({
       }
 
       const deltaTime = timestamp - state.lastRenderTimestamp
+      state.delta = deltaTime / 1000 // to seconds
       state.lastRenderTimestamp = timestamp
 
       if (isInView) {
         // time updates only when the canvas is in view
-        state.time += deltaTime / 1000 // to seconds
+        state.time += state.delta
         triggerRender()
       } else if (preload && !state.isPreloaded) {
         // Preload it!
