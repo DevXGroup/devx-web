@@ -69,11 +69,13 @@ export default function ShootingStars({ count = 4 }: { count?: number }) {
 
   const { canvasRef } = useCanvas({
     preload: false,
+    renderCondition: () => {
+      if (!starsRef.current.length) return false;
+      return true;
+    },
     renderFrame: ({ ctx, width, height, time }) => {
       const stars = starsRef.current
       ctx.clearRect(0, 0, width, height)
-
-      if (!stars.length) return
 
       // Update and draw stars
       stars.forEach((star) => {
