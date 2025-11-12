@@ -54,11 +54,12 @@ docs/
 
 Learn how to contribute code to the project:
 
-| Document | Description | Audience |
-|----------|-------------|----------|
+| Document                                                       | Description                                                  | Audience         |
+| -------------------------------------------------------------- | ------------------------------------------------------------ | ---------------- |
 | [Code Submission Workflow](guides/code-submission-workflow.md) | Complete guide for creating PRs with proper semantic commits | All contributors |
 
 **Key Topics:**
+
 - Creating feature branches
 - Writing conventional commits (`feat:`, `fix:`, etc.)
 - Pull request process
@@ -71,13 +72,14 @@ Learn how to contribute code to the project:
 
 Understand the automated deployment pipeline:
 
-| Document | Description | Audience |
-|----------|-------------|----------|
-| [CI/CD Setup](operations/ci-cd-setup.md) | GitHub Actions pipeline configuration | DevOps, maintainers |
-| [Deployment Commands](operations/deployment-commands.md) | How to skip CI/Vercel with commit tags | All contributors |
+| Document                                                     | Description                            | Audience            |
+| ------------------------------------------------------------ | -------------------------------------- | ------------------- |
+| [CI/CD Setup](operations/ci-cd-setup.md)                     | GitHub Actions pipeline configuration  | DevOps, maintainers |
+| [Deployment Commands](operations/deployment-commands.md)     | How to skip CI/Vercel with commit tags | All contributors    |
 | [Deployment Guardrails](operations/deployment-guardrails.md) | Production deployment protection rules | DevOps, maintainers |
 
 **Key Topics:**
+
 - Quality gate jobs (lint, test, build)
 - Semantic-release automation
 - Vercel integration
@@ -90,11 +92,12 @@ Understand the automated deployment pipeline:
 
 Ensure the site meets accessibility standards:
 
-| Document | Description | Audience |
-|----------|-------------|----------|
+| Document                                                 | Description                     | Audience              |
+| -------------------------------------------------------- | ------------------------------- | --------------------- |
 | [Accessibility Testing](guides/accessibility-testing.md) | WCAG compliance testing results | Developers, designers |
 
 **Key Topics:**
+
 - Contrast ratio testing
 - WCAG AA/AAA compliance
 - Before/after comparison
@@ -105,8 +108,8 @@ Ensure the site meets accessibility standards:
 
 Technical specifications and architecture:
 
-| Document | Description | Audience |
-|----------|-------------|----------|
+| Document                                                                         | Description                   | Audience            |
+| -------------------------------------------------------------------------------- | ----------------------------- | ------------------- |
 | [Next.js Supabase Boilerplate PRD](reference/nextjs-supabase-boilerplate-prd.md) | Product requirements document | Product, developers |
 
 ---
@@ -116,26 +119,33 @@ Technical specifications and architecture:
 ### I want to...
 
 #### Submit a new feature
+
 → Read [Code Submission Workflow](guides/code-submission-workflow.md)
 
 #### Fix a bug
+
 → Read [Code Submission Workflow](guides/code-submission-workflow.md) (same process)
 
 #### Update documentation without triggering deployments
+
 → Read [Deployment Commands](operations/deployment-commands.md)
 → Use: `git commit -m "docs: update README [skip ci][skip vercel]"`
 
 #### Add tests without deploying
+
 → Read [Deployment Commands](operations/deployment-commands.md)
 → Use: `git commit -m "test: add unit tests [skip vercel]"`
 
 #### Understand the CI/CD pipeline
+
 → Read [CI/CD Setup](operations/ci-cd-setup.md)
 
 #### Set up deployment checks in Vercel
+
 → Read [CI/CD Setup](operations/ci-cd-setup.md#vercel-configuration)
 
 #### Check accessibility compliance
+
 → Read [Accessibility Testing](guides/accessibility-testing.md)
 
 ---
