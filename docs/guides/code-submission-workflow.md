@@ -249,12 +249,22 @@ Result:
 
 ### I want to skip CI for a commit
 
-Use `[skip ci]` in commit message (only for metadata-only changes):
+Use `[skip ci]` in commit message (only for documentation-only changes):
 ```bash
-git commit -m "chore: update README [skip ci]"
+git commit -m "docs: update README [skip ci]"
 ```
 
-This is automatically done by semantic-release, don't do it manually.
+You can also skip Vercel deployments:
+```bash
+git commit -m "test: add unit tests [skip vercel]"
+```
+
+Or skip both:
+```bash
+git commit -m "docs: update guide [skip ci][skip vercel]"
+```
+
+**See [Deployment Commands](../operations/deployment-commands.md) for complete guide on when and how to use skip tags.**
 
 ### Version wasn't bumped as expected
 
