@@ -149,8 +149,6 @@ Comprehensive project documentation is available in the [docs/](docs/) directory
 - **[Deployment Commands](docs/operations/deployment-commands.md)** - Skip CI/Vercel deployment tags (`[skip ci]`, `[skip vercel]`)
 - **[Accessibility Testing](docs/guides/accessibility-testing.md)** - WCAG compliance testing
 
-For AI assistance with this codebase, see [CLAUDE.md](CLAUDE.md).
-
 See [docs/README.md](docs/README.md) for complete documentation index.
 
 ## Deployment
