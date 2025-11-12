@@ -245,8 +245,8 @@ const Threads: React.FC<ThreadsProps> = ({
 
     function resize() {
       let { clientWidth, clientHeight } = container
-      clientWidth*=dpr
-      clientHeight*=dpr
+      clientWidth *= dpr
+      clientHeight *= dpr
       renderer.setSize(clientWidth, clientHeight)
       program.uniforms.iResolution.value.r = clientWidth
       program.uniforms.iResolution.value.g = clientHeight
@@ -275,7 +275,7 @@ const Threads: React.FC<ThreadsProps> = ({
     function update(t: number) {
       if (isPaused.current) {
         animationFrameId.current = requestAnimationFrame(update)
-        return;
+        return
       }
 
       if (enableMouseInteraction) {

@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState, useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { PerspectiveCamera, MeshTransmissionMaterial } from '@react-three/drei'
 import { Vector3, Curve, TubeGeometry, type Mesh, SphereGeometry } from 'three'
@@ -82,6 +82,25 @@ export default function InfinityLogo() {
   )
 }
 
+class InfinityCurve extends Curve<Vector3> {
+  constructor(
+    public width = 3.5,
+    public height = 3.5,
+    public zOffset = 0.2
+  ) {
+    super()
+  }
+
+  getPoint(t: number, optionalTarget = new Vector3()) {
+    const angle = 2 * Math.PI * t
+    const x = (Math.sin(angle) * this.width) / (1 + Math.cos(angle) * Math.cos(angle))
+    const y =
+      (Math.cos(angle) * Math.sin(angle) * this.height) / (1 + Math.cos(angle) * Math.cos(angle))
+    const z = Math.sin(2 * angle) * this.zOffset
+    return optionalTarget.set(x, y, z)
+  }
+}
+
 function InfinityMesh({ setIsInteracting }: { setIsInteracting: (value: boolean) => void }) {
   const meshRef = useRef<Mesh>(null!)
   const hitAreaRef = useRef<Mesh>(null!)
@@ -92,34 +111,24 @@ function InfinityMesh({ setIsInteracting }: { setIsInteracting: (value: boolean)
   const autoRotateSpeed = useRef({ x: 0, y: 0.02 })
   const momentumActive = useRef(false)
 
-  class InfinityCurve extends Curve<Vector3> {
-    constructor(
-      public width = 3.5,
-      public height = 3.5,
-      public zOffset = 0.2
-    ) {
-      super()
-    }
+  const tubeGeometry = useMemo(() => {
+    const tubeCurve = new InfinityCurve(3.5, 3.5, 0.2)
+    const tubeTubeRadius = 0.4
+    const tubeRadialSegments = 64
+    const tubeTubularSegments = 256
 
-    getPoint(t: number, optionalTarget = new Vector3()) {
-      const angle = 2 * Math.PI * t
-      const x = (Math.sin(angle) * this.width) / (1 + Math.cos(angle) * Math.cos(angle))
-      const y =
-        (Math.cos(angle) * Math.sin(angle) * this.height) / (1 + Math.cos(angle) * Math.cos(angle))
-      const z = Math.sin(2 * angle) * this.zOffset
-      return optionalTarget.set(x, y, z)
-    }
-  }
+    return new TubeGeometry(
+      tubeCurve,
+      tubeTubularSegments,
+      tubeTubeRadius,
+      tubeRadialSegments,
+      false
+    )
+  }, [])
 
-  const curve = new InfinityCurve(3.5, 3.5, 0.2)
-  const tubeRadius = 0.4
-  const radialSegments = 64
-  const tubularSegments = 256
-
-  const tubeGeometry = new TubeGeometry(curve, tubularSegments, tubeRadius, radialSegments, false)
-
-  // Create a larger invisible sphere for hit detection
-  const hitAreaGeometry = new SphereGeometry(5, 16, 16)
+  const hitAreaGeometry = useMemo(() => {
+    return new SphereGeometry(5, 16, 16)
+  }, [])
 
   const onPointerDown = (e: any) => {
     e.stopPropagation()
