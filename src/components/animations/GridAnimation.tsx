@@ -116,7 +116,7 @@ const GridAnimation = ({
 
       if (randomFlicker) {
         timeSinceLastFlickerRef.current += delta
-        if (timeSinceLastFlickerRef.current >= (flickerInterval/1000)) {
+        if (timeSinceLastFlickerRef.current >= flickerInterval / 1000) {
           flickerSquaresRef.current.clear()
           const numToFlicker = Math.floor(Math.random() * maxFlickerSquares) + 1
           for (let i = 0; i < numToFlicker; i++) {
