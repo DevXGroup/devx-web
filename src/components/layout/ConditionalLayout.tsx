@@ -9,8 +9,17 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
   const pathname = usePathname()
   const isEntryPage = pathname === '/'
   const [showNavbar, setShowNavbar] = useState(true)
+  const [mounted, setMounted] = useState(false)
+
+  // Set mounted to true after hydration
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
+    // Only run after component is mounted (hydration complete)
+    if (!mounted) return undefined
+
     // Only manage navbar visibility on /home page
     if (pathname !== '/home') {
       setShowNavbar(true)
@@ -35,7 +44,7 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
     // Not from entry, show navbar immediately
     setShowNavbar(true)
     return undefined
-  }, [pathname])
+  }, [pathname, mounted])
 
   if (isEntryPage) {
     return <>{children}</>

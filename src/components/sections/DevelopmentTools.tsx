@@ -210,7 +210,10 @@ export default function DevelopmentTools() {
     // Detect mobile devices for performance optimization
     setIsMobile(
       typeof window !== 'undefined' &&
-      (window.innerWidth < 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
+        (window.innerWidth < 768 ||
+          /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+            navigator.userAgent
+          ))
     )
   }, [])
 
@@ -221,7 +224,7 @@ export default function DevelopmentTools() {
       setViewportWidth(window.innerWidth)
       setIsMobile(
         window.innerWidth < 768 ||
-        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+          /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
       )
     }
     handleResize()
@@ -233,18 +236,18 @@ export default function DevelopmentTools() {
   const stars = useMemo(() => {
     const rng = seedrandom('devx-stars') // seed to ensure deterministic output
     // Adjust star count based on device performance - fewer on mobile for better performance
-    const starCount = isMobile ? 40 : (viewportWidth < 768 ? 60 : 90) // Reduced from 60/80/120 for better performance
+    const starCount = isMobile ? 40 : viewportWidth < 768 ? 60 : 90 // Reduced from 60/80/120 for better performance
     return Array.from({ length: starCount }).map((_, i) => ({
       id: i,
-      width: isMobile ? (rng() * 1.5 + 0.3) : (rng() * 2.5 + 0.5),
-      height: isMobile ? (rng() * 1.5 + 0.3) : (rng() * 2.5 + 0.5),
+      width: isMobile ? rng() * 1.5 + 0.3 : rng() * 2.5 + 0.5,
+      height: isMobile ? rng() * 1.5 + 0.3 : rng() * 2.5 + 0.5,
       left: rng() * 100,
       top: rng() * 100,
-      boxShadow: `0 0 ${isMobile ? (rng() * 2 + 0.8) : (rng() * 4 + 1.5)}px rgba(255, 255, 255, ${rng() * 0.2 + 0.15})`,
-      duration: isMobile ? (1.5 + rng() * 3) : (2 + rng() * 5),
+      boxShadow: `0 0 ${isMobile ? rng() * 2 + 0.8 : rng() * 4 + 1.5}px rgba(255, 255, 255, ${rng() * 0.2 + 0.15})`,
+      duration: isMobile ? 1.5 + rng() * 3 : 2 + rng() * 5,
       delay: rng() * 2,
       twinkleIntensity: rng() * 0.5 + 0.2, // Less variation on mobile
-      isBrightStar: isMobile ? (rng() < 0.05) : (rng() < 0.1), // Fewer bright stars on mobile
+      isBrightStar: isMobile ? rng() < 0.05 : rng() < 0.1, // Fewer bright stars on mobile
     }))
   }, [viewportWidth, isMobile])
 
@@ -311,22 +314,29 @@ export default function DevelopmentTools() {
       setTransitioning(true)
 
       // After transition, update active index
-      setTimeout(() => {
-        setActiveIndex(nextIndex)
-        setTransitioning(false)
-        setTransitionData(null)
+      setTimeout(
+        () => {
+          setActiveIndex(nextIndex)
+          setTransitioning(false)
+          setTransitionData(null)
 
-        // Schedule next cycle only if still in auto mode
-        if (!isManual && isVisible) {
-          // Longer interval on mobile to reduce CPU usage
-          const cycleDelay = isMobile ? DISPLAY_DURATION * 1.5 : DISPLAY_DURATION
-          cycleRef.current = setTimeout(runCycle, cycleDelay)
-        }
-      }, isMobile ? 1600 : 1300)
+          // Schedule next cycle only if still in auto mode
+          if (!isManual && isVisible) {
+            // Longer interval on mobile to reduce CPU usage
+            const cycleDelay = isMobile ? DISPLAY_DURATION * 1.5 : DISPLAY_DURATION
+            cycleRef.current = setTimeout(runCycle, cycleDelay)
+          }
+        },
+        isMobile ? 1600 : 1300
+      )
     }
 
     // Start the cycle - check if we should resume immediately or wait
-    const initialDelay = resumeImmediately ? 0 : (isMobile ? DISPLAY_DURATION * 1.5 : DISPLAY_DURATION)
+    const initialDelay = resumeImmediately
+      ? 0
+      : isMobile
+        ? DISPLAY_DURATION * 1.5
+        : DISPLAY_DURATION
 
     // Clear any existing timer before setting new one
     if (cycleRef.current) {
@@ -394,19 +404,22 @@ export default function DevelopmentTools() {
       setTransitioning(true)
 
       // After transition completes, update active index and start display timer
-      setTimeout(() => {
-        setActiveIndex(index)
-        setTransitioning(false)
-        setTransitionData(null)
+      setTimeout(
+        () => {
+          setActiveIndex(index)
+          setTransitioning(false)
+          setTransitionData(null)
 
-        // Start the 4-second display timer AFTER transition completes
-        // Longer display time on mobile
-        const displayDuration = isMobile ? DISPLAY_DURATION * 1.2 : DISPLAY_DURATION
-        timerRef.current = setTimeout(() => {
-          setIsManual(false) // Exit manual mode to resume auto-rotation
-          setResumeImmediately(true) // Signal to start auto-rotation immediately
-        }, displayDuration)
-      }, isMobile ? 1600 : 1300)
+          // Start the 4-second display timer AFTER transition completes
+          // Longer display time on mobile
+          const displayDuration = isMobile ? DISPLAY_DURATION * 1.2 : DISPLAY_DURATION
+          timerRef.current = setTimeout(() => {
+            setIsManual(false) // Exit manual mode to resume auto-rotation
+            setResumeImmediately(true) // Signal to start auto-rotation immediately
+          }, displayDuration)
+        },
+        isMobile ? 1600 : 1300
+      )
     },
     [activeIndex, transitioning, innerMetrics, isMobile]
   )
@@ -447,7 +460,7 @@ export default function DevelopmentTools() {
       opacity: [0, 1, 1, 0],
       rotate: [0, 360, 720, 1080],
       transition: {
-        duration: isMobile ? (2 + i * 0.3) : (4 + i * 0.5),
+        duration: isMobile ? 2 + i * 0.3 : 4 + i * 0.5,
         ease: 'easeInOut',
         repeat: Number.POSITIVE_INFINITY,
         delay: i * 0.2,
