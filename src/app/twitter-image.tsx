@@ -10,6 +10,8 @@ interface OgSearchParams {
 }
 
 export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+export const revalidate = false
 export const alt = 'DevX Group - Elite Software Development Team'
 export const size = {
   width: 1200,
