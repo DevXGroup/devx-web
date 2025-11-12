@@ -478,38 +478,69 @@ const sections: Section[] = [
     title: 'Acronym Reference',
     paragraphs: [
       <>
-        For your convenience, here are definitions of technical and legal acronyms used throughout this policy:
+        For your convenience, here are definitions of technical and legal acronyms used throughout
+        this policy:
       </>,
     ],
     columns: [
       {
         title: 'Technical Terms',
         items: [
-          <><strong>AI</strong> — Artificial Intelligence</>,
-          <><strong>API</strong> — Application Programming Interface</>,
-          <><strong>AWS</strong> — Amazon Web Services</>,
-          <><strong>IoT</strong> — Internet of Things</>,
-          <><strong>IP</strong> — Internet Protocol or Intellectual Property (context dependent)</>,
-          <><strong>MFA</strong> — Multi-Factor Authentication</>,
-          <><strong>ML</strong> — Machine Learning</>,
-          <><strong>QA</strong> — Quality Assurance</>,
+          <>
+            <strong>AI</strong> — Artificial Intelligence
+          </>,
+          <>
+            <strong>API</strong> — Application Programming Interface
+          </>,
+          <>
+            <strong>AWS</strong> — Amazon Web Services
+          </>,
+          <>
+            <strong>IoT</strong> — Internet of Things
+          </>,
+          <>
+            <strong>IP</strong> — Internet Protocol or Intellectual Property (context dependent)
+          </>,
+          <>
+            <strong>MFA</strong> — Multi-Factor Authentication
+          </>,
+          <>
+            <strong>ML</strong> — Machine Learning
+          </>,
+          <>
+            <strong>QA</strong> — Quality Assurance
+          </>,
         ],
       },
       {
         title: 'Legal & Compliance',
         items: [
-          <><strong>CCPA</strong> — California Consumer Privacy Act</>,
-          <><strong>CPRA</strong> — California Privacy Rights Act</>,
-          <><strong>GDPR</strong> — General Data Protection Regulation</>,
-          <><strong>SOC 2</strong> — Service Organization Control 2</>,
-          <><strong>UK GDPR</strong> — United Kingdom General Data Protection Regulation</>,
+          <>
+            <strong>CCPA</strong> — California Consumer Privacy Act
+          </>,
+          <>
+            <strong>CPRA</strong> — California Privacy Rights Act
+          </>,
+          <>
+            <strong>GDPR</strong> — General Data Protection Regulation
+          </>,
+          <>
+            <strong>SOC 2</strong> — Service Organization Control 2
+          </>,
+          <>
+            <strong>UK GDPR</strong> — United Kingdom General Data Protection Regulation
+          </>,
         ],
       },
       {
         title: 'Business Terms',
         items: [
-          <><strong>LLC</strong> — Limited Liability Company</>,
-          <><strong>SaaS</strong> — Software as a Service</>,
+          <>
+            <strong>LLC</strong> — Limited Liability Company
+          </>,
+          <>
+            <strong>SaaS</strong> — Software as a Service
+          </>,
         ],
       },
     ],
