@@ -14,7 +14,7 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
     // Only manage navbar visibility on /home page
     if (pathname !== '/home') {
       setShowNavbar(true)
-      return
+      return undefined
     }
 
     // Check if we came from entry page - only check once on mount
@@ -34,6 +34,7 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
 
     // Not from entry, show navbar immediately
     setShowNavbar(true)
+    return undefined
   }, [pathname])
 
   if (isEntryPage) {
