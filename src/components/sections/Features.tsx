@@ -258,7 +258,7 @@ export default function Features() {
           squareSize={36}
           hoverFillColor="rgba(157, 78, 221, 0.45)"
           borderColor="rgba(204, 255, 0, 1)"
-          flickerColor='rgba(204, 255, 0, 0.4)'
+          flickerColor="rgba(204, 255, 0, 0.4)"
           randomFlicker={true}
         />
       </div>
