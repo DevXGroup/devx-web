@@ -4,119 +4,125 @@ import { AdditiveBlending } from 'three'
 import * as THREE from 'three'
 import { useScroll } from '@/hooks/use-scroll'
 
-const NoiseParticleSphere = memo(({
-  position,
-  scrollY,
-  index,
-  size,
-  speedFactor,
-  amplitudeFactor,
-  rotationFactor,
-  phaseOffset,
-  circleSpeed,
-  circleCenter,
-  circleRadius
-}: any) => {
-  const groupRef = useRef<THREE.Group>(null)
-  const particlesRef = useRef<THREE.Points>(null)
+const NoiseParticleSphere = memo(
+  ({
+    position,
+    scrollY,
+    index,
+    size,
+    speedFactor,
+    amplitudeFactor,
+    rotationFactor,
+    phaseOffset,
+    circleSpeed,
+    circleCenter,
+    circleRadius,
+  }: any) => {
+    const groupRef = useRef<THREE.Group>(null)
+    const particlesRef = useRef<THREE.Points>(null)
+    const localTime = useRef(0)
 
-  const particleCount = 60
+    const particleCount = 60
 
-  const { positions, opacities, sizes } = useMemo(() => {
-    const positions = new Float32Array(particleCount * 3)
-    const opacities = new Float32Array(particleCount)
-    const sizes = new Float32Array(particleCount)
+    const { positions, opacities, sizes } = useMemo(() => {
+      const positions = new Float32Array(particleCount * 3)
+      const opacities = new Float32Array(particleCount)
+      const sizes = new Float32Array(particleCount)
 
-    for (let i = 0; i < particleCount; i++) {
-      // Distribute particles within sphere using spherical coordinates
-      const theta = Math.random() * Math.PI * 2
-      const phi = Math.acos(Math.random() * 2 - 1)
-      const r = Math.cbrt(Math.random()) // Cube root for uniform distribution
+      for (let i = 0; i < particleCount; i++) {
+        // Distribute particles within sphere using spherical coordinates
+        const theta = Math.random() * Math.PI * 2
+        const phi = Math.acos(Math.random() * 2 - 1)
+        const r = Math.cbrt(Math.random()) // Cube root for uniform distribution
 
-      positions[i * 3] = r * Math.sin(phi) * Math.cos(theta)
-      positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta)
-      positions[i * 3 + 2] = r * Math.cos(phi)
+        positions[i * 3] = r * Math.sin(phi) * Math.cos(theta)
+        positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta)
+        positions[i * 3 + 2] = r * Math.cos(phi)
 
-      // High contrast noise - most particles very dim, some very bright
-      const noise = Math.random()
-      opacities[i] = (noise > 0.7 ? Math.pow(noise, 4) : noise * 0.1) * 0.14
+        // High contrast noise - most particles very dim, some very bright
+        const noise = Math.random()
+        opacities[i] = (noise > 0.7 ? Math.pow(noise, 4) : noise * 0.1) * 0.14
 
-      sizes[i] = 1 + Math.random() * 2
-    }
+        sizes[i] = 1 + Math.random() * 2
+      }
 
-    return { positions, opacities, sizes }
-  }, [])
+      return { positions, opacities, sizes }
+    }, [])
 
-  useFrame((state) => {
-    if (!groupRef.current || !particlesRef.current) return
+    useFrame((state, delta) => {
+      if (!groupRef.current || !particlesRef.current) return
 
-    const time = state.clock.elapsedTime
-    const instanceTime = time * speedFactor + phaseOffset
+      // there's a bug idk how it happens, but upon pausing the scene, delta gets so big, causes time jump. handling it like this for now.
+      if (delta > 10) return
+      // using custom time management to support pausing
+      localTime.current += delta
+      const instanceTime = localTime.current * speedFactor + phaseOffset
 
-    // Circular motion
-    const angle = instanceTime * circleSpeed
-    const baseXOffset = Math.sin(angle) * circleRadius
-    const baseYOffset = Math.cos(angle * 0.7) * circleRadius * 0.7
-    const baseZOffset = Math.sin(angle * 1.3) * circleRadius * 0.5
+      // Circular motion
+      const angle = instanceTime * circleSpeed
+      const baseXOffset = Math.sin(angle) * circleRadius
+      const baseYOffset = Math.cos(angle * 0.7) * circleRadius * 0.7
+      const baseZOffset = Math.sin(angle * 1.3) * circleRadius * 0.5
 
-    groupRef.current.position.x = circleCenter.x + baseXOffset
-    groupRef.current.position.y = circleCenter.y + baseYOffset
-    groupRef.current.position.z = circleCenter.z + baseZOffset
+      groupRef.current.position.x = circleCenter.x + baseXOffset
+      groupRef.current.position.y = circleCenter.y + baseYOffset
+      groupRef.current.position.z = circleCenter.z + baseZOffset
 
-    // Vertical movement and scroll
-    const viewport = state.viewport
-    const verticalMovement = ((Math.sin(instanceTime * 0.3) * 1.8 * viewport.height) / 12) * amplitudeFactor
-    const scrollInfluence = -scrollY * 0.005 * (1 + index * 0.1)
-    groupRef.current.position.y += verticalMovement + scrollInfluence
+      // Vertical movement and scroll
+      const viewport = state.viewport
+      const verticalMovement =
+        ((Math.sin(instanceTime * 0.3) * 1.8 * viewport.height) / 12) * amplitudeFactor
+      const scrollInfluence = -scrollY * 0.005 * (1 + index * 0.1)
+      groupRef.current.position.y += verticalMovement + scrollInfluence
 
-    // Scale pulse and scroll zoom
-    const scalePulse = 1 + Math.sin(instanceTime * 0.4) * 0.05
-    const normalizedScrollFactor = Math.min(1.0, scrollY * 0.001)
-    const scrollZoom = 1 + normalizedScrollFactor * 1.0
-    groupRef.current.scale.setScalar(scalePulse * scrollZoom * size)
+      // Scale pulse and scroll zoom
+      const scalePulse = 1 + Math.sin(instanceTime * 0.4) * 0.05
+      const normalizedScrollFactor = Math.min(1.0, scrollY * 0.001)
+      const scrollZoom = 1 + normalizedScrollFactor * 1.0
+      groupRef.current.scale.setScalar(scalePulse * scrollZoom * size)
 
-    // Gentle rotation
-    groupRef.current.rotation.x = instanceTime * 0.15 * rotationFactor
-    groupRef.current.rotation.y = instanceTime * 0.1 * rotationFactor
-    groupRef.current.rotation.z = instanceTime * 0.05 * rotationFactor
+      // Gentle rotation
+      groupRef.current.rotation.x = instanceTime * 0.15 * rotationFactor
+      groupRef.current.rotation.y = instanceTime * 0.1 * rotationFactor
+      groupRef.current.rotation.z = instanceTime * 0.05 * rotationFactor
 
-    // Update particle material
-    const material = particlesRef.current.material as THREE.ShaderMaterial
-    material.uniforms.uTime!.value = time
-  })
+      // Update particle material
+      const material = particlesRef.current.material as THREE.ShaderMaterial
+      material.uniforms.uTime!.value = instanceTime
+    })
 
-  return (
-    <group ref={groupRef} position={position}>
-      <points ref={particlesRef}>
-        <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            count={particleCount}
-            array={positions}
-            itemSize={3}
-          />
-          <bufferAttribute
-            attach="attributes-opacity"
-            count={particleCount}
-            array={opacities}
-            itemSize={1}
-          />
-          <bufferAttribute
-            attach="attributes-size"
-            count={particleCount}
-            array={sizes}
-            itemSize={1}
-          />
-        </bufferGeometry>
-        <shaderMaterial
-          transparent
-          depthWrite={false}
-          blending={AdditiveBlending}
-          uniforms={{
-            uTime: { value: 0 },
-            uColor: { value: new THREE.Color('#DBDBDB') }
-          }}
-          vertexShader={`
+    return (
+      <group ref={groupRef} position={position}>
+        <points ref={particlesRef}>
+          <bufferGeometry>
+            <bufferAttribute
+              attach="attributes-position"
+              count={particleCount}
+              array={positions}
+              itemSize={3}
+            />
+            <bufferAttribute
+              attach="attributes-opacity"
+              count={particleCount}
+              array={opacities}
+              itemSize={1}
+            />
+            <bufferAttribute
+              attach="attributes-size"
+              count={particleCount}
+              array={sizes}
+              itemSize={1}
+            />
+          </bufferGeometry>
+          <shaderMaterial
+            transparent
+            depthWrite={false}
+            blending={AdditiveBlending}
+            uniforms={{
+              uTime: { value: 0 },
+              uColor: { value: new THREE.Color('#DBDBDB') },
+            }}
+            vertexShader={`
             attribute float opacity;
             attribute float size;
             varying float vOpacity;
@@ -136,7 +142,7 @@ const NoiseParticleSphere = memo(({
               gl_Position = projectionMatrix * mvPosition;
             }
           `}
-          fragmentShader={`
+            fragmentShader={`
             varying float vOpacity;
             uniform vec3 uColor;
             uniform float uTime;
@@ -156,11 +162,12 @@ const NoiseParticleSphere = memo(({
               gl_FragColor = vec4(color, vOpacity * strength);
             }
           `}
-        />
-      </points>
-    </group>
-  )
-})
+          />
+        </points>
+      </group>
+    )
+  }
+)
 
 export const AnimatedBlob = () => {
   const { viewport } = useThree()
@@ -201,7 +208,8 @@ export const AnimatedBlob = () => {
         phaseOffset: Math.random() * Math.PI * 2,
         circleSpeed: 0.4 + Math.random() * 0.3,
         circleCenter: new THREE.Vector3(xPos, yPos, zPos),
-        circleRadius: (0.8 + Math.random() * 1.0) * Math.max(0.5, Math.min(2.0, viewport.width / 1200))
+        circleRadius:
+          (0.8 + Math.random() * 1.0) * Math.max(0.5, Math.min(2.0, viewport.width / 1200)),
       }
     })
   }, [viewport.width])
@@ -209,11 +217,7 @@ export const AnimatedBlob = () => {
   return (
     <Suspense fallback={null}>
       {sphereData.map((sphere) => (
-        <NoiseParticleSphere
-          key={sphere.index}
-          scrollY={scrollY}
-          {...sphere}
-        />
+        <NoiseParticleSphere key={sphere.index} scrollY={scrollY} {...sphere} />
       ))}
     </Suspense>
   )
