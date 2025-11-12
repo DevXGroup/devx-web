@@ -2,7 +2,7 @@
 
 import { useRef } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { AnimatedBlob } from './AnimatedBlob'
+import AnimatedBlob from './AnimatedBlob'
 import { usePerformanceOptimizedAnimation } from '@/hooks/use-performance-optimized-animation'
 import { useInView } from 'framer-motion'
 

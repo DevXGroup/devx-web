@@ -58,13 +58,15 @@ export default function PlanetDivider({ opacity = 0.68 }) {
     <div
       ref={containerRef}
       className="relative w-full mx-auto pointer-events-none"
-      style={{
-        height: `${containerHeight}px`,
-        background: 'transparent',
-        overflow: 'visible', // Allow glow to extend beyond container
-        '--planet-offset-y': '0px',
-        '--planet-opacity': `${opacity}`,
-      }}
+      style={
+        {
+          height: `${containerHeight}px`,
+          background: 'transparent',
+          overflow: 'visible', // Allow glow to extend beyond container
+          '--planet-offset-y': '0px',
+          '--planet-opacity': `${opacity}`,
+        } as React.CSSProperties
+      }
     >
       {/* Planet container - only shows bottom 1/2 */}
       <div
