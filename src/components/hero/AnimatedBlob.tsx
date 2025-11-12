@@ -30,7 +30,7 @@ const NoiseParticleSphere = memo(
   }) => {
     const groupRef = useRef<THREE.Group>(null)
     const particlesRef = useRef<THREE.Points>(null)
-    const scrollYRef = useScrollRef()
+    const scrollYRef = useScrollRef({})
     const localTime = useRef(0)
 
     const particleCount = 60
@@ -186,7 +186,6 @@ export const AnimatedBlob = () => {
   const sphereCount = 25
 
   const sphereData = useMemo(() => {
-    console.log(viewport.width)
     return Array.from({ length: sphereCount }, (_, index) => {
       const size = 0.4 + Math.random() * 1.2
       let viewportScale, leftBoundary, rightBoundary
