@@ -42,11 +42,29 @@ jobs:
       - name: Lint
         run: pnpm next lint
 
+      - name: Notify Vercel - Lint
+        if: always()
+        uses: vercel/repository-dispatch/actions/status@v1
+        with:
+          name: 'lint'
+
       - name: Run unit tests
         run: pnpm test
 
+      - name: Notify Vercel - Tests
+        if: always()
+        uses: vercel/repository-dispatch/actions/status@v1
+        with:
+          name: 'tests'
+
       - name: Build production bundle
         run: pnpm build
+
+      - name: Notify Vercel - Build
+        if: always()
+        uses: vercel/repository-dispatch/actions/status@v1
+        with:
+          name: 'build'
 
   release:
     needs: quality-gate
