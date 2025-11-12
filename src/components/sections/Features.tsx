@@ -105,7 +105,7 @@ function HireDevelopersCard({ icon: Icon, title, description, index }: HireDevel
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: false, amount: 0.1 }}
-      transition={{ duration: 0.6, ease: "easeOut", delay: index * 0.15 }}
+      transition={{ duration: 0.6, ease: 'easeOut', delay: index * 0.15 }}
     >
       <div className="relative flex flex-col gap-5">
         <div className="flex-shrink-0 w-12 h-12 sm:w-13 sm:h-13 md:w-14 md:h-14 rounded-full bg-[#ccff00] flex items-center justify-center shadow-[0_0_18px_rgba(204,255,0,0.25)]">
@@ -144,7 +144,7 @@ function WhyUsCard({
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: false, amount: 0.1 }}
-      transition={{ duration: 0.6, ease: "easeOut", delay: index * 0.15 }}
+      transition={{ duration: 0.6, ease: 'easeOut', delay: index * 0.15 }}
     >
       <div className="relative z-10 flex flex-col items-center h-full space-y-5">
         <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center bg-gradient-to-br from-[#ccff00] to-yellow-300 border border-[#ccff00]/70 shadow-[0_0_18px_rgba(204,255,0,0.25)]">
@@ -170,7 +170,9 @@ export default function Features() {
 
   const [isMounted, setIsMounted] = useState(false)
   const [isStepAnimationActive, setIsStepAnimationActive] = useState(false)
-  const [viewportWidth, setViewportWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200)
+  const [viewportWidth, setViewportWidth] = useState(
+    typeof window !== 'undefined' ? window.innerWidth : 1200
+  )
   const shouldReduceMotion = useReducedMotion()
   const isInView = useInView(containerRef, { once: true, margin: '-150px' })
   const { isMobile, shouldOptimizeAnimations } = usePerformanceOptimizedAnimation()
@@ -178,30 +180,30 @@ export default function Features() {
   useEffect(() => {
     setIsMounted(true)
     if (typeof window !== 'undefined') {
-      setViewportWidth(window.innerWidth);
+      setViewportWidth(window.innerWidth)
     }
   }, [])
 
   // Memoize animation timing based on reduced motion preference and screen size
   const stepInterval = useMemo(() => {
-    const baseInterval = isMobile ? 4000 : 5000; // Slower intervals on mobile for performance
-    return shouldOptimizeAnimations ? 6000 : baseInterval; // Even slower if animations should be optimized
+    const baseInterval = isMobile ? 4000 : 5000 // Slower intervals on mobile for performance
+    return shouldOptimizeAnimations ? 6000 : baseInterval // Even slower if animations should be optimized
   }, [shouldOptimizeAnimations, isMobile])
 
   useEffect(() => {
     const handleResize = () => {
-      setViewportWidth(window.innerWidth);
+      setViewportWidth(window.innerWidth)
       // Update isMobile if needed
-    };
+    }
 
     if (typeof window !== 'undefined') {
-      window.addEventListener('resize', handleResize);
-      return () => window.removeEventListener('resize', handleResize);
+      window.addEventListener('resize', handleResize)
+      return () => window.removeEventListener('resize', handleResize)
     }
 
     // Return undefined when window is not available
-    return undefined;
-  }, []);
+    return undefined
+  }, [])
 
   // IntersectionObserver for step animation - with mobile-friendly settings
   useEffect(() => {
@@ -214,8 +216,8 @@ export default function Features() {
         })
       },
       {
-        threshold: 0.1,  // Trigger earlier
-        rootMargin: isMobile ? '100px 0px 100px 0px' : '50px 0px 50px 0px',  // Larger margin for mobile for better UX
+        threshold: 0.1, // Trigger earlier
+        rootMargin: isMobile ? '100px 0px 100px 0px' : '50px 0px 50px 0px', // Larger margin for mobile for better UX
       }
     )
 
@@ -242,7 +244,7 @@ export default function Features() {
       viewport={{ once: false, amount: 0.1 }}
       transition={{
         duration: shouldOptimizeAnimations ? 0.4 : 0.8,
-        ease: 'easeOut'
+        ease: 'easeOut',
       }}
     >
       {/* Gradient transition from black to purple */}
@@ -269,7 +271,7 @@ export default function Features() {
         className="relative container mx-auto px-4 z-[3] max-w-6xl select-text"
         transition={{
           duration: shouldOptimizeAnimations ? 0.3 : 0.5,
-          ease: 'easeOut'
+          ease: 'easeOut',
         }}
       >
         {/* Hire Developers Section */}
@@ -312,10 +314,12 @@ export default function Features() {
               <div className="relative inline-block">
                 <RotatingText
                   texts={subheaders}
-                  rotationInterval={shouldOptimizeAnimations ? 4000 : (shouldReduceMotion ? 2500 : 3000)} // Slower on low performance
+                  rotationInterval={
+                    shouldOptimizeAnimations ? 4000 : shouldReduceMotion ? 2500 : 3000
+                  } // Slower on low performance
                   transition={{
                     type: shouldOptimizeAnimations ? 'tween' : 'spring', // Simpler transition on low performance
-                    ...(shouldOptimizeAnimations ? {} : { stiffness: 200, damping: 20 })
+                    ...(shouldOptimizeAnimations ? {} : { stiffness: 200, damping: 20 }),
                   }}
                   initial={{ y: 30, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}

@@ -9,7 +9,7 @@ if (typeof globalThis !== 'undefined' && typeof (globalThis as any).self === 'un
 // This runs immediately during module load to ensure it's available before React renders
 if (typeof window !== 'undefined' && !('requestIdleCallback' in window)) {
   // Safari doesn't support requestIdleCallback - provide polyfill
-  (window as any).requestIdleCallback = function (
+  ;(window as any).requestIdleCallback = function (
     callback: (deadline: { timeRemaining: () => number; didTimeout: boolean }) => void,
     options?: { timeout?: number }
   ) {
@@ -26,7 +26,7 @@ if (typeof window !== 'undefined' && !('requestIdleCallback' in window)) {
 }
 
 if (typeof window !== 'undefined' && !('cancelIdleCallback' in window)) {
-  (window as any).cancelIdleCallback = function (id: number) {
+  ;(window as any).cancelIdleCallback = function (id: number) {
     clearTimeout(id)
   }
 }
@@ -34,7 +34,7 @@ if (typeof window !== 'undefined' && !('cancelIdleCallback' in window)) {
 // Also add to global scope for immediate availability
 if (typeof globalThis !== 'undefined') {
   if (!('requestIdleCallback' in globalThis)) {
-    (globalThis as any).requestIdleCallback = function (
+    ;(globalThis as any).requestIdleCallback = function (
       callback: (deadline: { timeRemaining: () => number; didTimeout: boolean }) => void,
       options?: { timeout?: number }
     ) {
@@ -51,7 +51,7 @@ if (typeof globalThis !== 'undefined') {
   }
 
   if (!('cancelIdleCallback' in globalThis)) {
-    (globalThis as any).cancelIdleCallback = function (id: number) {
+    ;(globalThis as any).cancelIdleCallback = function (id: number) {
       clearTimeout(id)
     }
   }

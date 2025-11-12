@@ -5,6 +5,7 @@ This document explains the GitHub Actions CI/CD pipeline integration with Vercel
 ## Overview
 
 The CI/CD pipeline automates:
+
 1. **Quality Gates** on every push and pull request
 2. **Semantic Versioning** on successful merges to main
 3. **Automated Releases** with changelog generation
@@ -44,6 +45,7 @@ Pipeline stops (no release, no deployment)
 ## Key Features
 
 ### 1. Quality Gate (`quality-gate` job)
+
 - **Trigger**: Every push to `main` and all pull requests
 - **Skip Logic**: Skips if commit message contains `[skip ci]`
 - **Steps**:
@@ -53,6 +55,7 @@ Pipeline stops (no release, no deployment)
   - Build production bundle
 
 ### 2. Semantic Release (`release` job)
+
 - **Trigger**: Only if `quality-gate` passes AND on `main` branch
 - **Skip Logic**: Skips if commit message contains `[skip ci]`
 - **Behavior**:
@@ -67,6 +70,7 @@ Pipeline stops (no release, no deployment)
   - Pushes release commit with `[skip ci]` to prevent CI re-run
 
 ### 3. Vercel Deployment
+
 - **Trigger**: Push to `main` (automatic via Vercel GitHub integration)
 - **Prevention**: `[skip ci]` commits are ignored by GitHub Actions but still trigger Vercel
 - **Workflow**:
@@ -119,11 +123,13 @@ BREAKING CHANGE: old endpoint removed"
 ## Configuration Files
 
 ### `.github/workflows/ci.yml`
+
 - Defines GitHub Actions workflow
 - Two jobs: `quality-gate` and `release`
 - Conditional execution based on branch and commit messages
 
 ### `.releaserc.json`
+
 - Semantic-release configuration
 - Plugins:
   - `@semantic-release/commit-analyzer` - Analyzes commits
@@ -133,10 +139,12 @@ BREAKING CHANGE: old endpoint removed"
   - `@semantic-release/git` - Commits and pushes changes
 
 ### `.vercelignore`
+
 - Tells Vercel which files to ignore during deployment
 - Prevents unnecessary redeployments for non-code changes
 
 ### `package.json` (`pnpm release` script)
+
 - Triggers semantic-release CLI
 - Automatically analyzes commits, bumps version, creates release
 
@@ -171,29 +179,37 @@ BREAKING CHANGE: old endpoint removed"
 ## Troubleshooting
 
 ### CI Failing on Main
+
 **Issue**: Quality gate is failing, blocking releases
 **Solution**:
+
 1. Check GitHub Actions logs: GitHub → Actions → CI workflow
 2. Fix the failing step (formatting, linting, tests, or build)
 3. Commit and push fix to main
 4. CI will retry automatically
 
 ### Semantic Release Not Creating Release
+
 **Issue**: Commits don't follow conventional format
 **Solution**:
+
 1. Use proper commit format: `feat:`, `fix:`, `refactor:`, etc.
 2. Example: `git commit -m "feat: add new feature"`
 
 ### Vercel Deployment Stuck
+
 **Issue**: Deployment not completing or showing old version
 **Solution**:
+
 1. Check Vercel deployments dashboard
 2. Verify CI passed before Vercel deployment
 3. Check `.vercelignore` isn't accidentally excluding src/
 
 ### Duplicate Deployments
+
 **Issue**: Two Vercel deployments happening
 **Solution**: This is the expected behavior:
+
 1. CI passes → semantic-release pushes commit
 2. `[skip ci]` prevents second CI run
 3. One final Vercel deployment happens with release commit
@@ -202,6 +218,7 @@ BREAKING CHANGE: old endpoint removed"
 ## Local Testing
 
 ### Test Commit Message Format
+
 ```bash
 # Don't actually commit, just check if semantic-release would bump version
 pnpm exec semantic-release --dry-run
@@ -210,6 +227,7 @@ pnpm exec semantic-release --dry-run
 ```
 
 ### Manual Release (if needed)
+
 ```bash
 # Dangerous! Only do this if automated release failed
 pnpm release
@@ -218,11 +236,13 @@ pnpm release
 ## Monitoring
 
 ### Check Release Status
+
 - GitHub → Actions tab → see CI/release workflow runs
 - GitHub → Releases tab → see created releases with changelog
 - Vercel Dashboard → Deployments tab → see deployment status
 
 ### Production Monitoring
+
 - Sentry Dashboard → See errors in production
 - Vercel Analytics → See performance metrics
 - Vercel Speed Insights → See Core Web Vitals
