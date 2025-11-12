@@ -97,24 +97,20 @@ html:has(main[data-page='home']) {
   background-color: #000000 !important;
 }
 
-/* Hide navbar during home page transition */
-.navbar-hidden nav,
-.navbar-hidden .navbar-container,
-body:has(main[data-page='home']) nav,
-body:has(main[data-page='home']) .navbar-container {
-  visibility: hidden !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-  transition: opacity 0.3s ease-in-out;
+/* Navbar transition styles - simplified with conditional rendering */
+nav {
+  animation: navbarFadeIn 0.6s ease-out;
 }
 
-body:has(main[data-page='home'].navbar-ready) nav,
-body:has(main[data-page='home'].navbar-ready) .navbar-container,
-.navbar-hidden.navbar-visible nav,
-.navbar-hidden.navbar-visible .navbar-container {
-  visibility: visible !important;
-  opacity: 1 !important;
-  pointer-events: auto !important;
+@keyframes navbarFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Portfolio Page Animations */
@@ -1318,6 +1314,12 @@ html.is-touching .animation-heavy {
 .animate-shine {
   background-size: 400% 100%;
   animation: shine 3s linear infinite;
+  /* Hardware acceleration for smoother animation */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  /* Reduce repaints by containing layout changes */
+  contain: layout style paint;
 }
 
 /* Planet divider styles - old unused rules */

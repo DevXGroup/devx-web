@@ -8,25 +8,33 @@ import Footer from '@/common/Footer'
 export default function ConditionalLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const isEntryPage = pathname === '/'
-  const [navbarClass, setNavbarClass] = useState(pathname === '/home' ? 'navbar-hidden' : '')
+  const [showNavbar, setShowNavbar] = useState(true)
 
   useEffect(() => {
-    let timer: ReturnType<typeof setTimeout> | undefined
-
-    if (pathname === '/home') {
-      // Hide navbar immediately with CSS
-      setNavbarClass('navbar-hidden')
-      // Show navbar after transition
-      timer = setTimeout(() => {
-        setNavbarClass('')
-      }, 500)
-    } else {
-      setNavbarClass('')
+    // Only manage navbar visibility on /home page
+    if (pathname !== '/home') {
+      setShowNavbar(true)
+      return undefined
     }
 
-    return () => {
-      if (timer) clearTimeout(timer)
+    // Check if we came from entry page - only check once on mount
+    const fromEntry = sessionStorage.getItem('fromEntry') === 'true'
+
+    if (fromEntry) {
+      // Hide navbar initially
+      setShowNavbar(false)
+
+      // Show navbar after transition completes with longer delay for smoother experience
+      const timer = setTimeout(() => {
+        setShowNavbar(true)
+      }, 2800) // Increased from 1100ms to 1800ms
+
+      return () => clearTimeout(timer)
     }
+
+    // Not from entry, show navbar immediately
+    setShowNavbar(true)
+    return undefined
   }, [pathname])
 
   if (isEntryPage) {
@@ -35,9 +43,7 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
 
   return (
     <div className="min-h-screen flex flex-col">
-      <div className={navbarClass}>
-        <Navbar />
-      </div>
+      {showNavbar && <Navbar />}
       <main className="flex-1">{children}</main>
       <Footer />
     </div>

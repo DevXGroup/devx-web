@@ -1,0 +1,14 @@
+# Ignore files from semantic-release commits
+CHANGELOG.md
+
+# Ignore development files
+.git
+.gitignore
+.env.local
+.env.*.local
+node_modules
+.next
+.turbo
+.eslintcache
+coverage
+tests

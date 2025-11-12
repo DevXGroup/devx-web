@@ -26,14 +26,14 @@ export default function Footer() {
               color={[2, 1.5, 9]}
               amplitude={0.8}
               distance={0}
-              enableMouseInteraction={true}
+              enableMouseInteraction={false}
             />
           ) : (
             <Threads
               color={[2, 1.5, 9]}
               amplitude={1}
               distance={0.1}
-              enableMouseInteraction={true}
+              enableMouseInteraction={false}
             />
           )}
         </div>
