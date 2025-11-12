@@ -30,7 +30,7 @@ const NoiseParticleSphere = memo(
   }) => {
     const groupRef = useRef<THREE.Group>(null)
     const particlesRef = useRef<THREE.Points>(null)
-    const scrollYRef = useScrollRef({})
+    const scrollYRef = useScrollRef({ throttleDelay: 4 })
     const localTime = useRef(0)
 
     const particleCount = 60

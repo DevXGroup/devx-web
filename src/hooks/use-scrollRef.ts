@@ -17,7 +17,7 @@ const throttle = <T extends (...args: any[]) => any>(
 }
 
 // This one, is used in order to prevent re-renders during scrolling. (uses UseRef instead of UseState)
-export const useScrollRef = ({ throttleDelay = 16 }) => {
+export const useScrollRef = ({ throttleDelay = 8 }) => {
   const scrollYRef = useRef(0)
 
   const handleScroll = useCallback(
