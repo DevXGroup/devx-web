@@ -11,8 +11,7 @@ Welcome to the DevX Group documentation hub. This directory contains all project
 New to the project? Start here:
 
 1. **[../README.md](../README.md)** - Project overview and setup instructions
-2. **[../CLAUDE.md](../CLAUDE.md)** - Instructions for Claude Code AI assistant
-3. **[guides/code-submission-workflow.md](guides/code-submission-workflow.md)** - How to submit code changes
+2. **[guides/code-submission-workflow.md](guides/code-submission-workflow.md)** - How to submit code changes
 
 ### 👨‍💻 For Contributors
 
@@ -141,19 +140,6 @@ Technical specifications and architecture:
 
 ---
 
-## 🏗️ Project Architecture
-
-For detailed architecture information, see **[../CLAUDE.md](../CLAUDE.md)**, which covers:
-
-- Next.js 15 App Router structure
-- Server vs Client components
-- Performance optimization patterns
-- Animation & 3D components
-- Testing strategy
-- Coding standards
-
----
-
 ## 📝 Documentation Standards
 
 When creating or updating documentation:
@@ -207,7 +193,6 @@ Documentation improvements are always welcome! To contribute:
 - **General questions**: Check [../README.md](../README.md)
 - **Code submission**: See [guides/code-submission-workflow.md](guides/code-submission-workflow.md)
 - **CI/CD issues**: See [operations/ci-cd-setup.md](operations/ci-cd-setup.md)
-- **AI assistance**: Claude Code can help (see [../CLAUDE.md](../CLAUDE.md))
 
 ---
 

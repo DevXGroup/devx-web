@@ -30,10 +30,10 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
       }, 2800) // Increased from 1100ms to 1800ms
 
       return () => clearTimeout(timer)
-    } else {
-      // Not from entry, show navbar immediately
-      setShowNavbar(true)
     }
+
+    // Not from entry, show navbar immediately
+    setShowNavbar(true)
   }, [pathname])
 
   if (isEntryPage) {
