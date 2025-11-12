@@ -119,13 +119,19 @@ export default function Hero() {
     setEnableCosmicStars(true)
 
     // Load other heavy components with a longer stagger to reduce initial CPU spike
-    const shootingStarsTimer = requestIdleCallback(() => {
-      setEnableShootingStars(true)
-    }, { timeout: 1000 }) // Increased from 500ms
+    const shootingStarsTimer = requestIdleCallback(
+      () => {
+        setEnableShootingStars(true)
+      },
+      { timeout: 1000 }
+    ) // Increased from 500ms
 
-    const planetDividerTimer = requestIdleCallback(() => {
-      setEnablePlanetDivider(true)
-    }, { timeout: 1500 }) // Increased from 800ms
+    const planetDividerTimer = requestIdleCallback(
+      () => {
+        setEnablePlanetDivider(true)
+      },
+      { timeout: 1500 }
+    ) // Increased from 800ms
 
     return () => {
       cancelIdleCallback(shootingStarsTimer)
@@ -208,9 +214,7 @@ export default function Hero() {
                 <div className="relative flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap sm:gap-4 px-5 py-4 sm:px-8 sm:py-6 rounded-2xl overflow-hidden border-2 border-white/20 bg-black/60 backdrop-blur-md shadow-xl shadow-black/50 sm:bg-gradient-to-r sm:from-black/70 sm:via-black/60 sm:to-black/70">
                   {/* Subtle animated gradient background - disable on mobile for performance */}
                   <div className="absolute inset-0 hidden sm:block opacity-30">
-                    <div
-                      className="absolute inset-0 bg-gradient-to-br from-[#4CD787]/8 via-transparent to-[#ccff00]/8"
-                    />
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#4CD787]/8 via-transparent to-[#ccff00]/8" />
                   </div>
 
                   {/* Content with z-index to appear above background */}

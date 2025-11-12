@@ -135,17 +135,17 @@ Use both tags for pure documentation or non-code changes:
 
 ## Decision Matrix
 
-| Change Type | Use Tag | Why |
-|-------------|---------|-----|
-| Code changes (features, fixes) | None | Always run full CI/CD and deploy |
-| Documentation updates | `[skip ci][skip vercel]` | No need for CI or deployment |
-| Test additions/updates | `[skip vercel]` | Verify tests pass, but don't deploy |
-| CI/CD configuration | `[skip vercel]` | Verify workflow works, but don't deploy |
-| README typo fixes | `[skip ci][skip vercel]` | Pure documentation change |
-| Comment-only changes | `[skip ci]` | No functional changes, but deploy is fine |
-| Dependency updates | None or `[skip vercel]` | Always verify build; deploy optional |
-| Performance improvements | None | Always run full pipeline |
-| Refactoring | None | Always run full pipeline |
+| Change Type                    | Use Tag                  | Why                                       |
+| ------------------------------ | ------------------------ | ----------------------------------------- |
+| Code changes (features, fixes) | None                     | Always run full CI/CD and deploy          |
+| Documentation updates          | `[skip ci][skip vercel]` | No need for CI or deployment              |
+| Test additions/updates         | `[skip vercel]`          | Verify tests pass, but don't deploy       |
+| CI/CD configuration            | `[skip vercel]`          | Verify workflow works, but don't deploy   |
+| README typo fixes              | `[skip ci][skip vercel]` | Pure documentation change                 |
+| Comment-only changes           | `[skip ci]`              | No functional changes, but deploy is fine |
+| Dependency updates             | None or `[skip vercel]`  | Always verify build; deploy optional      |
+| Performance improvements       | None                     | Always run full pipeline                  |
+| Refactoring                    | None                     | Always run full pipeline                  |
 
 ---
 
@@ -160,6 +160,7 @@ git commit -m "docs: fix typo in installation section [skip ci][skip vercel]"
 ```
 
 **Result**:
+
 - ❌ CI skipped
 - ❌ Deployment skipped
 - ⏱️ Saves ~3-5 minutes of CI/CD time
@@ -175,6 +176,7 @@ git commit -m "test: add authentication unit tests [skip vercel]"
 ```
 
 **Result**:
+
 - ✅ CI runs (verifies tests pass)
 - ❌ Deployment skipped
 - 📝 Version bumped (if semantic-release configured)
@@ -190,6 +192,7 @@ git commit -m "ci: add deployment check notifications [skip vercel]"
 ```
 
 **Result**:
+
 - ✅ CI runs (verifies workflow syntax)
 - ❌ Deployment skipped
 - 🔍 Can review workflow output without deploying
@@ -205,6 +208,7 @@ git commit -m "fix: resolve authentication timeout issue"
 ```
 
 **Result**:
+
 - ✅ CI runs (verifies fix doesn't break tests)
 - ✅ Deployment happens immediately
 - 🚀 Users get fix ASAP
@@ -234,6 +238,7 @@ The `[skip vercel]` check is configured in `vercel.json`:
 ```
 
 This regex matches any of these patterns:
+
 - `[skip vercel]`
 - `[skip-vercel]`
 - `[skipvercel]`
@@ -247,6 +252,7 @@ This regex matches any of these patterns:
 **Cause**: Tag might not be in the commit message, or workflow configuration is incorrect
 
 **Solution**:
+
 1. Check your commit message: `git log -1 --pretty=%B`
 2. Verify `.github/workflows/ci.yml` has the skip condition
 3. Push a new commit with the tag
@@ -256,6 +262,7 @@ This regex matches any of these patterns:
 **Cause**: `vercel.json` not configured or Vercel hasn't picked up the change
 
 **Solution**:
+
 1. Verify `vercel.json` exists with the `ignoreCommand` field
 2. Check Vercel build logs for "Build skipped" message
 3. Try redeploy from Vercel dashboard
@@ -265,6 +272,7 @@ This regex matches any of these patterns:
 **Cause**: Syntax error in commit message (missing brackets, typos)
 
 **Solution**:
+
 ```bash
 # ✅ Correct
 git commit -m "docs: update [skip ci][skip vercel]"
@@ -299,11 +307,11 @@ git commit -m "docs: update [skip-c1][skip vercel]"
 
 ## Summary
 
-| Tag | GitHub Actions | Vercel | Use Case |
-|-----|----------------|--------|----------|
-| None | ✅ Runs | ✅ Deploys | Code changes, features, fixes |
-| `[skip ci]` | ❌ Skipped | ✅ Deploys | Documentation changes |
-| `[skip vercel]` | ✅ Runs | ❌ Skipped | Test additions, CI updates |
-| `[skip ci][skip vercel]` | ❌ Skipped | ❌ Skipped | Pure documentation |
+| Tag                      | GitHub Actions | Vercel     | Use Case                      |
+| ------------------------ | -------------- | ---------- | ----------------------------- |
+| None                     | ✅ Runs        | ✅ Deploys | Code changes, features, fixes |
+| `[skip ci]`              | ❌ Skipped     | ✅ Deploys | Documentation changes         |
+| `[skip vercel]`          | ✅ Runs        | ❌ Skipped | Test additions, CI updates    |
+| `[skip ci][skip vercel]` | ❌ Skipped     | ❌ Skipped | Pure documentation            |
 
 **Key Rule**: When in doubt, don't skip anything. Running full CI/CD ensures quality and catches issues early.
