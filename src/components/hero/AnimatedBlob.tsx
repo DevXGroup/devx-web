@@ -2,12 +2,11 @@ import { useRef, Suspense, useMemo, memo, useState, useEffect } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { AdditiveBlending } from 'three'
 import * as THREE from 'three'
-import { useScroll } from '@/hooks/use-scroll'
+import { useScrollRef } from '@/hooks/use-scrollRef'
 
 const NoiseParticleSphere = memo(
   ({
     position,
-    scrollY,
     index,
     size,
     speedFactor,
@@ -17,9 +16,21 @@ const NoiseParticleSphere = memo(
     circleSpeed,
     circleCenter,
     circleRadius,
-  }: any) => {
+  }: {
+    position: THREE.Vector3
+    index: number
+    size: number
+    speedFactor: number
+    amplitudeFactor: number
+    rotationFactor: number
+    phaseOffset: number
+    circleSpeed: number
+    circleCenter: THREE.Vector3
+    circleRadius: number
+  }) => {
     const groupRef = useRef<THREE.Group>(null)
     const particlesRef = useRef<THREE.Points>(null)
+    const scrollYRef = useScrollRef()
     const localTime = useRef(0)
 
     const particleCount = 60
@@ -69,6 +80,7 @@ const NoiseParticleSphere = memo(
       groupRef.current.position.z = circleCenter.z + baseZOffset
 
       // Vertical movement and scroll
+      const scrollY = scrollYRef.current
       const viewport = state.viewport
       const verticalMovement =
         ((Math.sin(instanceTime * 0.3) * 1.8 * viewport.height) / 12) * amplitudeFactor
@@ -171,10 +183,10 @@ const NoiseParticleSphere = memo(
 
 export const AnimatedBlob = () => {
   const { viewport } = useThree()
-  const scrollY = useScroll()
   const sphereCount = 25
 
   const sphereData = useMemo(() => {
+    console.log(viewport.width)
     return Array.from({ length: sphereCount }, (_, index) => {
       const size = 0.4 + Math.random() * 1.2
       let viewportScale, leftBoundary, rightBoundary
@@ -217,7 +229,7 @@ export const AnimatedBlob = () => {
   return (
     <Suspense fallback={null}>
       {sphereData.map((sphere) => (
-        <NoiseParticleSphere key={sphere.index} scrollY={scrollY} {...sphere} />
+        <NoiseParticleSphere key={sphere.index} {...sphere} />
       ))}
     </Suspense>
   )
