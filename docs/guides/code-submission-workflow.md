@@ -11,6 +11,7 @@ git checkout -b feature/your-feature-name
 ```
 
 Use descriptive branch names that reflect the work:
+
 - `feature/add-dark-mode`
 - `fix/navbar-visibility`
 - `refactor/authentication-flow`
@@ -28,6 +29,7 @@ git commit -m "feat: add dark mode toggle
 ```
 
 **Commit Types:**
+
 - `feat:` - New feature (triggers minor version bump: 0.1.0 → 0.2.0)
 - `fix:` - Bug fix (triggers patch version bump: 0.1.0 → 0.1.1)
 - `refactor:` - Code refactoring (no version bump)
@@ -63,6 +65,7 @@ git push origin feature/your-feature-name
 ```
 
 Then:
+
 1. Go to GitHub repository
 2. Click "New Pull Request"
 3. Set base branch: `main`
@@ -73,12 +76,14 @@ Then:
 ### Step 4: Wait for CI/CD Checks
 
 GitHub Actions will automatically:
+
 - ✅ Check formatting (Prettier)
 - ✅ Run linting (ESLint)
 - ✅ Run tests (Jest)
 - ✅ Build production bundle
 
 **If any check fails:**
+
 1. Fix the issue locally on your feature branch
 2. Commit and push: `git push origin feature/your-feature-name`
 3. PR automatically updates with new checks
@@ -143,6 +148,7 @@ pnpm build
 ```
 
 Or run all at once:
+
 ```bash
 pnpm lint && pnpm test && pnpm build
 ```
@@ -190,6 +196,7 @@ git commit -m "changes"
 Given current version: **1.0.0**
 
 ### Scenario 1: One `fix:` commit
+
 ```
 Commits since last release:
 - fix: resolve navbar issue
@@ -200,6 +207,7 @@ Result:
 ```
 
 ### Scenario 2: One `feat:` commit
+
 ```
 Commits since last release:
 - feat: add dark mode toggle
@@ -210,6 +218,7 @@ Result:
 ```
 
 ### Scenario 3: Multiple commits mixed
+
 ```
 Commits since last release:
 - feat: add authentication
@@ -224,6 +233,7 @@ Result:
 ```
 
 ### Scenario 4: Breaking change
+
 ```
 Commits since last release:
 - feat!: redesign API endpoints
@@ -242,6 +252,7 @@ Result:
 ### I pushed but CI didn't run
 
 **Solution:** Check GitHub Actions tab
+
 1. Go to GitHub repo → Actions tab
 2. Look for "CI" workflow
 3. Click on failed run to see logs
@@ -250,16 +261,19 @@ Result:
 ### I want to skip CI for a commit
 
 Use `[skip ci]` in commit message (only for documentation-only changes):
+
 ```bash
 git commit -m "docs: update README [skip ci]"
 ```
 
 You can also skip Vercel deployments:
+
 ```bash
 git commit -m "test: add unit tests [skip vercel]"
 ```
 
 Or skip both:
+
 ```bash
 git commit -m "docs: update guide [skip ci][skip vercel]"
 ```
@@ -271,6 +285,7 @@ git commit -m "docs: update guide [skip ci][skip vercel]"
 Commits must start with `feat:`, `fix:`, etc.
 
 Check your commits:
+
 ```bash
 git log --oneline
 ```
@@ -292,6 +307,7 @@ This analyzes commits and creates a release without merging through main.
 ## Maintainer Direct Push Workflow (Optional)
 
 Maintainers and repository admins can push directly to main without creating a pull request. This is useful for:
+
 - Hot fixes that need immediate deployment
 - Critical security patches
 - Emergency rollbacks
@@ -304,6 +320,7 @@ Maintainers and repository admins can push directly to main without creating a p
 The CI/CD pipeline runs **exactly the same way** for direct pushes as for PR merges:
 
 1. **You push directly to main:**
+
    ```bash
    git push origin main
    ```
@@ -330,6 +347,7 @@ pnpm build           # Build production bundle
 ```
 
 Or all at once:
+
 ```bash
 pnpm lint && pnpm test && pnpm build
 ```
@@ -361,6 +379,7 @@ git push origin main
 #### 4. Monitor GitHub Actions
 
 Go to GitHub Actions tab to monitor:
+
 - Quality gate job (should take 2-3 minutes)
 - Release job (automatic if quality-gate passes)
 - Check the logs if anything fails
@@ -374,6 +393,7 @@ Go to GitHub Actions tab to monitor:
 ### When NOT to Use Direct Push
 
 Use PR workflow instead when:
+
 - Code is non-critical or can wait for review
 - You want code review (recommended for all non-emergency changes)
 - It's a new feature (always use PR for visibility)
@@ -383,6 +403,7 @@ Use PR workflow instead when:
 ### Commit Message Examples for Direct Push
 
 **Good ✅:**
+
 ```bash
 fix: resolve database connection timeout in production
 fix: patch XSS vulnerability in user input
@@ -391,6 +412,7 @@ perf: optimize caching strategy
 ```
 
 **Bad ❌:**
+
 ```bash
 git push without committing anything
 git commit -m "hotfix" (not specific enough)
@@ -402,12 +424,12 @@ git commit -m "emergency fix" (no type specified)
 
 Same rules apply as PR workflow:
 
-| Commit Type | Version Change | Example |
-|---|---|---|
-| `fix:` | Patch (1.0.0 → 1.0.1) | Critical hotfix |
-| `feat:` | Minor (1.0.0 → 1.1.0) | New endpoint |
-| `refactor:` | No bump | Code cleanup |
-| `perf:` | No bump | Optimization |
+| Commit Type | Version Change        | Example         |
+| ----------- | --------------------- | --------------- |
+| `fix:`      | Patch (1.0.0 → 1.0.1) | Critical hotfix |
+| `feat:`     | Minor (1.0.0 → 1.1.0) | New endpoint    |
+| `refactor:` | No bump               | Code cleanup    |
+| `perf:`     | No bump               | Optimization    |
 
 ### Rollback If Needed
 
@@ -429,12 +451,14 @@ git push origin main
 ## Summary
 
 ### Contributor Workflow (Recommended)
+
 1. **Create branch** → Make commits with conventional format
 2. **Push → Create PR** → Wait for CI checks
 3. **Get code review** → Merge to main
 4. **Automatic release happens** → Vercel deploys
 
 ### Maintainer Direct Push (When Needed)
+
 1. **Verify locally** → All checks pass
 2. **Commit** → Conventional format
 3. **Push to main** → Triggers CI/CD automatically

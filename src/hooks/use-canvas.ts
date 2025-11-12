@@ -43,7 +43,7 @@ export function useCanvas({
 
   useEffect(() => {
     animationStateRef.current.isPaused = !isInView
-    if (!canvasRef.current) return;
+    if (!canvasRef.current) return
     // Reduce quality when not in view for performance
     canvasRef.current.style.imageRendering = isInView ? 'auto' : 'pixelated'
   }, [isInView])
@@ -105,7 +105,6 @@ export function useCanvas({
       const deltaTime = timestamp - state.lastRenderTimestamp
       state.lastRenderTimestamp = timestamp
 
-
       if (isInView) {
         // time updates only when the canvas is in view
         state.time += deltaTime / 1000 // to seconds
@@ -128,5 +127,5 @@ export function useCanvas({
     }
   }, [isInView, preload])
 
-  return { canvasRef, animationState: animationStateRef, isInView  }
+  return { canvasRef, animationState: animationStateRef, isInView }
 }

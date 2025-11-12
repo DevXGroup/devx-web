@@ -37,12 +37,15 @@ export default function GlobalTransition() {
         document.body.classList.add('navbar-hidden')
 
         // Start fade after small delay, then end transition
-        const timer = setTimeout(() => {
-          setIsTransitioning(false)
-          document.body.classList.remove('navbar-hidden')
-          // Clear the flag after transition completes
-          sessionStorage.removeItem('fromEntry')
-        }, (DELAY_BEFORE_FADE + FADE_DURATION) * 1000)
+        const timer = setTimeout(
+          () => {
+            setIsTransitioning(false)
+            document.body.classList.remove('navbar-hidden')
+            // Clear the flag after transition completes
+            sessionStorage.removeItem('fromEntry')
+          },
+          (DELAY_BEFORE_FADE + FADE_DURATION) * 1000
+        )
 
         return () => {
           clearTimeout(timer)
