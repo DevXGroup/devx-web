@@ -1,0 +1,116 @@
+═══════════════════════════════════════════════════════════════════════════════
+                        CODE SUBMISSION QUICK REFERENCE
+═══════════════════════════════════════════════════════════════════════════════
+
+BEFORE YOU PUSH TO MAIN:
+═══════════════════════════════════════════════════════════════════════════════
+
+1. VERIFY YOUR CODE LOCALLY:
+   pnpm format:check    # Check formatting
+   pnpm lint            # Check linting
+   pnpm test            # Run tests
+   pnpm build           # Build production
+
+2. COMMIT WITH CONVENTIONAL COMMITS:
+   feat:     → New feature (version: 0.1.0 → 0.2.0)
+   fix:      → Bug fix (version: 0.1.0 → 0.1.1)
+   refactor: → Code cleanup (NO version bump)
+   docs:     → Documentation (NO version bump)
+   chore:    → Build/CI/deps (NO version bump)
+   perf:     → Performance (NO version bump)
+   test:     → Test additions (NO version bump)
+
+3. EXAMPLES:
+   git commit -m "feat: add dark mode toggle"
+   git commit -m "fix: resolve navbar visibility"
+   git commit -m "docs: update README"
+
+═══════════════════════════════════════════════════════════════════════════════
+
+THE WORKFLOW:
+═══════════════════════════════════════════════════════════════════════════════
+
+Step 1: Create Feature Branch
+   git checkout -b feature/your-feature-name
+
+Step 2: Make Changes & Commit (with conventional format)
+   git commit -m "feat: add new feature"
+
+Step 3: Push to GitHub
+   git push origin feature/your-feature-name
+
+Step 4: Create Pull Request on GitHub
+   - GitHub Actions automatically checks formatting, linting, tests, build
+   - Wait for all checks to pass (green ✅)
+
+Step 5: Get Code Review & Merge
+   - Click "Merge pull request" on GitHub
+   - Choose "Create a merge commit"
+
+Step 6: AUTOMATIC RELEASE HAPPENS!
+   GitHub Actions automatically:
+   ✓ Analyzes your commit messages
+   ✓ Bumps version (1.0.0 → 1.0.1 or 1.1.0 or 2.0.0)
+   ✓ Updates CHANGELOG.md
+   ✓ Creates GitHub Release
+   ✓ Updates package.json
+   ✓ Pushes to production via Vercel
+
+═══════════════════════════════════════════════════════════════════════════════
+
+DO's & DON'Ts:
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ DO:
+   - Use conventional commit messages (feat:, fix:, etc.)
+   - Create PR for code review before merging
+   - Test locally before pushing
+   - Use descriptive branch names
+   - Add PR description
+
+❌ DON'T:
+   - Force push to main (git push --force)
+   - Commit without conventional format
+   - Skip CI checks
+   - Manually edit CHANGELOG.md (it's auto-generated)
+   - Manually edit package.json version (it's auto-bumped)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+COMMIT MESSAGE EXAMPLES:
+═══════════════════════════════════════════════════════════════════════════════
+
+GOOD ✅:
+   feat: add user authentication
+   fix: resolve sidebar not closing on mobile
+   docs: update installation guide
+   refactor: optimize component rendering
+   perf: lazy-load hero images
+
+BAD ❌:
+   updated stuff
+   WIP
+   fix bugs
+   changes
+   asdf
+
+═══════════════════════════════════════════════════════════════════════════════
+
+VERSION BUMPING RULES:
+═══════════════════════════════════════════════════════════════════════════════
+
+Current version: 1.0.0
+
+If commits contain:
+   - feat: commits only           → 1.1.0 (minor bump)
+   - fix: commits only            → 1.0.1 (patch bump)
+   - feat: + fix: commits         → 1.1.0 (minor bump - highest wins)
+   - BREAKING CHANGE in message   → 2.0.0 (major bump)
+   - refactor:/chore:/docs:/etc   → No bump (but listed in CHANGELOG)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+FOR DETAILED INSTRUCTIONS:
+See: docs/SUBMISSION_WORKFLOW.md
+
+═══════════════════════════════════════════════════════════════════════════════
