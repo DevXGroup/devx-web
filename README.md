@@ -140,6 +140,19 @@ Keep credentials out of version control and configure hosting platforms with mat
 - Follow conventional commits (`feat:`, `fix:`, `refactor:`, `chore:`, `docs:`).
 - Optimize performance with dynamic imports for heavy, browser-only modules.
 
+## Documentation
+
+Comprehensive project documentation is available in the [docs/](docs/) directory:
+
+- **[Code Submission Workflow](docs/guides/code-submission-workflow.md)** - How to submit PRs with semantic versioning
+- **[CI/CD Setup](docs/operations/ci-cd-setup.md)** - GitHub Actions and semantic-release configuration
+- **[Deployment Commands](docs/operations/deployment-commands.md)** - Skip CI/Vercel deployment tags (`[skip ci]`, `[skip vercel]`)
+- **[Accessibility Testing](docs/guides/accessibility-testing.md)** - WCAG compliance testing
+
+For AI assistance with this codebase, see [CLAUDE.md](CLAUDE.md).
+
+See [docs/README.md](docs/README.md) for complete documentation index.
+
 ## Deployment
 
 ```bash

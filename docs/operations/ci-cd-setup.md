@@ -252,3 +252,8 @@ pnpm release
 6. **Coordinate with team on breaking changes**
    - Breaking changes bump major version
    - Consider impact on users/integrations
+
+7. **Use deployment skip commands when appropriate**
+   - `[skip ci]` - Skip GitHub Actions for docs-only changes
+   - `[skip vercel]` - Skip deployment for test/CI updates
+   - See [Deployment Commands](./deployment-commands.md) for full guide
