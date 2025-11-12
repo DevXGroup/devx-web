@@ -1,7 +1,5 @@
 # Ignore files from semantic-release commits
 CHANGELOG.md
-package.json
-pnpm-lock.yaml
 
 # Ignore development files
 .git
@@ -9,7 +7,6 @@ pnpm-lock.yaml
 .env.local
 .env.*.local
 node_modules
-pnpm-lock.yaml
 .next
 .turbo
 .eslintcache
