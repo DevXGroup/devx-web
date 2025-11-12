@@ -17,7 +17,7 @@ const NoiseParticleSphere = memo(
     circleCenter,
     circleRadius,
   }: {
-    position: THREE.Vector3
+    position: number[]
     index: number
     size: number
     speedFactor: number
@@ -233,3 +233,5 @@ export const AnimatedBlob = () => {
     </Suspense>
   )
 }
+
+AnimatedBlob.name = 'AnimatedBlob'
