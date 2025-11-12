@@ -24,6 +24,9 @@ export default function PlanetDivider() {
 
     let ticking = false
     const handleScroll = () => {
+      // Only update if planet is potentially visible (first 1000px of page)
+      if (window.scrollY > 1000) return
+
       if (!ticking) {
         window.requestAnimationFrame(() => {
           setScrollY(window.scrollY)

@@ -75,8 +75,11 @@ export function useCanvas({
     window.addEventListener('resize', resizeDebounce)
     resizeDebounce()
 
-    return () => window.removeEventListener('resize', resizeDebounce)
-  }, [])
+    return () => {
+      if (timeout) clearTimeout(timeout)
+      window.removeEventListener('resize', resizeDebounce)
+    }
+  }, [resizeDebounceTime])
 
   useEffect(() => {
     const canvas = canvasRef.current

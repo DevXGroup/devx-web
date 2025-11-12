@@ -78,8 +78,36 @@ export default function Process() {
   const y = useTransform(scrollYProgress, [0, 0.5], [100, 0])
 
   const [scrollProgress, setScrollProgress] = useState(0)
+  const [isInViewport, setIsInViewport] = useState(false)
+
+  // IntersectionObserver to only track scroll when section is visible
+  useEffect(() => {
+    if (!containerRef.current) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsInViewport(entry.isIntersecting)
+        })
+      },
+      {
+        threshold: 0,
+        rootMargin: '100px 0px',
+      }
+    )
+
+    observer.observe(containerRef.current)
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [])
 
   useEffect(() => {
+    // Only add scroll listener when section is in viewport
+    if (!isInViewport) return
+
+    let rafId: number | null = null
     const handleScroll = () => {
       if (containerRef.current) {
         const scrollPosition = window.scrollY
@@ -93,13 +121,23 @@ export default function Process() {
       }
     }
 
-    window.addEventListener('scroll', handleScroll)
+    const handleScrollOptimized = () => {
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId)
+      }
+      rafId = requestAnimationFrame(handleScroll)
+    }
+
+    window.addEventListener('scroll', handleScrollOptimized, { passive: true })
     handleScroll() // Initial call to set the initial state
 
     return () => {
-      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('scroll', handleScrollOptimized)
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId)
+      }
     }
-  }, [])
+  }, [isInViewport])
 
   return (
     <section className="relative py-20 w-full overflow-hidden" ref={containerRef}>
@@ -120,7 +158,14 @@ export default function Process() {
       {/* Top fade-in gradient */}
       <div className="absolute top-0 left-0 right-0 h-24 md:h-40 bg-gradient-to-b from-black to-transparent z-[1] pointer-events-none" />
 
-      <motion.div style={{ opacity, y }} className="relative container mx-auto px-4 sm:px-6">
+      <motion.div
+        style={{
+          opacity,
+          y,
+          willChange: 'opacity, transform',
+        }}
+        className="relative container mx-auto px-4 sm:px-6"
+      >
         <div className="relative flex items-center justify-center text-center mb-12 sm:mb-16 py-8 sm:py-12">
           <div className="relative z-10">
             <div className="flex flex-col items-center">
@@ -161,6 +206,9 @@ export default function Process() {
               className="relative group rounded-xl p-[2px] cursor-pointer"
               role="article"
               aria-label={`${process.title}: ${process.description}`}
+              style={{
+                willChange: 'transform',
+              }}
             >
               <div
                 className="absolute inset-0 rounded-xl transition-opacity duration-700"
