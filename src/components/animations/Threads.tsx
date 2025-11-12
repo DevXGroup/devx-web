@@ -30,7 +30,7 @@ uniform vec2 uMouse;
 
 #define PI 3.1415926538
 
-const int u_line_count = 40;
+const int u_line_count = 20;
 const float u_line_width = 7.0;
 const float u_line_blur = 10.0;
 
@@ -140,6 +140,7 @@ const Threads: React.FC<ThreadsProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const animationFrameId = useRef<number | undefined>(undefined)
+  const isInViewRef = useRef<boolean>(false)
 
   useEffect(() => {
     if (!containerRef.current) return
@@ -214,6 +215,12 @@ const Threads: React.FC<ThreadsProps> = ({
     }
 
     function update(t: number) {
+      // Only render if in view - CRITICAL performance optimization
+      if (!isInViewRef.current) {
+        animationFrameId.current = requestAnimationFrame(update)
+        return
+      }
+
       if (enableMouseInteraction) {
         const smoothing = 0.05
         if (currentMouse[0] !== undefined && targetMouse[0] !== undefined) {
@@ -235,7 +242,24 @@ const Threads: React.FC<ThreadsProps> = ({
     }
     animationFrameId.current = requestAnimationFrame(update)
 
+    // Intersection Observer to pause animation when out of view
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          isInViewRef.current = entry.isIntersecting
+        })
+      },
+      {
+        threshold: 0.1, // Trigger when 10% visible
+        rootMargin: '100px', // Start rendering 100px before entering viewport
+      }
+    )
+
+    observer.observe(container)
+
     return () => {
+      observer.disconnect()
+
       if (animationFrameId.current) {
         cancelAnimationFrame(animationFrameId.current)
         animationFrameId.current = undefined

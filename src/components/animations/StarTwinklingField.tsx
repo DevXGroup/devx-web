@@ -34,7 +34,7 @@ export function StarTwinklingField({
       })
     }
     return stars
-  }, [count])
+  }, [count, maxSize, minSize])
 
   const { canvasRef } = useCanvas({
     useInViewOptions: { once: false, margin: '-90px' },

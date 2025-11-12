@@ -462,13 +462,13 @@ export default function DevelopmentTools() {
         <StarTwinklingField />
 
         {/* Title section */}
-        <div className="py-30 md:py-0 mt-24 md:mt-36 mb-16 md:mb-24">
+        <div className="py-30 md:py-0 mt-24 md:mt-36 mb-24 md:mb-32">
           <div className="container mx-auto px-4">
             <div className="flex flex-col items-center">
               <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold font-['IBM_Plex_Mono'] text-center animate-gradient-text mb-4">
                 DevX Development Tools
               </h3>
-              <p className="text-slate-400 text-lg md:text-xl font-['IBM_Plex_Sans'] text-center max-w-2xl mb-16 md:mb-24">
+              <p className="text-slate-400 text-lg md:text-xl font-['IBM_Plex_Sans'] text-center max-w-2xl mb-0">
                 Cutting-edge technologies powering innovative solutions across web, mobile, and
                 cloud platforms
               </p>
@@ -476,7 +476,7 @@ export default function DevelopmentTools() {
           </div>
         </div>
         {/* Animation container with proper sizing - increased height for extra stars */}
-        <div className="relative w-full h-[75vh] sm:h-[95vh] lg:h-[110vh] flex items-center justify-center mt-12 md:mt-20 pt-16 md:pt-24">
+        <div className="relative w-full h-[75vh] sm:h-[95vh] lg:h-[110vh] flex items-center justify-center mt-16 md:mt-24 lg:mt-32 pt-16 md:pt-24">
           {/* ============ Center black circle with glowing border ============ */}
           {/* Responsive center position with decreased circumference */}
           <div
