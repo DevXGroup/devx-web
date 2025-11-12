@@ -14,6 +14,11 @@ env:
 jobs:
   quality-gate:
     runs-on: ubuntu-latest
+    # Skip CI if commit message contains [skip ci]
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout repository
@@ -45,7 +50,8 @@ jobs:
 
   release:
     needs: quality-gate
-    if: github.ref == 'refs/heads/main'
+    # Only run on main branch and skip if commit has [skip ci]
+    if: github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, '[skip ci]')
     runs-on: ubuntu-latest
 
     permissions:
@@ -59,6 +65,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          # Use a PAT to allow semantic-release commits to trigger Vercel deployment
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up pnpm
         uses: pnpm/action-setup@v4
