@@ -85,17 +85,20 @@ The version appears at the bottom of every page (except entry page `/`):
 ### Manual Testing
 
 1. Check current version:
+
    ```bash
    curl http://localhost:3002/api/version
    # {"version":"1.0.0"}
    ```
 
 2. Update version in package.json:
+
    ```bash
    # Edit package.json, change "version": "1.0.0" to "1.0.1"
    ```
 
 3. Verify API returns new version:
+
    ```bash
    curl http://localhost:3002/api/version
    # {"version":"1.0.1"}
@@ -123,6 +126,7 @@ expect(version).toMatch(/v\d+\.\d+\.\d+/)
 **Cause**: API endpoint failing to read package.json
 
 **Solution**:
+
 1. Check server logs for errors
 2. Verify package.json exists at project root
 3. Check file permissions
@@ -132,6 +136,7 @@ expect(version).toMatch(/v\d+\.\d+\.\d+/)
 **Cause**: Browser cache or CDN cache
 
 **Solution**:
+
 1. Hard refresh browser (Cmd+Shift+R / Ctrl+Shift+R)
 2. Wait 60s for cache to expire
 3. Check Vercel deployment logs
@@ -141,6 +146,7 @@ expect(version).toMatch(/v\d+\.\d+\.\d+/)
 **Cause**: Trying to use Node.js fs module in client code
 
 **Solution**:
+
 - Ensure Footer.tsx is a client component ('use client')
 - Ensure fs is only used in API routes (server-side)
 - Current implementation uses API endpoint pattern (correct)
