@@ -115,10 +115,22 @@ export default function Hero() {
   // Trigger entrance animation and load background components when in view
   useEffect(() => {
     controls.start('visible')
-    // Load backgrounds immediately for better perceived performance
+    // Load cosmic stars immediately for better perceived performance
     setEnableCosmicStars(true)
-    setEnableShootingStars(true)
-    setEnablePlanetDivider(true)
+
+    // Load other heavy components with a longer stagger to reduce initial CPU spike
+    const shootingStarsTimer = requestIdleCallback(() => {
+      setEnableShootingStars(true)
+    }, { timeout: 1000 }) // Increased from 500ms
+
+    const planetDividerTimer = requestIdleCallback(() => {
+      setEnablePlanetDivider(true)
+    }, { timeout: 1500 }) // Increased from 800ms
+
+    return () => {
+      cancelIdleCallback(shootingStarsTimer)
+      cancelIdleCallback(planetDividerTimer)
+    }
   }, [controls])
 
   return (
@@ -129,7 +141,13 @@ export default function Hero() {
       {/* Cosmic Stars Background - Lightweight CSS-based stars */}
       <ClientOnly>
         {enableCosmicStars && (
-          <div className="absolute inset-0 w-full h-full z-[1]">
+          <div
+            className="absolute inset-0 w-full h-full z-[1]"
+            style={{
+              willChange: 'contents',
+              contain: 'layout',
+            }}
+          >
             <DynamicCosmicStars />
           </div>
         )}
@@ -162,9 +180,7 @@ export default function Hero() {
               <span
                 className="inline-block"
                 style={{
-                  textShadow:
-                    '0 0 40px rgba(255,255,255,0.3), 0 0 80px rgba(255,255,255,0.2), 0 0 120px rgba(255,255,255,0.1)',
-                  filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.45))',
+                  textShadow: '0 0 40px rgba(255,255,255,0.3), 0 8px 16px rgba(0,0,0,0.45)',
                 }}
               >
                 Your Vision,
@@ -173,9 +189,7 @@ export default function Hero() {
                 className="inline-block"
                 style={{
                   color: '#ccff00',
-                  textShadow:
-                    '0 0 40px rgba(204,255,0,0.4), 0 0 80px rgba(204,255,0,0.3), 0 0 120px rgba(204,255,0,0.2)',
-                  filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.45))',
+                  textShadow: '0 0 40px rgba(204,255,0,0.4), 0 8px 16px rgba(0,0,0,0.45)',
                 }}
               >
                 Engineered.
@@ -195,11 +209,7 @@ export default function Hero() {
                   {/* Subtle animated gradient background - disable on mobile for performance */}
                   <div className="absolute inset-0 hidden sm:block opacity-30">
                     <div
-                      className={`absolute inset-0 bg-gradient-to-br from-[#4CD787]/8 via-transparent to-[#ccff00]/8 ${isMobile ? '' : 'animate-pulse'}`}
-                      style={{
-                        animationDuration: '4s',
-                        animationPlayState: isMobile ? 'paused' : 'running',
-                      }}
+                      className="absolute inset-0 bg-gradient-to-br from-[#4CD787]/8 via-transparent to-[#ccff00]/8"
                     />
                   </div>
 
