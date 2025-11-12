@@ -19,12 +19,12 @@ import { Partytown } from '@qwik.dev/partytown/react'
 import { createOgImageUrl, createTwitterImageUrl, getSiteUrl } from '@/lib/og'
 
 // Self-hosted fonts via next/font for better performance
-// Using 'optional' for better CLS - font won't swap if already rendered
+// Using 'swap' for better FCP - fallback fonts display while custom fonts load
 const ibmPlexMono = IBM_Plex_Mono({
   weight: ['400', '600'],
   subsets: ['latin'],
   variable: '--font-ibm-plex-mono',
-  display: 'optional', // Changed from 'swap' to prevent CLS from font loading
+  display: 'swap', // Font swaps when ready, ensures text always visible
   preload: true,
   fallback: ['ui-monospace', 'Menlo', 'Monaco', 'Courier New', 'monospace'],
 })
@@ -33,7 +33,7 @@ const ibmPlexSans = IBM_Plex_Sans({
   weight: ['400', '600'],
   subsets: ['latin'],
   variable: '--font-ibm-plex-sans',
-  display: 'optional', // Changed from 'swap' to prevent CLS from font loading
+  display: 'swap', // Font swaps when ready, ensures text always visible
   preload: true,
   fallback: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
 })
@@ -266,6 +266,33 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className="dark" style={{ backgroundColor: '#000000' }}>
       <head>
+        {/* CRITICAL: Safari polyfill - must run BEFORE any other scripts */}
+        <Script
+          id="requestIdleCallback-polyfill"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+(function() {
+  if (!('requestIdleCallback' in window)) {
+    window.requestIdleCallback = function(cb, opts) {
+      var start = Date.now();
+      return setTimeout(function() {
+        cb({
+          didTimeout: false,
+          timeRemaining: function() {
+            return Math.max(0, 50 - (Date.now() - start));
+          }
+        });
+      }, 1);
+    };
+    window.cancelIdleCallback = function(id) {
+      clearTimeout(id);
+    };
+  }
+})();
+            `.trim(),
+          }}
+        />
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="mobile-web-app-capable" content="yes" />
@@ -353,8 +380,13 @@ gtag('config', '${gaId}', {
             <GlobalTransition />
           </div>
         </ErrorBoundary>
-        <SpeedInsights />
-        <Analytics />
+        {/* Only load Vercel Analytics in production (they don't work locally) */}
+        {process.env.NODE_ENV === 'production' && (
+          <>
+            <SpeedInsights />
+            <Analytics />
+          </>
+        )}
       </body>
     </html>
   )

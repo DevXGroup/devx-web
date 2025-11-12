@@ -16,12 +16,12 @@ const FeaturesSection = dynamic(() => import('@sections/Features'), {
 
 const ProcessSection = dynamic(() => import('@sections/Process'), {
   ssr: false,
-  loading: () => null,
+  loading: () => <div className="h-96" />, // Placeholder to prevent layout shift
 })
 
 const DevelopmentToolsSection = dynamic(() => import('@sections/DevelopmentTools'), {
   ssr: false,
-  loading: () => null,
+  loading: () => <div className="h-96" />, // Placeholder to prevent layout shift
 })
 
 export default function HomePageClient() {
@@ -39,36 +39,7 @@ export default function HomePageClient() {
     }
   }, [])
 
-  // Performance observer for layout shifts (disabled in production)
-  useEffect(() => {
-    if (
-      typeof window !== 'undefined' &&
-      'PerformanceObserver' in window &&
-      process.env.NODE_ENV === 'development'
-    ) {
-      const observer = new PerformanceObserver((list) => {
-        for (const entry of list.getEntries()) {
-          // Type guard to check if entry is a LayoutShift
-          const layoutShiftEntry = entry as PerformanceEntry & {
-            hadRecentInput?: boolean
-            value?: number
-          }
-          if (layoutShiftEntry.hadRecentInput) continue // Ignore layout shifts after user input
-          // Track cumulative layout shift silently
-        }
-      })
-
-      try {
-        observer.observe({ entryTypes: ['layout-shift'] })
-      } catch (e) {
-        // Some browsers might not support this entry type
-      }
-
-      return () => observer.disconnect()
-    }
-    // Return undefined when PerformanceObserver is not available
-    return undefined
-  }, [])
+  // Performance observer removed to reduce CPU usage - use browser DevTools instead
 
   useEffect(() => {
     // Performance marking
@@ -86,6 +57,9 @@ export default function HomePageClient() {
       window.scrollTo(0, 0)
     }
 
+    // Don't clear the fromEntry flag here - let GlobalTransition handle it
+    // This prevents race condition where flag is cleared before transition detects it
+
     // Set loaded immediately for better performance
     setIsLoaded(true)
     // Mark time when page is loaded
@@ -94,16 +68,8 @@ export default function HomePageClient() {
       performance.measure('home-page-load', 'home-page-start', 'home-page-loaded')
     }
 
-    // Check if coming from entry page (session storage flag)
-    const fromEntry = sessionStorage.getItem('fromEntry') === 'true'
-
     // Show navbar immediately for better performance
     setNavbarReady(true)
-
-    // Clear the flag after using it
-    if (fromEntry) {
-      sessionStorage.removeItem('fromEntry')
-    }
   }, [])
 
   useEffect(() => {
@@ -113,10 +79,12 @@ export default function HomePageClient() {
   return (
     <main
       data-page="home"
-      className={`flex min-h-screen flex-col items-center w-full bg-black ${
+      className={`relative flex min-h-screen flex-col items-center w-full bg-black ${
         isLoaded ? 'loaded' : ''
       } ${navbarReady ? 'navbar-ready' : ''}`}
-      style={{ backgroundColor: '#000000' }}
+      style={{
+        backgroundColor: '#000000',
+      }}
     >
       <Hero />
       <FeaturesSection />
