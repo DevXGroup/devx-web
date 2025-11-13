@@ -19,6 +19,7 @@ jobs:
 
     permissions:
       contents: read
+      statuses: write
 
     steps:
       - name: Checkout repository
@@ -30,7 +31,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: pnpm
 
       - name: Install dependencies
@@ -84,7 +85,7 @@ jobs:
         with:
           fetch-depth: 0
           # Use a PAT to allow semantic-release commits to trigger Vercel deployment
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.SEMANTIC_RELEASE_TOKEN }}
 
       - name: Set up pnpm
         uses: pnpm/action-setup@v4
@@ -92,7 +93,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: pnpm
 
       - name: Install dependencies
@@ -100,5 +101,5 @@ jobs:
 
       - name: Semantic release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.SEMANTIC_RELEASE_TOKEN }}
         run: pnpm release

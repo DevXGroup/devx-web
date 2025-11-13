@@ -228,6 +228,9 @@ importers:
       '@semantic-release/github':
         specifier: ^12.0.2
         version: 12.0.2(semantic-release@25.0.2(typescript@5.9.3))
+      '@semantic-release/npm':
+        specifier: ^13.1.1
+        version: 13.1.1(semantic-release@25.0.2(typescript@5.9.3))
       '@size-limit/preset-app':
         specifier: ^11.2.0
         version: 11.2.0(size-limit@11.2.0)
