@@ -1,3 +1,9 @@
+## [1.1.1](https://github.com/DevXGroup/devx-web/compare/v1.1.0...v1.1.1) (2025-11-13)
+
+### Bug Fixes
+
+* configure semantic-release to update package.json version and enable preview branch deployments ([0c2aaa7](https://github.com/DevXGroup/devx-web/commit/0c2aaa797cb27fdb616306c240db6a576556ad52))
+
 ## [1.1.0](https://github.com/DevXGroup/devx-web/compare/v1.0.0...v1.1.0) (2025-11-13)
 
 ### Features
