@@ -2,10 +2,5 @@
   "buildCommand": "pnpm build",
   "installCommand": "pnpm install --frozen-lockfile",
   "framework": "nextjs",
-  "git": {
-    "deploymentEnabled": {
-      "main": true
-    }
-  },
   "ignoreCommand": "bash -c '[[ \"$VERCEL_GIT_COMMIT_MESSAGE\" =~ \\[skip.*vercel\\] ]]'"
 }
