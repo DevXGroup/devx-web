@@ -21,13 +21,13 @@
     "not dead"
   ],
   "scripts": {
-    "dev": "next dev --port 3002",
+    "dev": "npx next dev --port 3002",
     "build": "pnpm next build",
     "start": "pnpm next start",
     "lint": "pnpm format:check && pnpm next lint",
     "lint:fix": "pnpm format && pnpm next lint --fix",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "format": "npx prettier --write .",
+    "format:check": "npx prettier --check .",
     "test": "pnpm jest",
     "test:watch": "pnpm jest --watch",
     "test:coverage": "pnpm jest --coverage",
