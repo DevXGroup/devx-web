@@ -1,3 +1,46 @@
+## [1.2.0](https://github.com/DevXGroup/devx-web/compare/v1.1.1...v1.2.0) (2025-11-14)
+
+### Features
+
+* better canvas mouse handling - added stars to hero ([0b2fdc3](https://github.com/DevXGroup/devx-web/commit/0b2fdc3ecd971758108104558ac0240f17bdc926))
+* blobs are improved and re-implemented ([c0559fe](https://github.com/DevXGroup/devx-web/commit/c0559fe248e466b82eb41f734472636910d706d7))
+* star field now randomizes and is more natural and satisfying! ([d4a4242](https://github.com/DevXGroup/devx-web/commit/d4a42428f1d69587df59f1adf55f56a022545f45))
+* updated dev tools background (stars); it's now very performant and nicer! + useCanvas hook for integrating all canvases into it to follow the same ruler for all of them (still need to refactor) ([edc5230](https://github.com/DevXGroup/devx-web/commit/edc52309569d34ac1d6e947ca7d0c0bca4fc930b))
+* Updated shooting stars to use the new canvas logic and updated a ([c1a7433](https://github.com/DevXGroup/devx-web/commit/c1a7433acbf5f7ff3b10f3c60668231256918827))
+* updated useCanvas with a pack of great features! - updated grid ([39f2208](https://github.com/DevXGroup/devx-web/commit/39f2208b1cfee23ceacd8efc56e37809e0ef7ffb))
+
+### Bug Fixes
+
+* button style in feature section ([4bda871](https://github.com/DevXGroup/devx-web/commit/4bda87152538fca29b049f445897181169131eb9))
+* Fixed animated blobs scroll smoothness ([fed643b](https://github.com/DevXGroup/devx-web/commit/fed643b8fec4df855bb72345a8412d433251d562))
+* fixed lint error ([aa481ef](https://github.com/DevXGroup/devx-web/commit/aa481ef0680766d6c0f1d6ad7ed6e810430d7557))
+* fixed performance and optimization ([070458d](https://github.com/DevXGroup/devx-web/commit/070458d7d9b158f7b317b90d3e46acb19540a27b))
+* fixed PlanetDivider logic and made it more smooth and optmized ([06c6168](https://github.com/DevXGroup/devx-web/commit/06c6168f1b2fbf38fa783938d5e9273e5242428b))
+* fixed threads animation on safari which was broken ([5286856](https://github.com/DevXGroup/devx-web/commit/5286856ebc2911246920c68f3c90f01674fb9c52))
+* format ([680f627](https://github.com/DevXGroup/devx-web/commit/680f6272f775734f3f9c548bfa90d88854851c4d))
+* format ([d1f6d12](https://github.com/DevXGroup/devx-web/commit/d1f6d12146ec1ec99922b2e6648a5b78872429c0))
+* grid animation optimized ([5975e63](https://github.com/DevXGroup/devx-web/commit/5975e6397254302c8648415ff3960739c3666280))
+* grid animation optimized ([48a5db7](https://github.com/DevXGroup/devx-web/commit/48a5db7913ea4e6a8c2511f64714dcf1ee0cd6b4))
+* grid animation pauses it's outside the viewport ([35a06ef](https://github.com/DevXGroup/devx-web/commit/35a06efcc317a89c9cbcc9b34220eaa624175104))
+* lint ([90dfb4f](https://github.com/DevXGroup/devx-web/commit/90dfb4f51e929f81c2ea0db7a9b13d1b3872c8b0))
+* made grid animation look the same on mobile and desktop ([acf957b](https://github.com/DevXGroup/devx-web/commit/acf957b4607c95e20baa2e0ba5f39bb84003d728))
+* minor fixes ([c779d6e](https://github.com/DevXGroup/devx-web/commit/c779d6e63e3a23b4c0d2faa8191986c7a266a4c9))
+* minor LCP fix for planet ([4652106](https://github.com/DevXGroup/devx-web/commit/4652106f27646f0f20c9c730b3946ab02982fbef))
+* minor useCanvas fix ([534f124](https://github.com/DevXGroup/devx-web/commit/534f12493f3e7f98b7877b15e6454485e87613c9))
+* optimized animated blob to support out of view pausing ([2334f5c](https://github.com/DevXGroup/devx-web/commit/2334f5c856c7a278d2f1c02399f0bcb34aab05d8))
+* optimized footer threads ([9ce309a](https://github.com/DevXGroup/devx-web/commit/9ce309a42efd16a31b3a311042c7b64677760977))
+* optimized infinity logo for better performance ([6700dee](https://github.com/DevXGroup/devx-web/commit/6700dee96eb146742b3f79ace2387ac8f721fe86))
+* revert home ([875d50b](https://github.com/DevXGroup/devx-web/commit/875d50bb38b57378d476f655b01034b776763bb8))
+* revert replaced changes by prettier format ([d3ffcbe](https://github.com/DevXGroup/devx-web/commit/d3ffcbe0f0242b324b8ce45a857f1339a4dc4076))
+* revert replaced changes by prettier format ([08c024e](https://github.com/DevXGroup/devx-web/commit/08c024efb036eaa475c0e7bcb728c6d87bee816f))
+* shooting stars delta time fixed ([85877b0](https://github.com/DevXGroup/devx-web/commit/85877b0807f217985d253da61088d1e3dbc2f00b))
+* star border css hover fix ([d6c183c](https://github.com/DevXGroup/devx-web/commit/d6c183cfabfe8f8cd6640d238fdc7c47c61c99ae))
+* star offscreen length ([c6a8d08](https://github.com/DevXGroup/devx-web/commit/c6a8d080637ee95c7dfba6dcddf6167661503ddd))
+* stars no vanish when turely out of the screen ([419e39f](https://github.com/DevXGroup/devx-web/commit/419e39f0b9560275b805fd8eaec9579ef592e1a1))
+* tune default setting ([41e7293](https://github.com/DevXGroup/devx-web/commit/41e7293cb6b469b14b49e7c8063e8707212859e3))
+* tune threads ([079bbc4](https://github.com/DevXGroup/devx-web/commit/079bbc42803eb03c2504d777e642b04a702937d8))
+* updated shooting stars to be optimized in their calculations ([8e0c63a](https://github.com/DevXGroup/devx-web/commit/8e0c63a9c57e5b3c9d95076a6e431adca490979f))
+
 ## [1.1.1](https://github.com/DevXGroup/devx-web/compare/v1.1.0...v1.1.1) (2025-11-13)
 
 ### Bug Fixes
