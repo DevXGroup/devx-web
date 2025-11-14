@@ -2,7 +2,7 @@
 
 import { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { AdditiveBlending } from 'three'
+import { AdditiveBlending, Points, Group, Mesh } from 'three'
 
 // Performance-based configuration
 const getPerformanceConfig = () => {
@@ -44,7 +44,7 @@ function SimpleStarLayer({
   count: number
   viewport: { width: number; height: number }
 }) {
-  const mesh = useRef<any>(null)
+  const mesh = useRef<Points>(null!)
   const performanceConfig = useMemo(() => getPerformanceConfig(), [])
   const frameCounter = useRef(0)
 
@@ -286,7 +286,7 @@ function BrightStarsLayer({
   count: number
   viewport: { width: number; height: number }
 }) {
-  const groupRef = useRef<any>(null)
+  const groupRef = useRef<Group>(null!)
 
   const starData = useRef(() => {
     const data = []
@@ -363,8 +363,8 @@ function BrightStar({
   spikeRotationSpeed: number
   color: [number, number, number]
 }) {
-  const starRef = useRef<any>(null)
-  const spikesRef = useRef<any>(null)
+  const starRef = useRef<Points>(null!)
+  const spikesRef = useRef<Mesh>(null!)
 
   useFrame((state) => {
     if (starRef.current && spikesRef.current) {

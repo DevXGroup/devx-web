@@ -9,8 +9,24 @@ import CubeFallback from './CubeFallback'
 import DevXEnvironment from './DevXEnvironment'
 
 // Interactive cube face component
-function CubeFace({ position, rotation, text, color, onClick, isActive, index }: any) {
-  const meshRef = useRef<any>(null)
+function CubeFace({
+  position,
+  rotation,
+  text,
+  color,
+  onClick,
+  isActive,
+  index,
+}: {
+  position: [number, number, number]
+  rotation: [number, number, number]
+  text: string
+  color: string
+  onClick: (index: number) => void
+  isActive: boolean
+  index: number
+}) {
+  const meshRef = useRef<THREE.Mesh>(null!)
   const [hovered, setHovered] = useState(false)
 
   // Pulsing animation for the active face

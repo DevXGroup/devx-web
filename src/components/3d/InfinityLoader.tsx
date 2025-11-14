@@ -72,7 +72,7 @@ const LightBeamMaterial = ({ color, opacity = 0.07 }: { color: string; opacity?:
 
 function InfinityMesh() {
   const meshRef = useRef<THREE.Mesh>(null!)
-  const materialRef = useRef<any>(null!)
+  const materialRef = useRef<typeof MeshTransmissionMaterial>(null!)
   const ray1Ref = useRef<THREE.Mesh>(null!)
   const ray2Ref = useRef<THREE.Mesh>(null!)
   const ray3Ref = useRef<THREE.Mesh>(null!)
