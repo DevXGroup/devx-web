@@ -1,5 +1,8 @@
 'use client'
 
+import { usePerformanceOptimizedAnimation } from '@/hooks/use-performance-optimized-animation'
+import { useScrollRef } from '@/hooks/use-scrollRef'
+import { useInView } from 'framer-motion'
 import { useEffect, useState, useRef } from 'react'
 
 /**
@@ -11,98 +14,59 @@ import { useEffect, useState, useRef } from 'react'
  * - Scroll-based movement (moves down as you scroll, with delay)
  * - High performance on all devices
  */
-export default function PlanetDivider() {
-  const [mounted, setMounted] = useState(false)
-  const [scrollY, setScrollY] = useState(0)
-  const [isMobile, setIsMobile] = useState(false)
-  const [isInView, setIsInView] = useState(true)
+export default function PlanetDivider({ opacity = 0.68 }) {
   const containerRef = useRef<HTMLDivElement>(null)
+  const [mounted, setMounted] = useState(false)
+  const scrollYRef = useScrollRef({ throttleDelay: 4 })
+  const { isMobile } = usePerformanceOptimizedAnimation()
+  const isInView = useInView(containerRef, { margin: '0px' })
 
   useEffect(() => {
-    setMounted(true)
-    setIsMobile(window.innerWidth < 768)
+    if (typeof window === 'undefined') return
 
-    let ticking = false
-    const handleScroll = () => {
-      // Only update if planet is potentially visible (first 1000px of page)
-      if (window.scrollY > 1000) return
-
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          setScrollY(window.scrollY)
-          ticking = false
-        })
-        ticking = true
-      }
-    }
-
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768)
-    }
-
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    window.addEventListener('resize', handleResize)
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-      window.removeEventListener('resize', handleResize)
-    }
-  }, [])
-
-  // Intersection observer to pause rotation when out of view
-  useEffect(() => {
     const element = containerRef.current
     if (!element) return
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          setIsInView(entry.isIntersecting)
-        })
-      },
-      {
-        threshold: 0.1, // Trigger when 10% visible
-        rootMargin: '100px', // Start observing 100px before entering viewport
-      }
-    )
+    let animationFrameId: number
 
-    observer.observe(element)
+    const animate = () => {
+      const scrollY = scrollYRef.current
+      const scrollProgress = Math.min(scrollY / 500, 1)
+
+      const easeOutCubic = (t: number): number => 1 - Math.pow(1 - t, 3)
+      const easedOffset = easeOutCubic(scrollProgress) * (isMobile ? 150 : 250)
+      const currentOpacity = opacity * (1 - scrollProgress)
+
+      element.style.setProperty('--planet-offset-y', `${easedOffset}px`)
+      element.style.setProperty('--planet-opacity', currentOpacity.toString())
+
+      animationFrameId = requestAnimationFrame(animate)
+    }
+
+    animationFrameId = window.requestAnimationFrame(animate)
 
     return () => {
-      observer.unobserve(element)
+      cancelAnimationFrame(animationFrameId)
     }
-  }, [mounted])
-
-  if (!mounted) return null
+  }, [])
 
   // Responsive sizing
   const planetSize = isMobile ? 360 : 700
   const containerHeight = isMobile ? 180 : 350
 
-  // Calculate scroll-based movement (similar to original but simplified)
-  // Move down slowly as user scrolls (with easing)
-  const scrollProgress = Math.min(scrollY / 500, 1) // 0 to 1 over 500px scroll
-
-  // Easing function for smooth movement
-  const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3)
-  const easedOffset = easeOutCubic(scrollProgress) * (isMobile ? 150 : 250)
-
-  // Calculate opacity based on scroll position
-  // Initially at full opacity (0.68) in hero section
-  // Scroll down: fade out from 0.68 to 0 over first 500px while moving down
-  // Scroll up: fade back in from 0 to 0.68 as you return to hero
-  const maxOpacity = 0.68
-  const opacity = maxOpacity * (1 - Math.min(scrollY / 500, 1))
-
   return (
     <div
       ref={containerRef}
       className="relative w-full mx-auto pointer-events-none"
-      style={{
-        height: `${containerHeight}px`,
-        background: 'transparent',
-        overflow: 'visible', // Allow glow to extend beyond container
-      }}
+      style={
+        {
+          height: `${containerHeight}px`,
+          background: 'transparent',
+          overflow: 'visible', // Allow glow to extend beyond container
+          '--planet-offset-y': '0px',
+          '--planet-opacity': `${opacity}`,
+        } as React.CSSProperties
+      }
     >
       {/* Planet container - only shows bottom 1/2 */}
       <div
@@ -111,21 +75,17 @@ export default function PlanetDivider() {
           width: `${planetSize}px`,
           height: `${planetSize}px`,
           marginLeft: `-${planetSize / 2}px`,
-          transform: `translateY(calc(50% + ${easedOffset}px))`, // Show only 50% (1/2) + scroll offset
+          transform: `translateY(calc(50% + var(--planet-offset-y)))`,
+          transition: 'transform 0.1s ease-out',
           overflow: 'visible', // Allow glow to extend
-          willChange: 'transform, opacity',
+          willChange: 'transform',
         }}
       >
         {/* Rotating planet with glow */}
         <div className="planet-rotate-container">
           <div className="planet-glow-container">
             {/* Safari-compatible glow layer using radial gradient */}
-            <div
-              className="planet-glow-bg"
-              style={{
-                opacity, // Match planet opacity
-              }}
-            />
+            <div className="planet-glow-bg" style={{ opacity: 'var(--planet-opacity)' }} />
             <picture className="planet-sphere-wrapper">
               <source
                 srcSet="/moon_hero_1536.webp 1536w, /moon_hero_1024.webp 1024w, /moon_hero_768.webp 768w, /moon_hero_512.webp 512w"
@@ -146,13 +106,12 @@ export default function PlanetDivider() {
                   width: '100%',
                   height: '100%',
                   objectFit: 'contain',
-                  opacity, // Dynamic opacity based on scroll direction
-                  // Ensure proper rendering in Safari and other browsers
+                  opacity: 'var(--planet-opacity)',
                   transform: 'translateZ(0)',
                   WebkitTransform: 'translateZ(0)',
                   backfaceVisibility: 'hidden',
                   WebkitBackfaceVisibility: 'hidden',
-                  willChange: 'filter, opacity',
+                  willChange: 'opacity',
                 }}
               />
             </picture>

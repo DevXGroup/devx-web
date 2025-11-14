@@ -1,4 +1,5 @@
-import React, { useRef, useEffect } from 'react'
+import { useCanvas } from '@/hooks/use-canvas'
+import { useRef, useEffect } from 'react'
 
 type CanvasStrokeStyle = string | CanvasGradient | CanvasPattern
 
@@ -7,144 +8,91 @@ interface GridOffset {
   y: number
 }
 
-interface GridAnimationProps {
+const GridAnimation = ({
+  direction = 'right',
+  speed = 1,
+  borderColor = '#999',
+  hoverFillColor = '#222',
+  flickerColor = '#fff',
+  squareSize = 40,
+  randomFlicker = false,
+  flickerInterval = 550,
+  maxFlickerSquares = 10,
+  showRadialGradient = true,
+}: {
   direction?: 'diagonal' | 'up' | 'right' | 'down' | 'left'
   speed?: number
   borderColor?: CanvasStrokeStyle
-  squareSize?: number
   hoverFillColor?: CanvasStrokeStyle
+  flickerColor?: CanvasStrokeStyle
+  squareSize?: number
   randomFlicker?: boolean
   flickerInterval?: number
   maxFlickerSquares?: number
   showRadialGradient?: boolean
-}
-
-const GridAnimation: React.FC<GridAnimationProps> = ({
-  direction = 'right',
-  speed = 1,
-  borderColor = '#999',
-  squareSize = 40,
-  hoverFillColor = '#222',
-  randomFlicker = false,
-  flickerInterval = 150,
-  maxFlickerSquares = 5,
-  showRadialGradient = true,
 }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  const requestRef = useRef<number | null>(null)
   const numSquaresX = useRef<number>(0)
   const numSquaresY = useRef<number>(0)
   const gridOffset = useRef<GridOffset>({ x: 0, y: 0 })
   const hoveredSquareRef = useRef<GridOffset | null>(null)
   const flickerSquaresRef = useRef<Set<string>>(new Set())
-  const lastFlickerTimeRef = useRef<number>(0)
+  const timeSinceLastFlickerRef = useRef(0)
   const gradientRef = useRef<CanvasGradient | null>(null)
-  const isMobileRef = useRef<boolean>(false)
+
+  const generateGradient = () => {
+    const canvas = canvasRef.current
+    const ctx = canvas?.getContext('2d')
+    if (!canvas || !ctx) return
+
+    numSquaresX.current = Math.ceil(canvas.offsetWidth / squareSize) + 1
+    numSquaresY.current = Math.ceil(canvas.offsetHeight / squareSize) + 1
+
+    // Cache gradient on resize (only if needed and not on mobile)
+    if (!showRadialGradient || isMobile) return
+
+    gradientRef.current = ctx.createRadialGradient(
+      canvas.width / 2,
+      canvas.height / 2,
+      0,
+      canvas.width / 2,
+      canvas.height / 2,
+      Math.sqrt(canvas.width ** 2 + canvas.height ** 2) / 2
+    )
+    gradientRef.current.addColorStop(0, 'rgba(0, 0, 0, 0.88)')
+    gradientRef.current.addColorStop(0.35, 'rgba(0, 0, 0, 0.65)')
+    gradientRef.current.addColorStop(0.65, 'rgba(0, 0, 0, 0.25)')
+    gradientRef.current.addColorStop(1, 'rgba(0, 0, 0, 0)')
+  }
 
   useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext('2d', { alpha: true })
-    if (!ctx) return
+    generateGradient()
+  }, [])
 
-    // Detect mobile for performance optimizations
-    isMobileRef.current =
-      window.innerWidth < 768 ||
-      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-    const dpr = isMobileRef.current ? 1 : window.devicePixelRatio || 1 // Use 1x on mobile for better performance
-
-    const resizeCanvas = () => {
-      canvas.width = canvas.offsetWidth * dpr
-      canvas.height = canvas.offsetHeight * dpr
-      numSquaresX.current = Math.ceil(canvas.offsetWidth / squareSize) + 1
-      numSquaresY.current = Math.ceil(canvas.offsetHeight / squareSize) + 1
-
-      // Cache gradient on resize (only if needed and not on mobile)
-      if (showRadialGradient && !isMobileRef.current) {
-        gradientRef.current = ctx.createRadialGradient(
-          canvas.width / 2,
-          canvas.height / 2,
-          0,
-          canvas.width / 2,
-          canvas.height / 2,
-          Math.sqrt(canvas.width ** 2 + canvas.height ** 2) / 2
-        )
-        gradientRef.current.addColorStop(0, 'rgba(0, 0, 0, 0.88)')
-        gradientRef.current.addColorStop(0.35, 'rgba(0, 0, 0, 0.65)')
-        gradientRef.current.addColorStop(0.65, 'rgba(0, 0, 0, 0.25)')
-        gradientRef.current.addColorStop(1, 'rgba(0, 0, 0, 0)')
-      }
-    }
-
-    window.addEventListener('resize', resizeCanvas)
-    setTimeout(resizeCanvas, 0)
-
-    const scaledSquareSize = squareSize * dpr
-
-    const drawGrid = () => {
-      if (!ctx) return
-
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      ctx.lineWidth = Math.max(0.5, 0.5 * dpr)
-
-      const startX = Math.floor(gridOffset.current.x / scaledSquareSize) * scaledSquareSize
-      const startY = Math.floor(gridOffset.current.y / scaledSquareSize) * scaledSquareSize
-
-      for (let x = startX; x < canvas.width + scaledSquareSize; x += scaledSquareSize) {
-        for (let y = startY; y < canvas.height + scaledSquareSize; y += scaledSquareSize) {
-          const squareX = x - gridOffset.current.x
-          const squareY = y - gridOffset.current.y
-
-          const gridX = Math.floor(x / scaledSquareSize)
-          const gridY = Math.floor(y / scaledSquareSize)
-          const squareKey = `${gridX}-${gridY}`
-
-          const isHovered =
-            hoveredSquareRef.current &&
-            gridX === hoveredSquareRef.current.x &&
-            gridY === hoveredSquareRef.current.y
-
-          const isFlickering = randomFlicker && flickerSquaresRef.current.has(squareKey)
-
-          if (isHovered || isFlickering) {
-            // Enhanced hover/flicker effect with glow
-            ctx.fillStyle = hoverFillColor
-            ctx.shadowColor = typeof borderColor === 'string' ? borderColor : '#FFD700'
-            ctx.shadowBlur = 8
-            ctx.fillRect(squareX, squareY, scaledSquareSize, scaledSquareSize)
-            ctx.shadowBlur = 0
-          }
-
-          ctx.strokeStyle = borderColor
-          ctx.strokeRect(squareX, squareY, scaledSquareSize, scaledSquareSize)
-        }
+  const { canvasRef, isMobile } = useCanvas({
+    useDPR: true,
+    onResize: () => {
+      generateGradient()
+    },
+    onMouse: ({ x, y, type }) => {
+      if (type === 'leave') {
+        hoveredSquareRef.current = null
+        return
       }
 
-      // Use cached gradient on desktop only (skip on mobile for performance)
-      if (showRadialGradient && !isMobileRef.current && gradientRef.current) {
-        ctx.fillStyle = gradientRef.current
-        ctx.fillRect(0, 0, canvas.width, canvas.height)
-      }
-    }
+      hoveredSquareRef.current = { x, y }
+    },
+    renderCondition: () => {
+      if (!numSquaresX.current || !numSquaresY.current) return false
+      return true
+    },
+    renderFrame: ({ ctx, width, height, time, delta, dpr }) => {
+      ctx.clearRect(0, 0, width, height)
 
-    const updateFlickerSquares = () => {
-      const now = Date.now()
-      if (now - lastFlickerTimeRef.current >= flickerInterval) {
-        flickerSquaresRef.current.clear()
-
-        const numSquares = Math.floor(Math.random() * maxFlickerSquares) + 1
-        for (let i = 0; i < numSquares; i++) {
-          const randomX = Math.floor(Math.random() * numSquaresX.current)
-          const randomY = Math.floor(Math.random() * numSquaresY.current)
-          flickerSquaresRef.current.add(`${randomX}-${randomY}`)
-        }
-
-        lastFlickerTimeRef.current = now
-      }
-    }
-
-    const updateAnimation = () => {
       const effectiveSpeed = Math.max(speed, 0.1) * dpr
+      const scaledSquareSize = squareSize * dpr
+
+      // Movement calculation
+
       switch (direction) {
         case 'right':
           gridOffset.current.x -= effectiveSpeed
@@ -162,89 +110,99 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
           gridOffset.current.x -= effectiveSpeed
           gridOffset.current.y -= effectiveSpeed
           break
-        default:
-          break
+      }
+
+      // Flicker timer and calculation
+
+      if (randomFlicker) {
+        timeSinceLastFlickerRef.current += delta
+        if (timeSinceLastFlickerRef.current >= flickerInterval / 1000) {
+          flickerSquaresRef.current.clear()
+          const numToFlicker = Math.floor(Math.random() * maxFlickerSquares) + 1
+          for (let i = 0; i < numToFlicker; i++) {
+            const x = Math.floor(Math.random() * numSquaresX.current)
+            const y = Math.floor(Math.random() * numSquaresY.current)
+            flickerSquaresRef.current.add(`${x}-${y}`)
+          }
+          timeSinceLastFlickerRef.current = 0
+        }
+      }
+
+      // Render!
+
+      ctx.lineWidth = Math.max(0.5, 0.5 * dpr)
+
+      const startX = Math.floor(gridOffset.current.x / scaledSquareSize)
+      const startY = Math.floor(gridOffset.current.y / scaledSquareSize)
+      const endX = Math.ceil((gridOffset.current.x + width) / scaledSquareSize)
+      const endY = Math.ceil((gridOffset.current.y + height) / scaledSquareSize)
+
+      if (hoveredSquareRef.current) {
+        const { x: mx, y: my } = hoveredSquareRef.current
+
+        const x = Math.floor((mx + gridOffset.current.x) / scaledSquareSize)
+        const y = Math.floor((my + gridOffset.current.y) / scaledSquareSize)
+
+        const squareX = x * scaledSquareSize - gridOffset.current.x
+        const squareY = y * scaledSquareSize - gridOffset.current.y
+        if (
+          squareX + scaledSquareSize > 0 &&
+          squareX < width &&
+          squareY + scaledSquareSize > 0 &&
+          squareY < height
+        ) {
+          ctx.fillStyle = hoverFillColor
+          // ctx.shadowColor = typeof borderColor === 'string' ? borderColor : '#FFD700'
+          ctx.fillRect(squareX, squareY, scaledSquareSize, scaledSquareSize)
+        }
       }
 
       if (randomFlicker) {
-        updateFlickerSquares()
+        flickerSquaresRef.current.forEach((key) => {
+          const [gx, gy] = key.split('-').map(Number)
+          const squareX = gx! * scaledSquareSize - gridOffset.current.x
+          const squareY = gy! * scaledSquareSize - gridOffset.current.y
+          // Simple bounds check to avoid drawing off-screen
+          if (
+            squareX + scaledSquareSize > 0 &&
+            squareX < width &&
+            squareY + scaledSquareSize > 0 &&
+            squareY < height
+          ) {
+            ctx.fillStyle = flickerColor
+            ctx.fillRect(squareX, squareY, scaledSquareSize, scaledSquareSize)
+          }
+        })
       }
 
-      drawGrid()
-      requestRef.current = requestAnimationFrame(updateAnimation)
-    }
+      ctx.beginPath()
 
-    const handleMouseMove = (event: MouseEvent) => {
-      // Use client coordinates for accurate positioning
-      const canvasRect = canvas.getBoundingClientRect()
-
-      // Calculate mouse position relative to canvas
-      const mouseX = (event.clientX - canvasRect.left) * dpr
-      const mouseY = (event.clientY - canvasRect.top) * dpr
-
-      // Check if mouse is within canvas bounds
-      if (mouseX >= 0 && mouseX <= canvas.width && mouseY >= 0 && mouseY <= canvas.height) {
-        const hoveredSquareX = Math.floor((mouseX + gridOffset.current.x) / scaledSquareSize)
-        const hoveredSquareY = Math.floor((mouseY + gridOffset.current.y) / scaledSquareSize)
-
-        if (
-          !hoveredSquareRef.current ||
-          hoveredSquareRef.current.x !== hoveredSquareX ||
-          hoveredSquareRef.current.y !== hoveredSquareY
-        ) {
-          hoveredSquareRef.current = { x: hoveredSquareX, y: hoveredSquareY }
-        }
-      }
-    }
-
-    const handleMouseLeave = () => {
-      hoveredSquareRef.current = null
-    }
-
-    // Create a debounced scroll handler - mobile only clears hover, no resize
-    let scrollTimer: number | null = null
-    const debouncedScrollHandler = () => {
-      // Clear hover state during scrolling
-      hoveredSquareRef.current = null
-
-      // Skip canvas recalculation on mobile to prevent flashing
-      if (isMobileRef.current) return
-
-      if (scrollTimer) {
-        window.clearTimeout(scrollTimer)
+      // Vertical lines
+      for (let gridX = startX; gridX <= endX; gridX++) {
+        const x = gridX * scaledSquareSize - gridOffset.current.x
+        ctx.moveTo(x, 0)
+        ctx.lineTo(x, height)
       }
 
-      // After scrolling stops for a brief moment, recalculate the canvas state (desktop only)
-      scrollTimer = window.setTimeout(() => {
-        resizeCanvas()
-      }, 150)
-    }
+      // Horizontal lines
+      for (let gridY = startY; gridY <= endY; gridY++) {
+        const y = gridY * scaledSquareSize - gridOffset.current.y
+        ctx.moveTo(0, y)
+        ctx.lineTo(width, y)
+      }
 
-    // Listen on window for hover effect to work everywhere
-    window.addEventListener('mousemove', handleMouseMove)
-    canvas.addEventListener('mouseleave', handleMouseLeave)
-    window.addEventListener('scroll', debouncedScrollHandler)
-    requestRef.current = requestAnimationFrame(updateAnimation)
+      ctx.strokeStyle = borderColor
+      ctx.shadowBlur = 0
+      ctx.shadowColor = ''
+      ctx.stroke()
 
-    return () => {
-      window.removeEventListener('resize', resizeCanvas)
-      if (requestRef.current) cancelAnimationFrame(requestRef.current)
-      window.removeEventListener('mousemove', handleMouseMove)
-      canvas.removeEventListener('mouseleave', handleMouseLeave)
-      window.removeEventListener('scroll', debouncedScrollHandler)
-      if (scrollTimer) window.clearTimeout(scrollTimer)
-    }
-  }, [
-    direction,
-    speed,
-    borderColor,
-    hoverFillColor,
-    squareSize,
-    randomFlicker,
-    flickerInterval,
-    maxFlickerSquares,
-    showRadialGradient,
-  ])
+      // Use cached gradient on desktop only (skip on mobile for performance)
+      if (showRadialGradient && !isMobile && gradientRef.current) {
+        ctx.fillStyle = gradientRef.current
+        ctx.fillRect(0, 0, width, height)
+      }
+    },
+  })
 
   return (
     <div className="relative w-full h-full">
@@ -258,12 +216,17 @@ const GridAnimation: React.FC<GridAnimationProps> = ({
         }}
       ></canvas>
       {/* CSS-based gradient overlay for mobile (better performance than canvas) */}
+      {/*<div className="absolute inset-0" style={{
+        backgroundImage: 'repeating-linear-gradient(to right, #999 0 2px, transparent 1px 40px), repeating-linear-gradient(to bottom, #999 0 1px, transparent 2px 40px)',
+        backgroundPosition: '0 0',
+        backgroundSize: '40px 40px',
+      }} />*/}
       {showRadialGradient && (
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              'radial-gradient(circle, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.65) 35%, rgba(0,0,0,0.25) 65%, rgba(0,0,0,0) 100%)',
+              'radial-gradient(circle, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.65) 25%, rgba(0,0,0,0.25) 45%, rgba(0,0,0,0) 100%)',
             mixBlendMode: 'normal',
             opacity: 1,
           }}

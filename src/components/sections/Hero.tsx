@@ -17,6 +17,24 @@ const DynamicCosmicStars = dynamic(() => import('../hero/CosmicStars'), {
     <div className="absolute inset-0 bg-black" style={{ minHeight: '100vh', width: '100%' }} />
   ),
 })
+
+const DynamicStarTwinklingField = dynamic(
+  () => import('../animations/StarTwinklingField').then((v) => v.StarTwinklingField),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="absolute inset-0 bg-black" style={{ minHeight: '100vh', width: '100%' }} />
+    ),
+  }
+)
+
+const DynamicHeroBackground = dynamic(() => import('../hero/HeroBackground'), {
+  ssr: false,
+  loading: () => (
+    <div className="absolute inset-0 bg-black" style={{ minHeight: '100vh', width: '100%' }} />
+  ),
+})
+
 const DynamicPlanetDivider = dynamic(
   () => import('../planet/PlanetDivider').then((mod) => ({ default: mod.default })),
   {
@@ -144,17 +162,11 @@ export default function Hero() {
       ref={sectionRef}
       className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-black"
     >
-      {/* Cosmic Stars Background - Lightweight CSS-based stars */}
       <ClientOnly>
         {enableCosmicStars && (
-          <div
-            className="absolute inset-0 w-full h-full z-[1]"
-            style={{
-              willChange: 'contents',
-              contain: 'layout',
-            }}
-          >
-            <DynamicCosmicStars />
+          <div className="absolute inset-0 w-full h-full z-[1]">
+            <DynamicStarTwinklingField className="z-1" count={50} />
+            <DynamicHeroBackground />
           </div>
         )}
       </ClientOnly>

@@ -255,10 +255,11 @@ export default function Features() {
         <GridAnimation
           direction="diagonal"
           speed={0.3}
-          borderColor="rgba(204, 255, 0, 1)"
           squareSize={36}
           hoverFillColor="rgba(157, 78, 221, 0.45)"
-          randomFlicker={false}
+          borderColor="rgba(204, 255, 0, 1)"
+          flickerColor="rgba(204, 255, 0, 0.4)"
+          randomFlicker={true}
         />
       </div>
 
@@ -393,7 +394,7 @@ export default function Features() {
               )}
               <Link
                 href="/about#our-values"
-                className="group relative inline-flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-[#4CD787] via-[#9d4edd] to-[#4CD787] bg-[length:200%_100%] hover:bg-[position:100%_0] text-black px-6 sm:px-8 py-3 sm:py-4 rounded-xl text-sm sm:text-base font-bold font-['IBM_Plex_Mono'] transition-all duration-500 backdrop-blur-sm border-2 border-[#4CD787]/40 hover:border-[#9d4edd]/60 hover:shadow-2xl hover:shadow-[#4CD787]/50 z-10"
+                className="group relative inline-flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-[#4CD787] via-[#9d4edd] to-[#4CD787] bg-[length:200%_100%] bg-[position:0%_0] hover:bg-[position:100%_0] text-black px-6 sm:px-8 py-3 sm:py-4 rounded-xl text-sm sm:text-base font-bold font-['IBM_Plex_Mono'] transition-all duration-500 backdrop-blur-sm border-2 border-[#4CD787]/40 hover:border-[#9d4edd]/60 hover:shadow-2xl hover:shadow-[#4CD787]/50 z-10"
               >
                 Explore more reasons to choose us
                 <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform duration-300" />
