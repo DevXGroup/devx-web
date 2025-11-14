@@ -20,7 +20,10 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 0)
+      const newState = window.scrollY > 0
+      if (newState !== isScrolled) {
+        setIsScrolled(newState)
+      }
     }
 
     handleScroll()
@@ -152,21 +155,17 @@ export default function Navbar() {
     }
   }
 
-  // Determine background opacity based on backdrop-filter support
-  const bgOpacity = supportsBackdropFilter ? 0.2 : 0.5
-  const navbarStyle = {
-    backgroundColor: `rgba(0, 0, 0, ${bgOpacity})`,
-    backdropFilter: supportsBackdropFilter ? 'blur(12px)' : 'none',
-    WebkitBackdropFilter: supportsBackdropFilter ? 'blur(12px)' : 'none',
-    borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-    boxShadow: isScrolled ? '0 18px 40px rgba(0,0,0,0.35)' : '0 12px 28px rgba(0,0,0,0.2)',
-    transition: 'background-color 0.3s ease, box-shadow 0.3s ease',
-  }
-
   return (
     <nav
       className={`fixed w-full z-[9999] transition-all duration-300 mt-0 top-0`}
-      style={navbarStyle}
+      style={{
+        backgroundColor: `rgba(0, 0, 0, ${supportsBackdropFilter ? 0.2 : 0.5})`,
+        backdropFilter: supportsBackdropFilter ? 'blur(12px)' : 'none',
+        WebkitBackdropFilter: supportsBackdropFilter ? 'blur(12px)' : 'none',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+        boxShadow: isScrolled ? '0 18px 40px rgba(0,0,0,0.35)' : '0 12px 28px rgba(0,0,0,0.2)',
+        transition: 'background-color 0.3s ease, box-shadow 0.3s ease',
+      }}
     >
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-[14px]">

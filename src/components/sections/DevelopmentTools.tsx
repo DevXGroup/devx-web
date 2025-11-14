@@ -472,7 +472,7 @@ export default function DevelopmentTools() {
     <LayoutGroup>
       {/* Optimized height for better spacing with extra bottom padding for tablets */}
       <div ref={sectionRef} className="relative w-full bg-black z-[150]">
-        <StarTwinklingField />
+        <StarTwinklingField className="-z-1" />
 
         {/* Title section */}
         <div className="py-30 md:py-0 mt-24 md:mt-36 mb-24 md:mb-32">

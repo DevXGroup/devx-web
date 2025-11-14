@@ -22,7 +22,7 @@ const StarBorder = <T extends React.ElementType = 'button'>({
 
   return (
     <Component
-      className={`relative inline-block overflow-hidden rounded-[20px] cursor-pointer`}
+      className={`relative inline-block overflow-hidden rounded-[20px] cursor-pointer group`}
       {...(rest as any)}
       style={{
         padding: `${thickness}px 0`,
@@ -45,9 +45,9 @@ const StarBorder = <T extends React.ElementType = 'button'>({
         }}
       ></div>
       <div
-        className={`relative z-[10] bg-gradient-to-b from-black to-gray-900 border border-gray-800 text-white hover:text-[#ccff00] hover:shadow-[0_0_20px_rgba(204,255,0,0.8)] text-center rounded-[20px] hover:border-robinhood transition-all duration-300 ${className}`}
+        className={`relative z-[10] bg-gradient-to-b from-black to-gray-900 border border-gray-800 text-white group-hover:text-[#ccff00] group-hover:shadow-[0_0_20px_rgba(204,255,0,0.8)] text-center rounded-[20px] group-hover:border-robinhood transition-all duration-300 ${className}`}
       >
-        <span className="relative z-[20] hover:drop-shadow-[0_0_8px_rgba(204,255,0,1)]">
+        <span className="transition-all duration-500 relative z-[20] group-hover:drop-shadow-[0_0_8px_rgba(204,255,0,1)]">
           {children}
         </span>
       </div>

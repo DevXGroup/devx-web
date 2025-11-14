@@ -1,16 +1,16 @@
 'use client'
 
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState, useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { PerspectiveCamera, MeshTransmissionMaterial } from '@react-three/drei'
 import { Vector3, Curve, TubeGeometry, type Mesh, SphereGeometry } from 'three'
 import DevXEnvironment from './DevXEnvironment'
+import { useInView } from 'framer-motion'
 
 export default function InfinityLogo() {
-  const [isMounted, setIsMounted] = useState(false)
-  const [isVisible, setIsVisible] = useState(false)
   const [isInteracting, setIsInteracting] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
+  const isInView = useInView(containerRef, { margin: '0px' })
 
   // Only prevent scrolling when actively interacting with the 3D object
   useEffect(() => {
@@ -32,32 +32,6 @@ export default function InfinityLogo() {
     }
   }, [isInteracting])
 
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
-
-  // IntersectionObserver to detect when component is visible
-  useEffect(() => {
-    if (!containerRef.current) return
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          setIsVisible(entry.isIntersecting)
-        })
-      },
-      {
-        threshold: 0.05,
-        rootMargin: '300px 0px 300px 0px',
-      }
-    )
-
-    observer.observe(containerRef.current)
-    return () => observer.disconnect()
-  }, [isMounted])
-
-  if (!isMounted) return null
-
   return (
     <div className="w-full h-[40vh] flex justify-center items-center overflow-hidden">
       <div
@@ -67,55 +41,64 @@ export default function InfinityLogo() {
           cursor: 'grab',
         }}
       >
-        {isVisible ? (
-          <Canvas
-            shadows
-            style={{ width: '100%', height: '100%' }}
-            onContextMenu={(e) => e.preventDefault()}
-          >
-            <PerspectiveCamera makeDefault position={[0, 0, 10]} />
-            <DevXEnvironment variant="studio" intensity={1.2} />
-            <ambientLight intensity={0.5} />
-            <directionalLight
-              castShadow
-              position={[5, 10, 5]}
-              intensity={1.5}
-              shadow-mapSize-width={1024}
-              shadow-mapSize-height={1024}
-            />
-            <spotLight
-              position={[10, 10, 10]}
-              angle={0.25}
-              penumbra={1}
-              intensity={1}
-              castShadow
-              color="#CCFF00"
-            />
-            <pointLight
-              position={[3, 2, 3]}
-              intensity={2}
-              color="#CCFF00"
-              distance={15}
-              decay={2}
-            />
-            <pointLight
-              position={[-3, -2, 4]}
-              intensity={1.5}
-              color="#4CD787"
-              distance={12}
-              decay={2}
-            />
+        <Canvas
+          shadows
+          style={{ width: '100%', height: '100%' }}
+          onContextMenu={(e) => e.preventDefault()}
+          gl={{ preserveDrawingBuffer: true }}
+          frameloop={isInView ? 'always' : 'never'}
+        >
+          <PerspectiveCamera makeDefault position={[0, 0, 10]} />
+          <DevXEnvironment variant="studio" intensity={1.2} />
+          <ambientLight intensity={0.5} />
+          <directionalLight
+            castShadow
+            position={[5, 10, 5]}
+            intensity={1.5}
+            shadow-mapSize-width={1024}
+            shadow-mapSize-height={1024}
+          />
+          <spotLight
+            position={[10, 10, 10]}
+            angle={0.25}
+            penumbra={1}
+            intensity={1}
+            castShadow
+            color="#CCFF00"
+          />
+          <pointLight position={[3, 2, 3]} intensity={2} color="#CCFF00" distance={15} decay={2} />
+          <pointLight
+            position={[-3, -2, 4]}
+            intensity={1.5}
+            color="#4CD787"
+            distance={12}
+            decay={2}
+          />
 
-            <InfinityMesh setIsInteracting={setIsInteracting} />
-          </Canvas>
-        ) : (
-          <div className="w-full h-full bg-gradient-to-br from-gray-900 to-black flex items-center justify-center">
-            <div className="text-gray-400 text-sm">Loading 3D...</div>
-          </div>
-        )}
+          <InfinityMesh setIsInteracting={setIsInteracting} />
+        </Canvas>
       </div>
     </div>
   )
+}
+
+class InfinityCurve extends Curve<Vector3> {
+  constructor(
+    public width = 3.5,
+    public height = 3.5,
+    public zOffset = 0.2
+  ) {
+    super()
+  }
+
+  getPoint(t: number, optionalTarget = new Vector3()) {
+    const angle = 2 * Math.PI * t
+    const x = (Math.sin(angle) * this.width) / (1 + Math.cos(angle) * Math.cos(angle))
+    const y =
+      (Math.cos(angle) * Math.sin(angle) * this.height) / (1 + Math.cos(angle) * Math.cos(angle))
+    const z = Math.sin(2 * angle) * this.zOffset
+    return optionalTarget.set(x, y, z)
+  }
 }
 
 function InfinityMesh({ setIsInteracting }: { setIsInteracting: (value: boolean) => void }) {
@@ -128,34 +111,24 @@ function InfinityMesh({ setIsInteracting }: { setIsInteracting: (value: boolean)
   const autoRotateSpeed = useRef({ x: 0, y: 0.02 })
   const momentumActive = useRef(false)
 
-  class InfinityCurve extends Curve<Vector3> {
-    constructor(
-      public width = 3.5,
-      public height = 3.5,
-      public zOffset = 0.2
-    ) {
-      super()
-    }
+  const tubeGeometry = useMemo(() => {
+    const tubeCurve = new InfinityCurve(3.5, 3.5, 0.2)
+    const tubeTubeRadius = 0.4
+    const tubeRadialSegments = 64
+    const tubeTubularSegments = 256
 
-    getPoint(t: number, optionalTarget = new Vector3()) {
-      const angle = 2 * Math.PI * t
-      const x = (Math.sin(angle) * this.width) / (1 + Math.cos(angle) * Math.cos(angle))
-      const y =
-        (Math.cos(angle) * Math.sin(angle) * this.height) / (1 + Math.cos(angle) * Math.cos(angle))
-      const z = Math.sin(2 * angle) * this.zOffset
-      return optionalTarget.set(x, y, z)
-    }
-  }
+    return new TubeGeometry(
+      tubeCurve,
+      tubeTubularSegments,
+      tubeTubeRadius,
+      tubeRadialSegments,
+      false
+    )
+  }, [])
 
-  const curve = new InfinityCurve(3.5, 3.5, 0.2)
-  const tubeRadius = 0.4
-  const radialSegments = 64
-  const tubularSegments = 256
-
-  const tubeGeometry = new TubeGeometry(curve, tubularSegments, tubeRadius, radialSegments, false)
-
-  // Create a larger invisible sphere for hit detection
-  const hitAreaGeometry = new SphereGeometry(5, 16, 16)
+  const hitAreaGeometry = useMemo(() => {
+    return new SphereGeometry(5, 16, 16)
+  }, [])
 
   const onPointerDown = (e: any) => {
     e.stopPropagation()
