@@ -2,21 +2,39 @@ import { useInView, UseInViewOptions } from 'framer-motion'
 import { useEffect, useMemo, useRef } from 'react'
 import { usePerformanceOptimizedAnimation } from './use-performance-optimized-animation'
 
+/**
+ * Arguments passed to the renderFrame callback on each animation frame
+ */
 export interface UseCanvasRenderArgs {
+  /** Elapsed time in seconds since canvas initialization (only increments when in view) */
   time: number
+  /** Time delta in seconds since last frame */
   delta: number
+  /** Canvas width in pixels (scaled by DPR if useDPR is true) */
   width: number
+  /** Canvas height in pixels (scaled by DPR if useDPR is true) */
   height: number
+  /** 2D rendering context for drawing operations */
   ctx: CanvasRenderingContext2D
+  /** Canvas HTML element reference */
   canvas: HTMLCanvasElement
+  /** Device pixel ratio (1 on mobile, window.devicePixelRatio on desktop) */
   dpr: number
 }
 
+/**
+ * Arguments passed to the onMouse callback when mouse events occur
+ */
 interface UseCanvasMouseArgs {
+  /** Original mouse event */
   mouseEvent: MouseEvent
+  /** Type of mouse event: 'move' (inside canvas), 'enter' (mouse enters), 'leave' (mouse exits) */
   type: MouseEventType
+  /** Mouse X position relative to canvas (scaled by DPR if useDPR is true) */
   x: number
+  /** Mouse Y position relative to canvas (scaled by DPR if useDPR is true) */
   y: number
+  /** Device pixel ratio */
   dpr: number
 }
 
@@ -24,23 +42,87 @@ type MouseEventType = 'move' | 'enter' | 'leave'
 export type RenderFunction = (e: UseCanvasRenderArgs) => void
 export type RenderCondition = (e: UseCanvasRenderArgs) => boolean | void
 
+/**
+ * Options for configuring the useCanvas hook
+ */
 export interface UseCanvasOptions {
+  /** Callback function called on each animation frame with rendering context */
   renderFrame?: RenderFunction
-  // We use renderCondition to determine if the canvas should be rendered. It's useful for preloading to be successful.
-  // For example, checking if states are ready before render.
+  /**
+   * Optional condition to determine if rendering should occur.
+   * Useful for preventing render until required state is initialized.
+   * Return false to skip rendering that frame.
+   *
+   * @example
+   * renderCondition: ({ width, height }) => width > 0 && height > 0
+   */
   renderCondition?: RenderCondition
+  /**
+   * If true, renders a single frame when canvas is off-screen for instant display when scrolled into view.
+   * Improves perceived performance. Default: true
+   */
   preload?: boolean
+  /** Options passed to framer-motion's useInView hook for viewport detection */
   useInViewOptions?: UseInViewOptions
-  // For canvas resolution handle
+  /**
+   * If true, scales canvas dimensions by device pixel ratio for sharp rendering on retina displays.
+   * Uses 1x on mobile, devicePixelRatio on desktop. Default: false
+   */
   useDPR?: boolean
+  /** Callback when canvas is resized (debounced by resizeDebounceTime) */
   onResize?: () => void
+  /**
+   * Callback for mouse events over the canvas.
+   * Mouse position is automatically tracked and throttled for performance.
+   *
+   * @example
+   * onMouse: ({ x, y, type }) => {
+   *   if (type === 'move') {
+   *     // Draw at mouse position
+   *   }
+   * }
+   */
   onMouse?: (e: UseCanvasMouseArgs) => void
-  // skipping mouse event to optimize performance
+  /** Time in ms to throttle mouse move events. Default: 8ms (~120fps) */
   mouseThrottleTime?: number
+  /** Time in ms to debounce window resize events. Default: 50ms */
   resizeDebounceTime?: number
+  /** Time in ms to throttle scroll events (for updating mouse position). Default: 150ms */
   scrollThrottleTime?: number
 }
 
+/**
+ * A comprehensive hook for managing canvas-based animations with built-in performance optimizations.
+ *
+ * Features:
+ * - Automatic pause/resume when scrolled in/out of view
+ * - Optional DPR scaling for retina displays
+ * - Smart mouse tracking with throttling
+ * - Resize handling with debouncing
+ * - Preloading support for instant display
+ * - Mobile-optimized (1x DPR)
+ *
+ * @example
+ * ```tsx
+ * const { canvasRef, isMobile } = useCanvas({
+ *   useDPR: true,
+ *   renderFrame: ({ ctx, width, height, time, delta }) => {
+ *     ctx.clearRect(0, 0, width, height)
+ *     // Draw your animation using time/delta for smooth frame-independent motion
+ *   },
+ *   onMouse: ({ x, y, type }) => {
+ *     if (type === 'move') {
+ *       // Handle mouse interaction
+ *     }
+ *   }
+ * })
+ *
+ * return <canvas ref={canvasRef} style={{ width: '100%', height: '400px' }} />
+ * ```
+ *
+ * @param options - Configuration options for canvas behavior
+ * @returns Object containing canvasRef to attach to <canvas>, animation state, viewport detection, DPR, and mobile detection
+ */
 export function useCanvas({
   renderFrame = () => {},
   renderCondition = () => true,
@@ -84,9 +166,6 @@ export function useCanvas({
 
   useEffect(() => {
     animationStateRef.current.isPaused = !isInView
-    if (!canvasRef.current) return
-    // Reduce quality when not in view for performance
-    canvasRef.current.style.imageRendering = isInView ? 'auto' : 'pixelated'
   }, [isInView])
 
   // Event handlers
