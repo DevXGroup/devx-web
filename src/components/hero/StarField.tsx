@@ -2,7 +2,7 @@
 
 import { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { AdditiveBlending } from 'three'
+import { AdditiveBlending, Points, Group, Mesh, ShaderMaterial } from 'three'
 
 // Performance-based configuration
 const getPerformanceConfig = () => {
@@ -44,7 +44,7 @@ function SimpleStarLayer({
   count: number
   viewport: { width: number; height: number }
 }) {
-  const mesh = useRef<any>(null)
+  const mesh = useRef<Points>(null!)
   const performanceConfig = useMemo(() => getPerformanceConfig(), [])
   const frameCounter = useRef(0)
 
@@ -286,7 +286,7 @@ function BrightStarsLayer({
   count: number
   viewport: { width: number; height: number }
 }) {
-  const groupRef = useRef<any>(null)
+  const groupRef = useRef<Group>(null!)
 
   const starData = useRef(() => {
     const data = []
@@ -363,11 +363,11 @@ function BrightStar({
   spikeRotationSpeed: number
   color: [number, number, number]
 }) {
-  const starRef = useRef<any>(null)
-  const spikesRef = useRef<any>(null)
+  const starRef = useRef<Points>(null!)
+  const spikesRef = useRef<Mesh>(null!)
 
   useFrame((state) => {
-    if (starRef.current && spikesRef.current) {
+    if (starRef.current?.material && spikesRef.current?.material) {
       const time = state.clock.elapsedTime * twinkleSpeed + twinklePhase
 
       // Simplified twinkling calculation
@@ -375,11 +375,17 @@ function BrightStar({
       const finalBrightness = brightness * (0.7 + primaryTwinkle * 0.3)
 
       // Update star core brightness
-      starRef.current.material.uniforms.uOpacity.value = finalBrightness
+      const starMaterial = starRef.current.material as ShaderMaterial
+      if (starMaterial.uniforms?.uOpacity) {
+        starMaterial.uniforms.uOpacity.value = finalBrightness
+      }
 
       // Animate diffraction spikes with reduced frequency
       const spikeIntensity = finalBrightness * 0.8
-      spikesRef.current.material.uniforms.uOpacity.value = spikeIntensity
+      const spikesMaterial = spikesRef.current.material as ShaderMaterial
+      if (spikesMaterial.uniforms?.uOpacity) {
+        spikesMaterial.uniforms.uOpacity.value = spikeIntensity
+      }
 
       // Slower rotation update
       if (Math.floor(time * 2) % 3 === 0) {

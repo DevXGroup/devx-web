@@ -140,7 +140,7 @@ export default function HorizontalScroll() {
   const x = useMotionValue(0)
   const [singleSetWidth, setSingleSetWidth] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
-  const animationRef = useRef<any>(null)
+  const animationRef = useRef<number | null>(null)
 
   const normalizeX = (value: number) => {
     let v = value
