@@ -153,7 +153,12 @@ function ModernCube(props: any) {
   }, [])
 
   // Cube face data
-  const faces = [
+  const faces: Array<{
+    position: [number, number, number]
+    rotation: [number, number, number]
+    text: string
+    color: string
+  }> = [
     { position: [0, 0, 1.51], rotation: [0, 0, 0], text: 'Custom Software', color: '#4CD787' },
     {
       position: [0, 0, -1.51],
