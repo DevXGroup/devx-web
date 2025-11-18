@@ -1,3 +1,9 @@
+## [1.2.5](https://github.com/DevXGroup/devx-web/compare/v1.2.4...v1.2.5) (2025-11-18)
+
+### Bug Fixes
+
+* resolve ESLint exhaustive-deps warning in LogoLoop ([6a4f023](https://github.com/DevXGroup/devx-web/commit/6a4f023284f902360e2da90b7e64846c17c349de))
+
 ## [1.2.4](https://github.com/DevXGroup/devx-web/compare/v1.2.3...v1.2.4) (2025-11-18)
 
 ### Bug Fixes
