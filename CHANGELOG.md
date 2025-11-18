@@ -1,3 +1,10 @@
+## [1.2.15](https://github.com/DevXGroup/devx-web/compare/v1.2.14...v1.2.15) (2025-11-18)
+
+### Reverts
+
+* Revert "chore(release): 1.2.14 [skip ci]" ([749dfdc](https://github.com/DevXGroup/devx-web/commit/749dfdc551cf2cd478680d5eec7d7b40afd022c1))
+* Revert "fix: restore textpressure animation dynamics" ([e5c163b](https://github.com/DevXGroup/devx-web/commit/e5c163bc67b635e54f12f3bf3ca90d60628588e6))
+
 ## [1.2.13](https://github.com/DevXGroup/devx-web/compare/v1.2.12...v1.2.13) (2025-11-18)
 
 ### Bug Fixes
