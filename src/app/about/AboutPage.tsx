@@ -46,7 +46,7 @@ const AnimatedSection = ({
 }) => {
   const shouldReduceMotion = useReducedMotion()
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '-100px' })
+  const isInView = useInView(ref, { once: true, amount: 0, margin: '0px' })
 
   return (
     <motion.div
@@ -54,8 +54,9 @@ const AnimatedSection = ({
       variants={fadeInUpVariants}
       initial="hidden"
       animate={isInView ? 'visible' : 'hidden'}
-      transition={{ duration: 0.6, delay: shouldReduceMotion ? 0 : delay }}
+      transition={{ duration: 0.4, delay: shouldReduceMotion ? 0 : delay }}
       className={className}
+      style={{ willChange: 'opacity, transform', transform: 'translateZ(0)' }}
     >
       {children}
     </motion.div>
@@ -76,7 +77,7 @@ const ValueCard = ({
 }) => {
   const shouldReduceMotion = useReducedMotion()
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true })
+  const isInView = useInView(ref, { once: true, amount: 0, margin: '50px' })
 
   return (
     <motion.div
@@ -84,7 +85,8 @@ const ValueCard = ({
       variants={fadeInUpVariants}
       initial="hidden"
       animate={isInView ? 'visible' : 'hidden'}
-      transition={{ duration: 0.6, delay: shouldReduceMotion ? 0 : delay }}
+      transition={{ duration: 0.4, delay: shouldReduceMotion ? 0 : delay }}
+      style={{ willChange: 'opacity, transform', transform: 'translateZ(0)' }}
       whileHover={
         shouldReduceMotion
           ? {}
