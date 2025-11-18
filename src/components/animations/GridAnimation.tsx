@@ -66,6 +66,7 @@ const GridAnimation = ({
 
   useEffect(() => {
     generateGradient()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const { canvasRef, isMobile } = useCanvas({

@@ -9,7 +9,7 @@ import ConditionalLayout from '@/components/layout/ConditionalLayout'
 import { BrowserCompatibilityDetector } from '@/components/layout/BrowserCompatibilityDetector'
 import { DevToolsErrorSuppressor } from '@/components/layout/DevToolsErrorSuppressor'
 import ErrorBoundary from '@/components/layout/ErrorBoundary'
-import GlobalTransition from '@/components/transitions/GlobalTransition'
+import HeroCurtain from '@/components/transitions/HeroCurtain'
 import ScrollToTop from '@/components/layout/ScrollToTop'
 import StructuredData from '@/components/seo/StructuredData'
 import { SpeedInsights } from '@vercel/speed-insights/next'
@@ -377,7 +377,7 @@ gtag('config', '${gaId}', {
           <div style={{ backgroundColor: '#000000' }} suppressHydrationWarning>
             <ConditionalLayout>{children}</ConditionalLayout>
             <ScrollToTop />
-            <GlobalTransition />
+            <HeroCurtain />
           </div>
         </ErrorBoundary>
         {/* Only load Vercel Analytics in production (they don't work locally) */}

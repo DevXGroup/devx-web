@@ -1609,3 +1609,9 @@ canvas,
   contain: none;
   overflow: visible;
 }
+
+/* Hide entry-aware components until the curtain completes */
+html[data-entry-transition='true'] [data-entry-aware-nav] {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}

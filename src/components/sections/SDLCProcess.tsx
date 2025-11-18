@@ -39,7 +39,7 @@ const AnimatedIcon = ({
           className="sm:hidden"
           initial={{ pathLength: isComplete || progress === 1 ? 1 : 0 }}
           animate={{ pathLength: isComplete || progress === 1 ? 1 : progress }}
-          transition={{ duration: 0.8, ease: 'easeInOut' }}
+          transition={{ duration: 0.5, ease: 'easeInOut' }}
           style={{ visibility: 'visible' }}
         />
         <motion.circle
@@ -52,7 +52,7 @@ const AnimatedIcon = ({
           className="hidden sm:block"
           initial={{ pathLength: isComplete || progress === 1 ? 1 : 0 }}
           animate={{ pathLength: isComplete || progress === 1 ? 1 : progress }}
-          transition={{ duration: 0.8, ease: 'easeInOut' }}
+          transition={{ duration: 0.5, ease: 'easeInOut' }}
           style={{ visibility: 'visible' }}
         />
       </svg>
@@ -64,7 +64,7 @@ const AnimatedIcon = ({
           scale: isActive ? [1, 1.05, 1] : 1,
         }}
         transition={{
-          duration: 1,
+          duration: 0.6,
           repeat: isActive ? Number.POSITIVE_INFINITY : 0,
           repeatType: 'reverse',
           ease: 'easeInOut',
@@ -108,7 +108,7 @@ const ConnectingLine = ({
           scaleX: lineProgress,
           visibility: 'visible',
         }}
-        transition={{ duration: 1.0, ease: 'easeInOut' }} // Slower animation (0.5 -> 1.0)
+        transition={{ duration: 0.6, ease: 'easeInOut' }}
       />
       <motion.div
         className="absolute top-0 left-0 right-0 h-full"
@@ -122,7 +122,7 @@ const ConnectingLine = ({
           x: ['-100%', '100%'],
         }}
         transition={{
-          duration: 5, // Slower animation (3 -> 5)
+          duration: 5,
           repeat: Number.POSITIVE_INFINITY,
           ease: 'linear',
         }}
@@ -238,7 +238,7 @@ export default function SDLCProcess() {
         setProgress(0)
 
         const controls = animate(0, 1, {
-          duration: 0.8, // Consistent timing for all steps
+          duration: 1.5,
           ease: 'easeInOut',
           onUpdate: (value) => {
             if (!cancelledRef.current) setProgress(value)
@@ -269,7 +269,7 @@ export default function SDLCProcess() {
             return next
           })
 
-          const holdDuration = i === sdlcSteps.length - 1 ? 800 : 400
+          const holdDuration = i === sdlcSteps.length - 1 ? 500 : 250
           await wait(holdDuration)
         }
 

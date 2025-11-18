@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, MotionStyle } from 'framer-motion'
 import { useReducedMotion } from '@/hooks/use-reduced-motion'
+import { activateEntryTransition } from '@/lib/entry-transition'
 
 type RGB = { r: number; g: number; b: number }
 
@@ -907,6 +908,7 @@ export default function EntryPage() {
   useEffect(() => {
     if (animationComplete && mounted) {
       // Start collapse animation immediately - no delay
+      activateEntryTransition()
       setIsCollapsing(true)
     }
   }, [animationComplete, mounted])
@@ -915,6 +917,7 @@ export default function EntryPage() {
   useEffect(() => {
     if (reduceMotion && mounted) {
       const timer = setTimeout(() => {
+        activateEntryTransition()
         router.push('/home')
       }, 1000)
 
@@ -952,7 +955,7 @@ export default function EntryPage() {
         transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
         onAnimationComplete={() => {
           if (isCollapsing) {
-            sessionStorage.setItem('fromEntry', 'true')
+            activateEntryTransition()
             router.push('/home')
           }
         }}

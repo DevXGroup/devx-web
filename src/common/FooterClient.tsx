@@ -12,9 +12,11 @@ interface FooterClientProps {
 }
 
 export default function FooterClient({ version }: FooterClientProps) {
+  const [mounted, setMounted] = useState(false)
   const [isSafari, setIsSafari] = useState(false)
 
   useEffect(() => {
+    setMounted(true)
     // Detect Safari browser
     const isSafariBrowser = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
     setIsSafari(isSafariBrowser)
@@ -22,32 +24,23 @@ export default function FooterClient({ version }: FooterClientProps) {
 
   return (
     <>
-      {/* Include the Threads effect touching the footer */}
-      <div className="w-full h-[70vh] sm:h-[45vh] md:h-[50vh] lg:h-[60vh] xl:h-[70vh] relative bg-black mt-[-190px] p-0 z-999">
-        <div className="absolute inset-0">
-          {isSafari ? (
+      <footer className="bg-[#141414] text-foreground relative mb-5 z-[10]">
+        {/* Threads effect at the very top of footer */}
+        {/* <div className="w-full h-[40vh] sm:h-[35vh] md:h-[40vh] lg:h-[75vh] relative -mb-50">
+          {mounted && (
             <Threads
-              color={[2, 1.5, 9]}
-              amplitude={0.8}
-              distance={0}
-              enableMouseInteraction={false}
-            />
-          ) : (
-            <Threads
-              color={[2, 1.5, 9]}
-              amplitude={1}
-              distance={0.1}
-              enableMouseInteraction={false}
+              color={[1.3, 1.4, 5]}
+              amplitude={1.5}
+              distance={-0.2}
+              enableMouseInteraction={true}
             />
           )}
-        </div>
-      </div>
+        </div> */}
 
-      <footer className="bg-black text-foreground relative mb-5 mt-[-90px] z-9999">
         {/* Background Pattern */}
-        <div className="absolute inset-0 bg-[url('/images/patterns/grid.svg')] opacity-10"></div>
+        <div className="absolute inset-0 bg-[url('/images/patterns/grid.svg')] opacity-10 -z-10"></div>
 
-        <div className="container mx-auto relative z-20 max-w-full px-4 sm:px-6 lg:px-8">
+        <div className="container mx-auto relative z-10 max-w-full px-4 sm:px-6 lg:px-8 pt-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 lg:gap-12">
             {/* Company Info */}
             <div className="sm:col-span-2 lg:col-span-1 xl:col-span-1 flex flex-col">

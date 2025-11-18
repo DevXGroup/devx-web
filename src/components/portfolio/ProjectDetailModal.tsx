@@ -206,7 +206,7 @@ const ProjectDetailModal = ({ project, isOpen, onClose }: ProjectDetailModalProp
               {/* Content */}
               <div>
                 <motion.div
-                  className="p-6 lg:p-8 space-y-8"
+                  className="p-6 pb-[60px] md:pb-8 lg:p-8 space-y-8"
                   variants={contentVariants}
                   initial="hidden"
                   animate="visible"
