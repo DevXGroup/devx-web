@@ -1,3 +1,9 @@
+## [1.2.9](https://github.com/DevXGroup/devx-web/compare/v1.2.8...v1.2.9) (2025-11-18)
+
+### Bug Fixes
+
+* polish hero supporting components ([9365746](https://github.com/DevXGroup/devx-web/commit/93657468a0a6792a16b021aab0546bab01433536))
+
 ## [1.2.8](https://github.com/DevXGroup/devx-web/compare/v1.2.7...v1.2.8) (2025-11-18)
 
 ### Bug Fixes
