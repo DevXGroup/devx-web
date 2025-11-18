@@ -68,10 +68,10 @@ export default function PlanetDivider({ opacity = 0.68 }) {
 
   // Responsive sizing
   const planetSize = isMobile ? 360 : 700
-  // Increased mobile container height to show more planet (220px instead of 180px)
-  const containerHeight = isMobile ? 220 : 350
-  // Mobile shows more of the planet (35% instead of 50%)
-  const verticalOffset = isMobile ? '35%' : '50%'
+  // Increased container height to keep more of the planet in-frame on tall desktops
+  const containerHeight = isMobile ? 240 : 420
+  // Show more of the planet on 1080p screens by lowering the hide offset
+  const verticalOffset = isMobile ? '32%' : '42%'
 
   return (
     <div
@@ -113,7 +113,7 @@ export default function PlanetDivider({ opacity = 0.68 }) {
                 width="768"
                 height="768"
                 alt=""
-                fetchPriority="high"
+                fetchPriority="low"
                 loading="lazy"
                 decoding="async"
                 className="planet-sphere"
