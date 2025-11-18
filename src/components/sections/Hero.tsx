@@ -131,52 +131,74 @@ export default function Hero() {
   }, [])
 
   // Trigger entrance animation and load background components when in view
+  const scheduleIdleTask = useCallback((cb: IdleRequestCallback, timeout = 1000) => {
+    if (typeof window === 'undefined') return undefined
+    const idleCallback = window.requestIdleCallback
+    if (typeof idleCallback === 'function') {
+      return idleCallback(cb, { timeout })
+    }
+    return window.setTimeout(() => {
+      cb({
+        didTimeout: false,
+        timeRemaining: () => 0,
+      })
+    }, timeout)
+  }, [])
+
+  const cancelIdleTask = useCallback((id?: number) => {
+    if (typeof window === 'undefined' || typeof id === 'undefined') return
+    const cancelIdle = window.cancelIdleCallback
+    if (typeof cancelIdle === 'function') {
+      cancelIdle(id)
+    } else {
+      window.clearTimeout(id)
+    }
+  }, [])
+
   useEffect(() => {
     controls.start('visible')
-    // Load cosmic stars immediately for better perceived performance
-    setEnableCosmicStars(true)
+    const backgroundTimer = scheduleIdleTask(() => {
+      setEnableCosmicStars(true)
+    }, 500)
 
-    // Load other heavy components with a longer stagger to reduce initial CPU spike
-    const shootingStarsTimer = requestIdleCallback(
-      () => {
-        setEnableShootingStars(true)
-      },
-      { timeout: 1000 }
-    ) // Increased from 500ms
+    const shootingStarsTimer = scheduleIdleTask(() => {
+      setEnableShootingStars(true)
+    }, 1400)
 
-    const planetDividerTimer = requestIdleCallback(
-      () => {
-        setEnablePlanetDivider(true)
-      },
-      { timeout: 1500 }
-    ) // Increased from 800ms
+    const planetDividerTimer = scheduleIdleTask(() => {
+      setEnablePlanetDivider(true)
+    }, 1800)
 
     return () => {
-      cancelIdleCallback(shootingStarsTimer)
-      cancelIdleCallback(planetDividerTimer)
+      cancelIdleTask(backgroundTimer)
+      cancelIdleTask(shootingStarsTimer)
+      cancelIdleTask(planetDividerTimer)
     }
-  }, [controls])
+  }, [cancelIdleTask, controls, scheduleIdleTask])
 
   return (
     <section
       ref={sectionRef}
       className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-black"
     >
-      <ClientOnly>
-        {enableCosmicStars && (
-          <div className="absolute inset-0 w-full h-full z-[1]">
-            <DynamicStarTwinklingField className="z-1" count={50} />
-            <DynamicHeroBackground />
-          </div>
-        )}
-      </ClientOnly>
+      <div className="absolute inset-0 w-full h-full z-[1]">
+        <div className="absolute inset-0 bg-gradient-to-b from-zinc-950 via-black to-black pointer-events-none" />
+        <ClientOnly>
+          {enableCosmicStars && (
+            <>
+              <DynamicStarTwinklingField className="z-1" count={50} />
+              <DynamicHeroBackground />
+            </>
+          )}
+        </ClientOnly>
+      </div>
 
       {/* Shooting Stars - Only rendered on client */}
       <ClientOnly>{enableShootingStars && <DynamicShootingStars />}</ClientOnly>
 
       {/* Content */}
       <motion.div
-        className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-[80] w-full pt-12 sm:pt-16 lg:pt-20 pb-36 sm:pb-44 lg:pb-52"
+        className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-[80] w-full pt-12 sm:pt-16 lg:pt-20 pb-28 sm:pb-36 lg:pb-44"
         variants={containerVariants}
         initial="hidden"
         animate={controls}
@@ -187,7 +209,7 @@ export default function Hero() {
           <div className="space-y-5 sm:space-y-7">
             <motion.h1
               variants={itemVariants}
-              className="hero-title mx-auto flex flex-wrap md:flex-nowrap items-center justify-center gap-2 sm:gap-3 md:gap-4 text-center text-white font-mono font-bold tracking-tight w-full"
+              className="hero-title mx-auto flex flex-wrap md:flex-nowrap items-center justify-center gap-2 sm:gap-3 md:gap-4 text-center text-white font-mono font-bold tracking-tight w-full whitespace-normal md:whitespace-nowrap"
               style={{
                 willChange: 'auto', // Changed from 'opacity, transform' for better LCP
                 minHeight: '5rem',
@@ -216,47 +238,34 @@ export default function Hero() {
 
             <motion.div
               variants={itemVariants}
-              className="text-center w-full mx-auto space-y-5"
+              className="text-center w-full mx-auto space-y-3"
               style={{ willChange: 'opacity, transform' }}
             >
               <p className="text-xl sm:text-2xl md:text-2xl lg:text-2xl xl:text-2xl text-white font-sans font-light leading-relaxed text-center mx-auto max-w-4xl">
                 Elite software team shipping polished software at&nbsp;startup&nbsp;speed.
               </p>
-              <div className="relative mx-auto w-full mt-10 flex justify-center">
-                <div className="relative flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap sm:gap-4 px-5 py-4 sm:px-8 sm:py-6 rounded-2xl overflow-hidden border-2 border-white/20 bg-black/60 backdrop-blur-md shadow-xl shadow-black/50 sm:bg-gradient-to-r sm:from-black/70 sm:via-black/60 sm:to-black/70">
-                  {/* Subtle animated gradient background - disable on mobile for performance */}
-                  <div className="absolute inset-0 hidden sm:block opacity-30">
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#4CD787]/8 via-transparent to-[#ccff00]/8" />
-                  </div>
-
-                  {/* Content with z-index to appear above background */}
-                  <div className="relative z-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
-                    <Link
-                      href="/services"
-                      className="uppercase tracking-[0.19em] text-sm sm:text-base md:text-lg lg:text-lg font-medium opacity-90 hover:opacity-100"
-                    >
-                      <ShinyText text="Elite Services" speed={isMobile ? 5 : 3} delay={0.3} />
-                    </Link>
-                    <span className="hidden sm:inline text-gray-600 text-base md:text-lg lg:text-lg">
-                      •
-                    </span>
-                    <Link
-                      href="/portfolio"
-                      className="uppercase tracking-[0.19em] text-sm sm:text-base md:text-lg lg:text-lg font-medium opacity-90 hover:opacity-100"
-                    >
-                      <ShinyText text="Proven Record" speed={isMobile ? 7 : 5} delay={0.6} />
-                    </Link>
-
-                    <span className="hidden md:inline text-gray-600 text-base md:text-lg lg:text-lg">
-                      •
-                    </span>
-                    <Link
-                      href="/pricing"
-                      className="uppercase tracking-[0.19em] text-sm sm:text-base md:text-lg lg:text-lg font-medium opacity-90 hover:opacity-100"
-                    >
-                      <ShinyText text="Transparent Pricing" speed={isMobile ? 9 : 7} delay={0.9} />
-                    </Link>
-                  </div>
+              <div className="relative mx-auto w-full mt-4 flex justify-center">
+                <div className="relative flex flex-col items-center justify-center gap-2 sm:flex-row sm:flex-wrap sm:gap-3">
+                  <Link
+                    href="/services"
+                    className="uppercase tracking-[0.19em] text-sm sm:text-base md:text-base font-medium opacity-90 hover:opacity-100 transition-opacity"
+                  >
+                    <ShinyText text="Elite Services" speed={isMobile ? 5 : 3} delay={0.3} />
+                  </Link>
+                  <span className="hidden sm:inline text-gray-500 text-sm md:text-base">•</span>
+                  <Link
+                    href="/portfolio"
+                    className="uppercase tracking-[0.19em] text-sm sm:text-base md:text-base font-medium opacity-90 hover:opacity-100 transition-opacity"
+                  >
+                    <ShinyText text="Proven Record" speed={isMobile ? 7 : 5} delay={0.6} />
+                  </Link>
+                  <span className="hidden md:inline text-gray-500 text-sm md:text-base">•</span>
+                  <Link
+                    href="/pricing"
+                    className="uppercase tracking-[0.19em] text-sm sm:text-base md:text-base font-medium opacity-90 hover:opacity-100 transition-opacity"
+                  >
+                    <ShinyText text="Transparent Pricing" speed={isMobile ? 9 : 7} delay={0.9} />
+                  </Link>
                 </div>
               </div>
             </motion.div>
@@ -288,14 +297,14 @@ export default function Hero() {
 
           <motion.div
             variants={itemVariants}
-            className="flex flex-row flex-wrap justify-center gap-4 sm:gap-5 relative z-[120] mt-6 sm:mt-7 mb-12 md:mb-16 lg:mb-20"
+            className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4 sm:gap-6 relative z-[120] w-full max-w-2xl mx-auto px-2 mt-7 sm:mt-9 mb-10 sm:mb-14 lg:mb-16"
           >
             <motion.div
               variants={buttonVariants}
               initial="rest"
               whileHover="hover"
               whileTap="tap"
-              className="relative z-[130]"
+              className="relative z-[130] w-full sm:w-auto"
             >
               <StarBorder
                 as="a"
@@ -304,7 +313,7 @@ export default function Hero() {
                 rel="noopener noreferrer"
                 color="#ccff00"
                 speed={isMobile ? '5s' : '3s'} // Slower animation on mobile
-                className="font-mono font-semibold text-base sm:text-md md:text-md px-6 py-3 sm:px-8 sm:py-3 min-h-[44px] flex items-center justify-center"
+                className="font-mono font-semibold text-base sm:text-md md:text-md px-6 py-3 sm:px-8 sm:py-3 min-h-[44px] flex w-full sm:w-auto items-center justify-center text-center"
                 aria-label="Book a free consultation call with DevX Group"
               >
                 Book a Free Call
@@ -315,13 +324,13 @@ export default function Hero() {
               initial="rest"
               whileHover="hover"
               whileTap="tap"
-              className="relative z-[130]"
+              className="relative z-[130] w-full sm:w-auto"
             >
               <StarBorder
                 onClick={navigateToPortfolio}
                 color="#e534eb"
                 speed={isMobile ? '6s' : '4s'} // Slower animation on mobile
-                className="font-mono font-semibold text-base sm:text-md md:text-md px-6 py-3 sm:px-8 sm:py-3 min-h-[44px] flex items-center justify-center"
+                className="font-mono font-semibold text-base sm:text-md md:text-md px-6 py-3 sm:px-8 sm:py-3 min-h-[44px] flex w-full sm:w-auto items-center justify-center text-center"
                 aria-label="View DevX Group portfolio"
               >
                 See Our Work

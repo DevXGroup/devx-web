@@ -4,7 +4,7 @@ import { version as reactVersion } from 'react'
 import type { ReactNode } from 'react'
 import './globals.css'
 import type { Metadata } from 'next'
-import { IBM_Plex_Mono, IBM_Plex_Sans } from 'next/font/google'
+import localFont from 'next/font/local'
 import ConditionalLayout from '@/components/layout/ConditionalLayout'
 import { BrowserCompatibilityDetector } from '@/components/layout/BrowserCompatibilityDetector'
 import { DevToolsErrorSuppressor } from '@/components/layout/DevToolsErrorSuppressor'
@@ -18,23 +18,25 @@ import { Analytics } from '@vercel/analytics/next'
 import { Partytown } from '@qwik.dev/partytown/react'
 import { createOgImageUrl, createTwitterImageUrl, getSiteUrl } from '@/lib/og'
 
-// Self-hosted fonts via next/font for better performance
+// Self-hosted fonts via next/font/local to avoid runtime fetches
 // Using 'swap' for better FCP - fallback fonts display while custom fonts load
-const ibmPlexMono = IBM_Plex_Mono({
-  weight: ['400', '600'],
-  subsets: ['latin'],
+const ibmPlexMono = localFont({
+  src: [
+    { path: '../../public/fonts/IBMPlexMono-Regular.ttf', weight: '400', style: 'normal' },
+    { path: '../../public/fonts/IBMPlexMono-SemiBold.ttf', weight: '600', style: 'normal' },
+  ],
   variable: '--font-ibm-plex-mono',
   display: 'swap', // Font swaps when ready, ensures text always visible
-  preload: true,
   fallback: ['ui-monospace', 'Menlo', 'Monaco', 'Courier New', 'monospace'],
 })
 
-const ibmPlexSans = IBM_Plex_Sans({
-  weight: ['400', '600'],
-  subsets: ['latin'],
+const ibmPlexSans = localFont({
+  src: [
+    { path: '../../public/fonts/IBMPlexSans-Regular.ttf', weight: '400', style: 'normal' },
+    { path: '../../public/fonts/IBMPlexSans-SemiBold.ttf', weight: '600', style: 'normal' },
+  ],
   variable: '--font-ibm-plex-sans',
   display: 'swap', // Font swaps when ready, ensures text always visible
-  preload: true,
   fallback: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
 })
 
