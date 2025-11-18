@@ -1,3 +1,16 @@
+## [1.2.4](https://github.com/DevXGroup/devx-web/compare/v1.2.3...v1.2.4) (2025-11-18)
+
+### Bug Fixes
+
+* prevent 3D infinity scroll lag on re-entry ([f5bda3f](https://github.com/DevXGroup/devx-web/commit/f5bda3f336f4f8a72f720a9b43621e6e68093009))
+
+### Performance Improvements
+
+* optimize planet divider scroll performance ([5002088](https://github.com/DevXGroup/devx-web/commit/50020888fbb3c2538d8dfa70587a2da21b0b17ee))
+* optimize scroll animation trigger thresholds ([dfa292e](https://github.com/DevXGroup/devx-web/commit/dfa292e052551d8585f7cd8407f1a7c6975e57c0))
+* reduce section card animation delays ([0a92697](https://github.com/DevXGroup/devx-web/commit/0a9269767aba28ad5f70195ea19f5aa274a345dd))
+* smooth curtain transition with GPU acceleration ([fdb4aa7](https://github.com/DevXGroup/devx-web/commit/fdb4aa755e0c5e4a21c6c949f2ee82094872d12c))
+
 ## [1.2.3](https://github.com/DevXGroup/devx-web/compare/v1.2.2...v1.2.3) (2025-11-18)
 
 ### Bug Fixes
