@@ -114,7 +114,7 @@ export default function LogoLoop({ logos, speed = 15 }: LogoLoopProps) {
     return () => {
       clearTouchTimeout()
     }
-  }, [])
+  }, [clearTouchTimeout])
 
   const scrollerStyles: CSSProperties & { '--scroll-distance'?: string } = {
     animationName: scrollDistance > 0 && isVisible ? 'scroll' : 'none',
