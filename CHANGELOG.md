@@ -1,3 +1,9 @@
+## [1.2.10](https://github.com/DevXGroup/devx-web/compare/v1.2.9...v1.2.10) (2025-11-18)
+
+### Bug Fixes
+
+* revert hero curtain animation ([4729ae2](https://github.com/DevXGroup/devx-web/commit/4729ae26c87f6724c92e9d87df715bb66b3eb909))
+
 ## [1.2.9](https://github.com/DevXGroup/devx-web/compare/v1.2.8...v1.2.9) (2025-11-18)
 
 ### Bug Fixes
