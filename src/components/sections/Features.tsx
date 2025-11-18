@@ -75,9 +75,12 @@ function StepAnimation({
   }
 
   return (
-    <motion.div key={`step-${step}`} className={`flex flex-col items-center space-y-4`}>
+    <motion.div
+      key={`step-${step}`}
+      className={`flex flex-col items-center space-y-2 sm:space-y-4`}
+    >
       <motion.div
-        className="w-16 h-16 rounded-full flex items-center justify-center text-lg font-bold font-['IBM_Plex_Mono'] relative border-4"
+        className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center text-base sm:text-lg font-bold font-['IBM_Plex_Mono'] relative border-2 sm:border-3 md:border-4"
         variants={stepCircleVariants}
         animate={isActive ? 'active' : 'inactive'}
         transition={{ duration: 0.25 }}
@@ -86,7 +89,7 @@ function StepAnimation({
       </motion.div>
 
       <motion.p
-        className="text-sm md:text-base font-['IBM_Plex_Mono'] text-center"
+        className="text-xs sm:text-sm md:text-base font-['IBM_Plex_Mono'] text-center max-w-[80px] sm:max-w-none"
         variants={stepTextVariants}
         animate={isActive ? 'active' : 'inactive'}
         transition={{ duration: 0.25 }}
@@ -424,11 +427,11 @@ export default function Features() {
 
         {/* Clean Step Animation - Enhanced Contrast - skip if optimizing */}
         {!shouldOptimizeAnimations && (
-          <div className="relative -mx-4 px-4 py-8 sm:py-12 md:py-16 mt-8 sm:mt-12 md:mt-16 mb-16 sm:mb-20 md:mb-24 bg-transparent">
+          <div className="relative w-full py-12 sm:py-16 md:py-20 mt-12 sm:mt-16 md:mt-20 mb-12 sm:mb-16 md:mb-20">
             {/* Steps Container */}
-            <div className="relative py-10 sm:py-12 px-5 sm:px-6 md:px-12 max-w-4xl mx-auto">
+            <div className="relative w-full max-w-4xl mx-auto px-4 sm:px-6">
               {/* Steps Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 md:gap-12">
+              <div className="grid grid-cols-3 gap-4 sm:gap-8 md:gap-12">
                 {steps.map((step, index) => (
                   <div key={index} className="flex justify-center">
                     <StepAnimation step={index + 1} text={step} isActive={currentStep === index} />
