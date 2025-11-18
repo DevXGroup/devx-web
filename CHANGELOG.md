@@ -1,3 +1,9 @@
+## [1.2.13](https://github.com/DevXGroup/devx-web/compare/v1.2.12...v1.2.13) (2025-11-18)
+
+### Bug Fixes
+
+* restore legacy textpressure sizing ([17a9569](https://github.com/DevXGroup/devx-web/commit/17a9569f67eb4dc4f8710b8505aaac6ec8bcd2f1))
+
 ## [1.2.12](https://github.com/DevXGroup/devx-web/compare/v1.2.11...v1.2.12) (2025-11-18)
 
 ### Bug Fixes
