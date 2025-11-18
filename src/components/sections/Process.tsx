@@ -192,11 +192,11 @@ export default function Process() {
               key={process.title}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false, amount: 0.2 }}
+              viewport={{ once: false, amount: 0.1 }}
               transition={{
-                duration: 0.6,
+                duration: 0.4,
                 ease: 'easeOut',
-                delay: index * 0.15,
+                delay: index * 0.05,
               }}
               whileHover={{
                 y: -10,

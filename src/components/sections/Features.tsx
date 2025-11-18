@@ -116,8 +116,8 @@ function HireDevelopersCard({ icon: Icon, title, description, index }: HireDevel
       className="relative bg-slate-800/90 border border-slate-600/50 p-6 sm:p-8 md:p-10 rounded-2xl shadow-xl shadow-black/40 backdrop-blur-sm"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: false, amount: 0.1 }}
-      transition={{ duration: 0.6, ease: 'easeOut', delay: index * 0.15 }}
+      viewport={{ once: false, amount: 0.05 }}
+      transition={{ duration: 0.4, ease: 'easeOut', delay: index * 0.05 }}
     >
       <div className="relative flex flex-col gap-5">
         <div className="flex-shrink-0 w-12 h-12 sm:w-13 sm:h-13 md:w-14 md:h-14 rounded-full bg-[#ccff00] flex items-center justify-center shadow-[0_0_18px_rgba(204,255,0,0.25)]">
@@ -155,8 +155,8 @@ function WhyUsCard({
       className="relative bg-slate-800/90 border border-slate-600/50 p-6 sm:p-7 md:p-8 rounded-2xl shadow-xl shadow-black/40 backdrop-blur-sm flex flex-col items-center text-center overflow-hidden min-h-[260px] sm:min-h-[280px] md:min-h-[300px] w-full"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: false, amount: 0.1 }}
-      transition={{ duration: 0.6, ease: 'easeOut', delay: index * 0.15 }}
+      viewport={{ once: false, amount: 0.05 }}
+      transition={{ duration: 0.4, ease: 'easeOut', delay: index * 0.05 }}
     >
       <div className="relative z-10 flex flex-col items-center h-full space-y-5">
         <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center bg-gradient-to-br from-[#ccff00] to-yellow-300 border border-[#ccff00]/70 shadow-[0_0_18px_rgba(204,255,0,0.25)]">
@@ -188,8 +188,8 @@ export default function Features() {
     typeof window !== 'undefined' ? window.innerWidth : 1200
   )
   const shouldReduceMotion = useReducedMotion()
-  const isInView = useInView(containerRef, { once: true, margin: '-150px' })
-  const is3DNear = useInView(infinityTriggerRef, { once: true, margin: '600px' })
+  const isInView = useInView(containerRef, { once: true, margin: '0px' })
+  const is3DNear = useInView(infinityTriggerRef, { once: true, margin: '800px' })
   const { isMobile, shouldOptimizeAnimations } = usePerformanceOptimizedAnimation()
 
   useEffect(() => {
@@ -263,9 +263,9 @@ export default function Features() {
       className="relative pt-24 sm:pt-32 md:pt-40 pb-12 sm:pb-16 md:pb-20 overflow-hidden bg-gradient-to-b from-slate-900 to-slate-950 w-full"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
-      viewport={{ once: false, amount: 0.1 }}
+      viewport={{ once: false, amount: 0.05 }}
       transition={{
-        duration: shouldOptimizeAnimations ? 0.4 : 0.8,
+        duration: shouldOptimizeAnimations ? 0.3 : 0.5,
         ease: 'easeOut',
       }}
     >
@@ -404,19 +404,28 @@ export default function Features() {
             >
               {/* Animated glow border effect - skip if optimizing */}
               {!shouldOptimizeAnimations && (
-                <div className="absolute inset-0 rounded-xl overflow-hidden">
+                <div className="absolute inset-0 rounded-xl overflow-hidden -z-10 pointer-events-none">
                   <div
                     className="absolute w-[200%] h-[200%] -top-[50%] -left-[50%] animate-spin opacity-70"
                     style={{
                       background: `conic-gradient(from 0deg, transparent, #4CD787, transparent, #9d4edd, transparent)`,
                       animationDuration: '3s',
+                      transform: 'translateZ(0)',
+                      willChange: 'transform',
+                      backfaceVisibility: 'hidden',
                     }}
                   />
                 </div>
               )}
               <Link
                 href="/about#our-values"
-                className="group relative inline-flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-[#4CD787] via-[#9d4edd] to-[#4CD787] bg-[length:200%_100%] bg-[position:0%_0] hover:bg-[position:100%_0] text-black px-6 sm:px-8 py-3 sm:py-4 rounded-lg text-base sm:text-lg md:text-xl font-bold font-sans transition-all duration-500 backdrop-blur-sm border-2 border-[#4CD787]/40 hover:border-[#9d4edd]/60 hover:shadow-2xl hover:shadow-[#4CD787]/50 z-10"
+                className="group relative inline-flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-[#4CD787] via-[#9d4edd] to-[#4CD787] bg-[length:200%_100%] bg-[position:0%_0] hover:bg-[position:100%_0] text-black px-6 sm:px-8 py-3 sm:py-4 rounded-lg text-base sm:text-lg md:text-xl font-bold font-sans backdrop-blur-sm border-2 border-[#4CD787]/40 hover:border-[#9d4edd]/60 hover:shadow-2xl hover:shadow-[#4CD787]/50 z-10"
+                style={{
+                  transition:
+                    'background-position 500ms ease, border-color 300ms ease, box-shadow 300ms ease',
+                  willChange: 'background-position',
+                  transform: 'translateZ(0)',
+                }}
               >
                 Explore more reasons to choose us
                 <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform duration-300" />
@@ -454,7 +463,16 @@ export default function Features() {
       </motion.div>
       {/* Trigger point for 3D loading - positioned well before the actual 3D component */}
       <div ref={infinityTriggerRef} className="absolute bottom-[60vh]" />
-      <div className="mt-20">{(shouldLoad3D || shouldOptimizeAnimations) && <InfinityLogo />}</div>
+      <div
+        className="mt-20"
+        style={{
+          willChange: 'transform',
+          contain: 'layout style paint',
+          transform: 'translateZ(0)',
+        }}
+      >
+        {(shouldLoad3D || shouldOptimizeAnimations) && <InfinityLogo />}
+      </div>
 
       {/* Smooth fade transition to next section */}
       <div className="absolute bottom-0 left-0 right-0 h-32 md:h-48 bg-gradient-to-b from-transparent to-black z-[1] pointer-events-none" />
