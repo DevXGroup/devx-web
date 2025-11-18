@@ -114,10 +114,11 @@ function HireDevelopersCard({ icon: Icon, title, description, index }: HireDevel
     <motion.div
       data-card-index={index}
       className="relative bg-slate-800/90 border border-slate-600/50 p-6 sm:p-8 md:p-10 rounded-2xl shadow-xl shadow-black/40 backdrop-blur-sm"
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: false, amount: 0.05 }}
-      transition={{ duration: 0.4, ease: 'easeOut', delay: index * 0.05 }}
+      viewport={{ once: true, amount: 0, margin: '50px' }}
+      transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+      style={{ willChange: 'opacity, transform', transform: 'translateZ(0)' }}
     >
       <div className="relative flex flex-col gap-5">
         <div className="flex-shrink-0 w-12 h-12 sm:w-13 sm:h-13 md:w-14 md:h-14 rounded-full bg-[#ccff00] flex items-center justify-center shadow-[0_0_18px_rgba(204,255,0,0.25)]">
@@ -153,10 +154,11 @@ function WhyUsCard({
     <motion.div
       data-card-index={index}
       className="relative bg-slate-800/90 border border-slate-600/50 p-6 sm:p-7 md:p-8 rounded-2xl shadow-xl shadow-black/40 backdrop-blur-sm flex flex-col items-center text-center overflow-hidden min-h-[260px] sm:min-h-[280px] md:min-h-[300px] w-full"
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: false, amount: 0.05 }}
-      transition={{ duration: 0.4, ease: 'easeOut', delay: index * 0.05 }}
+      viewport={{ once: true, amount: 0, margin: '50px' }}
+      transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+      style={{ willChange: 'opacity, transform', transform: 'translateZ(0)' }}
     >
       <div className="relative z-10 flex flex-col items-center h-full space-y-5">
         <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center bg-gradient-to-br from-[#ccff00] to-yellow-300 border border-[#ccff00]/70 shadow-[0_0_18px_rgba(204,255,0,0.25)]">
@@ -263,10 +265,10 @@ export default function Features() {
       className="relative pt-24 sm:pt-32 md:pt-40 pb-12 sm:pb-16 md:pb-20 overflow-hidden bg-gradient-to-b from-slate-900 to-slate-950 w-full"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
-      viewport={{ once: false, amount: 0.05 }}
+      viewport={{ once: true, amount: 0, margin: '100px' }}
       transition={{
-        duration: shouldOptimizeAnimations ? 0.3 : 0.5,
-        ease: 'easeOut',
+        duration: 0.4,
+        ease: [0.25, 0.1, 0.25, 1],
       }}
     >
       {/* Gradient transition from black to purple */}

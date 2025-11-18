@@ -190,13 +190,12 @@ export default function Process() {
           {processes.map((process, index) => (
             <motion.div
               key={process.title}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false, amount: 0.1 }}
+              viewport={{ once: true, amount: 0, margin: '50px' }}
               transition={{
-                duration: 0.4,
-                ease: 'easeOut',
-                delay: index * 0.05,
+                duration: 0.3,
+                ease: [0.25, 0.1, 0.25, 1],
               }}
               whileHover={{
                 y: -10,
@@ -207,7 +206,8 @@ export default function Process() {
               role="article"
               aria-label={`${process.title}: ${process.description}`}
               style={{
-                willChange: 'transform',
+                willChange: 'opacity, transform',
+                transform: 'translateZ(0)',
               }}
             >
               <div
