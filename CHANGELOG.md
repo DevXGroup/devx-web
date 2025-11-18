@@ -1,3 +1,9 @@
+## [1.2.7](https://github.com/DevXGroup/devx-web/compare/v1.2.6...v1.2.7) (2025-11-18)
+
+### Bug Fixes
+
+* eliminate scroll sticking on about page ([ac8126b](https://github.com/DevXGroup/devx-web/commit/ac8126b95e06de64379e5c4bdb93bc15bbafe646))
+
 ## [1.2.6](https://github.com/DevXGroup/devx-web/compare/v1.2.5...v1.2.6) (2025-11-18)
 
 ### Performance Improvements
