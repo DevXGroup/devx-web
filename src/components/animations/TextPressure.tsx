@@ -23,8 +23,8 @@ interface TextPressureProps {
 
 const TextPressure: React.FC<TextPressureProps> = ({
   text = 'Our Story',
-  fontFamily = 'var(--font-ibm-plex-mono)',
-  fontUrl = '',
+  fontFamily = '"IBM Plex Mono Var", var(--font-ibm-plex-mono), "IBM Plex Mono", Menlo, "Courier New", monospace',
+  fontUrl = '/fonts/IBMPlexMonoVar-Roman.woff2',
   width = true,
   weight = true,
   italic = true,
@@ -51,6 +51,8 @@ const TextPressure: React.FC<TextPressureProps> = ({
   const [lineHeight, setLineHeight] = useState(1)
 
   const chars = text.split('')
+  const primaryFontName =
+    fontFamily.split(',')[0]?.replace(/['"]/g, '').trim() || 'TextPressureVariableFont'
 
   const dist = (a: { x: number; y: number }, b: { x: number; y: number }) => {
     const dx = b.x - a.x
@@ -215,9 +217,11 @@ const TextPressure: React.FC<TextPressureProps> = ({
           fontUrl
             ? `
         @font-face {
-          font-family: '${fontFamily}';
-          src: url('${fontUrl}');
+          font-family: '${primaryFontName}';
+          src: url('${fontUrl}') format('woff2');
           font-style: normal;
+          font-weight: 100 700;
+          font-display: swap;
         }
         `
             : ''
