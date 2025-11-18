@@ -34,7 +34,7 @@
     "size": "size-limit --config size-limit.config.cjs",
     "analyze": "ANALYZE=true pnpm next build",
     "release": "semantic-release",
-    "prepare": "husky"
+    "prepare": "node scripts/husky-prepare.mjs"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "^1.4.0",
@@ -140,8 +140,8 @@
     "typescript": "^5.9.3"
   },
   "engines": {
-    "node": ">=22.14.0",
-    "pnpm": ">=10.19.0"
+    "node": "22.14.x",
+    "pnpm": "10.22.x"
   },
   "packageManager": "pnpm@10.22.0",
   "lint-staged": {
