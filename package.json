@@ -33,7 +33,8 @@
     "test:coverage": "pnpm jest --coverage",
     "size": "size-limit --config size-limit.config.cjs",
     "analyze": "ANALYZE=true pnpm next build",
-    "release": "semantic-release"
+    "release": "semantic-release",
+    "prepare": "husky"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "^1.4.0",
@@ -126,8 +127,10 @@
     "conventional-changelog-conventionalcommits": "^9.1.0",
     "eslint": "^9.39.1",
     "eslint-config-next": "^15.5.6",
+    "husky": "^9.1.7",
     "jest": "^30.2.0",
     "jest-environment-jsdom": "^30.2.0",
+    "lint-staged": "^16.2.6",
     "postcss": "^8.5.6",
     "prettier": "^3.6.2",
     "semantic-release": "^25.0.2",
@@ -140,5 +143,13 @@
     "node": ">=22.14.0",
     "pnpm": ">=10.19.0"
   },
-  "packageManager": "pnpm@10.22.0"
+  "packageManager": "pnpm@10.22.0",
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,css,scss,md}": [
+      "prettier --write"
+    ],
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix"
+    ]
+  }
 }
