@@ -471,7 +471,7 @@ export default function DevelopmentTools() {
   return (
     <LayoutGroup>
       {/* Optimized height for better spacing with extra bottom padding for tablets */}
-      <div ref={sectionRef} className="relative w-full bg-black z-[150]">
+      <div ref={sectionRef} className="relative w-full bg-black z-[1]">
         <StarTwinklingField className="-z-1" />
 
         {/* Title section */}
@@ -504,18 +504,15 @@ export default function DevelopmentTools() {
           */}
             <motion.div
               className="pointer-events-none absolute inset-0 rounded-full border"
-              style={{ borderColor: 'rgba(255, 255, 255, 0.7)' }}
+              style={{
+                borderColor: 'rgba(255, 255, 255, 0.7)',
+                boxShadow: '0 0 15px rgba(255,255,255,0.5), inset 0 0 10px rgba(255,255,255,0.25)',
+              }}
               animate={{
-                opacity: [0.7, 1, 0.7],
-                scale: [1, 1.05, 1],
-                boxShadow: [
-                  '0 0 10px rgba(255,255,255,0.4), inset 0 0 8px rgba(255,255,255,0.2)',
-                  '0 0 30px rgba(255,255,255,0.8), inset 0 0 15px rgba(255,255,255,0.4)',
-                  '0 0 10px rgba(255,255,255,0.4), inset 0 0 8px rgba(255,255,255,0.2)',
-                ],
+                opacity: [0.8, 1, 0.8],
               }}
               transition={{
-                duration: 4,
+                duration: 3,
                 repeat: Number.POSITIVE_INFINITY,
                 repeatType: 'reverse',
                 ease: 'easeInOut',
@@ -1023,6 +1020,7 @@ function AIToolsOrbit({
   }, [mounted])
 
   // Use useEffect to animate the rotation with motion blur - only when visible
+  // Optimized with reduced frame rate for better performance
   useEffect(() => {
     if (!isVisible || !mounted) {
       if (animationRef.current) {
@@ -1033,13 +1031,21 @@ function AIToolsOrbit({
     }
 
     let lastTime = performance.now()
+    let lastUpdateTime = performance.now()
     const rotationSpeed = 0.008 // slightly faster for more visible trail effect
+    const targetFPS = 30 // Limit to 30fps for better performance on large screens
+    const frameInterval = 1000 / targetFPS
 
     const animate = (time: number) => {
       const deltaTime = time - lastTime
       lastTime = time
 
-      setRotation((prev) => (prev + rotationSpeed * deltaTime) % 360)
+      // Throttle updates to target FPS
+      if (time - lastUpdateTime >= frameInterval) {
+        setRotation((prev) => (prev + rotationSpeed * deltaTime) % 360)
+        lastUpdateTime = time
+      }
+
       animationRef.current = requestAnimationFrame(animate)
     }
 
@@ -1121,12 +1127,11 @@ function AIToolsOrbit({
             >
               <motion.div
                 className="absolute inset-0 rounded-full pointer-events-none"
+                style={{
+                  boxShadow: '0 0 12px rgba(76, 215, 135, 0.45), 0 0 3px rgba(76, 215, 135, 0.65)',
+                }}
                 animate={{
-                  boxShadow: [
-                    '0 0 8px rgba(76, 215, 135, 0.4), 0 0 2px rgba(76, 215, 135, 0.6)',
-                    '0 0 20px rgba(76, 215, 135, 0.6), 0 0 6px rgba(76, 215, 135, 0.8)',
-                    '0 0 8px rgba(76, 215, 135, 0.4), 0 0 2px rgba(76, 215, 135, 0.6)',
-                  ],
+                  opacity: [0.8, 1, 0.8],
                 }}
                 transition={{
                   duration: 2.5,

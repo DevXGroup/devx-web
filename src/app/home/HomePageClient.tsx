@@ -57,8 +57,8 @@ export default function HomePageClient() {
       window.scrollTo(0, 0)
     }
 
-    // Don't clear the fromEntry flag here - let GlobalTransition handle it
-    // This prevents race condition where flag is cleared before transition detects it
+    // Don't clear the entry transition flag here - the transition components handle it
+    // This prevents race condition where the curtain/fade can't detect the state in time
 
     // Set loaded immediately for better performance
     setIsLoaded(true)

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { usePathname } from 'next/navigation'
 import { useReducedMotion } from '@/hooks/use-reduced-motion'
+import { clearEntryTransition, isEntryTransitionActive } from '@/lib/entry-transition'
 
 export default function GlobalTransition() {
   const pathname = usePathname()
@@ -27,9 +28,7 @@ export default function GlobalTransition() {
 
     // Show transition only once when first arriving at /home
     if (pathname === '/home' && !hasShownTransition) {
-      const fromEntry = sessionStorage.getItem('fromEntry') === 'true'
-
-      if (fromEntry) {
+      if (isEntryTransitionActive()) {
         setIsTransitioning(true)
         setHasShownTransition(true)
 
@@ -42,7 +41,7 @@ export default function GlobalTransition() {
             setIsTransitioning(false)
             document.body.classList.remove('navbar-hidden')
             // Clear the flag after transition completes
-            sessionStorage.removeItem('fromEntry')
+            clearEntryTransition()
           },
           (DELAY_BEFORE_FADE + FADE_DURATION) * 1000
         )
@@ -50,6 +49,7 @@ export default function GlobalTransition() {
         return () => {
           clearTimeout(timer)
           document.body.classList.remove('navbar-hidden')
+          clearEntryTransition()
         }
       }
     }
