@@ -44,7 +44,9 @@ export default function HeroCurtain() {
           className="fixed inset-0 pointer-events-none"
           style={{
             zIndex: 100000,
-            willChange: 'transform',
+            transform: 'translateZ(0)',
+            backfaceVisibility: 'hidden',
+            WebkitBackfaceVisibility: 'hidden',
             top: '-30vh',
             height: '180vh',
           }}
@@ -59,13 +61,14 @@ export default function HeroCurtain() {
           }}
           transition={{
             y: {
-              duration: 1.8,
+              duration: 1.5,
               delay: 0,
-              ease: [0.33, 0.1, 0.2, 1],
+              ease: [0.25, 0.1, 0.25, 1],
+              type: 'tween',
             },
             opacity: {
               duration: 0.3,
-              delay: 1.8,
+              delay: 1.5,
             },
           }}
           onAnimationComplete={handleAnimationComplete}
@@ -78,6 +81,9 @@ export default function HeroCurtain() {
               width: '100%',
               height: '100%',
               display: 'block',
+              transform: 'translateZ(0)',
+              backfaceVisibility: 'hidden',
+              WebkitBackfaceVisibility: 'hidden',
             }}
             xmlns="http://www.w3.org/2000/svg"
           >
@@ -94,8 +100,9 @@ export default function HeroCurtain() {
               fill="url(#curtainGradient)"
               style={{
                 filter: 'drop-shadow(0 4px 20px rgba(0, 0, 0, 0.5))',
+                transform: 'translateZ(0)',
               }}
-              shapeRendering="geometricPrecision"
+              shapeRendering="optimizeSpeed"
             />
           </svg>
         </motion.div>
