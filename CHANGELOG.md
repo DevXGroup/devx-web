@@ -1,3 +1,9 @@
+## [1.2.8](https://github.com/DevXGroup/devx-web/compare/v1.2.7...v1.2.8) (2025-11-18)
+
+### Bug Fixes
+
+* restore hero typography ([e9ee16c](https://github.com/DevXGroup/devx-web/commit/e9ee16c1acb457f69d2c28aec5b5b1da7d7e27ef))
+
 ## [1.2.7](https://github.com/DevXGroup/devx-web/compare/v1.2.6...v1.2.7) (2025-11-18)
 
 ### Bug Fixes
