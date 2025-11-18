@@ -6,13 +6,13 @@ import { useInView } from 'framer-motion'
 import { useEffect, useState, useRef } from 'react'
 
 /**
- * Lightweight PNG-based planet divider
+ * Optimized PNG-based planet divider
  * - Uses moon PNG image with 1/2 visible (bottom half)
  * - Continuous rotation with CSS animation (pauses when out of view)
- * - Subtle greenish-yellow grayish glow directly on the image
  * - Scroll-based opacity: fully visible in hero (68%), fades out while moving down on scroll
  * - Scroll-based movement (moves down as you scroll, with delay)
- * - High performance on all devices
+ * - Pure CSS animations (GPU-accelerated, no JavaScript)
+ * - Respects prefers-reduced-motion for accessibility
  */
 export default function PlanetDivider({ opacity = 0.68 }) {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -48,6 +48,7 @@ export default function PlanetDivider({ opacity = 0.68 }) {
     return () => {
       cancelAnimationFrame(animationFrameId)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Responsive sizing
@@ -62,7 +63,7 @@ export default function PlanetDivider({ opacity = 0.68 }) {
         {
           height: `${containerHeight}px`,
           background: 'transparent',
-          overflow: 'visible', // Allow glow to extend beyond container
+          overflow: 'visible',
           '--planet-offset-y': '0px',
           '--planet-opacity': `${opacity}`,
         } as React.CSSProperties
@@ -77,15 +78,13 @@ export default function PlanetDivider({ opacity = 0.68 }) {
           marginLeft: `-${planetSize / 2}px`,
           transform: `translateY(calc(50% + var(--planet-offset-y)))`,
           transition: 'transform 0.1s ease-out',
-          overflow: 'visible', // Allow glow to extend
+          overflow: 'visible',
           willChange: 'transform',
         }}
       >
-        {/* Rotating planet with glow */}
+        {/* Rotating planet */}
         <div className="planet-rotate-container">
-          <div className="planet-glow-container">
-            {/* Safari-compatible glow layer using radial gradient */}
-            <div className="planet-glow-bg" style={{ opacity: 'var(--planet-opacity)' }} />
+          <div className="planet-container">
             <picture className="planet-sphere-wrapper">
               <source
                 srcSet="/moon_hero_1536.webp 1536w, /moon_hero_1024.webp 1024w, /moon_hero_768.webp 768w, /moon_hero_512.webp 512w"
@@ -132,44 +131,16 @@ export default function PlanetDivider({ opacity = 0.68 }) {
           perspective: 1000px;
         }
 
-        .planet-glow-container {
+        .planet-container {
           width: 100%;
           height: 100%;
           position: relative;
-          /* Apply the glow effect to the container to prevent square clipping */
-          filter: drop-shadow(0 0 40px rgba(180, 200, 160, 0.2))
-            drop-shadow(0 0 70px rgba(170, 190, 150, 0.14))
-            drop-shadow(0 0 100px rgba(160, 180, 140, 0.08));
-          -webkit-filter: drop-shadow(0 0 40px rgba(180, 200, 160, 0.2))
-            drop-shadow(0 0 70px rgba(170, 190, 150, 0.14))
-            drop-shadow(0 0 100px rgba(160, 180, 140, 0.08));
           border-radius: 50%;
-          overflow: visible; /* Allow glow to extend beyond boundaries */
+          overflow: visible;
           transform: translateZ(0);
           -webkit-transform: translateZ(0);
           backface-visibility: hidden;
           -webkit-backface-visibility: hidden;
-        }
-
-        /* Safari-compatible glow background layer */
-        .planet-glow-bg {
-          position: absolute;
-          inset: -30%;
-          width: 160%;
-          height: 160%;
-          background: radial-gradient(
-            circle at center,
-            rgba(180, 200, 160, 0.22) 0%,
-            rgba(170, 190, 150, 0.18) 20%,
-            rgba(160, 180, 140, 0.12) 40%,
-            rgba(150, 170, 130, 0.06) 60%,
-            transparent 80%
-          );
-          border-radius: 50%;
-          pointer-events: none;
-          transform: translateZ(0);
-          -webkit-transform: translateZ(0);
-          will-change: opacity;
         }
 
         .planet-sphere-wrapper {
@@ -205,72 +176,6 @@ export default function PlanetDivider({ opacity = 0.68 }) {
           .planet-rotate-container {
             animation: none;
           }
-        }
-
-        /* Mobile optimizations - more subtle glow */
-        @media screen and (max-width: 767px) {
-          .planet-glow-container {
-            filter: drop-shadow(0 0 35px rgba(180, 200, 160, 0.18))
-              drop-shadow(0 0 60px rgba(170, 190, 150, 0.12))
-              drop-shadow(0 0 85px rgba(160, 180, 140, 0.07)) !important;
-            -webkit-filter: drop-shadow(0 0 35px rgba(180, 200, 160, 0.18))
-              drop-shadow(0 0 60px rgba(170, 190, 150, 0.12))
-              drop-shadow(0 0 85px rgba(160, 180, 140, 0.07)) !important;
-          }
-
-          .planet-glow-bg {
-            inset: -25%;
-            width: 150%;
-            height: 150%;
-            background: radial-gradient(
-              circle at center,
-              rgba(180, 200, 160, 0.2) 0%,
-              rgba(170, 190, 150, 0.16) 20%,
-              rgba(160, 180, 140, 0.1) 40%,
-              rgba(150, 170, 130, 0.05) 60%,
-              transparent 80%
-            );
-          }
-        }
-
-        /* Safari-specific fixes for glow effect */
-        @supports (-webkit-backdrop-filter: blur(1px)) {
-          .planet-glow-bg {
-            /* Enhanced glow for Safari using backdrop blur support detection */
-            inset: -40%;
-            width: 180%;
-            height: 180%;
-            background: radial-gradient(
-              circle at center,
-              rgba(180, 200, 160, 0.45) 0%,
-              rgba(170, 190, 150, 0.38) 15%,
-              rgba(160, 180, 140, 0.28) 30%,
-              rgba(150, 170, 130, 0.18) 50%,
-              rgba(140, 160, 120, 0.1) 65%,
-              transparent 80%
-            );
-          }
-
-          @media screen and (max-width: 767px) {
-            .planet-glow-bg {
-              inset: -35%;
-              width: 170%;
-              height: 170%;
-              background: radial-gradient(
-                circle at center,
-                rgba(180, 200, 160, 0.4) 0%,
-                rgba(170, 190, 150, 0.32) 15%,
-                rgba(160, 180, 140, 0.22) 30%,
-                rgba(150, 170, 130, 0.14) 50%,
-                rgba(140, 160, 120, 0.08) 65%,
-                transparent 80%
-              );
-            }
-          }
-        }
-
-        /* Respect reduced motion for all animations */
-        @media (prefers-reduced-motion: reduce) {
           .planet-sphere {
             transform: none;
           }

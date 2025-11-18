@@ -20,12 +20,12 @@ const throttle = <T extends (...args: any[]) => any>(
 export const useScrollRef = ({ throttleDelay = 8 }) => {
   const scrollYRef = useRef(0)
 
-  const handleScroll = useCallback(
-    throttle(() => {
+  const handleScroll = useCallback(() => {
+    const throttled = throttle(() => {
       scrollYRef.current = window.scrollY
-    }, throttleDelay),
-    []
-  )
+    }, throttleDelay)
+    throttled()
+  }, [throttleDelay])
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll, { passive: true })
