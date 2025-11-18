@@ -77,39 +77,45 @@ export default function InfinityLogo() {
             frameloop={isInView ? 'always' : 'demand'}
             performance={{ min: 0.5 }} // Allow frame rate to drop if needed
           >
-          <PerspectiveCamera makeDefault position={[0, 0, 10]} />
-          <DevXEnvironment variant="studio" intensity={isMobile ? 0.8 : 1.2} />
-          <ambientLight intensity={0.5} />
-          {/* Reduced lighting complexity for better performance */}
-          {!isMobile && (
-            <>
-              <directionalLight
-                castShadow
-                position={[5, 10, 5]}
-                intensity={1.5}
-                shadow-mapSize-width={512}
-                shadow-mapSize-height={512}
-              />
-              <spotLight
-                position={[10, 10, 10]}
-                angle={0.25}
-                penumbra={1}
-                intensity={1}
-                color="#CCFF00"
-              />
-            </>
-          )}
-          <pointLight position={[3, 2, 3]} intensity={2} color="#CCFF00" distance={15} decay={2} />
-          <pointLight
-            position={[-3, -2, 4]}
-            intensity={1.5}
-            color="#4CD787"
-            distance={12}
-            decay={2}
-          />
+            <PerspectiveCamera makeDefault position={[0, 0, 10]} />
+            <DevXEnvironment variant="studio" intensity={isMobile ? 0.8 : 1.2} />
+            <ambientLight intensity={0.5} />
+            {/* Reduced lighting complexity for better performance */}
+            {!isMobile && (
+              <>
+                <directionalLight
+                  castShadow
+                  position={[5, 10, 5]}
+                  intensity={1.5}
+                  shadow-mapSize-width={512}
+                  shadow-mapSize-height={512}
+                />
+                <spotLight
+                  position={[10, 10, 10]}
+                  angle={0.25}
+                  penumbra={1}
+                  intensity={1}
+                  color="#CCFF00"
+                />
+              </>
+            )}
+            <pointLight
+              position={[3, 2, 3]}
+              intensity={2}
+              color="#CCFF00"
+              distance={15}
+              decay={2}
+            />
+            <pointLight
+              position={[-3, -2, 4]}
+              intensity={1.5}
+              color="#4CD787"
+              distance={12}
+              decay={2}
+            />
 
-          <InfinityMesh setIsInteracting={setIsInteracting} isMobile={isMobile} />
-        </Canvas>
+            <InfinityMesh setIsInteracting={setIsInteracting} isMobile={isMobile} />
+          </Canvas>
         )}
       </div>
     </div>

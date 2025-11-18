@@ -506,8 +506,7 @@ export default function DevelopmentTools() {
               className="pointer-events-none absolute inset-0 rounded-full border"
               style={{
                 borderColor: 'rgba(255, 255, 255, 0.7)',
-                boxShadow:
-                  '0 0 15px rgba(255,255,255,0.5), inset 0 0 10px rgba(255,255,255,0.25)',
+                boxShadow: '0 0 15px rgba(255,255,255,0.5), inset 0 0 10px rgba(255,255,255,0.25)',
               }}
               animate={{
                 opacity: [0.8, 1, 0.8],
@@ -1129,8 +1128,7 @@ function AIToolsOrbit({
               <motion.div
                 className="absolute inset-0 rounded-full pointer-events-none"
                 style={{
-                  boxShadow:
-                    '0 0 12px rgba(76, 215, 135, 0.45), 0 0 3px rgba(76, 215, 135, 0.65)',
+                  boxShadow: '0 0 12px rgba(76, 215, 135, 0.45), 0 0 3px rgba(76, 215, 135, 0.65)',
                 }}
                 animate={{
                   opacity: [0.8, 1, 0.8],

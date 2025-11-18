@@ -83,19 +83,25 @@ export default function LogoLoop({ logos, speed = 15 }: LogoLoopProps) {
     }
   }, [])
 
-  const handleActivate = useCallback((index: number) => {
-    clearTouchTimeout()
-    setActiveIndex(index)
-  }, [clearTouchTimeout])
+  const handleActivate = useCallback(
+    (index: number) => {
+      clearTouchTimeout()
+      setActiveIndex(index)
+    },
+    [clearTouchTimeout]
+  )
 
   const handleDeactivate = useCallback(() => {
     clearTouchTimeout()
     setActiveIndex(null)
   }, [clearTouchTimeout])
 
-  const handleTouchStart = useCallback((index: number) => {
-    handleActivate(index)
-  }, [handleActivate])
+  const handleTouchStart = useCallback(
+    (index: number) => {
+      handleActivate(index)
+    },
+    [handleActivate]
+  )
 
   const handleTouchEnd = useCallback(() => {
     clearTouchTimeout()

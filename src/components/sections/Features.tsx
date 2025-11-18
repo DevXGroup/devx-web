@@ -451,9 +451,7 @@ export default function Features() {
       </motion.div>
       {/* Trigger point for 3D loading - positioned well before the actual 3D component */}
       <div ref={infinityTriggerRef} className="absolute bottom-[60vh]" />
-      <div className="mt-20">
-        {(shouldLoad3D || shouldOptimizeAnimations) && <InfinityLogo />}
-      </div>
+      <div className="mt-20">{(shouldLoad3D || shouldOptimizeAnimations) && <InfinityLogo />}</div>
 
       {/* Smooth fade transition to next section */}
       <div className="absolute bottom-0 left-0 right-0 h-32 md:h-48 bg-gradient-to-b from-transparent to-black z-[1] pointer-events-none" />
