@@ -480,7 +480,7 @@ export default function PortfolioPage() {
 
               <motion.p
                 variants={fadeInUpVariants}
-                className="text-lg md:text-xl text-foreground/90 font-light text-gray-500 max-w-2xl mb-8 -mt-5 leading-relaxed"
+                className="relative z-20 text-lg md:text-xl text-white font-light max-w-2xl mb-8 -mt-5 leading-relaxed drop-shadow-[0_6px_25px_rgba(0,0,0,0.65)]"
               >
                 Explore shipped products that increased revenue, retention, and efficiency across
                 web, mobile, AI, and cloud experiences.
