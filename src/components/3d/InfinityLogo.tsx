@@ -10,7 +10,8 @@ import { useInView } from 'framer-motion'
 export default function InfinityLogo() {
   const [isInteracting, setIsInteracting] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
-  const isInView = useInView(containerRef, { margin: '300px', once: false, amount: 0 })
+  // Large margin to keep animation running during scroll, once: true to prevent re-activation lag
+  const isInView = useInView(containerRef, { margin: '100%', once: true, amount: 0 })
   const [isMobile, setIsMobile] = useState(false)
   const [isReady, setIsReady] = useState(false)
 
