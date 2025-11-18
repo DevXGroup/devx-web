@@ -1,9 +1,3 @@
-## [1.2.14](https://github.com/DevXGroup/devx-web/compare/v1.2.13...v1.2.14) (2025-11-18)
-
-### Bug Fixes
-
-* restore textpressure animation dynamics ([788c599](https://github.com/DevXGroup/devx-web/commit/788c599c9795cea074481ea64fc27d3b10f736be))
-
 ## [1.2.13](https://github.com/DevXGroup/devx-web/compare/v1.2.12...v1.2.13) (2025-11-18)
 
 ### Bug Fixes
