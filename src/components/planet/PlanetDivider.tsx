@@ -9,9 +9,10 @@ import { useEffect, useState, useRef } from 'react'
  * Optimized PNG-based planet divider
  * - Uses moon PNG image with 1/2 visible (bottom half)
  * - Continuous rotation with CSS animation (pauses when out of view)
- * - Scroll-based opacity: fully visible in hero (68%), fades out while moving down on scroll
- * - Scroll-based movement (moves down as you scroll, with delay)
- * - Pure CSS animations (GPU-accelerated, no JavaScript)
+ * - Scroll-based opacity: fades from 68% to 40% (always visible for smooth scroll-back)
+ * - Scroll-based movement (moves down as you scroll with smooth easing)
+ * - Event-driven updates (only on scroll, not constant RAF loop)
+ * - Smooth CSS transitions for opacity changes
  * - Respects prefers-reduced-motion for accessibility
  */
 export default function PlanetDivider({ opacity = 0.68 }) {
@@ -27,33 +28,50 @@ export default function PlanetDivider({ opacity = 0.68 }) {
     const element = containerRef.current
     if (!element) return
 
-    let animationFrameId: number
+    let ticking = false
 
-    const animate = () => {
+    const updatePlanet = () => {
       const scrollY = scrollYRef.current
       const scrollProgress = Math.min(scrollY / 500, 1)
 
       const easeOutCubic = (t: number): number => 1 - Math.pow(1 - t, 3)
-      const easedOffset = easeOutCubic(scrollProgress) * (isMobile ? 150 : 250)
-      const currentOpacity = opacity * (1 - scrollProgress)
+      // Reduced mobile offset to keep planet more visible (100px instead of 150px)
+      const easedOffset = easeOutCubic(scrollProgress) * (isMobile ? 100 : 250)
+
+      // Keep planet visible with minimum 40% opacity, smooth fade from 68% to 40%
+      const minOpacity = 0.4
+      const currentOpacity = opacity - scrollProgress * (opacity - minOpacity)
 
       element.style.setProperty('--planet-offset-y', `${easedOffset}px`)
       element.style.setProperty('--planet-opacity', currentOpacity.toString())
 
-      animationFrameId = requestAnimationFrame(animate)
+      ticking = false
     }
 
-    animationFrameId = window.requestAnimationFrame(animate)
+    const handleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(updatePlanet)
+        ticking = true
+      }
+    }
+
+    // Initial update
+    updatePlanet()
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
 
     return () => {
-      cancelAnimationFrame(animationFrameId)
+      window.removeEventListener('scroll', handleScroll)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [isMobile, opacity])
 
   // Responsive sizing
   const planetSize = isMobile ? 360 : 700
-  const containerHeight = isMobile ? 180 : 350
+  // Increased mobile container height to show more planet (220px instead of 180px)
+  const containerHeight = isMobile ? 220 : 350
+  // Mobile shows more of the planet (35% instead of 50%)
+  const verticalOffset = isMobile ? '35%' : '50%'
 
   return (
     <div
@@ -69,17 +87,15 @@ export default function PlanetDivider({ opacity = 0.68 }) {
         } as React.CSSProperties
       }
     >
-      {/* Planet container - only shows bottom 1/2 */}
+      {/* Planet container - shows bottom portion (more visible on mobile) */}
       <div
         className="absolute left-1/2 bottom-0"
         style={{
           width: `${planetSize}px`,
           height: `${planetSize}px`,
           marginLeft: `-${planetSize / 2}px`,
-          transform: `translateY(calc(50% + var(--planet-offset-y)))`,
-          transition: 'transform 0.1s ease-out',
+          transform: `translateY(calc(${verticalOffset} + var(--planet-offset-y)))`,
           overflow: 'visible',
-          willChange: 'transform',
         }}
       >
         {/* Rotating planet */}
@@ -160,6 +176,8 @@ export default function PlanetDivider({ opacity = 0.68 }) {
           -webkit-backface-visibility: hidden;
           will-change: filter, opacity;
           border-radius: 50%;
+          /* Smooth opacity transitions for scroll */
+          transition: opacity 0.15s ease-out;
         }
 
         @keyframes rotate-planet {
