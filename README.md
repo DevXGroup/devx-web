@@ -125,6 +125,10 @@ Keep credentials out of version control and configure hosting platforms with mat
 
 ## Testing & Quality
 
+- **Pre-commit hooks** automatically enforce code quality before commits using Husky and lint-staged:
+  - Prettier formats all staged files
+  - Next.js ESLint checks source files in `src/`
+  - No manual formatting needed—hooks handle it automatically
 - Run `pnpm lint` before opening pull requests to enforce code quality.
 - Use `pnpm test` for component tests and `pnpm test:coverage` for coverage tracking.
 - Playwright scenarios in `tests/integration/`, `tests/qa/`, and `tests/audit/` validate critical journeys—update or add specs when flows change.
@@ -135,10 +139,19 @@ Keep credentials out of version control and configure hosting platforms with mat
 
 - Strict TypeScript across the codebase; prefer explicit public interfaces.
 - File naming: components in `PascalCase.tsx`, hooks in `use-*.ts`.
-- Formatting enforced by Prettier (2 spaces, single quotes, no semicolons).
+- Formatting enforced by Prettier (2 spaces, single quotes, no semicolons) via pre-commit hooks.
 - Leverage shared path aliases instead of deep relative imports.
 - Follow conventional commits (`feat:`, `fix:`, `refactor:`, `chore:`, `docs:`).
 - Optimize performance with dynamic imports for heavy, browser-only modules.
+
+### Pre-commit Quality Checks
+
+Git hooks automatically run when you commit changes:
+
+1. **Prettier** - Auto-formats all staged files (`.js`, `.jsx`, `.ts`, `.tsx`, `.json`, `.css`, `.scss`, `.md`)
+2. **Next.js ESLint** - Lints and fixes issues in source files under `src/`
+
+If you need to bypass hooks (not recommended), use `git commit --no-verify`.
 
 ## Documentation
 
