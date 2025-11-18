@@ -26,11 +26,11 @@ function isElementFullyOut(node: HTMLElement) {
 
 export function useScrollAnimation<T extends HTMLElement>(options?: UseScrollAnimationOptions) {
   const {
-    margin = '-15% 0px -15% 0px',
-    amount = 0.35,
+    margin = '0px 0px -10% 0px',
+    amount = 0.1,
     animationClass = 'slide-in-blurred-bottom',
-    reflowDelay = 30,
-    resetDelay = options?.exitDelay ?? 220,
+    reflowDelay = 0,
+    resetDelay = options?.exitDelay ?? 150,
     disabled = false,
     shouldResetOnExit = false,
   } = options ?? {}
