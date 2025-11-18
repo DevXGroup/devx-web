@@ -1,3 +1,9 @@
+## [1.2.2](https://github.com/DevXGroup/devx-web/compare/v1.2.1...v1.2.2) (2025-11-18)
+
+### Performance Improvements
+
+* optimize animation speeds and 3D infinity loading ([5f4c234](https://github.com/DevXGroup/devx-web/commit/5f4c234879f033f05036186af82083f29247ca62))
+
 ## [1.2.1](https://github.com/DevXGroup/devx-web/compare/v1.2.0...v1.2.1) (2025-11-18)
 
 ### Bug Fixes
