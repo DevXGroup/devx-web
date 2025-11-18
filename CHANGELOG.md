@@ -1,3 +1,9 @@
+## [1.2.12](https://github.com/DevXGroup/devx-web/compare/v1.2.11...v1.2.12) (2025-11-18)
+
+### Bug Fixes
+
+* restore animated headings ([596fccc](https://github.com/DevXGroup/devx-web/commit/596fcccf241c163f412f4a60ff45d564044d0086))
+
 ## [1.2.11](https://github.com/DevXGroup/devx-web/compare/v1.2.10...v1.2.11) (2025-11-18)
 
 ### Bug Fixes
