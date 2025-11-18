@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState, type CSSProperties } from 'react'
+import { useEffect, useRef, useState, useCallback, type CSSProperties } from 'react'
 import Image from 'next/image'
 
 interface LogoLoopLogo {
@@ -22,61 +22,87 @@ export default function LogoLoop({ logos, speed = 15 }: LogoLoopProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const scrollerRef = useRef<HTMLDivElement>(null)
   const touchTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const resizeTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
   const [scrollDistance, setScrollDistance] = useState(0)
+  const [isVisible, setIsVisible] = useState(false)
+
+  // Debounced resize handler to prevent excessive re-renders
+  const updateDistance = useCallback(() => {
+    if (!scrollerRef.current || !containerRef.current) return
+    const scrollerWidth = scrollerRef.current.scrollWidth
+    const containerWidth = containerRef.current.clientWidth
+    setScrollDistance(Math.max(0, scrollerWidth - containerWidth))
+  }, [])
+
+  // IntersectionObserver to pause animation when off-screen
+  useEffect(() => {
+    if (!containerRef.current) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsVisible(entry.isIntersecting)
+        })
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '50px 0px 50px 0px',
+      }
+    )
+
+    observer.observe(containerRef.current)
+    return () => observer.disconnect()
+  }, [])
 
   useEffect(() => {
-    const updateDistance = () => {
-      if (!scrollerRef.current || !containerRef.current) return
-      const scrollerWidth = scrollerRef.current.scrollWidth
-      const containerWidth = containerRef.current.clientWidth
-      setScrollDistance(Math.max(0, scrollerWidth - containerWidth))
-    }
-
     updateDistance()
-    window.addEventListener('resize', updateDistance)
 
-    let observer: ResizeObserver | null = null
-    if (typeof ResizeObserver !== 'undefined' && scrollerRef.current) {
-      observer = new ResizeObserver(updateDistance)
-      observer.observe(scrollerRef.current)
+    // Debounced resize handler
+    const handleResize = () => {
+      if (resizeTimeoutRef.current) {
+        clearTimeout(resizeTimeoutRef.current)
+      }
+      resizeTimeoutRef.current = setTimeout(updateDistance, 150)
     }
+
+    window.addEventListener('resize', handleResize, { passive: true })
 
     return () => {
-      window.removeEventListener('resize', updateDistance)
-      if (observer) {
-        observer.disconnect()
+      window.removeEventListener('resize', handleResize)
+      if (resizeTimeoutRef.current) {
+        clearTimeout(resizeTimeoutRef.current)
       }
     }
-  }, [logos.length])
+  }, [updateDistance])
 
-  const clearTouchTimeout = () => {
+  const clearTouchTimeout = useCallback(() => {
     if (touchTimeoutRef.current) {
       clearTimeout(touchTimeoutRef.current)
       touchTimeoutRef.current = null
     }
-  }
+  }, [])
 
-  const handleActivate = (index: number) => {
+  const handleActivate = useCallback((index: number) => {
     clearTouchTimeout()
     setActiveIndex(index)
-  }
+  }, [clearTouchTimeout])
 
-  const handleDeactivate = () => {
+  const handleDeactivate = useCallback(() => {
     clearTouchTimeout()
     setActiveIndex(null)
-  }
+  }, [clearTouchTimeout])
 
-  const handleTouchStart = (index: number) => {
+  const handleTouchStart = useCallback((index: number) => {
     handleActivate(index)
-  }
+  }, [handleActivate])
 
-  const handleTouchEnd = () => {
+  const handleTouchEnd = useCallback(() => {
     clearTouchTimeout()
     touchTimeoutRef.current = setTimeout(() => {
       setActiveIndex(null)
     }, 600)
-  }
+  }, [clearTouchTimeout])
 
   useEffect(() => {
     return () => {
@@ -85,23 +111,39 @@ export default function LogoLoop({ logos, speed = 15 }: LogoLoopProps) {
   }, [])
 
   const scrollerStyles: CSSProperties & { '--scroll-distance'?: string } = {
-    animationName: scrollDistance > 0 ? 'scroll' : 'none',
+    animationName: scrollDistance > 0 && isVisible ? 'scroll' : 'none',
     animationDuration: `${speed}s`,
     animationTimingFunction: 'linear',
     animationIterationCount: 'infinite',
     animationDirection: 'alternate',
-    willChange: scrollDistance > 0 ? 'transform' : undefined,
+    // Only use willChange when animation is actually running
+    willChange: scrollDistance > 0 && isVisible ? 'transform' : 'auto',
     '--scroll-distance': `${scrollDistance}px`,
   }
 
   return (
-    <div className="relative w-full overflow-hidden py-8 pb-20">
-      {/* Dark gradient overlays on the edges */}
-      <div className="absolute left-0 top-0 bottom-0 w-32 md:w-48 lg:w-64 bg-gradient-to-r from-black via-black/80 to-transparent z-20 pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-32 md:w-48 lg:w-64 bg-gradient-to-l from-black via-black/80 to-transparent z-20 pointer-events-none" />
+    <div ref={containerRef} className="relative w-full overflow-hidden py-8 pb-20">
+      {/* Dark gradient overlays on the edges - optimized with GPU acceleration */}
+      <div
+        className="absolute left-0 top-0 bottom-0 w-32 md:w-48 lg:w-64 bg-gradient-to-r from-black via-black/80 to-transparent z-20 pointer-events-none"
+        style={{ transform: 'translateZ(0)' }}
+      />
+      <div
+        className="absolute right-0 top-0 bottom-0 w-32 md:w-48 lg:w-64 bg-gradient-to-l from-black via-black/80 to-transparent z-20 pointer-events-none"
+        style={{ transform: 'translateZ(0)' }}
+      />
 
-      <div ref={containerRef} className="relative w-full">
-        <div ref={scrollerRef} className="flex gap-12 md:gap-16 lg:gap-20" style={scrollerStyles}>
+      <div className="relative w-full">
+        <div
+          ref={scrollerRef}
+          className="flex gap-12 md:gap-16 lg:gap-20"
+          style={{
+            ...scrollerStyles,
+            // Force GPU acceleration for smoother animations
+            transform: 'translateZ(0)',
+            backfaceVisibility: 'hidden',
+          }}
+        >
           {[...logos, ...logos].map((logo, index) => {
             const isActive = activeIndex === index
             const shouldApplyGrayscale = logo.grayscale !== false && !isActive
@@ -114,6 +156,11 @@ export default function LogoLoop({ logos, speed = 15 }: LogoLoopProps) {
                 className={`flex-shrink-0 transition-transform duration-300 hover:scale-125 group/item cursor-pointer ${
                   isActive ? 'scale-110' : ''
                 }`}
+                style={{
+                  // GPU acceleration for smooth hover effects
+                  transform: 'translateZ(0)',
+                  backfaceVisibility: 'hidden',
+                }}
                 onMouseEnter={() => handleActivate(index)}
                 onMouseLeave={handleDeactivate}
                 onFocus={() => handleActivate(index)}

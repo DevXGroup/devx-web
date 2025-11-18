@@ -303,6 +303,7 @@ export function useCanvas({
       if (resizeTimeout) clearTimeout(resizeTimeout)
       if (scrollTimer) clearTimeout(scrollTimer)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -358,7 +359,7 @@ export function useCanvas({
       cancelAnimationFrame(state.frameId)
       state.isAlive = false
     }
-  }, [isInView, preload])
+  }, [isInView, preload, dpr])
 
   return { canvasRef, animationState: animationStateRef, isInView, dpr, isMobile }
 }

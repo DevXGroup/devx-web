@@ -10,13 +10,15 @@ export const usePerformanceOptimizedAnimation = () => {
       (window.innerWidth < 768 ||
         /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
     )
-  }, [update])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const hasReducedMotion = useMemo(() => {
     return (
       typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
     )
-  }, [update])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const isLowPower = useMemo(() => {
     // Check for low power mode
@@ -39,7 +41,8 @@ export const usePerformanceOptimizedAnimation = () => {
     }
 
     return false
-  }, [update])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const shouldOptimizeAnimations = isLowPower || hasReducedMotion
 
@@ -49,7 +52,7 @@ export const usePerformanceOptimizedAnimation = () => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
 
     const handleReducedMotionChange = (e: MediaQueryListEvent) => {
-      setUpdate(update + 1)
+      setUpdate((prev) => prev + 1)
     }
 
     mediaQuery.addEventListener('change', handleReducedMotionChange)

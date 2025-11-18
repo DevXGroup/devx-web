@@ -6,7 +6,16 @@ import type { LucideIcon } from 'lucide-react'
 import { Rocket, User, Layers, Search, Flag, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import RotatingText from '@animations/RotatingText'
-import InfinityLogo from '@3d/InfinityLogo'
+import dynamic from 'next/dynamic'
+
+const InfinityLogo = dynamic(() => import('@3d/InfinityLogo'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-[40vh] flex justify-center items-center">
+      <div className="text-[#4CD787] text-lg font-['IBM_Plex_Mono']">Loading...</div>
+    </div>
+  ),
+})
 import GridAnimation from '@animations/GridAnimation'
 import { containerVariants as globalContainerVariants } from '@/lib/animations'
 import { usePerformanceOptimizedAnimation } from '@/hooks/use-performance-optimized-animation'
@@ -71,7 +80,7 @@ function StepAnimation({
         className="w-16 h-16 rounded-full flex items-center justify-center text-lg font-bold font-['IBM_Plex_Mono'] relative border-4"
         variants={stepCircleVariants}
         animate={isActive ? 'active' : 'inactive'}
-        transition={{ duration: 0.4 }}
+        transition={{ duration: 0.25 }}
       >
         {step}
       </motion.div>
@@ -80,7 +89,7 @@ function StepAnimation({
         className="text-sm md:text-base font-['IBM_Plex_Mono'] text-center"
         variants={stepTextVariants}
         animate={isActive ? 'active' : 'inactive'}
-        transition={{ duration: 0.4 }}
+        transition={{ duration: 0.25 }}
       >
         {text}
       </motion.p>
@@ -164,17 +173,20 @@ function WhyUsCard({
 export default function Features() {
   const containerRef = useRef<HTMLDivElement>(null)
   const hireDevelopersRef = useRef<HTMLDivElement>(null)
+  const infinityTriggerRef = useRef<HTMLDivElement>(null)
 
   const [currentStep, setCurrentStep] = useState(0)
   const steps = ['Talk to us', 'Plan together', 'Build something great']
 
   const [isMounted, setIsMounted] = useState(false)
   const [isStepAnimationActive, setIsStepAnimationActive] = useState(false)
+  const [shouldLoad3D, setShouldLoad3D] = useState(false)
   const [viewportWidth, setViewportWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 1200
   )
   const shouldReduceMotion = useReducedMotion()
   const isInView = useInView(containerRef, { once: true, margin: '-150px' })
+  const is3DNear = useInView(infinityTriggerRef, { once: true, margin: '600px' })
   const { isMobile, shouldOptimizeAnimations } = usePerformanceOptimizedAnimation()
 
   useEffect(() => {
@@ -184,10 +196,17 @@ export default function Features() {
     }
   }, [])
 
+  // Preload 3D component when user scrolls near it
+  useEffect(() => {
+    if (is3DNear && !shouldOptimizeAnimations) {
+      setShouldLoad3D(true)
+    }
+  }, [is3DNear, shouldOptimizeAnimations])
+
   // Memoize animation timing based on reduced motion preference and screen size
   const stepInterval = useMemo(() => {
-    const baseInterval = isMobile ? 4000 : 5000 // Slower intervals on mobile for performance
-    return shouldOptimizeAnimations ? 6000 : baseInterval // Even slower if animations should be optimized
+    const baseInterval = isMobile ? 2500 : 3000 // Faster intervals
+    return shouldOptimizeAnimations ? 4000 : baseInterval // Faster even when optimized
   }, [shouldOptimizeAnimations, isMobile])
 
   useEffect(() => {
@@ -394,7 +413,7 @@ export default function Features() {
               )}
               <Link
                 href="/about#our-values"
-                className="group relative inline-flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-[#4CD787] via-[#9d4edd] to-[#4CD787] bg-[length:200%_100%] bg-[position:0%_0] hover:bg-[position:100%_0] text-black px-6 sm:px-8 py-3 sm:py-4 rounded-xl text-sm sm:text-base font-bold font-['IBM_Plex_Mono'] transition-all duration-500 backdrop-blur-sm border-2 border-[#4CD787]/40 hover:border-[#9d4edd]/60 hover:shadow-2xl hover:shadow-[#4CD787]/50 z-10"
+                className="group relative inline-flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-[#4CD787] via-[#9d4edd] to-[#4CD787] bg-[length:200%_100%] bg-[position:0%_0] hover:bg-[position:100%_0] text-black px-6 sm:px-8 py-3 sm:py-4 rounded-lg text-base sm:text-lg md:text-xl font-bold font-sans transition-all duration-500 backdrop-blur-sm border-2 border-[#4CD787]/40 hover:border-[#9d4edd]/60 hover:shadow-2xl hover:shadow-[#4CD787]/50 z-10"
               >
                 Explore more reasons to choose us
                 <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform duration-300" />
@@ -430,8 +449,10 @@ export default function Features() {
           </p>
         </div>
       </motion.div>
+      {/* Trigger point for 3D loading - positioned well before the actual 3D component */}
+      <div ref={infinityTriggerRef} className="absolute bottom-[60vh]" />
       <div className="mt-20">
-        <InfinityLogo />
+        {(shouldLoad3D || shouldOptimizeAnimations) && <InfinityLogo />}
       </div>
 
       {/* Smooth fade transition to next section */}

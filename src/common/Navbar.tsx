@@ -8,10 +8,13 @@ import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { useBackdropFilterSupport } from '@/hooks/use-backdrop-filter-support'
 import { StaggeredMenu } from '@/components/ui/StaggeredMenu'
+import { useIsomorphicLayoutEffect } from '@/hooks/use-isomorphic-layout-effect'
+import { isEntryTransitionActive, subscribeToEntryTransition } from '@/lib/entry-transition'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
+  const [showNavbar, setShowNavbar] = useState(true)
   const pathname = usePathname()
   const supportsBackdropFilter = useBackdropFilterSupport()
   const mobileMenuRef = useRef<HTMLDivElement>(null)
@@ -29,7 +32,7 @@ export default function Navbar() {
     handleScroll()
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  }, [isScrolled])
 
   useEffect(() => {
     isOpenRef.current = isOpen
@@ -40,6 +43,24 @@ export default function Navbar() {
       setIsOpen(false)
       isOpenRef.current = false
       document.body.style.overflow = 'unset'
+    }
+  }, [pathname])
+
+  // Handle navbar visibility during curtain transition
+  useIsomorphicLayoutEffect(() => {
+    const updateVisibility = (active: boolean) => {
+      if (pathname !== '/home') {
+        setShowNavbar(true)
+        return
+      }
+      setShowNavbar(!active)
+    }
+
+    updateVisibility(isEntryTransitionActive())
+
+    const unsubscribe = subscribeToEntryTransition(updateVisibility)
+    return () => {
+      unsubscribe()
     }
   }, [pathname])
 
@@ -157,14 +178,17 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed w-full z-[9999] transition-all duration-300 mt-0 top-0`}
+      data-entry-aware-nav
+      className={`fixed w-full z-[9999] transition-all mt-0 top-0`}
       style={{
         backgroundColor: `rgba(0, 0, 0, ${supportsBackdropFilter ? 0.2 : 0.5})`,
         backdropFilter: supportsBackdropFilter ? 'blur(12px)' : 'none',
         WebkitBackdropFilter: supportsBackdropFilter ? 'blur(12px)' : 'none',
         borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
         boxShadow: isScrolled ? '0 18px 40px rgba(0,0,0,0.35)' : '0 12px 28px rgba(0,0,0,0.2)',
-        transition: 'background-color 0.3s ease, box-shadow 0.3s ease',
+        opacity: showNavbar ? 1 : 0,
+        transition: 'background-color 0.3s ease, box-shadow 0.3s ease, opacity 0.6s ease',
+        pointerEvents: showNavbar ? 'auto' : 'none',
       }}
     >
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
