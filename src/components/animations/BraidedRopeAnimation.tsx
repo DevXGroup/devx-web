@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { PerspectiveCamera } from '@react-three/drei'
-import { Vector3, Curve, TubeGeometry, type Mesh, SphereGeometry } from 'three'
+import { Vector3, Curve, TubeGeometry, type Mesh, SphereGeometry, PointLight } from 'three'
 import DevXEnvironment from '@/components/3d/DevXEnvironment'
 
 interface BraidedRopeAnimationProps {
@@ -204,10 +204,10 @@ export default function BraidedRopeAnimation({ className = '' }: BraidedRopeAnim
 }
 
 function AnimatedHighlights() {
-  const light1Ref = useRef<any>(null)
-  const light2Ref = useRef<any>(null)
-  const light3Ref = useRef<any>(null)
-  const light4Ref = useRef<any>(null)
+  const light1Ref = useRef<PointLight>(null!)
+  const light2Ref = useRef<PointLight>(null!)
+  const light3Ref = useRef<PointLight>(null!)
+  const light4Ref = useRef<PointLight>(null!)
 
   useFrame((state) => {
     const time = state.clock.getElapsedTime()
