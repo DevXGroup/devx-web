@@ -1,3 +1,9 @@
+## [1.2.6](https://github.com/DevXGroup/devx-web/compare/v1.2.5...v1.2.6) (2025-11-18)
+
+### Performance Improvements
+
+* make home page cards appear instantly on scroll ([b6f3e30](https://github.com/DevXGroup/devx-web/commit/b6f3e30f8351c1ab6d7b7aa7e402faea17f62f41))
+
 ## [1.2.5](https://github.com/DevXGroup/devx-web/compare/v1.2.4...v1.2.5) (2025-11-18)
 
 ### Bug Fixes
