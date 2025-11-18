@@ -1,3 +1,13 @@
+## [1.2.3](https://github.com/DevXGroup/devx-web/compare/v1.2.2...v1.2.3) (2025-11-18)
+
+### Bug Fixes
+
+* improve step circles layout on mobile devices ([b52c762](https://github.com/DevXGroup/devx-web/commit/b52c762b1f1270e7aa9af2ad23e3179bdf7392e7))
+
+### Performance Improvements
+
+* optimize DevelopmentTools for scroll performance ([e1bc5e9](https://github.com/DevXGroup/devx-web/commit/e1bc5e9608bbf26905521c3bc64168c16a541aa0))
+
 ## [1.2.2](https://github.com/DevXGroup/devx-web/compare/v1.2.1...v1.2.2) (2025-11-18)
 
 ### Performance Improvements
