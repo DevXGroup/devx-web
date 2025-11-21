@@ -53,6 +53,9 @@ documents/
 # Claude Code CLI directory
 .claude/
 
+# Gemini CLI directory
+.gemini/
+
 # IDEs setting files
 .vscode/
 .idea/
