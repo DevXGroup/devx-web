@@ -57,6 +57,14 @@ const DynamicShootingStars = dynamic(
   }
 )
 
+const DynamicOrionConstellation = dynamic(
+  () => import('../hero/OrionConstellation').then((mod) => ({ default: mod.default })),
+  {
+    ssr: false,
+    loading: () => null,
+  }
+)
+
 const subheaders = [
   'Stunning UI/UX',
   'Rapid MVP Launches',
