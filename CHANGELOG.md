@@ -1,3 +1,9 @@
+## [1.2.16](https://github.com/DevXGroup/devx-web/compare/v1.2.15...v1.2.16) (2025-11-21)
+
+### Performance Improvements
+
+* implement centralized typography system with optimized font loading ([cf9889d](https://github.com/DevXGroup/devx-web/commit/cf9889d69ac029018f24d52f75e2b78f59824ee0))
+
 ## [1.2.15](https://github.com/DevXGroup/devx-web/compare/v1.2.14...v1.2.15) (2025-11-18)
 
 ### Reverts
