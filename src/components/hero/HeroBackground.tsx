@@ -3,6 +3,7 @@
 import { useRef } from 'react'
 import { Canvas } from '@react-three/fiber'
 import AnimatedBlob from './AnimatedBlob'
+import OrionConstellation from './OrionConstellation'
 import { usePerformanceOptimizedAnimation } from '@/hooks/use-performance-optimized-animation'
 import { useInView } from 'framer-motion'
 
@@ -10,6 +11,7 @@ function Scene() {
   return (
     <>
       <AnimatedBlob />
+      <OrionConstellation />
     </>
   )
 }
