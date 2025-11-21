@@ -89,7 +89,7 @@ function StepAnimation({
       </motion.div>
 
       <motion.p
-        className="text-xs sm:text-sm md:text-base font-['IBM_Plex_Mono'] text-center max-w-[80px] sm:max-w-none"
+        className="subtitle-xs sm:subtitle-sm md:subtitle text-center max-w-[80px] sm:max-w-none"
         variants={stepTextVariants}
         animate={isActive ? 'active' : 'inactive'}
         transition={{ duration: 0.25 }}
@@ -413,7 +413,7 @@ export default function Features() {
               )}
               <Link
                 href="/about#our-values"
-                className="group relative inline-flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-[#4CD787] via-[#9d4edd] to-[#4CD787] bg-[length:200%_100%] bg-[position:0%_0] hover:bg-[position:100%_0] text-black px-6 sm:px-8 py-3 sm:py-4 rounded-lg text-base sm:text-lg md:text-xl font-bold font-sans backdrop-blur-sm border-2 border-[#4CD787]/40 hover:border-[#9d4edd]/60 hover:shadow-2xl hover:shadow-[#4CD787]/50 z-10"
+                className="group relative inline-flex items-center gap-1.5 xs:gap-2 sm:gap-3 bg-gradient-to-r from-[#4CD787] via-[#9d4edd] to-[#4CD787] bg-[length:200%_100%] bg-[position:0%_0] hover:bg-[position:100%_0] text-black px-3 xs:px-4 sm:px-6 md:px-8 py-2 xs:py-2.5 sm:py-3 md:py-4 rounded-lg text-xs xs:text-sm sm:text-base md:text-lg font-bold font-sans backdrop-blur-sm border-2 border-[#4CD787]/40 hover:border-[#9d4edd]/60 hover:shadow-2xl hover:shadow-[#4CD787]/50 z-10"
                 style={{
                   transition:
                     'background-position 500ms ease, border-color 300ms ease, box-shadow 300ms ease',
@@ -421,8 +421,9 @@ export default function Features() {
                   transform: 'translateZ(0)',
                 }}
               >
-                Explore more reasons to choose us
-                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                <span className="hidden sm:inline">Explore more reasons to choose us</span>
+                <span className="sm:hidden">Explore more</span>
+                <ArrowRight className="w-3 h-3 xs:w-4 xs:h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform duration-300" />
               </Link>
             </motion.div>
           </div>

@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from 'framer-motion'
 import { Check, Star, Zap, Shield, ArrowRight, Sparkles, Target, Crown } from 'lucide-react'
 import { useRef, useState } from 'react'
 import TextPressure from '@animations/TextPressure'
+import BlurText from '@animations/BlurText'
 
 // Enhanced animation variants
 const fadeInVariants = {
@@ -580,20 +581,13 @@ export default function PricingPage() {
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.3 }}
             >
-              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-                Need Something{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4CD787] to-[#FFD700]">
-                  Custom
-                </span>
-                ?
-              </h2>
-              <p
-                className="text-lg md:text-xl text-white/90 font-light mb-8 leading-relaxed font-['IBM_Plex_Sans'] mt-6"
-                style={{
-                  letterSpacing: '0.025em',
-                  fontWeight: '400',
-                }}
-              >
+              <BlurText
+                text="Need Something Custom?"
+                className="justify-center heading-section text-white mb-6"
+                delay={150}
+                once={false}
+              />
+              <p className="subtitle-lg mb-8 mt-6">
                 Every project is unique. Let&apos;s discuss your specific requirements and create a
                 tailored solution that perfectly fits your vision and budget.
               </p>

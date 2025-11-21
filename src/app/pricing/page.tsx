@@ -26,7 +26,7 @@ const twitterImage = createTwitterImageUrl(
 )
 
 export const metadata: Metadata = {
-  title: 'Software Development Pricing | Custom Solutions & Enterprise Packages | DevX Group',
+  title: 'Software Development Pricing | Custom Solutions & Enterprise Packages',
   description:
     'Transparent pricing for professional software development services. Choose from Rapid MVP, Growth Accelerator, or Enterprise packages. Custom quotes available for complex projects.',
   keywords: [
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     'software development rates',
   ],
   openGraph: {
-    title: 'Software Development Pricing | Custom Solutions & Enterprise Packages | DevX Group',
+    title: 'Software Development Pricing | Custom Solutions & Enterprise Packages',
     description:
       'Transparent pricing for professional software development services. Choose from Rapid MVP, Growth Accelerator, or Enterprise packages.',
     url: pageUrl,
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Software Development Pricing | DevX Group',
+    title: 'Software Development Pricing',
     description:
       'Transparent pricing for professional software development services. Rapid MVP, Growth Accelerator, and Enterprise packages.',
     images: [twitterImage],

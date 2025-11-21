@@ -1,45 +1,20 @@
 'use client'
 
-import { usePerformanceOptimizedAnimation } from '@/hooks/use-performance-optimized-animation'
 import { useScrollRef } from '@/hooks/use-scrollRef'
 import { useInView } from 'framer-motion'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 
 /**
- * Optimized PNG-based planet divider
- * - Uses moon PNG image with 1/2 visible (bottom half)
- * - Continuous rotation with CSS animation (pauses when out of view)
- * - Scroll-based opacity: fades from 68% to 40% (always visible for smooth scroll-back)
- * - Scroll-based movement (moves down as you scroll with smooth easing)
- * - Event-driven updates (only on scroll, not constant RAF loop)
- * - Smooth CSS transitions for opacity changes
- * - Respects prefers-reduced-motion for accessibility
+ * Simplified responsive planet divider
+ * - Fixed large size on all devices (700px)
+ * - Continuous rotation with CSS animation
+ * - Scroll-based opacity and movement
+ * - Positioned lower for better visibility
  */
 export default function PlanetDivider({ opacity = 0.68 }) {
   const containerRef = useRef<HTMLDivElement>(null)
-  const [mounted, setMounted] = useState(false)
-  const [planetSize, setPlanetSize] = useState(700)
   const scrollYRef = useScrollRef({ throttleDelay: 4 })
-  const { isMobile } = usePerformanceOptimizedAnimation()
   const isInView = useInView(containerRef, { margin: '200px', amount: 0.1 })
-
-  // Update planet size on mount and resize
-  useEffect(() => {
-    const updateSize = () => {
-      const maxWidth = window.innerWidth - 100 // 50px margin on each side
-      const maxSize = Math.min(maxWidth, 700) // Cap at 700px max
-      setPlanetSize(Math.max(maxSize, 300)) // Minimum 300px
-    }
-
-    updateSize()
-
-    const handleResize = () => {
-      updateSize()
-    }
-
-    window.addEventListener('resize', handleResize, { passive: true })
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -51,14 +26,11 @@ export default function PlanetDivider({ opacity = 0.68 }) {
 
     const updatePlanet = () => {
       const scrollY = scrollYRef.current
-      // Longer scroll range for smoother movement
       const scrollProgress = Math.min(scrollY / 600, 1)
 
-      // Direct easing - no interpolation for instant response
       const easeOutQuad = (t: number): number => t * (2 - t)
-      const easedOffset = easeOutQuad(scrollProgress) * (isMobile ? 120 : 300)
+      const easedOffset = easeOutQuad(scrollProgress) * 200
 
-      // Fade to nearly invisible
       const minOpacity = 0.05
       const currentOpacity = opacity - scrollProgress * (opacity - minOpacity)
 
@@ -75,20 +47,13 @@ export default function PlanetDivider({ opacity = 0.68 }) {
       }
     }
 
-    // Initial update
     updatePlanet()
-
     window.addEventListener('scroll', handleScroll, { passive: true })
 
     return () => {
       window.removeEventListener('scroll', handleScroll)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMobile, opacity])
-
-  // Responsive container and offset based on planet size
-  const containerHeight = Math.floor(planetSize * 0.6) // 60% of planet size
-  const verticalOffset = '40%' // Consistent offset for all sizes
+  }, [opacity, scrollYRef])
 
   return (
     <div
@@ -96,7 +61,7 @@ export default function PlanetDivider({ opacity = 0.68 }) {
       className="relative w-full mx-auto pointer-events-none"
       style={
         {
-          height: `${containerHeight}px`,
+          height: '420px',
           background: 'transparent',
           overflow: 'visible',
           '--planet-offset-y': '0px',
@@ -104,16 +69,15 @@ export default function PlanetDivider({ opacity = 0.68 }) {
         } as React.CSSProperties
       }
     >
-      {/* Planet container - shows bottom portion (more visible on mobile) */}
+      {/* Planet container - large size on all devices, positioned lower */}
       <div
         className="absolute left-1/2 bottom-0"
         style={{
-          width: `${planetSize}px`,
-          height: `${planetSize}px`,
-          marginLeft: `-${planetSize / 2}px`,
-          transform: `translateY(calc(${verticalOffset} + var(--planet-offset-y)))`,
+          width: '700px',
+          height: '700px',
+          marginLeft: '-350px',
+          transform: 'translateY(calc(50% + var(--planet-offset-y)))',
           overflow: 'visible',
-          transition: 'width 0.3s ease-out, height 0.3s ease-out, margin-left 0.3s ease-out',
         }}
       >
         {/* Rotating planet */}
@@ -127,7 +91,7 @@ export default function PlanetDivider({ opacity = 0.68 }) {
               <img
                 src="/moon_hero_768.png"
                 srcSet="/moon_hero_768.png 768w, /moon_hero_512.png 512w"
-                sizes={`${planetSize}px`}
+                sizes="700px"
                 width="768"
                 height="768"
                 alt=""
@@ -157,11 +121,10 @@ export default function PlanetDivider({ opacity = 0.68 }) {
           width: 100%;
           height: 100%;
           animation-name: rotate-planet;
-          animation-duration: ${isMobile ? '140s' : '100s'};
+          animation-duration: 100s;
           animation-timing-function: linear;
           animation-iteration-count: infinite;
           animation-play-state: ${isInView ? 'running' : 'paused'};
-          /* Hardware acceleration for smooth rotation */
           transform: translateZ(0);
           will-change: transform;
           backface-visibility: hidden;

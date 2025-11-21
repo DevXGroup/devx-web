@@ -213,4 +213,4 @@ Project version history and changes are tracked in **[../CHANGELOG.md](../CHANGE
 ---
 
 **Last Updated**: 2025-11-12
-**Maintained By**: DevX Group Team
+**Maintained By**: Max Sheikhizadeh
