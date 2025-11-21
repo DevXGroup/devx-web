@@ -7,10 +7,10 @@
  * - Preserves projects grid, services, and modals
  */
 
-import { motion, useReducedMotion, AnimatePresence } from 'framer-motion'
+import { motion, useReducedMotion, AnimatePresence, useInView } from 'framer-motion'
 
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import {
   ArrowRight,
@@ -29,15 +29,19 @@ import TextPressure from '@animations/TextPressure'
 import LetterGlitch from '@animations/LetterGlitch'
 import GridAnimation from '@animations/GridAnimation'
 import Waves from '@animations/Waves'
+import BlurText from '@animations/BlurText'
 import EnhancedProjectCard from '@/components/portfolio/EnhancedProjectCard'
 import ProjectDetailModal from '@/components/portfolio/ProjectDetailModal'
 import { portfolioProjects, ProjectData } from '@/data/portfolioProjects'
 import dynamic from 'next/dynamic'
 import { Button } from '@/components/ui/button'
 
+// Lazy load AsciiEffect3D only when hero section is in viewport for better LCP
 const AsciiEffect3D = dynamic(() => import('@/components/effects/AsciiEffect3D'), {
   ssr: false,
-  loading: () => <div className="w-full h-[480px]" />,
+  loading: () => (
+    <div className="w-full h-[480px] bg-gradient-to-b from-transparent via-purple-900/5 to-transparent" />
+  ),
 })
 
 // Animation variants kept minimal
@@ -250,14 +254,14 @@ const ServiceModal = ({
                   >
                     <Icon className="w-6 h-6 text-black" />
                   </div>
-                  <h2 className="text-2xl font-bold" style={{ color: service.color }}>
+                  <h2 className="heading-component" style={{ color: service.color }}>
                     {service.fullTitle}
                   </h2>
                 </div>
 
                 <div className="mb-6">
-                  <p className="text-white/90 mb-4">{service.description}</p>
-                  <h3 className="text-lg font-semibold mb-3" style={{ color: service.color }}>
+                  <p className="text-body mb-4">{service.description}</p>
+                  <h3 className="heading-subsection mb-3" style={{ color: service.color }}>
                     Key Benefits
                   </h3>
                   <ul className="space-y-2">
@@ -349,6 +353,10 @@ export default function PortfolioPage() {
   const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null)
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
 
+  // Track if hero section is in view to control animations
+  const heroRef = useRef(null)
+  const isHeroInView = useInView(heroRef, { amount: 0.2 })
+
   const handleServiceClick = (service: any, event: any) => {
     if (event) {
       const rect = event.currentTarget.getBoundingClientRect()
@@ -381,7 +389,7 @@ export default function PortfolioPage() {
   return (
     <div className="min-h-screen bg-background pt-20">
       {/* Top hero, simplified backgrounds */}
-      <section className="relative isolate py-9 overflow-hidden">
+      <section ref={heroRef} className="relative isolate py-9 overflow-hidden">
         <div className="absolute inset-0 z-0 bg-gradient-to-b from-black via-black/40 to-black pointer-events-none" />
 
         <div className="relative z-[60] container mx-auto px-4">
@@ -405,7 +413,7 @@ export default function PortfolioPage() {
                     zIndex: 1,
                   }}
                   animate={
-                    shouldReduceMotion
+                    shouldReduceMotion || !isHeroInView
                       ? {}
                       : {
                           y: [0, -15, 0],
@@ -413,7 +421,7 @@ export default function PortfolioPage() {
                         }
                   }
                   transition={
-                    shouldReduceMotion
+                    shouldReduceMotion || !isHeroInView
                       ? { duration: 0 }
                       : {
                           duration: 1.8,
@@ -436,7 +444,7 @@ export default function PortfolioPage() {
                     zIndex: 1,
                   }}
                   animate={
-                    shouldReduceMotion
+                    shouldReduceMotion || !isHeroInView
                       ? {}
                       : {
                           rotate: [45, 225, 45],
@@ -445,7 +453,7 @@ export default function PortfolioPage() {
                         }
                   }
                   transition={
-                    shouldReduceMotion
+                    shouldReduceMotion || !isHeroInView
                       ? { duration: 0 }
                       : {
                           duration: 5,
@@ -480,7 +488,10 @@ export default function PortfolioPage() {
 
               <motion.p
                 variants={fadeInUpVariants}
-                className="relative z-20 text-lg md:text-xl text-white font-light max-w-2xl mb-8 -mt-5 leading-relaxed drop-shadow-[0_6px_25px_rgba(0,0,0,0.65)]"
+                className="relative z-20 subtitle-lg max-w-2xl mb-8 -mt-5"
+                style={{
+                  textShadow: '0 6px 25px rgba(0,0,0,0.65)',
+                }}
               >
                 Explore shipped products that increased revenue, retention, and efficiency across
                 web, mobile, AI, and cloud experiences.
@@ -699,7 +710,7 @@ export default function PortfolioPage() {
       </section>
 
       {/* CTA */}
-      <section className="relative z-[30] py-20 pb-24 overflow-visible mb-33">
+      <section className="relative z-[30] py-20 pb-24 overflow-hidden mb-33">
         <div className="absolute inset-0 z-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent pointer-events-none" />
         <div className="relative z-10 container mx-auto px-4">
           <motion.div
@@ -709,13 +720,22 @@ export default function PortfolioPage() {
             transition={{ duration: 0.8 }}
             className="relative z-20 text-center max-w-3xl mx-auto"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#06B6D4]">
-              Ready to Build Your Next Project?
-            </h2>
-            <p className="text-lg md:text-xl text-foreground/90 font-light mb-8 leading-relaxed">
+            <BlurText
+              text="Ready to Build Your Next Project?"
+              className="justify-center heading-section text-[#06B6D4] mb-6"
+              delay={150}
+              once={true}
+            />
+            <p className="subtitle-lg mb-8">
               Partner with a team that has shipped complex products across industries and platforms.
             </p>
-            <motion.div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <motion.div
+              className="flex flex-col items-center justify-center gap-4 sm:flex-row"
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+            >
               <Button
                 asChild
                 className="group relative z-40 inline-flex items-center gap-2 bg-robinhood text-black hover:bg-white hover:text-black px-8 py-3 rounded-lg font-semibold text-lg border-2 border-robinhood shadow-lg transition-all duration-300 hover:shadow-[0_5px_15px_rgba(204,255,0,0.3)]"

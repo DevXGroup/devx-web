@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import dynamic from 'next/dynamic'
 
 // Enable SSR for Hero to improve FCP/LCP - hero content renders immediately
@@ -27,6 +28,7 @@ const DevelopmentToolsSection = dynamic(() => import('@sections/DevelopmentTools
 export default function HomePageClient() {
   const [isLoaded, setIsLoaded] = useState(false)
   const [navbarReady, setNavbarReady] = useState(false)
+  const [shouldFadeIn, setShouldFadeIn] = useState(false)
 
   // Performance monitoring function
   const logPerformance = useCallback((section: string) => {
@@ -57,11 +59,25 @@ export default function HomePageClient() {
       window.scrollTo(0, 0)
     }
 
-    // Don't clear the entry transition flag here - the transition components handle it
-    // This prevents race condition where the curtain/fade can't detect the state in time
-
     // Set loaded immediately for better performance
     setIsLoaded(true)
+
+    // Check if coming from entry page for smooth fade-in
+    const fromEntry =
+      typeof window !== 'undefined' && sessionStorage.getItem('fromEntry') === 'true'
+
+    if (fromEntry) {
+      // Clear the flag
+      sessionStorage.removeItem('fromEntry')
+      // Small delay for smooth transition
+      setTimeout(() => {
+        setShouldFadeIn(true)
+      }, 50)
+    } else {
+      // Direct navigation, no fade needed
+      setShouldFadeIn(true)
+    }
+
     // Mark time when page is loaded
     if (typeof window !== 'undefined' && window.performance) {
       performance.mark('home-page-loaded')
@@ -77,7 +93,7 @@ export default function HomePageClient() {
   }, [logPerformance])
 
   return (
-    <main
+    <motion.main
       data-page="home"
       className={`relative flex min-h-screen flex-col items-center w-full bg-black ${
         isLoaded ? 'loaded' : ''
@@ -85,11 +101,17 @@ export default function HomePageClient() {
       style={{
         backgroundColor: '#000000',
       }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: shouldFadeIn ? 1 : 0 }}
+      transition={{
+        duration: 0.6,
+        ease: [0.16, 1, 0.3, 1], // Smooth easeOutExpo
+      }}
     >
       <Hero />
       <FeaturesSection />
       <ProcessSection />
       <DevelopmentToolsSection />
-    </main>
+    </motion.main>
   )
 }

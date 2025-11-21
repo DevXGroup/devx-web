@@ -66,7 +66,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Software Development Services | DevX Group',
+    title: 'Software Development Services',
     description:
       'Comprehensive software development services including web apps, mobile apps, AI/ML solutions, and IoT integration.',
     images: [twitterImage],

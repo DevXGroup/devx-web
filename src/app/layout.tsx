@@ -9,7 +9,6 @@ import ConditionalLayout from '@/components/layout/ConditionalLayout'
 import { BrowserCompatibilityDetector } from '@/components/layout/BrowserCompatibilityDetector'
 import { DevToolsErrorSuppressor } from '@/components/layout/DevToolsErrorSuppressor'
 import ErrorBoundary from '@/components/layout/ErrorBoundary'
-import HeroCurtain from '@/components/transitions/HeroCurtain'
 import ScrollToTop from '@/components/layout/ScrollToTop'
 import StructuredData from '@/components/seo/StructuredData'
 import { SpeedInsights } from '@vercel/speed-insights/next'
@@ -32,6 +31,8 @@ const ibmPlexMono = localFont({
   variable: '--font-ibm-plex-mono',
   display: 'swap', // Font swaps when ready, ensures text always visible
   fallback: ['ui-monospace', 'Menlo', 'Monaco', 'Courier New', 'monospace'],
+  preload: true, // Preload critical font weights
+  adjustFontFallback: 'Arial', // Better fallback matching for LCP
 })
 
 const ibmPlexSans = localFont({
@@ -42,6 +43,8 @@ const ibmPlexSans = localFont({
   variable: '--font-ibm-plex-sans',
   display: 'swap', // Font swaps when ready, ensures text always visible
   fallback: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+  preload: true, // Preload critical font weights
+  adjustFontFallback: 'Arial', // Better fallback matching for LCP
 })
 
 const siteUrl = getSiteUrl()
@@ -405,7 +408,6 @@ gtag('config', '${gaId}', {
           <div style={{ backgroundColor: '#000000' }} suppressHydrationWarning>
             <ConditionalLayout>{children}</ConditionalLayout>
             <ScrollToTop />
-            <HeroCurtain />
           </div>
         </ErrorBoundary>
         {/* Only load Vercel Analytics in production (they don't work locally) */}

@@ -20,6 +20,7 @@ import {
 } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import TextPressure from '@/components/animations/TextPressure'
+import BlurText from '@/components/animations/BlurText'
 import { useIsMobile } from '@/hooks/use-mobile'
 
 declare global {
@@ -295,6 +296,7 @@ export default function ContactPage() {
     }
 
     let isCancelled = false
+    let observer: IntersectionObserver | null = null
 
     const initializeWidget = () => {
       if (
@@ -322,77 +324,123 @@ export default function ContactPage() {
       }
     }
 
-    if (window.Calendly && typeof window.Calendly.initInlineWidget === 'function') {
-      initializeWidget()
-      return () => {
-        isCancelled = true
-        containerElement.innerHTML = ''
+    const loadCalendly = () => {
+      if (window.Calendly && typeof window.Calendly.initInlineWidget === 'function') {
+        initializeWidget()
+        return
       }
-    }
 
-    if (!calendlyScriptPromiseRef.current) {
-      calendlyScriptPromiseRef.current = new Promise((resolve, reject) => {
-        const script = document.createElement('script')
-        script.src = 'https://assets.calendly.com/assets/external/widget.js'
-        script.async = true
-        script.onload = () => {
-          // Additional check after script loads to ensure the function exists
-          if (window.Calendly && typeof window.Calendly.initInlineWidget === 'function') {
-            resolve()
-          } else {
-            reject(new Error('Calendly widget function not available after script load'))
+      if (!calendlyScriptPromiseRef.current) {
+        calendlyScriptPromiseRef.current = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+          script.src = 'https://assets.calendly.com/assets/external/widget.js'
+          script.async = true
+          script.onload = () => {
+            if (window.Calendly && typeof window.Calendly.initInlineWidget === 'function') {
+              resolve()
+            } else {
+              reject(new Error('Calendly widget function not available after script load'))
+            }
           }
-        }
-        script.onerror = () => reject(new Error('Failed to load Calendly widget script'))
-        document.head.appendChild(script)
-      })
+          script.onerror = () => reject(new Error('Failed to load Calendly widget script'))
+          document.head.appendChild(script)
+        })
+      }
+
+      calendlyScriptPromiseRef.current
+        ?.then(() => {
+          if (!isCancelled) {
+            initializeWidget()
+          }
+        })
+        .catch((error) => {
+          calendlyScriptPromiseRef.current = null
+          if (process.env.NODE_ENV !== 'production') {
+            console.error('Calendly initialization error:', error)
+          }
+        })
     }
 
-    calendlyScriptPromiseRef.current
-      ?.then(() => {
-        if (!isCancelled) {
-          initializeWidget()
+    // Use IntersectionObserver to lazy-load Calendly only when section is near viewport
+    if ('IntersectionObserver' in window) {
+      observer = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting) {
+            loadCalendly()
+            observer?.disconnect()
+          }
+        },
+        {
+          rootMargin: '200px', // Start loading 200px before section is visible
         }
-      })
-      .catch((error) => {
-        calendlyScriptPromiseRef.current = null
-        if (process.env.NODE_ENV !== 'production') {
-          console.error('Calendly initialization error:', error)
-        }
-      })
+      )
+
+      observer.observe(containerElement)
+    } else {
+      // Fallback for browsers without IntersectionObserver
+      loadCalendly()
+    }
 
     return () => {
       isCancelled = true
+      if (observer) {
+        observer.disconnect()
+      }
       containerElement.innerHTML = ''
     }
   }, [calendlyEmbedUrl])
 
   // Defer WebGL-heavy lightning animation to improve LCP
+  // Wait for hero section to be visible before loading
   useEffect(() => {
     let idleHandle: number | null = null
     let timeoutHandle: ReturnType<typeof setTimeout> | null = null
+    let observer: IntersectionObserver | null = null
 
     const enableLightning = () => {
       setShowLightning(true)
     }
 
-    if (typeof window !== 'undefined') {
-      const requestIdle = window.requestIdleCallback?.bind(window)
-      if (requestIdle) {
-        idleHandle = requestIdle(
-          () => {
-            enableLightning()
-          },
-          { timeout: 1500 }
-        )
-      }
-    }
+    // Only load lightning after LCP is captured (after hero is painted)
+    const heroSection = document.querySelector('section[data-contact-hero]')
 
-    if (idleHandle === null) {
-      timeoutHandle = setTimeout(enableLightning, 400)
+    if (heroSection && typeof window !== 'undefined' && 'IntersectionObserver' in window) {
+      observer = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting) {
+            // Hero is visible, wait a bit longer for LCP
+            if (typeof window !== 'undefined') {
+              const requestIdle = window.requestIdleCallback?.bind(window)
+              if (requestIdle) {
+                idleHandle = requestIdle(
+                  () => {
+                    enableLightning()
+                  },
+                  { timeout: 2500 }
+                )
+              }
+            }
+
+            if (idleHandle === null) {
+              timeoutHandle = setTimeout(enableLightning, 1800)
+            }
+
+            observer?.disconnect()
+          }
+        },
+        { threshold: 0.1 }
+      )
+
+      observer.observe(heroSection)
+    } else {
+      // Fallback: Much longer delay to ensure LCP happens first
+      timeoutHandle = setTimeout(enableLightning, 1800)
     }
 
     return () => {
+      if (observer) {
+        observer.disconnect()
+      }
       if (idleHandle !== null && typeof window !== 'undefined') {
         window.cancelIdleCallback?.(idleHandle)
       }
@@ -626,8 +674,11 @@ export default function ContactPage() {
           originY={confettiOrigin.y}
         />
       )}
-      {/* Hero Section with Lightning Background - Reduced height */}
-      <section className="relative pt-0 pb-8 overflow-hidden h-[60vh]">
+      {/* Hero Section with Lightning Background - Reduced height for better LCP */}
+      <section
+        data-contact-hero
+        className="relative pt-0 pb-8 overflow-hidden h-[45vh] min-h-[400px]"
+      >
         <div className="absolute inset-0 bg-gradient-to-b from-black via-[#0a0a1a] to-black" />
 
         {/* Lightning Effect Background - Natural thunderstorm, centered */}
@@ -674,19 +725,18 @@ export default function ContactPage() {
             transition={{ duration: 0.8 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <div className="flex flex-col items-center mt-4 md:mt-6 py-8 md:py-10">
-              <div className="flex items-center justify-center w-full">
+            <div className="flex flex-col items-center mt-4 md:mt-6 py-8 md:py-3">
+              <div className="flex items-center justify-center w-full mb-4 sm:mb-4 px-4">
                 <div
                   style={{
                     position: 'relative',
                     height: '100px',
-                    width: '400px',
-                    padding: '0 20px',
-                    marginRight: '30px',
+                    width: '550px',
+                    padding: '0 0px',
                   }}
                 >
                   <TextPressure
-                    text="Contact&nbsp;Us  "
+                    text=" &nbsp;Contact&nbsp;US&nbsp;  "
                     flex={false}
                     alpha={false}
                     stroke={false}
@@ -699,13 +749,7 @@ export default function ContactPage() {
                   />
                 </div>
               </div>
-              <p
-                className="text-lg md:text-xl text-foreground/90 font-light max-w-2xl text-center mb-5 leading-relaxed font-['IBM_Plex_Sans']"
-                style={{
-                  letterSpacing: '0.025em',
-                  fontWeight: '400',
-                }}
-              >
+              <p className="subtitle-lg max-w-2xl text-center mb-5">
                 Contact us to discuss your mission requirements and objectives.
               </p>
             </div>
@@ -726,14 +770,13 @@ export default function ContactPage() {
             >
               <div className="space-y-8">
                 <div>
-                  <h2 className="text-2xl font-bold mb-6 text-white">Contact Information</h2>
-                  <p
-                    className="text-lg md:text-xl text-foreground/90 font-light mb-8 leading-relaxed font-['IBM_Plex_Sans'] mt-6"
-                    style={{
-                      letterSpacing: '0.025em',
-                      fontWeight: '400',
-                    }}
-                  >
+                  <BlurText
+                    text="Contact Information"
+                    className="justify-start heading-component text-white mb-6"
+                    delay={100}
+                    once={false}
+                  />
+                  <p className="subtitle-lg mb-8 mt-6">
                     Fill out the form and our team will get back to you within 24 hours.
                   </p>
                 </div>
@@ -743,15 +786,17 @@ export default function ContactPage() {
                     <Phone className="w-5 h-5 text-[#4CD787]" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground text-lg">Phone</h3>
+                    <h3 className="heading-subsection text-foreground">Phone</h3>
                     <a
                       href="tel:+14425440591"
-                      className="text-foreground/70 hover:text-[#4CD787] transition-colors duration-200 hover:underline"
+                      className="text-body text-foreground/70 hover:text-[#4CD787] transition-colors duration-200 hover:underline"
                       aria-label="Call DevX Group at +1 (442) 544-0591"
                     >
                       +1 (442) 544-0591
                     </a>
-                    <p className="text-foreground/50 text-sm mt-1">Mon-Fri from 8am to 5pm PST</p>
+                    <p className="text-body-small text-foreground/50 mt-1">
+                      Mon-Fri from 8am to 5pm PST
+                    </p>
                   </div>
                 </div>
 
@@ -760,15 +805,15 @@ export default function ContactPage() {
                     <Mail className="w-5 h-5 text-[#4CD787]" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground text-lg">Email</h3>
+                    <h3 className="heading-subsection text-foreground">Email</h3>
                     <a
                       href="mailto:support@devxgroup.io"
-                      className="text-foreground/70 hover:text-[#4CD787] transition-colors duration-200 hover:underline"
+                      className="text-body text-foreground/70 hover:text-[#4CD787] transition-colors duration-200 hover:underline"
                       aria-label="Email DevX Group at support@devxgroup.io"
                     >
                       support@devxgroup.io
                     </a>
-                    <p className="text-foreground/50 text-sm mt-1">
+                    <p className="text-body-small text-foreground/50 mt-1">
                       We&apos;ll respond as quickly as possible
                     </p>
                   </div>
@@ -779,19 +824,19 @@ export default function ContactPage() {
                     <MapPin className="w-5 h-5 text-[#4CD787]" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground text-lg">Locations</h3>
-                    <p className="text-foreground/70">
+                    <h3 className="heading-subsection text-foreground">Locations</h3>
+                    <p className="text-body text-foreground/70">
                       San Diego, California{' '}
-                      <span className="text-foreground/50 text-sm">(Headquarters)</span>
+                      <span className="text-body-small text-foreground/50">(Headquarters)</span>
                     </p>
                     <span className="text-foreground/30 flex justify-left ml-7">{'|'}</span>
-                    <p className="text-foreground/30">
+                    <p className="text-body text-foreground/30">
                       Kuwait City, Kuwait{' '}
-                      <span className="text-foreground/30 text-sm">
+                      <span className="text-body-small text-foreground/30">
                         (Development Partner Location)
                       </span>
                     </p>
-                    <p className="text-foreground/50 text-sm mt-2">
+                    <p className="text-body-small text-foreground/50 mt-2">
                       <span className="text-[#4CD787] font-medium">
                         Serving clients globally through local and remote teams
                       </span>
@@ -804,13 +849,13 @@ export default function ContactPage() {
                     <Calendar className="w-5 h-5 text-[#4CD787]" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground text-lg">Schedule a Call</h3>
-                    <p className="text-foreground/70">Book a free consultation</p>
+                    <h3 className="heading-subsection text-foreground">Schedule a Call</h3>
+                    <p className="text-body text-foreground/70">Book a free consultation</p>
                     <a
                       href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-block mt-2 text-[#4CD787] hover:underline"
+                      className="inline-block mt-2 text-body text-[#4CD787] hover:underline"
                     >
                       View availability →
                     </a>
@@ -877,7 +922,12 @@ export default function ContactPage() {
               <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-[#4834D4]/10 rounded-full blur-3xl z-0"></div>
 
               <div className="relative z-10">
-                <h2 className="text-2xl font-bold mb-6 text-white">Send us a message</h2>
+                <BlurText
+                  text="Send us a message"
+                  className="justify-start heading-component text-white mb-6"
+                  delay={100}
+                  once={false}
+                />
 
                 <div className="space-y-6">
                   <form onSubmit={handleSubmit} className="space-y-6">
@@ -1117,20 +1167,17 @@ export default function ContactPage() {
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
+            viewport={{ once: false }}
             transition={{ duration: 0.8 }}
             className="text-center max-w-3xl mx-auto mb-12"
           >
-            <h2 className="text-3xl font-bold mb-6 text-[#FFD700]">
-              Schedule your free Consultation
-            </h2>
-            <p
-              className="text-lg md:text-xl text-foreground/90 font-light mb-8 leading-relaxed font-['IBM_Plex_Sans'] mt-6"
-              style={{
-                letterSpacing: '0.025em',
-                fontWeight: '400',
-              }}
-            >
+            <BlurText
+              text="Schedule your free Consultation"
+              className="justify-center heading-section text-[#FFD700] mb-6"
+              delay={150}
+              once={false}
+            />
+            <p className="subtitle-lg mb-8 mt-6">
               Book a time that works for you using our online scheduling tool. No back-and-forth
               emails needed.
             </p>
@@ -1163,18 +1210,17 @@ export default function ContactPage() {
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
+            viewport={{ once: false }}
             transition={{ duration: 0.8 }}
             className="text-center max-w-3xl mx-auto mb-16"
           >
-            <h2 className="text-3xl font-bold mb-6 text-[#FFD700]">Frequently Asked Questions</h2>
-            <p
-              className="text-lg md:text-xl text-foreground/90 font-light leading-relaxed font-['IBM_Plex_Sans'] mt-6"
-              style={{
-                letterSpacing: '0.025em',
-                fontWeight: '400',
-              }}
-            >
+            <BlurText
+              text="Frequently Asked Questions"
+              className="justify-center heading-section text-[#FFD700] mb-6"
+              delay={150}
+              once={false}
+            />
+            <p className="subtitle-lg mt-6">
               Find quick answers to common questions about our services and process.
             </p>
           </motion.div>
@@ -1191,10 +1237,10 @@ export default function ContactPage() {
               className="bg-black/30 p-6 rounded-xl border border-white/10 hover:border-[#4CD787]/30 transition-colors duration-300 group"
               whileHover={shouldReduceMotion ? {} : { y: -4 }}
             >
-              <h3 className="text-xl font-semibold mb-3 text-[#4CD787] group-hover:text-white transition-colors duration-300">
+              <h3 className="heading-subsection mb-3 text-[#4CD787] group-hover:text-white transition-colors duration-300">
                 What is your typical response time?
               </h3>
-              <p className="text-foreground/70 group-hover:text-white/80 transition-colors duration-300">
+              <p className="text-body text-foreground/70 group-hover:text-white/80 transition-colors duration-300">
                 We typically respond to all inquiries within 24 hours during business days. For
                 urgent matters, we prioritize faster response times.
               </p>
@@ -1205,10 +1251,10 @@ export default function ContactPage() {
               className="bg-black/30 p-6 rounded-xl border border-white/10 hover:border-[#4CD787]/30 transition-colors duration-300 group"
               whileHover={shouldReduceMotion ? {} : { y: -4 }}
             >
-              <h3 className="text-xl font-semibold mb-3 text-[#4CD787] group-hover:text-white transition-colors duration-300">
+              <h3 className="heading-subsection mb-3 text-[#4CD787] group-hover:text-white transition-colors duration-300">
                 Do you work with international clients?
               </h3>
-              <p className="text-foreground/70 group-hover:text-white/80 transition-colors duration-300">
+              <p className="text-body text-foreground/70 group-hover:text-white/80 transition-colors duration-300">
                 Yes, we work with clients worldwide. Our team is experienced in remote collaboration
                 and can accommodate different time zones.
               </p>
@@ -1219,10 +1265,10 @@ export default function ContactPage() {
               className="bg-black/30 p-6 rounded-xl border border-white/10 hover:border-[#4CD787]/30 transition-colors duration-300 group"
               whileHover={shouldReduceMotion ? {} : { y: -4 }}
             >
-              <h3 className="text-xl font-semibold mb-3 text-[#4CD787] group-hover:text-white transition-colors duration-300">
+              <h3 className="heading-subsection mb-3 text-[#4CD787] group-hover:text-white transition-colors duration-300">
                 What information should I provide for a quote?
               </h3>
-              <p className="text-foreground/70 group-hover:text-white/80 transition-colors duration-300">
+              <p className="text-body text-foreground/70 group-hover:text-white/80 transition-colors duration-300">
                 To provide an accurate quote, we need details about your project scope, timeline,
                 technical requirements, and any specific features you need.
               </p>
@@ -1233,10 +1279,10 @@ export default function ContactPage() {
               className="bg-black/30 p-6 rounded-xl border border-white/10 hover:border-[#4CD787]/30 transition-colors duration-300 group"
               whileHover={shouldReduceMotion ? {} : { y: -4 }}
             >
-              <h3 className="text-xl font-semibold mb-3 text-[#4CD787] group-hover:text-white transition-colors duration-300">
+              <h3 className="heading-subsection mb-3 text-[#4CD787] group-hover:text-white transition-colors duration-300">
                 How do you handle project revisions?
               </h3>
-              <p className="text-foreground/70 group-hover:text-white/80 transition-colors duration-300">
+              <p className="text-body text-foreground/70 group-hover:text-white/80 transition-colors duration-300">
                 We include revision rounds in our project plans. The number of revisions depends on
                 your package, but we&apos;re always flexible to ensure your satisfaction.
               </p>
