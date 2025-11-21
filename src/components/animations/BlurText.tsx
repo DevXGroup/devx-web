@@ -14,6 +14,7 @@ interface BlurTextProps {
   easing?: (t: number) => number
   onAnimationComplete?: () => void
   stepDuration?: number
+  once?: boolean
 }
 
 const buildKeyframes = (
@@ -42,6 +43,7 @@ const BlurText = ({
   easing = (t: number) => t,
   onAnimationComplete,
   stepDuration = 0.35,
+  once = true,
 }: BlurTextProps) => {
   const elements = animateBy === 'words' ? text.split(' ') : text.split('')
   const [inView, setInView] = useState(false)
@@ -54,7 +56,11 @@ const BlurText = ({
         const entry = entries[0]
         if (entry?.isIntersecting && ref.current) {
           setInView(true)
-          observer.unobserve(ref.current)
+          if (once) {
+            observer.unobserve(ref.current)
+          }
+        } else if (!once) {
+          setInView(false)
         }
       },
       { threshold, rootMargin }
@@ -62,7 +68,7 @@ const BlurText = ({
     observer.observe(ref.current)
     return () => observer.disconnect()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [threshold, rootMargin])
+  }, [threshold, rootMargin, once])
 
   const defaultFrom = useMemo(
     () =>

@@ -1,4 +1,4 @@
-import React, { ReactNode, useLayoutEffect, useRef, useCallback, useMemo } from 'react'
+import React, { ReactNode, useLayoutEffect, useRef, useCallback, useMemo, useState } from 'react'
 
 export interface ScrollStackItemProps {
   itemClassName?: string
@@ -58,6 +58,9 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   const cardOffsetsRef = useRef<number[]>([])
   const lastTransformsRef = useRef(new Map<number, any>())
   const isUpdatingRef = useRef(false)
+  const [isInView, setIsInView] = useState(true)
+  const lastScrollTimeRef = useRef(0)
+  const scrollThrottleDelay = 16 // ~60fps
 
   // Cache calculation functions with useMemo to prevent recreation on every scroll
   const calculateProgress = useMemo(
@@ -134,7 +137,15 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   }, [useWindowScroll])
 
   const updateCardTransforms = useCallback(() => {
-    if (!cardsRef.current.length || isUpdatingRef.current) return
+    if (!cardsRef.current.length || isUpdatingRef.current || !isInView) return
+
+    // Additional throttling beyond RAF
+    const now = performance.now()
+    if (now - lastScrollTimeRef.current < scrollThrottleDelay) {
+      isUpdatingRef.current = false
+      return
+    }
+    lastScrollTimeRef.current = now
 
     isUpdatingRef.current = true
 
@@ -241,6 +252,8 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
     parsePercentage,
     getScrollData,
     getElementOffset,
+    isInView,
+    scrollThrottleDelay,
   ])
 
   const handleScroll = useCallback(() => {
@@ -351,6 +364,34 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
     }
   }, [cacheCardOffsets, updateCardTransforms, useWindowScroll])
 
+  // Intersection Observer to pause calculations when section is off-screen
+  useLayoutEffect(() => {
+    if (typeof window === 'undefined') return
+    if (!scrollerRef.current) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsInView(entry.isIntersecting)
+          // Force update when coming back into view
+          if (entry.isIntersecting) {
+            updateCardTransforms()
+          }
+        })
+      },
+      {
+        rootMargin: '200px', // Start calculations 200px before entering viewport
+        threshold: 0,
+      }
+    )
+
+    observer.observe(scrollerRef.current)
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [updateCardTransforms])
+
   return (
     <div
       className={`relative w-full h-full overflow-y-auto overflow-x-visible ${className}`.trim()}
@@ -358,7 +399,6 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       style={{
         overscrollBehavior: 'contain',
         WebkitOverflowScrolling: 'touch',
-        scrollBehavior: 'smooth',
         WebkitTransform: 'translateZ(0)',
         transform: 'translateZ(0)',
         willChange: 'scroll-position',

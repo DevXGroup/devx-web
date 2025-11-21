@@ -23,6 +23,7 @@ import CardSwap, { Card } from '@/components/animations/CardSwap'
 import OrgChart from '@/components/sections/OrgChart'
 import DarkVeil from '@/components/animations/DarkVeil'
 import ScrollStack, { ScrollStackItem } from '@/components/animations/ScrollStack'
+import BlurText from '@/components/animations/BlurText'
 import { useIsMobile } from '@/hooks/use-mobile'
 
 // Enhanced animation variants for better performance
@@ -189,13 +190,6 @@ type DeliveryItem = {
   icon: React.ComponentType<{ className?: string }>
 }
 
-type ContextMcpHighlight = {
-  label: string
-  title: string
-  description: string
-  accent: string
-}
-
 const deliveryHighlights: DeliveryItem[] = [
   {
     text: 'Weekly demos with milestone reviews keep delivery transparent.',
@@ -221,30 +215,6 @@ const deliveryHighlights: DeliveryItem[] = [
     text: '30-day stabilization support with on-call fixes and optimization guidance.',
     color: '#ff6b35',
     icon: Heart,
-  },
-]
-
-const contextMcpHighlights: ContextMcpHighlight[] = [
-  {
-    label: 'Context 7 MCP',
-    title: 'Shared Knowledge Backbone',
-    description:
-      'Our Context 7 MCP workspace packages discovery notes, QA heuristics, and escalation paths so every designer and engineer pulls the same high-signal context on day one.',
-    accent: '#4CD787',
-  },
-  {
-    label: 'UI Practice Kits',
-    title: 'Best-Practice Snapshots',
-    description:
-      'MCP bundles updated typography scales, tap-target guidance, and component specs so mobile and desktop builds automatically inherit AA+ readability defaults.',
-    accent: '#8A4FFF',
-  },
-  {
-    label: 'Ops Signal Loop',
-    title: 'Live Accessibility Guardrails',
-    description:
-      'Proactive MCP policies trigger checks for contrast, touch spacing, and copy tone, feeding issues back into delivery reviews before code ships.',
-    accent: '#FFD700',
   },
 ]
 
@@ -678,7 +648,7 @@ export default function AboutPage() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-[#000B14] pt-24">
+    <div className="min-h-screen bg-[#000B14] pt-4">
       {/* Hero Section */}
       <section className="pt-2 pb-8 relative overflow-visible">
         {/* DarkVeil background animation */}
@@ -697,17 +667,17 @@ export default function AboutPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               {/* Title and content - Left side */}
               <AnimatedSection className="lg:order-1">
-                <h1 className="mb-6">
+                <h1 className="-mb-6">
                   <div
                     style={{
                       position: 'relative',
                       height: '100px',
                       width: '400px',
-                      padding: '0 0px',
+                      padding: '0 0px 0 -3px',
                     }}
                   >
                     <TextPressure
-                      text="  About&nbsp;Us&nbsp; "
+                      text="About&nbsp;Us  "
                       flex={false}
                       alpha={false}
                       stroke={false}
@@ -793,7 +763,12 @@ export default function AboutPage() {
         <div className="container mx-auto px-[21px]">
           <AnimatedSection className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="heading-section text-white mb-4 md:mb-6">Our Impact</h2>
+              <BlurText
+                text="Our Impact"
+                className="justify-center heading-section text-white mb-4 md:mb-6"
+                delay={150}
+                once={false}
+              />
               <p className="subtitle-lg max-w-2xl mx-auto mt-2 md:mt-4 px-4">
                 Numbers that reflect our commitment to excellence and the trust our clients place in
                 us.
@@ -817,7 +792,12 @@ export default function AboutPage() {
       <section className="pt-20 pb-16 relative">
         <div className="container mx-auto px-[21px]">
           <AnimatedSection className="max-w-5xl mx-auto text-center mb-14 md:mb-16">
-            <h2 className="heading-section text-white mb-4 md:mb-6">How We Work</h2>
+            <BlurText
+              text="How We Work"
+              className="justify-center heading-section text-white mb-4 md:mb-6"
+              delay={150}
+              once={false}
+            />
             <p className="subtitle-lg max-w-3xl mx-auto mt-3 md:mt-4 px-4">
               A simple, reliable process that keeps you in control
               <br />
@@ -949,7 +929,12 @@ export default function AboutPage() {
       >
         <div className="container mx-auto px-[21px]">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="heading-section text-white mb-4 md:mb-6">Our Values</h2>
+            <BlurText
+              text="Our Values"
+              className="justify-center heading-section text-white mb-4 md:mb-6"
+              delay={150}
+              once={false}
+            />
             <p className="subtitle-lg mt-2 md:mt-4 px-4">
               Our core values guide everything we do and define how we work with our clients and
               each other.
@@ -1001,7 +986,12 @@ export default function AboutPage() {
       <section className="pt-16 pb-12 relative mt-30">
         <div className="max-w-screen-lg mx-auto px-[21px]">
           <AnimatedSection className="text-center max-w-3xl mx-auto">
-            <h2 className="heading-section text-white mb-6">Delivery Ownership</h2>
+            <BlurText
+              text="Delivery Ownership"
+              className="justify-center heading-section text-white mb-6"
+              delay={150}
+              once={false}
+            />
             <p className="subtitle-lg px-4">
               Your project success is our responsibility. <br /> We stand behind our commitments.
             </p>
@@ -1016,12 +1006,12 @@ export default function AboutPage() {
           ) : (
             <ScrollStack
               className="mt-1"
-              itemDistance={200}
-              itemScale={0.038}
-              itemStackDistance={40}
+              itemDistance={180}
+              itemScale={0.025}
+              itemStackDistance={35}
               stackPosition="20%"
               scaleEndPosition="15%"
-              baseScale={0.85}
+              baseScale={0.88}
               rotationAmount={0}
               blurAmount={0}
               useWindowScroll
@@ -1039,59 +1029,16 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Context 7 MCP Section */}
-      <section className="pt-16 pb-14 relative">
-        <div className="container mx-auto px-[21px]">
-          <AnimatedSection className="text-center max-w-4xl mx-auto mb-14 md:mb-16">
-            <h2 className="heading-section text-white mb-4 md:mb-6">Context 7 MCP</h2>
-            <p className="subtitle-lg px-4">
-              We maintain a dedicated Model Context Protocol (MCP) workspace so Context&nbsp;7 stays
-              in sync with the UI guardrails our teams follow on every device size.
-            </p>
-          </AnimatedSection>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {contextMcpHighlights.map((item) => (
-              <div
-                key={item.title}
-                className="relative rounded-2xl border border-white/10 p-6 md:p-8 bg-black/40 backdrop-blur"
-                style={{
-                  background: `linear-gradient(145deg, ${withAlpha(item.accent, 0.18)} 0%, rgba(5,8,16,0.9) 70%)`,
-                  boxShadow: `0 20px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 ${withAlpha(
-                    item.accent,
-                    0.2
-                  )}`,
-                }}
-              >
-                <div className="flex items-center justify-between">
-                  <span
-                    className="subtitle-xs tracking-[0.2em] uppercase font-semibold text-muted rounded-full px-3 py-1"
-                    style={{
-                      backgroundColor: withAlpha(item.accent, 0.15),
-                      border: `1px solid ${withAlpha(item.accent, 0.3)}`,
-                    }}
-                  >
-                    {item.label}
-                  </span>
-                  <Check
-                    className="w-5 h-5"
-                    style={{ color: item.accent, filter: 'drop-shadow(0 0 8px rgba(0,0,0,0.5))' }}
-                    aria-hidden
-                  />
-                </div>
-                <h3 className="heading-component text-white mt-5">{item.title}</h3>
-                <p className="text-body text-muted mt-3">{item.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Vision & Mission Section */}
-      <section className="pt-16 pb-14 relative overflow-hidden">
+      <section className="pt-32 pb-14 relative overflow-hidden">
         <div className="container mx-auto px-[21px] relative z-10">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-8">
-            <h2 className="heading-section text-white mb-4 md:mb-6">Our Purpose</h2>
+            <BlurText
+              text="Our Purpose"
+              className="justify-center heading-section text-white mb-4 md:mb-6"
+              delay={150}
+              once={false}
+            />
             <p className="subtitle-lg px-4">
               Driven by vision, guided by mission, committed to excellence.
             </p>
@@ -1108,7 +1055,12 @@ export default function AboutPage() {
       <section className="pt-20 pb-16 relative overflow-hidden">
         <div className="container mx-auto px-[21px] relative z-10">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="heading-section text-white mb-4 md:mb-6">Our Team Structure</h2>
+            <BlurText
+              text="Our Team Structure"
+              className="justify-center heading-section text-white mb-4 md:mb-6"
+              delay={150}
+              once={false}
+            />
             <p className="subtitle-lg mt-2 md:mt-4 px-4">
               Meet our leadership team and discover how our 23-member organization delivers
               exceptional results.
@@ -1139,9 +1091,12 @@ export default function AboutPage() {
             >
               Discover why clients choose us
             </a>
-            <h2 className="heading-section text-white mb-4 md:mb-6">
-              Ready to Start Your Project?
-            </h2>
+            <BlurText
+              text="Ready to Start Your Project?"
+              className="justify-center heading-section text-white mb-4 md:mb-6"
+              delay={150}
+              once={false}
+            />
             <p className="subtitle-lg mb-6 md:mb-8 max-w-2xl mx-auto mt-4 px-4">
               Let&apos;s discuss how we can help you achieve your goals with our expert software
               development services.
