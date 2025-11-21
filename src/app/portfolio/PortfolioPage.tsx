@@ -464,11 +464,11 @@ export default function PortfolioPage() {
                 >
                   <TextPressure
                     text="Portfolio  "
-                    flex
+                    flex={false}
                     alpha={false}
                     stroke={false}
-                    width
-                    weight
+                    width={false}
+                    weight={true}
                     italic={false}
                     textColor="#4834D4"
                     strokeColor="#FFFFFF"

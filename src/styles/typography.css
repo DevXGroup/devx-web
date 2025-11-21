@@ -3,7 +3,7 @@
 /* Main Headings - Hero titles - Mobile optimized with minimum 16px base */
 .heading-hero {
   @apply text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold;
-  font-family: var(--font-ibm-plex-mono), ui-monospace, 'SF Mono', monospace;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
   font-weight: 700;
   line-height: 1.2;
   letter-spacing: 0.02em;
@@ -16,7 +16,7 @@
 /* Section Headings - H1 equivalents */
 .heading-section {
   @apply text-3xl md:text-4xl lg:text-5xl font-bold;
-  font-family: var(--font-ibm-plex-mono), ui-monospace, 'SF Mono', monospace;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
   font-weight: 700;
   line-height: 1.2;
   letter-spacing: 0.015em;
@@ -27,7 +27,7 @@
 /* Subsection Headings - H2 equivalents */
 .heading-subsection {
   @apply text-2xl md:text-3xl lg:text-4xl font-semibold;
-  font-family: var(--font-ibm-plex-mono), ui-monospace, 'SF Mono', monospace;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
   font-weight: 600;
   line-height: 1.3;
   letter-spacing: 0.01em;
@@ -37,7 +37,7 @@
 /* Card/Component Headings - H3 equivalents */
 .heading-component {
   @apply text-xl md:text-2xl font-semibold;
-  font-family: var(--font-ibm-plex-mono), ui-monospace, 'SF Mono', monospace;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
   font-weight: 600;
   line-height: 1.4;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
@@ -76,7 +76,47 @@
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
 }
 
-/* Color Variants - Optimized for readability */
+/* ============================================
+   SUBTITLE CLASSES - Centralized Control
+   Change these to update ALL subtitles globally
+   ============================================ */
+
+/* Primary Subtitle - Pure white, standard readability */
+.subtitle {
+  @apply text-white;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+/* Large Subtitle - For prominent descriptions */
+.subtitle-lg {
+  @apply text-lg md:text-xl;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  line-height: 1.7;
+}
+
+/* Small Subtitle - For secondary descriptions */
+.subtitle-sm {
+  @apply text-sm md:text-base;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  line-height: 1.5;
+}
+
+/* Extra Small Subtitle - For captions and fine text */
+.subtitle-xs {
+  @apply text-xs md:text-sm;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  line-height: 1.4;
+}
+
+/* ============================================
+   Color Variants - Optimized for readability
+   ============================================ */
+
 .text-primary {
   @apply text-white;
 }

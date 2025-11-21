@@ -18,9 +18,28 @@ import { useEffect, useState, useRef } from 'react'
 export default function PlanetDivider({ opacity = 0.68 }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [mounted, setMounted] = useState(false)
+  const [planetSize, setPlanetSize] = useState(700)
   const scrollYRef = useScrollRef({ throttleDelay: 4 })
   const { isMobile } = usePerformanceOptimizedAnimation()
-  const isInView = useInView(containerRef, { margin: '0px' })
+  const isInView = useInView(containerRef, { margin: '200px', amount: 0.1 })
+
+  // Update planet size on mount and resize
+  useEffect(() => {
+    const updateSize = () => {
+      const maxWidth = window.innerWidth - 100 // 50px margin on each side
+      const maxSize = Math.min(maxWidth, 700) // Cap at 700px max
+      setPlanetSize(Math.max(maxSize, 300)) // Minimum 300px
+    }
+
+    updateSize()
+
+    const handleResize = () => {
+      updateSize()
+    }
+
+    window.addEventListener('resize', handleResize, { passive: true })
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -32,14 +51,15 @@ export default function PlanetDivider({ opacity = 0.68 }) {
 
     const updatePlanet = () => {
       const scrollY = scrollYRef.current
-      const scrollProgress = Math.min(scrollY / 500, 1)
+      // Longer scroll range for smoother movement
+      const scrollProgress = Math.min(scrollY / 600, 1)
 
-      const easeOutCubic = (t: number): number => 1 - Math.pow(1 - t, 3)
-      // Reduced mobile offset to keep planet more visible (100px instead of 150px)
-      const easedOffset = easeOutCubic(scrollProgress) * (isMobile ? 100 : 250)
+      // Direct easing - no interpolation for instant response
+      const easeOutQuad = (t: number): number => t * (2 - t)
+      const easedOffset = easeOutQuad(scrollProgress) * (isMobile ? 120 : 300)
 
-      // Keep planet visible with minimum 40% opacity, smooth fade from 68% to 40%
-      const minOpacity = 0.4
+      // Fade to nearly invisible
+      const minOpacity = 0.05
       const currentOpacity = opacity - scrollProgress * (opacity - minOpacity)
 
       element.style.setProperty('--planet-offset-y', `${easedOffset}px`)
@@ -66,12 +86,9 @@ export default function PlanetDivider({ opacity = 0.68 }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMobile, opacity])
 
-  // Responsive sizing
-  const planetSize = isMobile ? 360 : 700
-  // Increased container height to keep more of the planet in-frame on tall desktops
-  const containerHeight = isMobile ? 240 : 420
-  // Show more of the planet on 1080p screens by lowering the hide offset
-  const verticalOffset = isMobile ? '32%' : '42%'
+  // Responsive container and offset based on planet size
+  const containerHeight = Math.floor(planetSize * 0.6) // 60% of planet size
+  const verticalOffset = '40%' // Consistent offset for all sizes
 
   return (
     <div
@@ -96,6 +113,7 @@ export default function PlanetDivider({ opacity = 0.68 }) {
           marginLeft: `-${planetSize / 2}px`,
           transform: `translateY(calc(${verticalOffset} + var(--planet-offset-y)))`,
           overflow: 'visible',
+          transition: 'width 0.3s ease-out, height 0.3s ease-out, margin-left 0.3s ease-out',
         }}
       >
         {/* Rotating planet */}
@@ -109,7 +127,7 @@ export default function PlanetDivider({ opacity = 0.68 }) {
               <img
                 src="/moon_hero_768.png"
                 srcSet="/moon_hero_768.png 768w, /moon_hero_512.png 512w"
-                sizes={isMobile ? '360px' : '700px'}
+                sizes={`${planetSize}px`}
                 width="768"
                 height="768"
                 alt=""
@@ -138,7 +156,10 @@ export default function PlanetDivider({ opacity = 0.68 }) {
         .planet-rotate-container {
           width: 100%;
           height: 100%;
-          animation: rotate-planet ${isMobile ? '140s' : '100s'} linear infinite;
+          animation-name: rotate-planet;
+          animation-duration: ${isMobile ? '140s' : '100s'};
+          animation-timing-function: linear;
+          animation-iteration-count: infinite;
           animation-play-state: ${isInView ? 'running' : 'paused'};
           /* Hardware acceleration for smooth rotation */
           transform: translateZ(0);

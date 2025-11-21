@@ -492,10 +492,10 @@ export default function DevelopmentTools() {
         <div className="py-30 md:py-0 mt-24 md:mt-36 mb-24 md:mb-32">
           <div className="container mx-auto px-4">
             <div className="flex flex-col items-center">
-              <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold font-['IBM_Plex_Mono'] text-center animate-gradient-text mb-4">
+              <h3 className="heading-section text-center animate-gradient-text mb-4">
                 DevX Development Tools
               </h3>
-              <p className="text-slate-400 text-lg md:text-xl font-['IBM_Plex_Sans'] text-center max-w-2xl mb-0">
+              <p className="subtitle-lg text-slate-400 text-center max-w-2xl mb-0">
                 Cutting-edge technologies powering innovative solutions across web, mobile, and
                 cloud platforms
               </p>
@@ -549,7 +549,7 @@ export default function DevelopmentTools() {
         {/* Logo Loop Section */}
         <div className="w-full mt-8 md:mt-24 lg:mt-32 xl:mt-40 py-8 md:py-12 lg:py-16 mb-6">
           <div className="w-full max-w-full">
-            <h4 className="text-3xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold font-['IBM_Plex_Mono'] text-center text-white mb-12 md:mb-16 lg:mb-20 px-4">
+            <h4 className="heading-section text-center text-white mb-12 md:mb-16 lg:mb-20 px-4">
               Other Tools & Tech Stacks We Use
             </h4>
             <LogoLoop logos={aiTools} speed={18} />
@@ -692,7 +692,7 @@ const CenterCircle = memo(
             </motion.div>
 
             <h2
-              className="text-base sm:text-lg md:text-xl font-bold mb-2 text-white drop-shadow-lg"
+              className="heading-component text-white mb-2 drop-shadow-lg"
               style={{
                 textShadow:
                   '0 2px 4px rgba(0,0,0,0.9), 0 0 15px rgba(255,255,255,0.6), 0 0 25px rgba(255,255,255,0.3)',
@@ -701,7 +701,7 @@ const CenterCircle = memo(
               {activeTool.name}
             </h2>
             <p
-              className="text-xs sm:text-sm md:text-base text-white font-light leading-relaxed px-2"
+              className="subtitle-xs text-white px-2"
               style={{
                 textShadow: '0 1px 3px rgba(0,0,0,0.9), 0 0 10px rgba(255,255,255,0.3)',
               }}

@@ -1,4 +1,4 @@
-import React, { ReactNode, useLayoutEffect, useRef, useCallback } from 'react'
+import React, { ReactNode, useLayoutEffect, useRef, useCallback, useMemo } from 'react'
 
 export interface ScrollStackItemProps {
   itemClassName?: string
@@ -59,38 +59,48 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   const lastTransformsRef = useRef(new Map<number, any>())
   const isUpdatingRef = useRef(false)
 
-  const calculateProgress = useCallback((scrollTop: number, start: number, end: number) => {
-    if (scrollTop < start) return 0
-    if (scrollTop > end) return 1
-    return (scrollTop - start) / (end - start)
-  }, [])
+  // Cache calculation functions with useMemo to prevent recreation on every scroll
+  const calculateProgress = useMemo(
+    () => (scrollTop: number, start: number, end: number) => {
+      if (scrollTop < start) return 0
+      if (scrollTop > end) return 1
+      return (scrollTop - start) / (end - start)
+    },
+    []
+  )
 
-  const parsePercentage = useCallback((value: string | number, containerHeight: number) => {
-    if (typeof value === 'string' && value.includes('%')) {
-      return (parseFloat(value) / 100) * containerHeight
-    }
-    return parseFloat(value as string)
-  }, [])
-
-  const getScrollData = useCallback(() => {
-    if (useWindowScroll) {
-      return {
-        scrollTop: window.scrollY,
-        containerHeight: window.innerHeight,
-        scrollContainer: document.documentElement,
+  const parsePercentage = useMemo(
+    () => (value: string | number, containerHeight: number) => {
+      if (typeof value === 'string' && value.includes('%')) {
+        return (parseFloat(value) / 100) * containerHeight
       }
-    } else {
-      const scroller = scrollerRef.current
-      return {
-        scrollTop: scroller ? scroller.scrollTop : 0,
-        containerHeight: scroller ? scroller.clientHeight : 0,
-        scrollContainer: scroller,
-      }
-    }
-  }, [useWindowScroll])
+      return parseFloat(value as string)
+    },
+    []
+  )
 
-  const getElementOffset = useCallback(
-    (element: HTMLElement) => {
+  const getScrollData = useMemo(
+    () => () => {
+      if (useWindowScroll) {
+        return {
+          scrollTop: window.scrollY,
+          containerHeight: window.innerHeight,
+          scrollContainer: document.documentElement,
+        }
+      } else {
+        const scroller = scrollerRef.current
+        return {
+          scrollTop: scroller ? scroller.scrollTop : 0,
+          containerHeight: scroller ? scroller.clientHeight : 0,
+          scrollContainer: scroller,
+        }
+      }
+    },
+    [useWindowScroll]
+  )
+
+  const getElementOffset = useMemo(
+    () => (element: HTMLElement) => {
       if (useWindowScroll) {
         const rect = element.getBoundingClientRect()
         return rect.top + window.scrollY

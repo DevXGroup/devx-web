@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 interface TextPressureProps {
   text?: string
@@ -18,7 +18,6 @@ interface TextPressureProps {
   strokeWidth?: number
   className?: string
   minFontSize?: number
-  letterSpacing?: string
 }
 
 const TextPressure: React.FC<TextPressureProps> = ({
@@ -32,12 +31,11 @@ const TextPressure: React.FC<TextPressureProps> = ({
   flex = true,
   stroke = false,
   scale = false,
-  textColor = '#',
-  strokeColor = '#FFFFFF',
+  textColor = '#FFFFFF',
+  strokeColor = '#FF0000',
   strokeWidth = 2,
   className = '',
   minFontSize = 24,
-  letterSpacing = 'normal',
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const titleRef = useRef<HTMLHeadingElement | null>(null)
@@ -50,7 +48,8 @@ const TextPressure: React.FC<TextPressureProps> = ({
   const [scaleY, setScaleY] = useState(1)
   const [lineHeight, setLineHeight] = useState(1)
 
-  const chars = text.split('')
+  const normalizedText = (text ?? '').replace(/&nbsp;/g, '\u00A0')
+  const chars = normalizedText.split('')
 
   const dist = (a: { x: number; y: number }, b: { x: number; y: number }) => {
     const dx = b.x - a.x
@@ -58,60 +57,63 @@ const TextPressure: React.FC<TextPressureProps> = ({
     return Math.sqrt(dx * dx + dy * dy)
   }
 
-  const isDev = process.env.NODE_ENV !== 'production'
-
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      cursorRef.current.x = e.clientX
-      cursorRef.current.y = e.clientY
+    const updateCursor = (x: number, y: number) => {
+      cursorRef.current.x = x
+      cursorRef.current.y = y
     }
+
+    const recenterCursor = () => {
+      if (!containerRef.current) return
+      const { left, top, width, height } = containerRef.current.getBoundingClientRect()
+      const centerX = left + width / 2
+      const centerY = top + height / 2
+      updateCursor(centerX, centerY)
+      mouseRef.current.x = centerX
+      mouseRef.current.y = centerY
+    }
+
+    const handleMouseMove = (e: MouseEvent) => {
+      updateCursor(e.clientX, e.clientY)
+    }
+
     const handleTouchMove = (e: TouchEvent) => {
       const t = e.touches[0]
-      if (t) {
-        cursorRef.current.x = t.clientX
-        cursorRef.current.y = t.clientY
-      }
+      if (!t) return
+      updateCursor(t.clientX, t.clientY)
     }
+
+    const handleMouseLeave = () => {
+      recenterCursor()
+    }
+
+    const node = containerRef.current
+    const touchOptions: AddEventListenerOptions = { passive: false }
 
     window.addEventListener('mousemove', handleMouseMove)
-    window.addEventListener('touchmove', handleTouchMove, { passive: false })
+    window.addEventListener('touchmove', handleTouchMove, touchOptions)
+    node?.addEventListener('mousemove', handleMouseMove)
+    node?.addEventListener('touchmove', handleTouchMove, touchOptions)
+    node?.addEventListener('mouseleave', handleMouseLeave)
 
-    if (containerRef.current) {
-      try {
-        const { left, top, width, height } = containerRef.current.getBoundingClientRect()
-        mouseRef.current.x = left + width / 2
-        mouseRef.current.y = top + height / 2
-        cursorRef.current.x = mouseRef.current.x
-        cursorRef.current.y = mouseRef.current.y
-      } catch (error) {
-        if (isDev) {
-          console.warn('TextPressure: Could not get container bounds', error)
-        }
-      }
-    }
+    recenterCursor()
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove)
-      window.removeEventListener('touchmove', handleTouchMove)
+      window.removeEventListener('touchmove', handleTouchMove, touchOptions)
+      node?.removeEventListener('mousemove', handleMouseMove)
+      node?.removeEventListener('touchmove', handleTouchMove, touchOptions)
+      node?.removeEventListener('mouseleave', handleMouseLeave)
     }
-  }, [isDev])
+  }, [])
 
-  const setSize = useCallback(() => {
+  const setSize = () => {
     if (!containerRef.current || !titleRef.current) return
 
-    let containerW = 300,
-      containerH = 100
-    try {
-      const rect = containerRef.current.getBoundingClientRect()
-      containerW = rect.width
-      containerH = rect.height
-    } catch (error) {
-      if (isDev) {
-        console.warn('TextPressure: Could not get container dimensions', error)
-      }
-    }
+    const { width: containerW, height: containerH } = containerRef.current.getBoundingClientRect()
+    const charCount = chars.length || 1
 
-    let newFontSize = containerW / (chars.length / 2)
+    let newFontSize = containerW / (charCount / 2)
     newFontSize = Math.max(newFontSize, minFontSize)
 
     setFontSize(newFontSize)
@@ -120,34 +122,21 @@ const TextPressure: React.FC<TextPressureProps> = ({
 
     requestAnimationFrame(() => {
       if (!titleRef.current) return
-      try {
-        const textRect = titleRef.current.getBoundingClientRect()
-        if (scale && textRect.height > 0) {
-          const yRatio = containerH / textRect.height
-          setScaleY(yRatio)
-          setLineHeight(yRatio)
-        }
-      } catch (error) {
-        if (isDev) {
-          console.warn('TextPressure: Could not get title dimensions', error)
-        }
+      const textRect = titleRef.current.getBoundingClientRect()
+
+      if (scale && textRect.height > 0) {
+        const yRatio = containerH / textRect.height
+        setScaleY(yRatio)
+        setLineHeight(yRatio)
       }
     })
-  }, [chars.length, minFontSize, scale, isDev])
+  }
 
   useEffect(() => {
-    // Force immediate sizing on mount and after a short delay for Safari
     setSize()
-    const timeoutId = setTimeout(() => {
-      setSize()
-    }, 100)
-
     window.addEventListener('resize', setSize)
-    return () => {
-      window.removeEventListener('resize', setSize)
-      clearTimeout(timeoutId)
-    }
-  }, [scale, text, setSize])
+    return () => window.removeEventListener('resize', setSize)
+  }, [scale, text, minFontSize, chars.length])
 
   useEffect(() => {
     let rafId: number
@@ -156,29 +145,13 @@ const TextPressure: React.FC<TextPressureProps> = ({
       mouseRef.current.y += (cursorRef.current.y - mouseRef.current.y) / 15
 
       if (titleRef.current) {
-        let titleRect = { width: 300, height: 100, x: 0, y: 0 }
-        try {
-          titleRect = titleRef.current.getBoundingClientRect()
-        } catch (error) {
-          if (isDev) {
-            console.warn('TextPressure: Could not get title rect for animation', error)
-          }
-        }
-        const maxDist = titleRect.width / 2
+        const titleRect = titleRef.current.getBoundingClientRect()
+        const maxDist = titleRect.width / 2 || 1
 
         spansRef.current.forEach((span) => {
           if (!span) return
 
-          let rect = { x: 0, y: 0, width: 20, height: 20 }
-          try {
-            rect = span.getBoundingClientRect()
-          } catch (error) {
-            if (isDev) {
-              console.warn('TextPressure: Could not get span rect', error)
-            }
-            return
-          }
-
+          const rect = span.getBoundingClientRect()
           const charCenter = {
             x: rect.x + rect.width / 2,
             y: rect.y + rect.height / 2,
@@ -191,13 +164,29 @@ const TextPressure: React.FC<TextPressureProps> = ({
             return Math.max(minVal, val + minVal)
           }
 
-          const wdth = width ? Math.floor(getAttr(d, 5, 200)) : 100
+          const wdth = width ? Math.floor(getAttr(d, 95, 200)) : 100
           const wght = weight ? Math.floor(getAttr(d, 100, 900)) : 400
-          const italVal = italic ? getAttr(d, 0, 1).toFixed(2) : '0'
+          const italVal = italic ? getAttr(d, 0, 1) : 0
           const alphaVal = alpha ? getAttr(d, 0, 1).toFixed(2) : '1'
 
           span.style.opacity = alphaVal
-          span.style.fontVariationSettings = `'wght' ${wght}, 'wdth' ${wdth}, 'ital' ${italVal}`
+          span.style.fontVariationSettings = `'wght' ${wght}, 'wdth' ${wdth}, 'ital' ${italVal.toFixed(
+            2
+          )}`
+          span.style.fontWeight = `${Math.min(900, Math.max(100, wght))}`
+
+          const widthScale = width ? Math.min(1.4, Math.max(0.6, wdth / 100)) : 1
+          const skewDeg = italic ? italVal * 12 : 0
+          span.style.transform = `scaleX(${widthScale.toFixed(2)}) skewX(${skewDeg.toFixed(2)}deg)`
+          span.style.display = 'inline-block'
+          if (flex) {
+            const flexGrow = Math.max(0.25, wdth / 160)
+            span.style.flexGrow = flexGrow.toFixed(2)
+            span.style.flexBasis = 'auto'
+          } else {
+            span.style.flexGrow = ''
+            span.style.flexBasis = ''
+          }
         })
       }
 
@@ -206,21 +195,22 @@ const TextPressure: React.FC<TextPressureProps> = ({
 
     animate()
     return () => cancelAnimationFrame(rafId)
-  }, [width, weight, italic, alpha, chars.length, isDev])
+  }, [width, weight, italic, alpha, chars.length, flex])
 
   return (
     <div ref={containerRef} className="relative w-full h-full overflow-hidden bg-transparent">
       <style>{`
         ${
           fontUrl
-            ? `
-        @font-face {
+            ? `@font-face {
           font-family: '${fontFamily}';
           src: url('${fontUrl}');
           font-style: normal;
-        }
-        `
+        }`
             : ''
+        }
+        .text-pressure-title span {
+          font-family: inherit !important;
         }
         .stroke span {
           position: relative;
@@ -236,30 +226,30 @@ const TextPressure: React.FC<TextPressureProps> = ({
           -webkit-text-stroke-width: ${strokeWidth}px;
           -webkit-text-stroke-color: ${strokeColor};
         }
-        .text-pressure-title {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          width: 100%;
-          height: 100%;
-        }
       `}</style>
 
       <h1
         ref={titleRef}
         className={`text-pressure-title ${className} ${
-          stroke ? 'stroke' : ''
-        } uppercase text-center`}
+          flex ? 'flex justify-between' : ''
+        } ${stroke ? 'stroke' : ''} uppercase text-center`}
         style={{
           fontFamily,
           fontSize: fontSize,
           lineHeight,
           transform: `scale(1, ${scaleY})`,
-          transformOrigin: 'center center',
+          transformOrigin: 'center top',
           margin: 0,
-          fontWeight: 400,
+          fontWeight: 100,
           color: stroke ? undefined : textColor,
-          letterSpacing: letterSpacing,
+          ...(flex
+            ? {
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                width: '100%',
+              }
+            : {}),
         }}
       >
         {chars.map((char, i) => (

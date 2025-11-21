@@ -165,7 +165,7 @@ const ValueCard = ({
             </motion.div>
           </motion.div>
           <motion.h3
-            className="text-xl font-semibold font-['IBM_Plex_Sans'] text-white"
+            className="heading-component text-white"
             whileHover={{
               scale: 1.05,
               textShadow: '0 0 15px #4CD78780',
@@ -175,7 +175,7 @@ const ValueCard = ({
             {title}
           </motion.h3>
         </div>
-        <motion.p className="text-white/90 font-['IBM_Plex_Sans'] font-light text-base leading-relaxed group-hover:text-white transition-colors duration-500">
+        <motion.p className="subtitle group-hover:text-white transition-colors duration-500">
           {description}
         </motion.p>
       </div>
@@ -187,6 +187,13 @@ type DeliveryItem = {
   text: string
   color: string
   icon: React.ComponentType<{ className?: string }>
+}
+
+type ContextMcpHighlight = {
+  label: string
+  title: string
+  description: string
+  accent: string
 }
 
 const deliveryHighlights: DeliveryItem[] = [
@@ -214,6 +221,30 @@ const deliveryHighlights: DeliveryItem[] = [
     text: '30-day stabilization support with on-call fixes and optimization guidance.',
     color: '#ff6b35',
     icon: Heart,
+  },
+]
+
+const contextMcpHighlights: ContextMcpHighlight[] = [
+  {
+    label: 'Context 7 MCP',
+    title: 'Shared Knowledge Backbone',
+    description:
+      'Our Context 7 MCP workspace packages discovery notes, QA heuristics, and escalation paths so every designer and engineer pulls the same high-signal context on day one.',
+    accent: '#4CD787',
+  },
+  {
+    label: 'UI Practice Kits',
+    title: 'Best-Practice Snapshots',
+    description:
+      'MCP bundles updated typography scales, tap-target guidance, and component specs so mobile and desktop builds automatically inherit AA+ readability defaults.',
+    accent: '#8A4FFF',
+  },
+  {
+    label: 'Ops Signal Loop',
+    title: 'Live Accessibility Guardrails',
+    description:
+      'Proactive MCP policies trigger checks for contrast, touch spacing, and copy tone, feeding issues back into delivery reviews before code ships.',
+    accent: '#FFD700',
   },
 ]
 
@@ -290,12 +321,7 @@ const DeliveryCard = ({ text, color, icon: Icon, index }: DeliveryItem & { index
       <div
         className={`relative z-10 flex-1 text-center ${isEven ? 'md:text-left md:pr-6' : 'md:text-right md:pl-6'}`}
       >
-        <p
-          className="max-w-prose text-base sm:text-lg md:text-xl lg:text-2xl leading-relaxed text-white font-['IBM_Plex_Sans'] font-light inline-block"
-          style={{ letterSpacing: '0.01em' }}
-        >
-          {text}
-        </p>
+        <p className="subtitle-lg inline-block">{text}</p>
       </div>
     </div>
   )
@@ -314,7 +340,7 @@ const VisionCard = () => {
     >
       <div className="flex items-center gap-3 mb-3 md:mb-4">
         <motion.h3
-          className="text-xl md:text-2xl font-bold text-[#4CD787] font-['IBM_Plex_Mono'] whitespace-nowrap"
+          className="heading-component text-[#4CD787] whitespace-nowrap"
           animate={
             isHovered
               ? { textShadow: '0 0 12px rgba(76, 215, 135, 0.4), 0 0 24px rgba(76, 215, 135, 0.2)' }
@@ -347,7 +373,7 @@ const VisionCard = () => {
           }}
         />
       </div>
-      <p className="text-sm md:text-base lg:text-lg text-white/90 leading-relaxed font-['IBM_Plex_Sans']">
+      <p className="subtitle">
         To revolutionize software development by delivering innovative, efficient, and scalable
         solutions that empower businesses worldwide to thrive in a digital-first future.
       </p>
@@ -368,7 +394,7 @@ const MissionCard = () => {
     >
       <div className="flex items-center gap-3 mb-3 md:mb-4">
         <motion.h3
-          className="text-xl md:text-2xl font-bold text-[#06B6D4] font-['IBM_Plex_Mono'] whitespace-nowrap"
+          className="heading-component text-[#06B6D4] whitespace-nowrap"
           animate={
             isHovered
               ? { textShadow: '0 0 12px rgba(6, 182, 212, 0.4), 0 0 24px rgba(6, 182, 212, 0.2)' }
@@ -401,7 +427,7 @@ const MissionCard = () => {
           }}
         />
       </div>
-      <p className="text-sm md:text-base lg:text-lg text-white/90 leading-relaxed font-['IBM_Plex_Sans']">
+      <p className="subtitle">
         To simplify the software development journey through a streamlined, results-first process,
         ensuring exceptional quality, adaptability, and long-term success for every client.
       </p>
@@ -608,7 +634,7 @@ const StatCounter = ({ number, label }: { number: string | number; label: string
 
         {/* Counter number */}
         <motion.div
-          className="text-4xl md:text-5xl font-bold text-white font-['IBM_Plex_Mono'] group-hover:text-[#4CD787] transition-colors duration-300 relative"
+          className="text-4xl md:text-5xl font-bold text-white font-mono group-hover:text-[#4CD787] transition-colors duration-300 relative"
           whileHover={shouldReduceMotion ? {} : { y: -3 }}
         >
           {/* Glowing text effect */}
@@ -625,7 +651,7 @@ const StatCounter = ({ number, label }: { number: string | number; label: string
           <div className="w-12 h-0.5 bg-gradient-to-r from-transparent via-[#4CD787]/50 to-transparent group-hover:from-[#4CD787]/30 group-hover:via-[#4CD787] group-hover:to-[#4CD787]/30 transition-all duration-300"></div>
 
           {/* Label */}
-          <div className="text-sm md:text-base text-white/80 font-['IBM_Plex_Mono'] font-medium group-hover:text-white transition-colors duration-300 uppercase tracking-wide">
+          <div className="subtitle-sm font-mono font-medium group-hover:text-white transition-colors duration-300 uppercase tracking-wide">
             {label}
           </div>
         </div>
@@ -681,27 +707,21 @@ export default function AboutPage() {
                     }}
                   >
                     <TextPressure
-                      text="About&nbsp;Us&nbsp; "
-                      flex={true}
+                      text="  About&nbsp;Us&nbsp; "
+                      flex={false}
                       alpha={false}
                       stroke={false}
-                      width={true}
+                      width={false}
                       weight={true}
                       italic={false}
                       textColor="#FFD700"
                       strokeColor="#FFFFFF"
-                      minFontSize={32}
+                      minFontSize={66}
                     />
                     <span className="sr-only">About Us</span>
                   </div>
                 </h1>
-                <p
-                  className="text-base md:text-lg lg:text-xl text-foreground/90 mb-6 md:mb-8 leading-relaxed font-['IBM_Plex_Sans']"
-                  style={{
-                    letterSpacing: '0.025em',
-                    fontWeight: '400',
-                  }}
-                >
+                <p className="subtitle-lg mb-6 md:mb-8 font-semibold">
                   We are a senior engineering team trusted by growth‑stage companies for complex and
                   time‑sensitive projects. We ship production‑ready software with clear milestones,
                   ownership, and post‑launch support.
@@ -773,16 +793,8 @@ export default function AboutPage() {
         <div className="container mx-auto px-[21px]">
           <AnimatedSection className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6 text-white">
-                Our Impact
-              </h2>
-              <p
-                className="text-base md:text-lg lg:text-xl text-foreground/90 font-light max-w-2xl mx-auto leading-relaxed font-['IBM_Plex_Sans'] mt-2 md:mt-4 px-4"
-                style={{
-                  letterSpacing: '0.025em',
-                  fontWeight: '400',
-                }}
-              >
+              <h2 className="heading-section text-white mb-4 md:mb-6">Our Impact</h2>
+              <p className="subtitle-lg max-w-2xl mx-auto mt-2 md:mt-4 px-4">
                 Numbers that reflect our commitment to excellence and the trust our clients place in
                 us.
               </p>
@@ -793,7 +805,7 @@ export default function AboutPage() {
               <StatCounter number="40+" label="Projects Completed" />
               <StatCounter number="23" label="Team Members" />
             </div>
-            <p className="text-xs text-white/60 text-center mt-4">
+            <p className="subtitle-sm text-center mt-4">
               DevX Group LLC has been in business for 2+ years with a seasoned senior engineering
               team.
             </p>
@@ -805,13 +817,8 @@ export default function AboutPage() {
       <section className="pt-20 pb-16 relative">
         <div className="container mx-auto px-[21px]">
           <AnimatedSection className="max-w-5xl mx-auto text-center mb-14 md:mb-16">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6 text-white">
-              How We Work
-            </h2>
-            <p
-              className="text-base md:text-lg lg:text-xl text-foreground/90 font-light max-w-3xl mx-auto leading-relaxed font-['IBM_Plex_Sans'] mt-3 md:mt-4 px-4"
-              style={{ letterSpacing: '0.025em', fontWeight: '400', whiteSpace: 'wrap' }}
-            >
+            <h2 className="heading-section text-white mb-4 md:mb-6">How We Work</h2>
+            <p className="subtitle-lg max-w-3xl mx-auto mt-3 md:mt-4 px-4">
               A simple, reliable process that keeps you in control
               <br />
               and delivers outcomes on time.
@@ -825,11 +832,11 @@ export default function AboutPage() {
               <div className="space-y-4">
                 <div className="flex items-start gap-4">
                   <div className="w-8 h-8 rounded-full bg-[#4CD787]/20 flex items-center justify-center flex-shrink-0 mt-1">
-                    <span className="text-[#4CD787] font-bold text-sm">1</span>
+                    <span className="text-[#4CD787] font-semibold text-base">1</span>
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-white mb-2">Discovery & Planning</h3>
-                    <p className="text-foreground/80 text-sm leading-relaxed">
+                    <h3 className="heading-component text-white mb-2">Discovery & Planning</h3>
+                    <p className="text-body text-muted">
                       We align on goals, constraints, and success metrics in a focused strategy
                       call.
                     </p>
@@ -837,33 +844,33 @@ export default function AboutPage() {
                 </div>
                 <div className="flex items-start gap-4">
                   <div className="w-8 h-8 rounded-full bg-[#FFD700]/20 flex items-center justify-center flex-shrink-0 mt-1">
-                    <span className="text-[#FFD700] font-bold text-sm">2</span>
+                    <span className="text-[#FFD700] font-semibold text-base">2</span>
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-white mb-2">Solution Proposal</h3>
-                    <p className="text-foreground/80 text-sm leading-relaxed">
+                    <h3 className="heading-component text-white mb-2">Solution Proposal</h3>
+                    <p className="text-body text-muted">
                       Clear milestones, scope, and ownership, with timeline and dependencies.
                     </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
                   <div className="w-8 h-8 rounded-full bg-[#4834D4]/20 flex items-center justify-center flex-shrink-0 mt-1">
-                    <span className="text-[#4834D4] font-bold text-sm">3</span>
+                    <span className="text-[#4834D4] font-semibold text-base">3</span>
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-white mb-2">Build & Reviews</h3>
-                    <p className="text-foreground/80 text-sm leading-relaxed">
+                    <h3 className="heading-component text-white mb-2">Build & Reviews</h3>
+                    <p className="text-body text-muted">
                       Weekly demos, no surprises. We optimize for reliability and maintainability.
                     </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
                   <div className="w-8 h-8 rounded-full bg-[#9d4edd]/20 flex items-center justify-center flex-shrink-0 mt-1">
-                    <span className="text-[#9d4edd] font-bold text-sm">4</span>
+                    <span className="text-[#9d4edd] font-semibold text-base">4</span>
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-white mb-2">Delivery & Support</h3>
-                    <p className="text-foreground/80 text-sm leading-relaxed">
+                    <h3 className="heading-component text-white mb-2">Delivery & Support</h3>
+                    <p className="text-body text-muted">
                       Handover, documentation, and stabilization support after launch.
                     </p>
                   </div>
@@ -889,9 +896,9 @@ export default function AboutPage() {
                 <Card className="bg-gradient-to-br from-black/80 to-black/60 border-[#4CD787]/30 backdrop-blur-sm p-6">
                   <div className="flex items-center gap-3 mb-4">
                     <Users className="w-6 h-6 text-[#4CD787]" />
-                    <h3 className="font-semibold text-white text-lg">Discovery</h3>
+                    <h3 className="heading-component text-white">Discovery</h3>
                   </div>
-                  <p className="text-foreground/90 text-sm leading-relaxed">
+                  <p className="text-body text-secondary">
                     We align on goals, constraints, and success metrics in a focused call.
                   </p>
                   <div className="mt-4 w-12 h-1 bg-gradient-to-r from-[#4CD787] to-[#4CD787]/50 rounded-full"></div>
@@ -900,9 +907,9 @@ export default function AboutPage() {
                 <Card className="bg-gradient-to-br from-black/80 to-black/60 border-[#FFD700]/30 backdrop-blur-sm p-6">
                   <div className="flex items-center gap-3 mb-4">
                     <Globe className="w-6 h-6 text-[#FFD700]" />
-                    <h3 className="font-semibold text-white text-lg">Solution Proposal</h3>
+                    <h3 className="heading-component text-white">Solution Proposal</h3>
                   </div>
-                  <p className="text-foreground/90 text-sm leading-relaxed">
+                  <p className="text-body text-secondary">
                     Clear milestones, scope, and ownership, with timeline and dependencies.
                   </p>
                   <div className="mt-4 w-12 h-1 bg-gradient-to-r from-[#FFD700] to-[#FFD700]/50 rounded-full"></div>
@@ -911,9 +918,9 @@ export default function AboutPage() {
                 <Card className="bg-gradient-to-br from-black/80 to-black/60 border-[#4834D4]/30 backdrop-blur-sm p-6">
                   <div className="flex items-center gap-3 mb-4">
                     <Zap className="w-6 h-6 text-[#4834D4]" />
-                    <h3 className="font-semibold text-white text-lg">Build & Reviews</h3>
+                    <h3 className="heading-component text-white">Build & Reviews</h3>
                   </div>
-                  <p className="text-foreground/90 text-sm leading-relaxed">
+                  <p className="text-body text-secondary">
                     Weekly demos, no surprises. We optimize for reliability and maintainability.
                   </p>
                   <div className="mt-4 w-12 h-1 bg-gradient-to-r from-[#21cf3e] to-[#4834D4]/50 rounded-full"></div>
@@ -922,9 +929,9 @@ export default function AboutPage() {
                 <Card className="bg-gradient-to-br from-black/80 to-black/60 border-[#9d4edd]/30 backdrop-blur-sm p-6">
                   <div className="flex items-center gap-3 mb-4">
                     <Check className="w-6 h-6 text-[#9d4edd]" />
-                    <h3 className="font-semibold text-white text-lg">Delivery & Support</h3>
+                    <h3 className="heading-component text-white">Delivery & Support</h3>
                   </div>
-                  <p className="text-foreground/90 text-sm leading-relaxed">
+                  <p className="text-body text-secondary">
                     Handover, documentation, and stabilization support after launch.
                   </p>
                   <div className="mt-4 w-12 h-1 bg-gradient-to-r from-[#9d4edd] to-[#9d4edd]/50 rounded-full"></div>
@@ -942,16 +949,8 @@ export default function AboutPage() {
       >
         <div className="container mx-auto px-[21px]">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6 text-white">
-              Our Values
-            </h2>
-            <p
-              className="text-base md:text-lg lg:text-xl text-foreground/90 font-light leading-relaxed font-['IBM_Plex_Sans'] mt-2 md:mt-4 px-4"
-              style={{
-                letterSpacing: '0.025em',
-                fontWeight: '400',
-              }}
-            >
+            <h2 className="heading-section text-white mb-4 md:mb-6">Our Values</h2>
+            <p className="subtitle-lg mt-2 md:mt-4 px-4">
               Our core values guide everything we do and define how we work with our clients and
               each other.
             </p>
@@ -1002,10 +1001,8 @@ export default function AboutPage() {
       <section className="pt-16 pb-12 relative mt-30">
         <div className="max-w-screen-lg mx-auto px-[21px]">
           <AnimatedSection className="text-center max-w-3xl mx-auto">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-0 md:mb-6 text-white font-['IBM_Plex_Mono'] mb-6">
-              Delivery Ownership
-            </h2>
-            <p className="text-base md:text-lg lg:text-xl text-foreground/90 font-light leading-relaxed font-['IBM_Plex_Sans'] px-4">
+            <h2 className="heading-section text-white mb-6">Delivery Ownership</h2>
+            <p className="subtitle-lg px-4">
               Your project success is our responsibility. <br /> We stand behind our commitments.
             </p>
           </AnimatedSection>
@@ -1042,14 +1039,60 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* Context 7 MCP Section */}
+      <section className="pt-16 pb-14 relative">
+        <div className="container mx-auto px-[21px]">
+          <AnimatedSection className="text-center max-w-4xl mx-auto mb-14 md:mb-16">
+            <h2 className="heading-section text-white mb-4 md:mb-6">Context 7 MCP</h2>
+            <p className="subtitle-lg px-4">
+              We maintain a dedicated Model Context Protocol (MCP) workspace so Context&nbsp;7 stays
+              in sync with the UI guardrails our teams follow on every device size.
+            </p>
+          </AnimatedSection>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {contextMcpHighlights.map((item) => (
+              <div
+                key={item.title}
+                className="relative rounded-2xl border border-white/10 p-6 md:p-8 bg-black/40 backdrop-blur"
+                style={{
+                  background: `linear-gradient(145deg, ${withAlpha(item.accent, 0.18)} 0%, rgba(5,8,16,0.9) 70%)`,
+                  boxShadow: `0 20px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 ${withAlpha(
+                    item.accent,
+                    0.2
+                  )}`,
+                }}
+              >
+                <div className="flex items-center justify-between">
+                  <span
+                    className="subtitle-xs tracking-[0.2em] uppercase font-semibold text-muted rounded-full px-3 py-1"
+                    style={{
+                      backgroundColor: withAlpha(item.accent, 0.15),
+                      border: `1px solid ${withAlpha(item.accent, 0.3)}`,
+                    }}
+                  >
+                    {item.label}
+                  </span>
+                  <Check
+                    className="w-5 h-5"
+                    style={{ color: item.accent, filter: 'drop-shadow(0 0 8px rgba(0,0,0,0.5))' }}
+                    aria-hidden
+                  />
+                </div>
+                <h3 className="heading-component text-white mt-5">{item.title}</h3>
+                <p className="text-body text-muted mt-3">{item.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Vision & Mission Section */}
       <section className="pt-16 pb-14 relative overflow-hidden">
         <div className="container mx-auto px-[21px] relative z-10">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-8">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6 text-white font-['IBM_Plex_Mono']">
-              Our Purpose
-            </h2>
-            <p className="text-base md:text-lg lg:text-xl text-foreground/90 font-light leading-relaxed font-['IBM_Plex_Sans'] px-4">
+            <h2 className="heading-section text-white mb-4 md:mb-6">Our Purpose</h2>
+            <p className="subtitle-lg px-4">
               Driven by vision, guided by mission, committed to excellence.
             </p>
           </AnimatedSection>
@@ -1065,16 +1108,8 @@ export default function AboutPage() {
       <section className="pt-20 pb-16 relative overflow-hidden">
         <div className="container mx-auto px-[21px] relative z-10">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6 text-white">
-              Our Team Structure
-            </h2>
-            <p
-              className="text-base md:text-lg lg:text-xl text-foreground/90 font-light leading-relaxed font-['IBM_Plex_Sans'] mt-2 md:mt-4 px-4"
-              style={{
-                letterSpacing: '0.025em',
-                fontWeight: '400',
-              }}
-            >
+            <h2 className="heading-section text-white mb-4 md:mb-6">Our Team Structure</h2>
+            <p className="subtitle-lg mt-2 md:mt-4 px-4">
               Meet our leadership team and discover how our 23-member organization delivers
               exceptional results.
             </p>
@@ -1094,7 +1129,7 @@ export default function AboutPage() {
           <AnimatedSection className="bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-8 md:p-12 max-w-4xl mx-auto text-center">
             <a
               href="#our-values"
-              className="inline-block mb-8 bg-[#8A4FFF]/20 hover:bg-[#8A4FFF]/30 text-white border border-[#8A4FFF]/50 px-6 py-2 rounded-full text-sm font-medium transition-colors"
+              className="inline-block mb-8 bg-[#8A4FFF]/20 hover:bg-[#8A4FFF]/30 text-white border border-[#8A4FFF]/50 px-6 py-2 rounded-full text-base font-medium transition-colors"
               onClick={(e) => {
                 e.preventDefault()
                 document.getElementById('our-values')?.scrollIntoView({
@@ -1104,16 +1139,10 @@ export default function AboutPage() {
             >
               Discover why clients choose us
             </a>
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6 text-white">
+            <h2 className="heading-section text-white mb-4 md:mb-6">
               Ready to Start Your Project?
             </h2>
-            <p
-              className="text-base md:text-lg lg:text-xl text-foreground/90 mb-6 md:mb-8 max-w-2xl mx-auto leading-relaxed font-['IBM_Plex_Sans'] mt-4 px-4"
-              style={{
-                letterSpacing: '0.025em',
-                fontWeight: '400',
-              }}
-            >
+            <p className="subtitle-lg mb-6 md:mb-8 max-w-2xl mx-auto mt-4 px-4">
               Let&apos;s discuss how we can help you achieve your goals with our expert software
               development services.
             </p>

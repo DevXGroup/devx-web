@@ -373,15 +373,15 @@ export default function ServicesPage() {
                   <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
                     <TextPressure
                       text="Services  "
-                      flex={true}
+                      flex={false}
                       alpha={false}
                       stroke={false}
-                      width={true}
+                      width={false}
                       weight={true}
                       italic={false}
                       textColor="#F472B6"
                       strokeColor="#FFFFFF"
-                      minFontSize={59}
+                      minFontSize={64}
                     />
                   </div>
                 </div>
@@ -389,7 +389,7 @@ export default function ServicesPage() {
 
               <motion.p
                 variants={floatingAnimation}
-                className="text-lg md:text-xl font-light max-w-2xl mx-auto relative z-30 font-['IBM_Plex_Sans'] leading-relaxed mt-2 mb-0"
+                className="text-lg md:text-xl font-light max-w-2xl mx-auto relative z-30 leading-relaxed mt-2 mb-0"
                 style={{
                   textShadow: '0 2px 8px rgba(0,0,0,0.9)',
                   fontWeight: '400',
@@ -494,10 +494,10 @@ export default function ServicesPage() {
               >
                 <TextPressure
                   text="Expertise&nbsp; "
-                  flex={true}
+                  flex={false}
                   alpha={false}
                   stroke={false}
-                  width={true}
+                  width={false}
                   weight={true}
                   italic={false}
                   textColor="#06B6D4"

@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import PortfolioPage from './PortfolioPage'
 import { createOgImageUrl, createTwitterImageUrl, getSiteUrl } from '@/lib/og'
+import StructuredData from '@/components/seo/StructuredData'
 
 const siteUrl = getSiteUrl()
 const pagePath = '/portfolio'
@@ -70,5 +71,16 @@ export const metadata: Metadata = {
 }
 
 export default function Portfolio() {
-  return <PortfolioPage />
+  return (
+    <>
+      <StructuredData
+        type="breadcrumb"
+        breadcrumbs={[
+          { name: 'Home', url: siteUrl },
+          { name: 'Portfolio', url: pageUrl },
+        ]}
+      />
+      <PortfolioPage />
+    </>
+  )
 }
