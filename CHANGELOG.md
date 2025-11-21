@@ -1,3 +1,9 @@
+## [1.3.0](https://github.com/DevXGroup/devx-web/compare/v1.2.16...v1.3.0) (2025-11-21)
+
+### Features
+
+* add Orion constellation to hero section ([49afd70](https://github.com/DevXGroup/devx-web/commit/49afd70382ceaa392891b521a604bf9191a76570))
+
 ## [1.2.16](https://github.com/DevXGroup/devx-web/compare/v1.2.15...v1.2.16) (2025-11-21)
 
 ### Performance Improvements
