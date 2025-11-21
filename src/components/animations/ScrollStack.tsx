@@ -34,6 +34,7 @@ interface ScrollStackProps {
   blurAmount?: number
   useWindowScroll?: boolean
   onStackComplete?: () => void
+  smoothing?: number
 }
 
 const ScrollStack: React.FC<ScrollStackProps> = ({
@@ -50,6 +51,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   blurAmount = 0,
   useWindowScroll = false,
   onStackComplete,
+  smoothing = 0.18,
 }) => {
   const scrollerRef = useRef<HTMLDivElement>(null)
   const stackCompletedRef = useRef(false)
@@ -201,7 +203,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
         translateY = pinEnd - cardTop + stackPositionPx + itemStackDistance * i
       }
 
-      const newTransform = {
+      const targetTransform = {
         translateY: Math.round(translateY * 100) / 100,
         scale: Math.round(scale * 1000) / 1000,
         rotation: Math.round(rotation * 100) / 100,
@@ -209,21 +211,34 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       }
 
       const lastTransform = lastTransformsRef.current.get(i)
+      const appliedTransform = lastTransform
+        ? {
+            translateY:
+              lastTransform.translateY +
+              (targetTransform.translateY - lastTransform.translateY) * smoothing,
+            scale: lastTransform.scale + (targetTransform.scale - lastTransform.scale) * smoothing,
+            rotation:
+              lastTransform.rotation +
+              (targetTransform.rotation - lastTransform.rotation) * smoothing,
+            blur: lastTransform.blur + (targetTransform.blur - lastTransform.blur) * smoothing,
+          }
+        : targetTransform
+
       const hasChanged =
         !lastTransform ||
-        Math.abs(lastTransform.translateY - newTransform.translateY) > 0.1 ||
-        Math.abs(lastTransform.scale - newTransform.scale) > 0.001 ||
-        Math.abs(lastTransform.rotation - newTransform.rotation) > 0.1 ||
-        Math.abs(lastTransform.blur - newTransform.blur) > 0.1
+        Math.abs(lastTransform.translateY - targetTransform.translateY) > 0.1 ||
+        Math.abs(lastTransform.scale - targetTransform.scale) > 0.001 ||
+        Math.abs(lastTransform.rotation - targetTransform.rotation) > 0.1 ||
+        Math.abs(lastTransform.blur - targetTransform.blur) > 0.1
 
       if (hasChanged) {
-        const transform = `translate3d(0, ${newTransform.translateY}px, 0) scale(${newTransform.scale}) rotate(${newTransform.rotation}deg)`
-        const filter = newTransform.blur > 0 ? `blur(${newTransform.blur}px)` : ''
+        const transform = `translate3d(0, ${appliedTransform.translateY}px, 0) scale(${appliedTransform.scale}) rotate(${appliedTransform.rotation}deg)`
+        const filter = appliedTransform.blur > 0 ? `blur(${appliedTransform.blur}px)` : ''
 
         card.style.transform = transform
         card.style.filter = filter
 
-        lastTransformsRef.current.set(i, newTransform)
+        lastTransformsRef.current.set(i, appliedTransform)
       }
 
       if (i === cardsRef.current.length - 1) {
@@ -254,6 +269,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
     getElementOffset,
     isInView,
     scrollThrottleDelay,
+    smoothing,
   ])
 
   const handleScroll = useCallback(() => {
@@ -404,7 +420,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
         willChange: 'scroll-position',
       }}
     >
-      <div className="scroll-stack-inner pt-[20vh] px-20 pb-[50rem] min-h-screen">
+      <div className="scroll-stack-inner pt-[18vh] px-20 pb-[28rem] min-h-screen">
         {children}
         {/* Spacer so the last pin can release cleanly */}
         <div className="scroll-stack-end w-full h-px" />

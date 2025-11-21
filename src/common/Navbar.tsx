@@ -64,6 +64,20 @@ export default function Navbar() {
     }
   }, [pathname])
 
+  // Safety: ensure navbar never stays hidden due to stale transition flags
+  useEffect(() => {
+    document.body.classList.remove('navbar-hidden')
+    const failSafe = setTimeout(() => {
+      setShowNavbar(true)
+      document.body.classList.remove('navbar-hidden')
+    }, 1800)
+
+    return () => {
+      clearTimeout(failSafe)
+      document.body.classList.remove('navbar-hidden')
+    }
+  }, [pathname])
+
   // Click outside to close mobile menu and handle escape key
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

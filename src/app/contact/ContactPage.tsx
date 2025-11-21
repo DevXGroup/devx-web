@@ -365,7 +365,8 @@ export default function ContactPage() {
     if ('IntersectionObserver' in window) {
       observer = new IntersectionObserver(
         (entries) => {
-          if (entries[0].isIntersecting) {
+          const entry = entries[0]
+          if (entry?.isIntersecting) {
             loadCalendly()
             observer?.disconnect()
           }
@@ -407,7 +408,8 @@ export default function ContactPage() {
     if (heroSection && typeof window !== 'undefined' && 'IntersectionObserver' in window) {
       observer = new IntersectionObserver(
         (entries) => {
-          if (entries[0].isIntersecting) {
+          const entry = entries[0]
+          if (entry?.isIntersecting) {
             // Hero is visible, wait a bit longer for LCP
             if (typeof window !== 'undefined') {
               const requestIdle = window.requestIdleCallback?.bind(window)

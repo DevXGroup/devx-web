@@ -24,7 +24,7 @@ export default function FooterClient({ version }: FooterClientProps) {
 
   return (
     <>
-      <footer className="bg-[#141414] text-foreground relative mb-5 z-[10]">
+      <footer className="bg-[#121214] text-foreground relative overflow-hidden z-[10]">
         {/* Threads effect at the very top of footer */}
         {/* <div className="w-full h-[40vh] sm:h-[35vh] md:h-[40vh] lg:h-[75vh] relative -mb-50">
           {mounted && (
@@ -37,8 +37,21 @@ export default function FooterClient({ version }: FooterClientProps) {
           )}
         </div> */}
 
-        {/* Background Pattern */}
-        <div className="absolute inset-0 bg-[url('/images/patterns/grid.svg')] opacity-10 -z-10"></div>
+        {/* Layered background texture */}
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0d0d0f] via-[#121214] to-[#0b0b0f]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.05),transparent_32%),radial-gradient(circle_at_80%_12%,rgba(76,215,135,0.08),transparent_30%),radial-gradient(circle_at_50%_85%,rgba(76,215,135,0.05),transparent_28%)] opacity-70 mix-blend-screen" />
+          <div
+            className="absolute inset-0 opacity-20 mix-blend-soft-light"
+            style={{
+              backgroundImage:
+                "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/></filter><rect width='120' height='120' filter='url(%23n)' opacity='0.55'/></svg>\")",
+              backgroundRepeat: 'repeat',
+            }}
+          />
+          <div className="absolute inset-0 bg-[url('/images/patterns/grid.svg')] opacity-10" />
+          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-[#121214]/0 via-[#121214]/80 to-[#121214]" />
+        </div>
 
         <div className="container mx-auto relative z-10 max-w-full px-4 sm:px-6 lg:px-8 pt-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 lg:gap-12">
@@ -345,7 +358,7 @@ export default function FooterClient({ version }: FooterClientProps) {
             </div>
           </div>
 
-          <div className="mt-6 lg:mt-10 border-t border-border pt-4 flex flex-col sm:flex-row justify-center items-center gap-4 text-xs text-muted-foreground">
+          <div className="mt-6 lg:mt-10 border-t border-border py-6 flex flex-col sm:flex-row justify-center items-center gap-4 text-xs text-muted-foreground">
             <p className="text-center">
               © {new Date().getFullYear()} DevX Group LLC. All rights reserved.
             </p>
