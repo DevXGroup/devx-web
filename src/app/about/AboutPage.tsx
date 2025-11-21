@@ -456,9 +456,9 @@ const StatCounter = ({ number, label }: { number: string | number; label: string
   const containerRef = useRef<HTMLDivElement | null>(null)
   const shouldReduceMotion = useReducedMotion()
   const isInView = useInView(containerRef, {
-    once: false,
-    margin: '-150px',
-    amount: 0.35,
+    once: true,
+    margin: '0px 0px -10% 0px',
+    amount: 0.3,
   })
 
   const numericTarget = useMemo(() => {
@@ -484,6 +484,7 @@ const StatCounter = ({ number, label }: { number: string | number; label: string
   const animationRef = useRef<ReturnType<typeof animate> | null>(null)
   const prevInView = useRef(false)
   const hoverSequenceRef = useRef(0)
+  const hasAnimatedRef = useRef(false)
 
   const formatValue = useCallback(
     (value: number) => {
@@ -524,6 +525,8 @@ const StatCounter = ({ number, label }: { number: string | number; label: string
   )
 
   const runCountUp = useCallback(async () => {
+    if (hasAnimatedRef.current) return
+
     if (shouldReduceMotion) {
       countValue.set(numericTarget)
       setDisplayValue(formatValue(numericTarget))
@@ -534,6 +537,7 @@ const StatCounter = ({ number, label }: { number: string | number; label: string
     countValue.set(0)
     setDisplayValue(formatValue(0))
     await animateTo(numericTarget, { duration: 1.4 })
+    hasAnimatedRef.current = true
   }, [animateTo, countValue, formatValue, numericTarget, shouldReduceMotion, stopActiveAnimation])
 
   useEffect(() => {
@@ -546,6 +550,7 @@ const StatCounter = ({ number, label }: { number: string | number; label: string
   useEffect(() => {
     countValue.set(numericTarget)
     setDisplayValue(formatValue(numericTarget))
+    hasAnimatedRef.current = false
   }, [countValue, formatValue, numericTarget])
 
   useEffect(() => {
@@ -587,7 +592,7 @@ const StatCounter = ({ number, label }: { number: string | number; label: string
     <motion.div
       ref={containerRef}
       className="relative group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4CD787]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#000B14]/80 rounded-3xl h-[200px] sm:h-[210px] md:h-[220px] lg:h-[230px]"
-      whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
+      whileHover={shouldReduceMotion ? {} : { scale: 1.02 }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onFocus={handleMouseEnter}
@@ -1005,16 +1010,17 @@ export default function AboutPage() {
             </div>
           ) : (
             <ScrollStack
-              className="mt-1"
-              itemDistance={180}
-              itemScale={0.025}
-              itemStackDistance={35}
-              stackPosition="20%"
-              scaleEndPosition="15%"
-              baseScale={0.88}
+              className="mt-6 max-w-4xl mx-auto"
+              itemDistance={120}
+              itemScale={0.02}
+              itemStackDistance={30}
+              stackPosition="42%"
+              scaleEndPosition="32%"
+              baseScale={0.96}
               rotationAmount={0}
               blurAmount={0}
               useWindowScroll
+              smoothing={0.25}
             >
               {deliveryHighlights.map((item, index) => (
                 <ScrollStackItem
@@ -1030,7 +1036,7 @@ export default function AboutPage() {
       </section>
 
       {/* Vision & Mission Section */}
-      <section className="pt-32 pb-14 relative overflow-hidden">
+      <section className="pt-36 pb-14 relative overflow-hidden">
         <div className="container mx-auto px-[21px] relative z-10">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-8">
             <BlurText
