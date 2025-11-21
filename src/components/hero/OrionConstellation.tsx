@@ -43,9 +43,9 @@ export default function OrionConstellation() {
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      // Subtle mouse movement - much less pronounced than before
-      setMouseX((e.clientX / window.innerWidth - 0.5) * 0.3)
-      setMouseY((e.clientY / window.innerHeight - 0.5) * 0.3)
+      // Noticeable but smooth parallax
+      setMouseX((e.clientX / window.innerWidth - 0.5) * 1.2)
+      setMouseY((e.clientY / window.innerHeight - 0.5) * 0.8)
     }
     window.addEventListener('mousemove', handleMouseMove)
     return () => window.removeEventListener('mousemove', handleMouseMove)
