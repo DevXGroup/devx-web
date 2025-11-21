@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import { Quote } from 'lucide-react'
 import EnhancedInfinityLoader from '@/components/3d/EnhancedInfinityLoader'
+import BlurText from '@/components/animations/BlurText'
 
 const testimonials = [
   {
@@ -120,10 +121,13 @@ export default function ParallaxTestimonials() {
           transition={{ duration: 0.8 }}
           className="text-center max-w-3xl mx-auto mb-16 mt-28"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-purple-400">
-            What Our Clients Say
-          </h2>
-          <p className="text-lg text-foreground/80 font-light">
+          <BlurText
+            text="What Our Clients Say"
+            className="justify-center heading-section text-purple-400 mb-6"
+            delay={150}
+            once={false}
+          />
+          <p className="subtitle-lg">
             Don&apos;t just take our word for it. Here&apos;s what our clients have to say about
             working with us.
           </p>

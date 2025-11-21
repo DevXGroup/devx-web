@@ -191,7 +191,7 @@ function ConstellationLines() {
 
       // Shoulders connection (top of trapezoid)
       [3, 4],
- 
+
       // Shoulders to head
       [3, 7],
       [4, 7],

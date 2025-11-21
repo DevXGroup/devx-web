@@ -1645,8 +1645,12 @@ canvas,
   overflow: visible;
 }
 
-/* Hide entry-aware components until the curtain completes */
-html[data-entry-transition='true'] [data-entry-aware-nav] {
-  opacity: 0 !important;
-  pointer-events: none !important;
+/* Smooth home page entry from landing page */
+main[data-page='home'] {
+  /* Force GPU acceleration for smooth fade-in */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  /* Optimize for opacity animation */
+  will-change: opacity;
 }

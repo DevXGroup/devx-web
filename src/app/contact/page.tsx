@@ -8,7 +8,7 @@ const pageUrl = `${siteUrl}${pagePath}`
 const ogImage = createOgImageUrl(
   {
     eyebrow: "Let's talk",
-    title: 'Book a Strategy Session with DevX Group',
+    title: 'Book a Strategy Session',
     subtitle: 'Custom Software • Agentic AI • Cloud Modernization',
     focus: ['Discovery Workshops', 'Product Roadmaps', 'Build & Scale'],
   },
@@ -17,7 +17,7 @@ const ogImage = createOgImageUrl(
 const twitterImage = createTwitterImageUrl(
   {
     eyebrow: "Let's talk",
-    title: 'Book a Strategy Session with DevX Group',
+    title: 'Book a Strategy Session',
     subtitle: 'Custom Software • Agentic AI • Cloud Modernization',
     focus: ['Discovery Workshops', 'Product Roadmaps', 'Build & Scale'],
   },
@@ -25,7 +25,7 @@ const twitterImage = createTwitterImageUrl(
 )
 
 export const metadata: Metadata = {
-  title: 'Contact DevX Group | Get a Free Software Development Consultation',
+  title: 'Contact Us | Get a Free Software Development Consultation',
   description:
     'Contact DevX Group for your software development needs. Schedule a free consultation, get a custom quote, or discuss your project requirements. Phone: +1 (442) 544-0591',
   keywords: [
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     'project requirements',
   ],
   openGraph: {
-    title: 'Contact DevX Group | Get a Free Software Development Consultation',
+    title: 'Contact Us | Get a Free Software Development Consultation',
     description:
       'Contact DevX Group for your software development needs. Schedule a free consultation, get a custom quote, or discuss your project requirements.',
     url: pageUrl,
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Contact DevX Group | Free Software Development Consultation',
+    title: 'Contact Us | Free Software Development Consultation',
     description:
       'Contact DevX Group for your software development needs. Schedule a free consultation or get a custom quote.',
     images: [twitterImage],

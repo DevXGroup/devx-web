@@ -1,7 +1,22 @@
 'use client'
 
 import { motion, useAnimation, useInView, useMotionValue } from 'framer-motion'
-import { ArrowRight, Code2, Cloud, Brain, Smartphone, Cpu, Bot, Monitor } from 'lucide-react'
+import {
+  ArrowRight,
+  Code2,
+  Cloud,
+  Brain,
+  Smartphone,
+  Cpu,
+  Bot,
+  Monitor,
+  Zap,
+  CheckCircle,
+  DollarSign,
+  Users,
+  Sparkles,
+  LifeBuoy,
+} from 'lucide-react'
 // import Link from 'next/link'
 import { useRef, useState, useEffect } from 'react'
 import TrueFocus from '@/components/animations/TrueFocus'
@@ -132,34 +147,46 @@ const valueProps = [
     description:
       'Start your project today and see results in days, not months. We get you up and running quickly.',
     proofPoint: 'Average MVP delivery in 6-8 weeks, 40% faster than industry standard',
+    icon: Zap,
+    iconColor: '#FFD700',
   },
   {
     title: 'Reliable Results',
     description:
       "We deliver what we promise on time. You'll see real improvements in your business.",
     proofPoint: '98% on-time delivery rate across 50+ projects completed',
+    icon: CheckCircle,
+    iconColor: '#4CD787',
   },
   {
     title: 'Clear Pricing',
     description: "No hidden costs or surprises. You'll know exactly what you pay before we start.",
     proofPoint: 'Fixed-price projects with 0% cost overruns in the last 2 years',
+    icon: DollarSign,
+    iconColor: '#06B6D4',
   },
   {
     title: 'Long-term Support',
     description: 'We stick around after launch. Get ongoing help and advice when you need it.',
     proofPoint: '90% client retention rate with ongoing support relationships',
+    icon: LifeBuoy,
+    iconColor: '#9d4edd',
   },
   {
     title: 'Experienced Team',
     description:
       "Work with skilled developers, designers, and project managers who know what they're doing.",
     proofPoint: '15+ years combined experience with 100+ successful deployments',
+    icon: Users,
+    iconColor: '#F472B6',
   },
   {
     title: 'Modern AI Tools',
     description:
       'Use the latest AI technology to automate work and improve your business processes.',
     proofPoint: 'AI implementations reducing operational costs by 60% on average',
+    icon: Sparkles,
+    iconColor: '#ff6b6b',
   },
 ]
 
@@ -815,15 +842,16 @@ export default function ServicesPage() {
             <div className="max-w-3xl mx-auto text-center mb-14">
               <BlurText
                 text="Why teams choose DevX"
-                className="justify-center text-3xl md:text-4xl font-semibold text-[#06B6D4]"
+                className="justify-center heading-section text-[#06B6D4]"
                 delay={200}
+                once={false}
               />
               <motion.p
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                viewport={{ once: false }}
                 transition={{ duration: 0.6 }}
-                className="text-white/80 text-base md:text-lg leading-relaxed font-['IBM_Plex_Sans'] mt-4"
+                className="subtitle-lg mt-4"
               >
                 Every engagement is anchored on speed, predictability, and the confidence that your
                 product will delight customers from day one.
@@ -833,109 +861,150 @@ export default function ServicesPage() {
               ref={valuePropsRef}
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto"
             >
-              {valueProps.map((prop, index) => (
-                <motion.div
-                  key={prop.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.1 }}
-                  transition={{ duration: 0.6, delay: index * 0.1, ease: 'easeOut' }}
-                  className="relative bg-slate-800/90 border border-slate-600/50 p-6 sm:p-7 md:p-8 rounded-2xl shadow-xl shadow-black/40 backdrop-blur-sm group cursor-pointer overflow-hidden hover:shadow-2xl hover:shadow-[#06B6D4]/20 transition-all duration-300"
-                  whileHover={{ scale: 1.03, y: -4 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  {/* Icon */}
-                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center bg-gradient-to-br from-[#06B6D4] to-[#0891b2] border border-[#06B6D4]/50 shadow-[0_0_20px_rgba(6,182,212,0.3)] mb-5 sm:mb-6 group-hover:shadow-[0_0_30px_rgba(6,182,212,0.5)] transition-all duration-300">
-                    <span className="text-2xl sm:text-3xl">✓</span>
-                  </div>
-
-                  {/* Title */}
-                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-3 sm:mb-4 font-['IBM_Plex_Mono'] leading-tight group-hover:text-[#06B6D4] transition-colors duration-300 relative z-10">
-                    {prop.title}
-                  </h3>
-
-                  {/* Description */}
-                  <p className="text-slate-100 text-base sm:text-lg leading-relaxed font-['IBM_Plex_Sans'] mb-4 sm:mb-5 relative z-10">
-                    {prop.description}
-                  </p>
-
-                  {/* Proof Point */}
-                  {prop.proofPoint && (
-                    <p className="text-[#4CD787] text-sm md:text-base font-semibold relative z-10 flex items-start gap-2">
-                      <span className="text-[#4CD787] mt-0.5">✓</span>
-                      <span>{prop.proofPoint}</span>
-                    </p>
-                  )}
-
-                  {/* Animated border effect on hover */}
+              {valueProps.map((prop, index) => {
+                const Icon = prop.icon
+                return (
                   <motion.div
-                    className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none z-0"
-                    initial={{ opacity: 0 }}
-                    whileHover={{ opacity: 1 }}
-                    transition={{ duration: 0.3 }}
+                    key={prop.title}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.1 }}
+                    transition={{ duration: 0.6, delay: index * 0.1, ease: 'easeOut' }}
+                    className="relative bg-slate-800/90 border border-slate-600/50 p-6 sm:p-7 md:p-8 rounded-2xl shadow-xl shadow-black/40 backdrop-blur-sm group cursor-pointer overflow-hidden hover:shadow-2xl transition-all duration-300"
+                    style={{
+                      boxShadow: `0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.04)`,
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.boxShadow = `0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 30px ${prop.iconColor}40`
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.boxShadow = `0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.04)`
+                    }}
+                    whileHover={{ scale: 1.03, y: -4 }}
+                    whileTap={{ scale: 0.98 }}
                   >
-                    {/* Top border */}
-                    <motion.div
-                      className="absolute w-full h-[2px] bg-gradient-to-r from-transparent via-[#06B6D4] to-transparent top-0"
-                      initial={{ x: '-100%' }}
-                      animate={{ x: ['100%', '-100%'] }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: 'linear',
+                    {/* Icon */}
+                    <div
+                      className="w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center border mb-5 sm:mb-6 transition-all duration-300"
+                      style={{
+                        background: `linear-gradient(135deg, ${prop.iconColor}20 0%, ${prop.iconColor}10 100%)`,
+                        borderColor: `${prop.iconColor}50`,
+                        boxShadow: `0 0 20px ${prop.iconColor}30`,
                       }}
-                    />
-                    {/* Right border */}
-                    <motion.div
-                      className="absolute w-[2px] h-full bg-gradient-to-b from-transparent via-[#06B6D4] to-transparent right-0"
-                      initial={{ y: '-100%' }}
-                      animate={{ y: ['100%', '-100%'] }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: 'linear',
-                        delay: 0.5,
+                    >
+                      <Icon className="w-6 h-6 sm:w-7 sm:h-7" style={{ color: prop.iconColor }} />
+                    </div>
+
+                    {/* Title */}
+                    <h3
+                      className="heading-component text-white mb-3 sm:mb-4 leading-tight transition-colors duration-300 relative z-10"
+                      style={{
+                        transition: 'color 0.3s ease',
                       }}
-                    />
-                    {/* Bottom border */}
-                    <motion.div
-                      className="absolute w-full h-[2px] bg-gradient-to-r from-transparent via-[#06B6D4] to-transparent bottom-0"
-                      initial={{ x: '100%' }}
-                      animate={{ x: ['-100%', '100%'] }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: 'linear',
-                        delay: 1,
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color = prop.iconColor
                       }}
-                    />
-                    {/* Left border */}
-                    <motion.div
-                      className="absolute w-[2px] h-full bg-gradient-to-b from-transparent via-[#06B6D4] to-transparent left-0"
-                      initial={{ y: '100%' }}
-                      animate={{ y: ['-100%', '100%'] }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: 'linear',
-                        delay: 1.5,
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = 'white'
                       }}
+                    >
+                      {prop.title}
+                    </h3>
+
+                    {/* Description */}
+                    <p className="text-body text-slate-100 mb-4 sm:mb-5 relative z-10">
+                      {prop.description}
+                    </p>
+
+                    {/* Proof Point */}
+                    {prop.proofPoint && (
+                      <p className="text-body-small text-[#4CD787] font-semibold relative z-10 flex items-start gap-2">
+                        <span className="text-[#4CD787] mt-0.5">✓</span>
+                        <span>{prop.proofPoint}</span>
+                      </p>
+                    )}
+
+                    {/* Animated border effect on hover */}
+                    <motion.div
+                      className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none z-0"
+                      initial={{ opacity: 0 }}
+                      whileHover={{ opacity: 1 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      {/* Top border */}
+                      <motion.div
+                        className="absolute w-full h-[2px] top-0"
+                        style={{
+                          background: `linear-gradient(to right, transparent, ${prop.iconColor}, transparent)`,
+                        }}
+                        initial={{ x: '-100%' }}
+                        animate={{ x: ['100%', '-100%'] }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          ease: 'linear',
+                        }}
+                      />
+                      {/* Right border */}
+                      <motion.div
+                        className="absolute w-[2px] h-full right-0"
+                        style={{
+                          background: `linear-gradient(to bottom, transparent, ${prop.iconColor}, transparent)`,
+                        }}
+                        initial={{ y: '-100%' }}
+                        animate={{ y: ['100%', '-100%'] }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          ease: 'linear',
+                          delay: 0.5,
+                        }}
+                      />
+                      {/* Bottom border */}
+                      <motion.div
+                        className="absolute w-full h-[2px] bottom-0"
+                        style={{
+                          background: `linear-gradient(to right, transparent, ${prop.iconColor}, transparent)`,
+                        }}
+                        initial={{ x: '100%' }}
+                        animate={{ x: ['-100%', '100%'] }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          ease: 'linear',
+                          delay: 1,
+                        }}
+                      />
+                      {/* Left border */}
+                      <motion.div
+                        className="absolute w-[2px] h-full left-0"
+                        style={{
+                          background: `linear-gradient(to bottom, transparent, ${prop.iconColor}, transparent)`,
+                        }}
+                        initial={{ y: '100%' }}
+                        animate={{ y: ['-100%', '100%'] }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          ease: 'linear',
+                          delay: 1.5,
+                        }}
+                      />
+                    </motion.div>
+
+                    {/* Glow effect on hover */}
+                    <motion.div
+                      className="absolute inset-0 rounded-2xl pointer-events-none z-0"
+                      style={{
+                        background: `radial-gradient(circle at 50% 0%, ${prop.iconColor}15, transparent 70%)`,
+                      }}
+                      initial={{ opacity: 0 }}
+                      whileHover={{ opacity: 1 }}
+                      transition={{ duration: 0.3 }}
                     />
                   </motion.div>
-
-                  {/* Glow effect on hover */}
-                  <motion.div
-                    className="absolute inset-0 rounded-2xl pointer-events-none z-0"
-                    style={{
-                      background:
-                        'radial-gradient(circle at center, #06B6D410 0%, transparent 70%)',
-                    }}
-                    initial={{ opacity: 0 }}
-                    whileHover={{ opacity: 1 }}
-                    transition={{ duration: 0.3 }}
-                  />
-                </motion.div>
-              ))}
+                )
+              })}
             </div>
           </div>
         </section>
@@ -1027,32 +1096,47 @@ export default function ServicesPage() {
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            viewport={{ once: true, amount: 0.4 }}
+            viewport={{ once: false, amount: 0.4 }}
             transition={{ duration: 0.7, ease: 'easeOut' }}
             className="text-center max-w-4xl mx-auto"
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight lg:whitespace-nowrap">
-              Ready to Transform Your Business?
-            </h2>
-            <p className="mt-6 text-lg md:text-xl text-white/80 leading-relaxed">
+            <BlurText
+              text="Ready to Transform Your Business?"
+              className="justify-center heading-hero text-white mb-6"
+              delay={100}
+              once={false}
+            />
+            <p className="subtitle-lg mt-6">
               Partner with our senior engineers to launch resilient, scalable products and unlock
               new growth faster than you thought possible.
             </p>
 
-            <motion.div className="mt-8" whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
+            <motion.div className="mt-10" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
               <a
                 href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 md:gap-3 bg-gradient-to-r from-[#FAD961] via-[#C2892B] to-[#0B0B0B] text-black hover:from-[#FAD961] hover:via-[#D19028] hover:to-[#111111] px-5 py-3 md:px-8 md:py-4 rounded-xl font-semibold text-base md:text-lg border-2 border-[#C2892B] shadow-lg hover:shadow-[0_8px_30px_rgba(194,137,43,0.35)] transition-all duration-300"
+                className="inline-flex items-center gap-3 bg-gradient-to-r from-[#4CD787] via-[#66E6A4] to-[#4CD787] bg-[length:200%_100%] bg-[position:0%_0] hover:bg-[position:100%_0] text-black px-8 py-4 md:px-10 md:py-5 rounded-xl font-bold text-lg md:text-xl border-2 border-[#4CD787]/40 hover:border-[#4CD787] shadow-lg hover:shadow-[0_8px_35px_rgba(76,215,135,0.45)] transition-all duration-300 relative overflow-hidden group"
               >
-                Schedule a Strategy Call
-                <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
+                <Sparkles className="w-5 h-5 md:w-6 md:h-6 group-hover:rotate-12 transition-transform duration-300" />
+                <span>Schedule a Strategy Call</span>
+                <ArrowRight className="w-5 h-5 md:w-6 md:h-6 group-hover:translate-x-1 transition-transform duration-300" />
+                {/* Shimmer effect */}
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                  initial={{ x: '-100%' }}
+                  animate={{ x: '200%' }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: 'linear',
+                  }}
+                />
               </a>
             </motion.div>
 
             <motion.p
-              className="mt-5 text-sm md:text-base text-white/60"
+              className="subtitle-sm mt-6 text-white/70"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
