@@ -1,0 +1,16 @@
+{
+  "output": {
+    "format": "text"
+  },
+  "general": {
+    "sessionRetention": {
+      "enabled": true
+    }
+  },
+  "ui": {
+    "showStatusInTitle": true,
+    "footer": {
+      "hideContextPercentage": false
+    }
+  }
+}

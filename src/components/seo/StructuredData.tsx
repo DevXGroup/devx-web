@@ -1,8 +1,24 @@
-interface StructuredDataProps {
-  type?: 'organization' | 'website' | 'localBusiness'
+interface BreadcrumbItem {
+  name: string
+  url: string
 }
 
-export default function StructuredData({ type = 'organization' }: StructuredDataProps) {
+interface FAQItem {
+  question: string
+  answer: string
+}
+
+interface StructuredDataProps {
+  type?: 'organization' | 'website' | 'localBusiness' | 'breadcrumb' | 'faq'
+  breadcrumbs?: BreadcrumbItem[]
+  faqs?: FAQItem[]
+}
+
+export default function StructuredData({
+  type = 'organization',
+  breadcrumbs,
+  faqs,
+}: StructuredDataProps) {
   const organizationData = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
@@ -108,12 +124,44 @@ export default function StructuredData({ type = 'organization' }: StructuredData
     },
   }
 
+  const breadcrumbData = breadcrumbs
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: breadcrumbs.map((item, index) => ({
+          '@type': 'ListItem',
+          position: index + 1,
+          name: item.name,
+          item: item.url,
+        })),
+      }
+    : null
+
+  const faqData = faqs
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: faqs.map((faq) => ({
+          '@type': 'Question',
+          name: faq.question,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: faq.answer,
+          },
+        })),
+      }
+    : null
+
   const getStructuredData = () => {
     switch (type) {
       case 'website':
         return websiteData
       case 'localBusiness':
         return localBusinessData
+      case 'breadcrumb':
+        return breadcrumbData
+      case 'faq':
+        return faqData
       default:
         return organizationData
     }

@@ -19,11 +19,15 @@ import { Partytown } from '@qwik.dev/partytown/react'
 import { createOgImageUrl, createTwitterImageUrl, getSiteUrl } from '@/lib/og'
 
 // Self-hosted fonts via next/font/local to avoid runtime fetches
-// Using 'swap' for better FCP - fallback fonts display while custom fonts load
+// Using woff2 format (51% smaller than TTF) with 'swap' for better FCP
 const ibmPlexMono = localFont({
   src: [
-    { path: '../../public/fonts/IBMPlexMono-Regular.ttf', weight: '400', style: 'normal' },
-    { path: '../../public/fonts/IBMPlexMono-SemiBold.ttf', weight: '600', style: 'normal' },
+    { path: '../../public/fonts/IBMPlexMono-Thin.woff2', weight: '100', style: 'normal' },
+    { path: '../../public/fonts/IBMPlexMono-Light.woff2', weight: '300', style: 'normal' },
+    { path: '../../public/fonts/IBMPlexMono-Regular.woff2', weight: '400', style: 'normal' },
+    { path: '../../public/fonts/IBMPlexMono-Medium.woff2', weight: '500', style: 'normal' },
+    { path: '../../public/fonts/IBMPlexMono-SemiBold.woff2', weight: '600', style: 'normal' },
+    { path: '../../public/fonts/IBMPlexMono-Bold.woff2', weight: '700', style: 'normal' },
   ],
   variable: '--font-ibm-plex-mono',
   display: 'swap', // Font swaps when ready, ensures text always visible
@@ -32,8 +36,8 @@ const ibmPlexMono = localFont({
 
 const ibmPlexSans = localFont({
   src: [
-    { path: '../../public/fonts/IBMPlexSans-Regular.ttf', weight: '400', style: 'normal' },
-    { path: '../../public/fonts/IBMPlexSans-SemiBold.ttf', weight: '600', style: 'normal' },
+    { path: '../../public/fonts/IBMPlexSans-Regular.woff2', weight: '400', style: 'normal' },
+    { path: '../../public/fonts/IBMPlexSans-SemiBold.woff2', weight: '600', style: 'normal' },
   ],
   variable: '--font-ibm-plex-sans',
   display: 'swap', // Font swaps when ready, ensures text always visible
@@ -300,6 +304,28 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="format-detection" content="telephone=no" />
+        {/* Font preloading for critical weights (LCP optimization) */}
+        <link
+          rel="preload"
+          href="/fonts/IBMPlexMono-Regular.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/IBMPlexMono-SemiBold.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/IBMPlexSans-Regular.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
         {/* Resource hints for better performance */}
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />

@@ -169,10 +169,8 @@ export default function Process() {
         <div className="relative flex items-center justify-center text-center mb-12 sm:mb-16 py-8 sm:py-12">
           <div className="relative z-10">
             <div className="flex flex-col items-center">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 text-center font-['IBM_Plex_Mono'] text-white">
-                How It Works
-              </h2>
-              <p className="text-base sm:text-lg md:text-xl text-foreground/80 max-w-3xl mx-auto font-['IBM_Plex_Mono'] font-light px-4 leading-relaxed">
+              <h2 className="heading-section text-white mb-4 sm:mb-6">How It Works</h2>
+              <p className="subtitle-lg text-foreground/80 max-w-3xl mx-auto px-4">
                 Simple steps to bring your software vision to life from idea to launch in record
                 time.
               </p>
@@ -244,13 +242,9 @@ export default function Process() {
                   >
                     <process.icon className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
                   </div>
-                  <h3 className="text-lg sm:text-xl font-semibold font-['IBM_Plex_Mono'] text-white">
-                    {process.title}
-                  </h3>
+                  <h3 className="heading-component text-white">{process.title}</h3>
                 </div>
-                <p className="text-sm sm:text-base md:text-lg text-slate-100 font-['IBM_Plex_Sans'] leading-relaxed">
-                  {process.description}
-                </p>
+                <p className="subtitle-sm text-slate-100">{process.description}</p>
               </div>
             </motion.div>
           ))}

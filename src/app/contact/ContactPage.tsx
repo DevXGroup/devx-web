@@ -687,10 +687,10 @@ export default function ContactPage() {
                 >
                   <TextPressure
                     text="Contact&nbsp;Us  "
-                    flex={true}
+                    flex={false}
                     alpha={false}
                     stroke={false}
-                    width={true}
+                    width={false}
                     weight={true}
                     italic={false}
                     textColor="#4CD787"

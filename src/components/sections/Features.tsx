@@ -125,12 +125,8 @@ function HireDevelopersCard({ icon: Icon, title, description, index }: HireDevel
           <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-black" />
         </div>
         <div className="flex-1 space-y-3">
-          <h3 className="text-xl md:text-2xl font-bold text-white font-['IBM_Plex_Sans'] leading-tight">
-            {title}
-          </h3>
-          <p className="text-slate-100 font-['IBM_Plex_Sans'] text-base sm:text-lg leading-relaxed">
-            {description}
-          </p>
+          <h3 className="heading-component text-white">{title}</h3>
+          <p className="subtitle-sm text-slate-100">{description}</p>
         </div>
       </div>
     </motion.div>
@@ -164,12 +160,8 @@ function WhyUsCard({
         <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center bg-gradient-to-br from-[#ccff00] to-yellow-300 border border-[#ccff00]/70 shadow-[0_0_18px_rgba(204,255,0,0.25)]">
           <Icon className="w-7 h-7 sm:w-8 sm:h-8 text-black" />
         </div>
-        <h3 className="text-base sm:text-lg md:text-xl font-bold font-['IBM_Plex_Mono'] text-white tracking-tight">
-          {title}
-        </h3>
-        <p className="text-slate-100 font-['IBM_Plex_Sans'] text-base sm:text-lg leading-relaxed max-w-[22rem]">
-          {description}
-        </p>
+        <h3 className="heading-component text-white">{title}</h3>
+        <p className="subtitle-sm text-slate-100 max-w-[22rem]">{description}</p>
       </div>
     </motion.div>
   )
@@ -303,7 +295,7 @@ export default function Features() {
           {/* Hero Section */}
           <div className="text-center mb-8 sm:mb-12 md:mb-16 relative z-[3]">
             {/* Fixed title visibility with inline styles */}
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 font-['IBM_Plex_Mono'] text-white pb-2 sm:pb-3 px-4">
+            <h2 className="heading-section text-white mb-4 sm:mb-6 pb-2 sm:pb-3 px-4">
               Hire Elite Developers
               <br />
               Effortlessly.
@@ -365,11 +357,11 @@ export default function Features() {
         {/* Why Us Section */}
         <div id="why-devx-section" className="text-center mb-12 sm:mb-16 md:mb-20">
           {/* Fixed title visibility with inline styles */}
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 font-['IBM_Plex_Mono'] text-white pb-2 sm:pb-3 px-4">
+          <h2 className="heading-section text-white mb-4 sm:mb-6 pb-2 sm:pb-3 px-4">
             Why Choose Us?
           </h2>
           <div className="max-w-3xl mx-auto mb-12 sm:mb-16 px-4">
-            <p className="text-slate-100 text-base sm:text-lg md:text-xl mb-4 font-['IBM_Plex_Mono'] leading-relaxed">
+            <p className="subtitle-lg text-slate-100 mb-4">
               Trusted U.S. company with worldwide senior developers, proven track record, and
               full-stack expertise across industries.
             </p>
@@ -455,12 +447,10 @@ export default function Features() {
 
         {/* Final CTA */}
         <div className="text-center mb-12 sm:mb-16 px-4">
-          <p className="text-[#ccff00] text-xl sm:text-2xl md:text-3xl font-bold mb-3 sm:mb-4 font-['IBM_Plex_Mono']">
+          <p className="heading-subsection text-[#ccff00] mb-3 sm:mb-4">
             We&apos;re ready to transform your vision into reality.
           </p>
-          <p className="text-slate-100 text-lg sm:text-xl md:text-2xl font-['IBM_Plex_Mono']">
-            Let&apos;s embark on this journey together!
-          </p>
+          <p className="subtitle-lg text-slate-100">Let&apos;s embark on this journey together!</p>
         </div>
       </motion.div>
       {/* Trigger point for 3D loading - positioned well before the actual 3D component */}

@@ -472,23 +472,23 @@ export default function PricingPage() {
                 <div
                   style={{
                     position: 'relative',
-                    height: '100px',
-                    width: '300px',
-                    padding: '0 20px',
+                    height: '80px',
+                    width: '330px',
+                    padding: '0 0px',
                     marginRight: '0px',
                   }}
                 >
                   <TextPressure
-                    text="&nbsp;Pricing&nbsp;"
-                    flex={true}
+                    text="&nbsp;Pricing&nbsp; "
+                    flex={false}
                     alpha={false}
                     stroke={false}
-                    width={true}
+                    width={false}
                     weight={true}
                     italic={false}
                     textColor="#FFFFFF"
                     strokeColor="#FFFFFF"
-                    minFontSize={39}
+                    minFontSize={64}
                   />
                 </div>
               </div>

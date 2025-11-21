@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import ServicesPage from './ServicesPage'
 import { createOgImageUrl, createTwitterImageUrl, getSiteUrl } from '@/lib/og'
+import StructuredData from '@/components/seo/StructuredData'
 
 const siteUrl = getSiteUrl()
 const pagePath = '/services'
@@ -76,5 +77,16 @@ export const metadata: Metadata = {
 }
 
 export default function Services() {
-  return <ServicesPage />
+  return (
+    <>
+      <StructuredData
+        type="breadcrumb"
+        breadcrumbs={[
+          { name: 'Home', url: siteUrl },
+          { name: 'Services', url: pageUrl },
+        ]}
+      />
+      <ServicesPage />
+    </>
+  )
 }
