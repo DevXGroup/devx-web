@@ -1,44 +1,62 @@
 'use client'
 
-import { useRef, useMemo } from 'react'
+import { useRef, useMemo, useState, useEffect } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { Points, AdditiveBlending, Group } from 'three'
 import type * as THREE from 'three'
 
-// Orion constellation star data
+// Orion constellation star data - scaled up and centered
 // Based on the real Orion constellation with relative positions
+// Center X is at 0 (constellation spans from -4.5 to 4.5)
 const ORION_STARS = [
-  // Belt stars (3 main stars)
-  { name: 'Alnitak', position: [-8, 2, -10], brightness: 0.95, size: 0.18 },
-  { name: 'Alnilam', position: [-6, 2, -10], brightness: 0.93, size: 0.16 },
-  { name: 'Mintaka', position: [-4, 2, -10], brightness: 0.92, size: 0.15 },
+  // Belt stars (3 main stars) - larger and more spread
+  { name: 'Alnitak', position: [-3, 3, -10], brightness: 0.95, size: 0.24 },
+  { name: 'Alnilam', position: [0, 3, -10], brightness: 0.93, size: 0.22 },
+  { name: 'Mintaka', position: [3, 3, -10], brightness: 0.92, size: 0.2 },
 
-  // Shoulders
-  { name: 'Betelgeuse', position: [-9, 6, -10], brightness: 0.96, size: 0.22 },
-  { name: 'Bellatrix', position: [-3, 6, -10], brightness: 0.89, size: 0.14 },
+  // Shoulders - scaled up
+  { name: 'Betelgeuse', position: [-4.5, 9, -10], brightness: 0.96, size: 0.28 },
+  { name: 'Bellatrix', position: [4.5, 9, -10], brightness: 0.89, size: 0.18 },
 
-  // Feet
-  { name: 'Rigel', position: [-3, -4, -10], brightness: 0.98, size: 0.25 },
-  { name: 'Saiph', position: [-9, -4, -10], brightness: 0.87, size: 0.12 },
+  // Feet - scaled up
+  { name: 'Rigel', position: [4.5, -6, -10], brightness: 0.98, size: 0.32 },
+  { name: 'Saiph', position: [-4.5, -6, -10], brightness: 0.87, size: 0.16 },
 
-  // Head/Sword area stars
-  { name: 'Head1', position: [-6, 9, -10], brightness: 0.85, size: 0.11 },
+  // Head/Sword area stars - scaled up
+  { name: 'Head1', position: [0, 13.5, -10], brightness: 0.85, size: 0.14 },
 
-  // Sword stars (forming sword below belt)
-  { name: 'Sword1', position: [-6, -1, -10], brightness: 0.82, size: 0.1 },
-  { name: 'Sword2', position: [-5.8, -2.5, -10], brightness: 0.8, size: 0.09 },
-  { name: 'Sword3', position: [-6.2, -2.5, -10], brightness: 0.81, size: 0.09 },
+  // Sword stars (forming sword below belt) - scaled up
+  { name: 'Sword1', position: [0, -1.5, -10], brightness: 0.82, size: 0.13 },
+  { name: 'Sword2', position: [0.3, -3.75, -10], brightness: 0.8, size: 0.12 },
+  { name: 'Sword3', position: [-0.3, -3.75, -10], brightness: 0.81, size: 0.12 },
 
-  // Faint stars to complete the constellation outline
-  { name: 'Faint1', position: [-7, 4, -10], brightness: 0.75, size: 0.08 },
-  { name: 'Faint2', position: [-5, 4, -10], brightness: 0.75, size: 0.08 },
-  { name: 'Faint3', position: [-7.5, -1, -10], brightness: 0.73, size: 0.07 },
-  { name: 'Faint4', position: [-4.5, -1, -10], brightness: 0.73, size: 0.07 },
+  // Faint stars to complete the constellation outline - scaled up
+  { name: 'Faint1', position: [-1.5, 6, -10], brightness: 0.75, size: 0.11 },
+  { name: 'Faint2', position: [1.5, 6, -10], brightness: 0.75, size: 0.11 },
+  { name: 'Faint3', position: [-2.25, -1.5, -10], brightness: 0.73, size: 0.09 },
+  { name: 'Faint4', position: [2.25, -1.5, -10], brightness: 0.73, size: 0.09 },
 ]
 
 export default function OrionConstellation() {
+  const [mouseX, setMouseX] = useState(0)
+  const [mouseY, setMouseY] = useState(0)
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      // Subtle mouse movement - much less pronounced than before
+      setMouseX((e.clientX / window.innerWidth - 0.5) * 0.3)
+      setMouseY((e.clientY / window.innerHeight - 0.5) * 0.3)
+    }
+    window.addEventListener('mousemove', handleMouseMove)
+    return () => window.removeEventListener('mousemove', handleMouseMove)
+  }, [])
+
+  // Fixed position in 3D space - CSS handles screen positioning
+  const baseX = 0
+  const baseY = 0
+
   return (
-    <group position={[15, 0, 0]}>
+    <group position={[baseX + mouseX, baseY + mouseY, 0]}>
       {/* Main constellation stars - more visible */}
       <OrionStars />
       {/* Connecting lines (visual guide) */}
@@ -171,6 +189,9 @@ function ConstellationLines() {
       // Right shoulder to belt
       [4, 2],
 
+      // Shoulders connection (top of trapezoid)
+      [3, 4],
+ 
       // Shoulders to head
       [3, 7],
       [4, 7],

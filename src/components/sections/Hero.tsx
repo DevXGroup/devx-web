@@ -57,8 +57,8 @@ const DynamicShootingStars = dynamic(
   }
 )
 
-const DynamicOrionConstellation = dynamic(
-  () => import('../hero/OrionConstellation').then((mod) => ({ default: mod.default })),
+const DynamicOrionCanvas = dynamic(
+  () => import('../hero/OrionCanvasWrapper').then((mod) => ({ default: mod.default })),
   {
     ssr: false,
     loading: () => null,
@@ -78,27 +78,15 @@ const subheaders = [
   'Intelligent Workflows',
 ]
 
-// Optimized animation variants for better performance and LCP
+// Simplified - no animations to prevent CLS
 const containerVariants = {
-  hidden: { opacity: 1 }, // Immediate visibility for better FCP/LCP
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0, // No stagger for instant visibility
-      delayChildren: 0, // No delay for faster FCP
-    },
-  },
+  hidden: { opacity: 1 },
+  visible: { opacity: 1 },
 }
 
 const itemVariants = {
-  hidden: { opacity: 1, y: 0 }, // Immediate visibility for better FCP/LCP
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0, // Instant for better FCP
-    },
-  },
+  hidden: { opacity: 1, y: 0 },
+  visible: { opacity: 1, y: 0 },
 }
 
 const buttonVariants = {
@@ -194,8 +182,21 @@ export default function Hero() {
         <ClientOnly>
           {enableCosmicStars && (
             <>
-              <DynamicStarTwinklingField className="z-1" count={50} />
+              <DynamicStarTwinklingField className="z-1" count={100} />
               <DynamicHeroBackground />
+              {/* Orion constellation - fixed position, stays in same spot at all screen sizes */}
+              <div
+                className="fixed z-[10000] pointer-events-none"
+                style={{
+                  top: '170px',
+                  left: '50%',
+                  marginLeft: '110px',
+                  width: '400px',
+                  height: '400px',
+                }}
+              >
+                <DynamicOrionCanvas />
+              </div>
             </>
           )}
         </ClientOnly>
@@ -205,24 +206,15 @@ export default function Hero() {
       <ClientOnly>{enableShootingStars && <DynamicShootingStars />}</ClientOnly>
 
       {/* Content */}
-      <motion.div
-        className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-[80] w-full pt-12 sm:pt-16 lg:pt-20 pb-28 sm:pb-36 lg:pb-44"
-        variants={containerVariants}
-        initial="hidden"
-        animate={controls}
-        style={{ willChange: 'opacity' }}
-      >
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-[80] w-full pt-12 sm:pt-16 lg:pt-20 pb-28 sm:pb-36 lg:pb-44">
         <div className="text-center mx-auto w-full px-6 sm:px-[50px] space-y-7 sm:space-y-9 pt-2 sm:pt-4 flex flex-col items-center justify-center">
-          {/* Hero content wrapper - this div prevents movement on button hover */}
+          {/* Hero content wrapper */}
           <div className="space-y-5 sm:space-y-7">
-            <motion.h1
-              variants={itemVariants}
+            <h1
               className="hero-title mx-auto flex flex-wrap md:flex-nowrap items-center justify-center gap-2 sm:gap-3 md:gap-4 text-center text-white font-mono font-bold tracking-tight w-full whitespace-normal md:whitespace-nowrap"
               style={{
-                willChange: 'auto', // Changed from 'opacity, transform' for better LCP
                 minHeight: '5rem',
-                maxHeight: '5rem', // Prevent expansion
-                height: '5rem', // Fixed height to prevent CLS
+                height: '5rem',
               }}
             >
               <span
@@ -242,13 +234,9 @@ export default function Hero() {
               >
                 Engineered.
               </span>
-            </motion.h1>
+            </h1>
 
-            <motion.div
-              variants={itemVariants}
-              className="text-center w-full mx-auto space-y-3"
-              style={{ willChange: 'opacity, transform' }}
-            >
+            <div className="text-center w-full mx-auto space-y-3">
               <p className="text-xl sm:text-2xl md:text-2xl lg:text-2xl xl:text-2xl text-white font-sans font-light leading-relaxed text-center mx-auto max-w-4xl">
                 Elite software team shipping polished software at&nbsp;startup&nbsp;speed.
               </p>
@@ -276,15 +264,13 @@ export default function Hero() {
                   </Link>
                 </div>
               </div>
-            </motion.div>
+            </div>
           </div>
 
-          <motion.div
-            variants={itemVariants}
+          <div
             className="mt-3 sm:mt-4 md:mt-5 flex justify-center items-center w-full"
             style={{
               minHeight: '4.5rem',
-              maxHeight: '4.5rem',
               height: '4.5rem',
               overflow: 'hidden',
             }}
@@ -301,12 +287,15 @@ export default function Hero() {
               cursorClassName=""
               loop={true}
             />
-          </motion.div>
+            {/* Hidden SEO-friendly content for search engines - all typewriter phrases */}
+            <span className="sr-only">
+              Elite software development services: {subheaders.join(', ')}. Custom software
+              development, mobile applications, AI and machine learning solutions, cloud
+              infrastructure, IoT integration, and digital transformation services.
+            </span>
+          </div>
 
-          <motion.div
-            variants={itemVariants}
-            className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4 sm:gap-6 relative z-[120] w-full max-w-2xl mx-auto px-2 mt-7 sm:mt-9 mb-10 sm:mb-14 lg:mb-16"
-          >
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4 sm:gap-6 relative z-[120] w-full max-w-2xl mx-auto px-2 mt-7 sm:mt-9 mb-10 sm:mb-14 lg:mb-16">
             <motion.div
               variants={buttonVariants}
               initial="rest"
@@ -344,9 +333,9 @@ export default function Hero() {
                 See Our Work
               </StarBorder>
             </motion.div>
-          </motion.div>
+          </div>
         </div>
-      </motion.div>
+      </div>
 
       {/* Planet Divider at the bottom of hero - Only rendered on client */}
       <ClientOnly>
