@@ -45,7 +45,7 @@ const nextConfig = {
   outputFileTracingRoot: path.join(process.cwd()),
   // Target modern browsers - avoid legacy polyfills
   compiler: {
-    removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error', 'warn'] } : false,
+    removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error'] } : false,
   },
   eslint: {
     ignoreDuringBuilds: false,
