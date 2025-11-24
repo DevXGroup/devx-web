@@ -844,9 +844,17 @@ export default function ServicesPage() {
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.boxShadow = `0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 30px ${prop.iconColor}40`
+                      const title = e.currentTarget.querySelector('h3')
+                      if (title) {
+                        ;(title as HTMLElement).style.color = prop.iconColor
+                      }
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.boxShadow = `0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.04)`
+                      const title = e.currentTarget.querySelector('h3')
+                      if (title) {
+                        ;(title as HTMLElement).style.color = 'white'
+                      }
                     }}
                     whileHover={{ scale: 1.03, y: -4 }}
                     whileTap={{ scale: 0.98 }}
@@ -864,18 +872,7 @@ export default function ServicesPage() {
                     </div>
 
                     {/* Title */}
-                    <h3
-                      className="heading-component text-white mb-3 sm:mb-4 leading-tight transition-colors duration-300 relative z-10"
-                      style={{
-                        transition: 'color 0.3s ease',
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.color = prop.iconColor
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.color = 'white'
-                      }}
-                    >
+                    <h3 className="heading-component text-white mb-3 sm:mb-4 leading-tight transition-colors duration-300 relative z-10">
                       {prop.title}
                     </h3>
 
