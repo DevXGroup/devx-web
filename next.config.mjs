@@ -297,7 +297,17 @@ const sentryWebpackPluginOptions = {
 
   // Suppress source map warnings for dynamic chunks
   errorHandler: (err, invokeErr, compilation) => {
+    // Suppress warnings about missing source maps for dynamic/temporary chunks
+    if (err.message?.includes('Could not auto-detect referenced sourcemap')) {
+      return
+    }
     compilation.warnings.push('Sentry CLI Plugin: ' + err.message)
+  },
+
+  // Additional options to reduce warnings
+  sourcemaps: {
+    assets: ['**/*.js', '**/*.map'],
+    ignore: ['**/node_modules/**', '**/*.config.js'],
   },
 }
 
