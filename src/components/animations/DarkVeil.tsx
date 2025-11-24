@@ -98,6 +98,8 @@ export default function DarkVeil({
   resolutionScale = 1,
 }: Props) {
   const ref = useRef<HTMLCanvasElement>(null)
+  const isVisibleRef = useRef(true)
+
   useEffect(() => {
     const canvas = ref.current as HTMLCanvasElement
     const parent = canvas.parentElement as HTMLElement
@@ -144,17 +146,35 @@ export default function DarkVeil({
       resizeObserver.observe(parent)
     }
 
+    // Intersection observer to pause when off-screen
+    let intersectionObserver: IntersectionObserver | null = null
+    if (typeof IntersectionObserver !== 'undefined') {
+      intersectionObserver = new IntersectionObserver(
+        (entries) => {
+          const entry = entries[0]
+          if (entry) {
+            isVisibleRef.current = entry.isIntersecting
+          }
+        },
+        { threshold: 0 }
+      )
+      intersectionObserver.observe(canvas)
+    }
+
     const start = performance.now()
     let frame = 0
 
     const loop = () => {
-      program.uniforms.uTime.value = ((performance.now() - start) / 1000) * speed
-      program.uniforms.uHueShift.value = hueShift
-      program.uniforms.uNoise.value = noiseIntensity
-      program.uniforms.uScan.value = scanlineIntensity
-      program.uniforms.uScanFreq.value = scanlineFrequency
-      program.uniforms.uWarp.value = warpAmount
-      renderer.render({ scene: mesh })
+      // Only render if visible
+      if (isVisibleRef.current) {
+        program.uniforms.uTime.value = ((performance.now() - start) / 1000) * speed
+        program.uniforms.uHueShift.value = hueShift
+        program.uniforms.uNoise.value = noiseIntensity
+        program.uniforms.uScan.value = scanlineIntensity
+        program.uniforms.uScanFreq.value = scanlineFrequency
+        program.uniforms.uWarp.value = warpAmount
+        renderer.render({ scene: mesh })
+      }
       frame = requestAnimationFrame(loop)
     }
 
@@ -164,6 +184,7 @@ export default function DarkVeil({
       cancelAnimationFrame(frame)
       window.removeEventListener('resize', resize)
       resizeObserver?.disconnect()
+      intersectionObserver?.disconnect()
     }
   }, [
     hueShift,
