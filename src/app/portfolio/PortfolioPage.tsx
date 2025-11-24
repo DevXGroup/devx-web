@@ -472,6 +472,7 @@ export default function PortfolioPage() {
                 >
                   <TextPressure
                     text="Portfolio  "
+                    fontFamily="var(--font-ibm-plex-mono)"
                     flex={false}
                     alpha={false}
                     stroke={false}
@@ -683,12 +684,18 @@ export default function PortfolioPage() {
         <div className="absolute inset-0 z-0 bg-gradient-to-b from-black via-purple-900/10 to-black pointer-events-none" />
         <div className="container mx-auto px-4 relative">
           <div className="text-center mb-8">
-            <h3 className="text-3xl md:text-4xl font-bold mb-6 text-[#06B6D4]">
-              Services we deliver
-            </h3>
-            <p className="text-white/70 mt-2">
-              We can build and ship across these areas. See the Services page for details.
-            </p>
+            <BlurText
+              text="Services we deliver"
+              className="heading-section text-[#06B6D4] justify-center mb-4"
+              animateBy="words"
+              once={false}
+            />
+            <BlurText
+              text="We can build and ship across these areas. See the Services page for details."
+              className="subtitle text-white/80 justify-center mt-2"
+              animateBy="words"
+              once={false}
+            />
           </div>
           <div className="flex flex-wrap justify-center gap-8 md:gap-12 lg:gap-16 relative z-10">
             {services.map((service, index) => (
@@ -718,16 +725,14 @@ export default function PortfolioPage() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="relative z-20 text-center max-w-3xl mx-auto"
+            className="relative z-20 text-center max-w-4xl mx-auto"
           >
-            <BlurText
-              text="Ready to Build Your Next Project?"
-              className="justify-center heading-section text-[#06B6D4] mb-6"
-              delay={150}
-              once={true}
-            />
-            <p className="subtitle-lg mb-8">
-              Partner with a team that has shipped complex products across industries and platforms.
+            <h2 className="heading-section text-[#06B6D4] mb-6 whitespace-nowrap">
+              Ready to Build Your Next Project?
+            </h2>
+            <p className="text-lg md:text-xl lg:text-2xl font-light text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed">
+              Partner with a team that has shipped complex <br className="hidden sm:block" />
+              products across industries and platforms.
             </p>
             <motion.div
               className="flex flex-col items-center justify-center gap-4 sm:flex-row"
@@ -739,6 +744,7 @@ export default function PortfolioPage() {
               <Button
                 asChild
                 className="group relative z-40 inline-flex items-center gap-2 bg-robinhood text-black hover:bg-white hover:text-black px-8 py-3 rounded-lg font-semibold text-lg border-2 border-robinhood shadow-lg transition-all duration-300 hover:shadow-[0_5px_15px_rgba(204,255,0,0.3)]"
+                style={{ fontFamily: 'var(--font-ibm-plex-mono)' }}
               >
                 <a
                   href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?background_color=000000&text_color=ffffff&primary_color=4CD787&hide_gdpr_banner=1"
@@ -753,6 +759,7 @@ export default function PortfolioPage() {
                 asChild
                 variant="outline"
                 className="group relative z-40 inline-flex items-center gap-2 border border-white/30 px-8 py-3 font-medium text-white transition-all duration-300 hover:border-white hover:bg-white/10"
+                style={{ fontFamily: 'var(--font-ibm-plex-mono)' }}
               >
                 <Link href="/contact">
                   <span>Contact Our Team</span>

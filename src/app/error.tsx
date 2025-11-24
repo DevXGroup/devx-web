@@ -100,21 +100,21 @@ export default function Error({
         >
           <button
             onClick={reset}
-            className="bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded-lg transition-all duration-200 transform hover:scale-105 font-['IBM_Plex_Mono'] font-medium shadow-lg hover:shadow-red-500/25"
+            className="bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded-lg transition-all duration-200 transform hover:scale-105 font-sans font-medium shadow-lg hover:shadow-red-500/25"
           >
             Try Again
           </button>
 
           <Link
             href="/home"
-            className="border border-orange-400 text-orange-400 hover:bg-orange-400 hover:text-black px-8 py-3 rounded-lg transition-all duration-200 transform hover:scale-105 font-['IBM_Plex_Mono'] font-medium"
+            className="border border-orange-400 text-orange-400 hover:bg-orange-400 hover:text-black px-8 py-3 rounded-lg transition-all duration-200 transform hover:scale-105 font-sans font-medium"
           >
             ← Back to Home
           </Link>
 
           <Link
             href="/contact"
-            className="text-white/60 hover:text-white px-6 py-3 rounded-lg transition-all duration-200 font-['IBM_Plex_Sans'] underline underline-offset-4"
+            className="text-white/60 hover:text-white px-6 py-3 rounded-lg transition-all duration-200 font-sans underline underline-offset-4"
           >
             Report This Issue
           </Link>

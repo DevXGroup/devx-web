@@ -99,14 +99,14 @@ export default function GlobalError({
           >
             <button
               onClick={reset}
-              className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg transition-all duration-200 transform hover:scale-105 font-['IBM_Plex_Mono'] font-medium shadow-lg hover:shadow-red-600/25 border border-red-500"
+              className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg transition-all duration-200 transform hover:scale-105 font-sans font-medium shadow-lg hover:shadow-red-600/25 border border-red-500"
             >
               Force Restart
             </button>
 
             <button
               onClick={() => (window.location.href = '/home')}
-              className="border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black px-8 py-3 rounded-lg transition-all duration-200 transform hover:scale-105 font-['IBM_Plex_Mono'] font-medium"
+              className="border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black px-8 py-3 rounded-lg transition-all duration-200 transform hover:scale-105 font-sans font-medium"
             >
               Emergency Exit
             </button>

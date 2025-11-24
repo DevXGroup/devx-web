@@ -140,7 +140,7 @@
     "typescript": "^5.9.3"
   },
   "engines": {
-    "node": "22.14.x",
+    "node": ">=22.14 <23",
     "pnpm": "10.22.x"
   },
   "packageManager": "pnpm@10.22.0",

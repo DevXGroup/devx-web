@@ -5,6 +5,7 @@ import { useEffect, useState, useCallback, useRef, useMemo, memo } from 'react'
 import Image from 'next/image'
 import seedrandom from 'seedrandom'
 import LogoLoop from '@animations/LogoLoop'
+import BlurText from '@animations/BlurText'
 import { StarTwinklingField } from '../animations/StarTwinklingField'
 
 const buildIconPath = (file: string) => `/images/tech/${file}`
@@ -492,13 +493,15 @@ export default function DevelopmentTools() {
         <div className="py-30 md:py-0 mt-24 md:mt-36 mb-24 md:mb-32">
           <div className="container mx-auto px-4">
             <div className="flex flex-col items-center">
-              <h3 className="heading-section text-center animate-gradient-text mb-4">
+              <h2 className="heading-section text-center animate-gradient-text mb-4">
                 DevX Development Tools
-              </h3>
-              <p className="subtitle-lg text-slate-400 text-center max-w-2xl mb-0">
-                Cutting-edge technologies powering innovative solutions across web, mobile, and
-                cloud platforms
-              </p>
+              </h2>
+              <BlurText
+                text="Cutting-edge technologies powering innovative solutions across web, mobile, and cloud platforms"
+                className="justify-center subtitle-lg text-center max-w-2xl mb-0"
+                delay={100}
+                once={true}
+              />
             </div>
           </div>
         </div>
@@ -549,9 +552,12 @@ export default function DevelopmentTools() {
         {/* Logo Loop Section */}
         <div className="w-full mt-8 md:mt-24 lg:mt-32 xl:mt-40 py-8 md:py-12 lg:py-16 mb-6">
           <div className="w-full max-w-full">
-            <h4 className="heading-section text-center text-white mb-12 md:mb-16 lg:mb-20 px-4">
-              Other Tools & Tech Stacks We Use
-            </h4>
+            <BlurText
+              text="Other Tools & Tech Stacks We Use"
+              className="justify-center heading-section text-center mb-12 md:mb-16 lg:mb-20 px-4"
+              delay={150}
+              once={true}
+            />
             <LogoLoop logos={aiTools} speed={18} />
           </div>
         </div>
@@ -701,7 +707,7 @@ const CenterCircle = memo(
               {activeTool.name}
             </h2>
             <p
-              className="subtitle-xs text-white px-2"
+              className="subtitle-xs px-2"
               style={{
                 textShadow: '0 1px 3px rgba(0,0,0,0.9), 0 0 10px rgba(255,255,255,0.3)',
               }}
@@ -1006,7 +1012,7 @@ const AIToolsOrbit = memo(
                   transition={{ duration: 0.25 }}
                   className="absolute whitespace-nowrap top-11 sm:top-12 left-1/2 -translate-x-1/2 z-[999] pointer-events-none"
                 >
-                  <span className="text-sm sm:text-base text-white font-medium bg-black/95 backdrop-blur-md px-4 py-2 rounded-lg border border-[#4CD787]/50 shadow-lg shadow-[#4CD787]/20 font-['IBM_Plex_Mono']">
+                  <span className="subtitle-sm bg-black/95 backdrop-blur-md px-4 py-2 rounded-lg border border-[#4CD787]/50 shadow-lg shadow-[#4CD787]/20">
                     {tool.name}
                   </span>
                 </motion.div>

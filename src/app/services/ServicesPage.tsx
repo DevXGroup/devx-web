@@ -505,33 +505,12 @@ export default function ServicesPage() {
         <section className="section-padding relative services-section pt-8 md:pt-12 bg-black">
           <div className="container mx-auto px-4 ">
             <div className="w-full flex justify-center mb-28">
-              <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{
-                  opacity: 1,
-                }}
-                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                viewport={{ once: true, amount: 0.2 }}
-                style={{
-                  position: 'relative',
-                  height: '100px',
-                  width: '420px',
-                  padding: '0 0px',
-                }}
-              >
-                <TextPressure
-                  text="Expertise&nbsp; "
-                  flex={false}
-                  alpha={false}
-                  stroke={false}
-                  width={false}
-                  weight={true}
-                  italic={false}
-                  textColor="#06B6D4"
-                  strokeColor="#FFFFFF"
-                  minFontSize={32}
-                />
-              </motion.div>
+              <BlurText
+                text="Our Expertise"
+                className="justify-center blur-section text-[#06B6D4]"
+                delay={250}
+                once={false}
+              />
             </div>
 
             <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,24rem),1fr))] justify-center gap-6 md:gap-8 px-2 md:px-8 lg:px-12 xl:px-16 relative z-10">
@@ -581,12 +560,8 @@ export default function ServicesPage() {
                     transition={{ duration: 0.8 }}
                     className="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-start text-center px-4 py-6 sm:px-6 sm:py-10 lg:py-16"
                   >
-                    <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold">
-                      <span className="bg-gradient-to-r from-[#FAD961] via-[#C2892B] to-[#0B0B0B] bg-clip-text text-transparent">
-                        Agentic AI & RAG Solutions
-                      </span>
-                    </h2>
-                    <p className="mt-3 sm:mt-4 text-sm sm:text-base md:text-lg lg:text-xl text-white/90 font-['IBM_Plex_Sans'] leading-relaxed max-w-3xl px-2 sm:px-0">
+                    <h2 className="section-title-hero gradient-gold">Agentic AI & RAG Solutions</h2>
+                    <p className="section-subtitle mt-3 sm:mt-4 max-w-3xl px-2 sm:px-0">
                       Transform your business with intelligent AI agents that think, learn, and act
                       autonomously. Powered by cutting-edge retrieval-augmented generation
                       technology.
@@ -600,6 +575,7 @@ export default function ServicesPage() {
                       playsInline
                       className="absolute inset-0 h-full w-full object-cover"
                     >
+                      <source src="/videos/agentic-ai-grid.webm" type="video/webm" />
                       <source src="/videos/agentic-ai-grid.mp4" type="video/mp4" />
                       Your browser does not support the video tag.
                     </video>
@@ -615,10 +591,10 @@ export default function ServicesPage() {
                   className="mt-6 text-center transition-all duration-300 lg:-translate-y-[60px]"
                 >
                   <motion.p
-                    className={`text-sm md:text-base font-['IBM_Plex_Mono'] transition-all duration-300 ${
+                    className={`transition-all duration-300 ${
                       isAgentLabelActive
-                        ? 'lg:text-3xl lg:font-extrabold'
-                        : 'lg:text-lg lg:font-semibold'
+                        ? 'subtitle-lg lg:text-3xl lg:font-extrabold'
+                        : 'subtitle-sm lg:text-lg lg:font-semibold'
                     }`}
                     animate={{
                       letterSpacing: isAgentLabelActive ? '0.04em' : '0.01em',
@@ -688,28 +664,26 @@ export default function ServicesPage() {
                         <div className="w-12 h-12 rounded-xl bg-[#4CD787]/20 flex items-center justify-center">
                           <Bot className="w-6 h-6 text-[#4CD787]" />
                         </div>
-                        <h3 className="text-xl md:text-2xl font-bold text-[#4CD787]">
-                          Agentic AI Development
-                        </h3>
+                        <h3 className="card-title text-[#4CD787]">Agentic AI Development</h3>
                       </div>
-                      <p className="text-white/80 text-base md:text-lg leading-relaxed font-['IBM_Plex_Sans'] max-w-2xl">
+                      <p className="card-description max-w-2xl">
                         Build autonomous AI agents that execute complex workflows end-to-end.
                         Powered by OpenAI AgentKit, n8n, Make, and Zapier for seamless automation.
                       </p>
-                      <ul className="space-y-2 text-sm md:text-base text-white/70">
-                        <li className="flex items-start gap-2">
+                      <ul className="space-y-2">
+                        <li className="card-feature flex items-start gap-2">
                           <span className="text-[#4CD787]">✓</span>
                           Multi-agent orchestration & collaboration
                         </li>
-                        <li className="flex items-start gap-2">
+                        <li className="card-feature flex items-start gap-2">
                           <span className="text-[#4CD787]">✓</span>
                           Browser automation with computer use tools
                         </li>
-                        <li className="flex items-start gap-2">
+                        <li className="card-feature flex items-start gap-2">
                           <span className="text-[#4CD787]">✓</span>
                           24/7 autonomous task execution
                         </li>
-                        <li className="flex items-start gap-2">
+                        <li className="card-feature flex items-start gap-2">
                           <span className="text-[#4CD787]">✓</span>
                           70% reduction in manual workflows
                         </li>
@@ -732,28 +706,26 @@ export default function ServicesPage() {
                         <div className="w-12 h-12 rounded-xl bg-[#9d4edd]/20 flex items-center justify-center">
                           <Brain className="w-6 h-6 text-[#9d4edd]" />
                         </div>
-                        <h3 className="text-xl md:text-2xl font-bold text-[#9d4edd]">
-                          RAG Implementation
-                        </h3>
+                        <h3 className="card-title text-[#9d4edd]">RAG Implementation</h3>
                       </div>
-                      <p className="text-white/80 text-base md:text-lg leading-relaxed font-['IBM_Plex_Sans'] max-w-2xl">
+                      <p className="card-description max-w-2xl">
                         Enhance AI accuracy with retrieval-augmented generation. Connect LLMs to
                         your knowledge base for contextually relevant, up-to-date responses.
                       </p>
-                      <ul className="space-y-2 text-sm md:text-base text-white/70">
-                        <li className="flex items-start gap-2">
+                      <ul className="space-y-2">
+                        <li className="card-feature flex items-start gap-2">
                           <span className="text-[#9d4edd]">✓</span>
                           Real-time knowledge retrieval & integration
                         </li>
-                        <li className="flex items-start gap-2">
+                        <li className="card-feature flex items-start gap-2">
                           <span className="text-[#9d4edd]">✓</span>
                           99% accuracy with GraphRAG technology
                         </li>
-                        <li className="flex items-start gap-2">
+                        <li className="card-feature flex items-start gap-2">
                           <span className="text-[#9d4edd]">✓</span>
                           Multimodal RAG (text, audio, video, images)
                         </li>
-                        <li className="flex items-start gap-2">
+                        <li className="card-feature flex items-start gap-2">
                           <span className="text-[#9d4edd]">✓</span>
                           Eliminate AI hallucinations
                         </li>
@@ -776,28 +748,28 @@ export default function ServicesPage() {
                         <div className="w-12 h-12 rounded-xl bg-[#CFB53B]/20 flex items-center justify-center">
                           <Cpu className="w-6 h-6 text-[#CFB53B]" />
                         </div>
-                        <h3 className="text-xl md:text-2xl font-bold text-[#CFB53B]">
+                        <h3 className="card-title text-[#CFB53B]">
                           Intelligent Workflow Automation
                         </h3>
                       </div>
-                      <p className="text-white/80 text-base md:text-lg leading-relaxed font-['IBM_Plex_Sans'] max-w-2xl">
+                      <p className="card-description max-w-2xl">
                         Automate repetitive tasks with AI-powered workflows. Integrate with 8,000+
                         apps using n8n, Make, and Zapier platforms.
                       </p>
-                      <ul className="space-y-2 text-sm md:text-base text-white/70">
-                        <li className="flex items-start gap-2">
+                      <ul className="space-y-2">
+                        <li className="card-feature flex items-start gap-2">
                           <span className="text-[#CFB53B]">✓</span>
                           Visual workflow builder with drag-and-drop
                         </li>
-                        <li className="flex items-start gap-2">
+                        <li className="card-feature flex items-start gap-2">
                           <span className="text-[#CFB53B]">✓</span>
                           Self-hosted & cloud deployment options
                         </li>
-                        <li className="flex items-start gap-2">
+                        <li className="card-feature flex items-start gap-2">
                           <span className="text-[#CFB53B]">✓</span>
                           Advanced AI node integrations
                         </li>
-                        <li className="flex items-start gap-2">
+                        <li className="card-feature flex items-start gap-2">
                           <span className="text-[#CFB53B]">✓</span>
                           60% operational cost reduction
                         </li>
@@ -816,14 +788,14 @@ export default function ServicesPage() {
               transition={{ duration: 0.8, delay: 0.6 }}
               className="mt-16 text-center px-[5px] sm:px-2"
             >
-              <p className="text-base sm:text-lg md:text-xl text-white/70 mb-6 font-['IBM_Plex_Sans'] px-[5px] max-w-[18rem] sm:max-w-none mx-auto">
+              <p className="section-subtitle-compact mb-6 px-[5px] max-w-[18rem] sm:max-w-none mx-auto">
                 Ready to automate your business with intelligent AI agents?
               </p>
               <motion.a
                 href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 bg-gradient-to-r from-[#FAD961] via-[#C2892B] to-[#0B0B0B] hover:from-[#FAD961] hover:via-[#D19028] hover:to-[#111111] text-black px-8 py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-[0_12px_40px_rgba(194,137,43,0.35)] border-2 border-[#C2892B] transition-all duration-300"
+                className="inline-flex items-center gap-3 bg-gradient-to-r from-[#FAD961] via-[#C2892B] to-[#0B0B0B] hover:from-[#FAD961] hover:via-[#D19028] hover:to-[#111111] text-black px-8 py-4 rounded-xl btn-text-primary shadow-lg hover:shadow-[0_12px_40px_rgba(194,137,43,0.35)] border-2 border-[#C2892B] transition-all duration-300"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -842,20 +814,16 @@ export default function ServicesPage() {
             <div className="max-w-3xl mx-auto text-center mb-14">
               <BlurText
                 text="Why teams choose DevX"
-                className="justify-center heading-section text-[#06B6D4]"
+                className="justify-center blur-section text-[#06B6D4]"
                 delay={200}
                 once={false}
               />
-              <motion.p
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false }}
-                transition={{ duration: 0.6 }}
-                className="subtitle-lg mt-4"
-              >
-                Every engagement is anchored on speed, predictability, and the confidence that your
-                product will delight customers from day one.
-              </motion.p>
+              <BlurText
+                text="Every engagement is anchored on speed, predictability, and the confidence that your product will delight customers from day one."
+                className="justify-center blur-subtitle mt-4"
+                delay={250}
+                once={false}
+              />
             </div>
             <div
               ref={valuePropsRef}
@@ -1024,22 +992,12 @@ export default function ServicesPage() {
               className="title-margin text-center"
             >
               <TrueFocus sentence="Case Studies" />
-              <motion.p
-                initial={{ opacity: 0 }}
-                whileInView={{
-                  opacity: 1,
-                }}
-                transition={{ delay: 0.3, duration: 0.6 }}
-                viewport={{ once: true, amount: 0.2 }}
-                className="text-lg md:text-xl text-white/90 font-light mt-10 max-w-2xl mx-auto font-['IBM_Plex_Sans'] leading-relaxed"
-                style={{
-                  textShadow: '0 2px 6px rgba(0,0,0,0.8)',
-                  fontWeight: '400',
-                }}
-              >
-                Explore shipped products and the business impact we continue to deliver for founders
-                and enterprise teams.
-              </motion.p>
+              <BlurText
+                text="Explore shipped products and the business impact we continue to deliver for founders and enterprise teams."
+                className="justify-center blur-subtitle mt-10 max-w-2xl mx-auto"
+                delay={200}
+                once={true}
+              />
             </motion.div>
           </div>
           <HorizontalScroll />
@@ -1102,21 +1060,23 @@ export default function ServicesPage() {
           >
             <BlurText
               text="Ready to Transform Your Business?"
-              className="justify-center heading-hero text-white mb-6"
+              className="justify-center blur-section text-white mb-6"
               delay={100}
               once={false}
             />
-            <p className="subtitle-lg mt-6">
-              Partner with our senior engineers to launch resilient, scalable products and unlock
-              new growth faster than you thought possible.
-            </p>
+            <BlurText
+              text="Partner with our senior engineers to launch resilient, scalable products and unlock new growth faster than you thought possible."
+              className="justify-center blur-subtitle mt-6"
+              delay={150}
+              once={false}
+            />
 
             <motion.div className="mt-10" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
               <a
                 href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 bg-gradient-to-r from-[#4CD787] via-[#66E6A4] to-[#4CD787] bg-[length:200%_100%] bg-[position:0%_0] hover:bg-[position:100%_0] text-black px-8 py-4 md:px-10 md:py-5 rounded-xl font-bold text-lg md:text-xl border-2 border-[#4CD787]/40 hover:border-[#4CD787] shadow-lg hover:shadow-[0_8px_35px_rgba(76,215,135,0.45)] transition-all duration-300 relative overflow-hidden group"
+                className="inline-flex items-center gap-3 bg-gradient-to-r from-[#4CD787] via-[#66E6A4] to-[#4CD787] bg-[length:200%_100%] bg-[position:0%_0] hover:bg-[position:100%_0] text-black px-8 py-4 md:px-10 md:py-5 rounded-xl btn-text-primary border-2 border-[#4CD787]/40 hover:border-[#4CD787] shadow-lg hover:shadow-[0_8px_35px_rgba(76,215,135,0.45)] transition-all duration-300 relative overflow-hidden group"
               >
                 <Sparkles className="w-5 h-5 md:w-6 md:h-6 group-hover:rotate-12 transition-transform duration-300" />
                 <span>Schedule a Strategy Call</span>
