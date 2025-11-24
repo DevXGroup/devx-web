@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
+import TestErrorClient from './TestErrorClient'
 
-export const dynamic = 'force-dynamic'
-export const revalidate = false
+export const dynamic = 'force-static'
 
 export const metadata: Metadata = {
   title: 'Error Testing | DevX Group Development Tools',
@@ -11,8 +11,6 @@ export const metadata: Metadata = {
     follow: false,
   },
 }
-
-import TestErrorClient from './TestErrorClient'
 
 export default function TestErrorPage() {
   return <TestErrorClient />
