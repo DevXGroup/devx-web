@@ -1,6 +1,6 @@
 'use client'
 
-import { motion, useReducedMotion, useInView, useMotionValue, animate } from 'framer-motion'
+import { motion, useReducedMotion, useInView } from 'framer-motion'
 import { useRef, useCallback, useMemo, useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -444,24 +444,16 @@ const VisionMissionCard = ({
   )
 }
 
-// Simplified stat counter with smooth animation
+// Simple stat counter with clean animation - plain React, no Framer Motion
 const StatCounter = ({ number, label }: { number: string | number; label: string }) => {
   const containerRef = useRef<HTMLDivElement | null>(null)
-  const hasAnimated = useRef(false)
-  const isInView = useInView(containerRef, {
-    once: true,
-    margin: '0px 0px -10% 0px',
-    amount: 0.3,
-  })
+  const [displayValue, setDisplayValue] = useState<string>('0')
+  const [isVisible, setIsVisible] = useState(false)
 
+  // Extract numeric value and suffix
   const numericTarget = useMemo(() => {
     const numericPortion = Number.parseFloat(String(number).replace(/[^0-9.]/g, ''))
     return Number.isFinite(numericPortion) ? numericPortion : 0
-  }, [number])
-
-  const decimalPlaces = useMemo(() => {
-    const match = String(number).match(/\.(\d+)/)
-    return match && match[1] ? match[1].length : 0
   }, [number])
 
   const suffix = useMemo(() => {
@@ -469,47 +461,57 @@ const StatCounter = ({ number, label }: { number: string | number; label: string
     return number.replace(/[-+]?[\d.,\s]+/g, '')
   }, [number])
 
-  const countValue = useMotionValue(0)
-  const [displayValue, setDisplayValue] = useState('0')
+  // Simple intersection observer
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0]
+        if (entry && entry.isIntersecting && !isVisible) {
+          setIsVisible(true)
+        }
+      },
+      { threshold: 0.3 }
+    )
 
-  const formatValue = useCallback(
-    (value: number) => {
-      if (decimalPlaces > 0) {
-        return value.toFixed(decimalPlaces)
+    if (containerRef.current) {
+      observer.observe(containerRef.current)
+    }
+
+    return () => observer.disconnect()
+  }, [isVisible])
+
+  // Simple counter animation using requestAnimationFrame
+  useEffect(() => {
+    if (!isVisible) return
+
+    const duration = 1400 // ms
+    const startTime = Date.now()
+    const startValue = 0
+
+    const animate = () => {
+      const elapsed = Date.now() - startTime
+      const progress = Math.min(elapsed / duration, 1)
+
+      // Ease out cubic
+      const eased = 1 - Math.pow(1 - progress, 3)
+      const currentValue = startValue + (numericTarget - startValue) * eased
+
+      setDisplayValue(Math.round(currentValue).toString())
+
+      if (progress < 1) {
+        requestAnimationFrame(animate)
       }
-      return Math.round(value).toString()
-    },
-    [decimalPlaces]
-  )
+    }
 
-  // Single animation on mount/view
-  useEffect(() => {
-    if (!isInView || hasAnimated.current) return
-    hasAnimated.current = true
-
-    const controls = animate(countValue, numericTarget, {
-      duration: 1.4,
-      ease: [0.16, 1, 0.3, 1],
-    })
-
-    return () => controls.stop()
-  }, [isInView, numericTarget, countValue])
-
-  useEffect(() => {
-    const unsubscribe = countValue.on('change', (latest) => {
-      setDisplayValue(formatValue(latest))
-    })
-    return unsubscribe
-  }, [countValue, formatValue])
+    requestAnimationFrame(animate)
+  }, [isVisible, numericTarget])
 
   const formattedDisplay = `${displayValue}${suffix}`
 
   return (
-    <motion.div
+    <div
       ref={containerRef}
-      className="relative group rounded-3xl h-[200px] sm:h-[210px] md:h-[220px] lg:h-[230px]"
-      whileHover={{ scale: 1.02 }}
-      transition={{ duration: 0.3, ease: 'easeOut' }}
+      className="relative group rounded-3xl h-[200px] sm:h-[210px] md:h-[220px] lg:h-[230px] transition-transform duration-300 hover:scale-105"
     >
       {/* Background shimmer */}
       <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/[0.04] via-white/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -520,11 +522,7 @@ const StatCounter = ({ number, label }: { number: string | number; label: string
         <div className="pointer-events-none absolute inset-0 rounded-[26px] ring-1 ring-inset ring-white/0 transition-all duration-500 group-hover:ring-[#4CD787]/30"></div>
 
         {/* Counter number */}
-        <motion.div
-          className="text-4xl md:text-5xl font-bold text-white font-mono group-hover:text-[#4CD787] transition-colors duration-300 relative"
-          whileHover={{ y: -3 }}
-          transition={{ duration: 0.2 }}
-        >
+        <div className="text-4xl md:text-5xl font-bold text-white font-mono group-hover:text-[#4CD787] transition-all duration-300 relative group-hover:-translate-y-1">
           {/* Glowing text effect */}
           <span className="relative">
             {formattedDisplay}
@@ -532,7 +530,7 @@ const StatCounter = ({ number, label }: { number: string | number; label: string
               {formattedDisplay}
             </span>
           </span>
-        </motion.div>
+        </div>
 
         {/* Separator line */}
         <div className="flex flex-col items-center gap-3">
@@ -544,7 +542,7 @@ const StatCounter = ({ number, label }: { number: string | number; label: string
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   )
 }
 
