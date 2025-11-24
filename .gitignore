@@ -46,6 +46,7 @@ next-env.d.ts
 # AI MDs
 CLAUDE.md
 AGENTS.md
+TODO.md
 
 # Internal documentation (do not commit)
 documents/
