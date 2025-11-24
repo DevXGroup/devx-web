@@ -75,7 +75,7 @@ export default function ServiceCard({ service, index }: ServiceCardProps) {
           </div>
         </div>
         <h3
-          className="heading-component"
+          className="card-title"
           style={{
             color: cardColor,
           }}
@@ -84,14 +84,14 @@ export default function ServiceCard({ service, index }: ServiceCardProps) {
         </h3>
       </div>
 
-      <p className="text-body text-white/85 mb-4 sm:mb-6 relative z-10 flex-grow">
+      <p className="card-description-normal mb-4 sm:mb-6 relative z-10 flex-grow">
         {service.description}
       </p>
 
       {service.outcome && (
         <div className="mb-4 sm:mb-6 relative z-10 p-3 rounded-lg border border-white/10 bg-white/5">
-          <p className="text-sm font-semibold text-[#4CD787] mb-1">What you get:</p>
-          <p className="text-sm text-white/90">{service.outcome}</p>
+          <p className="ui-label text-[#4CD787] mb-1">What you get:</p>
+          <p className="card-outcome">{service.outcome}</p>
         </div>
       )}
 
@@ -99,7 +99,7 @@ export default function ServiceCard({ service, index }: ServiceCardProps) {
         {service.features.map((feature, i) => (
           <motion.li
             key={feature}
-            className="flex items-center text-body-small text-white/75 group"
+            className="flex items-center card-feature group"
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : { opacity: 0 }}
             transition={{ duration: 0.4, delay: i * 0.05, ease: 'easeOut' }}

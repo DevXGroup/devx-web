@@ -20,9 +20,9 @@ import {
 import TextPressure from '@/components/animations/TextPressure'
 import ShapeBlur from '@/components/animations/ShapeBlur'
 import CardSwap, { Card } from '@/components/animations/CardSwap'
+import ScrollStack, { ScrollStackItem } from '@/components/animations/ScrollStack'
 import OrgChart from '@/components/sections/OrgChart'
 import DarkVeil from '@/components/animations/DarkVeil'
-import ScrollStack, { ScrollStackItem } from '@/components/animations/ScrollStack'
 import BlurText from '@/components/animations/BlurText'
 import { useIsMobile } from '@/hooks/use-mobile'
 
@@ -423,16 +423,9 @@ const VisionMissionCard = ({
   const isMobile = useIsMobile()
   const ref = useRef(null)
   const isInViewForFadeIn = useInView(ref, { once: true })
-  const isInViewForHover = useInView(ref, { once: false, margin: '-40% 0px -40% 0px' })
 
   void accentColor
   void isHovered
-
-  useEffect(() => {
-    if (isMobile) {
-      onHoverChange?.(isInViewForHover)
-    }
-  }, [isMobile, isInViewForHover, onHoverChange])
 
   return (
     <motion.div
@@ -451,10 +444,10 @@ const VisionMissionCard = ({
   )
 }
 
-// Enhanced stat counter with animation
+// Simplified stat counter with smooth animation
 const StatCounter = ({ number, label }: { number: string | number; label: string }) => {
   const containerRef = useRef<HTMLDivElement | null>(null)
-  const shouldReduceMotion = useReducedMotion()
+  const hasAnimated = useRef(false)
   const isInView = useInView(containerRef, {
     once: true,
     margin: '0px 0px -10% 0px',
@@ -476,15 +469,8 @@ const StatCounter = ({ number, label }: { number: string | number; label: string
     return number.replace(/[-+]?[\d.,\s]+/g, '')
   }, [number])
 
-  const countValue = useMotionValue(numericTarget)
-  const [displayValue, setDisplayValue] = useState(() =>
-    decimalPlaces > 0 ? numericTarget.toFixed(decimalPlaces) : Math.round(numericTarget).toString()
-  )
-
-  const animationRef = useRef<ReturnType<typeof animate> | null>(null)
-  const prevInView = useRef(false)
-  const hoverSequenceRef = useRef(0)
-  const hasAnimatedRef = useRef(false)
+  const countValue = useMotionValue(0)
+  const [displayValue, setDisplayValue] = useState('0')
 
   const formatValue = useCallback(
     (value: number) => {
@@ -496,108 +482,34 @@ const StatCounter = ({ number, label }: { number: string | number; label: string
     [decimalPlaces]
   )
 
-  const stopActiveAnimation = useCallback(() => {
-    if (animationRef.current) {
-      animationRef.current.stop()
-      animationRef.current = null
-    }
-  }, [])
+  // Single animation on mount/view
+  useEffect(() => {
+    if (!isInView || hasAnimated.current) return
+    hasAnimated.current = true
 
-  const animateTo = useCallback(
-    async (value: number, options: { duration?: number; ease?: any } = {}) => {
-      if (shouldReduceMotion) {
-        stopActiveAnimation()
-        countValue.set(value)
-        setDisplayValue(formatValue(value))
-        return
-      }
+    const controls = animate(countValue, numericTarget, {
+      duration: 1.4,
+      ease: [0.16, 1, 0.3, 1],
+    })
 
-      stopActiveAnimation()
-      const controls = animate(countValue, value, {
-        duration: 0.8,
-        ease: [0.16, 1, 0.3, 1],
-        ...options,
-      })
-      animationRef.current = controls
-      await controls.finished
-    },
-    [countValue, formatValue, shouldReduceMotion, stopActiveAnimation]
-  )
-
-  const runCountUp = useCallback(async () => {
-    if (hasAnimatedRef.current) return
-
-    if (shouldReduceMotion) {
-      countValue.set(numericTarget)
-      setDisplayValue(formatValue(numericTarget))
-      return
-    }
-
-    stopActiveAnimation()
-    countValue.set(0)
-    setDisplayValue(formatValue(0))
-    await animateTo(numericTarget, { duration: 1.4 })
-    hasAnimatedRef.current = true
-  }, [animateTo, countValue, formatValue, numericTarget, shouldReduceMotion, stopActiveAnimation])
+    return () => controls.stop()
+  }, [isInView, numericTarget, countValue])
 
   useEffect(() => {
     const unsubscribe = countValue.on('change', (latest) => {
       setDisplayValue(formatValue(latest))
     })
-    return () => unsubscribe()
+    return unsubscribe
   }, [countValue, formatValue])
-
-  useEffect(() => {
-    countValue.set(numericTarget)
-    setDisplayValue(formatValue(numericTarget))
-    hasAnimatedRef.current = false
-  }, [countValue, formatValue, numericTarget])
-
-  useEffect(() => {
-    if (isInView && !prevInView.current) {
-      runCountUp()
-    }
-    prevInView.current = isInView
-  }, [isInView, runCountUp])
-
-  useEffect(
-    () => () => {
-      stopActiveAnimation()
-    },
-    [stopActiveAnimation]
-  )
-
-  const handleMouseEnter = useCallback(() => {
-    if (shouldReduceMotion) return
-    const currentSequence = hoverSequenceRef.current + 1
-    hoverSequenceRef.current = currentSequence
-    ;(async () => {
-      await animateTo(0, { duration: 0.45, ease: 'easeInOut' })
-      if (hoverSequenceRef.current !== currentSequence) return
-      await animateTo(numericTarget, { duration: 0.75 })
-    })().catch(() => {
-      // No-op; animation was likely interrupted
-    })
-  }, [animateTo, numericTarget, shouldReduceMotion])
-
-  const handleMouseLeave = useCallback(() => {
-    hoverSequenceRef.current += 1
-    if (shouldReduceMotion) return
-    void animateTo(numericTarget, { duration: 0.6 })
-  }, [animateTo, numericTarget, shouldReduceMotion])
 
   const formattedDisplay = `${displayValue}${suffix}`
 
   return (
     <motion.div
       ref={containerRef}
-      className="relative group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4CD787]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#000B14]/80 rounded-3xl h-[200px] sm:h-[210px] md:h-[220px] lg:h-[230px]"
-      whileHover={shouldReduceMotion ? {} : { scale: 1.02 }}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onFocus={handleMouseEnter}
-      onBlur={handleMouseLeave}
-      tabIndex={0}
+      className="relative group rounded-3xl h-[200px] sm:h-[210px] md:h-[220px] lg:h-[230px]"
+      whileHover={{ scale: 1.02 }}
+      transition={{ duration: 0.3, ease: 'easeOut' }}
     >
       {/* Background shimmer */}
       <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/[0.04] via-white/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -610,7 +522,8 @@ const StatCounter = ({ number, label }: { number: string | number; label: string
         {/* Counter number */}
         <motion.div
           className="text-4xl md:text-5xl font-bold text-white font-mono group-hover:text-[#4CD787] transition-colors duration-300 relative"
-          whileHover={shouldReduceMotion ? {} : { y: -3 }}
+          whileHover={{ y: -3 }}
+          transition={{ duration: 0.2 }}
         >
           {/* Glowing text effect */}
           <span className="relative">
@@ -639,6 +552,7 @@ export default function AboutPage() {
   const isMobile = useIsMobile()
   const [isSafari, setIsSafari] = useState(false)
   const [hasMounted, setHasMounted] = useState(false)
+
   useEffect(() => {
     setHasMounted(true)
     if (typeof navigator === 'undefined') return
@@ -667,9 +581,9 @@ export default function AboutPage() {
           />
         </div>
 
-        <div className="container mx-auto px-[21px] relative z-10">
+        <div className="container mx-auto px-[21px] relative z-10 mt-10">
           <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 ">
               {/* Title and content - Left side */}
               <AnimatedSection className="lg:order-1">
                 <h1 className="-mb-6">
@@ -678,7 +592,7 @@ export default function AboutPage() {
                       position: 'relative',
                       height: '100px',
                       width: '400px',
-                      padding: '0 0px 0 -3px',
+                      padding: '0 0px',
                     }}
                   >
                     <TextPressure
@@ -772,7 +686,7 @@ export default function AboutPage() {
                 text="Our Impact"
                 className="justify-center heading-section text-white mb-4 md:mb-6"
                 delay={150}
-                once={false}
+                once={true}
               />
               <p className="subtitle-lg max-w-2xl mx-auto mt-2 md:mt-4 px-4">
                 Numbers that reflect our commitment to excellence and the trust our clients place in
@@ -801,7 +715,7 @@ export default function AboutPage() {
               text="How We Work"
               className="justify-center heading-section text-white mb-4 md:mb-6"
               delay={150}
-              once={false}
+              once={true}
             />
             <p className="subtitle-lg max-w-3xl mx-auto mt-3 md:mt-4 px-4">
               A simple, reliable process that keeps you in control
@@ -873,9 +787,9 @@ export default function AboutPage() {
                 height={290}
                 cardDistance={66}
                 verticalDistance={60}
-                delay={3000}
+                delay={6000}
                 pauseOnHover={false}
-                easing="elastic"
+                easing="linear"
                 onCardClick={handleProcessCardClick}
               >
                 <Card className="bg-gradient-to-br from-black/80 to-black/60 border-[#4CD787]/30 backdrop-blur-sm p-6">
@@ -938,7 +852,7 @@ export default function AboutPage() {
               text="Our Values"
               className="justify-center heading-section text-white mb-4 md:mb-6"
               delay={150}
-              once={false}
+              once={true}
             />
             <p className="subtitle-lg mt-2 md:mt-4 px-4">
               Our core values guide everything we do and define how we work with our clients and
@@ -995,7 +909,7 @@ export default function AboutPage() {
               text="Delivery Ownership"
               className="justify-center heading-section text-white mb-6"
               delay={150}
-              once={false}
+              once={true}
             />
             <p className="subtitle-lg px-4">
               Your project success is our responsibility. <br /> We stand behind our commitments.
@@ -1010,17 +924,17 @@ export default function AboutPage() {
             </div>
           ) : (
             <ScrollStack
-              className="mt-6 max-w-4xl mx-auto"
-              itemDistance={120}
-              itemScale={0.02}
-              itemStackDistance={30}
-              stackPosition="42%"
-              scaleEndPosition="32%"
-              baseScale={0.96}
+              className="mt-1"
+              itemDistance={180}
+              itemScale={0.025}
+              itemStackDistance={35}
+              stackPosition="35%"
+              scaleEndPosition="25%"
+              baseScale={0.88}
               rotationAmount={0}
               blurAmount={0}
               useWindowScroll
-              smoothing={0.25}
+              smoothing={0.2}
             >
               {deliveryHighlights.map((item, index) => (
                 <ScrollStackItem
@@ -1043,7 +957,7 @@ export default function AboutPage() {
               text="Our Purpose"
               className="justify-center heading-section text-white mb-4 md:mb-6"
               delay={150}
-              once={false}
+              once={true}
             />
             <p className="subtitle-lg px-4">
               Driven by vision, guided by mission, committed to excellence.
@@ -1065,7 +979,7 @@ export default function AboutPage() {
               text="Our Team Structure"
               className="justify-center heading-section text-white mb-4 md:mb-6"
               delay={150}
-              once={false}
+              once={true}
             />
             <p className="subtitle-lg mt-2 md:mt-4 px-4">
               Meet our leadership team and discover how our 23-member organization delivers
@@ -1101,7 +1015,7 @@ export default function AboutPage() {
               text="Ready to Start Your Project?"
               className="justify-center heading-section text-white mb-4 md:mb-6"
               delay={150}
-              once={false}
+              once={true}
             />
             <p className="subtitle-lg mb-6 md:mb-8 max-w-2xl mx-auto mt-4 px-4">
               Let&apos;s discuss how we can help you achieve your goals with our expert software

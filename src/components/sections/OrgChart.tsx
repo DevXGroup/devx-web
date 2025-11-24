@@ -90,10 +90,8 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
                 </div>
               </div>
               <div>
-                <h3 className="font-bold text-white text-base mb-1 leading-tight">
-                  Max Sheikhizadeh
-                </h3>
-                <p className="text-[#4CD787] text-xs font-medium mb-2">CTO & Founder</p>
+                <h3 className="heading-component text-white mb-1">Max Sheikhizadeh</h3>
+                <p className="subtitle-xs text-[#4CD787] mb-2">CTO & Founder</p>
                 <button className="bg-[#4CD787]/20 hover:bg-[#4CD787]/30 text-[#4CD787] px-3 py-1.5 rounded-md text-xs font-medium transition-colors border border-[#4CD787]/30">
                   <User className="w-3 h-3 inline mr-1" />
                   Bio
@@ -121,10 +119,8 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
                 </div>
               </div>
               <div>
-                <h3 className="font-bold text-white text-base mb-1 leading-tight">
-                  Milaad Sheikhizadeh
-                </h3>
-                <p className="text-[#FFD700] text-xs font-medium mb-2">General Manager</p>
+                <h3 className="heading-component text-white mb-1">Milaad Sheikhizadeh</h3>
+                <p className="subtitle-xs text-[#FFD700] mb-2">General Manager</p>
                 <button className="bg-[#FFD700]/20 hover:bg-[#FFD700]/30 text-[#FFD700] px-3 py-1.5 rounded-md text-xs font-medium transition-colors border border-[#FFD700]/30">
                   <User className="w-3 h-3 inline mr-1" />
                   Bio
@@ -230,8 +226,8 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
               <div className="w-12 h-12 mx-auto mb-3 bg-gradient-to-br from-[#4CD787]/20 to-[#4CD787]/40 rounded-lg flex items-center justify-center border border-[#4CD787]/30">
                 <Users className="w-4 h-4 text-[#4CD787]" />
               </div>
-              <h4 className="text-white text-sm font-semibold mb-1">Overseas</h4>
-              <h4 className="text-white text-sm font-semibold">Logistic Manager</h4>
+              <h4 className="heading-component text-white mb-1">Overseas</h4>
+              <h4 className="heading-component text-white">Logistic Manager</h4>
             </motion.div>
 
             {/* Technical Lead */}
@@ -245,7 +241,7 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
               <div className="w-12 h-12 mx-auto mb-3 bg-gradient-to-br from-[#4834D4]/20 to-[#4834D4]/40 rounded-lg flex items-center justify-center border border-[#4834D4]/30">
                 <Cpu className="w-4 h-4 text-[#4834D4]" />
               </div>
-              <h4 className="text-white text-sm font-semibold">Technical Lead</h4>
+              <h4 className="heading-component text-white">Technical Lead</h4>
             </motion.div>
 
             {/* Project Managers (Consolidated) */}
@@ -259,8 +255,8 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
               <div className="w-12 h-12 mx-auto mb-3 bg-gradient-to-br from-[#FFD700]/20 to-[#FFD700]/40 rounded-lg flex items-center justify-center border border-[#FFD700]/30">
                 <Calendar className="w-4 h-4 text-[#FFD700]" />
               </div>
-              <h4 className="text-white text-sm font-semibold mb-1">Project</h4>
-              <h4 className="text-white text-sm font-semibold">Managers</h4>
+              <h4 className="heading-component text-white mb-1">Project</h4>
+              <h4 className="heading-component text-white">Managers</h4>
             </motion.div>
 
             {/* Designer */}
@@ -274,7 +270,7 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
               <div className="w-12 h-12 mx-auto mb-3 bg-gradient-to-br from-[#9d4edd]/20 to-[#9d4edd]/40 rounded-lg flex items-center justify-center border border-[#9d4edd]/30">
                 <Cpu className="w-4 h-4 text-[#9d4edd]" />
               </div>
-              <h4 className="text-white text-sm font-semibold">Designer</h4>
+              <h4 className="heading-component text-white">Designer</h4>
             </motion.div>
           </motion.div>
 
@@ -320,8 +316,8 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
 
           {/* Developers Team Level */}
           <div className="text-center bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 max-w-3xl mx-auto relative mt-6 md:-mt-2">
-            <h4 className="text-white text-2xl font-bold mb-2">15+ Senior Developers</h4>
-            <p className="text-white/80 text-sm">
+            <h4 className="heading-section mb-2">15+ Senior Developers</h4>
+            <p className="subtitle">
               Specialized in Full-Stack, AI/ML, IoT, and Mobile Development
             </p>
           </div>
@@ -331,24 +327,24 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
             <div className="flex flex-wrap justify-center items-center gap-6 text-sm">
               <div className="text-center">
                 <div className="text-2xl font-bold text-[#4CD787] mb-1">23</div>
-                <div className="text-white/80 font-medium text-xs">
+                <div className="subtitle-xs">
                   <span className="block sm:inline">Total Team</span>
                 </div>
               </div>
               <div className="w-px h-8 bg-white/20"></div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-[#FFD700] mb-1">2</div>
-                <div className="text-white/80 font-medium text-xs">Leadership</div>
+                <div className="subtitle-xs">Leadership</div>
               </div>
               <div className="w-px h-8 bg-white/20"></div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-[#4834D4] mb-1">4</div>
-                <div className="text-white/80 font-medium text-xs">Management</div>
+                <div className="subtitle-xs">Management</div>
               </div>
               <div className="w-px h-8 bg-white/20"></div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-[#9d4edd] mb-1">17</div>
-                <div className="text-white/80 font-medium text-xs">Developers</div>
+                <div className="subtitle-xs">Developers</div>
               </div>
             </div>
           </div>
@@ -401,15 +397,15 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
                 </div>
 
                 <div className="flex-1">
-                  <h3 className="text-2xl font-bold text-white mb-2">{selectedMember.name}</h3>
+                  <h3 className="heading-section text-white mb-2">{selectedMember.name}</h3>
                   <p
-                    className={`text-lg font-medium mb-4 ${
+                    className={`subtitle-lg mb-4 ${
                       selectedMember.id === 'max' ? 'text-[#4CD787]' : 'text-[#FFD700]'
                     }`}
                   >
                     {selectedMember.title}
                   </p>
-                  <p className="text-white/80 leading-relaxed mb-6">{selectedMember.bio}</p>
+                  <p className="subtitle mb-6">{selectedMember.bio}</p>
 
                   {selectedMember.linkedIn && (
                     <a

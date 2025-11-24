@@ -151,11 +151,21 @@ export default function Hero() {
     }
   }, [])
 
+  const canUseHeavyVisuals = !shouldReduceMotion && !isMobile
+
   useEffect(() => {
     controls.start('visible')
+    if (!canUseHeavyVisuals) {
+      setEnableCosmicStars(false)
+      setEnableShootingStars(false)
+      setEnablePlanetDivider(false)
+      return
+    }
+
     const backgroundTimer = scheduleIdleTask(() => {
+      // Delay expensive canvases until main thread is idle to help LCP/INP
       setEnableCosmicStars(true)
-    }, 500)
+    }, 800)
 
     const shootingStarsTimer = scheduleIdleTask(() => {
       setEnableShootingStars(true)
@@ -170,7 +180,7 @@ export default function Hero() {
       cancelIdleTask(shootingStarsTimer)
       cancelIdleTask(planetDividerTimer)
     }
-  }, [cancelIdleTask, controls, scheduleIdleTask])
+  }, [cancelIdleTask, canUseHeavyVisuals, controls, scheduleIdleTask])
 
   return (
     <section
@@ -180,7 +190,7 @@ export default function Hero() {
       <div className="absolute inset-0 w-full h-full z-[1]">
         <div className="absolute inset-0 bg-gradient-to-b from-zinc-950 via-black to-black pointer-events-none" />
         <ClientOnly>
-          {enableCosmicStars && (
+          {enableCosmicStars && canUseHeavyVisuals && (
             <>
               <DynamicStarTwinklingField className="z-1" count={100} />
               <DynamicHeroBackground />
@@ -203,7 +213,9 @@ export default function Hero() {
       </div>
 
       {/* Shooting Stars - Only rendered on client */}
-      <ClientOnly>{enableShootingStars && <DynamicShootingStars />}</ClientOnly>
+      <ClientOnly>
+        {enableShootingStars && canUseHeavyVisuals && <DynamicShootingStars />}
+      </ClientOnly>
 
       {/* Content */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-[80] w-full pt-12 sm:pt-16 lg:pt-20 pb-28 sm:pb-36 lg:pb-44">

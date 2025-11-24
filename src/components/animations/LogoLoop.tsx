@@ -205,9 +205,9 @@ export default function LogoLoop({ logos, speed = 15 }: LogoLoopProps) {
                   {/* Label - Shows on hover */}
                   <div
                     className={`
-                      absolute -bottom-12 left-1/2 -translate-x-1/2 whitespace-nowrap z-[999]
+                      subtitle-sm absolute -bottom-12 left-1/2 -translate-x-1/2 whitespace-nowrap z-[999]
                       bg-black/95 backdrop-blur-md px-4 py-2 rounded-lg
-                      border border-[#4CD787]/50 text-white text-sm sm:text-base font-['IBM_Plex_Mono'] font-medium
+                      border border-[#4CD787]/50
                       shadow-lg shadow-[#4CD787]/20
                       transition-all duration-300 pointer-events-none opacity-0 translate-y-2 scale-95
                       group-hover/item:opacity-100 group-hover/item:translate-y-0 group-hover/item:scale-100

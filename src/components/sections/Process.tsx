@@ -6,6 +6,7 @@ import { useRef, useEffect, useState } from 'react'
 import { Code2, Rocket, Users, Zap, Pencil, Settings } from 'lucide-react'
 import SDLCProcess from './SDLCProcess'
 import { AnimatedGradientText } from '@animations/AnimatedGradientText'
+import BlurText from '@animations/BlurText'
 import GridAnimation from '@animations/GridAnimation'
 
 const processes = [
@@ -144,12 +145,12 @@ export default function Process() {
       {/* Speed lines background image */}
       <div className="absolute inset-0">
         <Image
-          src="/images/backgrounds/speed-lines.jpg"
+          src="/images/backgrounds/speed-lines.webp"
           alt=""
           fill
           className="object-cover"
           priority
-          quality={90}
+          quality={75}
         />
         {/* Dark overlay for text readability - increased opacity */}
         <div className="absolute inset-0 bg-black/85" />
@@ -169,8 +170,13 @@ export default function Process() {
         <div className="relative flex items-center justify-center text-center mb-12 sm:mb-16 py-8 sm:py-12">
           <div className="relative z-10">
             <div className="flex flex-col items-center">
-              <h2 className="heading-section text-white mb-4 sm:mb-6">How It Works</h2>
-              <p className="subtitle-lg text-foreground/80 max-w-3xl mx-auto px-4">
+              <BlurText
+                text="How It Works"
+                className="justify-center heading-section text-white mb-4 sm:mb-6"
+                delay={150}
+                once={false}
+              />
+              <p className="subtitle-lg max-w-3xl mx-auto px-4">
                 Simple steps to bring your software vision to life from idea to launch in record
                 time.
               </p>
@@ -244,7 +250,7 @@ export default function Process() {
                   </div>
                   <h3 className="heading-component text-white">{process.title}</h3>
                 </div>
-                <p className="subtitle-sm text-slate-100">{process.description}</p>
+                <p className="subtitle-sm">{process.description}</p>
               </div>
             </motion.div>
           ))}

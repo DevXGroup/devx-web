@@ -322,10 +322,10 @@ export default function SDLCProcess() {
                 index={index}
               />
               <p
-                className={`text-[10px] sm:text-xs md:text-sm font-['IBM_Plex_Mono'] text-center mt-2 sm:mt-3 md:mt-4 ${
+                className={`subtitle-xs text-center mt-2 sm:mt-3 md:mt-4 ${
                   completedSteps.has(index)
                     ? 'font-bold text-[#4CD787] drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]'
-                    : 'font-light text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]'
+                    : 'font-light drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]'
                 }`}
               >
                 {step.name}

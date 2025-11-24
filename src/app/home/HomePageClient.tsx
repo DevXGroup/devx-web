@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import dynamic from 'next/dynamic'
 
 // Enable SSR for Hero to improve FCP/LCP - hero content renders immediately
@@ -29,6 +29,7 @@ export default function HomePageClient() {
   const [isLoaded, setIsLoaded] = useState(false)
   const [navbarReady, setNavbarReady] = useState(false)
   const [shouldFadeIn, setShouldFadeIn] = useState(false)
+  const prefersReducedMotion = useReducedMotion()
 
   // Performance monitoring function
   const logPerformance = useCallback((section: string) => {
@@ -101,12 +102,16 @@ export default function HomePageClient() {
       style={{
         backgroundColor: '#000000',
       }}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: shouldFadeIn ? 1 : 0 }}
-      transition={{
-        duration: 0.6,
-        ease: [0.16, 1, 0.3, 1], // Smooth easeOutExpo
-      }}
+      initial={prefersReducedMotion ? false : { opacity: 0 }}
+      animate={prefersReducedMotion ? false : { opacity: shouldFadeIn ? 1 : 0 }}
+      transition={
+        prefersReducedMotion
+          ? { duration: 0 }
+          : {
+              duration: 0.6,
+              ease: [0.16, 1, 0.3, 1], // Smooth easeOutExpo
+            }
+      }
     >
       <Hero />
       <FeaturesSection />

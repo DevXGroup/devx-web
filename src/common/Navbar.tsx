@@ -428,7 +428,7 @@ export default function Navbar() {
                   style={{
                     width: '16px',
                     height: '2px',
-                    background: 'white',
+                    background: '#ffffff',
                   }}
                   animate={
                     isOpen
@@ -437,12 +437,12 @@ export default function Navbar() {
                   }
                   whileHover={{
                     background: [
-                      'white',
+                      '#ffffff',
                       '#4CD787', // theme-green
                       '#CFB53B', // theme-gold
                       '#9d4edd', // theme-purple
                       '#4834D4', // theme-blue
-                      'white',
+                      '#ffffff',
                     ],
                     transition: {
                       duration: 1.5,
@@ -459,7 +459,7 @@ export default function Navbar() {
                   style={{
                     width: '20px',
                     height: '2px',
-                    background: 'white',
+                    background: '#ffffff',
                   }}
                   animate={
                     isOpen
@@ -468,12 +468,12 @@ export default function Navbar() {
                   }
                   whileHover={{
                     background: [
-                      'white',
+                      '#ffffff',
                       '#CFB53B', // theme-gold
                       '#9d4edd', // theme-purple
                       '#4834D4', // theme-blue
                       '#4CD787', // theme-green
-                      'white',
+                      '#ffffff',
                     ],
                     transition: {
                       duration: 1.5,
@@ -491,7 +491,7 @@ export default function Navbar() {
                   style={{
                     width: '24px',
                     height: '2px',
-                    background: 'white',
+                    background: '#ffffff',
                   }}
                   animate={
                     isOpen
@@ -500,12 +500,12 @@ export default function Navbar() {
                   }
                   whileHover={{
                     background: [
-                      'white',
+                      '#ffffff',
                       '#9d4edd', // theme-purple
                       '#4834D4', // theme-blue
                       '#4CD787', // theme-green
                       '#CFB53B', // theme-gold
-                      'white',
+                      '#ffffff',
                     ],
                     transition: {
                       duration: 1.5,

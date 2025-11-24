@@ -53,7 +53,7 @@ export default function FooterClient({ version }: FooterClientProps) {
           <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-[#121214]/0 via-[#121214]/80 to-[#121214]" />
         </div>
 
-        <div className="container mx-auto relative z-10 max-w-full px-4 sm:px-6 lg:px-8 pt-8">
+        <div className="container mx-auto relative z-10 max-w-full px-4 sm:px-6 lg:px-8 pt-8 pb-12">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 lg:gap-12">
             {/* Company Info */}
             <div className="sm:col-span-2 lg:col-span-1 xl:col-span-1 flex flex-col">
@@ -358,8 +358,8 @@ export default function FooterClient({ version }: FooterClientProps) {
             </div>
           </div>
 
-          <div className="mt-6 lg:mt-10 border-t border-border py-6 flex flex-col sm:flex-row justify-center items-center gap-4 text-xs text-muted-foreground">
-            <p className="text-center">
+          <div className="mt-6 lg:mt-10 border-t border-border py-6 pb-8 flex flex-col sm:flex-row justify-center items-center gap-4 text-xs text-muted-foreground">
+            <p className="text-center flex items-center leading-none">
               © {new Date().getFullYear()} DevX Group LLC. All rights reserved.
             </p>
             <span className="hidden sm:block">•</span>

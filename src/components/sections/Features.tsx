@@ -6,6 +6,7 @@ import type { LucideIcon } from 'lucide-react'
 import { Rocket, User, Layers, Search, Flag, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import RotatingText from '@animations/RotatingText'
+import BlurText from '@animations/BlurText'
 import dynamic from 'next/dynamic'
 
 const InfinityLogo = dynamic(() => import('@3d/InfinityLogo'), {
@@ -80,7 +81,8 @@ function StepAnimation({
       className={`flex flex-col items-center space-y-2 sm:space-y-4`}
     >
       <motion.div
-        className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center text-base sm:text-lg font-bold font-['IBM_Plex_Mono'] relative border-2 sm:border-3 md:border-4"
+        className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center text-base sm:text-lg font-bold relative border-2 sm:border-3 md:border-4"
+        style={{ fontFamily: 'var(--font-ibm-plex-sans)' }}
         variants={stepCircleVariants}
         animate={isActive ? 'active' : 'inactive'}
         transition={{ duration: 0.25 }}
@@ -125,8 +127,8 @@ function HireDevelopersCard({ icon: Icon, title, description, index }: HireDevel
           <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-black" />
         </div>
         <div className="flex-1 space-y-3">
-          <h3 className="heading-component text-white">{title}</h3>
-          <p className="subtitle-sm text-slate-100">{description}</p>
+          <h3 className="card-title text-white">{title}</h3>
+          <p className="card-description-normal">{description}</p>
         </div>
       </div>
     </motion.div>
@@ -160,8 +162,8 @@ function WhyUsCard({
         <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center bg-gradient-to-br from-[#ccff00] to-yellow-300 border border-[#ccff00]/70 shadow-[0_0_18px_rgba(204,255,0,0.25)]">
           <Icon className="w-7 h-7 sm:w-8 sm:h-8 text-black" />
         </div>
-        <h3 className="heading-component text-white">{title}</h3>
-        <p className="subtitle-sm text-slate-100 max-w-[22rem]">{description}</p>
+        <h3 className="card-title text-white">{title}</h3>
+        <p className="card-description-normal max-w-[22rem]">{description}</p>
       </div>
     </motion.div>
   )
@@ -183,7 +185,7 @@ export default function Features() {
   )
   const shouldReduceMotion = useReducedMotion()
   const isInView = useInView(containerRef, { once: true, margin: '0px' })
-  const is3DNear = useInView(infinityTriggerRef, { once: true, margin: '800px' })
+  const is3DNear = useInView(infinityTriggerRef, { once: true, margin: '200px' })
   const { isMobile, shouldOptimizeAnimations } = usePerformanceOptimizedAnimation()
 
   useEffect(() => {
@@ -267,7 +269,7 @@ export default function Features() {
       <div className="absolute top-0 left-0 right-0 h-2 md:h-40 bg-gradient-to-b from-black to-transparent z-[1] pointer-events-none" />
 
       {/* Full-screen Grid Background for entire section */}
-      <div className="absolute inset-0 w-full h-full opacity-50 md:opacity-40 z-[0] pointer-events-auto">
+      <div className="absolute inset-0 w-full h-full opacity-50 md:opacity-40 z-[0] pointer-events-none">
         <GridAnimation
           direction="diagonal"
           speed={0.3}
@@ -295,11 +297,12 @@ export default function Features() {
           {/* Hero Section */}
           <div className="text-center mb-8 sm:mb-12 md:mb-16 relative z-[3]">
             {/* Fixed title visibility with inline styles */}
-            <h2 className="heading-section text-white mb-4 sm:mb-6 pb-2 sm:pb-3 px-4">
-              Hire Elite Developers
-              <br />
-              Effortlessly.
-            </h2>
+            <BlurText
+              text="Hire Elite Developers Effortlessly."
+              className="justify-center heading-section text-white mb-4 sm:mb-6 pb-2 sm:pb-3 px-4"
+              delay={150}
+              once={true}
+            />
           </div>
 
           {/* Redesigned Cards Section */}
@@ -357,14 +360,19 @@ export default function Features() {
         {/* Why Us Section */}
         <div id="why-devx-section" className="text-center mb-12 sm:mb-16 md:mb-20">
           {/* Fixed title visibility with inline styles */}
-          <h2 className="heading-section text-white mb-4 sm:mb-6 pb-2 sm:pb-3 px-4">
-            Why Choose Us?
-          </h2>
+          <BlurText
+            text="Why Choose Us?"
+            className="justify-center heading-section text-white mb-4 sm:mb-6 pb-2 sm:pb-3 px-4"
+            delay={150}
+            once={true}
+          />
           <div className="max-w-3xl mx-auto mb-12 sm:mb-16 px-4">
-            <p className="subtitle-lg text-slate-100 mb-4">
-              Trusted U.S. company with worldwide senior developers, proven track record, and
-              full-stack expertise across industries.
-            </p>
+            <BlurText
+              text="Trusted U.S. company with worldwide senior developers, proven track record, and full-stack expertise across industries."
+              className="justify-center subtitle-lg mb-4"
+              delay={100}
+              once={true}
+            />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-8 lg:gap-10 max-w-6xl mx-auto px-4 sm:px-6">
@@ -396,21 +404,10 @@ export default function Features() {
               transition={{ duration: shouldOptimizeAnimations ? 0.1 : 0.2 }} // Faster transition on low performance
               className="relative inline-block pointer-events-auto"
             >
-              {/* Animated glow border effect - skip if optimizing */}
-              {!shouldOptimizeAnimations && (
-                <div className="absolute inset-0 rounded-xl overflow-hidden -z-10 pointer-events-none">
-                  <div
-                    className="absolute w-[200%] h-[200%] -top-[50%] -left-[50%] animate-spin opacity-70"
-                    style={{
-                      background: `conic-gradient(from 0deg, transparent, #4CD787, transparent, #9d4edd, transparent)`,
-                      animationDuration: '3s',
-                      transform: 'translateZ(0)',
-                      willChange: 'transform',
-                      backfaceVisibility: 'hidden',
-                    }}
-                  />
-                </div>
-              )}
+              {/* Static glow border effect - better performance */}
+              <div className="absolute inset-0 rounded-xl -z-10 pointer-events-none blur-sm opacity-60">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#4CD787] via-[#9d4edd] to-[#4CD787] rounded-xl" />
+              </div>
               <Link
                 href="/about#our-values"
                 className="group relative inline-flex items-center gap-1.5 xs:gap-2 sm:gap-3 bg-gradient-to-r from-[#4CD787] via-[#9d4edd] to-[#4CD787] bg-[length:200%_100%] bg-[position:0%_0] hover:bg-[position:100%_0] text-black px-3 xs:px-4 sm:px-6 md:px-8 py-2 xs:py-2.5 sm:py-3 md:py-4 rounded-lg text-xs xs:text-sm sm:text-base md:text-lg font-bold font-sans backdrop-blur-sm border-2 border-[#4CD787]/40 hover:border-[#9d4edd]/60 hover:shadow-2xl hover:shadow-[#4CD787]/50 z-10"
@@ -448,9 +445,12 @@ export default function Features() {
 
         {/* Final CTA */}
         <div className="text-center mb-12 sm:mb-16 px-4">
-          <p className="heading-subsection text-[#ccff00] mb-3 sm:mb-4">
-            We&apos;re ready to transform your vision into reality.
-          </p>
+          <BlurText
+            text="We're ready to transform your vision into reality."
+            className="justify-center heading-subsection text-[#ccff00] mb-3 sm:mb-4"
+            delay={150}
+            once={true}
+          />
           <p className="subtitle-lg text-slate-100">Let&apos;s embark on this journey together!</p>
         </div>
       </motion.div>
