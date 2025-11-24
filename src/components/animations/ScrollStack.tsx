@@ -61,8 +61,6 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   const lastTransformsRef = useRef(new Map<number, any>())
   const isUpdatingRef = useRef(false)
   const [isInView, setIsInView] = useState(true)
-  const lastScrollTimeRef = useRef(0)
-  const scrollThrottleDelay = 16 // ~60fps
 
   // Cache calculation functions with useMemo to prevent recreation on every scroll
   const calculateProgress = useMemo(
@@ -141,14 +139,6 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   const updateCardTransforms = useCallback(() => {
     if (!cardsRef.current.length || isUpdatingRef.current || !isInView) return
 
-    // Additional throttling beyond RAF
-    const now = performance.now()
-    if (now - lastScrollTimeRef.current < scrollThrottleDelay) {
-      isUpdatingRef.current = false
-      return
-    }
-    lastScrollTimeRef.current = now
-
     isUpdatingRef.current = true
 
     const { scrollTop, containerHeight } = getScrollData()
@@ -226,14 +216,21 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
 
       const hasChanged =
         !lastTransform ||
-        Math.abs(lastTransform.translateY - targetTransform.translateY) > 0.1 ||
-        Math.abs(lastTransform.scale - targetTransform.scale) > 0.001 ||
-        Math.abs(lastTransform.rotation - targetTransform.rotation) > 0.1 ||
-        Math.abs(lastTransform.blur - targetTransform.blur) > 0.1
+        Math.abs(lastTransform.translateY - targetTransform.translateY) > 0.5 ||
+        Math.abs(lastTransform.scale - targetTransform.scale) > 0.003 ||
+        Math.abs(lastTransform.rotation - targetTransform.rotation) > 0.5 ||
+        Math.abs(lastTransform.blur - targetTransform.blur) > 0.5
 
       if (hasChanged) {
         const transform = `translate3d(0, ${appliedTransform.translateY}px, 0) scale(${appliedTransform.scale}) rotate(${appliedTransform.rotation}deg)`
         const filter = appliedTransform.blur > 0 ? `blur(${appliedTransform.blur}px)` : ''
+
+        // Use will-change sparingly and only when needed
+        if (isPinned) {
+          card.style.willChange = 'transform, filter'
+        } else {
+          card.style.willChange = 'auto'
+        }
 
         card.style.transform = transform
         card.style.filter = filter
@@ -268,7 +265,6 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
     getScrollData,
     getElementOffset,
     isInView,
-    scrollThrottleDelay,
     smoothing,
   ])
 
@@ -297,13 +293,17 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       if (i < cards.length - 1) {
         card.style.marginBottom = `${itemDistance}px`
       }
-      card.style.willChange = 'transform, filter'
+      card.style.willChange = 'auto'
       card.style.transformOrigin = 'top center'
       card.style.backfaceVisibility = 'hidden'
       card.style.transform = 'translateZ(0)'
       card.style.webkitTransform = 'translateZ(0)'
       card.style.perspective = '1000px'
       card.style.webkitPerspective = '1000px'
+      // @ts-ignore - vendor-specific properties not in CSSStyleDeclaration
+      card.style.WebkitFontSmoothing = 'antialiased'
+      // @ts-ignore - vendor-specific properties not in CSSStyleDeclaration
+      card.style.MozOsxFontSmoothing = 'grayscale'
     })
 
     const scrollTarget = useWindowScroll ? window : scrollerRef.current

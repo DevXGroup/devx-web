@@ -135,8 +135,8 @@ const originalCaseStudies = [
 const caseStudies = [...originalCaseStudies, ...originalCaseStudies]
 
 export default function HorizontalScroll() {
-  const containerRef = useRef(null)
-  const scrollContentRef = useRef(null)
+  const containerRef = useRef<HTMLDivElement | null>(null)
+  const scrollContentRef = useRef<HTMLDivElement | null>(null)
   const x = useMotionValue(0)
   const [singleSetWidth, setSingleSetWidth] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
@@ -216,17 +216,30 @@ export default function HorizontalScroll() {
     startAutoScroll()
   }
 
-  const handleWheel = useCallback((e: React.WheelEvent<HTMLDivElement>) => {
-    const absX = Math.abs(e.deltaX)
-    const absY = Math.abs(e.deltaY)
+  // Use native event listener to avoid passive event listener warning
+  useEffect(() => {
+    const container = containerRef.current
+    if (!container) return
 
-    // Let vertical scroll bubble to page
-    if (absY >= absX) return
+    const handleWheel = (e: WheelEvent) => {
+      if (!container) return
+      const absX = Math.abs(e.deltaX)
+      const absY = Math.abs(e.deltaY)
 
-    e.preventDefault()
-    const dx = absX > 0 ? e.deltaX : e.shiftKey ? e.deltaY : 0
-    if (containerRef.current) {
-      ;(containerRef.current as HTMLDivElement).scrollBy({ left: dx, behavior: 'auto' })
+      // Let vertical scroll bubble to page
+      if (absY >= absX) return
+
+      e.preventDefault()
+      const dx = absX > 0 ? e.deltaX : e.shiftKey ? e.deltaY : 0
+      container.scrollBy({ left: dx, behavior: 'auto' })
+    }
+
+    container.addEventListener('wheel', handleWheel, { passive: false })
+
+    return () => {
+      if (container) {
+        container.removeEventListener('wheel', handleWheel)
+      }
     }
   }, [])
 
@@ -235,7 +248,6 @@ export default function HorizontalScroll() {
       <div className="w-full">
         <div
           ref={containerRef}
-          onWheel={handleWheel}
           className="relative w-full overflow-x-hidden overscroll-x-contain scroll-smooth"
           style={{ touchAction: 'pan-y', position: 'relative' }}
           role="region"
