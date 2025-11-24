@@ -17,7 +17,7 @@ const testimonials = [
   },
   {
     quote:
-      'Our partnership with Dev Group has driven our company to be a leader in online channels. We recommend them for any business looking to have an active online presence creatively.',
+      'Our partnership with DevX Group has driven our company to be a leader in online channels. We recommend them for any business looking to have an active online presence creatively.',
     author: 'Lazurd Inc CEO',
     position: 'CEO, Lazurd Inc',
     logo: '/images/testimonials/abstract-tech-logo.png',
@@ -119,17 +119,20 @@ export default function ParallaxTestimonials() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: false, amount: 0.2 }}
           transition={{ duration: 0.8 }}
-          className="text-center max-w-3xl mx-auto mb-16 mt-28"
+          className="text-center max-w-4xl mx-auto mb-16 mt-28"
         >
-          <BlurText
-            text="What Our Clients Say"
-            className="justify-center heading-section text-purple-400 mb-6"
-            delay={150}
-            once={false}
-          />
-          <p className="subtitle-lg">
-            Don&apos;t just take our word for it. Here&apos;s what our clients have to say about
-            working with us.
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-center lg:gap-3 mb-6">
+            <BlurText
+              text="What Our Clients Say"
+              className="justify-center section-title-compact text-purple-400 lg:mb-0"
+              delay={150}
+              once={false}
+            />
+            <span className="hidden lg:inline text-purple-400/50 section-title-compact">—</span>
+            <p className="subtitle mt-2 lg:mt-0">Don&apos;t just take our word for it.</p>
+          </div>
+          <p className="subtitle-sm">
+            Here&apos;s what our clients have to say about working with us.
           </p>
         </motion.div>
 
@@ -241,7 +244,7 @@ function TestimonialCard({
 
       {/* Quote */}
       <div className="flex-grow relative z-10 mb-8 pt-12">
-        <p className="text-white/90 italic text-base leading-relaxed break-words hyphens-auto overflow-wrap-break-word">
+        <p className="testimonial-quote break-words hyphens-auto overflow-wrap-break-word">
           &ldquo;
           {isExpanded || !isTruncated
             ? testimonial.quote
@@ -249,7 +252,7 @@ function TestimonialCard({
           &rdquo;
         </p>
         {isTruncated && (
-          <button onClick={onExpand} className="text-purple-300 hover:underline mt-4 font-semibold">
+          <button onClick={onExpand} className="link-primary mt-4">
             {isExpanded ? 'Show less' : 'Read more'}
           </button>
         )}
@@ -283,8 +286,8 @@ function TestimonialCard({
           />
         </div>
         <div className="flex-1 min-w-0">
-          <h4 className="font-semibold text-white break-words">{testimonial.author}</h4>
-          <p className="text-sm text-white/60 break-words">{testimonial.position}</p>
+          <h4 className="testimonial-author break-words">{testimonial.author}</h4>
+          <p className="testimonial-role break-words">{testimonial.position}</p>
         </div>
       </div>
 

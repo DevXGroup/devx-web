@@ -147,6 +147,561 @@
   color: #4834d4;
 }
 
+/* ============================================
+   CARD TYPOGRAPHY SYSTEM
+   Consistent card styling across entire site
+   ============================================ */
+
+/* Card Title - Same as heading-component but can diverge */
+.card-title {
+  @apply text-xl md:text-2xl font-bold;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+  line-height: 1.4;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Card Description - Italic, elegant style for main card text */
+.card-description {
+  @apply text-base md:text-lg lg:text-xl;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.7;
+  letter-spacing: 0.015em;
+  @apply text-white/90;
+}
+
+/* Card Description (Non-italic variant) */
+.card-description-normal {
+  @apply text-base md:text-lg;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  @apply text-white/85;
+}
+
+/* Card Body Text - For additional content in cards */
+.card-body {
+  @apply text-sm md:text-base;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  line-height: 1.6;
+  @apply text-white/80;
+}
+
+/* Card Feature List Item */
+.card-feature {
+  @apply text-sm md:text-base;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  line-height: 1.5;
+  @apply text-white/70;
+}
+
+/* Card Outcome/Result Text - Highlighted results in cards */
+.card-outcome {
+  @apply text-sm;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+  @apply text-white/90;
+}
+
+/* ============================================
+   SECTION TITLE VARIANTS
+   For different page contexts and emphasis
+   ============================================ */
+
+/* Section Title - Hero Style (Large, dramatic) */
+.section-title-hero {
+  @apply text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+  text-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.9),
+    0 2px 6px rgba(0, 0, 0, 0.7);
+}
+
+/* Section Title - Standard (Most common) */
+.section-title {
+  @apply text-3xl md:text-4xl lg:text-5xl font-bold;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.015em;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Section Title - Compact (Smaller sections) */
+.section-title-compact {
+  @apply text-2xl md:text-3xl lg:text-4xl font-bold;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* Section Subtitle - Pairs with section titles */
+.section-subtitle {
+  @apply text-lg md:text-xl lg:text-2xl;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  line-height: 1.7;
+  letter-spacing: 0.015em;
+  @apply text-white/90;
+}
+
+/* Section Subtitle - Compact */
+.section-subtitle-compact {
+  @apply text-base md:text-lg lg:text-xl;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  line-height: 1.6;
+  @apply text-white/85;
+}
+
+/* ============================================
+   BUTTON TYPOGRAPHY
+   Consistent button text styling
+   ============================================ */
+
+/* Primary Button Text - Large CTAs */
+.btn-text-primary {
+  @apply text-base md:text-lg lg:text-xl;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+}
+
+/* Secondary Button Text - Standard buttons */
+.btn-text-secondary {
+  @apply text-sm md:text-base lg:text-lg;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+/* Small Button Text - Compact actions */
+.btn-text-small {
+  @apply text-xs md:text-sm;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+/* ============================================
+   UI ELEMENT TYPOGRAPHY
+   Labels, badges, captions, etc.
+   ============================================ */
+
+/* Label - Form labels, UI labels */
+.ui-label {
+  @apply text-sm md:text-base;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 500;
+  line-height: 1.4;
+  @apply text-white/90;
+}
+
+/* Badge Text - Status badges, tags */
+.ui-badge {
+  @apply text-xs md:text-sm;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Caption - Image captions, footnotes */
+.ui-caption {
+  @apply text-xs md:text-sm;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  line-height: 1.4;
+  @apply text-white/70;
+}
+
+/* Code/Mono Text - Technical content */
+.ui-code {
+  @apply text-xs md:text-sm;
+  font-family: var(--font-ibm-plex-mono), ui-monospace, monospace;
+  font-weight: 400;
+  line-height: 1.5;
+  @apply text-white/80;
+}
+
+/* ============================================
+   BLUR TEXT COMPATIBLE CLASSES
+   These work seamlessly with BlurText component
+   ============================================ */
+
+/* BlurText - Hero Title */
+.blur-hero {
+  @apply text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+}
+
+/* BlurText - Section Title */
+.blur-section {
+  @apply text-3xl md:text-4xl lg:text-5xl font-bold;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  line-height: 1.2;
+  letter-spacing: 0.015em;
+}
+
+/* BlurText - Subtitle */
+.blur-subtitle {
+  @apply text-lg md:text-xl lg:text-2xl font-light;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  line-height: 1.7;
+}
+
+/* ============================================
+   GRADIENT TEXT UTILITIES
+   For consistent gradient styling
+   ============================================ */
+
+/* Gold Gradient - Primary brand color */
+.gradient-gold {
+  background: linear-gradient(to right, #fad961, #c2892b, #0b0b0b);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Green Gradient - Success/growth */
+.gradient-green {
+  background: linear-gradient(to right, #4cd787, #66e6a4, #4cd787);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Purple Gradient - Premium/luxury */
+.gradient-purple {
+  background: linear-gradient(to right, #9d4edd, #c77dff, #9d4edd);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Blue Gradient - Trust/technology */
+.gradient-blue {
+  background: linear-gradient(to right, #4834d4, #6c5ce7, #4834d4);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Cyan Gradient - Modern/fresh */
+.gradient-cyan {
+  background: linear-gradient(to right, #06b6d4, #22d3ee, #06b6d4);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ============================================
+   CARD VARIANTS - Extended
+   Additional card styles for specific use cases
+   ============================================ */
+
+/* Card Description - Compact (smaller italic) */
+.card-description-compact {
+  @apply text-sm md:text-base;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.6;
+  @apply text-white/85;
+}
+
+/* Card Subtitle - For secondary headings in cards */
+.card-subtitle {
+  @apply text-lg md:text-xl;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+  line-height: 1.4;
+  @apply text-white/95;
+}
+
+/* Card Eyebrow - Small text above card title */
+.card-eyebrow {
+  @apply text-xs md:text-sm;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  @apply text-white/70;
+}
+
+/* Card Price - For pricing cards */
+.card-price {
+  @apply text-4xl md:text-5xl lg:text-6xl;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+/* Card Price Unit - /month, /year, etc. */
+.card-price-unit {
+  @apply text-lg md:text-xl;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
+  line-height: 1.4;
+  @apply text-white/60;
+}
+
+/* ============================================
+   TESTIMONIAL TYPOGRAPHY
+   Specific styles for testimonial components
+   ============================================ */
+
+/* Testimonial Quote */
+.testimonial-quote {
+  @apply text-base md:text-lg;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.7;
+  @apply text-white/90;
+}
+
+/* Testimonial Author */
+.testimonial-author {
+  @apply text-base md:text-lg;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+  line-height: 1.4;
+  @apply text-white;
+}
+
+/* Testimonial Role */
+.testimonial-role {
+  @apply text-sm md:text-base;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
+  line-height: 1.4;
+  @apply text-white/70;
+}
+
+/* ============================================
+   FORM TYPOGRAPHY
+   Consistent form field styling
+   ============================================ */
+
+/* Form Label */
+.form-label {
+  @apply text-sm md:text-base;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 500;
+  line-height: 1.4;
+  @apply text-white/90;
+}
+
+/* Form Input Text */
+.form-input {
+  @apply text-base md:text-lg;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+  @apply text-white;
+}
+
+/* Form Placeholder */
+.form-placeholder {
+  @apply text-base md:text-lg;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  line-height: 1.5;
+  @apply text-white/40;
+}
+
+/* Form Helper Text */
+.form-helper {
+  @apply text-xs md:text-sm;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  line-height: 1.4;
+  @apply text-white/60;
+}
+
+/* Form Error Text */
+.form-error {
+  @apply text-xs md:text-sm;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 500;
+  line-height: 1.4;
+  @apply text-red-400;
+}
+
+/* ============================================
+   STATS & NUMBERS TYPOGRAPHY
+   For showcasing metrics and statistics
+   ============================================ */
+
+/* Stat Number - Large display numbers */
+.stat-number {
+  @apply text-5xl md:text-6xl lg:text-7xl;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+/* Stat Label - Description below number */
+.stat-label {
+  @apply text-sm md:text-base lg:text-lg;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
+  line-height: 1.4;
+  @apply text-white/70;
+}
+
+/* Stat Change - Percentage or delta */
+.stat-change {
+  @apply text-xs md:text-sm;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+/* ============================================
+   FOOTER TYPOGRAPHY
+   Specific styles for footer sections
+   ============================================ */
+
+/* Footer Heading */
+.footer-heading {
+  @apply text-base md:text-lg;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+  line-height: 1.4;
+  @apply text-white;
+}
+
+/* Footer Link */
+.footer-link {
+  @apply text-sm md:text-base;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  @apply text-white/70;
+  transition: color 0.2s ease;
+}
+
+.footer-link:hover {
+  @apply text-white/90;
+}
+
+/* Footer Copyright */
+.footer-copyright {
+  @apply text-xs md:text-sm;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  line-height: 1.4;
+  @apply text-white/50;
+}
+
+/* ============================================
+   LINK TYPOGRAPHY
+   Consistent link styling
+   ============================================ */
+
+/* Primary Link - Standard links */
+.link-primary {
+  @apply text-base md:text-lg;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 500;
+  line-height: 1.5;
+  @apply text-[#4CD787];
+  transition: color 0.2s ease;
+}
+
+.link-primary:hover {
+  @apply text-[#66E6A4];
+}
+
+/* Secondary Link - Subtle links */
+.link-secondary {
+  @apply text-sm md:text-base;
+  font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+  @apply text-white/70;
+  transition: color 0.2s ease;
+}
+
+.link-secondary:hover {
+  @apply text-white/90;
+}
+
+/* Link Underline - Animated underline effect */
+.link-underline {
+  position: relative;
+}
+
+.link-underline::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: currentColor;
+  transition: width 0.3s ease;
+}
+
+.link-underline:hover::after {
+  width: 100%;
+}
+
+/* ============================================
+   SPACING UTILITIES
+   Consistent vertical rhythm
+   ============================================ */
+
+/* Section Spacing */
+.section-padding {
+  @apply py-12 md:py-16 lg:py-20;
+}
+
+.section-padding-large {
+  @apply py-16 md:py-24 lg:py-32;
+}
+
+.section-padding-small {
+  @apply py-8 md:py-12 lg:py-16;
+}
+
+/* Title Margins */
+.title-margin {
+  @apply mb-8 md:mb-12 lg:mb-16;
+}
+
+.title-margin-small {
+  @apply mb-4 md:mb-6 lg:mb-8;
+}
+
+/* Content Spacing */
+.content-spacing {
+  @apply space-y-4 md:space-y-6;
+}
+
+.content-spacing-large {
+  @apply space-y-6 md:space-y-8 lg:space-y-10;
+}
+
 /* Responsive Typography Utilities */
 @media (max-width: 640px) {
   .heading-hero {
@@ -163,5 +718,29 @@
 
   .text-body-large {
     @apply text-base;
+  }
+
+  .section-title-hero {
+    @apply text-3xl;
+  }
+
+  .section-title {
+    @apply text-2xl;
+  }
+
+  .card-description {
+    @apply text-base;
+  }
+
+  .card-price {
+    @apply text-3xl;
+  }
+
+  .stat-number {
+    @apply text-4xl;
+  }
+
+  .testimonial-quote {
+    @apply text-sm;
   }
 }
