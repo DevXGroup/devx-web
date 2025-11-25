@@ -57,25 +57,25 @@ export default function FooterClient({ version }: FooterClientProps) {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 lg:gap-12">
             {/* Company Info */}
             <div className="sm:col-span-2 lg:col-span-1 xl:col-span-1 flex flex-col">
-              <Link href="/" className="inline-block mb-4">
+              <Link href="/" className="inline-block mb-6 -mt-[3px] -ml-2">
                 <Image
                   src="/images/logos/devx-logo.png"
                   alt="DevX Logo"
-                  width={180}
-                  height={48}
-                  quality={85}
-                  sizes="(max-width: 640px) 140px, 180px"
+                  width={130}
+                  height={36}
+                  quality={50}
+                  sizes="(max-width: 640px) 110px, 130px"
                   className="h-8 w-auto"
                 />
               </Link>
-              <p className="text-sm text-muted-foreground mb-6 max-w-sm leading-relaxed font-light">
+              <p className="text-sm text-gray-400 mb-6 max-w-sm leading-relaxed font-light">
                 California-based software development company specializing in custom software,
                 AI/ML, IoT hardware, and digital transformation services.
               </p>
               <div className="flex space-x-4 mt-auto">
                 <Link
                   href="https://www.youtube.com/channel/UC6Zqx3Bhwbberq_MEmlgpIw"
-                  className="text-muted-foreground hover:text-[#4CD787] transition-colors p-2 hover:bg-white/5 rounded-md"
+                  className="text-gray-400 hover:text-[#4CD787] transition-colors p-2 hover:bg-white/5 rounded-md"
                   aria-label="YouTube"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -84,7 +84,7 @@ export default function FooterClient({ version }: FooterClientProps) {
                 </Link>
                 <Link
                   href="https://www.linkedin.com/company/devx-group-llc/"
-                  className="text-muted-foreground hover:text-[#4CD787] transition-colors p-2 hover:bg-white/5 rounded-md"
+                  className="text-gray-400 hover:text-[#4CD787] transition-colors p-2 hover:bg-white/5 rounded-md"
                   aria-label="LinkedIn"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -93,7 +93,7 @@ export default function FooterClient({ version }: FooterClientProps) {
                 </Link>
                 <Link
                   href="https://github.com/DevXGroup"
-                  className="text-muted-foreground hover:text-[#4CD787] transition-colors p-2 hover:bg-white/5 rounded-md"
+                  className="text-gray-400 hover:text-[#4CD787] transition-colors p-2 hover:bg-white/5 rounded-md"
                   aria-label="GitHub"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -102,14 +102,14 @@ export default function FooterClient({ version }: FooterClientProps) {
                 </Link>
                 <Link
                   href="#"
-                  className="text-muted-foreground hover:text-[#4CD787] transition-colors p-2 hover:bg-white/5 rounded-md"
+                  className="text-gray-400 hover:text-[#4CD787] transition-colors p-2 hover:bg-white/5 rounded-md"
                   aria-label="Instagram"
                 >
                   <Instagram className="w-5 h-5" />
                 </Link>
                 <Link
                   href="#"
-                  className="text-muted-foreground hover:text-[#4CD787] transition-colors p-2 hover:bg-white/5 rounded-md"
+                  className="text-gray-400 hover:text-[#4CD787] transition-colors p-2 hover:bg-white/5 rounded-md"
                   aria-label="X"
                 >
                   <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
@@ -123,35 +123,35 @@ export default function FooterClient({ version }: FooterClientProps) {
             <div className="sm:hidden grid grid-cols-2 gap-4 col-span-1">
               {/* Services */}
               <div className="min-w-0">
-                <h3 className="text-base font-extrabold mb-4">Services</h3>
+                <h3 className="text-base font-extrabold mb-4 text-[#4CD787]">Services</h3>
                 <div className="space-y-2">
                   <Link
                     href="/services"
-                    className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
+                    className="block text-sm text-gray-400 hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                   >
                     Custom Software
                   </Link>
                   <Link
                     href="/services"
-                    className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
+                    className="block text-sm text-gray-400 hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                   >
                     AI & ML
                   </Link>
                   <Link
                     href="/services"
-                    className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
+                    className="block text-sm text-gray-400 hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                   >
                     IoT Hardware
                   </Link>
                   <Link
                     href="/services"
-                    className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
+                    className="block text-sm text-gray-400 hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                   >
                     Digital Transform
                   </Link>
                   <Link
                     href="/services"
-                    className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
+                    className="block text-sm text-gray-400 hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                   >
                     Web Development
                   </Link>
@@ -160,35 +160,35 @@ export default function FooterClient({ version }: FooterClientProps) {
 
               {/* Company */}
               <div className="min-w-0">
-                <h3 className="text-base font-extrabold mb-4">Company</h3>
+                <h3 className="text-base font-extrabold mb-4 text-[#4CD787]">Company</h3>
                 <div className="space-y-2">
                   <Link
                     href="/about"
-                    className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
+                    className="block text-sm text-gray-400 hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                   >
                     About Us
                   </Link>
                   <Link
                     href="/portfolio"
-                    className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
+                    className="block text-sm text-gray-400 hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                   >
                     Portfolio
                   </Link>
                   <Link
                     href="/pricing"
-                    className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
+                    className="block text-sm text-gray-400 hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                   >
                     Pricing
                   </Link>
                   <Link
                     href="/contact"
-                    className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
+                    className="block text-sm text-gray-400 hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                   >
                     Contact
                   </Link>
                   <Link
                     href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative"
-                    className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
+                    className="block text-sm text-gray-400 hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                   >
                     Schedule Call
                   </Link>
@@ -198,35 +198,37 @@ export default function FooterClient({ version }: FooterClientProps) {
 
             {/* Services - Hidden on mobile, shown on sm+ */}
             <div className="hidden sm:block lg:col-span-1 xl:col-span-1 min-w-0">
-              <h3 className="text-base font-extrabold mb-4 lg:mb-6">Services</h3>
+              <h3 className="text-base font-extrabold mb-4 lg:mb-6 text-[#4CD787] flex items-end h-8">
+                Services
+              </h3>
               <div className="space-y-2 lg:space-y-3">
                 <Link
                   href="/services"
-                  className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
+                  className="block text-sm text-gray-400 hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                 >
                   Custom Software
                 </Link>
                 <Link
                   href="/services"
-                  className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
+                  className="block text-sm text-gray-400 hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                 >
                   AI & Machine Learning
                 </Link>
                 <Link
                   href="/services"
-                  className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
+                  className="block text-sm text-gray-400 hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                 >
                   IoT Hardware
                 </Link>
                 <Link
                   href="/services"
-                  className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
+                  className="block text-sm text-gray-400 hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                 >
                   Digital Transformation
                 </Link>
                 <Link
                   href="/services"
-                  className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
+                  className="block text-sm text-gray-400 hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                 >
                   Web Development
                 </Link>
@@ -235,35 +237,37 @@ export default function FooterClient({ version }: FooterClientProps) {
 
             {/* Company - Hidden on mobile, shown on sm+ */}
             <div className="hidden sm:block lg:col-span-1 xl:col-span-1 min-w-0">
-              <h3 className="text-base font-extrabold mb-4 lg:mb-6">Company</h3>
+              <h3 className="text-base font-extrabold mb-4 lg:mb-6 text-[#4CD787] flex items-end h-8">
+                Company
+              </h3>
               <div className="space-y-2 lg:space-y-3">
                 <Link
                   href="/about"
-                  className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
+                  className="block text-sm text-gray-400 hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                 >
                   About Us
                 </Link>
                 <Link
                   href="/portfolio"
-                  className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
+                  className="block text-sm text-gray-400 hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                 >
                   Portfolio
                 </Link>
                 <Link
                   href="/pricing"
-                  className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
+                  className="block text-sm text-gray-400 hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                 >
                   Pricing
                 </Link>
                 <Link
                   href="/contact"
-                  className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
+                  className="block text-sm text-gray-400 hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                 >
                   Contact
                 </Link>
                 <Link
                   href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative"
-                  className="block text-sm text-muted-foreground hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
+                  className="block text-sm text-gray-400 hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
                 >
                   Schedule Call
                 </Link>
@@ -279,14 +283,14 @@ export default function FooterClient({ version }: FooterClientProps) {
           {/* Contact Info Bar */}
           <div className="mt-8 lg:mt-12 pt-6 lg:pt-8 border-t border-border">
             <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 lg:gap-8">
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:flex lg:items-center gap-4 lg:gap-8 text-sm text-muted-foreground">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:flex lg:items-center gap-4 lg:gap-8 text-sm text-gray-400">
                 <a
                   href="tel:+14425440591"
                   className="flex items-center justify-center sm:justify-start gap-2 hover:text-[#4CD787] transition-colors"
                   aria-label="Call DevX Group at +1 (442) 544-0591"
                 >
                   <svg
-                    className="w-4 h-4 text-muted-foreground"
+                    className="w-4 h-4 text-gray-400"
                     viewBox="0 0 24 24"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -304,7 +308,7 @@ export default function FooterClient({ version }: FooterClientProps) {
                   aria-label="Email DevX Group at support@devxgroup.io"
                 >
                   <svg
-                    className="w-4 h-4 text-muted-foreground"
+                    className="w-4 h-4 text-gray-400"
                     viewBox="0 0 1920 1920"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -319,7 +323,7 @@ export default function FooterClient({ version }: FooterClientProps) {
                 </a>
                 <span className="flex items-center justify-center sm:justify-start sm:col-span-2 md:col-span-1 gap-2">
                   <svg
-                    className="w-4 h-4 text-muted-foreground"
+                    className="w-4 h-4 text-gray-400"
                     viewBox="0 0 24 24"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -337,19 +341,19 @@ export default function FooterClient({ version }: FooterClientProps) {
               <div className="flex flex-col sm:flex-row gap-4 lg:gap-6 text-sm border-t sm:border-t-0 pt-6 sm:pt-0 justify-center lg:justify-end lg:text-right">
                 <Link
                   href="/privacy"
-                  className="text-muted-foreground hover:text-[#4CD787] transition-colors text-center lg:text-left"
+                  className="text-gray-400 hover:text-[#4CD787] transition-colors text-center lg:text-left"
                 >
                   Privacy Policy
                 </Link>
                 <Link
                   href="/terms"
-                  className="text-muted-foreground hover:text-[#4CD787] transition-colors text-center lg:text-left"
+                  className="text-gray-400 hover:text-[#4CD787] transition-colors text-center lg:text-left"
                 >
                   Terms of Service
                 </Link>
                 <a
                   href="/sitemap.xml"
-                  className="text-muted-foreground hover:text-[#4CD787] transition-colors text-center lg:text-left"
+                  className="text-gray-400 hover:text-[#4CD787] transition-colors text-center lg:text-left"
                   rel="noreferrer"
                 >
                   Sitemap
@@ -358,7 +362,7 @@ export default function FooterClient({ version }: FooterClientProps) {
             </div>
           </div>
 
-          <div className="mt-6 lg:mt-10 border-t border-border py-6 pb-8 flex flex-col sm:flex-row justify-center items-center gap-4 text-xs text-muted-foreground">
+          <div className="mt-6 lg:mt-10 border-t border-border py-6 pb-8 flex flex-col sm:flex-row justify-center items-center gap-4 text-xs text-gray-400">
             <p className="text-center flex items-center leading-none">
               © {new Date().getFullYear()} DevX Group LLC. All rights reserved.
             </p>

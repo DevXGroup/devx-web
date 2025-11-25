@@ -115,20 +115,21 @@ function HireDevelopersCard({ icon: Icon, title, description, index }: HireDevel
   return (
     <motion.div
       data-card-index={index}
-      className="relative bg-slate-800/90 border border-slate-600/50 p-6 sm:p-8 md:p-10 rounded-2xl shadow-xl shadow-black/40 backdrop-blur-sm"
+      className="relative bg-slate-800/90 border border-slate-600/50 p-8 sm:p-10 md:p-12 lg:p-14 rounded-2xl shadow-2xl shadow-black/50 backdrop-blur-sm hover:border-slate-500/60 transition-all duration-300 group cursor-pointer"
       initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0, margin: '50px' }}
       transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
       style={{ willChange: 'opacity, transform', transform: 'translateZ(0)' }}
+      whileHover={{ y: -4, transition: { duration: 0.2 } }}
     >
-      <div className="relative flex flex-col gap-5">
-        <div className="flex-shrink-0 w-12 h-12 sm:w-13 sm:h-13 md:w-14 md:h-14 rounded-full bg-[#ccff00] flex items-center justify-center shadow-[0_0_18px_rgba(204,255,0,0.25)]">
-          <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-black" />
+      <div className="relative flex flex-col gap-6">
+        <div className="flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 md:w-18 md:h-18 rounded-full bg-[#ccff00] flex items-center justify-center shadow-[0_0_24px_rgba(204,255,0,0.35)] group-hover:shadow-[0_0_32px_rgba(204,255,0,0.5)] transition-all duration-300">
+          <Icon className="w-7 h-7 sm:w-8 sm:h-8 text-black" />
         </div>
-        <div className="flex-1 space-y-3">
-          <h3 className="card-title text-white">{title}</h3>
-          <p className="card-description-normal">{description}</p>
+        <div className="flex-1 space-y-4">
+          <h3 className="heading-subsection text-white leading-tight">{title}</h3>
+          <p className="card-description-normal text-slate-300">{description}</p>
         </div>
       </div>
     </motion.div>
@@ -151,12 +152,13 @@ function WhyUsCard({
   return (
     <motion.div
       data-card-index={index}
-      className="relative bg-slate-800/90 border border-slate-600/50 p-6 sm:p-7 md:p-8 rounded-2xl shadow-xl shadow-black/40 backdrop-blur-sm flex flex-col items-center text-center overflow-hidden min-h-[260px] sm:min-h-[280px] md:min-h-[300px] w-full"
+      className="relative bg-slate-800/90 border border-slate-600/50 p-6 sm:p-7 md:p-8 rounded-2xl shadow-xl shadow-black/40 backdrop-blur-sm flex flex-col items-center text-center overflow-hidden min-h-[260px] sm:min-h-[280px] md:min-h-[300px] w-full cursor-pointer hover:border-slate-500/60 transition-all duration-300"
       initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0, margin: '50px' }}
       transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
       style={{ willChange: 'opacity, transform', transform: 'translateZ(0)' }}
+      whileHover={{ y: -4, scale: 1.02, transition: { duration: 0.2 } }}
     >
       <div className="relative z-10 flex flex-col items-center h-full space-y-5">
         <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center bg-gradient-to-br from-[#ccff00] to-yellow-300 border border-[#ccff00]/70 shadow-[0_0_18px_rgba(204,255,0,0.25)]">
@@ -172,56 +174,27 @@ function WhyUsCard({
 export default function Features() {
   const containerRef = useRef<HTMLDivElement>(null)
   const hireDevelopersRef = useRef<HTMLDivElement>(null)
-  const infinityTriggerRef = useRef<HTMLDivElement>(null)
 
   const [currentStep, setCurrentStep] = useState(0)
   const steps = ['Talk to us', 'Plan together', 'Build something great']
 
   const [isMounted, setIsMounted] = useState(false)
   const [isStepAnimationActive, setIsStepAnimationActive] = useState(false)
-  const [shouldLoad3D, setShouldLoad3D] = useState(false)
-  const [viewportWidth, setViewportWidth] = useState(
-    typeof window !== 'undefined' ? window.innerWidth : 1200
-  )
+  const [hasEnabled3D, setHasEnabled3D] = useState(false)
   const shouldReduceMotion = useReducedMotion()
   const isInView = useInView(containerRef, { once: true, margin: '0px' })
-  const is3DNear = useInView(infinityTriggerRef, { once: true, margin: '200px' })
   const { isMobile, shouldOptimizeAnimations } = usePerformanceOptimizedAnimation()
+  const shouldRender3D = hasEnabled3D && !shouldOptimizeAnimations
 
   useEffect(() => {
     setIsMounted(true)
-    if (typeof window !== 'undefined') {
-      setViewportWidth(window.innerWidth)
-    }
   }, [])
-
-  // Preload 3D component when user scrolls near it
-  useEffect(() => {
-    if (is3DNear && !shouldOptimizeAnimations) {
-      setShouldLoad3D(true)
-    }
-  }, [is3DNear, shouldOptimizeAnimations])
 
   // Memoize animation timing based on reduced motion preference and screen size
   const stepInterval = useMemo(() => {
     const baseInterval = isMobile ? 2500 : 3000 // Faster intervals
     return shouldOptimizeAnimations ? 4000 : baseInterval // Faster even when optimized
   }, [shouldOptimizeAnimations, isMobile])
-
-  useEffect(() => {
-    const handleResize = () => {
-      setViewportWidth(window.innerWidth)
-      // Update isMobile if needed
-    }
-
-    if (typeof window !== 'undefined') {
-      window.addEventListener('resize', handleResize)
-      return () => window.removeEventListener('resize', handleResize)
-    }
-
-    // Return undefined when window is not available
-    return undefined
-  }, [])
 
   // IntersectionObserver for step animation - with mobile-friendly settings
   useEffect(() => {
@@ -256,7 +229,7 @@ export default function Features() {
   return (
     <motion.section
       ref={containerRef}
-      className="relative pt-24 sm:pt-32 md:pt-40 pb-12 sm:pb-16 md:pb-20 overflow-hidden bg-gradient-to-b from-slate-900 to-slate-950 w-full"
+      className="relative pt-32 sm:pt-40 md:pt-48 lg:pt-56 pb-16 sm:pb-20 md:pb-24 lg:pb-28 overflow-hidden bg-gradient-to-b from-slate-900 to-slate-950 w-full"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true, amount: 0, margin: '100px' }}
@@ -286,7 +259,7 @@ export default function Features() {
         variants={containerVariants}
         initial="hidden"
         animate={isInView ? 'visible' : 'hidden'}
-        className="relative container mx-auto px-4 z-[3] max-w-6xl select-text"
+        className="relative container mx-auto px-6 sm:px-8 lg:px-12 z-[3] max-w-7xl select-text"
         transition={{
           duration: shouldOptimizeAnimations ? 0.3 : 0.5,
           ease: 'easeOut',
@@ -299,14 +272,14 @@ export default function Features() {
             {/* Fixed title visibility with inline styles */}
             <BlurText
               text="Hire Elite Developers Effortlessly."
-              className="justify-center heading-section text-white mb-4 sm:mb-6 pb-2 sm:pb-3 px-4"
+              className="justify-center text-white mb-4 sm:mb-6 pb-2 sm:pb-3 px-4 section-title-hero"
               delay={150}
               once={true}
             />
           </div>
 
           {/* Redesigned Cards Section */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 md:gap-8 mb-12 sm:mb-16 md:mb-20 max-w-5xl mx-auto px-4 sm:px-6 relative z-[3]">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-10 lg:gap-12 mb-16 sm:mb-20 md:mb-24 lg:mb-28 max-w-6xl mx-auto px-4 sm:px-6 relative z-[3]">
             <HireDevelopersCard
               icon={Rocket}
               title="Are you launching a startup or new product?"
@@ -326,27 +299,27 @@ export default function Features() {
         {/* Creative Rotating Text Section - Enhanced Size & Visibility */}
         <div className="relative -mx-4 px-4 py-14 sm:py-16 md:py-20 my-12 sm:my-16 md:my-20 bg-transparent">
           <div className="relative z-10 text-center">
-            <div className="flex flex-col sm:flex-row items-center sm:items-baseline justify-center gap-3 sm:gap-4 md:gap-5 px-4">
-              <span className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-indigo-500 drop-shadow-[0_0_25px_rgba(99,102,241,0.6)]">
+            <div className="flex flex-col sm:flex-row items-center sm:items-baseline justify-center gap-3 sm:gap-4 md:gap-5 lg:gap-5 xl:gap-6 px-4">
+              <span className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl xl:text-[4rem] 2xl:text-[4.5rem] font-black bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-purple-300 to-indigo-400 drop-shadow-[0_0_35px_rgba(147,51,234,0.8)] filter-none">
                 Creative
               </span>
-              <div className="relative inline-block">
+              <div className="relative inline-block whitespace-nowrap">
                 <RotatingText
                   texts={subheaders}
                   rotationInterval={
                     shouldOptimizeAnimations ? 4000 : shouldReduceMotion ? 2500 : 3000
-                  } // Slower on low performance
+                  }
                   transition={{
-                    type: shouldOptimizeAnimations ? 'tween' : 'spring', // Simpler transition on low performance
+                    type: shouldOptimizeAnimations ? 'tween' : 'spring',
                     ...(shouldOptimizeAnimations ? {} : { stiffness: 200, damping: 20 }),
                   }}
                   initial={{ y: 30, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   exit={{ y: -30, opacity: 0 }}
                   splitBy="characters"
-                  staggerDuration={shouldOptimizeAnimations ? 0.05 : 0.03} // Slower stagger on low performance
+                  staggerDuration={shouldOptimizeAnimations ? 0.05 : 0.03}
                   staggerFrom="first"
-                  mainClassName="relative font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-mono text-center text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]"
+                  mainClassName="relative text-3xl sm:text-4xl md:text-4xl lg:text-5xl xl:text-[3.5rem] 2xl:text-[4rem] font-bold font-mono text-center text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)] leading-tight whitespace-nowrap"
                   splitLevelClassName="overflow-visible"
                   elementLevelClassName="inline-block drop-shadow-lg"
                   loop={true}
@@ -362,14 +335,14 @@ export default function Features() {
           {/* Fixed title visibility with inline styles */}
           <BlurText
             text="Why Choose Us?"
-            className="justify-center heading-section text-white mb-4 sm:mb-6 pb-2 sm:pb-3 px-4"
+            className="justify-center text-white mb-4 sm:mb-6 pb-2 sm:pb-3 px-4 section-title-hero"
             delay={150}
             once={true}
           />
-          <div className="max-w-3xl mx-auto mb-12 sm:mb-16 px-4">
+          <div className="max-w-3xl xl:max-w-4xl 2xl:max-w-5xl mx-auto mb-12 sm:mb-16 px-4">
             <BlurText
               text="Trusted U.S. company with worldwide senior developers, proven track record, and full-stack expertise across industries."
-              className="justify-center subtitle-lg mb-4"
+              className="justify-center mb-4 section-subtitle"
               delay={100}
               once={true}
             />
@@ -398,32 +371,23 @@ export default function Features() {
 
           {/* Added link to About page */}
           <div className="mt-12 sm:mt-16 mb-20 sm:mb-24 md:mb-28 text-center px-4 pointer-events-auto">
-            <motion.div
-              whileHover={!shouldOptimizeAnimations ? { scale: 1.02 } : {}} // Skip animation if optimization is needed
-              whileTap={!shouldOptimizeAnimations ? { scale: 0.98 } : {}} // Skip animation if optimization is needed
-              transition={{ duration: shouldOptimizeAnimations ? 0.1 : 0.2 }} // Faster transition on low performance
-              className="relative inline-block pointer-events-auto"
-            >
-              {/* Static glow border effect - better performance */}
-              <div className="absolute inset-0 rounded-xl -z-10 pointer-events-none blur-sm opacity-60">
-                <div className="absolute inset-0 bg-gradient-to-r from-[#4CD787] via-[#9d4edd] to-[#4CD787] rounded-xl" />
-              </div>
-              <Link
-                href="/about#our-values"
-                className="group relative inline-flex items-center gap-1.5 xs:gap-2 sm:gap-3 bg-gradient-to-r from-[#4CD787] via-[#9d4edd] to-[#4CD787] bg-[length:200%_100%] bg-[position:0%_0] hover:bg-[position:100%_0] text-black px-3 xs:px-4 sm:px-6 md:px-8 py-2 xs:py-2.5 sm:py-3 md:py-4 rounded-lg text-xs xs:text-sm sm:text-base md:text-lg font-bold font-sans backdrop-blur-sm border-2 border-[#4CD787]/40 hover:border-[#9d4edd]/60 hover:shadow-2xl hover:shadow-[#4CD787]/50 z-10"
-                style={{
-                  transition:
-                    'background-position 500ms ease, border-color 300ms ease, box-shadow 300ms ease',
-                  willChange: 'background-position',
-                  transform: 'translateZ(0)',
-                }}
-              >
-                <span className="hidden sm:inline">Explore more reasons to choose us</span>
-                <span className="sm:hidden">Explore more</span>
-                <ArrowRight className="w-3 h-3 xs:w-4 xs:h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform duration-300" />
-              </Link>
-            </motion.div>
+            {/* Static glow border effect - better performance */}
+            {/* <div className="absolute inset-0 rounded-xl -z-10 pointer-events-none blur-sm opacity-60"> */}
           </div>
+          <Link
+            href="/about#our-values"
+            className="group relative flex sm:inline-flex items-center justify-center gap-2 text-black px-4 sm:px-5 md:px-5 lg:px-4 xl:px-4 py-2.5 sm:py-3 rounded-lg text-sm sm:text-base font-bold font-sans backdrop-blur-sm border border-[#4CD787]/35 hover:border-[#4CD787]/50 hover:shadow-xl hover:shadow-[#4CD787]/25 z-10 w-full sm:w-auto overflow-hidden max-w-full lg:max-w-[360px] xl:max-w-[320px]"
+            style={{
+              transition:
+                'background-position 500ms ease, background-color 300ms ease, border-color 300ms ease, box-shadow 300ms ease',
+              transform: 'translateZ(0)',
+            }}
+          >
+            <span className="relative z-10">Explore more reasons to choose us</span>
+            <ArrowRight className="relative z-10 w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform duration-300" />
+            {/* Animated green sweep */}
+            <span className="absolute inset-0 bg-gradient-to-r from-[#4CD787] via-[#64d184] to-[#3bbb6f] bg-[length:200%_100%] bg-[position:0%_0] group-hover:bg-[position:100%_0] opacity-90 transition-[background-position] duration-500" />
+          </Link>
         </div>
 
         {/* Clean Step Animation - Enhanced Contrast - skip if optimizing */}
@@ -447,15 +411,15 @@ export default function Features() {
         <div className="text-center mb-12 sm:mb-16 px-4">
           <BlurText
             text="We're ready to transform your vision into reality."
-            className="justify-center heading-subsection text-[#ccff00] mb-3 sm:mb-4"
+            className="justify-center text-[#ccff00] mb-3 sm:mb-4 section-title-compact font-semibold"
             delay={150}
             once={true}
           />
-          <p className="subtitle-lg text-slate-100">Let&apos;s embark on this journey together!</p>
+          <p className="text-slate-100 section-subtitle">
+            Let&apos;s embark on this journey together!
+          </p>
         </div>
       </motion.div>
-      {/* Trigger point for 3D loading - positioned well before the actual 3D component */}
-      <div ref={infinityTriggerRef} className="absolute bottom-[60vh]" />
       <div
         className="mt-20"
         style={{
@@ -464,7 +428,27 @@ export default function Features() {
           transform: 'translateZ(0)',
         }}
       >
-        {(shouldLoad3D || shouldOptimizeAnimations) && <InfinityLogo />}
+        {!shouldRender3D && (
+          <div className="w-full max-w-4xl mx-auto text-center space-y-4 bg-slate-900/70 border border-slate-700/70 rounded-2xl p-8 sm:p-10">
+            <p className="text-slate-100 text-lg font-semibold">Interactive 3D preview</p>
+            <p className="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto">
+              Turn on the infinity loop to see our WebGL demo. We keep it disabled by default to
+              save bandwidth during page load.
+            </p>
+            <button
+              type="button"
+              onClick={() => setHasEnabled3D(true)}
+              disabled={shouldOptimizeAnimations}
+              className="px-5 py-2 rounded-lg bg-[#ccff00] text-black font-bold shadow-[0_10px_30px_rgba(204,255,0,0.25)] disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {shouldOptimizeAnimations
+                ? '3D disabled for low power mode'
+                : 'Enable 3D Infinity Loop'}
+            </button>
+          </div>
+        )}
+
+        {shouldRender3D && <InfinityLogo />}
       </div>
 
       {/* Smooth fade transition to next section */}
