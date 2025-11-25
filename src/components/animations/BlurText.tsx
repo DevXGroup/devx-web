@@ -1,10 +1,12 @@
 import { motion } from 'framer-motion'
 import { useEffect, useRef, useState, useMemo } from 'react'
+import type { CSSProperties } from 'react'
 
 interface BlurTextProps {
   text?: string
   delay?: number
   className?: string
+  style?: CSSProperties
   animateBy?: 'words' | 'letters'
   direction?: 'top' | 'bottom' | 'left' | 'right'
   threshold?: number
@@ -44,6 +46,7 @@ const BlurText = ({
   onAnimationComplete,
   stepDuration = 0.35,
   once = true,
+  style,
 }: BlurTextProps) => {
   const elements = animateBy === 'words' ? text.split(' ') : text.split('')
   const [inView, setInView] = useState(false)
@@ -100,7 +103,7 @@ const BlurText = ({
   )
 
   return (
-    <p ref={ref} className={`blur-text ${className} flex flex-wrap`}>
+    <p ref={ref} className={`blur-text ${className} flex flex-wrap`} style={style}>
       {elements.map((segment, index) => {
         const animateKeyframes = buildKeyframes(fromSnapshot, toSnapshots)
 

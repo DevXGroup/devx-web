@@ -6,9 +6,12 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import ClientOnly from '@layout/ClientOnly'
 import dynamic from 'next/dynamic'
+import BlurText from '@animations/BlurText'
 import StarBorder from '@animations/StarBorder'
 import TextType from '@animations/TextType'
 import ShinyText from '@/components/ui/ShinyText'
+import { usePerformanceOptimizedAnimation } from '@/hooks/use-performance-optimized-animation'
+import PlanetDivider from '../planet/PlanetDivider'
 
 // Dynamically import components only when in viewport - optimized loading
 const DynamicCosmicStars = dynamic(() => import('../hero/CosmicStars'), {
@@ -17,53 +20,6 @@ const DynamicCosmicStars = dynamic(() => import('../hero/CosmicStars'), {
     <div className="absolute inset-0 bg-black" style={{ minHeight: '100vh', width: '100%' }} />
   ),
 })
-
-const DynamicStarTwinklingField = dynamic(
-  () => import('../animations/StarTwinklingField').then((v) => v.StarTwinklingField),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="absolute inset-0 bg-black" style={{ minHeight: '100vh', width: '100%' }} />
-    ),
-  }
-)
-
-const DynamicHeroBackground = dynamic(() => import('../hero/HeroBackground'), {
-  ssr: false,
-  loading: () => (
-    <div className="absolute inset-0 bg-black" style={{ minHeight: '100vh', width: '100%' }} />
-  ),
-})
-
-const DynamicPlanetDivider = dynamic(
-  () => import('../planet/PlanetDivider').then((mod) => ({ default: mod.default })),
-  {
-    ssr: false,
-    loading: () => (
-      <div
-        className="absolute bottom-0 left-0 w-full"
-        style={{ height: '350px', background: 'transparent' }}
-      />
-    ),
-  }
-)
-const DynamicShootingStars = dynamic(
-  () => import('../hero/ShootingStars').then((mod) => ({ default: mod.default })),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="absolute inset-0" style={{ minHeight: '100vh', width: '100%' }} />
-    ),
-  }
-)
-
-const DynamicOrionCanvas = dynamic(
-  () => import('../hero/OrionCanvasWrapper').then((mod) => ({ default: mod.default })),
-  {
-    ssr: false,
-    loading: () => null,
-  }
-)
 
 const subheaders = [
   'Stunning UI/UX',
@@ -104,8 +60,17 @@ export default function Hero() {
   const controls = useAnimation()
   const [enableCosmicStars, setEnableCosmicStars] = useState(false)
   const [enableShootingStars, setEnableShootingStars] = useState(false)
-  const [enablePlanetDivider, setEnablePlanetDivider] = useState(false)
+  const [StarFieldComp, setStarFieldComp] = useState<(() => React.ReactElement) | null>(null)
+  const [HeroBgComp, setHeroBgComp] = useState<(() => React.ReactElement) | null>(null)
+  const [ShootingStarsComp, setShootingStarsComp] = useState<(() => React.ReactElement) | null>(
+    null
+  )
+  const [OrionComp, setOrionComp] = useState<(() => React.ReactElement) | null>(null)
+  const [visualsReady, setVisualsReady] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+
+  // Use performance optimization hook to detect slow devices
+  const { shouldOptimizeAnimations } = usePerformanceOptimizedAnimation()
 
   // Intersection observer to load 3D components only when visible
   const sectionRef = useRef<HTMLElement>(null)
@@ -124,6 +89,20 @@ export default function Hero() {
     const handleResize = () => setIsMobile(checkIfMobile())
     window.addEventListener('resize', handleResize, { passive: true })
     return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  // Allow heavy visuals after first user interaction or slight delay
+  useEffect(() => {
+    const enable = () => setVisualsReady(true)
+    // Only enable when the user interacts; skip automatic timer to avoid background JS during LCP/TBT
+    window.addEventListener('pointermove', enable, { once: true, passive: true })
+    window.addEventListener('scroll', enable, { once: true, passive: true })
+    window.addEventListener('click', enable, { once: true, passive: true })
+    return () => {
+      window.removeEventListener('pointermove', enable)
+      window.removeEventListener('scroll', enable)
+      window.removeEventListener('click', enable)
+    }
   }, [])
 
   // Trigger entrance animation and load background components when in view
@@ -151,34 +130,61 @@ export default function Hero() {
     }
   }, [])
 
-  const canUseHeavyVisuals = !shouldReduceMotion && !isMobile
+  // Show animations only when device isn't in low-power or reduced-motion mode
+  const canUseHeavyVisuals = visualsReady && !shouldOptimizeAnimations && !shouldReduceMotion
 
   useEffect(() => {
     controls.start('visible')
     if (!canUseHeavyVisuals) {
       setEnableCosmicStars(false)
       setEnableShootingStars(false)
-      setEnablePlanetDivider(false)
       return
+    }
+
+    const loadVisuals = async () => {
+      try {
+        const [
+          { StarTwinklingField },
+          { default: HeroBackground },
+          { default: ShootingStars },
+          orion,
+        ] = await Promise.all([
+          import('../animations/StarTwinklingField'),
+          import('../hero/HeroBackground'),
+          import('../hero/ShootingStars'),
+          import('../hero/OrionCanvasWrapper'),
+        ])
+        const StarFieldLazy = () => <StarTwinklingField className="z-1" count={100} />
+        StarFieldLazy.displayName = 'StarFieldLazy'
+        const HeroBgLazy = () => <HeroBackground />
+        HeroBgLazy.displayName = 'HeroBackgroundLazy'
+        const ShootingStarsLazy = () => <ShootingStars />
+        ShootingStarsLazy.displayName = 'ShootingStarsLazy'
+        const OrionLazy = () => <orion.default />
+        OrionLazy.displayName = 'OrionCanvasLazy'
+
+        setStarFieldComp(() => StarFieldLazy)
+        setHeroBgComp(() => HeroBgLazy)
+        setShootingStarsComp(() => ShootingStarsLazy)
+        setOrionComp(() => OrionLazy)
+      } catch {
+        // ignore load errors; skip visuals
+      }
     }
 
     const backgroundTimer = scheduleIdleTask(() => {
       // Delay expensive canvases until main thread is idle to help LCP/INP
       setEnableCosmicStars(true)
+      loadVisuals()
     }, 800)
 
     const shootingStarsTimer = scheduleIdleTask(() => {
       setEnableShootingStars(true)
     }, 1400)
 
-    const planetDividerTimer = scheduleIdleTask(() => {
-      setEnablePlanetDivider(true)
-    }, 1800)
-
     return () => {
       cancelIdleTask(backgroundTimer)
       cancelIdleTask(shootingStarsTimer)
-      cancelIdleTask(planetDividerTimer)
     }
   }, [cancelIdleTask, canUseHeavyVisuals, controls, scheduleIdleTask])
 
@@ -192,21 +198,14 @@ export default function Hero() {
         <ClientOnly>
           {enableCosmicStars && canUseHeavyVisuals && (
             <>
-              <DynamicStarTwinklingField className="z-1" count={100} />
-              <DynamicHeroBackground />
+              {StarFieldComp && <StarFieldComp />}
+              {HeroBgComp && <HeroBgComp />}
               {/* Orion constellation - fixed position, stays in same spot at all screen sizes */}
-              <div
-                className="fixed z-[10000] pointer-events-none"
-                style={{
-                  top: '170px',
-                  left: '50%',
-                  marginLeft: '110px',
-                  width: '400px',
-                  height: '400px',
-                }}
-              >
-                <DynamicOrionCanvas />
-              </div>
+              {OrionComp && (
+                <div className="fixed z-[10000] pointer-events-none left-1/2 translate-x-[32%] sm:left-auto sm:right-3 sm:translate-x-0 top-[26vh] sm:top-[28vh] md:top-[30vh] md:right-4 lg:right-12 lg:top-[32vh] xl:right-20 xl:top-[30vh] w-60 h-60 sm:w-64 sm:h-64 md:w-72 md:h-72 xl:w-[360px] xl:h-[360px]">
+                  <OrionComp />
+                </div>
+              )}
             </>
           )}
         </ClientOnly>
@@ -214,86 +213,120 @@ export default function Hero() {
 
       {/* Shooting Stars - Only rendered on client */}
       <ClientOnly>
-        {enableShootingStars && canUseHeavyVisuals && <DynamicShootingStars />}
+        {enableShootingStars && canUseHeavyVisuals && ShootingStarsComp && <ShootingStarsComp />}
       </ClientOnly>
 
       {/* Content */}
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-[80] w-full pt-12 sm:pt-16 lg:pt-20 pb-28 sm:pb-36 lg:pb-44">
-        <div className="text-center mx-auto w-full px-6 sm:px-[50px] space-y-7 sm:space-y-9 pt-2 sm:pt-4 flex flex-col items-center justify-center">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 relative z-[80] w-full pt-16 sm:pt-20 lg:pt-24 xl:pt-32 pb-32 sm:pb-40 lg:pb-48 xl:pb-56">
+        <div className="text-center mx-auto w-full px-4 sm:px-8 md:px-12 xl:px-16 space-y-8 sm:space-y-10 lg:space-y-12 xl:space-y-16 pt-4 sm:pt-6 lg:pt-8 flex flex-col items-center justify-center">
           {/* Hero content wrapper */}
-          <div className="space-y-5 sm:space-y-7">
-            <h1
-              className="hero-title mx-auto flex flex-wrap md:flex-nowrap items-center justify-center gap-2 sm:gap-3 md:gap-4 text-center text-white font-mono font-bold tracking-tight w-full whitespace-normal md:whitespace-nowrap"
+          <div className="space-y-6 sm:space-y-8 lg:space-y-10 xl:space-y-12">
+            <div
+              className="hero-title mx-auto flex flex-wrap md:flex-nowrap items-center justify-center gap-3 sm:gap-4 md:gap-5 xl:gap-6 2xl:gap-7 text-center text-white font-mono font-black tracking-[-0.02em] w-full whitespace-normal md:whitespace-nowrap text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5rem] 2xl:text-[5.5rem] leading-[1.1]"
               style={{
-                minHeight: '5rem',
-                height: '5rem',
+                minHeight: '4rem',
+                height: 'auto',
               }}
             >
-              <span
-                className="inline-block"
+              <BlurText
+                text="Your Vision,"
+                className="inline-flex"
+                animateBy="letters"
+                delay={80}
+                once
+                animationFrom={{ filter: 'blur(12px)', opacity: 0, y: -16 }}
+                animationTo={[
+                  { filter: 'blur(6px)', opacity: 0.6, y: 4 },
+                  { filter: 'blur(0px)', opacity: 1, y: 0 },
+                ]}
+                stepDuration={0.25}
                 style={{
-                  textShadow: '0 0 40px rgba(255,255,255,0.3), 0 8px 16px rgba(0,0,0,0.45)',
+                  textShadow: '0 0 60px rgba(255,255,255,0.4), 0 10px 24px rgba(0,0,0,0.5)',
                 }}
-              >
-                Your Vision,
-              </span>
-              <span
-                className="inline-block"
+              />
+              <BlurText
+                text="Engineered."
+                className="inline-flex"
+                animateBy="letters"
+                delay={190}
+                once
+                animationFrom={{ filter: 'blur(12px)', opacity: 0, y: -16 }}
+                animationTo={[
+                  { filter: 'blur(6px)', opacity: 0.6, y: 4 },
+                  { filter: 'blur(0px)', opacity: 1, y: 0 },
+                ]}
+                stepDuration={0.25}
                 style={{
                   color: '#ccff00',
-                  textShadow: '0 0 40px rgba(204,255,0,0.4), 0 8px 16px rgba(0,0,0,0.45)',
+                  textShadow:
+                    '0 0 60px rgba(204,255,0,0.5), 0 10px 24px rgba(0,0,0,0.5), 0 0 120px rgba(204,255,0,0.2)',
                 }}
-              >
-                Engineered.
-              </span>
-            </h1>
+              />
+            </div>
 
-            <div className="text-center w-full mx-auto space-y-3">
-              <p className="text-xl sm:text-2xl md:text-2xl lg:text-2xl xl:text-2xl text-white font-sans font-light leading-relaxed text-center mx-auto max-w-4xl">
-                Elite software team shipping polished software at&nbsp;startup&nbsp;speed.
-              </p>
-              <div className="relative mx-auto w-full mt-4 flex justify-center">
-                <div className="relative flex flex-col items-center justify-center gap-2 sm:flex-row sm:flex-wrap sm:gap-3">
+            <div className="text-center w-full mx-auto space-y-4 sm:space-y-5 lg:space-y-6">
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 2.3, duration: 1.9 }}
+                className="text-white/90 text-center mx-auto px-2 text-xl sm:text-2xl md:text-3xl lg:text-3xl xl:text-[2rem] 2xl:text-[2.25rem] font-light leading-tight"
+              >
+                Elite software team shipping polished software at startup speed.
+              </motion.p>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.1, duration: 0.4 }}
+                className="relative mx-auto w-full mt-6 flex justify-center"
+              >
+                <div className="relative flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap sm:gap-4 lg:gap-5">
                   <Link
                     href="/services"
-                    className="uppercase tracking-[0.19em] text-sm sm:text-base md:text-base font-medium opacity-90 hover:opacity-100 transition-opacity"
+                    className="uppercase tracking-[0.15em] subtitle-lg font-semibold opacity-90 hover:opacity-100 transition-all duration-300 hover:tracking-[0.2em]"
                   >
-                    <ShinyText text="Elite Services" speed={isMobile ? 5 : 3} delay={0.3} />
+                    <ShinyText text="Elite Services" speed={isMobile ? 5 : 3} delay={0} />
                   </Link>
-                  <span className="hidden sm:inline text-gray-500 text-sm md:text-base">•</span>
+                  <span className="hidden sm:inline text-gray-400/60 subtitle-lg">•</span>
                   <Link
                     href="/portfolio"
-                    className="uppercase tracking-[0.19em] text-sm sm:text-base md:text-base font-medium opacity-90 hover:opacity-100 transition-opacity"
+                    className="uppercase tracking-[0.15em] subtitle-lg font-semibold opacity-90 hover:opacity-100 transition-all duration-300 hover:tracking-[0.2em]"
                   >
-                    <ShinyText text="Proven Record" speed={isMobile ? 7 : 5} delay={0.6} />
+                    <ShinyText text="Proven Record" speed={isMobile ? 7 : 5} delay={0.2} />
                   </Link>
-                  <span className="hidden md:inline text-gray-500 text-sm md:text-base">•</span>
+                  <span className="hidden md:inline text-gray-400/60 subtitle-lg">•</span>
                   <Link
                     href="/pricing"
-                    className="uppercase tracking-[0.19em] text-sm sm:text-base md:text-base font-medium opacity-90 hover:opacity-100 transition-opacity"
+                    className="uppercase tracking-[0.15em] subtitle-lg font-semibold opacity-90 hover:opacity-100 transition-all duration-300 hover:tracking-[0.2em]"
                   >
-                    <ShinyText text="Transparent Pricing" speed={isMobile ? 9 : 7} delay={0.9} />
+                    <ShinyText text="Transparent Pricing" speed={isMobile ? 9 : 7} delay={0.4} />
                   </Link>
                 </div>
-              </div>
+              </motion.div>
             </div>
           </div>
 
-          <div
-            className="mt-3 sm:mt-4 md:mt-5 flex justify-center items-center w-full"
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.5, duration: 0.5 }}
+            className="mt-6 sm:mt-8 flex justify-center items-center w-full px-2"
             style={{
-              minHeight: '4.5rem',
-              height: '4.5rem',
+              minHeight: '5rem',
+              height: 'auto',
               overflow: 'hidden',
             }}
           >
             <TextType
               text={subheaders}
               as="p"
-              typingSpeed={shouldReduceMotion ? 40 : isMobile ? 60 : 80} // Slower on mobile
-              deletingSpeed={shouldReduceMotion ? 25 : isMobile ? 35 : 50} // Slower on mobile
-              pauseDuration={shouldReduceMotion ? 800 : isMobile ? 2500 : 2000} // Longer on mobile
-              className="font-mono typewriter-text tracking-[0.08em] text-center mx-auto leading-tight"
+              typingSpeed={shouldReduceMotion ? 40 : isMobile ? 60 : 80}
+              deletingSpeed={shouldReduceMotion ? 25 : isMobile ? 35 : 50}
+              pauseDuration={shouldReduceMotion ? 800 : isMobile ? 2500 : 2000}
+              className="font-mono typewriter-text tracking-[0.08em] text-center mx-auto leading-tight px-2"
+              style={{
+                color: '#ccff00',
+                textShadow: '0 0 40px rgba(204,255,0,0.4), 0 4px 12px rgba(0,0,0,0.4)',
+              }}
               showCursor={true}
               cursorCharacter="_"
               cursorClassName=""
@@ -305,9 +338,14 @@ export default function Hero() {
               development, mobile applications, AI and machine learning solutions, cloud
               infrastructure, IoT integration, and digital transformation services.
             </span>
-          </div>
+          </motion.div>
 
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4 sm:gap-6 relative z-[120] w-full max-w-2xl mx-auto px-2 mt-7 sm:mt-9 mb-10 sm:mb-14 lg:mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.9, duration: 0.4 }}
+            className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-5 sm:gap-6 lg:gap-8 relative z-[120] w-full max-w-3xl mx-auto px-2 mt-8 sm:mt-10 lg:mt-12 mb-10 sm:mb-14 lg:mb-16"
+          >
             <motion.div
               variants={buttonVariants}
               initial="rest"
@@ -321,8 +359,8 @@ export default function Hero() {
                 target="_blank"
                 rel="noopener noreferrer"
                 color="#ccff00"
-                speed={isMobile ? '5s' : '3s'} // Slower animation on mobile
-                className="font-mono font-semibold text-base sm:text-md md:text-md px-6 py-3 sm:px-8 sm:py-3 min-h-[44px] flex w-full sm:w-auto items-center justify-center text-center"
+                speed={isMobile ? '5s' : '3s'}
+                className="ui-code font-extrabold btn-text-primary px-6 py-3 sm:px-7 sm:py-3.5 lg:px-8 lg:py-4 min-h-[44px] flex w-full sm:w-auto items-center justify-center text-center tracking-wide hover:tracking-wider transition-all duration-300"
                 aria-label="Book a free consultation call with DevX Group"
               >
                 Book a Free Call
@@ -338,25 +376,21 @@ export default function Hero() {
               <StarBorder
                 onClick={navigateToPortfolio}
                 color="#e534eb"
-                speed={isMobile ? '6s' : '4s'} // Slower animation on mobile
-                className="font-mono font-semibold text-base sm:text-md md:text-md px-6 py-3 sm:px-8 sm:py-3 min-h-[44px] flex w-full sm:w-auto items-center justify-center text-center"
+                speed={isMobile ? '6s' : '4s'}
+                className="ui-code font-extrabold btn-text-primary px-6 py-3 sm:px-7 sm:py-3.5 lg:px-8 lg:py-4 min-h-[44px] flex w-full sm:w-auto items-center justify-center text-center tracking-wide hover:tracking-wider transition-all duration-300"
                 aria-label="View DevX Group portfolio"
               >
                 See Our Work
               </StarBorder>
             </motion.div>
-          </div>
+          </motion.div>
         </div>
       </div>
 
-      {/* Planet Divider at the bottom of hero - Only rendered on client */}
-      <ClientOnly>
-        {enablePlanetDivider && (
-          <div className="absolute bottom-0 left-0 w-full z-10" aria-hidden>
-            <DynamicPlanetDivider />
-          </div>
-        )}
-      </ClientOnly>
+      {/* Planet Divider at the bottom of hero */}
+      <div className="absolute bottom-0 left-0 w-full z-10" aria-hidden>
+        <PlanetDivider />
+      </div>
       <style jsx>{`
         .link-gradient {
           background: linear-gradient(120deg, #4cd787, #9d4edd, #ccff00, #4cd787);
