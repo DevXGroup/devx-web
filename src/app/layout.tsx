@@ -11,7 +11,7 @@ import { DevToolsErrorSuppressor } from '@/components/layout/DevToolsErrorSuppre
 import ErrorBoundary from '@/components/layout/ErrorBoundary'
 import ScrollToTop from '@/components/layout/ScrollToTop'
 import StructuredData from '@/components/seo/StructuredData'
-import { SpeedInsights } from '@vercel/speed-insights/next'
+import { DeferredStyles } from '@/components/layout/DeferredStyles'
 import Script from 'next/script'
 import { Analytics } from '@vercel/analytics/next'
 import { Partytown } from '@qwik.dev/partytown/react'
@@ -42,7 +42,7 @@ const ibmPlexSans = localFont({
   ],
   variable: '--font-ibm-plex-sans',
   display: 'swap', // Font swaps when ready, ensures text always visible
-  fallback: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+  fallback: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
   preload: true, // Preload critical font weights
   adjustFontFallback: 'Arial', // Better fallback matching for LCP
 })
@@ -64,6 +64,10 @@ const defaultTwitterImage = createTwitterImageUrl(
   },
   siteUrl
 )
+
+const enableVercelAnalytics =
+  process.env.NODE_ENV === 'production' &&
+  process.env.NEXT_PUBLIC_ENABLE_VERCEL_ANALYTICS === 'true'
 
 const devtoolsVersionPatchScript = `
 (function () {
@@ -311,14 +315,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         {/* Resource hints for better performance */}
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
-        <link rel="preconnect" href="https://calendly.com" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://calendly.com" />
         {/* Patch React DevTools semver regression */}
-        <Script
-          id="react-devtools-semver-patch"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{ __html: devtoolsVersionPatchScript }}
-        />
+        {process.env.NODE_ENV !== 'production' && (
+          <Script
+            id="react-devtools-semver-patch"
+            strategy="beforeInteractive"
+            dangerouslySetInnerHTML={{ __html: devtoolsVersionPatchScript }}
+          />
+        )}
         <StructuredData type="organization" />
         <StructuredData type="localBusiness" />
         <StructuredData type="website" />
@@ -389,13 +393,9 @@ gtag('config', '${gaId}', {
             <ScrollToTop />
           </div>
         </ErrorBoundary>
-        {/* Only load Vercel Analytics in production (they don't work locally) */}
-        {process.env.NODE_ENV === 'production' && (
-          <>
-            <SpeedInsights />
-            <Analytics />
-          </>
-        )}
+        {/* Load Vercel Analytics only when explicitly enabled to avoid local 404s */}
+        {enableVercelAnalytics && <Analytics />}
+        <DeferredStyles />
       </body>
     </html>
   )
