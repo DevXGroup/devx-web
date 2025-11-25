@@ -58,10 +58,9 @@ export default function PlanetDivider({ opacity = 0.68 }) {
   return (
     <div
       ref={containerRef}
-      className="relative w-full mx-auto pointer-events-none"
+      className="relative w-full mx-auto pointer-events-none h-[440px] lg:h-[500px] xl:h-[540px] 2xl:h-[580px]"
       style={
         {
-          height: '420px',
           background: 'transparent',
           overflow: 'visible',
           '--planet-offset-y': '0px',
@@ -69,14 +68,11 @@ export default function PlanetDivider({ opacity = 0.68 }) {
         } as React.CSSProperties
       }
     >
-      {/* Planet container - large size on all devices, positioned lower */}
+      {/* Planet container - responsive size that scales with viewport */}
       <div
-        className="absolute left-1/2 bottom-0"
+        className="absolute left-1/2 bottom-0 w-[640px] h-[640px] -ml-[320px] xl:w-[780px] xl:h-[780px] xl:-ml-[390px] 2xl:w-[900px] 2xl:h-[900px] 2xl:-ml-[450px]"
         style={{
-          width: '700px',
-          height: '700px',
-          marginLeft: '-350px',
-          transform: 'translateY(calc(50% + var(--planet-offset-y)))',
+          transform: 'translateY(calc(45% + var(--planet-offset-y)))',
           overflow: 'visible',
         }}
       >
@@ -85,18 +81,19 @@ export default function PlanetDivider({ opacity = 0.68 }) {
           <div className="planet-container">
             <picture className="planet-sphere-wrapper">
               <source
-                srcSet="/moon_hero_1536.webp 1536w, /moon_hero_1024.webp 1024w, /moon_hero_768.webp 768w, /moon_hero_512.webp 512w"
+                srcSet="/moon_hero_1024.webp 1024w, /moon_hero_768.webp 768w, /moon_hero_512.webp 512w"
+                sizes="(min-width: 1536px) 720px, (min-width: 1280px) 680px, (min-width: 1024px) 620px, (min-width: 640px) 520px, 360px"
                 type="image/webp"
               />
               <img
-                src="/moon_hero_768.png"
-                srcSet="/moon_hero_768.png 768w, /moon_hero_512.png 512w"
-                sizes="700px"
+                src="/moon_hero_768.webp"
+                srcSet="/moon_hero_768.webp 768w, /moon_hero_512.png 512w"
+                sizes="(min-width: 1536px) 720px, (min-width: 1280px) 680px, (min-width: 1024px) 620px, (min-width: 640px) 520px, 360px"
                 width="768"
                 height="768"
                 alt=""
-                fetchPriority="low"
-                loading="lazy"
+                fetchPriority="high"
+                loading="eager"
                 decoding="async"
                 className="planet-sphere"
                 style={{
