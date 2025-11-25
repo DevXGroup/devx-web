@@ -493,12 +493,12 @@ export default function DevelopmentTools() {
         <div className="py-30 md:py-0 mt-24 md:mt-36 mb-24 md:mb-32">
           <div className="container mx-auto px-4">
             <div className="flex flex-col items-center">
-              <h2 className="heading-section text-center animate-gradient-text mb-4">
+              <h2 className="text-center animate-gradient-text mb-4 section-title-hero">
                 DevX Development Tools
               </h2>
               <BlurText
                 text="Cutting-edge technologies powering innovative solutions across web, mobile, and cloud platforms"
-                className="justify-center subtitle-lg text-center max-w-2xl mb-0"
+                className="justify-center text-center max-w-2xl xl:max-w-3xl 2xl:max-w-4xl mb-0 section-subtitle"
                 delay={100}
                 once={true}
               />
@@ -554,7 +554,7 @@ export default function DevelopmentTools() {
           <div className="w-full max-w-full">
             <BlurText
               text="Other Tools & Tech Stacks We Use"
-              className="justify-center heading-section text-center mb-12 md:mb-16 lg:mb-20 px-4"
+              className="justify-center text-center mb-12 md:mb-16 lg:mb-20 px-4 section-title-hero"
               delay={150}
               once={true}
             />
