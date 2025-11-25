@@ -74,10 +74,11 @@ export function useScrollAnimation<T extends HTMLElement>(options?: UseScrollAni
           }
 
           current.classList.remove(animationClass)
-          void current.offsetWidth
-          current.classList.add(animationClass)
-          hasTriggeredRef.current = true
-          enterTimeoutRef.current = null
+          requestAnimationFrame(() => {
+            current.classList.add(animationClass)
+            hasTriggeredRef.current = true
+            enterTimeoutRef.current = null
+          })
         },
         Math.max(reflowDelay, 0)
       )

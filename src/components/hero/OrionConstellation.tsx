@@ -176,6 +176,13 @@ function OrionStar({
 // Draw constellation connection lines
 function ConstellationLines() {
   const lineRef = useRef<any>(null!)
+  const geometryRef = useRef<THREE.BufferGeometry | null>(null)
+  const startTimeRef = useRef<number | null>(null)
+
+  const drawDuration = 12 // seconds to complete the constellation trace
+  const holdDuration = 1.2 // seconds to let the full outline linger
+  const fadeDuration = 1.6 // seconds to fade the outline out
+  const pauseDuration = 2 // pause before restarting
 
   const connections = useMemo(
     () => [
@@ -225,12 +232,72 @@ function ConstellationLines() {
     return new Float32Array(pos)
   }, [connections])
 
+  // Animate lines drawing on first render for a light, connected-in effect
+  useFrame(({ clock }) => {
+    if (!geometryRef.current || !lineRef.current) return
+
+    const positionAttribute = geometryRef.current.attributes.position
+    if (!positionAttribute) return
+
+    const totalVertices = positionAttribute.count
+    const segmentCount = totalVertices / 2
+
+    if (startTimeRef.current === null) {
+      startTimeRef.current = clock.getElapsedTime()
+      geometryRef.current.setDrawRange(0, 0)
+    }
+
+    const elapsed = clock.getElapsedTime() - startTimeRef.current
+    const cycle = drawDuration + holdDuration + fadeDuration + pauseDuration
+    const cycleProgress = elapsed % cycle
+    const drawing = cycleProgress <= drawDuration
+    const fading =
+      cycleProgress > drawDuration + holdDuration &&
+      cycleProgress <= drawDuration + holdDuration + fadeDuration
+
+    const material = lineRef.current.material as THREE.LineBasicMaterial
+
+    if (drawing) {
+      const progress = cycleProgress / drawDuration
+      const eased = 1 - Math.pow(1 - progress, 3) // ease-out cubic for gentle finish
+      const segmentProgress = eased * segmentCount
+      const currentSegment = Math.floor(segmentProgress)
+      const intraSegment = segmentProgress - currentSegment
+      const drawCount = Math.max(
+        2,
+        Math.min(totalVertices, currentSegment * 2 + Math.ceil(intraSegment * 2))
+      )
+      geometryRef.current.setDrawRange(0, drawCount)
+      material.opacity = 0.08 + 0.34 * eased
+    } else if (cycleProgress <= drawDuration + holdDuration) {
+      geometryRef.current.setDrawRange(0, totalVertices)
+      material.opacity = 0.32
+    } else if (fading) {
+      const fadeProgress = (cycleProgress - (drawDuration + holdDuration)) / fadeDuration
+      const remaining = Math.max(0, 1 - fadeProgress)
+      geometryRef.current.setDrawRange(0, totalVertices)
+      material.opacity = 0.32 * remaining
+    } else {
+      geometryRef.current.setDrawRange(0, 0)
+      material.opacity = 0
+    }
+  })
+
   return (
     <lineSegments ref={lineRef}>
-      <bufferGeometry>
+      <bufferGeometry ref={geometryRef}>
         <bufferAttribute attach="attributes-position" args={[positions, 3]} />
       </bufferGeometry>
-      <lineBasicMaterial color={0xffffff} transparent opacity={0.15} linewidth={1} fog={false} />
+      <lineBasicMaterial
+        color={0x9ad8ff}
+        transparent
+        opacity={0}
+        linewidth={1}
+        fog={false}
+        depthWrite={false}
+        depthTest={false}
+        blending={AdditiveBlending}
+      />
     </lineSegments>
   )
 }
