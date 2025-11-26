@@ -15,7 +15,7 @@ jobs:
   quality-gate:
     runs-on: ubuntu-latest
     # Skip CI if commit message contains [skip ci]
-    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
 
     permissions:
       contents: read
@@ -70,7 +70,7 @@ jobs:
   release:
     needs: quality-gate
     # Only run on main branch and skip if commit has [skip ci]
-    if: github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, '[skip ci]')
+    if: ${{ github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, '[skip ci]') }}
     runs-on: ubuntu-latest
 
     permissions:
