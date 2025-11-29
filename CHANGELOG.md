@@ -1,3 +1,33 @@
+## [1.4.0](https://github.com/DevXGroup/devx-web/compare/v1.3.0...v1.4.0) (2025-11-29)
+
+### Features
+
+* add interactive Orion constellation to hero section ([7b9768c](https://github.com/DevXGroup/devx-web/commit/7b9768cb32b74118bfec1ea08ca2e2f943fdfd35))
+* add optimized background assets ([115f64f](https://github.com/DevXGroup/devx-web/commit/115f64f532a1257f15b7e4d56e1b2be454ea8188))
+* new look and feel and overall performance improvements plus new font and animations ([65fcca2](https://github.com/DevXGroup/devx-web/commit/65fcca2eac2009e9bb9e46e9c27d5e1fa740693b))
+
+### Bug Fixes
+
+* improve card hover interaction in Services page ([3e77883](https://github.com/DevXGroup/devx-web/commit/3e77883ec8dab587ae1a16cc843ec18b97e22b6a))
+* remove duplicate Orion from hero background ([4c901ea](https://github.com/DevXGroup/devx-web/commit/4c901ea1276c5028f1443dcc0f9e8283d8db85e7))
+* resolve React Hook dependency warnings in CardSwap ([90871b0](https://github.com/DevXGroup/devx-web/commit/90871b0da5888f8165e92bea609375d658103ab6))
+* resolve TypeScript strict mode errors in animation components ([7dff195](https://github.com/DevXGroup/devx-web/commit/7dff195a5f0c8d07ac22def80e8491e375b2f43d))
+* restore Orion parallax movement ([56ca42e](https://github.com/DevXGroup/devx-web/commit/56ca42e1caaadd13381ae493ae5914e634a0b918))
+
+### Performance Improvements
+
+* lazy-load hero section visuals with performance detection ([550896e](https://github.com/DevXGroup/devx-web/commit/550896e28ba27be372494988e475a63f2fc5d1e1))
+* optimize application performance and clean up UI ([b93601d](https://github.com/DevXGroup/devx-web/commit/b93601d7cde1f9b99a5641dfeeeea49fb4477a78))
+* optimize DarkVeil to only render when visible ([eb6d361](https://github.com/DevXGroup/devx-web/commit/eb6d361e300bf88c70ee569b844bbcbd3b9802e3))
+* optimize layout and defer non-critical analytics loading ([70c7099](https://github.com/DevXGroup/devx-web/commit/70c7099c580d76304a0c4555a8495694865ffddb))
+* optimize Sentry and font loading configuration ([e5c5d0f](https://github.com/DevXGroup/devx-web/commit/e5c5d0fb737956ecedd689ae61383b6ce1728e20))
+* refactor component styling and reduce layout recalculations ([c5ac6a7](https://github.com/DevXGroup/devx-web/commit/c5ac6a71c66afd79bec9953f94e470d1eccf351e))
+* suppress production console warnings ([51f22a8](https://github.com/DevXGroup/devx-web/commit/51f22a84b3db3a3878e29c2add417ff92609a7e3))
+
+### Reverts
+
+* Revert "chore: remove AI tool configuration folders" ([fddc7d0](https://github.com/DevXGroup/devx-web/commit/fddc7d0be1fa72f7722a939a9ee61d83cdfcb74b))
+
 ## [1.3.0](https://github.com/DevXGroup/devx-web/compare/v1.2.16...v1.3.0) (2025-11-21)
 
 ### Features
