@@ -1,3 +1,9 @@
+## [1.4.1](https://github.com/DevXGroup/devx-web/compare/v1.4.0...v1.4.1) (2025-11-29)
+
+### Bug Fixes
+
+* **hydration:** resolve React hydration error in production builds ([06bdf5b](https://github.com/DevXGroup/devx-web/commit/06bdf5b3f174906b5074b0cb7c0b7d0ee9f32dd6)), closes [#418](https://github.com/DevXGroup/devx-web/issues/418)
+
 ## [1.4.0](https://github.com/DevXGroup/devx-web/compare/v1.3.0...v1.4.0) (2025-11-29)
 
 ### Features
