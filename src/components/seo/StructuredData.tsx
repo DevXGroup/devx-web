@@ -1,3 +1,5 @@
+import Script from 'next/script'
+
 interface BreadcrumbItem {
   name: string
   url: string
@@ -167,11 +169,15 @@ export default function StructuredData({
     }
   }
 
+  const structuredData = getStructuredData()
+  if (!structuredData) return null
+
   return (
-    <script
+    <Script
+      id={`structured-data-${type}`}
       type="application/ld+json"
       dangerouslySetInnerHTML={{
-        __html: JSON.stringify(getStructuredData()),
+        __html: JSON.stringify(structuredData),
       }}
     />
   )
