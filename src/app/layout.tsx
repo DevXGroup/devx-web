@@ -323,11 +323,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             dangerouslySetInnerHTML={{ __html: devtoolsVersionPatchScript }}
           />
         )}
-        <StructuredData type="organization" />
-        <StructuredData type="localBusiness" />
-        <StructuredData type="website" />
-        {/* Partytown for offloading third-party scripts */}
-        <Partytown debug={false} forward={['dataLayer.push', 'gtag']} />
       </head>
       <body
         className={`${ibmPlexSans.variable} ${ibmPlexMono.variable} bg-black text-white font-sans antialiased`}
@@ -344,6 +339,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           />
         </noscript>
         {/* End Google Tag Manager (noscript) */}
+
+        {/* Partytown for offloading third-party scripts - Load after hydration */}
+        <Partytown debug={false} forward={['dataLayer.push', 'gtag']} />
+
+        {/* Structured Data - Load after hydration */}
+        <StructuredData type="organization" />
+        <StructuredData type="localBusiness" />
+        <StructuredData type="website" />
 
         {/* Google Tag Manager - Run in web worker via Partytown */}
         <Script
