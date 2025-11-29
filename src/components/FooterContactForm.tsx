@@ -93,7 +93,9 @@ export default function FooterContactForm() {
 
   return (
     <div>
-      <h3 className="text-base font-bold mb-4">Get in touch</h3>
+      <h3 className="text-base font-extrabold mb-4 lg:mb-6 text-[#4CD787] flex items-end h-8">
+        Get in touch
+      </h3>
       {isSubmitted ? (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
@@ -107,7 +109,7 @@ export default function FooterContactForm() {
       ) : (
         <form onSubmit={handleSubmit} className="space-y-3">
           <div>
-            <p className="mb-1 text-sm">Email*</p>
+            <p className="mb-1 text-sm text-gray-400">Email*</p>
             <Input
               type="email"
               name="email"
@@ -117,7 +119,7 @@ export default function FooterContactForm() {
               autoComplete="email"
               className={`bg-secondary border ${
                 formErrors.email ? 'border-red-500' : 'border-secondary'
-              } text-secondary-foreground placeholder:text-muted-foreground text-sm`}
+              } text-gray-400 placeholder:text-gray-500 text-sm`}
             />
             {formErrors.email && (
               <motion.p
@@ -130,7 +132,7 @@ export default function FooterContactForm() {
             )}
           </div>
           <div>
-            <p className="mb-1 text-sm">Message*</p>
+            <p className="mb-1 text-sm text-gray-400">Message*</p>
             <Textarea
               name="message"
               value={formState.message}
@@ -138,7 +140,7 @@ export default function FooterContactForm() {
               placeholder="Ask a quick question"
               className={`bg-secondary border ${
                 formErrors.message ? 'border-red-500' : 'border-secondary'
-              } text-secondary-foreground placeholder:text-muted-foreground min-h-[80px] text-sm`}
+              } text-gray-400 placeholder:text-gray-500 min-h-[80px] text-sm`}
             />
             {formErrors.message && (
               <motion.p

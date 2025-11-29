@@ -1,5 +1,7 @@
 @import 'tailwindcss';
 
+@import '../styles/typography.css';
+
 /* ========================================================
    TYPOGRAPHY SYSTEM - CENTRALIZED FONT MANAGEMENT
 
@@ -49,7 +51,7 @@ body {
 :root {
   /* CHANGE THESE to update fonts globally */
   --font-ibm-plex-sans:
-    'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial,
     sans-serif;
   --font-ibm-plex-mono:
     'IBM Plex Mono', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
@@ -59,7 +61,7 @@ body {
 img,
 video,
 canvas {
-  overflow: clip;
+  overflow: clip !important;
 }
 
 /* Mobile-specific optimizations */
@@ -82,12 +84,6 @@ canvas {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-}
-
-/* Performance: content-visibility for off-screen sections */
-.defer-section {
-  content-visibility: auto;
-  contain-intrinsic-size: 0 500px;
 }
 
 /* Prevent white flash during navigation */
@@ -126,89 +122,6 @@ body:has(main[data-page='home']),
 html:has(main[data-page='home']) {
   background-color: #000000 !important;
 }
-
-/* Navbar transition styles - simplified with conditional rendering */
-nav {
-  animation: navbarFadeIn 0.6s ease-out;
-}
-
-@keyframes navbarFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Portfolio Page Animations */
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0px) translateX(0px);
-  }
-  25% {
-    transform: translateY(-10px) translateX(5px);
-  }
-  50% {
-    transform: translateY(-5px) translateX(-5px);
-  }
-  75% {
-    transform: translateY(-15px) translateX(3px);
-  }
-}
-
-.slide-in-blurred-bottom {
-  -webkit-animation: slide-in-blurred-bottom 1.15s cubic-bezier(0.23, 1, 0.32, 1) both;
-  animation: slide-in-blurred-bottom 1.15s cubic-bezier(0.23, 1, 0.32, 1) both;
-}
-
-/* slide-in-blurred-bottom animation adapted from Animista (FreeBSD License) */
-@-webkit-keyframes slide-in-blurred-bottom {
-  0% {
-    -webkit-transform: translateY(1000px) scaleY(2.5) scaleX(0.2);
-    transform: translateY(1000px) scaleY(2.5) scaleX(0.2);
-    -webkit-transform-origin: 50% 100%;
-    transform-origin: 50% 100%;
-    -webkit-filter: blur(40px);
-    filter: blur(40px);
-    opacity: 0;
-  }
-  100% {
-    -webkit-transform: translateY(0) scaleY(1) scaleX(1);
-    transform: translateY(0) scaleY(1) scaleX(1);
-    -webkit-transform-origin: 50% 50%;
-    transform-origin: 50% 50%;
-    -webkit-filter: blur(0);
-    filter: blur(0);
-    opacity: 1;
-  }
-}
-@keyframes slide-in-blurred-bottom {
-  0% {
-    -webkit-transform: translateY(1000px) scaleY(2.5) scaleX(0.2);
-    transform: translateY(1000px) scaleY(2.5) scaleX(0.2);
-    -webkit-transform-origin: 50% 100%;
-    transform-origin: 50% 100%;
-    -webkit-filter: blur(40px);
-    filter: blur(40px);
-    opacity: 0;
-  }
-  100% {
-    -webkit-transform: translateY(0) scaleY(1) scaleX(1);
-    transform: translateY(0) scaleY(1) scaleX(1);
-    -webkit-transform-origin: 50% 50%;
-    transform-origin: 50% 50%;
-    -webkit-filter: blur(0);
-    filter: blur(0);
-    opacity: 1;
-  }
-}
-
-/* Import DevX Typography System */
-@import '../styles/typography.css';
 
 @layer base {
   :root {
@@ -963,13 +876,15 @@ html.no-backdrop-filter .glass-effect {
 
 /* Gradient text animation */
 .animate-gradient-text {
-  background-image: linear-gradient(-45deg, #4cd787, #ffd700, #9d4edd, #4834d4);
+  background-image: linear-gradient(-45deg, #5ef79a, #ffed4e, #c77dff, #6366f1);
   background-size: 300% 300%;
   animation: gradient-animation 6s ease infinite;
   -webkit-animation: gradient-animation 6s ease infinite;
   background-clip: text;
   -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   color: transparent;
+  filter: brightness(1.2) saturate(1.1);
 }
 
 /* BlurText compatible gradient animation */

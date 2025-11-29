@@ -211,13 +211,13 @@ export default function Navbar() {
             <Image
               src="/images/logos/devx-logo.png"
               alt="DevX Group LLC"
-              width={200}
-              height={40}
+              width={150}
+              height={30}
               priority
-              quality={90}
-              sizes="(max-width: 640px) 160px, 200px"
-              className="w-[200px] h-auto cursor-pointer"
-              style={{ maxWidth: '200px', height: 'auto', cursor: 'pointer' }}
+              quality={50}
+              sizes="(max-width: 640px) 120px, 150px"
+              className="w-[150px] h-auto cursor-pointer"
+              style={{ maxWidth: '150px', height: 'auto', cursor: 'pointer' }}
             />
           </Link>
           {/* Desktop Menu - right aligned */}

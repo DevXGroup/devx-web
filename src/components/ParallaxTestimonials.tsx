@@ -124,16 +124,12 @@ export default function ParallaxTestimonials() {
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-center lg:gap-3 mb-6">
             <BlurText
               text="What Our Clients Say"
-              className="justify-center section-title-compact text-purple-400 lg:mb-0"
+              className="justify-center section-title text-purple-400 lg:mb-0"
               delay={150}
               once={false}
             />
             <span className="hidden lg:inline text-purple-400/50 section-title-compact">—</span>
-            <p className="subtitle mt-2 lg:mt-0">Don&apos;t just take our word for it.</p>
           </div>
-          <p className="subtitle-sm">
-            Here&apos;s what our clients have to say about working with us.
-          </p>
         </motion.div>
 
         <div
