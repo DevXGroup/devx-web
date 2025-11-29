@@ -608,12 +608,12 @@ export default function AboutPage() {
                     <span className="sr-only">About Us</span>
                   </div>
                 </h1>
-                <p className="subtitle-lg mb-6 md:mb-8 font-semibold">
+                <p className="subtitle-lg mb-6 md:mb-8 font-semibold ml-2 mt-6">
                   We are a senior engineering team trusted by growth‑stage companies for complex and
                   time‑sensitive projects. We ship production‑ready software with clear milestones,
                   ownership, and post‑launch support.
                 </p>
-                <div className="flex flex-wrap gap-4">
+                <div className="flex flex-wrap gap-4 ml-2">
                   <a
                     href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative"
                     target="_blank"
@@ -999,7 +999,7 @@ export default function AboutPage() {
           <AnimatedSection className="bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-8 md:p-12 max-w-4xl mx-auto text-center">
             <a
               href="#our-values"
-              className="inline-block mb-8 bg-[#8A4FFF]/20 hover:bg-[#8A4FFF]/30 text-white border border-[#8A4FFF]/50 px-6 py-2 rounded-full text-base font-medium transition-colors"
+              className="block sm:inline-block w-full sm:w-auto mb-8 bg-[#4CD787]/20 hover:bg-[#4CD787]/30 text-white border border-[#4CD787]/50 px-4 sm:px-6 py-2 rounded-full text-sm sm:text-base font-medium transition-colors text-center"
               onClick={(e) => {
                 e.preventDefault()
                 document.getElementById('our-values')?.scrollIntoView({

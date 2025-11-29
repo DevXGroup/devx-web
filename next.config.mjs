@@ -74,6 +74,10 @@ const nextConfig = {
         pathname: '/images/**',
         search: '?*',
       },
+      {
+        pathname: '/**',
+        search: '',
+      },
     ],
     formats: ['image/avif', 'image/webp'], // Modern formats for better compression
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
