@@ -153,21 +153,9 @@ const aiTools: AITool[] = [
     loopWrapperClassName: 'bg-transparent rounded-none p-0',
   },
   {
-    name: 'Antigravity',
-    description: 'High-performance cloud workspaces for collaborative dev flows',
-    icon: buildIconPath('antigravity.svg'),
-    loopWrapperClassName: 'bg-transparent rounded-none p-0',
-  },
-  {
     name: 'Zed',
     description: 'Lightning-fast multiplayer code editor for modern teams',
     icon: buildIconPath('zed.svg'),
-    loopWrapperClassName: 'bg-transparent rounded-none p-0',
-  },
-  {
-    name: 'Zen Browser',
-    description: 'Privacy-focused browser with efficient dev tooling',
-    icon: buildIconPath('zen-browser.svg'),
     loopWrapperClassName: 'bg-transparent rounded-none p-0',
   },
 ]
