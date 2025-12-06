@@ -152,6 +152,24 @@ const aiTools: AITool[] = [
     icon: buildIconPath('mongodb.svg'),
     loopWrapperClassName: 'bg-transparent rounded-none p-0',
   },
+  {
+    name: 'Antigravity',
+    description: 'High-performance cloud workspaces for collaborative dev flows',
+    icon: buildIconPath('antigravity.svg'),
+    loopWrapperClassName: 'bg-transparent rounded-none p-0',
+  },
+  {
+    name: 'Zed',
+    description: 'Lightning-fast multiplayer code editor for modern teams',
+    icon: buildIconPath('zed.svg'),
+    loopWrapperClassName: 'bg-transparent rounded-none p-0',
+  },
+  {
+    name: 'Zen Browser',
+    description: 'Privacy-focused browser with efficient dev tooling',
+    icon: buildIconPath('zen-browser.svg'),
+    loopWrapperClassName: 'bg-transparent rounded-none p-0',
+  },
 ]
 
 type OrbitMetrics = {
@@ -558,7 +576,7 @@ export default function DevelopmentTools() {
               delay={150}
               once={true}
             />
-            <LogoLoop logos={aiTools} speed={18} />
+            <LogoLoop logos={aiTools} speed={20} />
           </div>
         </div>
 
