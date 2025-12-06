@@ -88,3 +88,6 @@ test-results/
 # Documents
 # Keep the folder tracked for project documentation.
 # To ignore generated artifacts under documents, add patterns below.
+
+# Work in progress - separate folder
+devx-apps.md/

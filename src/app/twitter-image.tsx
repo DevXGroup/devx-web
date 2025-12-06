@@ -23,7 +23,8 @@ const DEFAULT_TITLE = 'DevX Group'
 const DEFAULT_SUBTITLE = 'AI Platforms • Custom Apps • Cloud Modernization'
 const DEFAULT_EYEBROW = 'Trusted by founders & enterprise teams'
 const DEFAULT_FOCUS = ['Agentic AI', 'Product Engineering', 'Experience Design', 'Cloud Ops']
-const LOGO_FILE = ['devx', 'logo', 'og'].join('-') + '.png'
+// Use the main logo which has better transparency
+const LOGO_FILE = 'devx-logo.png'
 
 const parseSearchParams = (params: OgSearchParams | undefined) => {
   const valueOf = (value: string | undefined) =>
@@ -124,13 +125,14 @@ export default async function Image({ searchParams }: { searchParams?: OgSearchP
                 height: 220,
                 borderRadius: '26px',
                 background:
-                  'linear-gradient(145deg, rgba(6, 182, 212, 0.28), rgba(157, 78, 221, 0.22))',
-                backdropFilter: 'blur(12px)',
+                  'radial-gradient(circle at 30% 30%, rgba(6, 182, 212, 0.15), transparent 70%), radial-gradient(circle at 70% 70%, rgba(157, 78, 221, 0.12), transparent 65%), rgba(15, 23, 42, 0.25)',
+                backdropFilter: 'blur(16px)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                boxShadow: '0 35px 90px rgba(2, 8, 35, 0.55)',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                boxShadow:
+                  '0 35px 90px rgba(2, 8, 35, 0.45), inset 0 0 35px rgba(6, 182, 212, 0.08)',
               }}
             >
               <img
@@ -138,7 +140,10 @@ export default async function Image({ searchParams }: { searchParams?: OgSearchP
                 height="120"
                 src={logoSrc}
                 alt="DevX Group logo"
-                style={{ objectFit: 'contain' }}
+                style={{
+                  objectFit: 'contain',
+                  filter: 'drop-shadow(0 4px 12px rgba(0, 0, 0, 0.25))',
+                }}
               />
             </div>
             <div>Full-stack teams · AI automation · Cloud deployment</div>

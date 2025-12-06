@@ -26,6 +26,7 @@ export default function LogoLoop({ logos, speed = 15 }: LogoLoopProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
   const [scrollDistance, setScrollDistance] = useState(0)
   const [isVisible, setIsVisible] = useState(false)
+  const [computedSpeed, setComputedSpeed] = useState(speed)
 
   // Debounced resize handler to prevent excessive re-renders
   const updateDistance = useCallback(() => {
@@ -56,14 +57,26 @@ export default function LogoLoop({ logos, speed = 15 }: LogoLoopProps) {
   }, [])
 
   useEffect(() => {
+    const updateSpeed = () => {
+      if (typeof window === 'undefined') return
+      const width = window.innerWidth || 0
+      // Slow down on mobile for less jitter; use provided speed as base
+      const multiplier = width < 768 ? 1.4 : 1
+      setComputedSpeed(speed * multiplier)
+    }
+
     updateDistance()
+    updateSpeed()
 
     // Debounced resize handler
     const handleResize = () => {
       if (resizeTimeoutRef.current) {
         clearTimeout(resizeTimeoutRef.current)
       }
-      resizeTimeoutRef.current = setTimeout(updateDistance, 150)
+      resizeTimeoutRef.current = setTimeout(() => {
+        updateDistance()
+        updateSpeed()
+      }, 150)
     }
 
     window.addEventListener('resize', handleResize, { passive: true })
@@ -74,7 +87,7 @@ export default function LogoLoop({ logos, speed = 15 }: LogoLoopProps) {
         clearTimeout(resizeTimeoutRef.current)
       }
     }
-  }, [updateDistance])
+  }, [updateDistance, speed])
 
   const clearTouchTimeout = useCallback(() => {
     if (touchTimeoutRef.current) {
@@ -118,7 +131,7 @@ export default function LogoLoop({ logos, speed = 15 }: LogoLoopProps) {
 
   const scrollerStyles: CSSProperties & { '--scroll-distance'?: string } = {
     animationName: scrollDistance > 0 && isVisible ? 'scroll' : 'none',
-    animationDuration: `${speed}s`,
+    animationDuration: `${computedSpeed}s`,
     animationTimingFunction: 'linear',
     animationIterationCount: 'infinite',
     animationDirection: 'alternate',

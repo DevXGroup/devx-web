@@ -110,8 +110,6 @@ type HireDevelopersCardProps = {
 }
 
 function HireDevelopersCard({ icon: Icon, title, description, index }: HireDevelopersCardProps) {
-  const prefersReducedMotion = useReducedMotion()
-
   return (
     <motion.div
       data-card-index={index}
@@ -119,7 +117,7 @@ function HireDevelopersCard({ icon: Icon, title, description, index }: HireDevel
       initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0, margin: '50px' }}
-      transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+      transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
       style={{ willChange: 'opacity, transform', transform: 'translateZ(0)' }}
       whileHover={{ y: -4, transition: { duration: 0.2 } }}
     >
@@ -147,8 +145,6 @@ function WhyUsCard({
   description: string
   index: number
 }) {
-  const prefersReducedMotion = useReducedMotion()
-
   return (
     <motion.div
       data-card-index={index}
@@ -156,7 +152,7 @@ function WhyUsCard({
       initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0, margin: '50px' }}
-      transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+      transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
       style={{ willChange: 'opacity, transform', transform: 'translateZ(0)' }}
       whileHover={{ y: -4, scale: 1.02, transition: { duration: 0.2 } }}
     >
@@ -174,17 +170,27 @@ function WhyUsCard({
 export default function Features() {
   const containerRef = useRef<HTMLDivElement>(null)
   const hireDevelopersRef = useRef<HTMLDivElement>(null)
+  const infinityContainerRef = useRef<HTMLDivElement>(null)
 
   const [currentStep, setCurrentStep] = useState(0)
   const steps = ['Talk to us', 'Plan together', 'Build something great']
 
   const [isMounted, setIsMounted] = useState(false)
   const [isStepAnimationActive, setIsStepAnimationActive] = useState(false)
-  const [hasEnabled3D, setHasEnabled3D] = useState(false)
   const shouldReduceMotion = useReducedMotion()
   const isInView = useInView(containerRef, { once: true, margin: '0px' })
   const { isMobile, shouldOptimizeAnimations } = usePerformanceOptimizedAnimation()
-  const shouldRender3D = hasEnabled3D && !shouldOptimizeAnimations
+
+  // Viewport-based lazy loading: Start loading when user scrolls near the 3D section
+  // Large margin (800px) ensures it loads before coming into view for smooth UX
+  const is3DInViewport = useInView(infinityContainerRef, {
+    once: true, // Only trigger once - never unload
+    margin: '800px', // Start loading well before it's visible
+    amount: 0,
+  })
+
+  // Render 3D when in viewport and not on low-power devices
+  const shouldRender3D = is3DInViewport && !shouldOptimizeAnimations
 
   useEffect(() => {
     setIsMounted(true)
@@ -295,6 +301,124 @@ export default function Features() {
           </div>
         </div>
         {/* End of Hire Developers Section with Grid */}
+
+        {/* Engagement Models Section */}
+        <div className="relative py-12 sm:py-16 md:py-20 my-12 sm:my-16 md:my-20">
+          <div className="text-center mb-8 sm:mb-12 relative z-[3]">
+            <BlurText
+              text="How We Work With You"
+              className="justify-center heading-section text-white mb-4 sm:mb-6 pb-2 sm:pb-3 px-4"
+              delay={150}
+              once={true}
+            />
+            <p className="subtitle-lg max-w-3xl mx-auto px-4 text-slate-300">
+              From small businesses to large enterprises—flexible engagement models that fit your
+              needs
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 md:gap-8 max-w-6xl mx-auto px-4 sm:px-6 relative z-[3]">
+            <motion.div
+              className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 border border-[#4CD787]/30 p-6 sm:p-8 rounded-2xl shadow-xl shadow-black/40 backdrop-blur-sm group hover:border-[#4CD787]/60 transition-all duration-300"
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0, margin: '50px' }}
+              transition={{ duration: 0.3, delay: 0, ease: [0.25, 0.1, 0.25, 1] }}
+            >
+              <div className="flex flex-col gap-4">
+                <div className="w-12 h-12 rounded-full bg-[#4CD787]/20 flex items-center justify-center">
+                  <Rocket className="w-6 h-6 text-[#4CD787]" />
+                </div>
+                <h3 className="card-title text-white">Project Delivery</h3>
+                <p className="card-description-normal">
+                  Fixed-scope projects with clear timelines and deliverables. Perfect for defined
+                  features, MVPs, or specific initiatives.
+                </p>
+                <ul className="space-y-2 text-sm text-slate-300 mt-2">
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#4CD787] mt-1">•</span>
+                    <span>Fixed pricing & timeline</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#4CD787] mt-1">•</span>
+                    <span>Well-defined scope</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#4CD787] mt-1">•</span>
+                    <span>End-to-end delivery</span>
+                  </li>
+                </ul>
+              </div>
+            </motion.div>
+
+            <motion.div
+              className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 border border-[#9d4edd]/30 p-6 sm:p-8 rounded-2xl shadow-xl shadow-black/40 backdrop-blur-sm group hover:border-[#9d4edd]/60 transition-all duration-300"
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0, margin: '50px' }}
+              transition={{ duration: 0.3, delay: 0.1, ease: [0.25, 0.1, 0.25, 1] }}
+            >
+              <div className="flex flex-col gap-4">
+                <div className="w-12 h-12 rounded-full bg-[#9d4edd]/20 flex items-center justify-center">
+                  <User className="w-6 h-6 text-[#9d4edd]" />
+                </div>
+                <h3 className="card-title text-white">Team Augmentation</h3>
+                <p className="card-description-normal">
+                  Dedicated engineers who integrate with your team. Scale up or down as needed with
+                  seamless collaboration.
+                </p>
+                <ul className="space-y-2 text-sm text-slate-300 mt-2">
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#9d4edd] mt-1">•</span>
+                    <span>Flexible team size</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#9d4edd] mt-1">•</span>
+                    <span>Your process & tools</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#9d4edd] mt-1">•</span>
+                    <span>Monthly engagement</span>
+                  </li>
+                </ul>
+              </div>
+            </motion.div>
+
+            <motion.div
+              className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 border border-[#ccff00]/30 p-6 sm:p-8 rounded-2xl shadow-xl shadow-black/40 backdrop-blur-sm group hover:border-[#ccff00]/60 transition-all duration-300"
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0, margin: '50px' }}
+              transition={{ duration: 0.3, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+            >
+              <div className="flex flex-col gap-4">
+                <div className="w-12 h-12 rounded-full bg-[#ccff00]/20 flex items-center justify-center">
+                  <Layers className="w-6 h-6 text-[#ccff00]" />
+                </div>
+                <h3 className="card-title text-white">Long-Term Partnership</h3>
+                <p className="card-description-normal">
+                  Full engineering team ownership for startups and software companies. We become
+                  your execution arm.
+                </p>
+                <ul className="space-y-2 text-sm text-slate-300 mt-2">
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#ccff00] mt-1">•</span>
+                    <span>Ongoing development</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#ccff00] mt-1">•</span>
+                    <span>Strategic planning</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#ccff00] mt-1">•</span>
+                    <span>Complete ownership</span>
+                  </li>
+                </ul>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+        {/* End of Engagement Models Section */}
 
         {/* Creative Rotating Text Section - Enhanced Size & Visibility */}
         <div className="relative -mx-4 px-4 py-14 sm:py-16 md:py-20 my-12 sm:my-16 md:my-20 bg-transparent">
@@ -421,6 +545,7 @@ export default function Features() {
         </div>
       </motion.div>
       <div
+        ref={infinityContainerRef}
         className="mt-20"
         style={{
           willChange: 'transform',
@@ -428,26 +553,43 @@ export default function Features() {
           transform: 'translateZ(0)',
         }}
       >
-        {!shouldRender3D && (
-          <div className="w-full max-w-4xl mx-auto text-center space-y-4 bg-slate-900/70 border border-slate-700/70 rounded-2xl p-8 sm:p-10">
-            <p className="text-slate-100 text-lg font-semibold">Interactive 3D preview</p>
-            <p className="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto">
-              Turn on the infinity loop to see our WebGL demo. We keep it disabled by default to
-              save bandwidth during page load.
-            </p>
-            <button
-              type="button"
-              onClick={() => setHasEnabled3D(true)}
-              disabled={shouldOptimizeAnimations}
-              className="px-5 py-2 rounded-lg bg-[#ccff00] text-black font-bold shadow-[0_10px_30px_rgba(204,255,0,0.25)] disabled:opacity-60 disabled:cursor-not-allowed"
-            >
-              {shouldOptimizeAnimations
-                ? '3D disabled for low power mode'
-                : 'Enable 3D Infinity Loop'}
-            </button>
+        {/* Loading skeleton while 3D component is being loaded */}
+        {!shouldRender3D && !shouldOptimizeAnimations && (
+          <div className="w-full h-[40vh] flex items-center justify-center">
+            <div className="relative w-32 h-32">
+              {/* Animated infinity symbol skeleton */}
+              <div className="absolute inset-0 animate-pulse">
+                <svg
+                  viewBox="0 0 100 50"
+                  className="w-full h-full"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M 25 25 Q 35 10, 50 25 Q 65 40, 75 25 Q 85 10, 75 25 Q 65 40, 50 25 Q 35 10, 25 25"
+                    fill="none"
+                    stroke="rgba(204, 255, 0, 0.3)"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </div>
+              <p className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-slate-400 text-sm whitespace-nowrap">
+                Loading 3D experience...
+              </p>
+            </div>
           </div>
         )}
 
+        {/* Show message for low-power devices */}
+        {shouldOptimizeAnimations && (
+          <div className="w-full max-w-3xl mx-auto text-center py-12 px-4">
+            <p className="text-slate-400 text-base">
+              3D visualization disabled to optimize performance for your device.
+            </p>
+          </div>
+        )}
+
+        {/* Render 3D when in viewport and device supports it */}
         {shouldRender3D && <InfinityLogo />}
       </div>
 

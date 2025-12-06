@@ -114,24 +114,6 @@ export default function ParallaxTestimonials() {
           <EnhancedInfinityLoader scrollThreshold={0.25} baseScale={0.3} maxScale={3} />
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.2 }}
-          transition={{ duration: 0.8 }}
-          className="text-center max-w-4xl mx-auto mb-16 mt-28"
-        >
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-center lg:gap-3 mb-6">
-            <BlurText
-              text="What Our Clients Say"
-              className="justify-center section-title text-purple-400 lg:mb-0"
-              delay={150}
-              once={false}
-            />
-            <span className="hidden lg:inline text-purple-400/50 section-title-compact">—</span>
-          </div>
-        </motion.div>
-
         <div
           className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-16 max-w-6xl mx-auto"
           ref={containerRef}

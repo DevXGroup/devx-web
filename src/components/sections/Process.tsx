@@ -3,6 +3,7 @@
 import { motion, useScroll, useTransform, useMotionValue } from 'framer-motion'
 import { useRef, useEffect, useState } from 'react'
 import { Code2, Rocket, Users, Zap, Pencil, Settings } from 'lucide-react'
+import Image from 'next/image'
 import SDLCProcess from './SDLCProcess'
 import { AnimatedGradientText } from '@animations/AnimatedGradientText'
 import BlurText from '@animations/BlurText'
@@ -141,12 +142,18 @@ export default function Process() {
 
   return (
     <section className="relative py-20 w-full overflow-hidden" ref={containerRef}>
-      {/* Lightweight CSS background instead of heavy image */}
+      {/* Speed lines background image */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#050505] via-[#0b0b12] to-[#050505]" />
-        <div className="absolute inset-0 opacity-20 mix-blend-screen bg-[radial-gradient(circle_at_20%_30%,rgba(204,255,0,0.12),transparent_40%),radial-gradient(circle_at_80%_20%,rgba(147,197,253,0.12),transparent_38%),radial-gradient(circle_at_50%_80%,rgba(139,92,246,0.1),transparent_42%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(60deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[length:180px_180px]" />
-        <div className="absolute inset-0 bg-black/82" />
+        <Image
+          src="/images/backgrounds/speed-lines.webp"
+          alt=""
+          fill
+          className="object-cover"
+          priority
+          quality={75}
+        />
+        {/* Dark overlay for text readability - increased opacity */}
+        <div className="absolute inset-0 bg-black/85" />
       </div>
 
       {/* Top fade-in gradient */}
@@ -241,7 +248,9 @@ export default function Process() {
                   >
                     <process.icon className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
                   </div>
-                  <h3 className="heading-component text-white">{process.title}</h3>
+                  <h3 className="heading-component text-white text-left flex-1 leading-tight">
+                    {process.title}
+                  </h3>
                 </div>
                 <p className="subtitle-sm">{process.description}</p>
               </div>
