@@ -216,6 +216,8 @@ export default function CosmicStars() {
           opacity: 0.9;
           pointer-events: none;
           box-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
+          transform: scale(1);
+          filter: brightness(1);
         }
 
         /* Subtle twinkling animation for medium stars */

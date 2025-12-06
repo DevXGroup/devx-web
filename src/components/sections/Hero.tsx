@@ -191,7 +191,7 @@ export default function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-black"
+      className="relative min-h-screen min-h-[100dvh] w-full flex items-center justify-center overflow-hidden bg-black"
     >
       <div className="absolute inset-0 w-full h-full z-[1]">
         <div className="absolute inset-0 bg-gradient-to-b from-zinc-950 via-black to-black pointer-events-none" />
@@ -222,7 +222,7 @@ export default function Hero() {
           {/* Hero content wrapper */}
           <div className="space-y-6 sm:space-y-8 lg:space-y-10 xl:space-y-12">
             <div
-              className="hero-title mx-auto flex flex-wrap md:flex-nowrap items-center justify-center gap-3 sm:gap-4 md:gap-5 xl:gap-6 2xl:gap-7 text-center text-white font-mono font-black tracking-[-0.02em] w-full whitespace-normal md:whitespace-nowrap text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5rem] 2xl:text-[5.5rem] leading-[1.1]"
+              className="hero-title mx-auto flex flex-wrap lg:flex-nowrap items-center justify-center gap-3 sm:gap-4 md:gap-5 xl:gap-6 2xl:gap-7 text-center text-white font-mono font-black tracking-[-0.02em] w-full whitespace-normal lg:whitespace-nowrap text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5rem] 2xl:text-[5.5rem] leading-[1.1]"
               style={{
                 minHeight: '4rem',
                 height: 'auto',
@@ -264,14 +264,15 @@ export default function Hero() {
               />
             </div>
 
-            <div className="text-center w-full mx-auto space-y-4 sm:space-y-5 lg:space-y-6">
+            <div className="text-center w-full mx-auto space-y-6 sm:space-y-7 md:space-y-8 lg:space-y-6">
               <motion.p
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 2.3, duration: 1.9 }}
-                className="text-white/90 text-center mx-auto px-2 text-xl sm:text-2xl md:text-3xl lg:text-3xl xl:text-[2rem] 2xl:text-[2.25rem] font-light leading-tight"
+                className="text-white/90 text-center mx-auto px-2 text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-[2rem] 2xl:text-[2.25rem] font-light leading-relaxed"
               >
-                Elite software team shipping polished software at startup speed.
+                Elite software team shipping polished products
+                <span className="block">at startup speed.</span>
               </motion.p>
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
@@ -360,10 +361,10 @@ export default function Hero() {
                 rel="noopener noreferrer"
                 color="#ccff00"
                 speed={isMobile ? '5s' : '3s'}
-                className="ui-code font-extrabold btn-text-primary px-6 py-3 sm:px-7 sm:py-3.5 lg:px-8 lg:py-4 min-h-[44px] flex w-full sm:w-auto items-center justify-center text-center tracking-wide hover:tracking-wider transition-all duration-300"
-                aria-label="Book a free consultation call with DevX Group"
+                className="ui-code font-extrabold btn-text-primary px-6 py-3 sm:px-7 sm:py-3.5 lg:px-8 lg:py-4 min-h-[44px] min-w-[230px] flex w-full sm:w-auto items-center justify-center text-center tracking-wide hover:tracking-wider transition-all duration-300"
+                aria-label="Schedule a free consultation with DevX Group"
               >
-                Book a Free Call
+                Schedule a Free Consultation
               </StarBorder>
             </motion.div>
             <motion.div
@@ -377,7 +378,7 @@ export default function Hero() {
                 onClick={navigateToPortfolio}
                 color="#e534eb"
                 speed={isMobile ? '6s' : '4s'}
-                className="ui-code font-extrabold btn-text-primary px-6 py-3 sm:px-7 sm:py-3.5 lg:px-8 lg:py-4 min-h-[44px] flex w-full sm:w-auto items-center justify-center text-center tracking-wide hover:tracking-wider transition-all duration-300"
+                className="ui-code font-extrabold btn-text-primary px-6 py-3 sm:px-7 sm:py-3.5 lg:px-8 lg:py-4 min-h-[44px] min-w-[230px] flex w-full sm:w-auto items-center justify-center text-center tracking-wide hover:tracking-wider transition-all duration-300"
                 aria-label="View DevX Group portfolio"
               >
                 See Our Work

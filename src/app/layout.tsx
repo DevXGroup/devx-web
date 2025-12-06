@@ -5,6 +5,7 @@ import type { ReactNode } from 'react'
 import './globals.css'
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
+import { Playwrite_CU } from 'next/font/google'
 import ConditionalLayout from '@/components/layout/ConditionalLayout'
 import { BrowserCompatibilityDetector } from '@/components/layout/BrowserCompatibilityDetector'
 import { DevToolsErrorSuppressor } from '@/components/layout/DevToolsErrorSuppressor'
@@ -45,6 +46,12 @@ const ibmPlexSans = localFont({
   fallback: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
   preload: true, // Preload critical font weights
   adjustFontFallback: 'Arial', // Better fallback matching for LCP
+})
+
+const playwriteCU = Playwrite_CU({
+  weight: ['100', '200', '300', '400'],
+  variable: '--font-playwrite-cu',
+  display: 'swap',
 })
 
 const siteUrl = getSiteUrl()
@@ -325,7 +332,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         )}
       </head>
       <body
-        className={`${ibmPlexSans.variable} ${ibmPlexMono.variable} bg-black text-white font-sans antialiased`}
+        className={`${ibmPlexSans.variable} ${ibmPlexMono.variable} ${playwriteCU.variable} bg-black text-white font-sans antialiased`}
         style={{ backgroundColor: '#000000', transition: 'none', paddingTop: '64px' }}
         suppressHydrationWarning
       >

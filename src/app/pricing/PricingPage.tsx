@@ -381,7 +381,7 @@ function PricingCard({ plan }: PricingCardProps) {
             `}
           >
             <span className="relative z-10 flex items-center justify-center gap-2">
-              Schedule a Strategy Call
+              Schedule a Free Consultation
               <ArrowRight className="w-4 h-4 group-hover/button:translate-x-1 transition-transform duration-300" />
             </span>
 
@@ -600,7 +600,7 @@ export default function PricingPage() {
                   className="inline-flex items-center gap-3 bg-gradient-to-r from-[#4CD787] to-[#66E6A4] text-black px-8 py-4 rounded-xl font-bold text-lg hover:shadow-xl hover:shadow-[#4CD787]/30 transition-all duration-300 relative overflow-hidden group"
                 >
                   <Sparkles className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
-                  Schedule a Strategy Call
+                  Schedule a Free Consultation
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
                   {/* Button shimmer */}
                   <motion.div

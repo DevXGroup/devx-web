@@ -277,7 +277,7 @@ export default function CreativeAnimationHero() {
             transition={{ delay: 1, duration: 1 }}
           >
             <motion.h1
-              className="text-7xl md:text-9xl font-['IBM_Plex_Mono'] font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-orange-300 to-pink-300 mb-6"
+              className="text-6xl md:text-8xl font-['IBM_Plex_Mono'] font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-orange-300 to-pink-300 mb-6"
               style={{
                 textShadow: '0 0 40px rgba(255,255,255,0.3)',
                 WebkitTextStroke: '1px rgba(255,255,255,0.1)',
@@ -286,7 +286,7 @@ export default function CreativeAnimationHero() {
               Creative
             </motion.h1>
             <motion.p
-              className="text-2xl md:text-3xl font-['IBM_Plex_Sans'] font-light text-white/90"
+              className="text-xl md:text-2xl font-['IBM_Plex_Sans'] font-light text-white/90"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.5, duration: 1 }}

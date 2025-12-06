@@ -21,7 +21,8 @@ const DEFAULT_TITLE = 'DevX Group'
 const DEFAULT_SUBTITLE = 'Custom Software • Agentic AI • Cloud Modernization'
 const DEFAULT_EYEBROW = 'Elite Product Engineers'
 const DEFAULT_FOCUS = ['AI Platforms', 'Agentic Automation', 'Product Design', 'Cloud Ops']
-const LOGO_FILE = ['devx', 'logo', 'og'].join('-') + '.png'
+// Use the main logo which has better transparency
+const LOGO_FILE = 'devx-logo.png'
 
 const parseSearchParams = (params: OgSearchParams | undefined) => {
   const valueOf = (value: string | undefined) =>
@@ -125,14 +126,16 @@ export default async function Image({ searchParams }: { searchParams?: OgSearchP
                 width: 240,
                 height: 240,
                 borderRadius: '28px',
-                background:
-                  'linear-gradient(145deg, rgba(157, 78, 221, 0.28), rgba(76, 215, 135, 0.22))',
-                backdropFilter: 'blur(12px)',
+                backgroundImage:
+                  'radial-gradient(circle at 30% 30%, rgba(157, 78, 221, 0.15), transparent 70%), radial-gradient(circle at 70% 70%, rgba(76, 215, 135, 0.12), transparent 65%)',
+                backgroundColor: 'rgba(15, 23, 42, 0.25)',
+                backdropFilter: 'blur(16px)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
-                boxShadow: '0 35px 100px rgba(18, 0, 60, 0.45)',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                boxShadow:
+                  '0 35px 100px rgba(18, 0, 60, 0.35), inset 0 0 40px rgba(157, 78, 221, 0.08)',
               }}
             >
               <img
@@ -140,7 +143,10 @@ export default async function Image({ searchParams }: { searchParams?: OgSearchP
                 height="130"
                 src={logoSrc}
                 alt="DevX Group logo"
-                style={{ objectFit: 'contain' }}
+                style={{
+                  objectFit: 'contain',
+                  filter: 'drop-shadow(0 4px 12px rgba(0, 0, 0, 0.25))',
+                }}
               />
             </div>
             <div>San Diego · Toronto · Global Delivery</div>
