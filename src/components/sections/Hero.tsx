@@ -58,8 +58,6 @@ export default function Hero() {
   const router = useRouter()
   const shouldReduceMotion = useReducedMotion()
   const controls = useAnimation()
-  const [enableCosmicStars, setEnableCosmicStars] = useState(false)
-  const [enableShootingStars, setEnableShootingStars] = useState(false)
   const [StarFieldComp, setStarFieldComp] = useState<(() => React.ReactElement) | null>(null)
   const [HeroBgComp, setHeroBgComp] = useState<(() => React.ReactElement) | null>(null)
   const [ShootingStarsComp, setShootingStarsComp] = useState<(() => React.ReactElement) | null>(
@@ -68,6 +66,9 @@ export default function Hero() {
   const [OrionComp, setOrionComp] = useState<(() => React.ReactElement) | null>(null)
   const [visualsReady, setVisualsReady] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const [orionReady, setOrionReady] = useState(false)
+  const [showStars, setShowStars] = useState(false)
+  const [showShootingStars, setShowShootingStars] = useState(false)
 
   // Use performance optimization hook to detect slow devices
   const { shouldOptimizeAnimations } = usePerformanceOptimizedAnimation()
@@ -134,73 +135,26 @@ export default function Hero() {
     }
   }, [])
 
-  // Allow background visuals to render for smooth experience
-  // Orion constellation deferred until user interaction for performance
   const canUseHeavyVisuals = !shouldOptimizeAnimations && !shouldReduceMotion
   const canUseOrionVisuals = visualsReady && canUseHeavyVisuals
 
+  // New loading sequence: Text → Planet → Stars/Blobs (for performance)
   useEffect(() => {
     controls.start('visible')
+
     if (!canUseHeavyVisuals) {
-      setEnableCosmicStars(false)
-      setEnableShootingStars(false)
+      setShowStars(false)
+      setShowShootingStars(false)
       return
     }
 
-    const loadVisuals = async () => {
-      try {
-        const [
-          { StarTwinklingField },
-          { default: HeroBackground },
-          { default: ShootingStars },
-          orion,
-        ] = await Promise.all([
-          import('../animations/StarTwinklingField'),
-          import('../hero/HeroBackground'),
-          import('../hero/ShootingStars'),
-          import('../hero/OrionCanvasWrapper'),
-        ])
-        const StarFieldLazy = () => <StarTwinklingField className="z-1" count={100} />
-        StarFieldLazy.displayName = 'StarFieldLazy'
-        const HeroBgLazy = () => <HeroBackground />
-        HeroBgLazy.displayName = 'HeroBackgroundLazy'
-        const ShootingStarsLazy = () => <ShootingStars />
-        ShootingStarsLazy.displayName = 'ShootingStarsLazy'
-        const OrionLazy = () => <orion.default />
-        OrionLazy.displayName = 'OrionCanvasLazy'
+    let orionTimer: number | undefined
+    let starsTimer: number | undefined
+    let shootingTimer: number | undefined
 
-        setStarFieldComp(() => StarFieldLazy)
-        setHeroBgComp(() => HeroBgLazy)
-        setShootingStarsComp(() => ShootingStarsLazy)
-        setOrionComp(() => OrionLazy)
-      } catch {
-        // ignore load errors; skip visuals
-      }
-    }
-
-    // Load background visuals immediately for smooth animation experience
-    // Text animations play while backgrounds load in the background
-    const backgroundTimer = scheduleIdleTask(() => {
-      setEnableCosmicStars(true)
-      loadVisuals()
-    }, 400) // Reduced from 800ms to start background sooner
-
-    // Shooting stars follow shortly after
-    const shootingStarsTimer = scheduleIdleTask(() => {
-      setEnableShootingStars(true)
-    }, 1000) // Reduced from 1400ms
-
-    return () => {
-      cancelIdleTask(backgroundTimer)
-      cancelIdleTask(shootingStarsTimer)
-    }
-  }, [cancelIdleTask, canUseHeavyVisuals, controls, scheduleIdleTask])
-
-  // Separate effect to load Orion constellation on user interaction
-  useEffect(() => {
-    if (!canUseOrionVisuals) return
-
-    const loadOrion = async () => {
+    // Step 1: Text appears immediately (already handled by Framer Motion)
+    // Step 2: Load Planet (Orion) after text starts animating
+    const loadPlanet = async () => {
       try {
         const orion = await import('../hero/OrionCanvasWrapper')
         const OrionLazy = () => <orion.default />
@@ -211,8 +165,71 @@ export default function Hero() {
       }
     }
 
-    loadOrion()
-  }, [canUseOrionVisuals])
+    // Step 3: Load stars and background effects AFTER planet
+    const loadStarsAndEffects = async () => {
+      try {
+        const [{ StarTwinklingField }, { default: HeroBackground }, { default: ShootingStars }] =
+          await Promise.all([
+            import('../animations/StarTwinklingField'),
+            import('../hero/HeroBackground'),
+            import('../hero/ShootingStars'),
+          ])
+        const StarFieldLazy = () => <StarTwinklingField className="z-1" count={100} />
+        StarFieldLazy.displayName = 'StarFieldLazy'
+        const HeroBgLazy = () => <HeroBackground />
+        HeroBgLazy.displayName = 'HeroBackgroundLazy'
+        const ShootingStarsLazy = () => <ShootingStars />
+        ShootingStarsLazy.displayName = 'ShootingStarsLazy'
+
+        setStarFieldComp(() => StarFieldLazy)
+        setHeroBgComp(() => HeroBgLazy)
+        setShootingStarsComp(() => ShootingStarsLazy)
+      } catch {
+        // ignore load errors
+      }
+    }
+
+    // Sequence: Text (0-4200ms) → Planet (4500ms) → Stars (5500ms)
+    // Wait for subtitle animation to complete (~4200ms) before loading planet
+    orionTimer = window.setTimeout(() => {
+      loadPlanet()
+    }, 4500) as unknown as number
+
+    starsTimer = window.setTimeout(() => {
+      setShowStars(true)
+      loadStarsAndEffects()
+    }, 5500) as unknown as number
+
+    shootingTimer = window.setTimeout(() => {
+      setShowShootingStars(true)
+    }, 6300) as unknown as number
+
+    return () => {
+      if (orionTimer) clearTimeout(orionTimer)
+      if (starsTimer) clearTimeout(starsTimer)
+      if (shootingTimer) clearTimeout(shootingTimer)
+    }
+  }, [canUseHeavyVisuals, controls])
+
+  // Make Orion visible after it's loaded and positioned
+  useEffect(() => {
+    if (!OrionComp) {
+      setOrionReady(false)
+      return
+    }
+
+    // Use RAF to ensure layout is calculated, then show with smooth fade
+    const rafId = requestAnimationFrame(() => {
+      const timerId = setTimeout(() => {
+        setOrionReady(true)
+      }, 100) // Minimal delay since Orion already loaded in sequence
+      return timerId
+    })
+
+    return () => {
+      if (typeof rafId === 'number') cancelAnimationFrame(rafId)
+    }
+  }, [OrionComp])
 
   return (
     <section
@@ -222,24 +239,47 @@ export default function Hero() {
       <div className="absolute inset-0 w-full h-full z-[1]">
         <div className="absolute inset-0 bg-gradient-to-b from-zinc-950 via-black to-black pointer-events-none" />
         <ClientOnly>
-          {enableCosmicStars && canUseHeavyVisuals && (
-            <>
+          {/* Orion constellation - loads second, after text */}
+          {OrionComp && canUseHeavyVisuals && (
+            <motion.div
+              className="fixed z-[10000] pointer-events-none left-1/2 translate-x-[32%] sm:left-auto sm:right-3 sm:translate-x-0 top-[26vh] sm:top-[28vh] md:top-[30vh] md:right-4 lg:right-12 lg:top-[32vh] xl:right-20 xl:top-[30vh] w-60 h-60 sm:w-64 sm:h-64 md:w-72 md:h-72 xl:w-[360px] xl:h-[360px]"
+              style={{
+                visibility: orionReady ? 'visible' : 'hidden',
+              }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: orionReady ? 1 : 0 }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
+            >
+              <OrionComp />
+            </motion.div>
+          )}
+          {/* Stars and background - load last for performance */}
+          {showStars && canUseHeavyVisuals && (
+            <motion.div
+              className="absolute inset-0 w-full h-full"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, ease: 'easeOut' }}
+            >
               {StarFieldComp && <StarFieldComp />}
               {HeroBgComp && <HeroBgComp />}
-              {/* Orion constellation - fixed position, stays in same spot at all screen sizes */}
-              {OrionComp && (
-                <div className="fixed z-[10000] pointer-events-none left-1/2 translate-x-[32%] sm:left-auto sm:right-3 sm:translate-x-0 top-[26vh] sm:top-[28vh] md:top-[30vh] md:right-4 lg:right-12 lg:top-[32vh] xl:right-20 xl:top-[30vh] w-60 h-60 sm:w-64 sm:h-64 md:w-72 md:h-72 xl:w-[360px] xl:h-[360px]">
-                  <OrionComp />
-                </div>
-              )}
-            </>
+            </motion.div>
           )}
         </ClientOnly>
       </div>
 
-      {/* Shooting Stars - Only rendered on client */}
+      {/* Shooting Stars - Load last */}
       <ClientOnly>
-        {enableShootingStars && canUseHeavyVisuals && ShootingStarsComp && <ShootingStarsComp />}
+        {showShootingStars && canUseHeavyVisuals && ShootingStarsComp && (
+          <motion.div
+            className="absolute inset-0 w-full h-full pointer-events-none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, ease: 'easeOut' }}
+          >
+            <ShootingStarsComp />
+          </motion.div>
+        )}
       </ClientOnly>
 
       {/* Content */}

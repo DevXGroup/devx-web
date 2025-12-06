@@ -421,13 +421,13 @@ export default function Features() {
         {/* End of Engagement Models Section */}
 
         {/* Creative Rotating Text Section - Enhanced Size & Visibility */}
-        <div className="relative -mx-4 px-4 py-14 sm:py-16 md:py-20 my-12 sm:my-16 md:my-20 bg-transparent">
-          <div className="relative z-10 text-center">
-            <div className="flex flex-col sm:flex-row items-center sm:items-baseline justify-center gap-3 sm:gap-4 md:gap-5 lg:gap-5 xl:gap-6 px-4">
-              <span className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl xl:text-[4rem] 2xl:text-[4.5rem] font-black bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-purple-300 to-indigo-400 drop-shadow-[0_0_35px_rgba(147,51,234,0.8)] filter-none">
+        <div className="relative w-full py-14 sm:py-16 md:py-20 my-12 sm:my-16 md:my-20 bg-transparent px-[2%]">
+          <div className="relative z-10 text-center w-full">
+            <div className="flex flex-col sm:flex-row items-center sm:items-baseline justify-center gap-3 sm:gap-4 md:gap-5 lg:gap-5 xl:gap-6 w-full">
+              <span className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl xl:text-[3.5rem] 2xl:text-[4rem] font-black bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-purple-300 to-indigo-400 drop-shadow-[0_0_35px_rgba(147,51,234,0.8)] filter-none shrink-0">
                 Creative
               </span>
-              <div className="relative inline-block whitespace-nowrap">
+              <div className="relative inline-block whitespace-nowrap min-w-0 flex-1 overflow-hidden">
                 <RotatingText
                   texts={subheaders}
                   rotationInterval={
@@ -443,7 +443,7 @@ export default function Features() {
                   splitBy="characters"
                   staggerDuration={shouldOptimizeAnimations ? 0.05 : 0.03}
                   staggerFrom="first"
-                  mainClassName="relative text-3xl sm:text-4xl md:text-4xl lg:text-5xl xl:text-[3.5rem] 2xl:text-[4rem] font-bold font-mono text-center text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)] leading-tight whitespace-nowrap"
+                  mainClassName="relative text-3xl sm:text-4xl md:text-4xl lg:text-5xl xl:text-[3rem] 2xl:text-[3.5rem] font-bold font-mono text-center text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)] leading-tight whitespace-nowrap"
                   splitLevelClassName="overflow-visible"
                   elementLevelClassName="inline-block drop-shadow-lg"
                   loop={true}
