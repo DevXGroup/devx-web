@@ -17,7 +17,11 @@ if (typeof globalThis !== 'undefined' && typeof globalThis.self === 'undefined')
 try {
   if (typeof globalThis !== 'undefined' && typeof self === 'undefined') {
     // eslint-disable-next-line no-new-func
-    Function('self = this').call(globalThis)
+    const fn = new Function('return this')
+    const context = fn()
+    if (context && typeof context.self === 'undefined') {
+      context.self = context
+    }
   }
 } catch {
   // Ignore if the environment already defines `self` or disallows assignment.

@@ -24,6 +24,7 @@ import ScrollStack, { ScrollStackItem } from '@/components/animations/ScrollStac
 import OrgChart from '@/components/sections/OrgChart'
 import DarkVeil from '@/components/animations/DarkVeil'
 import BlurText from '@/components/animations/BlurText'
+import ParallaxTestimonials from '@/components/ParallaxTestimonials'
 import { useIsMobile } from '@/hooks/use-mobile'
 
 // Enhanced animation variants for better performance
@@ -308,9 +309,9 @@ const VisionCard = () => {
       isHovered={isHovered}
       onHoverChange={setIsHovered}
     >
-      <div className="flex items-center gap-3 mb-3 md:mb-4">
+      <div className="flex items-center gap-3 mb-4">
         <motion.h3
-          className="heading-component text-[#4CD787] whitespace-nowrap"
+          className="card-title text-[#4CD787] whitespace-nowrap"
           animate={
             isHovered
               ? { textShadow: '0 0 12px rgba(76, 215, 135, 0.4), 0 0 24px rgba(76, 215, 135, 0.2)' }
@@ -343,7 +344,7 @@ const VisionCard = () => {
           }}
         />
       </div>
-      <p className="subtitle">
+      <p className="card-description max-w-2xl">
         To revolutionize software development by delivering innovative, efficient, and scalable
         solutions that empower businesses worldwide to thrive in a digital-first future.
       </p>
@@ -362,9 +363,9 @@ const MissionCard = () => {
       isHovered={isHovered}
       onHoverChange={setIsHovered}
     >
-      <div className="flex items-center gap-3 mb-3 md:mb-4">
+      <div className="flex items-center gap-3 mb-4">
         <motion.h3
-          className="heading-component text-[#06B6D4] whitespace-nowrap"
+          className="card-title text-[#06B6D4] whitespace-nowrap"
           animate={
             isHovered
               ? { textShadow: '0 0 12px rgba(6, 182, 212, 0.4), 0 0 24px rgba(6, 182, 212, 0.2)' }
@@ -397,7 +398,7 @@ const MissionCard = () => {
           }}
         />
       </div>
-      <p className="subtitle">
+      <p className="card-description max-w-2xl">
         To simplify the software development journey through a streamlined, results-first process,
         ensuring exceptional quality, adaptability, and long-term success for every client.
       </p>
@@ -434,7 +435,7 @@ const VisionMissionCard = ({
       initial="hidden"
       animate={isInViewForFadeIn ? 'visible' : 'hidden'}
       transition={{ duration: 0.6, delay: shouldReduceMotion ? 0 : delay }}
-      className="group relative bg-black/60 backdrop-blur-md p-6 md:p-8 rounded-xl border border-white/20 hover:border-[#4CD787]/40 active:border-[#4CD787]/60 transition-colors duration-300 shadow-2xl overflow-visible cursor-pointer touch-manipulation"
+      className="group relative bg-[#0B0B10]/90 p-8 rounded-2xl border border-white/30 hover:border-[#4CD787]/50 active:border-[#4CD787]/60 transition-all duration-300 shadow-lg hover:shadow-[#4CD787]/30 overflow-visible cursor-pointer touch-manipulation text-left"
       onMouseEnter={() => !isMobile && onHoverChange?.(true)}
       onMouseLeave={() => !isMobile && onHoverChange?.(false)}
       whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
@@ -627,7 +628,7 @@ export default function AboutPage() {
                       e.preventDefault()
                     }}
                   >
-                    Schedule a Strategy Call
+                    Schedule a Free Consultation
                   </a>
                   <Link
                     href="/portfolio"
@@ -697,10 +698,6 @@ export default function AboutPage() {
               <StatCounter number="40+" label="Projects Completed" />
               <StatCounter number="23" label="Team Members" />
             </div>
-            <p className="subtitle-sm text-center mt-4">
-              DevX Group LLC has been in business for 2+ years with a seasoned senior engineering
-              team.
-            </p>
           </AnimatedSection>
         </div>
       </section>
@@ -989,6 +986,24 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* Testimonials Section - Full Width */}
+      <section className="relative pt-20 pb-16 w-full bg-gradient-to-b from-black via-[#0a0a1a] to-black overflow-hidden">
+        <div className="container mx-auto px-[21px] mb-12">
+          <AnimatedSection className="text-center max-w-3xl mx-auto">
+            <BlurText
+              text="What Our Clients Say"
+              className="justify-center heading-section text-[#F472B6] mb-4 md:mb-6"
+              delay={150}
+              once={true}
+            />
+            <p className="subtitle-lg px-4 text-white relative z-100 mb-30">
+              Don&apos;t just take our word for it. Hear from the clients we&apos;ve partnered with.
+            </p>
+          </AnimatedSection>
+        </div>
+        <ParallaxTestimonials />
+      </section>
+
       {/* CTA Section */}
       <section className="relative pt-16 pb-24 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#050810] to-black"></div>
@@ -997,18 +1012,6 @@ export default function AboutPage() {
 
         <div className="container mx-auto px-[21px] relative z-10">
           <AnimatedSection className="bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-8 md:p-12 max-w-4xl mx-auto text-center">
-            <a
-              href="#our-values"
-              className="block sm:inline-block w-full sm:w-auto mb-8 bg-[#4CD787]/20 hover:bg-[#4CD787]/30 text-white border border-[#4CD787]/50 px-4 sm:px-6 py-2 rounded-full text-sm sm:text-base font-medium transition-colors text-center"
-              onClick={(e) => {
-                e.preventDefault()
-                document.getElementById('our-values')?.scrollIntoView({
-                  behavior: 'smooth',
-                })
-              }}
-            >
-              Discover why clients choose us
-            </a>
             <BlurText
               text="Ready to Start Your Project?"
               className="justify-center heading-section text-white mb-4 md:mb-6"
@@ -1033,7 +1036,7 @@ export default function AboutPage() {
                   e.preventDefault()
                 }}
               >
-                Schedule a Strategy Call
+                Schedule a Free Consultation
               </a>
               <Link
                 href="/portfolio"

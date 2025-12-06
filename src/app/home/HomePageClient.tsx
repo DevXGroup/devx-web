@@ -7,7 +7,7 @@ import dynamic from 'next/dynamic'
 // Enable SSR for Hero to improve FCP/LCP - hero content renders immediately
 const Hero = dynamic(() => import('@sections/Hero'), {
   ssr: true,
-  loading: () => <div className="min-h-screen bg-black" />,
+  loading: () => <div className="min-h-screen min-h-[100dvh] bg-black" />,
 })
 
 const FeaturesSection = dynamic(() => import('@sections/Features'), {
@@ -96,7 +96,7 @@ export default function HomePageClient() {
   return (
     <motion.main
       data-page="home"
-      className={`relative flex min-h-screen flex-col items-center w-full bg-black ${
+      className={`relative flex min-h-screen min-h-[100dvh] flex-col items-center w-full bg-black overflow-x-hidden ${
         isLoaded ? 'loaded' : ''
       } ${navbarReady ? 'navbar-ready' : ''}`}
       style={{

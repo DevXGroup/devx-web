@@ -22,6 +22,7 @@ module.exports = {
       fontFamily: {
         mono: ['var(--font-ibm-plex-mono)', 'ui-monospace', 'SF Mono', 'monospace'],
         sans: ['var(--font-ibm-plex-sans)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        'playwrite-cu': ['var(--font-playwrite-cu)', 'cursive'],
       },
       colors: {
         border: 'hsl(var(--border))',

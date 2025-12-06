@@ -70,11 +70,8 @@ export default function PlanetDivider({ opacity = 0.68 }) {
     >
       {/* Planet container - responsive size that scales with viewport */}
       <div
-        className="absolute left-1/2 bottom-0 w-[640px] h-[640px] -ml-[320px] xl:w-[780px] xl:h-[780px] xl:-ml-[390px] 2xl:w-[900px] 2xl:h-[900px] 2xl:-ml-[450px]"
-        style={{
-          transform: 'translateY(calc(45% + var(--planet-offset-y)))',
-          overflow: 'visible',
-        }}
+        className="planet-visual absolute left-1/2 bottom-0 w-[640px] h-[640px] -ml-[320px] lg:w-[680px] lg:h-[680px] lg:-ml-[340px] xl:w-[720px] xl:h-[720px] xl:-ml-[360px] 2xl:w-[800px] 2xl:h-[800px] 2xl:-ml-[400px]"
+        style={{ overflow: 'visible' }}
       >
         {/* Rotating planet */}
         <div className="planet-rotate-container">
@@ -167,6 +164,28 @@ export default function PlanetDivider({ opacity = 0.68 }) {
           }
           to {
             transform: rotate(360deg);
+          }
+        }
+
+        .planet-visual {
+          transform: translateY(calc(34% + var(--planet-offset-y)));
+        }
+
+        @media (min-width: 1024px) {
+          .planet-visual {
+            transform: translateY(calc(30% + var(--planet-offset-y)));
+          }
+        }
+
+        @media (min-width: 1280px) {
+          .planet-visual {
+            transform: translateY(calc(26% + var(--planet-offset-y)));
+          }
+        }
+
+        @media (min-width: 1536px) {
+          .planet-visual {
+            transform: translateY(calc(22% + var(--planet-offset-y)));
           }
         }
 

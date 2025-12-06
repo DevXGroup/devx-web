@@ -28,7 +28,7 @@ import ServiceCard from '@/components/services/ServiceCard'
 import AppleScrollSection from '@/components/services/AppleScrollSection'
 import ScrollVelocityText from '@/components/animations/ScrollVelocityText'
 import HorizontalScroll from '@/components/HorizontalScroll'
-import ParallaxTestimonials from '@/components/ParallaxTestimonials'
+// ParallaxTestimonials moved to About page for consolidated testimonials
 
 import dynamic from 'next/dynamic'
 
@@ -416,14 +416,14 @@ export default function ServicesPage() {
 
               <motion.p
                 variants={floatingAnimation}
-                className="text-lg md:text-xl font-light max-w-2xl mx-auto relative z-30 leading-relaxed mt-2 mb-0"
+                className="text-lg md:text-xl font-light max-w-3xl mx-auto relative z-30 leading-relaxed mt-2 mb-0"
                 style={{
                   textShadow: '0 2px 8px rgba(0,0,0,0.9)',
                   fontWeight: '400',
                 }}
               >
-                Launch revenue-driving web, mobile, AI, and automation products your customers rely
-                on. Our team embeds with yours to deliver dependable software and measurable wins.
+                We build web, mobile, AI, and automation products that grow your revenue, partnering
+                with you from one-off projects to dedicated engineering teams
               </motion.p>
             </motion.div>
           </div>
@@ -799,7 +799,7 @@ export default function ServicesPage() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
               >
-                Schedule AI Strategy Session
+                Schedule a Free Consultation
                 <ArrowRight className="w-5 h-5" />
               </motion.a>
             </motion.div>
@@ -1001,12 +1001,7 @@ export default function ServicesPage() {
         </section>
       </AppleScrollSection>
 
-      {/* Testimonials with Parallax - Consistent spacing */}
-      <AppleScrollSection delay={0.5} className="section-margin">
-        <ClientOnly>
-          <ParallaxTestimonials />
-        </ClientOnly>
-      </AppleScrollSection>
+      {/* Testimonials moved to About page */}
 
       <section className="relative py-20 overflow-hidden bg-black">
         <div className="absolute inset-0 z-0 bg-gradient-to-t from-black via-purple-900/20 to-black pointer-events-none" />
@@ -1076,7 +1071,7 @@ export default function ServicesPage() {
                 className="inline-flex items-center gap-3 bg-gradient-to-r from-[#4CD787] via-[#66E6A4] to-[#4CD787] bg-[length:200%_100%] bg-[position:0%_0] hover:bg-[position:100%_0] text-black px-8 py-4 md:px-10 md:py-5 rounded-xl btn-text-primary border-2 border-[#4CD787]/40 hover:border-[#4CD787] shadow-lg hover:shadow-[0_8px_35px_rgba(76,215,135,0.45)] transition-all duration-300 relative overflow-hidden group"
               >
                 <Sparkles className="w-5 h-5 md:w-6 md:h-6 group-hover:rotate-12 transition-transform duration-300" />
-                <span>Schedule a Strategy Call</span>
+                <span>Schedule a Free Consultation</span>
                 <ArrowRight className="w-5 h-5 md:w-6 md:h-6 group-hover:translate-x-1 transition-transform duration-300" />
                 {/* Shimmer effect */}
                 <motion.div

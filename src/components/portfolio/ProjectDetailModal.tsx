@@ -486,7 +486,7 @@ const ProjectDetailModal = ({ project, isOpen, onClose }: ProjectDetailModalProp
                         }}
                         whileTap={{ scale: 0.95 }}
                       >
-                        Schedule a Consultation
+                        Schedule a Free Consultation
                         <ExternalLink size={16} />
                       </motion.a>
                     </div>
