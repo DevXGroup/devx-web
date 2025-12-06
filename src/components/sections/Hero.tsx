@@ -58,8 +58,6 @@ export default function Hero() {
   const router = useRouter()
   const shouldReduceMotion = useReducedMotion()
   const controls = useAnimation()
-  const [enableCosmicStars, setEnableCosmicStars] = useState(false)
-  const [enableShootingStars, setEnableShootingStars] = useState(false)
   const [StarFieldComp, setStarFieldComp] = useState<(() => React.ReactElement) | null>(null)
   const [HeroBgComp, setHeroBgComp] = useState<(() => React.ReactElement) | null>(null)
   const [ShootingStarsComp, setShootingStarsComp] = useState<(() => React.ReactElement) | null>(
@@ -68,6 +66,9 @@ export default function Hero() {
   const [OrionComp, setOrionComp] = useState<(() => React.ReactElement) | null>(null)
   const [visualsReady, setVisualsReady] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const [orionReady, setOrionReady] = useState(false)
+  const [showStars, setShowStars] = useState(false)
+  const [showShootingStars, setShowShootingStars] = useState(false)
 
   // Use performance optimization hook to detect slow devices
   const { shouldOptimizeAnimations } = usePerformanceOptimizedAnimation()
@@ -91,17 +92,21 @@ export default function Hero() {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  // Allow heavy visuals after first user interaction or slight delay
+  // Enable text animations immediately for smooth experience
+  // Defer heavy canvas elements (Orion/globe) until user interaction
   useEffect(() => {
-    const enable = () => setVisualsReady(true)
-    // Only enable when the user interacts; skip automatic timer to avoid background JS during LCP/TBT
-    window.addEventListener('pointermove', enable, { once: true, passive: true })
-    window.addEventListener('scroll', enable, { once: true, passive: true })
-    window.addEventListener('click', enable, { once: true, passive: true })
+    const enableVisuals = () => setVisualsReady(true)
+
+    // Enable canvas visuals (Orion constellation) on first user interaction only
+    // This keeps the page smooth while text animations play
+    window.addEventListener('pointermove', enableVisuals, { once: true, passive: true })
+    window.addEventListener('scroll', enableVisuals, { once: true, passive: true })
+    window.addEventListener('click', enableVisuals, { once: true, passive: true })
+
     return () => {
-      window.removeEventListener('pointermove', enable)
-      window.removeEventListener('scroll', enable)
-      window.removeEventListener('click', enable)
+      window.removeEventListener('pointermove', enableVisuals)
+      window.removeEventListener('scroll', enableVisuals)
+      window.removeEventListener('click', enableVisuals)
     }
   }, [])
 
@@ -130,90 +135,151 @@ export default function Hero() {
     }
   }, [])
 
-  // Show animations only when device isn't in low-power or reduced-motion mode
-  const canUseHeavyVisuals = visualsReady && !shouldOptimizeAnimations && !shouldReduceMotion
+  const canUseHeavyVisuals = !shouldOptimizeAnimations && !shouldReduceMotion
+  const canUseOrionVisuals = visualsReady && canUseHeavyVisuals
 
+  // New loading sequence: Text → Planet → Stars/Blobs (for performance)
   useEffect(() => {
     controls.start('visible')
+
     if (!canUseHeavyVisuals) {
-      setEnableCosmicStars(false)
-      setEnableShootingStars(false)
+      setShowStars(false)
+      setShowShootingStars(false)
       return
     }
 
-    const loadVisuals = async () => {
+    let orionTimer: number | undefined
+    let starsTimer: number | undefined
+    let shootingTimer: number | undefined
+
+    // Step 1: Text appears immediately (already handled by Framer Motion)
+    // Step 2: Load Planet (Orion) after text starts animating
+    const loadPlanet = async () => {
       try {
-        const [
-          { StarTwinklingField },
-          { default: HeroBackground },
-          { default: ShootingStars },
-          orion,
-        ] = await Promise.all([
-          import('../animations/StarTwinklingField'),
-          import('../hero/HeroBackground'),
-          import('../hero/ShootingStars'),
-          import('../hero/OrionCanvasWrapper'),
-        ])
+        const orion = await import('../hero/OrionCanvasWrapper')
+        const OrionLazy = () => <orion.default />
+        OrionLazy.displayName = 'OrionCanvasLazy'
+        setOrionComp(() => OrionLazy)
+      } catch {
+        // ignore load errors
+      }
+    }
+
+    // Step 3: Load stars and background effects AFTER planet
+    const loadStarsAndEffects = async () => {
+      try {
+        const [{ StarTwinklingField }, { default: HeroBackground }, { default: ShootingStars }] =
+          await Promise.all([
+            import('../animations/StarTwinklingField'),
+            import('../hero/HeroBackground'),
+            import('../hero/ShootingStars'),
+          ])
         const StarFieldLazy = () => <StarTwinklingField className="z-1" count={100} />
         StarFieldLazy.displayName = 'StarFieldLazy'
         const HeroBgLazy = () => <HeroBackground />
         HeroBgLazy.displayName = 'HeroBackgroundLazy'
         const ShootingStarsLazy = () => <ShootingStars />
         ShootingStarsLazy.displayName = 'ShootingStarsLazy'
-        const OrionLazy = () => <orion.default />
-        OrionLazy.displayName = 'OrionCanvasLazy'
 
         setStarFieldComp(() => StarFieldLazy)
         setHeroBgComp(() => HeroBgLazy)
         setShootingStarsComp(() => ShootingStarsLazy)
-        setOrionComp(() => OrionLazy)
       } catch {
-        // ignore load errors; skip visuals
+        // ignore load errors
       }
     }
 
-    const backgroundTimer = scheduleIdleTask(() => {
-      // Delay expensive canvases until main thread is idle to help LCP/INP
-      setEnableCosmicStars(true)
-      loadVisuals()
-    }, 800)
+    // Sequence: Text (0-4200ms) → Planet (4500ms) → Stars (5500ms)
+    // Wait for subtitle animation to complete (~4200ms) before loading planet
+    orionTimer = window.setTimeout(() => {
+      loadPlanet()
+    }, 4500) as unknown as number
 
-    const shootingStarsTimer = scheduleIdleTask(() => {
-      setEnableShootingStars(true)
-    }, 1400)
+    starsTimer = window.setTimeout(() => {
+      setShowStars(true)
+      loadStarsAndEffects()
+    }, 5500) as unknown as number
+
+    shootingTimer = window.setTimeout(() => {
+      setShowShootingStars(true)
+    }, 6300) as unknown as number
 
     return () => {
-      cancelIdleTask(backgroundTimer)
-      cancelIdleTask(shootingStarsTimer)
+      if (orionTimer) clearTimeout(orionTimer)
+      if (starsTimer) clearTimeout(starsTimer)
+      if (shootingTimer) clearTimeout(shootingTimer)
     }
-  }, [cancelIdleTask, canUseHeavyVisuals, controls, scheduleIdleTask])
+  }, [canUseHeavyVisuals, controls])
+
+  // Make Orion visible after it's loaded and positioned
+  useEffect(() => {
+    if (!OrionComp) {
+      setOrionReady(false)
+      return
+    }
+
+    // Use RAF to ensure layout is calculated, then show with smooth fade
+    const rafId = requestAnimationFrame(() => {
+      const timerId = setTimeout(() => {
+        setOrionReady(true)
+      }, 100) // Minimal delay since Orion already loaded in sequence
+      return timerId
+    })
+
+    return () => {
+      if (typeof rafId === 'number') cancelAnimationFrame(rafId)
+    }
+  }, [OrionComp])
 
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-black"
+      className="relative min-h-screen min-h-[100dvh] w-full flex items-center justify-center overflow-hidden bg-black"
     >
       <div className="absolute inset-0 w-full h-full z-[1]">
         <div className="absolute inset-0 bg-gradient-to-b from-zinc-950 via-black to-black pointer-events-none" />
         <ClientOnly>
-          {enableCosmicStars && canUseHeavyVisuals && (
-            <>
+          {/* Orion constellation - loads second, after text */}
+          {OrionComp && canUseHeavyVisuals && (
+            <motion.div
+              className="fixed z-[10000] pointer-events-none left-1/2 translate-x-[32%] sm:left-auto sm:right-3 sm:translate-x-0 top-[26vh] sm:top-[28vh] md:top-[30vh] md:right-4 lg:right-12 lg:top-[32vh] xl:right-20 xl:top-[30vh] w-60 h-60 sm:w-64 sm:h-64 md:w-72 md:h-72 xl:w-[360px] xl:h-[360px]"
+              style={{
+                visibility: orionReady ? 'visible' : 'hidden',
+              }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: orionReady ? 1 : 0 }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
+            >
+              <OrionComp />
+            </motion.div>
+          )}
+          {/* Stars and background - load last for performance */}
+          {showStars && canUseHeavyVisuals && (
+            <motion.div
+              className="absolute inset-0 w-full h-full"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, ease: 'easeOut' }}
+            >
               {StarFieldComp && <StarFieldComp />}
               {HeroBgComp && <HeroBgComp />}
-              {/* Orion constellation - fixed position, stays in same spot at all screen sizes */}
-              {OrionComp && (
-                <div className="fixed z-[10000] pointer-events-none left-1/2 translate-x-[32%] sm:left-auto sm:right-3 sm:translate-x-0 top-[26vh] sm:top-[28vh] md:top-[30vh] md:right-4 lg:right-12 lg:top-[32vh] xl:right-20 xl:top-[30vh] w-60 h-60 sm:w-64 sm:h-64 md:w-72 md:h-72 xl:w-[360px] xl:h-[360px]">
-                  <OrionComp />
-                </div>
-              )}
-            </>
+            </motion.div>
           )}
         </ClientOnly>
       </div>
 
-      {/* Shooting Stars - Only rendered on client */}
+      {/* Shooting Stars - Load last */}
       <ClientOnly>
-        {enableShootingStars && canUseHeavyVisuals && ShootingStarsComp && <ShootingStarsComp />}
+        {showShootingStars && canUseHeavyVisuals && ShootingStarsComp && (
+          <motion.div
+            className="absolute inset-0 w-full h-full pointer-events-none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, ease: 'easeOut' }}
+          >
+            <ShootingStarsComp />
+          </motion.div>
+        )}
       </ClientOnly>
 
       {/* Content */}
@@ -222,7 +288,7 @@ export default function Hero() {
           {/* Hero content wrapper */}
           <div className="space-y-6 sm:space-y-8 lg:space-y-10 xl:space-y-12">
             <div
-              className="hero-title mx-auto flex flex-wrap md:flex-nowrap items-center justify-center gap-3 sm:gap-4 md:gap-5 xl:gap-6 2xl:gap-7 text-center text-white font-mono font-black tracking-[-0.02em] w-full whitespace-normal md:whitespace-nowrap text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5rem] 2xl:text-[5.5rem] leading-[1.1]"
+              className="hero-title mx-auto flex flex-wrap lg:flex-nowrap items-center justify-center gap-3 sm:gap-4 md:gap-5 xl:gap-6 2xl:gap-7 text-center text-white font-mono font-black tracking-[-0.02em] w-full whitespace-normal lg:whitespace-nowrap text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5rem] 2xl:text-[5.5rem] leading-[1.1]"
               style={{
                 minHeight: '4rem',
                 height: 'auto',
@@ -264,14 +330,15 @@ export default function Hero() {
               />
             </div>
 
-            <div className="text-center w-full mx-auto space-y-4 sm:space-y-5 lg:space-y-6">
+            <div className="text-center w-full mx-auto space-y-6 sm:space-y-7 md:space-y-8 lg:space-y-6">
               <motion.p
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 2.3, duration: 1.9 }}
-                className="text-white/90 text-center mx-auto px-2 text-xl sm:text-2xl md:text-3xl lg:text-3xl xl:text-[2rem] 2xl:text-[2.25rem] font-light leading-tight"
+                className="text-white/90 text-center mx-auto px-2 text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-[2rem] 2xl:text-[2.25rem] font-light leading-relaxed"
               >
-                Elite software team shipping polished software at startup speed.
+                Elite software team shipping polished products
+                <span className="block">at startup speed.</span>
               </motion.p>
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
@@ -360,10 +427,10 @@ export default function Hero() {
                 rel="noopener noreferrer"
                 color="#ccff00"
                 speed={isMobile ? '5s' : '3s'}
-                className="ui-code font-extrabold btn-text-primary px-6 py-3 sm:px-7 sm:py-3.5 lg:px-8 lg:py-4 min-h-[44px] flex w-full sm:w-auto items-center justify-center text-center tracking-wide hover:tracking-wider transition-all duration-300"
-                aria-label="Book a free consultation call with DevX Group"
+                className="ui-code font-extrabold btn-text-primary px-6 py-3 sm:px-7 sm:py-3.5 lg:px-8 lg:py-4 min-h-[44px] min-w-[230px] flex w-full sm:w-auto items-center justify-center text-center tracking-wide hover:tracking-wider transition-all duration-300"
+                aria-label="Schedule a free consultation with DevX Group"
               >
-                Book a Free Call
+                Schedule a Free Consultation
               </StarBorder>
             </motion.div>
             <motion.div
@@ -377,7 +444,7 @@ export default function Hero() {
                 onClick={navigateToPortfolio}
                 color="#e534eb"
                 speed={isMobile ? '6s' : '4s'}
-                className="ui-code font-extrabold btn-text-primary px-6 py-3 sm:px-7 sm:py-3.5 lg:px-8 lg:py-4 min-h-[44px] flex w-full sm:w-auto items-center justify-center text-center tracking-wide hover:tracking-wider transition-all duration-300"
+                className="ui-code font-extrabold btn-text-primary px-6 py-3 sm:px-7 sm:py-3.5 lg:px-8 lg:py-4 min-h-[44px] min-w-[230px] flex w-full sm:w-auto items-center justify-center text-center tracking-wide hover:tracking-wider transition-all duration-300"
                 aria-label="View DevX Group portfolio"
               >
                 See Our Work

@@ -26,7 +26,6 @@ interface EnhancedProjectCardProps {
 
 const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectCardProps) => {
   const [isHovered, setIsHovered] = useState(false)
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [isMounted, setIsMounted] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)
   const controls = useAnimation()
@@ -34,16 +33,6 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
   useEffect(() => {
     setIsMounted(true)
   }, [])
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!cardRef.current) return
-
-    const rect = cardRef.current.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
-
-    setMousePosition({ x, y })
-  }
 
   const handleMouseEnter = () => {
     setIsHovered(true)
@@ -55,12 +44,14 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
 
   const handleMouseLeave = () => {
     setIsHovered(false)
-    setMousePosition({ x: 0, y: 0 })
     controls.start({
       scale: 1,
       transition: { duration: 0.3, ease: 'easeOut' },
     })
   }
+
+  // Only animate border lines when actually visible and in viewport
+  const shouldAnimateBorder = isMounted && isHovered
 
   const categoryColor = categoryColors[project.category as keyof typeof categoryColors] || '#4CD787'
 
@@ -68,17 +59,12 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
     <motion.div
       ref={cardRef}
       animate={controls}
-      onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className="relative group cursor-pointer overflow-hidden
         bg-black/40 backdrop-blur-md border border-white/10
         rounded-2xl hover:border-white/20 transition-all duration-500
         h-[680px] 2xl:h-[800px] 2xl:w-[calc(100%+40px)] 2xl:ml-[-20px]"
-      style={{
-        transformStyle: 'preserve-3d',
-        perspective: '1000px',
-      }}
       whileInView={{
         opacity: 1,
         transition: {
@@ -89,22 +75,20 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
       }}
       initial={{ opacity: 0 }}
     >
-      {/* Subtle Glow Effect */}
-      {isHovered && isMounted && (
-        <motion.div
-          className="absolute pointer-events-none rounded-2xl"
-          style={{
-            background: `radial-gradient(400px circle at center, ${categoryColor}10, transparent 60%)`,
-            left: 0,
-            top: 0,
-            right: 0,
-            bottom: 0,
-          }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        />
-      )}
+      {/* Subtle Glow Effect - optimized for performance */}
+      <motion.div
+        className="absolute pointer-events-none rounded-2xl"
+        style={{
+          background: `radial-gradient(400px circle at center, ${categoryColor}10, transparent 60%)`,
+          left: 0,
+          top: 0,
+          right: 0,
+          bottom: 0,
+        }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isHovered && isMounted ? 1 : 0 }}
+        transition={{ duration: 0.3 }}
+      />
 
       {/* Main Content Container */}
       <div className="relative h-full flex flex-col">
@@ -374,93 +358,77 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
         </div>
       </div>
 
-      {/* Running shining line effect on hover */}
-      <motion.div
-        className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none z-50"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: isHovered ? 1 : 0 }}
-        transition={{ duration: 0.3 }}
-      >
+      {/* Running shining line effect on hover - optimized to prevent flashing */}
+      {shouldAnimateBorder && (
         <motion.div
-          className="absolute w-full h-[2px] bg-gradient-to-r from-transparent via-white to-transparent top-0"
-          style={{
-            boxShadow: `0 0 6px ${categoryColor}, 0 0 12px ${categoryColor}40`,
-          }}
-          initial={{ x: '-100%' }}
-          animate={
-            isHovered
-              ? {
-                  x: ['-100%', '100%'],
-                }
-              : { x: '-100%' }
-          }
-          transition={{
-            duration: 1.5,
-            repeat: isHovered ? Infinity : 0,
-            ease: 'linear',
-          }}
-        />
-        <motion.div
-          className="absolute w-[2px] h-full bg-gradient-to-b from-transparent via-white to-transparent right-0"
-          style={{
-            boxShadow: `0 0 6px ${categoryColor}, 0 0 12px ${categoryColor}40`,
-          }}
-          initial={{ y: '-100%' }}
-          animate={
-            isHovered
-              ? {
-                  y: ['-100%', '100%'],
-                }
-              : { y: '-100%' }
-          }
-          transition={{
-            duration: 1.5,
-            repeat: isHovered ? Infinity : 0,
-            ease: 'linear',
-            delay: 0.375,
-          }}
-        />
-        <motion.div
-          className="absolute w-full h-[2px] bg-gradient-to-r from-transparent via-white to-transparent bottom-0"
-          style={{
-            boxShadow: `0 0 6px ${categoryColor}, 0 0 12px ${categoryColor}40`,
-          }}
-          initial={{ x: '100%' }}
-          animate={
-            isHovered
-              ? {
-                  x: ['100%', '-100%'],
-                }
-              : { x: '100%' }
-          }
-          transition={{
-            duration: 1.5,
-            repeat: isHovered ? Infinity : 0,
-            ease: 'linear',
-            delay: 0.75,
-          }}
-        />
-        <motion.div
-          className="absolute w-[2px] h-full bg-gradient-to-b from-transparent via-white to-transparent left-0"
-          style={{
-            boxShadow: `0 0 6px ${categoryColor}, 0 0 12px ${categoryColor}40`,
-          }}
-          initial={{ y: '100%' }}
-          animate={
-            isHovered
-              ? {
-                  y: ['100%', '-100%'],
-                }
-              : { y: '100%' }
-          }
-          transition={{
-            duration: 1.5,
-            repeat: isHovered ? Infinity : 0,
-            ease: 'linear',
-            delay: 1.125,
-          }}
-        />
-      </motion.div>
+          className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none z-50"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          style={{ willChange: 'opacity' }}
+        >
+          <motion.div
+            className="absolute w-full h-[2px] bg-gradient-to-r from-transparent via-white to-transparent top-0"
+            style={{
+              boxShadow: `0 0 6px ${categoryColor}, 0 0 12px ${categoryColor}40`,
+              willChange: 'transform',
+            }}
+            initial={{ x: '-100%' }}
+            animate={{ x: ['-100%', '100%'] }}
+            transition={{
+              duration: 1.5,
+              repeat: Infinity,
+              ease: 'linear',
+            }}
+          />
+          <motion.div
+            className="absolute w-[2px] h-full bg-gradient-to-b from-transparent via-white to-transparent right-0"
+            style={{
+              boxShadow: `0 0 6px ${categoryColor}, 0 0 12px ${categoryColor}40`,
+              willChange: 'transform',
+            }}
+            initial={{ y: '-100%' }}
+            animate={{ y: ['-100%', '100%'] }}
+            transition={{
+              duration: 1.5,
+              repeat: Infinity,
+              ease: 'linear',
+              delay: 0.375,
+            }}
+          />
+          <motion.div
+            className="absolute w-full h-[2px] bg-gradient-to-r from-transparent via-white to-transparent bottom-0"
+            style={{
+              boxShadow: `0 0 6px ${categoryColor}, 0 0 12px ${categoryColor}40`,
+              willChange: 'transform',
+            }}
+            initial={{ x: '100%' }}
+            animate={{ x: ['100%', '-100%'] }}
+            transition={{
+              duration: 1.5,
+              repeat: Infinity,
+              ease: 'linear',
+              delay: 0.75,
+            }}
+          />
+          <motion.div
+            className="absolute w-[2px] h-full bg-gradient-to-b from-transparent via-white to-transparent left-0"
+            style={{
+              boxShadow: `0 0 6px ${categoryColor}, 0 0 12px ${categoryColor}40`,
+              willChange: 'transform',
+            }}
+            initial={{ y: '100%' }}
+            animate={{ y: ['100%', '-100%'] }}
+            transition={{
+              duration: 1.5,
+              repeat: Infinity,
+              ease: 'linear',
+              delay: 1.125,
+            }}
+          />
+        </motion.div>
+      )}
 
       {/* Simple Border Highlight */}
       <motion.div

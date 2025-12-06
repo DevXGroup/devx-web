@@ -38,25 +38,43 @@ const ORION_STARS = [
 ]
 
 export default function OrionConstellation() {
-  const [mouseX, setMouseX] = useState(0)
-  const [mouseY, setMouseY] = useState(0)
+  const [targetX, setTargetX] = useState(0)
+  const [targetY, setTargetY] = useState(0)
+  const [currentX, setCurrentX] = useState(0)
+  const [currentY, setCurrentY] = useState(0)
+  const animationFrameRef = useRef<number | null>(null)
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      // Noticeable but smooth parallax
-      setMouseX((e.clientX / window.innerWidth - 0.5) * 1.2)
-      setMouseY((e.clientY / window.innerHeight - 0.5) * 0.8)
+      // Smooth parallax with easing
+      const newTargetX = (e.clientX / window.innerWidth - 0.5) * 1.2
+      const newTargetY = (e.clientY / window.innerHeight - 0.5) * 0.8
+      setTargetX(newTargetX)
+      setTargetY(newTargetY)
     }
-    window.addEventListener('mousemove', handleMouseMove)
+
+    window.addEventListener('mousemove', handleMouseMove, { passive: true })
     return () => window.removeEventListener('mousemove', handleMouseMove)
   }, [])
 
-  // Fixed position in 3D space - CSS handles screen positioning
-  const baseX = 0
-  const baseY = 0
+  // Smooth easing animation using RAF
+  useEffect(() => {
+    const animate = () => {
+      setCurrentX((prev) => prev + (targetX - prev) * 0.08) // 8% lerp per frame
+      setCurrentY((prev) => prev + (targetY - prev) * 0.08)
+      animationFrameRef.current = requestAnimationFrame(animate)
+    }
+
+    animationFrameRef.current = requestAnimationFrame(animate)
+    return () => {
+      if (animationFrameRef.current !== null) {
+        cancelAnimationFrame(animationFrameRef.current)
+      }
+    }
+  }, [targetX, targetY])
 
   return (
-    <group position={[baseX + mouseX, baseY + mouseY, 0]}>
+    <group position={[currentX, currentY, 0]}>
       {/* Main constellation stars - more visible */}
       <OrionStars />
       {/* Connecting lines (visual guide) */}
@@ -120,7 +138,7 @@ function OrionStar({
       const primaryTwinkle = (Math.sin(time) + 1) * 0.5
       const finalBrightness = brightness * (0.85 + primaryTwinkle * 0.15)
 
-      const material = starRef.current.material as any
+      const material = starRef.current.material as THREE.ShaderMaterial
       if (material.uniforms?.uOpacity) {
         material.uniforms.uOpacity.value = finalBrightness
       }
@@ -142,7 +160,10 @@ function OrionStar({
             attribute float size;
             void main() {
               vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-              gl_PointSize = size;
+              // Maintain consistent point size regardless of view transformation
+              // Avoid perspective distortion artifacts on parallax movement
+              float distance = length(mvPosition.xyz);
+              gl_PointSize = size / sqrt(distance) * 2.0;
               gl_Position = projectionMatrix * mvPosition;
             }
           `}

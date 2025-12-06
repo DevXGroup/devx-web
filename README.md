@@ -4,11 +4,11 @@
 ![Status](https://img.shields.io/badge/status-active-success?style=flat)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey?style=flat)
 
-Modern marketing and capability site for DevX Group LLC, a San Diego-based software and IoT engineering consultancy delivering custom software, AI/ML, and hardware solutions.
+Portfolio and capability site for DevX Group LLC, a San Diego-based software engineering company specializing in custom web applications, AI/ML integration, and IoT hardware solutions. We work with small businesses through large enterprises, and provide dedicated engineering teams for startups and software companies seeking long-term execution partners to deliver results.
 
 ## Overview
 
-The application showcases the DevX Group portfolio, services, and lead-generation funnels. It uses the Next.js App Router to deliver fully typed, high-performance pages with animation-rich interactions and enterprise-ready privacy and legal coverage.
+The application showcases DevX Group's software engineering capabilities, project portfolio, and engagement models—from project-based delivery to embedded team augmentation. Built with Next.js App Router, it delivers fully typed, high-performance pages with animation-rich interactions and enterprise-ready privacy and legal coverage.
 
 - Deployable to any Next.js-compatible platform, with defaults optimized for Vercel.
 - Responsive layouts backed by Tailwind CSS theme tokens and IBM Plex typography.

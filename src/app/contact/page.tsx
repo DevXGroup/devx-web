@@ -8,7 +8,7 @@ const pageUrl = `${siteUrl}${pagePath}`
 const ogImage = createOgImageUrl(
   {
     eyebrow: "Let's talk",
-    title: 'Book a Strategy Session',
+    title: 'Schedule a Free Consultation',
     subtitle: 'Custom Software • Agentic AI • Cloud Modernization',
     focus: ['Discovery Workshops', 'Product Roadmaps', 'Build & Scale'],
   },
@@ -17,7 +17,7 @@ const ogImage = createOgImageUrl(
 const twitterImage = createTwitterImageUrl(
   {
     eyebrow: "Let's talk",
-    title: 'Book a Strategy Session',
+    title: 'Schedule a Free Consultation',
     subtitle: 'Custom Software • Agentic AI • Cloud Modernization',
     focus: ['Discovery Workshops', 'Product Roadmaps', 'Build & Scale'],
   },

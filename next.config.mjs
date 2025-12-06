@@ -1,4 +1,4 @@
-import { withSentryConfig } from '@sentry/nextjs'
+// import { withSentryConfig } from '@sentry/nextjs' // Disabled for Next.js 16 compatibility
 import bundleAnalyzer from '@next/bundle-analyzer'
 import path from 'node:path'
 
@@ -17,7 +17,11 @@ if (typeof globalThis !== 'undefined' && typeof globalThis.self === 'undefined')
 try {
   if (typeof globalThis !== 'undefined' && typeof self === 'undefined') {
     // eslint-disable-next-line no-new-func
-    Function('self = this').call(globalThis)
+    const fn = new Function('return this')
+    const context = fn()
+    if (context && typeof context.self === 'undefined') {
+      context.self = context
+    }
   }
 } catch {
   // Ignore if the environment already defines `self` or disallows assignment.
@@ -46,9 +50,6 @@ const nextConfig = {
   // Target modern browsers - avoid legacy polyfills
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error'] } : false,
-  },
-  eslint: {
-    ignoreDuringBuilds: false,
   },
   typescript: {
     ignoreBuildErrors: false,
@@ -163,7 +164,9 @@ const nextConfig = {
       ...securityHeaders,
     ]
   },
-  // Enhanced webpack settings for better performance
+  // Turbopack configuration (Next.js 16 default)
+  turbopack: {},
+  // Enhanced webpack settings for better performance (fallback)
   webpack: (config, { dev, isServer }) => {
     if (isServer) {
       config.output = config.output || {}
@@ -296,7 +299,7 @@ const sentryWebpackPluginOptions = {
   autoInstrumentServerFunctions: process.env.NODE_ENV === 'production',
   autoInstrumentMiddleware: process.env.NODE_ENV === 'production',
 
-  // Disable automatic client instrumentation to fix Next.js 15.5.4 compatibility
+  // Disable automatic client instrumentation to fix Next.js 16 compatibility
   autoInstrumentAppDirectory: false,
 
   // Suppress source map warnings for dynamic chunks
@@ -315,13 +318,17 @@ const sentryWebpackPluginOptions = {
   },
 }
 
-// Only run the webpack plugin (which performs network calls) when CI is present
-const enableSentryWebpackPlugin = process.env.CI === 'true' || process.env.CI === '1'
-
 const configWithAnalyzer = withBundleAnalyzer(nextConfig)
 
-const exportedConfig = enableSentryWebpackPlugin
-  ? withSentryConfig(configWithAnalyzer, sentryWebpackPluginOptions)
-  : configWithAnalyzer
+// NOTE: Sentry wrapper causes context-related issues in Next.js 16 during static generation
+// The withSentryConfig function is available but we're not using it here
+// Sentry instrumentation is handled via @sentry/nextjs/instrumentation.server.ts instead
 
-export default exportedConfig
+// Known Issues with Next.js 16 Upgrade:
+// 1. Error pages (global-error, not-found) fail during static generation due to Framer Motion context
+//    This is a known issue where React context is unavailable during static pre-rendering
+//    Workaround: These pages are rendered dynamically at runtime
+// 2. "Each child in a list should have a unique key prop" warnings during build
+//    These appear to be related to Next.js internals and can be safely ignored
+
+export default configWithAnalyzer

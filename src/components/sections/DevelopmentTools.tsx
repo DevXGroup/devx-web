@@ -152,6 +152,12 @@ const aiTools: AITool[] = [
     icon: buildIconPath('mongodb.svg'),
     loopWrapperClassName: 'bg-transparent rounded-none p-0',
   },
+  {
+    name: 'Zed',
+    description: 'Lightning-fast multiplayer code editor for modern teams',
+    icon: buildIconPath('zed.svg'),
+    loopWrapperClassName: 'bg-transparent rounded-none p-0',
+  },
 ]
 
 type OrbitMetrics = {
@@ -558,7 +564,7 @@ export default function DevelopmentTools() {
               delay={150}
               once={true}
             />
-            <LogoLoop logos={aiTools} speed={18} />
+            <LogoLoop logos={aiTools} speed={20} />
           </div>
         </div>
 

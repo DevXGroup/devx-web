@@ -291,7 +291,7 @@ const ServiceModal = ({
                     rel="noopener noreferrer"
                     className="px-5 py-2 rounded-lg bg-robinhood text-black font-medium transition-all hover:bg-white hover:text-black border-2 border-robinhood shadow-lg"
                   >
-                    Schedule a Strategy Call
+                    Schedule a Free Consultation
                   </a>
                 </div>
               </motion.div>
@@ -686,13 +686,13 @@ export default function PortfolioPage() {
           <div className="text-center mb-8">
             <BlurText
               text="Services we deliver"
-              className="heading-section text-[#06B6D4] justify-center mb-4"
+              className="heading-section text-white justify-center mb-4"
               animateBy="words"
               once={false}
             />
             <BlurText
-              text="We can build and ship across these areas. See the Services page for details."
-              className="subtitle text-white/80 justify-center mt-2"
+              text="We can build and ship across these areas"
+              className="subtitle text-white/80 justify-center mt-2 subtitle-lg"
               animateBy="words"
               once={false}
             />
@@ -715,6 +715,14 @@ export default function PortfolioPage() {
           clickPosition={clickPosition}
         />
       </section>
+
+      <div className="mt-28 flex items-center justify-center relative">
+        <div className="h-px bg-gradient-to-r from-transparent via-[#4CD787]/30 to-transparent w-64" />
+        <div className="mx-4 w-2 h-2 bg-[#4CD787] rounded-full opacity-60" />
+        <div className="h-px bg-gradient-to-r from-transparent via-[#4CD787]/30 to-transparent w-64" />
+      </div>
+      <br />
+      <br />
 
       {/* CTA */}
       <section className="relative z-[30] py-20 pb-24 overflow-hidden mb-33">
@@ -751,7 +759,7 @@ export default function PortfolioPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <span>Schedule a Strategy Call</span>
+                  <span>Schedule a Free Consultation</span>
                   <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </a>
               </Button>

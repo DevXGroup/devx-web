@@ -213,10 +213,10 @@ html:has(main[data-page='home']) {
   }
 
   /* Apply IBM Plex Sans to paragraphs and body text */
+  /* Exclusions: .font-mono (monospace), .feature-highlight (special highlights) */
   p:not(.font-mono),
   .body-text,
   li:not(.feature-highlight):not(.font-mono),
-  span:not(.font-mono),
   .description,
   .font-sans {
     font-family: var(
@@ -230,6 +230,29 @@ html:has(main[data-page='home']) {
       Arial,
       sans-serif
     );
+  }
+
+  /* Apply IBM Plex Sans to spans, but NOT if they're inside an element with playwrite font */
+  span:not(.font-mono):not([style*='playwrite']):not([class*='font-playwrite']) {
+    font-family: var(
+      --font-ibm-plex-sans,
+      'IBM Plex Sans',
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      'Roboto',
+      'Helvetica Neue',
+      Arial,
+      sans-serif
+    );
+  }
+
+  /* Override: spans inside elements with playwrite styling should NOT get IBM Plex Sans */
+  [style*='--font-playwrite'] span,
+  [style*='font-playwrite'] span,
+  .font-playwrite-cu span,
+  [class*='font-playwrite'] span {
+    font-family: inherit !important;
   }
 
   /* Ensure hero heading has normal font weight with enhanced visibility */
