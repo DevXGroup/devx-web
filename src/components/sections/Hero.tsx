@@ -91,17 +91,21 @@ export default function Hero() {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  // Allow heavy visuals after first user interaction or slight delay
+  // Enable text animations immediately for smooth experience
+  // Defer heavy canvas elements (Orion/globe) until user interaction
   useEffect(() => {
-    const enable = () => setVisualsReady(true)
-    // Only enable when the user interacts; skip automatic timer to avoid background JS during LCP/TBT
-    window.addEventListener('pointermove', enable, { once: true, passive: true })
-    window.addEventListener('scroll', enable, { once: true, passive: true })
-    window.addEventListener('click', enable, { once: true, passive: true })
+    const enableVisuals = () => setVisualsReady(true)
+
+    // Enable canvas visuals (Orion constellation) on first user interaction only
+    // This keeps the page smooth while text animations play
+    window.addEventListener('pointermove', enableVisuals, { once: true, passive: true })
+    window.addEventListener('scroll', enableVisuals, { once: true, passive: true })
+    window.addEventListener('click', enableVisuals, { once: true, passive: true })
+
     return () => {
-      window.removeEventListener('pointermove', enable)
-      window.removeEventListener('scroll', enable)
-      window.removeEventListener('click', enable)
+      window.removeEventListener('pointermove', enableVisuals)
+      window.removeEventListener('scroll', enableVisuals)
+      window.removeEventListener('click', enableVisuals)
     }
   }, [])
 
@@ -130,8 +134,10 @@ export default function Hero() {
     }
   }, [])
 
-  // Show animations only when device isn't in low-power or reduced-motion mode
-  const canUseHeavyVisuals = visualsReady && !shouldOptimizeAnimations && !shouldReduceMotion
+  // Allow background visuals to render for smooth experience
+  // Orion constellation deferred until user interaction for performance
+  const canUseHeavyVisuals = !shouldOptimizeAnimations && !shouldReduceMotion
+  const canUseOrionVisuals = visualsReady && canUseHeavyVisuals
 
   useEffect(() => {
     controls.start('visible')
@@ -172,21 +178,41 @@ export default function Hero() {
       }
     }
 
+    // Load background visuals immediately for smooth animation experience
+    // Text animations play while backgrounds load in the background
     const backgroundTimer = scheduleIdleTask(() => {
-      // Delay expensive canvases until main thread is idle to help LCP/INP
       setEnableCosmicStars(true)
       loadVisuals()
-    }, 800)
+    }, 400) // Reduced from 800ms to start background sooner
 
+    // Shooting stars follow shortly after
     const shootingStarsTimer = scheduleIdleTask(() => {
       setEnableShootingStars(true)
-    }, 1400)
+    }, 1000) // Reduced from 1400ms
 
     return () => {
       cancelIdleTask(backgroundTimer)
       cancelIdleTask(shootingStarsTimer)
     }
   }, [cancelIdleTask, canUseHeavyVisuals, controls, scheduleIdleTask])
+
+  // Separate effect to load Orion constellation on user interaction
+  useEffect(() => {
+    if (!canUseOrionVisuals) return
+
+    const loadOrion = async () => {
+      try {
+        const orion = await import('../hero/OrionCanvasWrapper')
+        const OrionLazy = () => <orion.default />
+        OrionLazy.displayName = 'OrionCanvasLazy'
+        setOrionComp(() => OrionLazy)
+      } catch {
+        // ignore load errors
+      }
+    }
+
+    loadOrion()
+  }, [canUseOrionVisuals])
 
   return (
     <section
