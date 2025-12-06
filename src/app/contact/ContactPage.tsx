@@ -851,8 +851,12 @@ export default function ContactPage() {
                     <Calendar className="w-5 h-5 text-[#4CD787]" />
                   </div>
                   <div>
-                    <h3 className="heading-subsection text-foreground">Schedule a Call</h3>
-                    <p className="text-body text-foreground/70">Book a free consultation</p>
+                    <h3 className="heading-subsection text-foreground">
+                      Schedule a Free Consultation
+                    </h3>
+                    <p className="text-body text-foreground/70">
+                      We&apos;ll tailor the session to your project
+                    </p>
                     <a
                       href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
                       target="_blank"
@@ -1174,7 +1178,7 @@ export default function ContactPage() {
             className="text-center max-w-3xl mx-auto mb-12"
           >
             <BlurText
-              text="Schedule your free Consultation"
+              text="Schedule a Free Consultation"
               className="justify-center heading-section text-[#FFD700] mb-6"
               delay={150}
               once={false}
