@@ -17,11 +17,12 @@
     "not IE 11"
   ],
   "scripts": {
-    "dev": "npx next dev --port 3002",
+    "dev": "npx next dev --turbo --port 3002",
+    "dev:poll": "WATCHPACK_POLLING=true CHOKIDAR_USEPOLLING=1 WATCHPACK_POLLING_INTERVAL=800 npx next dev --port 3002",
     "build": "pnpm next build",
     "start": "pnpm next start",
-    "lint": "pnpm format:check && pnpm next lint",
-    "lint:fix": "pnpm format && pnpm next lint --fix",
+    "lint": "pnpm format:check && eslint .",
+    "lint:fix": "pnpm format && eslint . --fix",
     "format": "npx prettier --write .",
     "format:check": "npx prettier --check .",
     "test": "pnpm jest",
@@ -103,6 +104,7 @@
     "zod": "^4.1.12"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.3",
     "@next/bundle-analyzer": "^14.2.33",
     "@playwright/test": "^1.56.1",
     "@resvg/resvg-js": "^2.6.2",
@@ -147,7 +149,7 @@
       "prettier --write"
     ],
     "src/**/*.{js,jsx,ts,tsx}": [
-      "next lint --fix --file"
+      "eslint --fix"
     ]
   }
 }
