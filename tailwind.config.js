@@ -25,6 +25,8 @@ export default {
         mono: ['var(--font-ibm-plex-mono)', 'ui-monospace', 'SF Mono', 'monospace'],
         sans: ['var(--font-ibm-plex-sans)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         'playwrite-cu': ['var(--font-playwrite-cu)', 'cursive'],
+        editorial: ['"Playfair Display"', 'serif'],
+        creative: ['var(--font-pacifico)', '"Pacifico"', 'cursive'],
       },
       colors: {
         border: 'hsl(var(--border))',
