@@ -26,6 +26,7 @@ html {
   /* Mobile font size baseline - 16px minimum for readability */
   font-size: 16px;
 }
+
 body {
   background-color: #000000 !important;
   color: #ffffff !important;
@@ -55,6 +56,80 @@ body {
     sans-serif;
   --font-ibm-plex-mono:
     'IBM Plex Mono', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  --font-playfair-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-playwrite-cu: 'Playwrite CU', 'Segoe UI', system-ui, sans-serif;
+  --font-pacifico: 'Pacifico', cursive;
+}
+
+/* Self-hosted font faces */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  src:
+    url('/fonts/IBMPlexSans-Regular.woff2') format('woff2'),
+    url('/fonts/IBMPlexSans-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans';
+  src:
+    url('/fonts/IBMPlexSans-SemiBold.woff2') format('woff2'),
+    url('/fonts/IBMPlexSans-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IBM Plex Mono';
+  src:
+    url('/fonts/IBMPlexMono-Regular.woff2') format('woff2'),
+    url('/fonts/IBMPlexMono-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IBM Plex Mono';
+  src:
+    url('/fonts/IBMPlexMono-Bold.woff2') format('woff2'),
+    url('/fonts/IBMPlexMono-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Playfair Display';
+  src:
+    url('/fonts/PlayfairDisplay-Variable.woff2') format('woff2'),
+    url('/fonts/PlayfairDisplay-Variable.ttf') format('truetype');
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Playwrite CU';
+  src:
+    url('/fonts/PlaywriteCU-Variable.woff2') format('woff2'),
+    url('/fonts/PlaywriteCU-Variable.ttf') format('truetype');
+  font-weight: 100 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Pacifico';
+  src:
+    url('/fonts/Pacifico-Regular.woff2') format('woff2'),
+    url('/fonts/Pacifico-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 
 /* Fix deprecated overflow:visible on replaced elements (img, video, canvas) */
@@ -62,6 +137,14 @@ img,
 video,
 canvas {
   overflow: clip !important;
+}
+
+/* Ensure pointer cursor on all interactive elements */
+a,
+button,
+[role='button'],
+[role='link'] {
+  cursor: pointer;
 }
 
 /* Mobile-specific optimizations */
@@ -108,7 +191,8 @@ html::before {
 
 /* Prevent navbar flash on home page - hide immediately */
 [data-page='home'] {
-  opacity: 1 !important; /* Changed from 0 for better LCP */
+  opacity: 1 !important;
+  /* Changed from 0 for better LCP */
   background-color: #000000 !important;
 }
 
@@ -213,10 +297,10 @@ html:has(main[data-page='home']) {
   }
 
   /* Apply IBM Plex Sans to paragraphs and body text */
-  /* Exclusions: .font-mono (monospace), .feature-highlight (special highlights) */
-  p:not(.font-mono),
+  /* Exclusions: .font-mono (monospace), .feature-highlight (special highlights), .font-editorial (Playfair Display) */
+  p:not(.font-mono):not([class*='font-editorial']),
   .body-text,
-  li:not(.feature-highlight):not(.font-mono),
+  li:not(.feature-highlight):not(.font-mono):not([class*='font-editorial']),
   .description,
   .font-sans {
     font-family: var(
@@ -232,8 +316,10 @@ html:has(main[data-page='home']) {
     );
   }
 
-  /* Apply IBM Plex Sans to spans, but NOT if they're inside an element with playwrite font */
-  span:not(.font-mono):not([style*='playwrite']):not([class*='font-playwrite']) {
+  /* Apply IBM Plex Sans to spans, but NOT if they're inside an element with playwrite or editorial font */
+  span:not(.font-mono):not([style*='playwrite']):not([class*='font-playwrite']):not(
+      [class*='font-editorial']
+    ):not([class*='font-creative']) {
     font-family: var(
       --font-ibm-plex-sans,
       'IBM Plex Sans',
@@ -247,11 +333,22 @@ html:has(main[data-page='home']) {
     );
   }
 
-  /* Override: spans inside elements with playwrite styling should NOT get IBM Plex Sans */
+  /* Override: spans inside elements with playwrite or editorial styling should NOT get IBM Plex Sans */
   [style*='--font-playwrite'] span,
   [style*='font-playwrite'] span,
   .font-playwrite-cu span,
-  [class*='font-playwrite'] span {
+  [class*='font-playwrite'] span,
+  [class*='font-editorial'] span,
+  [class*='font-creative'] span,
+  .section-title-hero span,
+  .section-title span,
+  .section-title-compact span,
+  .heading-hero span,
+  .heading-section span,
+  .heading-subsection span,
+  .heading-component span,
+  .card-title span,
+  [style*='Playfair'] span {
     font-family: inherit !important;
   }
 
@@ -292,6 +389,7 @@ html:has(main[data-page='home']) {
     filter: blur(10px);
     opacity: 0;
   }
+
   100% {
     filter: blur(0);
     opacity: 1;
@@ -326,6 +424,7 @@ html:has(main[data-page='home']) {
   0% {
     background-position: -200% 0;
   }
+
   100% {
     background-position: 200% 0;
   }
@@ -409,9 +508,11 @@ html.is-firefox .navbar-blur {
     transform: translate3d(var(--star-drift, 0px), var(--star-start, -240px), 0);
     opacity: var(--star-opacity-start, 0.1);
   }
+
   60% {
     opacity: var(--star-opacity-end, 0.35);
   }
+
   100% {
     transform: translate3d(calc(var(--star-drift, 0px) * 1.2), var(--star-end, 480px), 0);
     opacity: 0;
@@ -423,9 +524,11 @@ html.is-firefox .navbar-blur {
     -webkit-transform: translate3d(var(--star-drift, 0px), var(--star-start, -240px), 0);
     opacity: var(--star-opacity-start, 0.1);
   }
+
   60% {
     opacity: var(--star-opacity-end, 0.35);
   }
+
   100% {
     -webkit-transform: translate3d(calc(var(--star-drift, 0px) * 1.2), var(--star-end, 480px), 0);
     opacity: 0;
@@ -521,6 +624,7 @@ html.is-firefox .navbar-blur {
   from {
     transform: translate(0, 0);
   }
+
   to {
     transform: translate(-200px, -200px);
   }
@@ -530,6 +634,7 @@ html.is-firefox .navbar-blur {
   from {
     transform: translate(0, 0);
   }
+
   to {
     transform: translate(-200px, -200px);
   }
@@ -539,6 +644,7 @@ html.is-firefox .navbar-blur {
   from {
     transform: translate(0, 0);
   }
+
   to {
     transform: translate(-200px, -200px);
   }
@@ -554,45 +660,61 @@ html.is-firefox .navbar-blur {
 } 
 ***/
 
-@media (max-width: 655px) {
+@media (max-width: 489px) {
   .hero-title {
-    font-size: 2.3rem !important; /* Small mobile size */
+    font-size: 2.25rem !important;
+    /* Extra small mobile - allow wrapping */
     line-height: 1.3;
+    flex-wrap: wrap !important;
+    /* Allow Engineered to wrap to second line */
+  }
+}
+
+@media (min-width: 490px) and (max-width: 655px) {
+  .hero-title {
+    font-size: 2.5rem !important;
+    /* Small mobile size */
+    line-height: 1.4;
   }
 }
 
 @media (min-width: 656px) and (max-width: 768px) {
   .hero-title {
-    font-size: 2.7rem !important; /* Large mobile/small tablet */
-    line-height: 1.1;
+    font-size: 3rem !important;
+    /* Large mobile/small tablet */
+    line-height: 1.4;
   }
 }
 
-@media (min-width: 769px) and (max-width: 943px) {
+@media (min-width: 769px) and (max-width: 920px) {
   .hero-title {
-    font-size: 3.5rem !important; /* Tablet size */
-    line-height: 1.1;
+    font-size: 2.75rem !important;
+    /* Smaller to prevent wrapping */
+    line-height: 1.4;
   }
 }
 
-@media (min-width: 944px) and (max-width: 1023px) {
+@media (min-width: 921px) and (max-width: 1023px) {
   .hero-title {
-    font-size: 3.2rem !important; /* Tablet size - reduced to prevent wrapping */
-    line-height: 1.1;
+    font-size: 3.5rem !important;
+    /* Gradual increase after wrap point */
+    line-height: 1.4;
   }
 }
 
 @media (min-width: 1024px) and (max-width: 1279px) {
   .hero-title {
-    font-size: 4.3rem !important; /* Desktop size */
-    line-height: 1.1;
+    font-size: 4.8rem !important;
+    /* Desktop size */
+    line-height: 1.4;
   }
 }
 
 @media (min-width: 1280px) {
   .hero-title {
-    font-size: 4.6rem !important; /* Large desktop */
-    line-height: 1.05;
+    font-size: 5rem !important;
+    /* Large desktop */
+    line-height: 1.4;
   }
 }
 
@@ -633,7 +755,8 @@ html.no-backdrop-filter .glass-effect {
   display: inline-block;
   overflow: hidden;
   white-space: nowrap;
-  visibility: visible !important; /* Force visibility in Safari */
+  visibility: visible !important;
+  /* Force visibility in Safari */
   color: var(--robinhood-green);
   max-width: 100%;
   text-overflow: ellipsis;
@@ -646,10 +769,12 @@ html.no-backdrop-filter .glass-effect {
     background-position: 0% 50%;
     -webkit-background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
     -webkit-background-position: 100% 50%;
   }
+
   100% {
     background-position: 0% 50%;
     -webkit-background-position: 0% 50%;
@@ -660,9 +785,11 @@ html.no-backdrop-filter .glass-effect {
   0% {
     -webkit-background-position: 0% 50%;
   }
+
   50% {
     -webkit-background-position: 100% 50%;
   }
+
   100% {
     -webkit-background-position: 0% 50%;
   }
@@ -679,10 +806,12 @@ html.no-backdrop-filter .glass-effect {
     filter: drop-shadow(0 0 8px rgba(157, 78, 221, 0.5));
     -webkit-filter: drop-shadow(0 0 8px rgba(157, 78, 221, 0.5));
   }
+
   50% {
     filter: drop-shadow(0 0 12px rgba(157, 78, 221, 0.7));
     -webkit-filter: drop-shadow(0 0 12px rgba(157, 78, 221, 0.7));
   }
+
   100% {
     filter: drop-shadow(0 0 8px rgba(157, 78, 221, 0.5));
     -webkit-filter: drop-shadow(0 0 8px rgba(157, 78, 221, 0.5));
@@ -693,9 +822,11 @@ html.no-backdrop-filter .glass-effect {
   0% {
     -webkit-filter: drop-shadow(0 0 8px rgba(157, 78, 221, 0.5));
   }
+
   50% {
     -webkit-filter: drop-shadow(0 0 12px rgba(157, 78, 221, 0.7));
   }
+
   100% {
     -webkit-filter: drop-shadow(0 0 8px rgba(157, 78, 221, 0.5));
   }
@@ -796,6 +927,7 @@ html.no-backdrop-filter .glass-effect {
       visibility: hidden;
       opacity: 0;
     }
+
     to {
       visibility: visible;
       opacity: 1;
@@ -838,9 +970,11 @@ html.no-backdrop-filter .glass-effect {
   0% {
     stop-color: #4834d4;
   }
+
   50% {
     stop-color: #9d4edd;
   }
+
   100% {
     stop-color: #4834d4;
   }
@@ -850,9 +984,11 @@ html.no-backdrop-filter .glass-effect {
   0% {
     stop-color: #4834d4;
   }
+
   50% {
     stop-color: #9d4edd;
   }
+
   100% {
     stop-color: #4834d4;
   }
@@ -919,16 +1055,19 @@ html.no-backdrop-filter .glass-effect {
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation-delay: 2s; /* Start after blur animation completes */
+  animation-delay: 2s;
+  /* Start after blur animation completes */
 }
 
 @keyframes gradient-animation {
   0% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
+
   100% {
     background-position: 0% 50%;
   }
@@ -938,9 +1077,11 @@ html.no-backdrop-filter .glass-effect {
   0% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
+
   100% {
     background-position: 0% 50%;
   }
@@ -1010,6 +1151,7 @@ html.no-backdrop-filter .glass-effect {
   0% {
     transform: translateX(0);
   }
+
   100% {
     transform: translateX(-50%);
   }
@@ -1019,6 +1161,7 @@ html.no-backdrop-filter .glass-effect {
   0% {
     transform: translateX(-50%);
   }
+
   100% {
     transform: translateX(0);
   }
@@ -1042,6 +1185,7 @@ html.no-backdrop-filter .glass-effect {
   100% {
     transform: translateY(0) scale(1);
   }
+
   50% {
     transform: translateY(-15px) scale(1.1);
   }
@@ -1078,6 +1222,7 @@ html.no-backdrop-filter .glass-effect {
   0% {
     transform: translateX(0);
   }
+
   100% {
     transform: translateX(-50%);
   }
@@ -1087,6 +1232,7 @@ html.no-backdrop-filter .glass-effect {
   0% {
     transform: translateX(-50%);
   }
+
   100% {
     transform: translateX(0);
   }
@@ -1119,9 +1265,11 @@ html.no-backdrop-filter .glass-effect {
   0% {
     border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
   }
+
   50% {
     border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
   }
+
   100% {
     border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
   }
@@ -1152,6 +1300,7 @@ html.no-backdrop-filter .glass-effect {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1238,8 +1387,10 @@ html.is-touching {
 }
 
 .horizontal-scroll {
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  /* Internet Explorer 10+ */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 html.is-touching .animation-heavy {
@@ -1291,6 +1442,7 @@ html.is-touching .animation-heavy {
   0% {
     background-position: -200% center;
   }
+
   100% {
     background-position: 200% center;
   }
@@ -1319,7 +1471,8 @@ html.is-touching .animation-heavy {
   overflow: hidden;
   transition: all 0.3s ease;
   z-index: 1;
-  transform: translateZ(0); /* Force GPU acceleration */
+  transform: translateZ(0);
+  /* Force GPU acceleration */
 }
 
 .hero-button:hover {
@@ -1339,7 +1492,8 @@ html.is-touching .animation-heavy {
   -webkit-filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.2))
     drop-shadow(0 0 50px rgba(255, 255, 255, 0.1));
   animation: planet-edge-glow 4s infinite ease-in-out;
-  transform: translateZ(0); /* Force GPU acceleration */
+  transform: translateZ(0);
+  /* Force GPU acceleration */
 }
 
 @keyframes planet-edge-glow {
@@ -1350,6 +1504,7 @@ html.is-touching .animation-heavy {
     -webkit-filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.2))
       drop-shadow(0 0 50px rgba(255, 255, 255, 0.1));
   }
+
   50% {
     filter: drop-shadow(0 0 38px rgba(255, 255, 255, 0.3))
       drop-shadow(0 0 75px rgba(255, 255, 255, 0.15));
@@ -1365,6 +1520,7 @@ html.is-touching .animation-heavy {
     transform: scale(1);
     opacity: 0.2;
   }
+
   50% {
     transform: scale(1.05);
     opacity: 0.3;
@@ -1376,12 +1532,15 @@ html.is-touching .animation-heavy {
   100% {
     transform: translate(0, 0) scale(1);
   }
+
   25% {
     transform: translate(-2%, 2%) scale(1.02);
   }
+
   50% {
     transform: translate(2%, -2%) scale(0.98);
   }
+
   75% {
     transform: translate(1%, 1%) scale(1.01);
   }
@@ -1391,6 +1550,7 @@ html.is-touching .animation-heavy {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -1402,6 +1562,7 @@ html.is-touching .animation-heavy {
     opacity: 0.3;
     transform: scale(0.8);
   }
+
   50% {
     opacity: 0.7;
     transform: scale(1.2);
@@ -1430,6 +1591,7 @@ html.is-touching .animation-heavy {
   100% {
     box-shadow: 0 0 40px 5px rgba(255, 255, 255, 0.15);
   }
+
   50% {
     box-shadow: 0 0 60px 8px rgba(255, 255, 255, 0.2);
   }
@@ -1445,6 +1607,7 @@ html.is-touching .animation-heavy {
   100% {
     opacity: 0.8;
   }
+
   50% {
     opacity: 1;
   }
@@ -1519,6 +1682,7 @@ a.button,
     transform: translate(0%, 0%);
     opacity: 1;
   }
+
   100% {
     transform: translate(-100%, 0%);
     opacity: 0;
@@ -1530,6 +1694,7 @@ a.button,
     transform: translate(0%, 0%);
     opacity: 1;
   }
+
   100% {
     transform: translate(100%, 0%);
     opacity: 0;
@@ -1541,13 +1706,408 @@ a.button,
   color: #ccff00 !important;
 }
 
+/* ============================================
+   ANIMATED GRADIENT LINK TEXT
+   Used for Hero section links
+   ============================================ */
+.link-gradient {
+  background: linear-gradient(120deg, #4cd787, #9d4edd, #ccff00, #4cd787);
+  background-size: 250% 250%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: linkGradient 8s ease-in-out infinite;
+}
+
+@keyframes linkGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* ============================================
+   LOGO LOOP SCROLL ANIMATION
+   ============================================ */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-1 * var(--scroll-distance, 0px)));
+  }
+}
+
+/* ============================================
+   CURSOR BLINK ANIMATION
+   Used for TextType component
+   ============================================ */
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ============================================
+   COSMIC STARS ANIMATIONS
+   ============================================ */
+.stars-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Tiny distant stars - completely static, dense field */
+.stars-tiny {
+  background-image:
+    radial-gradient(1px 1px at 20% 30%, white, transparent),
+    radial-gradient(1px 1px at 60% 70%, white, transparent),
+    radial-gradient(1px 1px at 50% 50%, white, transparent),
+    radial-gradient(1px 1px at 80% 10%, white, transparent),
+    radial-gradient(1px 1px at 90% 60%, white, transparent),
+    radial-gradient(1px 1px at 33% 80%, white, transparent),
+    radial-gradient(1px 1px at 15% 90%, white, transparent),
+    radial-gradient(1px 1px at 75% 20%, white, transparent),
+    radial-gradient(1px 1px at 40% 40%, white, transparent),
+    radial-gradient(1px 1px at 65% 15%, white, transparent),
+    radial-gradient(1px 1px at 25% 65%, white, transparent),
+    radial-gradient(1px 1px at 85% 85%, white, transparent),
+    radial-gradient(1px 1px at 10% 45%, white, transparent),
+    radial-gradient(1px 1px at 95% 35%, white, transparent),
+    radial-gradient(1px 1px at 45% 10%, white, transparent),
+    radial-gradient(1px 1px at 70% 90%, white, transparent),
+    radial-gradient(1px 1px at 30% 20%, white, transparent),
+    radial-gradient(1px 1px at 55% 60%, white, transparent);
+  background-size:
+    200% 200%,
+    200% 200%,
+    200% 200%,
+    200% 200%,
+    200% 200%,
+    200% 200%,
+    200% 200%,
+    200% 200%,
+    200% 200%,
+    200% 200%,
+    200% 200%,
+    200% 200%,
+    200% 200%,
+    200% 200%,
+    200% 200%,
+    200% 200%,
+    200% 200%,
+    200% 200%;
+  background-position:
+    0% 0%,
+    100% 100%,
+    50% 50%,
+    20% 80%,
+    80% 20%,
+    40% 60%,
+    60% 40%,
+    10% 90%,
+    90% 10%,
+    30% 70%,
+    70% 30%,
+    15% 15%,
+    85% 85%,
+    25% 45%,
+    65% 75%,
+    45% 25%,
+    75% 65%,
+    35% 55%;
+  opacity: 0.6;
+}
+
+/* Small stars - mostly static with very subtle variations */
+.stars-small {
+  background-image:
+    radial-gradient(1.5px 1.5px at 18% 25%, rgba(255, 255, 255, 0.9), transparent),
+    radial-gradient(1.5px 1.5px at 82% 55%, rgba(255, 255, 255, 0.8), transparent),
+    radial-gradient(1.5px 1.5px at 45% 75%, rgba(255, 255, 255, 0.85), transparent),
+    radial-gradient(1.5px 1.5px at 68% 35%, rgba(255, 255, 255, 0.9), transparent),
+    radial-gradient(1.5px 1.5px at 22% 88%, rgba(255, 255, 255, 0.8), transparent),
+    radial-gradient(1.5px 1.5px at 92% 12%, rgba(255, 255, 255, 0.85), transparent),
+    radial-gradient(1.5px 1.5px at 38% 48%, rgba(255, 255, 255, 0.9), transparent),
+    radial-gradient(1.5px 1.5px at 72% 68%, rgba(255, 255, 255, 0.8), transparent),
+    radial-gradient(1.5px 1.5px at 12% 62%, rgba(255, 255, 255, 0.85), transparent),
+    radial-gradient(1.5px 1.5px at 58% 18%, rgba(255, 255, 255, 0.9), transparent),
+    radial-gradient(1.5px 1.5px at 88% 78%, rgba(255, 255, 255, 0.8), transparent),
+    radial-gradient(1.5px 1.5px at 28% 38%, rgba(255, 255, 255, 0.85), transparent);
+  background-size:
+    300% 300%,
+    300% 300%,
+    300% 300%,
+    300% 300%,
+    300% 300%,
+    300% 300%,
+    300% 300%,
+    300% 300%,
+    300% 300%,
+    300% 300%,
+    300% 300%,
+    300% 300%;
+  background-position:
+    18% 25%,
+    82% 55%,
+    45% 75%,
+    68% 35%,
+    22% 88%,
+    92% 12%,
+    38% 48%,
+    72% 68%,
+    12% 62%,
+    58% 18%,
+    88% 78%,
+    28% 38%;
+  opacity: 0.7;
+}
+
+/* Individual medium stars - subtle twinkling with staggered delays */
+.star-medium {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: radial-gradient(circle, white, transparent);
+  border-radius: 50%;
+  animation: twinkle-subtle ease-in-out infinite;
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+/* Individual bright stars - noticeable twinkling with staggered delays */
+.star-bright {
+  position: absolute;
+  background: radial-gradient(circle, rgba(255, 255, 255, 1), transparent);
+  border-radius: 50%;
+  animation: twinkle-bright ease-in-out infinite;
+  opacity: 0.9;
+  pointer-events: none;
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
+  transform: scale(1);
+  filter: brightness(1);
+}
+
+/* Subtle twinkling animation for medium stars */
+@keyframes twinkle-subtle {
+  0%,
+  100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.95);
+  }
+}
+
+/* More pronounced twinkling for bright stars */
+@keyframes twinkle-bright {
+  0%,
+  100% {
+    opacity: 0.9;
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  25% {
+    opacity: 1;
+    transform: scale(1.05);
+    filter: brightness(1.2);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.9);
+    filter: brightness(0.8);
+  }
+  75% {
+    opacity: 1;
+    transform: scale(1.05);
+    filter: brightness(1.2);
+  }
+}
+
+/* Respect reduced motion preference for cosmic stars */
+@media (prefers-reduced-motion: reduce) {
+  .star-medium,
+  .star-bright {
+    animation: none;
+    opacity: 0.8;
+  }
+}
+
 /* Additional rendering optimization for Safari to prevent square glow issue */
 @supports (-webkit-appearance: none) {
   .planet-sphere {
     /* Prevent overflow clipping that may cause square glow effect in Safari */
     -webkit-mask-image: -webkit-radial-gradient(white, black);
-    border-radius: 50%; /* Ensure circular shape for proper glow */
+    border-radius: 50%;
+    /* Ensure circular shape for proper glow */
   }
+}
+
+/* ============================================
+   PLAYFAIR DISPLAY FONT CLASSES
+   Elegant serif font for emphasis and sophistication
+   ============================================ */
+
+/* Pacifico Cursive Font - 'Creative' class */
+.font-creative {
+  font-family: var(--font-pacifico), 'Pacifico', cursive !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+}
+
+/* Base Playfair Display class */
+.font-editorial {
+  font-family: var(
+    --font-playfair-display,
+    'Playfair Display',
+    Georgia,
+    'Times New Roman',
+    serif
+  ) !important;
+}
+
+/* Playfair Display - Regular */
+.font-editorial-regular {
+  font-family: var(
+    --font-playfair-display,
+    'Playfair Display',
+    Georgia,
+    'Times New Roman',
+    serif
+  ) !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+}
+
+/* Playfair Display - Italic (Most elegant for emphasis) */
+.font-editorial-italic {
+  font-family: var(
+    --font-playfair-display,
+    'Playfair Display',
+    Georgia,
+    'Times New Roman',
+    serif
+  ) !important;
+  font-weight: 400 !important;
+  font-style: italic !important;
+}
+
+/* Playfair Display - Medium */
+.font-editorial-medium {
+  font-family: var(
+    --font-playfair-display,
+    'Playfair Display',
+    Georgia,
+    'Times New Roman',
+    serif
+  ) !important;
+  font-weight: 500 !important;
+  font-style: normal !important;
+}
+
+/* Playfair Display - Medium Italic */
+.font-editorial-medium-italic {
+  font-family: var(
+    --font-playfair-display,
+    'Playfair Display',
+    Georgia,
+    'Times New Roman',
+    serif
+  ) !important;
+  font-weight: 500 !important;
+  font-style: italic !important;
+}
+
+/* Playfair Display - SemiBold */
+.font-editorial-semibold {
+  font-family: var(
+    --font-playfair-display,
+    'Playfair Display',
+    Georgia,
+    'Times New Roman',
+    serif
+  ) !important;
+  font-weight: 600 !important;
+  font-style: normal !important;
+}
+
+/* Playfair Display - SemiBold Italic */
+.font-editorial-semibold-italic {
+  font-family: var(
+    --font-playfair-display,
+    'Playfair Display',
+    Georgia,
+    'Times New Roman',
+    serif
+  ) !important;
+  font-weight: 600 !important;
+  font-style: italic !important;
+}
+
+/* Playfair Display - Bold */
+.font-editorial-bold {
+  font-family: var(
+    --font-playfair-display,
+    'Playfair Display',
+    Georgia,
+    'Times New Roman',
+    serif
+  ) !important;
+  font-weight: 700 !important;
+  font-style: normal !important;
+}
+
+/* Playfair Display - Bold Italic */
+.font-editorial-bold-italic {
+  font-family: var(
+    --font-playfair-display,
+    'Playfair Display',
+    Georgia,
+    'Times New Roman',
+    serif
+  ) !important;
+  font-weight: 700 !important;
+  font-style: italic !important;
+}
+
+/* Playfair Display - Black (Extra Bold) */
+.font-editorial-black {
+  font-family: var(
+    --font-playfair-display,
+    'Playfair Display',
+    Georgia,
+    'Times New Roman',
+    serif
+  ) !important;
+  font-weight: 900 !important;
+  font-style: normal !important;
+}
+
+/* Playfair Display - Black Italic */
+.font-editorial-black-italic {
+  font-family: var(
+    --font-playfair-display,
+    'Playfair Display',
+    Georgia,
+    'Times New Roman',
+    serif
+  ) !important;
+  font-weight: 900 !important;
+  font-style: italic !important;
 }
 
 /* Performance optimizations for Core Web Vitals */
@@ -1556,7 +2116,7 @@ a.button,
 .hero-title {
   contain: layout;
   min-height: 5rem;
-  max-height: 5rem;
+  margin-bottom: 2rem;
 }
 
 /* Optimize typewriter text container to prevent CLS */
@@ -1570,7 +2130,8 @@ a.button,
 .hero-title,
 .typewriter-text,
 [class*='motion-'] {
-  will-change: auto; /* Let browser decide */
+  will-change: auto;
+  /* Let browser decide */
 }
 
 /* Prevent font loading from causing CLS */

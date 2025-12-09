@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useMemo } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { OrbitControls, Sphere, MeshDistortMaterial, Stars, Float } from '@react-three/drei'
 import * as THREE from 'three'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import DevXEnvironment from '@/components/3d/DevXEnvironment'
 
 // Igloo-style animated planet component
@@ -221,6 +221,16 @@ export default function CreativeAnimationHero() {
     target: containerRef,
     offset: ['start start', 'end start'],
   })
+  const animatedPhrases = ['Animation', 'Motion Design', 'Storytelling']
+  const [phraseIndex, setPhraseIndex] = useState(0)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPhraseIndex((prev) => (prev + 1) % animatedPhrases.length)
+    }, 2600)
+
+    return () => clearInterval(interval)
+  }, [animatedPhrases.length])
 
   // Transform scroll into various animation values
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0])
@@ -231,7 +241,7 @@ export default function CreativeAnimationHero() {
       {/* Main hero section */}
       <motion.div
         ref={containerRef}
-        className="relative h-screen w-full overflow-hidden"
+        className="relative min-h-[85vh] w-full overflow-hidden"
         style={{ opacity, scale }}
       >
         {/* 3D Canvas */}
@@ -249,12 +259,7 @@ export default function CreativeAnimationHero() {
         <div className="absolute inset-0 z-20 pointer-events-none">
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
             <motion.div
-              className="w-96 h-96 rounded-full"
-              style={{
-                background: 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%)',
-                backdropFilter: 'blur(20px)',
-                border: '1px solid rgba(255,255,255,0.1)',
-              }}
+              className="w-72 h-72 md:w-80 md:h-80 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.1)_0%,transparent_70%)] backdrop-blur-[20px] border border-white/10"
               animate={{
                 scale: [1, 1.1, 1],
                 opacity: [0.3, 0.6, 0.3],
@@ -276,17 +281,27 @@ export default function CreativeAnimationHero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1, duration: 1 }}
           >
-            <motion.h1
-              className="text-6xl md:text-8xl font-['IBM_Plex_Mono'] font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-orange-300 to-pink-300 mb-6"
-              style={{
-                textShadow: '0 0 40px rgba(255,255,255,0.3)',
-                WebkitTextStroke: '1px rgba(255,255,255,0.1)',
-              }}
-            >
-              Creative
-            </motion.h1>
+            <div className="flex flex-col items-center md:flex-row md:items-end md:gap-4">
+              <motion.h1 className="text-4xl md:text-6xl font-creative text-transparent bg-clip-text bg-gradient-to-r from-white via-orange-200 to-pink-200 leading-tight mb-3 md:mb-0 drop-shadow-[0_0_24px_rgba(255,255,255,0.25)]">
+                Creative
+              </motion.h1>
+              <div className="md:pb-3">
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={phraseIndex}
+                    className="block text-lg md:text-xl font-['IBM_Plex_Sans'] uppercase tracking-[0.25em] text-white/90 md:whitespace-nowrap text-center md:text-left"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.4 }}
+                  >
+                    {animatedPhrases[phraseIndex]}
+                  </motion.span>
+                </AnimatePresence>
+              </div>
+            </div>
             <motion.p
-              className="text-xl md:text-2xl font-['IBM_Plex_Sans'] font-light text-white/90"
+              className="text-base md:text-lg font-['IBM_Plex_Sans'] font-light text-white/80 mt-2"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.5, duration: 1 }}

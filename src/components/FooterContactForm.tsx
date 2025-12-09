@@ -93,60 +93,60 @@ export default function FooterContactForm() {
 
   return (
     <div>
-      <h3 className="text-base font-extrabold mb-4 lg:mb-6 text-[#4CD787] flex items-end h-8">
+      <h3 className="text-sm font-semibold uppercase tracking-wider mb-4 lg:mb-6 text-white flex items-end h-8">
         Get in touch
       </h3>
       {isSubmitted ? (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-[#4CD787]/20 border border-[#4CD787]/30 rounded-lg p-6 text-center"
+          className="bg-zinc-900/50 border border-white/10 rounded-lg p-6 text-center backdrop-blur-sm"
         >
           <CheckCircle className="w-12 h-12 text-[#4CD787] mx-auto mb-3" />
           <h3 className="text-lg font-semibold text-white mb-1">Message Sent!</h3>
-          <p className="text-foreground/70 text-sm">We&apos;ll be in touch shortly.</p>
+          <p className="text-zinc-400 text-sm">We&apos;ll be in touch shortly.</p>
         </motion.div>
       ) : (
-        <form onSubmit={handleSubmit} className="space-y-3">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <p className="mb-1 text-sm text-gray-400">Email*</p>
+            <p className="mb-1.5 text-xs font-medium text-zinc-400">Email</p>
             <Input
               type="email"
               name="email"
               value={formState.email}
               onChange={handleChange}
-              placeholder="Enter your email address here"
+              placeholder="Enter your email address"
               autoComplete="email"
-              className={`bg-secondary border ${
-                formErrors.email ? 'border-red-500' : 'border-secondary'
-              } text-gray-400 placeholder:text-gray-500 text-sm`}
+              className={`bg-zinc-900/50 border ${
+                formErrors.email ? 'border-red-500/50' : 'border-white/10'
+              } text-zinc-200 placeholder:text-zinc-500 text-sm focus:border-white/20 focus:ring-0 transition-all duration-300 rounded-lg`}
             />
             {formErrors.email && (
               <motion.p
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="text-red-400 text-xs mt-1"
+                className="text-red-400/90 text-xs mt-1.5"
               >
                 {formErrors.email}
               </motion.p>
             )}
           </div>
           <div>
-            <p className="mb-1 text-sm text-gray-400">Message*</p>
+            <p className="mb-1.5 text-xs font-medium text-zinc-400">Message</p>
             <Textarea
               name="message"
               value={formState.message}
               onChange={handleChange}
-              placeholder="Ask a quick question"
-              className={`bg-secondary border ${
-                formErrors.message ? 'border-red-500' : 'border-secondary'
-              } text-gray-400 placeholder:text-gray-500 min-h-[80px] text-sm`}
+              placeholder="How can we help you?"
+              className={`bg-zinc-900/50 border ${
+                formErrors.message ? 'border-red-500/50' : 'border-white/10'
+              } text-zinc-200 placeholder:text-zinc-500 min-h-[100px] text-sm focus:border-white/20 focus:ring-0 transition-all duration-300 rounded-lg resize-none`}
             />
             {formErrors.message && (
               <motion.p
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="text-red-400 text-xs mt-1"
+                className="text-red-400/90 text-xs mt-1.5"
               >
                 {formErrors.message}
               </motion.p>
@@ -155,9 +155,9 @@ export default function FooterContactForm() {
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-[#4CD787] text-black hover:bg-[#4CD787]/90 text-sm font-medium transition-colors duration-200"
+            className="w-full bg-white text-black hover:bg-zinc-200 text-sm font-semibold transition-all duration-300 rounded-lg py-5 mt-2 shadow-lg shadow-white/5 hover:shadow-white/10"
           >
-            {isSubmitting ? 'Sending...' : 'Send message'}
+            {isSubmitting ? 'Sending...' : 'Send Message'}
           </Button>
           {submitError && (
             <motion.p

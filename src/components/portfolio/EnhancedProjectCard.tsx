@@ -64,7 +64,7 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
       className="relative group cursor-pointer overflow-hidden
         bg-black/40 backdrop-blur-md border border-white/10
         rounded-2xl hover:border-white/20 transition-all duration-500
-        h-[680px] 2xl:h-[800px] 2xl:w-[calc(100%+40px)] 2xl:ml-[-20px]"
+        h-[680px] xl:h-[720px] 2xl:h-[760px]"
       whileInView={{
         opacity: 1,
         transition: {
@@ -103,7 +103,7 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
               src={project.images.banner}
               alt={project.title}
               fill
-              className="object-cover"
+              className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
 
@@ -163,7 +163,7 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
                   {project.title}
                 </motion.h3>
 
-                <p className="text-white/70 mt-2 leading-relaxed text-sm 2xl:text-base 2xl:mt-3">
+                <p className="text-zinc-400 mt-2 leading-relaxed text-sm 2xl:text-base 2xl:mt-3">
                   {project.shortDescription}
                 </p>
               </div>
@@ -174,7 +174,7 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
               {project.technologies.slice(0, 3).map((tech) => (
                 <motion.span
                   key={tech}
-                  className="px-2 py-1 text-xs rounded-md bg-white/5 border border-white/10 text-white/80"
+                  className="px-2 py-1 text-xs rounded-md bg-white/5 border border-white/10 text-zinc-400"
                   whileHover={{
                     backgroundColor: `${categoryColor}20`,
                     borderColor: `${categoryColor}40`,
@@ -185,7 +185,7 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
                 </motion.span>
               ))}
               {project.technologies.length > 3 && (
-                <span className="px-2 py-1 text-xs rounded-md bg-white/5 border border-white/10 text-white/60">
+                <span className="px-2 py-1 text-xs rounded-md bg-white/5 border border-white/10 text-zinc-400">
                   +{project.technologies.length - 3} more
                 </span>
               )}
@@ -224,7 +224,7 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
             >
               <div className="flex items-start gap-2">
                 <Target size={16} className="text-green-400 mt-0.5 flex-shrink-0" />
-                <p className="text-sm text-white/80 leading-relaxed">{project.businessImpact}</p>
+                <p className="text-sm text-zinc-400 leading-relaxed">{project.businessImpact}</p>
               </div>
             </motion.div>
           )}
@@ -232,7 +232,7 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
           {/* Bottom Section */}
           <div className="space-y-4 mt-auto">
             {/* Project Details */}
-            <div className="flex items-center gap-4 text-xs text-white/60">
+            <div className="flex items-center gap-4 text-xs text-zinc-400">
               {project.completionYear && (
                 <div className="flex items-center gap-1">
                   <Calendar size={12} />

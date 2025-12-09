@@ -35,6 +35,7 @@ import ProjectDetailModal from '@/components/portfolio/ProjectDetailModal'
 import { portfolioProjects, ProjectData } from '@/data/portfolioProjects'
 import dynamic from 'next/dynamic'
 import { Button } from '@/components/ui/button'
+import StarBorder from '@/components/animations/StarBorder'
 
 // Lazy load AsciiEffect3D only when hero section is in viewport for better LCP
 const AsciiEffect3D = dynamic(() => import('@/components/effects/AsciiEffect3D'), {
@@ -248,22 +249,15 @@ const ServiceModal = ({
                 className="bg-black/80 backdrop-blur-md border border-white/10 rounded-xl max-w-2xl w-full max-h-[90vh] overflow-auto p-6 relative"
               >
                 <div className="flex items-center mb-6">
-                  <div
-                    className="w-12 h-12 rounded-full flex items-center justify-center mr-4"
-                    style={{ backgroundColor: service.color }}
-                  >
-                    <Icon className="w-6 h-6 text-black" />
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center mr-4 bg-white/5 border border-white/10">
+                    <Icon className="w-6 h-6 text-white" />
                   </div>
-                  <h2 className="heading-component" style={{ color: service.color }}>
-                    {service.fullTitle}
-                  </h2>
+                  <h2 className="heading-component text-white">{service.fullTitle}</h2>
                 </div>
 
                 <div className="mb-6">
                   <p className="text-body mb-4">{service.description}</p>
-                  <h3 className="heading-subsection mb-3" style={{ color: service.color }}>
-                    Key Benefits
-                  </h3>
+                  <h3 className="heading-component mb-3 text-white">Key Benefits</h3>
                   <ul className="space-y-2">
                     {service.features.map((feature: any) => (
                       <li key={feature} className="flex items-center">
@@ -279,20 +273,21 @@ const ServiceModal = ({
 
                 <div className="flex justify-between mt-8 pt-4 border-t border-white/10">
                   <button
-                    className="px-5 py-2 rounded-lg text-black font-medium transition-all cursor-pointer"
-                    style={{ backgroundColor: service.color }}
+                    className="px-5 py-2 rounded-lg text-white/70 hover:text-white font-medium transition-all cursor-pointer hover:bg-white/10"
                     onClick={onClose}
                   >
                     Close
                   </button>
-                  <a
+                  <StarBorder
                     href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-5 py-2 rounded-lg bg-robinhood text-black font-medium transition-all hover:bg-white hover:text-black border-2 border-robinhood shadow-lg"
+                    className="px-6 py-2 rounded-lg text-white font-medium transition-all"
+                    color="#FFFFFF"
+                    speed="3s"
                   >
-                    Schedule a Free Consultation
-                  </a>
+                    Schedule Consultation
+                  </StarBorder>
                 </div>
               </motion.div>
             </div>
@@ -331,13 +326,10 @@ function ServiceIcon({
       whileHover={shouldReduceMotion ? {} : { scale: 1.08 }}
       whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
     >
-      <motion.div
-        className="w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center relative overflow-hidden transition-all duration-300 group-hover:shadow-lg"
-        style={{ backgroundColor: service.color }}
-      >
-        <service.icon className="w-8 h-8 md:w-10 md:h-10 text-black relative z-10" />
+      <motion.div className="w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center relative overflow-hidden transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] bg-zinc-900 border border-white/10 group-hover:bg-white">
+        <service.icon className="w-8 h-8 md:w-10 md:h-10 text-white relative z-10 group-hover:!text-black transition-colors duration-300" />
       </motion.div>
-      <motion.div className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs font-medium whitespace-nowrap text-center text-white/70 group-hover:text-white transition-colors duration-300">
+      <motion.div className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs font-medium whitespace-nowrap text-center text-zinc-400 group-hover:text-white transition-colors duration-300">
         {service.title}
       </motion.div>
     </motion.button>
@@ -487,25 +479,21 @@ export default function PortfolioPage() {
                 </div>
               </div>
 
-              <motion.p
-                variants={fadeInUpVariants}
-                className="relative z-20 subtitle-lg max-w-2xl mb-8 -mt-5"
-                style={{
-                  textShadow: '0 6px 25px rgba(0,0,0,0.65)',
-                }}
-              >
-                Explore shipped products that increased revenue, retention, and efficiency across
-                web, mobile, AI, and cloud experiences.
-              </motion.p>
+              <BlurText
+                text="Explore shipped products that increased revenue, retention, and efficiency across web, mobile, AI, and cloud experiences."
+                className="relative z-20 section-subtitle text-zinc-400 max-w-2xl mx-auto mb-10 -mt-8 justify-center text-center"
+                delay={200}
+                animateBy="words"
+              />
 
               {/* Decorative squares row under subtitle */}
-              <div className="relative mt-1 mb-49 h-[220px] sm:h-[250px] md:h-[330px] w-full">
+              <div className="relative mt-1 mb-49 h-[260px] sm:h-[250px] md:h-[330px] w-full">
                 <div className="relative w-full max-w-4xl mx-auto flex items-center justify-center h-full">
                   <AsciiEffect3D
                     key={`hero-ascii-ball-${pathname}`}
                     height={620}
                     className="rounded-xl"
-                    color="#9d4edd"
+                    color="#E4E4E7"
                     charSize={6}
                     opacity={0.75}
                     showBase={false}
@@ -515,6 +503,83 @@ export default function PortfolioPage() {
                     ambient={0.08}
                     charSet={' ..*%$#@a,-/| '}
                   />
+                </div>
+
+                {/* Mobile-friendly animated squares */}
+                <div className="md:hidden absolute inset-x-0 bottom-0 px-5 pt-5">
+                  <div className="grid grid-cols-2 gap-3 max-w-[260px] mx-auto">
+                    <motion.div
+                      className="relative rounded-2xl border border-[#4CD787]/50 bg-gradient-to-br from-white/5 via-[#4CD787]/10 to-transparent backdrop-blur-sm overflow-hidden aspect-square shadow-[0_12px_50px_-28px_rgba(76,215,135,0.5)]"
+                      style={{ transform: 'rotate(-6deg)' }}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, ease: 'easeOut' }}
+                    >
+                      <LetterGlitch
+                        glitchColors={['#2b4539', '#61dca3', '#61b3dc']}
+                        glitchSpeed={28}
+                        centerVignette={true}
+                        outerVignette={false}
+                        smooth={true}
+                      />
+                    </motion.div>
+
+                    <motion.div
+                      className="relative rounded-2xl border border-[#4834D4]/50 bg-gradient-to-br from-[#0b1221]/80 via-[#1a1f35]/80 to-[#0b1221]/60 backdrop-blur-sm overflow-hidden aspect-square -ml-5 rotate-6"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.55, ease: 'easeOut', delay: 0.05 }}
+                    >
+                      <DotGrid
+                        dotSize={3}
+                        gap={10}
+                        baseColor="#4CD787"
+                        activeColor="#9d4edd"
+                        proximity={42}
+                        shockRadius={52}
+                        shockStrength={2}
+                        style={{ width: '100%', height: '100%' }}
+                      />
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent" />
+                    </motion.div>
+
+                    <motion.div
+                      className="relative rounded-2xl border border-amber-300/50 bg-gradient-to-br from-amber-200/10 via-amber-400/10 to-transparent backdrop-blur-sm overflow-hidden aspect-square -mt-2"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, ease: 'easeOut', delay: 0.1 }}
+                    >
+                      <GridAnimation
+                        direction="diagonal"
+                        speed={0.22}
+                        borderColor="rgba(255, 215, 0, 0.6)"
+                        squareSize={18}
+                        hoverFillColor="rgba(255, 215, 0, 0.25)"
+                        showRadialGradient={false}
+                      />
+                    </motion.div>
+
+                    <motion.div
+                      className="relative rounded-2xl border border-[#4CD787]/60 bg-gradient-to-br from-[#0b3326]/60 via-black/30 to-[#0b3326]/40 backdrop-blur-sm overflow-hidden aspect-square -ml-6 -mt-4 rotate-12"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.65, ease: 'easeOut', delay: 0.15 }}
+                    >
+                      <Waves
+                        lineColor="#4CD787"
+                        backgroundColor="rgba(0,0,0,0.25)"
+                        waveSpeedX={0.01}
+                        waveSpeedY={0.004}
+                        waveAmpX={14}
+                        waveAmpY={8}
+                        xGap={7}
+                        yGap={12}
+                        friction={0.94}
+                        tension={0.006}
+                        maxCursorMove={28}
+                      />
+                    </motion.div>
+                  </div>
                 </div>
 
                 {/* Left Outer Square - LetterGlitch (110x110px) - Tablet and up */}
@@ -644,10 +709,17 @@ export default function PortfolioPage() {
       </section>
 
       {/* Projects */}
-      <section className="pt-[5px] pb-24 relative">
-        <div className="container mx-auto px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-8 max-w-8xl">
+      <section className="pt-[5px] pb-28 relative">
+        <div className="pointer-events-none absolute inset-0 flex items-stretch justify-center">
+          <div className="w-full max-w-6xl xl:max-w-7xl mx-auto flex gap-12 px-6 md:px-10">
+            <div className="flex-1 bg-gradient-to-b from-white/5 via-transparent to-white/5 opacity-10 rounded-full" />
+            <div className="flex-1 bg-gradient-to-b from-[#4CD787]/20 via-transparent to-[#4CD787]/20 opacity-10 rounded-full" />
+            <div className="flex-1 bg-gradient-to-b from-[#D8B4FE]/20 via-transparent to-[#D8B4FE]/20 opacity-10 rounded-full hidden md:block" />
+          </div>
+        </div>
+        <div className="container mx-auto px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-24 max-w-8xl">
           <motion.div
-            className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-8 md:gap-10 lg:gap-12 xl:gap-14 2xl:gap-16 relative z-10 justify-items-center"
+            className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-2 gap-8 md:gap-12 lg:gap-14 xl:gap-16 2xl:gap-20 relative z-10 justify-items-center max-w-6xl xl:max-w-7xl mx-auto"
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
@@ -686,7 +758,7 @@ export default function PortfolioPage() {
           <div className="text-center mb-8">
             <BlurText
               text="Services we deliver"
-              className="heading-section text-white justify-center mb-4"
+              className="section-title text-white justify-center mb-4 font-editorial"
               animateBy="words"
               once={false}
             />
@@ -735,7 +807,7 @@ export default function PortfolioPage() {
             transition={{ duration: 0.8 }}
             className="relative z-20 text-center max-w-4xl mx-auto"
           >
-            <h2 className="heading-section text-[#06B6D4] mb-6 whitespace-nowrap">
+            <h2 className="section-title text-[#06B6D4] mb-6 whitespace-nowrap font-editorial">
               Ready to Build Your Next Project?
             </h2>
             <p className="text-lg md:text-xl lg:text-2xl font-light text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed">
@@ -749,31 +821,27 @@ export default function PortfolioPage() {
               viewport={{ once: true }}
               transition={{ delay: 0.3, duration: 0.5 }}
             >
-              <Button
-                asChild
-                className="group relative z-40 inline-flex items-center gap-2 bg-robinhood text-black hover:bg-white hover:text-black px-8 py-3 rounded-lg font-semibold text-lg border-2 border-robinhood shadow-lg transition-all duration-300 hover:shadow-[0_5px_15px_rgba(204,255,0,0.3)]"
-                style={{ fontFamily: 'var(--font-ibm-plex-mono)' }}
+              <StarBorder
+                href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?background_color=000000&text_color=ffffff&primary_color=4CD787&hide_gdpr_banner=1"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative z-40 inline-flex items-center gap-2 text-white px-8 py-3 rounded-lg font-semibold text-lg transition-all duration-300"
+                color="#FFFFFF"
+                speed="3s"
               >
-                <a
-                  href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?background_color=000000&text_color=ffffff&primary_color=4CD787&hide_gdpr_banner=1"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <span>Schedule a Free Consultation</span>
-                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                </a>
-              </Button>
-              <Button
-                asChild
-                variant="outline"
-                className="group relative z-40 inline-flex items-center gap-2 border border-white/30 px-8 py-3 font-medium text-white transition-all duration-300 hover:border-white hover:bg-white/10"
-                style={{ fontFamily: 'var(--font-ibm-plex-mono)' }}
+                <span>Schedule a Free Consultation</span>
+                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </StarBorder>
+
+              <StarBorder
+                href="/contact"
+                className="group relative z-40 inline-flex items-center gap-2 text-white px-8 py-3 rounded-lg font-semibold text-lg transition-all duration-300 border border-white/10 hover:bg-white/10"
+                color="#FFFFFF"
+                speed="3s"
               >
-                <Link href="/contact">
-                  <span>Contact Our Team</span>
-                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                </Link>
-              </Button>
+                <span>Contact Our Team</span>
+                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </StarBorder>
             </motion.div>
           </motion.div>
         </div>
