@@ -1,3 +1,24 @@
+## [1.5.0](https://github.com/DevXGroup/devx-web/compare/v1.4.1...v1.5.0) (2025-12-09)
+
+### Features
+
+* **animations:** slow down card fade-in effects for better visibility ([88914bf](https://github.com/DevXGroup/devx-web/commit/88914bfc72bb406017064b924ff9925fb37579dd)), closes [#36](https://github.com/DevXGroup/devx-web/issues/36)
+* **animations:** slow down tool carousel and add borderless logo styling ([cc4a01a](https://github.com/DevXGroup/devx-web/commit/cc4a01af61eef1133776ec70c454a529cd89ddb9)), closes [#36](https://github.com/DevXGroup/devx-web/issues/36)
+* **assets:** update tool logos to borderless grayscale design ([553e2ea](https://github.com/DevXGroup/devx-web/commit/553e2eaad3cd0c4a1dadb93df4bded5445a7d642)), closes [#36](https://github.com/DevXGroup/devx-web/issues/36)
+
+### Bug Fixes
+
+* **code-quality:** add missing hook dependencies and fix accessibility ([be40cd7](https://github.com/DevXGroup/devx-web/commit/be40cd71c360e0316faa9711350b8ecfd0851aa7)), closes [#36](https://github.com/DevXGroup/devx-web/issues/36)
+* **deps:** add require-in-the-middle and import-in-the-middle for Sentry instrumentation ([b7ce609](https://github.com/DevXGroup/devx-web/commit/b7ce60990c3d143c6346c7647b2cdbeae06fcc53))
+* resolve Tailwind ESM module format and optimize hero animations ([0aeee16](https://github.com/DevXGroup/devx-web/commit/0aeee166b002546beaa4e4029fc171bb8816af03))
+* **security:** update Next.js to 15.5.7 to fix CVE-2025-66478 vulnerability ([25c6a4e](https://github.com/DevXGroup/devx-web/commit/25c6a4ef26f1292026c60f94d4f3665054587a0e))
+* **security:** update React 19.1.1 → 19.2.1 to fix CVE-2025-55182 ([ef1f404](https://github.com/DevXGroup/devx-web/commit/ef1f404548a739b58c81a658519876696a642373))
+* **ui:** improve Creative section layout and prevent text wrapping ([32e654b](https://github.com/DevXGroup/devx-web/commit/32e654bb195f1a40870cb105808baa361c656785))
+
+### Performance Improvements
+
+* **ui:** optimize hero animations and fix card performance issues ([630b9bd](https://github.com/DevXGroup/devx-web/commit/630b9bd70c177e730cd009450a069ebfc5d44040))
+
 ## [1.4.1](https://github.com/DevXGroup/devx-web/compare/v1.4.0...v1.4.1) (2025-11-29)
 
 ### Bug Fixes
