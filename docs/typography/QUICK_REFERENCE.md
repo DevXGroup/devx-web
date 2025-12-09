@@ -13,7 +13,7 @@
 
 ## 📝 Use These Classes
 
-### Headings (Sans - Bold/Semibold)
+### Headings (Playfair Display - Serif)
 | Class | Size | Usage |
 |-------|------|-------|
 | `.heading-hero` | 4xl→8xl | Page hero title |
@@ -85,14 +85,14 @@
 
 ## 🎨 EXTENDED TYPOGRAPHY SYSTEM
 
-### Gradient Text Utilities
+### Gradient Text Utilities (Pastel Theme)
 | Class | Colors | Usage |
 |-------|--------|-------|
-| `.gradient-gold` | Gold→Bronze→Black | Primary brand gradient |
-| `.gradient-green` | Lime→Mint→Lime | Success/growth gradient |
-| `.gradient-purple` | Purple→Lavender→Purple | Premium/luxury gradient |
-| `.gradient-blue` | Indigo→Blue→Indigo | Trust/technology gradient |
-| `.gradient-cyan` | Cyan→Aqua→Cyan | Modern/fresh gradient |
+| `.gradient-gold` | Soft Gold→Yellow→Gold | Primary brand gradient |
+| `.gradient-green` | Soft Mint→Pale Green→Mint | Success/growth gradient |
+| `.gradient-purple` | Soft Lavender→Lilac→Lavender | Premium/luxury gradient |
+| `.gradient-blue` | Soft Sky→Pale Blue→Sky | Trust/technology gradient |
+| `.gradient-cyan` | Soft Aqua→Pale Cyan→Aqua | Modern/fresh gradient |
 
 ### Extended Card Variants
 | Class | Size | Style | Usage |
@@ -136,7 +136,7 @@
 ### Link Typography
 | Class | Size | Color | Usage |
 |-------|------|-------|-------|
-| `.link-primary` | base→lg | Green (#4CD787) | Standard links |
+| `.link-primary` | base→lg | Pastel Green (#86EFAC) | Standard links |
 | `.link-secondary` | sm→base | White/70 | Subtle links |
 | `.link-underline` | - | - | Animated underline on hover |
 
@@ -156,7 +156,7 @@
 ### Card Component (Elegant with Italic)
 ```tsx
 <div className="card">
-  <h3 className="card-title text-[#4CD787]">Agentic AI Development</h3>
+  <h3 className="card-title text-[#86EFAC]">Agentic AI Development</h3>
   <p className="card-description">
     Build autonomous AI agents that execute complex workflows end-to-end.
   </p>
@@ -175,7 +175,7 @@
     We build custom software that fits your exact needs.
   </p>
   <div className="outcome-box">
-    <p className="ui-label text-[#4CD787]">What you get:</p>
+    <p className="ui-label text-[#86EFAC]">What you get:</p>
     <p className="card-outcome">Custom software that scales with your business</p>
   </div>
   <ul>
@@ -188,7 +188,7 @@
 ### Section with Title & Subtitle
 ```tsx
 <section>
-  <h2 className="section-title text-[#06B6D4]">Our Services</h2>
+  <h2 className="section-title text-[#67E8F9]">Our Services</h2>
   <p className="section-subtitle">
     Launch revenue-driving products your customers rely on.
   </p>
@@ -199,7 +199,7 @@
 ```tsx
 <section>
   <h1 className="section-title-hero">
-    <span className="bg-gradient-to-r from-[#FAD961] to-[#C2892B] bg-clip-text text-transparent">
+    <span className="bg-gradient-to-r from-[#FDE047] to-[#FEF08A] bg-clip-text text-transparent">
       Agentic AI & RAG Solutions
     </span>
   </h1>
@@ -211,7 +211,7 @@
 
 ### Button with Typography
 ```tsx
-<button className="btn-text-primary bg-gradient-to-r from-[#4CD787] to-[#66E6A4]">
+<button className="btn-text-primary bg-gradient-to-r from-[#86EFAC] to-[#BBF7D0]">
   Schedule a Strategy Call
 </button>
 
@@ -224,7 +224,7 @@
 ```tsx
 <BlurText
   text="Why Choose Us?"
-  className="blur-section text-[#06B6D4]"
+  className="blur-section text-[#67E8F9]"
   delay={150}
   once={true}
 />

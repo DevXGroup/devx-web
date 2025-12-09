@@ -26,7 +26,7 @@ DevX uses a **centralized typography system** where changing fonts in ONE place 
 - **What's defined**: All typography classes in one place
 
 **Available Classes:**
-- Headings (Sans): `.heading-hero`, `.heading-section`, `.heading-subsection`, `.heading-component`
+- Headings (Serif): `.heading-hero`, `.heading-section`, `.heading-subsection`, `.heading-component`
 - Body (Sans): `.text-body-large`, `.text-body`, `.text-body-small`
 - Subtitles (Sans): `.subtitle`, `.subtitle-lg`, `.subtitle-sm`, `.subtitle-xs`
 
@@ -39,7 +39,7 @@ DevX uses a **centralized typography system** where changing fonts in ONE place 
 
 ## 📋 Available Classes
 
-### Headings (IBM Plex Sans - Bold/Semibold)
+### Headings (Playfair Display - Serif)
 ```tsx
 <h1 className="heading-hero">Hero Title</h1>                    // 4xl → 8xl
 <h2 className="heading-section">Section Title</h2>              // 3xl → 5xl

@@ -3,6 +3,7 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import { Check, Star, Zap, Shield, ArrowRight, Sparkles, Target, Crown } from 'lucide-react'
 import { useRef, useState } from 'react'
+import StarBorder from '@animations/StarBorder'
 import TextPressure from '@animations/TextPressure'
 import BlurText from '@animations/BlurText'
 
@@ -141,55 +142,8 @@ const pricingPlans = [
 ]
 
 // Animated background particles
-interface FloatingParticleConfig {
-  delay: number
-  size: string
-  color: string
-  left: string
-  top: string
-  duration: number
-}
-
-const FloatingParticle = ({ delay, size, color, left, top, duration }: FloatingParticleConfig) => (
-  <motion.div
-    className="absolute rounded-full opacity-20"
-    style={{
-      width: size,
-      height: size,
-      backgroundColor: color,
-      left,
-      top,
-    }}
-    animate={{
-      y: [-20, 20, -20],
-      x: [-10, 10, -10],
-      opacity: [0.2, 0.5, 0.2],
-    }}
-    transition={{
-      duration,
-      repeat: Infinity,
-      delay,
-      ease: 'easeInOut',
-    }}
-  />
-)
-const particleConfigurations: FloatingParticleConfig[] = [
-  { delay: 0, size: '6px', color: '#4CD787', left: '6%', top: '22%', duration: 7 },
-  { delay: 0.5, size: '8px', color: '#FFD700', left: '27%', top: '18%', duration: 8.5 },
-  { delay: 1, size: '9px', color: '#9d4edd', left: '52%', top: '72%', duration: 8 },
-  { delay: 1.5, size: '7px', color: '#4CD787', left: '74%', top: '24%', duration: 9 },
-  { delay: 2, size: '10px', color: '#FFD700', left: '43%', top: '12%', duration: 10 },
-  { delay: 2.5, size: '8px', color: '#9d4edd', left: '9%', top: '58%', duration: 7.5 },
-  { delay: 3, size: '11px', color: '#4CD787', left: '14%', top: '48%', duration: 9.5 },
-  { delay: 3.5, size: '7px', color: '#FFD700', left: '18%', top: '6%', duration: 8.2 },
-  { delay: 4, size: '9px', color: '#9d4edd', left: '59%', top: '62%', duration: 9.7 },
-  { delay: 4.5, size: '6px', color: '#4CD787', left: '33%', top: '82%', duration: 8.8 },
-  { delay: 5, size: '7px', color: '#FFD700', left: '8%', top: '76%', duration: 7.8 },
-  { delay: 5.5, size: '10px', color: '#9d4edd', left: '88%', top: '66%', duration: 9.3 },
-  { delay: 6, size: '8px', color: '#4CD787', left: '61%', top: '54%', duration: 8.9 },
-  { delay: 6.5, size: '6px', color: '#FFD700', left: '4%', top: '64%', duration: 8.4 },
-  { delay: 7, size: '9px', color: '#9d4edd', left: '46%', top: '8%', duration: 9.1 },
-]
+// Floating particles removed for performance
+const particleConfigurations = []
 
 interface PricingPlan {
   name: string
@@ -211,46 +165,22 @@ interface PricingCardProps {
 }
 
 function PricingCard({ plan }: PricingCardProps) {
-  const shouldReduceMotion = useReducedMotion()
-  const ref = useRef(null)
   const IconComponent = plan.icon
   const [isHovered, setIsHovered] = useState(false)
 
   return (
-    <motion.div
-      ref={ref}
-      variants={fadeInVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.6, ease: [0.0, 0.0, 0.2, 1] }}
-      whileHover={shouldReduceMotion ? {} : cardHoverVariants.hover}
-      className={`relative bg-black/40 backdrop-blur-xl rounded-2xl border ${
-        plan.popular
-          ? 'border-[#FFD700] ring-2 ring-[#FFD700]/30 shadow-2xl shadow-[#FFD700]/20'
-          : 'border-white/10'
-      } flex flex-col group transition-all duration-500 overflow-hidden h-full`}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
+    <StarBorder
+      as="div"
+      className="h-full w-full p-0 bg-zinc-900/40 backdrop-blur-md rounded-2xl overflow-hidden"
+      color={plan.color}
+      speed="4s"
+      thickness={2}
     >
-      {/* Animated background gradient */}
-      <motion.div
-        className={`absolute inset-0 bg-gradient-to-br ${plan.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
-        animate={
-          isHovered
-            ? {
-                background: [
-                  `linear-gradient(135deg, ${plan.color}20, transparent)`,
-                  `linear-gradient(225deg, ${plan.color}30, transparent)`,
-                  `linear-gradient(135deg, ${plan.color}20, transparent)`,
-                ],
-              }
-            : {}
-        }
-        transition={{ duration: 3, repeat: Infinity }}
-      />
-
-      <div className="relative z-10 p-6 flex flex-col h-full">
+      <div
+        className="relative z-10 p-6 flex flex-col h-full"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         {/* Header section */}
         <div className="flex items-center gap-3 mb-4">
           <motion.div
@@ -276,9 +206,9 @@ function PricingCard({ plan }: PricingCardProps) {
             <span className="text-3xl font-bold text-white group-hover:scale-105 transition-transform duration-300">
               {plan.price}
             </span>
-            <span className="text-sm text-white/60">{plan.priceUnit}</span>
+            <span className="text-sm text-zinc-400">{plan.priceUnit}</span>
             <motion.span
-              className="text-xs text-white/40 line-through ml-1"
+              className="text-xs text-zinc-400 line-through ml-1"
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
@@ -302,7 +232,7 @@ function PricingCard({ plan }: PricingCardProps) {
           </motion.div>
         </div>
 
-        <p className="text-white/80 text-sm md:text-base leading-relaxed mb-4 group-hover:text-white/90 transition-colors duration-300">
+        <p className="text-zinc-400 text-sm md:text-base leading-relaxed mb-4 group-hover:text-zinc-300 transition-colors duration-300">
           {plan.description}
         </p>
 
@@ -316,7 +246,7 @@ function PricingCard({ plan }: PricingCardProps) {
             {plan.features.map((feature: string, featureIndex: number) => (
               <motion.li
                 key={feature}
-                className="flex items-start text-sm md:text-base text-white/80 group-hover:text-white transition-colors duration-300"
+                className="flex items-start text-sm md:text-base text-zinc-400 group-hover:text-zinc-300 transition-colors duration-300"
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1 * featureIndex }}
@@ -341,7 +271,7 @@ function PricingCard({ plan }: PricingCardProps) {
             What&apos;s Included
           </h4>
           <motion.ul
-            className="space-y-2 text-sm md:text-base text-white/70"
+            className="space-y-2 text-sm md:text-base text-zinc-400"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             transition={{ delay: 0.5, duration: 0.5 }}
@@ -366,7 +296,8 @@ function PricingCard({ plan }: PricingCardProps) {
 
         {/* Enhanced CTA button */}
         <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="mt-auto">
-          <a
+          <StarBorder
+            as="a"
             href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
             target="_blank"
             rel="noopener noreferrer"
@@ -375,13 +306,16 @@ function PricingCard({ plan }: PricingCardProps) {
               transition-all duration-300 relative overflow-hidden group/button
               ${
                 plan.popular
-                  ? 'bg-gradient-to-r from-[#FFD700] to-[#E6D055] text-black shadow-lg shadow-[#FFD700]/30 hover:shadow-xl hover:shadow-[#FFD700]/40'
+                  ? 'bg-zinc-900/80 text-white border border-white/40 shadow-lg hover:shadow-xl hover:shadow-white/20'
                   : 'bg-white/10 text-white border border-white/20 hover:bg-white/20 hover:border-white/40'
               }
             `}
+            color="#FFFFFF"
+            speed="3s"
+            thickness={1}
           >
             <span className="relative z-10 flex items-center justify-center gap-2">
-              Schedule a Strategy Call
+              Schedule a Free Consultation
               <ArrowRight className="w-4 h-4 group-hover/button:translate-x-1 transition-transform duration-300" />
             </span>
 
@@ -392,10 +326,10 @@ function PricingCard({ plan }: PricingCardProps) {
               whileHover={{ x: '100%' }}
               transition={{ duration: 0.6 }}
             />
-          </a>
+          </StarBorder>
         </motion.div>
       </div>
-    </motion.div>
+    </StarBorder>
   )
 }
 
@@ -408,55 +342,8 @@ export default function PricingPage() {
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900/50 to-black" />
 
-        {/* Floating particles */}
-        {particleConfigurations.map((config, i) => (
-          <FloatingParticle
-            key={i}
-            delay={config.delay}
-            size={config.size}
-            color={config.color}
-            left={config.left}
-            top={config.top}
-            duration={config.duration}
-          />
-        ))}
-
-        {/* Larger animated blobs */}
-        <motion.div
-          className="absolute w-[600px] h-[600px] bg-[#4CD787]/10 rounded-full blur-3xl"
-          animate={{
-            x: [-100, 100, -100],
-            y: [-50, 50, -50],
-            scale: [1, 1.2, 1],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-          style={{
-            left: '10%',
-            top: '20%',
-          }}
-        />
-        <motion.div
-          className="absolute w-[500px] h-[500px] bg-[#FFD700]/10 rounded-full blur-3xl"
-          animate={{
-            x: [100, -100, 100],
-            y: [50, -50, 50],
-            scale: [1.2, 1, 1.2],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: 'easeInOut',
-            delay: 5,
-          }}
-          style={{
-            right: '10%',
-            bottom: '20%',
-          }}
-        />
+        {/* Floating particles and heavy blobs removed for performance - using simple gradient instead */}
+        <div className="absolute inset-0 w-full h-full bg-gradient-to-b from-black via-zinc-950/50 to-black z-0" />
       </div>
 
       {/* Hero Section */}
@@ -473,23 +360,24 @@ export default function PricingPage() {
                 <div
                   style={{
                     position: 'relative',
-                    height: '80px',
-                    width: '330px',
-                    padding: '0 0px',
-                    marginRight: '0px',
+                    height: '100px',
+                    width: '100%',
+                    maxWidth: '400px',
+                    padding: '0',
+                    margin: '0 auto',
                   }}
                 >
                   <TextPressure
-                    text="&nbsp;Pricing&nbsp; "
+                    text="Pricing   "
+                    fontFamily="'Playfair Display', Georgia, 'Times New Roman', serif"
+                    fontUrl="/fonts/PlayfairDisplay-Variable.woff2"
                     flex={false}
                     alpha={false}
                     stroke={false}
                     width={false}
                     weight={true}
                     italic={false}
-                    textColor="#FFFFFF"
-                    strokeColor="#FFFFFF"
-                    minFontSize={64}
+                    minFontSize={54}
                   />
                 </div>
               </div>
@@ -497,11 +385,7 @@ export default function PricingPage() {
 
             <motion.p
               variants={fadeInVariants}
-              className="text-lg md:text-xl text-white/90 font-light mb-8 leading-relaxed max-w-3xl mx-auto font-['IBM_Plex_Sans'] mt-4"
-              style={{
-                letterSpacing: '0.025em',
-                fontWeight: '400',
-              }}
+              className="section-subtitle text-white/90 mb-8 max-w-3xl mx-auto mt-4 text-center"
             >
               Transparent, competitive hourly rates with no hidden fees.
               <span className="text-[#4CD787] font-medium"> Choose the perfect plan</span> for your
@@ -577,7 +461,7 @@ export default function PricingPage() {
             className="text-center max-w-4xl mx-auto"
           >
             <motion.div
-              className="bg-gradient-to-br from-white/5 to-white/0 backdrop-blur-xl rounded-3xl border border-white/10 p-12 shadow-2xl"
+              className="bg-zinc-900/40 backdrop-blur-md rounded-3xl border border-white/10 p-12 shadow-2xl"
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.3 }}
             >
@@ -593,14 +477,17 @@ export default function PricingPage() {
               </p>
 
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <a
+                <StarBorder
+                  as="a"
                   href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-3 bg-gradient-to-r from-[#4CD787] to-[#66E6A4] text-black px-8 py-4 rounded-xl font-bold text-lg hover:shadow-xl hover:shadow-[#4CD787]/30 transition-all duration-300 relative overflow-hidden group"
+                  className="inline-flex items-center gap-3 bg-zinc-900/50 text-white border border-white/20 px-8 py-4 rounded-xl font-bold text-lg hover:shadow-xl hover:shadow-white/20 transition-all duration-300 relative overflow-hidden group"
+                  color="#FFFFFF"
+                  speed="3s"
                 >
                   <Sparkles className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
-                  Schedule a Strategy Call
+                  Schedule a Free Consultation
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
                   {/* Button shimmer */}
                   <motion.div
@@ -609,11 +496,11 @@ export default function PricingPage() {
                     whileHover={{ x: '100%' }}
                     transition={{ duration: 0.6 }}
                   />
-                </a>
+                </StarBorder>
               </motion.div>
 
               <motion.p
-                className="mt-6 text-sm text-white/60"
+                className="mt-6 text-sm text-zinc-400"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}

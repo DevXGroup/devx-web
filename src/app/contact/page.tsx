@@ -2,13 +2,16 @@ import { Metadata } from 'next'
 import ContactPage from './ContactPage'
 import { createOgImageUrl, createTwitterImageUrl, getSiteUrl } from '@/lib/og'
 
+// Force dynamic rendering to avoid Framer Motion context issues during static generation
+export const dynamic = 'force-dynamic'
+
 const siteUrl = getSiteUrl()
 const pagePath = '/contact'
 const pageUrl = `${siteUrl}${pagePath}`
 const ogImage = createOgImageUrl(
   {
     eyebrow: "Let's talk",
-    title: 'Book a Strategy Session',
+    title: 'Schedule a Free Consultation',
     subtitle: 'Custom Software • Agentic AI • Cloud Modernization',
     focus: ['Discovery Workshops', 'Product Roadmaps', 'Build & Scale'],
   },
@@ -17,7 +20,7 @@ const ogImage = createOgImageUrl(
 const twitterImage = createTwitterImageUrl(
   {
     eyebrow: "Let's talk",
-    title: 'Book a Strategy Session',
+    title: 'Schedule a Free Consultation',
     subtitle: 'Custom Software • Agentic AI • Cloud Modernization',
     focus: ['Discovery Workshops', 'Product Roadmaps', 'Build & Scale'],
   },

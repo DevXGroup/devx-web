@@ -12,6 +12,9 @@ import {
 } from 'lucide-react'
 import { createOgImageUrl, createTwitterImageUrl, getSiteUrl } from '@/lib/og'
 
+// Force dynamic rendering to avoid context issues during static generation
+export const dynamic = 'force-dynamic'
+
 const siteUrl = getSiteUrl()
 const pagePath = '/terms'
 const pageUrl = `${siteUrl}${pagePath}`

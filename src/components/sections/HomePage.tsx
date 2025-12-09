@@ -7,7 +7,7 @@ import Process from '@/components/sections/Process'
 
 export default function HomePage() {
   return (
-    <div className="bg-black min-h-screen">
+    <div className="bg-black min-h-screen min-h-[100vh] overflow-x-hidden">
       <Hero />
       <Features />
       <Technologies />

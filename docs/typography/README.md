@@ -26,7 +26,8 @@ This folder contains the centralized typography system documentation for DevX Gr
 ## Key Concepts
 
 ### Font Hierarchy
-- **IBM Plex Sans**: Headings, body text, and subtitles (bold/semibold/light/regular)
+- **Playfair Display**: Headings and titles (Serif, Editorial feel)
+- **IBM Plex Sans**: Body text, subtitles, and UI elements (Sans-serif, Clean)
 - **IBM Plex Mono**: Reserved for special use cases (code, technical elements)
 
 ### Typography Classes

@@ -1,10 +1,8 @@
-/* eslint-disable @next/next/no-page-custom-font */
 import '@/lib/polyfills'
 import { version as reactVersion } from 'react'
 import type { ReactNode } from 'react'
 import './globals.css'
 import type { Metadata } from 'next'
-import localFont from 'next/font/local'
 import ConditionalLayout from '@/components/layout/ConditionalLayout'
 import { BrowserCompatibilityDetector } from '@/components/layout/BrowserCompatibilityDetector'
 import { DevToolsErrorSuppressor } from '@/components/layout/DevToolsErrorSuppressor'
@@ -16,36 +14,6 @@ import Script from 'next/script'
 import { Analytics } from '@vercel/analytics/next'
 import { Partytown } from '@qwik.dev/partytown/react'
 import { createOgImageUrl, createTwitterImageUrl, getSiteUrl } from '@/lib/og'
-
-// Self-hosted fonts via next/font/local to avoid runtime fetches
-// Using woff2 format (51% smaller than TTF) with 'swap' for better FCP
-const ibmPlexMono = localFont({
-  src: [
-    { path: '../../public/fonts/IBMPlexMono-Thin.woff2', weight: '100', style: 'normal' },
-    { path: '../../public/fonts/IBMPlexMono-Light.woff2', weight: '300', style: 'normal' },
-    { path: '../../public/fonts/IBMPlexMono-Regular.woff2', weight: '400', style: 'normal' },
-    { path: '../../public/fonts/IBMPlexMono-Medium.woff2', weight: '500', style: 'normal' },
-    { path: '../../public/fonts/IBMPlexMono-SemiBold.woff2', weight: '600', style: 'normal' },
-    { path: '../../public/fonts/IBMPlexMono-Bold.woff2', weight: '700', style: 'normal' },
-  ],
-  variable: '--font-ibm-plex-mono',
-  display: 'swap', // Font swaps when ready, ensures text always visible
-  fallback: ['ui-monospace', 'Menlo', 'Monaco', 'Courier New', 'monospace'],
-  preload: true, // Preload critical font weights
-  adjustFontFallback: 'Arial', // Better fallback matching for LCP
-})
-
-const ibmPlexSans = localFont({
-  src: [
-    { path: '../../public/fonts/IBMPlexSans-Regular.woff2', weight: '400', style: 'normal' },
-    { path: '../../public/fonts/IBMPlexSans-SemiBold.woff2', weight: '600', style: 'normal' },
-  ],
-  variable: '--font-ibm-plex-sans',
-  display: 'swap', // Font swaps when ready, ensures text always visible
-  fallback: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
-  preload: true, // Preload critical font weights
-  adjustFontFallback: 'Arial', // Better fallback matching for LCP
-})
 
 const siteUrl = getSiteUrl()
 const defaultOgImage = createOgImageUrl(
@@ -306,7 +274,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             `.trim(),
           }}
         />
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -315,6 +282,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         {/* Resource hints for better performance */}
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         {/* Patch React DevTools semver regression */}
         {process.env.NODE_ENV !== 'production' && (
           <Script
@@ -325,7 +294,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         )}
       </head>
       <body
-        className={`${ibmPlexSans.variable} ${ibmPlexMono.variable} bg-black text-white font-sans antialiased`}
+        className="bg-black text-white font-sans antialiased"
         style={{ backgroundColor: '#000000', transition: 'none', paddingTop: '64px' }}
         suppressHydrationWarning
       >
