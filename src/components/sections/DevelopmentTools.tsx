@@ -10,7 +10,13 @@ import { StarTwinklingField } from '../animations/StarTwinklingField'
 
 const buildIconPath = (file: string) => `/images/tech/${file}`
 
-const tools = [
+type DisplayTool = {
+  name: string
+  description: string
+  icon: string
+}
+
+const tools: DisplayTool[] = [
   {
     name: 'Laravel',
     description: "Quickly build secure web apps with Laravel's powerful features",
@@ -226,7 +232,10 @@ ToolIcon.displayName = 'ToolIcon'
 const DISPLAY_DURATION = 4000
 
 export default function DevelopmentTools() {
-  const [activeIndex, setActiveIndex] = useState(0)
+  const [activeInnerIndex, setActiveInnerIndex] = useState(0)
+  const [activeSelection, setActiveSelection] = useState<
+    { source: 'inner'; index: number } | { source: 'outer'; index: number }
+  >({ source: 'inner', index: 0 })
   const [isManual, setIsManual] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
@@ -235,7 +244,8 @@ export default function DevelopmentTools() {
   const [transitionData, setTransitionData] = useState<{
     from: { x: number; y: number }
     to: { x: number; y: number }
-    tool: (typeof tools)[0]
+    tool: DisplayTool
+    source: 'inner' | 'outer'
   } | null>(null)
   const [viewportWidth, setViewportWidth] = useState(() =>
     typeof window !== 'undefined' ? window.innerWidth : 1440
@@ -347,7 +357,7 @@ export default function DevelopmentTools() {
     const runCycle = () => {
       if (isManual || transitioning || !isVisible) return
 
-      const nextIndex = (activeIndex + 1) % tools.length
+      const nextIndex = (activeInnerIndex + 1) % tools.length
       const nextTool = tools[nextIndex]
       if (!nextTool) return
 
@@ -361,12 +371,14 @@ export default function DevelopmentTools() {
         from: { x: fromX, y: fromY },
         to: { x: 0, y: 0 },
         tool: nextTool,
+        source: 'inner',
       })
       setTransitioning(true)
 
       setTimeout(
         () => {
-          setActiveIndex(nextIndex)
+          setActiveInnerIndex(nextIndex)
+          setActiveSelection({ source: 'inner', index: nextIndex })
           setTransitioning(false)
           setTransitionData(null)
 
@@ -403,7 +415,7 @@ export default function DevelopmentTools() {
     }
   }, [
     isManual,
-    activeIndex,
+    activeInnerIndex,
     transitioning,
     isVisible,
     innerMetrics,
@@ -415,7 +427,7 @@ export default function DevelopmentTools() {
   // User click handler - optimized
   const handleIconClick = useCallback(
     (index: number) => {
-      if (index === activeIndex) return
+      if (activeSelection.source === 'inner' && index === activeSelection.index) return
 
       if (transitioning) {
         setTransitioning(false)
@@ -447,12 +459,14 @@ export default function DevelopmentTools() {
         from: { x: fromX, y: fromY },
         to: { x: 0, y: 0 },
         tool: clickedTool,
+        source: 'inner',
       })
       setTransitioning(true)
 
       setTimeout(
         () => {
-          setActiveIndex(index)
+          setActiveInnerIndex(index)
+          setActiveSelection({ source: 'inner', index })
           setTransitioning(false)
           setTransitionData(null)
 
@@ -465,18 +479,64 @@ export default function DevelopmentTools() {
         isMobile ? 1600 : 1300
       )
     },
-    [activeIndex, transitioning, innerMetrics, isMobile]
+    [activeSelection, transitioning, innerMetrics, isMobile]
   )
 
-  const handleAIToolClick = useCallback((index: number) => {
-    const tool = aiTools[index]
-    if (!tool) return
-    if (process.env.NODE_ENV !== 'production') {
-      console.log(`AI Tool clicked: ${tool.name}`)
-    }
-  }, [])
+  const handleAIToolClick = useCallback(
+    (index: number, position?: { x: number; y: number }) => {
+      const tool = aiTools[index]
+      if (!tool) return
 
-  const activeTool = tools[activeIndex] ?? null
+      if (transitioning) {
+        setTransitioning(false)
+        setTransitionData(null)
+      }
+
+      setIsManual(true)
+
+      if (cycleRef.current) {
+        clearTimeout(cycleRef.current)
+        cycleRef.current = null
+      }
+
+      if (timerRef.current) {
+        clearTimeout(timerRef.current)
+        timerRef.current = null
+      }
+
+      const from = position ?? { x: 0, y: 0 }
+
+      setTransitionData({
+        from,
+        to: { x: 0, y: 0 },
+        tool,
+        source: 'outer',
+      })
+      setTransitioning(true)
+
+      setTimeout(
+        () => {
+          setActiveSelection({ source: 'outer', index })
+          setTransitioning(false)
+          setTransitionData(null)
+
+          const displayDuration = isMobile ? DISPLAY_DURATION * 1.2 : DISPLAY_DURATION
+          timerRef.current = setTimeout(() => {
+            setIsManual(false)
+            setResumeImmediately(true)
+          }, displayDuration)
+        },
+        isMobile ? 1600 : 1300
+      )
+    },
+    [transitioning, isMobile]
+  )
+
+  const activeTool =
+    activeSelection.source === 'inner'
+      ? (tools[activeSelection.index] ?? null)
+      : (aiTools[activeSelection.index] ?? null)
+  const activeOuterIndex = activeSelection.source === 'outer' ? activeSelection.index : null
 
   if (!mounted) {
     return (
@@ -499,12 +559,12 @@ export default function DevelopmentTools() {
         <div className="py-30 md:py-0 mt-24 md:mt-36 mb-24 md:mb-32">
           <div className="container mx-auto px-4">
             <div className="flex flex-col items-center">
-              <h2 className="text-center animate-gradient-text mb-4 section-title-hero">
+              <h2 className="text-center mb-4 text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white font-editorial drop-shadow-sm">
                 DevX Development Tools
               </h2>
               <BlurText
                 text="Cutting-edge technologies powering innovative solutions across web, mobile, and cloud platforms"
-                className="justify-center text-center max-w-2xl xl:max-w-3xl 2xl:max-w-4xl mb-0 section-subtitle"
+                className="justify-center text-center max-w-2xl xl:max-w-3xl 2xl:max-w-4xl mb-0 section-subtitle text-zinc-400"
                 delay={100}
                 once={true}
               />
@@ -537,7 +597,7 @@ export default function DevelopmentTools() {
           {/* Orbiting Icons */}
           <StaticIconsOrbit
             toolList={tools}
-            activeIndex={activeIndex}
+            activeIndex={activeInnerIndex}
             onIconClick={handleIconClick}
             transitioning={transitioning}
             transitionData={transitionData}
@@ -547,10 +607,12 @@ export default function DevelopmentTools() {
           {/* Outer AI Tools Orbit - Hidden on mobile */}
           <div className="hidden lg:block relative z-[120]">
             <AIToolsOrbit
-              activeIndex={activeIndex}
+              activeIndex={activeOuterIndex}
+              activeSelectionSource={activeSelection.source}
               onIconClick={handleAIToolClick}
               metrics={outerMetrics}
               isVisible={isVisible}
+              transitionData={transitionData}
             />
           </div>
         </div>
@@ -560,11 +622,11 @@ export default function DevelopmentTools() {
           <div className="w-full max-w-full">
             <BlurText
               text="Other Tools & Tech Stacks We Use"
-              className="justify-center text-center mb-12 md:mb-16 lg:mb-20 px-4 section-title-hero"
+              className="justify-center text-center mb-12 md:mb-16 lg:mb-20 px-4 section-title text-white font-editorial"
               delay={150}
               once={true}
             />
-            <LogoLoop logos={aiTools} speed={20} />
+            <LogoLoop logos={aiTools} speed={60} />
           </div>
         </div>
 
@@ -704,7 +766,7 @@ const CenterCircle = memo(
             </motion.div>
 
             <h2
-              className="heading-component text-white mb-2 drop-shadow-lg"
+              className="heading-component text-white mb-2 drop-shadow-lg text-2xl sm:text-3xl"
               style={{
                 textShadow:
                   '0 2px 4px rgba(0,0,0,0.9), 0 0 15px rgba(255,255,255,0.6), 0 0 25px rgba(255,255,255,0.3)',
@@ -742,7 +804,7 @@ function TransitionPlanet({
 }: {
   from: { x: number; y: number }
   to: { x: number; y: number }
-  tool: (typeof tools)[0]
+  tool: DisplayTool
   duration: number
   offset: number
   isMobile: boolean
@@ -823,14 +885,14 @@ const StaticIconsOrbit = memo(
     transitionData,
     metrics,
   }: {
-    toolList: typeof tools
+    toolList: DisplayTool[]
     activeIndex: number
     onIconClick: (index: number) => void
     transitioning?: boolean
     transitionData?: {
       from: { x: number; y: number }
       to: { x: number; y: number }
-      tool: any
+      tool: DisplayTool
     } | null
     metrics: OrbitMetrics & { offset: number }
   }) => {
@@ -889,14 +951,21 @@ StaticIconsOrbit.displayName = 'StaticIconsOrbit'
 const AIToolsOrbit = memo(
   ({
     activeIndex,
+    activeSelectionSource,
     onIconClick,
     metrics,
     isVisible,
+    transitionData,
   }: {
-    activeIndex: number
-    onIconClick: (index: number) => void
+    activeIndex: number | null
+    activeSelectionSource: 'inner' | 'outer'
+    onIconClick: (index: number, position?: { x: number; y: number }) => void
     metrics: OrbitMetrics
     isVisible: boolean
+    transitionData: {
+      tool: DisplayTool
+      source: 'inner' | 'outer'
+    } | null
   }) => {
     const [rotation, setRotation] = useState(0)
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
@@ -967,9 +1036,15 @@ const AIToolsOrbit = memo(
           const angleRad = (angle * Math.PI) / 180
           const x = Math.cos(angleRad) * metrics.radius
           const y = Math.sin(angleRad) * metrics.radius
-          const isActive = activeIndex === i
+          const isActive = activeSelectionSource === 'outer' && activeIndex === i
           const isHovered = hoveredIndex === i
           const showLabel = isActive || isHovered
+          const isTransitioningTool =
+            transitionData?.tool.name === tool.name && transitionData?.source === 'outer'
+
+          if (isActive || isTransitioningTool) {
+            return null
+          }
 
           return (
             <div
@@ -992,7 +1067,7 @@ const AIToolsOrbit = memo(
                 }`}
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => onIconClick(i)}
+                onClick={() => onIconClick(i, { x, y })}
                 onPointerEnter={() => handlePointerEnter(i)}
                 onPointerLeave={handlePointerLeave}
                 onFocus={() => handlePointerEnter(i)}

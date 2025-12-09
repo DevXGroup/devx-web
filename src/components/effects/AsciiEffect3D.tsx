@@ -213,9 +213,8 @@ export default function AsciiEffect3D({
         // Set up optional drag controls (TrackballControls)
         if (enableDragRotate) {
           // Dynamically import TrackballControls only if needed
-          const { TrackballControls } = await import(
-            'three/examples/jsm/controls/TrackballControls.js'
-          )
+          const { TrackballControls } =
+            await import('three/examples/jsm/controls/TrackballControls.js')
           const controls = new TrackballControls(camera, effect.domElement)
           controls.noPan = true
           controls.noZoom = !enableZoom

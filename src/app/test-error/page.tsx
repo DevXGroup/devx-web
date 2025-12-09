@@ -1,7 +1,8 @@
 import { Metadata } from 'next'
 import TestErrorClient from './TestErrorClient'
 
-export const dynamic = 'force-static'
+// Force dynamic rendering to avoid context issues during static generation
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Error Testing | DevX Group Development Tools',

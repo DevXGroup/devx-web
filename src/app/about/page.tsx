@@ -2,6 +2,9 @@ import { Metadata } from 'next'
 import AboutPage from './AboutPage'
 import { createOgImageUrl, createTwitterImageUrl, getSiteUrl } from '@/lib/og'
 
+// Force dynamic rendering to avoid Framer Motion context issues during static generation
+export const dynamic = 'force-dynamic'
+
 const siteUrl = getSiteUrl()
 const pagePath = '/about'
 const pageUrl = `${siteUrl}${pagePath}`

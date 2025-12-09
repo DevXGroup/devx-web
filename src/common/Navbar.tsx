@@ -193,6 +193,7 @@ export default function Navbar() {
   return (
     <nav
       data-entry-aware-nav
+      suppressHydrationWarning={true}
       className={`fixed w-full z-[9999] transition-all mt-0 top-0`}
       style={{
         backgroundColor: `rgba(0, 0, 0, ${supportsBackdropFilter ? 0.2 : 0.5})`,
@@ -209,22 +210,22 @@ export default function Navbar() {
         <div className="flex justify-between items-center py-[14px]">
           <Link href="/home" aria-label="DevX Group LLC" className="flex-shrink-0 cursor-pointer">
             <Image
-              src="/images/logos/devx-logo.png"
+              src="/images/logos/devx-logo-white.png"
               alt="DevX Group LLC"
               width={150}
               height={30}
               priority
               quality={50}
               sizes="(max-width: 640px) 120px, 150px"
-              className="w-[150px] h-auto cursor-pointer"
               style={{ maxWidth: '150px', height: 'auto', cursor: 'pointer' }}
+              className="w-[150px] h-auto cursor-pointer"
             />
           </Link>
           {/* Desktop Menu - right aligned */}
-          <div className="hidden lg:flex items-center space-x-6 font-mono">
+          <div className="hidden lg:flex items-center space-x-6 font-sans font-medium tracking-wide">
             <Link
               href="/home"
-              className={`relative px-3 py-1 rounded transition-all duration-150 ease-out transform will-change-transform antialiased ${
+              className={`relative px-3 py-1 text-sm rounded transition-all duration-150 ease-out transform will-change-transform antialiased ${
                 isActive('/home')
                   ? getActiveColor('/home')?.text + ' font-bold'
                   : 'text-white hover:text-white/80 hover:bg-white/10'
@@ -253,7 +254,7 @@ export default function Navbar() {
             <Link
               href="/services"
               scroll={false}
-              className={`relative px-3 py-1 rounded transition-all duration-150 ease-out transform will-change-transform antialiased ${
+              className={`relative px-3 py-1 text-sm rounded transition-all duration-150 ease-out transform will-change-transform antialiased ${
                 isActive('/services')
                   ? getActiveColor('/services')?.text + ' font-bold'
                   : 'text-white hover:text-white/80 hover:bg-white/10'
@@ -281,7 +282,7 @@ export default function Navbar() {
             </Link>
             <Link
               href="/portfolio"
-              className={`relative px-3 py-1 rounded transition-all duration-150 ease-out transform will-change-transform antialiased ${
+              className={`relative px-3 py-1 text-sm rounded transition-all duration-150 ease-out transform will-change-transform antialiased ${
                 isActive('/portfolio')
                   ? getActiveColor('/portfolio')?.text + ' font-bold'
                   : 'text-white hover:text-white/80 hover:bg-white/10'
@@ -309,7 +310,7 @@ export default function Navbar() {
             </Link>
             <Link
               href="/about"
-              className={`relative px-3 py-1 rounded transition-all duration-150 ease-out transform will-change-transform antialiased ${
+              className={`relative px-3 py-1 text-sm rounded transition-all duration-150 ease-out transform will-change-transform antialiased ${
                 isActive('/about')
                   ? getActiveColor('/about')?.text + ' font-bold'
                   : 'text-white hover:text-white/80 hover:bg-white/10'
@@ -337,7 +338,7 @@ export default function Navbar() {
             </Link>
             <Link
               href="/pricing"
-              className={`relative px-3 py-1 rounded transition-all duration-150 ease-out transform will-change-transform antialiased ${
+              className={`relative px-3 py-1 text-sm rounded transition-all duration-150 ease-out transform will-change-transform antialiased ${
                 isActive('/pricing')
                   ? getActiveColor('/pricing')?.text + ' font-bold'
                   : 'text-white hover:text-white/80 hover:bg-white/10'
@@ -365,7 +366,7 @@ export default function Navbar() {
             </Link>
             <Link
               href="/contact"
-              className={`relative px-3 py-1 rounded transition-all duration-150 ease-out transform will-change-transform antialiased ${
+              className={`relative px-3 py-1 text-sm rounded transition-all duration-150 ease-out transform will-change-transform antialiased ${
                 isActive('/contact')
                   ? getActiveColor('/contact')?.text + ' font-bold'
                   : 'text-white hover:text-white/80 hover:bg-white/10'
@@ -395,16 +396,11 @@ export default function Navbar() {
               href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-robinhood text-black hover:bg-white hover:text-black px-5 md:px-6 py-3 rounded-lg transition-all duration-300 ease-out font-medium border-2 border-robinhood shadow-lg relative overflow-hidden whitespace-nowrap text-sm md:text-base min-h-[44px] flex items-center justify-center"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              className="border border-[#ccff00]/60 text-[#ccff00] hover:bg-[#ccff00] hover:text-black px-4 py-2 rounded-full transition-all duration-300 ease-out font-medium relative overflow-hidden whitespace-nowrap text-sm flex items-center justify-center backdrop-blur-sm"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               aria-label="Schedule a meeting with DevX Group"
             >
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-theme-green to-theme-gold opacity-0"
-                whileHover={{ opacity: 0.2 }}
-                transition={{ duration: 0.3 }}
-              />
               <span className="relative z-10">Let&apos;s Talk</span>
             </motion.a>
           </div>
@@ -582,7 +578,7 @@ export default function Navbar() {
             logoUrl="/images/logos/devx-logo.png"
             menuButtonColor="#fff"
             openMenuButtonColor="#fff"
-            accentColor="#4CD787"
+            accentColor="#9CA3AF"
             changeMenuColorOnOpen={true}
             hideToggleButton={true}
             isOpen={isOpen}

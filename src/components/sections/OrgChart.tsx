@@ -216,61 +216,80 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
             }}
           >
             {/* Overseas Logistic Manager */}
-            {/* TODO: Add photo placeholder - replace icon with Image component when photos are available */}
             <motion.div
               variants={fadeInUp}
               initial={false}
               animate="visible"
-              className="text-center bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:border-[#4CD787]/30 transition-colors"
+              className="text-center group bg-zinc-900/40 backdrop-blur-md rounded-2xl p-6 border border-white/10 hover:border-[#4CD787]/50 transition-all duration-300 hover:bg-zinc-900/60"
             >
-              <div className="w-12 h-12 mx-auto mb-3 bg-gradient-to-br from-[#4CD787]/20 to-[#4CD787]/40 rounded-lg flex items-center justify-center border border-[#4CD787]/30">
-                <Users className="w-4 h-4 text-[#4CD787]" />
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full overflow-hidden border-2 border-[#4CD787]/30 group-hover:border-[#4CD787] transition-all shadow-lg group-hover:shadow-[#4CD787]/20 relative">
+                <Image
+                  src="/images/about/avatar-logistic.png"
+                  alt="Logistic Manager"
+                  width={64}
+                  height={64}
+                  className="w-full h-full object-cover"
+                />
               </div>
-              <h4 className="heading-component text-white mb-1">Overseas</h4>
-              <h4 className="heading-component text-white">Logistic Manager</h4>
+              <h4 className="heading-component text-white text-lg mb-1 font-editorial">Overseas</h4>
+              <p className="text-sm text-[#4CD787] font-mono">Logistic Manager</p>
             </motion.div>
 
             {/* Technical Lead */}
-            {/* TODO: Add photo placeholder - replace icon with Image component when photos are available */}
             <motion.div
               variants={fadeInUp}
               initial={false}
               animate="visible"
-              className="text-center bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:border-[#4834D4]/30 transition-colors"
+              className="text-center group bg-zinc-900/40 backdrop-blur-md rounded-2xl p-6 border border-white/10 hover:border-[#4834D4]/50 transition-all duration-300 hover:bg-zinc-900/60"
             >
-              <div className="w-12 h-12 mx-auto mb-3 bg-gradient-to-br from-[#4834D4]/20 to-[#4834D4]/40 rounded-lg flex items-center justify-center border border-[#4834D4]/30">
-                <Cpu className="w-4 h-4 text-[#4834D4]" />
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full overflow-hidden border-2 border-[#4834D4]/30 group-hover:border-[#4834D4] transition-all shadow-lg group-hover:shadow-[#4834D4]/20 relative">
+                <Image
+                  src="/images/about/avatar-tech-lead.png"
+                  alt="Technical Lead"
+                  width={64}
+                  height={64}
+                  className="w-full h-full object-cover"
+                />
               </div>
-              <h4 className="heading-component text-white">Technical Lead</h4>
+              <h4 className="heading-component text-white text-lg mb-1 font-editorial">
+                Technical Lead
+              </h4>
+              <p className="text-sm text-[#4834D4] font-mono">Engineering</p>
             </motion.div>
 
-            {/* Project Managers (Consolidated) */}
-            {/* TODO: Add photo placeholder - replace icon with Image component when photos are available */}
+            {/* Project Managers */}
             <motion.div
               variants={fadeInUp}
               initial={false}
               animate="visible"
-              className="text-center bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:border-[#FFD700]/30 transition-colors"
+              className="text-center group bg-zinc-900/40 backdrop-blur-md rounded-2xl p-6 border border-white/10 hover:border-[#FFD700]/50 transition-all duration-300 hover:bg-zinc-900/60"
             >
-              <div className="w-12 h-12 mx-auto mb-3 bg-gradient-to-br from-[#FFD700]/20 to-[#FFD700]/40 rounded-lg flex items-center justify-center border border-[#FFD700]/30">
-                <Calendar className="w-4 h-4 text-[#FFD700]" />
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full overflow-hidden border-2 border-[#FFD700]/30 group-hover:border-[#FFD700] transition-all shadow-lg group-hover:shadow-[#FFD700]/20 relative bg-zinc-900 flex items-center justify-center">
+                {/* Fallback to icon for Gold since we lack a gold avatar, aiming for quality over mismatch */}
+                <Calendar className="w-8 h-8 text-[#FFD700]" />
               </div>
-              <h4 className="heading-component text-white mb-1">Project</h4>
-              <h4 className="heading-component text-white">Managers</h4>
+              <h4 className="heading-component text-white text-lg mb-1 font-editorial">Project</h4>
+              <p className="text-sm text-[#FFD700] font-mono">Managers</p>
             </motion.div>
 
             {/* Designer */}
-            {/* TODO: Add photo placeholder - replace icon with Image component when photos are available */}
             <motion.div
               variants={fadeInUp}
               initial={false}
               animate="visible"
-              className="text-center bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:border-[#9d4edd]/30 transition-colors"
+              className="text-center group bg-zinc-900/40 backdrop-blur-md rounded-2xl p-6 border border-white/10 hover:border-[#9d4edd]/50 transition-all duration-300 hover:bg-zinc-900/60"
             >
-              <div className="w-12 h-12 mx-auto mb-3 bg-gradient-to-br from-[#9d4edd]/20 to-[#9d4edd]/40 rounded-lg flex items-center justify-center border border-[#9d4edd]/30">
-                <Cpu className="w-4 h-4 text-[#9d4edd]" />
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full overflow-hidden border-2 border-[#9d4edd]/30 group-hover:border-[#9d4edd] transition-all shadow-lg group-hover:shadow-[#9d4edd]/20 relative">
+                <Image
+                  src="/images/about/avatar-tech-lead.png"
+                  alt="Designer"
+                  width={64}
+                  height={64}
+                  className="w-full h-full object-cover hue-rotate-90"
+                />
               </div>
-              <h4 className="heading-component text-white">Designer</h4>
+              <h4 className="heading-component text-white text-lg mb-1 font-editorial">Designer</h4>
+              <p className="text-sm text-[#9d4edd] font-mono">Creative Team</p>
             </motion.div>
           </motion.div>
 

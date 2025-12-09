@@ -16,14 +16,17 @@ import {
   Star,
   Lock,
   FileText,
+  ArrowRight,
+  Sparkles,
 } from 'lucide-react'
 import TextPressure from '@/components/animations/TextPressure'
 import ShapeBlur from '@/components/animations/ShapeBlur'
 import CardSwap, { Card } from '@/components/animations/CardSwap'
 import ScrollStack, { ScrollStackItem } from '@/components/animations/ScrollStack'
-import OrgChart from '@/components/sections/OrgChart'
+import OrgChart from '@/components/sections/OrgChartV2'
 import DarkVeil from '@/components/animations/DarkVeil'
 import BlurText from '@/components/animations/BlurText'
+import StarBorder from '@/components/animations/StarBorder'
 import ParallaxTestimonials from '@/components/ParallaxTestimonials'
 import { useIsMobile } from '@/hooks/use-mobile'
 
@@ -87,99 +90,35 @@ const ValueCard = ({
       variants={fadeInUpVariants}
       initial="hidden"
       animate={isInView ? 'visible' : 'hidden'}
-      transition={{ duration: 0.4, delay: shouldReduceMotion ? 0 : delay }}
+      transition={{
+        duration: 0.5,
+        delay: shouldReduceMotion ? 0 : delay,
+        ease: [0.25, 0.1, 0.25, 1],
+      }}
       style={{ willChange: 'opacity, transform', transform: 'translateZ(0)' }}
-      whileHover={
-        shouldReduceMotion
-          ? {}
-          : {
-              scale: 1.01,
-              y: -4,
-            }
-      }
-      whileTap={{ scale: 0.98 }}
-      className="group relative bg-slate-800 p-8 md:p-10 rounded-xl border border-purple-500/20 hover:border-purple-400/40 flex flex-col items-start text-left overflow-hidden cursor-pointer min-h-[220px] transition-all duration-300"
+      whileHover={{ y: -4, transition: { duration: 0.3, ease: 'easeOut' } }}
+      className="relative bg-zinc-900/40 border border-white/10 p-8 rounded-3xl backdrop-blur-md hover:border-white/20 hover:bg-zinc-900/60 transition-all duration-500 group cursor-pointer overflow-hidden flex flex-col gap-6"
       role="article"
       aria-label={`${title}: ${description}`}
     >
-      {/* Morphing background blob */}
-      <motion.div
-        className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100"
-        initial={{
-          background: 'radial-gradient(circle at 50% 50%, #4CD78700 0%, transparent 100%)',
-        }}
-        whileHover={{
-          background: [
-            'radial-gradient(circle at 20% 80%, #4CD78715 0%, transparent 60%)',
-            'radial-gradient(circle at 80% 20%, #4CD78720 0%, transparent 50%)',
-            'radial-gradient(circle at 30% 70%, #4CD78715 0%, transparent 60%)',
-            'radial-gradient(circle at 70% 30%, #4CD78720 0%, transparent 50%)',
-          ],
-        }}
-        transition={{
-          duration: 4,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-      />
+      <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/[0.03] to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
       {/* Content */}
-      <div className="relative z-10 w-full">
-        <div className="flex items-center mb-6">
-          <motion.div
-            className="w-12 h-12 rounded-full flex items-center justify-center mr-4 relative overflow-hidden shrink-0"
-            whileHover={{
-              boxShadow: '0 0 30px #4CD78760',
-            }}
-            transition={{ duration: 0.4 }}
-            style={{
-              backgroundColor: '#4CD78720',
-              border: '2px solid #4CD78740',
-            }}
-          >
-            {/* Icon pulse effect */}
-            <motion.div
-              className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100"
-              animate={{
-                scale: [1, 1.5, 1],
-                opacity: [0, 0.3, 0],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: 'easeOut',
-              }}
-              style={{ backgroundColor: '#4CD78730' }}
-            />
-
-            <motion.div
-              whileHover={{ scale: 1.08 }}
-              transition={{ duration: 0.25, ease: 'easeOut' }}
-              className="pointer-events-none"
-            >
-              <Icon
-                className="w-6 h-6 transition-all duration-300 relative z-10 pointer-events-none"
-                style={{
-                  color: '#4CD787',
-                  filter: 'drop-shadow(0 0 4px #4CD78780)',
-                }}
-              />
-            </motion.div>
-          </motion.div>
-          <motion.h3
-            className="heading-component text-white"
-            whileHover={{
-              scale: 1.05,
-              textShadow: '0 0 15px #4CD78780',
-            }}
-            transition={{ duration: 0.3 }}
-          >
-            {title}
-          </motion.h3>
+      <div className="relative z-10 w-full flex flex-col gap-6 h-full">
+        <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white group-hover:scale-110 group-hover:bg-white group-hover:border-white group-hover:text-black transition-all duration-300">
+          <Icon
+            className="w-6 h-6 transition-colors duration-300 text-current"
+            strokeWidth={1.5}
+            color="currentColor"
+          />
         </div>
-        <motion.p className="subtitle group-hover:text-white transition-colors duration-500">
-          {description}
-        </motion.p>
+
+        <div className="flex-1 space-y-3">
+          <h3 className="text-xl md:text-2xl font-bold text-white">{title}</h3>
+          <p className="text-base font-light text-white/80 leading-relaxed font-sans group-hover:text-zinc-300 transition-colors duration-300">
+            {description}
+          </p>
+        </div>
       </div>
     </motion.div>
   )
@@ -311,7 +250,7 @@ const VisionCard = () => {
     >
       <div className="flex items-center gap-3 mb-4">
         <motion.h3
-          className="card-title text-[#4CD787] whitespace-nowrap"
+          className="card-title text-[#4CD787] whitespace-nowrap font-editorial"
           animate={
             isHovered
               ? { textShadow: '0 0 12px rgba(76, 215, 135, 0.4), 0 0 24px rgba(76, 215, 135, 0.2)' }
@@ -365,7 +304,7 @@ const MissionCard = () => {
     >
       <div className="flex items-center gap-3 mb-4">
         <motion.h3
-          className="card-title text-[#06B6D4] whitespace-nowrap"
+          className="card-title text-[#06B6D4] whitespace-nowrap font-editorial"
           animate={
             isHovered
               ? { textShadow: '0 0 12px rgba(6, 182, 212, 0.4), 0 0 24px rgba(6, 182, 212, 0.2)' }
@@ -435,7 +374,7 @@ const VisionMissionCard = ({
       initial="hidden"
       animate={isInViewForFadeIn ? 'visible' : 'hidden'}
       transition={{ duration: 0.6, delay: shouldReduceMotion ? 0 : delay }}
-      className="group relative bg-[#0B0B10]/90 p-8 rounded-2xl border border-white/30 hover:border-[#4CD787]/50 active:border-[#4CD787]/60 transition-all duration-300 shadow-lg hover:shadow-[#4CD787]/30 overflow-visible cursor-pointer touch-manipulation text-left"
+      className="group relative bg-[#0B0B10]/90 p-8 rounded-2xl border border-white/10 hover:border-[#4CD787]/50 active:border-[#4CD787]/60 transition-all duration-300 shadow-lg hover:shadow-[#4CD787]/30 overflow-visible cursor-pointer touch-manipulation text-left"
       onMouseEnter={() => !isMobile && onHoverChange?.(true)}
       onMouseLeave={() => !isMobile && onHoverChange?.(false)}
       whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
@@ -481,30 +420,33 @@ const StatCounter = ({ number, label }: { number: string | number; label: string
     return () => observer.disconnect()
   }, [isVisible])
 
-  // Simple counter animation using requestAnimationFrame
+  // Animation logic
   useEffect(() => {
     if (!isVisible) return
 
-    const duration = 1400 // ms
-    const startTime = Date.now()
-    const startValue = 0
+    const duration = 2000 // 2 seconds
+    const steps = 60
+    const interval = duration / steps
+    let currentStep = 0
 
-    const animate = () => {
-      const elapsed = Date.now() - startTime
-      const progress = Math.min(elapsed / duration, 1)
+    const timer = setInterval(() => {
+      currentStep += 1
+      const progress = currentStep / steps
+      // Ease out quartic
+      const ease = 1 - Math.pow(1 - progress, 4)
 
-      // Ease out cubic
-      const eased = 1 - Math.pow(1 - progress, 3)
-      const currentValue = startValue + (numericTarget - startValue) * eased
+      const currentVal = Math.round(numericTarget * ease)
 
-      setDisplayValue(Math.round(currentValue).toString())
-
-      if (progress < 1) {
-        requestAnimationFrame(animate)
+      // Format with suffix
+      if (currentStep >= steps) {
+        setDisplayValue(String(numericTarget))
+        clearInterval(timer)
+      } else {
+        setDisplayValue(String(currentVal))
       }
-    }
+    }, interval)
 
-    requestAnimationFrame(animate)
+    return () => clearInterval(timer)
   }, [isVisible, numericTarget])
 
   const formattedDisplay = `${displayValue}${suffix}`
@@ -512,36 +454,13 @@ const StatCounter = ({ number, label }: { number: string | number; label: string
   return (
     <div
       ref={containerRef}
-      className="relative group rounded-3xl h-[200px] sm:h-[210px] md:h-[220px] lg:h-[230px] transition-transform duration-300 hover:scale-105"
+      className="bg-zinc-900/40 border border-white/10 backdrop-blur-md p-8 rounded-3xl hover:border-white/20 hover:bg-zinc-900/60 transition-all duration-500 group flex flex-col items-center justify-center text-center h-full min-h-[180px] cursor-pointer"
     >
-      {/* Background shimmer */}
-      <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/[0.04] via-white/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-      {/* Main content */}
-      <div className="relative bg-white/[0.02] backdrop-blur-sm p-6 rounded-3xl border border-white/10 text-center h-full transition-all duration-500 group-hover:bg-white/[0.04] group-hover:border-white/20 group-hover:shadow-[0_12px_32px_-24px_rgba(76,215,135,0.35)] flex flex-col items-center justify-between gap-6">
-        {/* Accent ring */}
-        <div className="pointer-events-none absolute inset-0 rounded-[26px] ring-1 ring-inset ring-white/0 transition-all duration-500 group-hover:ring-[#4CD787]/30"></div>
-
-        {/* Counter number */}
-        <div className="text-4xl md:text-5xl font-bold text-white font-mono group-hover:text-[#4CD787] transition-all duration-300 relative group-hover:-translate-y-1">
-          {/* Glowing text effect */}
-          <span className="relative">
-            {formattedDisplay}
-            <span className="absolute inset-0 text-[#4CD787] opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur-sm">
-              {formattedDisplay}
-            </span>
-          </span>
-        </div>
-
-        {/* Separator line */}
-        <div className="flex flex-col items-center gap-3">
-          <div className="w-12 h-0.5 bg-gradient-to-r from-transparent via-[#4CD787]/50 to-transparent group-hover:from-[#4CD787]/30 group-hover:via-[#4CD787] group-hover:to-[#4CD787]/30 transition-all duration-300"></div>
-
-          {/* Label */}
-          <div className="subtitle-sm font-mono font-medium group-hover:text-white transition-colors duration-300 uppercase tracking-wide">
-            {label}
-          </div>
-        </div>
+      <div className="text-4xl md:text-5xl font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-500">
+        {formattedDisplay}
+      </div>
+      <div className="text-base md:text-lg text-zinc-400 font-light group-hover:text-white transition-colors duration-300">
+        {label}
       </div>
     </div>
   )
@@ -580,62 +499,63 @@ export default function AboutPage() {
           />
         </div>
 
-        <div className="container mx-auto px-[21px] relative z-10 mt-10">
+        <div className="container px-[21px] relative z-10 mt-10">
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 ">
               {/* Title and content - Left side */}
-              <AnimatedSection className="lg:order-1">
-                <h1 className="-mb-6">
+              <AnimatedSection className="lg:order-0 flex flex-col justify-center text-left items-start">
+                <h1 className="-mb-6 w-full">
                   <div
                     style={{
                       position: 'relative',
                       height: '100px',
-                      width: '400px',
-                      padding: '0 0px',
+                      width: '100%',
+                      maxWidth: '320px',
+                      padding: '0',
+                      margin: '0',
                     }}
                   >
                     <TextPressure
                       text="About&nbsp;Us  "
+                      fontFamily="'Playfair Display', Georgia, 'Times New Roman', serif"
+                      fontUrl="/fonts/PlayfairDisplay-Variable.woff2"
                       flex={false}
                       alpha={false}
                       stroke={false}
                       width={false}
                       weight={true}
                       italic={false}
-                      textColor="#FFD700"
+                      textColor="#ffffffff"
                       strokeColor="#FFFFFF"
-                      minFontSize={66}
+                      minFontSize={64}
                     />
                     <span className="sr-only">About Us</span>
                   </div>
                 </h1>
-                <p className="subtitle-lg mb-6 md:mb-8 font-semibold ml-2 mt-6">
+                <p className="subtitle-lg mb-6 md:mb-8 mt-6 text-left">
                   We are a senior engineering team trusted by growth‑stage companies for complex and
                   time‑sensitive projects. We ship production‑ready software with clear milestones,
                   ownership, and post‑launch support.
                 </p>
-                <div className="flex flex-wrap gap-4 ml-2">
-                  <a
+                <div className="flex flex-row items-center justify-start gap-4 flex-wrap sm:flex-nowrap">
+                  <StarBorder
                     href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="bg-robinhood text-black hover:bg-white hover:text-black px-6 py-3 rounded-lg transition-colors font-medium border-2 border-robinhood shadow-lg"
-                    onClick={(e) => {
-                      window.open(
-                        'https://calendly.com/a-sheikhizadeh/devx-group-llc-representative',
-                        '_blank'
-                      )
-                      e.preventDefault()
-                    }}
+                    className="cursor-pointer font-sans font-bold text-sm px-6 py-3 flex-1 sm:flex-none min-w-[140px] sm:min-w-[200px] flex items-center justify-center gap-2 text-white whitespace-nowrap"
+                    color="#E2E8F0"
+                    speed="3s"
                   >
-                    Schedule a Free Consultation
-                  </a>
-                  <Link
+                    Book Free Call
+                  </StarBorder>
+                  <StarBorder
                     href="/portfolio"
-                    className="bg-transparent text-white hover:bg-white/10 px-6 py-3 rounded-lg transition-colors font-medium border border-white/30"
+                    className="cursor-pointer font-sans font-bold text-sm px-6 py-3 flex-1 sm:flex-none min-w-[140px] sm:min-w-[200px] flex items-center justify-center gap-2 text-white whitespace-nowrap"
+                    color="#E2E8F0"
+                    speed="3s"
                   >
                     See Our Work
-                  </Link>
+                  </StarBorder>
                 </div>
               </AnimatedSection>
 
@@ -683,7 +603,7 @@ export default function AboutPage() {
             <div className="text-center mb-12">
               <BlurText
                 text="Our Impact"
-                className="justify-center heading-section text-white mb-4 md:mb-6"
+                className="justify-center heading-section text-white mb-4 md:mb-6 font-editorial"
                 delay={150}
                 once={true}
               />
@@ -708,7 +628,7 @@ export default function AboutPage() {
           <AnimatedSection className="max-w-5xl mx-auto text-center mb-14 md:mb-16">
             <BlurText
               text="How We Work"
-              className="justify-center heading-section text-white mb-4 md:mb-6"
+              className="justify-center heading-section text-white mb-4 md:mb-6 font-editorial"
               delay={150}
               once={true}
             />
@@ -729,8 +649,10 @@ export default function AboutPage() {
                     <span className="text-[#4CD787] font-semibold text-base">1</span>
                   </div>
                   <div>
-                    <h3 className="heading-component text-white mb-2">Discovery & Planning</h3>
-                    <p className="text-body text-muted">
+                    <h3 className="heading-component text-white mb-2 font-editorial">
+                      Discovery & Planning
+                    </h3>
+                    <p className="text-body text-zinc-400">
                       We align on goals, constraints, and success metrics in a focused strategy
                       call.
                     </p>
@@ -741,8 +663,10 @@ export default function AboutPage() {
                     <span className="text-[#FFD700] font-semibold text-base">2</span>
                   </div>
                   <div>
-                    <h3 className="heading-component text-white mb-2">Solution Proposal</h3>
-                    <p className="text-body text-muted">
+                    <h3 className="heading-component text-white mb-2 font-editorial">
+                      Solution Proposal
+                    </h3>
+                    <p className="text-body text-zinc-400">
                       Clear milestones, scope, and ownership, with timeline and dependencies.
                     </p>
                   </div>
@@ -752,8 +676,10 @@ export default function AboutPage() {
                     <span className="text-[#4834D4] font-semibold text-base">3</span>
                   </div>
                   <div>
-                    <h3 className="heading-component text-white mb-2">Build & Reviews</h3>
-                    <p className="text-body text-muted">
+                    <h3 className="heading-component text-white mb-2 font-editorial">
+                      Build & Reviews
+                    </h3>
+                    <p className="text-body text-zinc-400">
                       Weekly demos, no surprises. We optimize for reliability and maintainability.
                     </p>
                   </div>
@@ -763,8 +689,10 @@ export default function AboutPage() {
                     <span className="text-[#9d4edd] font-semibold text-base">4</span>
                   </div>
                   <div>
-                    <h3 className="heading-component text-white mb-2">Delivery & Support</h3>
-                    <p className="text-body text-muted">
+                    <h3 className="heading-component text-white mb-2 font-editorial">
+                      Delivery & Support
+                    </h3>
+                    <p className="text-body text-zinc-400">
                       Handover, documentation, and stabilization support after launch.
                     </p>
                   </div>
@@ -790,7 +718,7 @@ export default function AboutPage() {
                 <Card className="bg-gradient-to-br from-black/80 to-black/60 border-[#4CD787]/30 backdrop-blur-sm p-6">
                   <div className="flex items-center gap-3 mb-4">
                     <Users className="w-6 h-6 text-[#4CD787]" />
-                    <h3 className="heading-component text-white">Discovery</h3>
+                    <h3 className="heading-component text-white font-editorial">Discovery</h3>
                   </div>
                   <p className="text-body text-secondary">
                     We align on goals, constraints, and success metrics in a focused call.
@@ -801,7 +729,9 @@ export default function AboutPage() {
                 <Card className="bg-gradient-to-br from-black/80 to-black/60 border-[#FFD700]/30 backdrop-blur-sm p-6">
                   <div className="flex items-center gap-3 mb-4">
                     <Globe className="w-6 h-6 text-[#FFD700]" />
-                    <h3 className="heading-component text-white">Solution Proposal</h3>
+                    <h3 className="heading-component text-white font-editorial">
+                      Solution Proposal
+                    </h3>
                   </div>
                   <p className="text-body text-secondary">
                     Clear milestones, scope, and ownership, with timeline and dependencies.
@@ -812,7 +742,7 @@ export default function AboutPage() {
                 <Card className="bg-gradient-to-br from-black/80 to-black/60 border-[#4834D4]/30 backdrop-blur-sm p-6">
                   <div className="flex items-center gap-3 mb-4">
                     <Zap className="w-6 h-6 text-[#4834D4]" />
-                    <h3 className="heading-component text-white">Build & Reviews</h3>
+                    <h3 className="heading-component text-white font-editorial">Build & Reviews</h3>
                   </div>
                   <p className="text-body text-secondary">
                     Weekly demos, no surprises. We optimize for reliability and maintainability.
@@ -823,7 +753,9 @@ export default function AboutPage() {
                 <Card className="bg-gradient-to-br from-black/80 to-black/60 border-[#9d4edd]/30 backdrop-blur-sm p-6">
                   <div className="flex items-center gap-3 mb-4">
                     <Check className="w-6 h-6 text-[#9d4edd]" />
-                    <h3 className="heading-component text-white">Delivery & Support</h3>
+                    <h3 className="heading-component text-white font-editorial">
+                      Delivery & Support
+                    </h3>
                   </div>
                   <p className="text-body text-secondary">
                     Handover, documentation, and stabilization support after launch.
@@ -845,7 +777,7 @@ export default function AboutPage() {
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
             <BlurText
               text="Our Values"
-              className="justify-center heading-section text-white mb-4 md:mb-6"
+              className="justify-center heading-section text-white mb-4 md:mb-6 font-editorial"
               delay={150}
               once={true}
             />
@@ -858,7 +790,7 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             <ValueCard
               icon={Heart}
-              title="Client-Centered Focus"
+              title="Customer Centric"
               description="Our customers are always first in everything we do. We provide support after delivery and build long-term relationships."
               delay={0.1}
             />
@@ -902,7 +834,7 @@ export default function AboutPage() {
           <AnimatedSection className="text-center max-w-3xl mx-auto">
             <BlurText
               text="Delivery Ownership"
-              className="justify-center heading-section text-white mb-6"
+              className="justify-center heading-section text-white mb-6 font-editorial"
               delay={150}
               once={true}
             />
@@ -950,7 +882,7 @@ export default function AboutPage() {
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-8">
             <BlurText
               text="Our Purpose"
-              className="justify-center heading-section text-white mb-4 md:mb-6"
+              className="justify-center heading-section text-white mb-4 md:mb-6 font-editorial"
               delay={150}
               once={true}
             />
@@ -972,7 +904,7 @@ export default function AboutPage() {
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
             <BlurText
               text="Our Team Structure"
-              className="justify-center heading-section text-white mb-4 md:mb-6"
+              className="justify-center heading-section text-white mb-4 md:mb-6 font-editorial"
               delay={150}
               once={true}
             />
@@ -992,7 +924,7 @@ export default function AboutPage() {
           <AnimatedSection className="text-center max-w-3xl mx-auto">
             <BlurText
               text="What Our Clients Say"
-              className="justify-center heading-section text-[#F472B6] mb-4 md:mb-6"
+              className="justify-center heading-section text-white mb-4 md:mb-6 font-editorial"
               delay={150}
               once={true}
             />
@@ -1014,7 +946,7 @@ export default function AboutPage() {
           <AnimatedSection className="bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-8 md:p-12 max-w-4xl mx-auto text-center">
             <BlurText
               text="Ready to Start Your Project?"
-              className="justify-center heading-section text-white mb-4 md:mb-6"
+              className="justify-center heading-section text-white mb-4 md:mb-6 font-editorial"
               delay={150}
               once={true}
             />
@@ -1027,7 +959,7 @@ export default function AboutPage() {
                 href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-robinhood text-black hover:bg-white hover:text-black px-8 py-3 rounded-lg transition-colors font-medium border-2 border-robinhood shadow-lg"
+                className="bg-transparent text-white hover:bg-white hover:!text-black px-8 py-3 rounded-lg transition-all duration-300 font-medium border border-white/20 hover:border-white shadow-lg backdrop-blur-sm"
                 onClick={(e) => {
                   window.open(
                     'https://calendly.com/a-sheikhizadeh/devx-group-llc-representative',
@@ -1040,7 +972,7 @@ export default function AboutPage() {
               </a>
               <Link
                 href="/portfolio"
-                className="bg-transparent text-white hover:bg-white/10 px-8 py-3 rounded-lg transition-colors font-medium border border-white/30"
+                className="bg-transparent text-white hover:bg-white/10 px-8 py-3 rounded-lg transition-colors font-medium border border-white/20 backdrop-blur-sm"
               >
                 See Our Work
               </Link>

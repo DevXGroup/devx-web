@@ -10,14 +10,12 @@ export const usePerformanceOptimizedAnimation = () => {
       (window.innerWidth < 768 ||
         /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
     )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const hasReducedMotion = useMemo(() => {
     return (
       typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
     )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const isLowPower = useMemo(() => {
@@ -41,7 +39,6 @@ export const usePerformanceOptimizedAnimation = () => {
     }
 
     return false
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const shouldOptimizeAnimations = isLowPower || hasReducedMotion

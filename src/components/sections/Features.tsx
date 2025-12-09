@@ -7,6 +7,7 @@ import { Rocket, User, Layers, Search, Flag, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import RotatingText from '@animations/RotatingText'
 import BlurText from '@animations/BlurText'
+import StarBorder from '@/components/animations/StarBorder'
 import dynamic from 'next/dynamic'
 
 const InfinityLogo = dynamic(() => import('@3d/InfinityLogo'), {
@@ -29,7 +30,7 @@ const subheaders = [
   'Cloud Solutions',
   'DevOps & Infrastructure',
   'Custom Software Solutions',
-  'Legacy System Modernization',
+  'Legacy\u00A0System\u00A0Modernization',
   'Cross-Platform Development',
   'Stunning UI/UX Design',
   'Agentic AI',
@@ -49,11 +50,11 @@ function StepAnimation({
 }) {
   const stepCircleVariants = {
     active: {
-      backgroundColor: '#ccff00',
-      color: '#0f172a',
+      backgroundColor: '#ffffff',
+      color: '#000000',
       scale: 1.05,
-      borderColor: '#d8ff4d',
-      boxShadow: '0 0 18px rgba(204, 255, 0, 0.45)',
+      borderColor: '#ffffff',
+      boxShadow: '0 0 18px rgba(255, 255, 255, 0.45)',
     },
     inactive: {
       backgroundColor: 'rgba(30, 41, 59, 0.85)', // slate-800/85
@@ -66,12 +67,16 @@ function StepAnimation({
 
   const stepTextVariants = {
     active: {
-      fontWeight: 700,
+      fontWeight: 500,
       color: '#ffffff',
+      fontFamily: 'var(--font-ibm-plex-sans)',
+      letterSpacing: '0.02em',
     },
     inactive: {
       fontWeight: 400,
       color: 'rgb(203 213 225)', // slate-200
+      fontFamily: 'var(--font-ibm-plex-sans)',
+      letterSpacing: '0.02em',
     },
   }
 
@@ -81,8 +86,8 @@ function StepAnimation({
       className={`flex flex-col items-center space-y-2 sm:space-y-4`}
     >
       <motion.div
-        className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center text-base sm:text-lg font-bold relative border-2 sm:border-3 md:border-4"
-        style={{ fontFamily: 'var(--font-ibm-plex-sans)' }}
+        className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center text-base sm:text-lg font-medium relative border-2 sm:border-3 md:border-4"
+        style={{ fontFamily: 'var(--font-ibm-plex-mono), monospace' }}
         variants={stepCircleVariants}
         animate={isActive ? 'active' : 'inactive'}
         transition={{ duration: 0.25 }}
@@ -113,21 +118,27 @@ function HireDevelopersCard({ icon: Icon, title, description, index }: HireDevel
   return (
     <motion.div
       data-card-index={index}
-      className="relative bg-slate-800/90 border border-slate-600/50 p-8 sm:p-10 md:p-12 lg:p-14 rounded-2xl shadow-2xl shadow-black/50 backdrop-blur-sm hover:border-slate-500/60 transition-all duration-300 group cursor-pointer"
+      className="relative bg-zinc-900/40 border border-white/10 p-8 sm:p-10 md:p-12 lg:p-14 rounded-3xl backdrop-blur-md hover:border-white/20 hover:bg-zinc-900/60 transition-all duration-500 group cursor-pointer overflow-hidden"
       initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0, margin: '50px' }}
       transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
       style={{ willChange: 'opacity, transform', transform: 'translateZ(0)' }}
-      whileHover={{ y: -4, transition: { duration: 0.2 } }}
+      whileHover={{ y: -4, transition: { duration: 0.3, ease: 'easeOut' } }}
     >
-      <div className="relative flex flex-col gap-6">
-        <div className="flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 md:w-18 md:h-18 rounded-full bg-[#ccff00] flex items-center justify-center shadow-[0_0_24px_rgba(204,255,0,0.35)] group-hover:shadow-[0_0_32px_rgba(204,255,0,0.5)] transition-all duration-300">
-          <Icon className="w-7 h-7 sm:w-8 sm:h-8 text-black" />
+      <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/[0.03] to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+      <div className="relative flex flex-col gap-6 z-10">
+        <div className="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:scale-110 group-hover:bg-white group-hover:border-white transition-all duration-300">
+          <Icon
+            className="w-6 h-6 sm:w-7 sm:h-7 text-white group-hover:text-black transition-colors duration-300 [&>*]:stroke-white [&>*]:group-hover:stroke-black [&>*]:transition-colors [&>*]:duration-300"
+            strokeWidth={1.5}
+          />
         </div>
-        <div className="flex-1 space-y-4">
-          <h3 className="heading-subsection text-white leading-tight">{title}</h3>
-          <p className="card-description-normal text-slate-300">{description}</p>
+        <div className="flex-1 space-y-3">
+          <h3 className="card-title text-white">{title}</h3>
+          <p className="card-text-body group-hover:text-zinc-300 transition-colors duration-300">
+            {description}
+          </p>
         </div>
       </div>
     </motion.div>
@@ -148,20 +159,25 @@ function WhyUsCard({
   return (
     <motion.div
       data-card-index={index}
-      className="relative bg-slate-800/90 border border-slate-600/50 p-6 sm:p-7 md:p-8 rounded-2xl shadow-xl shadow-black/40 backdrop-blur-sm flex flex-col items-center text-center overflow-hidden min-h-[260px] sm:min-h-[280px] md:min-h-[300px] w-full cursor-pointer hover:border-slate-500/60 transition-all duration-300"
+      className="relative bg-zinc-900/30 border border-white/5 p-6 sm:p-8 rounded-3xl backdrop-blur-sm flex flex-col items-center text-center min-h-[260px] sm:min-h-[280px] w-full cursor-pointer hover:border-white/15 hover:bg-zinc-900/50 transition-all duration-500 group overflow-hidden"
       initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0, margin: '50px' }}
       transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
       style={{ willChange: 'opacity, transform', transform: 'translateZ(0)' }}
-      whileHover={{ y: -4, scale: 1.02, transition: { duration: 0.2 } }}
+      whileHover={{ y: -4, transition: { duration: 0.3 } }}
     >
+      <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
       <div className="relative z-10 flex flex-col items-center h-full space-y-5">
-        <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center bg-gradient-to-br from-[#ccff00] to-yellow-300 border border-[#ccff00]/70 shadow-[0_0_18px_rgba(204,255,0,0.25)]">
-          <Icon className="w-7 h-7 sm:w-8 sm:h-8 text-black" />
+        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center bg-white/5 border border-white/10 group-hover:border-[#ccff00]/50 group-hover:bg-[#ccff00]/10 transition-all duration-300">
+          <Icon
+            className="w-6 h-6 sm:w-7 sm:h-7 text-white group-hover:text-black transition-colors duration-300"
+            strokeWidth={1.5}
+          />
         </div>
-        <h3 className="card-title text-white">{title}</h3>
-        <p className="card-description-normal max-w-[22rem]">{description}</p>
+        <h3 className="card-title text-center text-white">{title}</h3>
+        <p className="card-text-body text-center max-w-[22rem]">{description}</p>
       </div>
     </motion.div>
   )
@@ -235,7 +251,7 @@ export default function Features() {
   return (
     <motion.section
       ref={containerRef}
-      className="relative pt-32 sm:pt-40 md:pt-48 lg:pt-56 pb-16 sm:pb-20 md:pb-24 lg:pb-28 overflow-hidden bg-gradient-to-b from-slate-900 to-slate-950 w-full"
+      className="relative pt-32 sm:pt-40 md:pt-48 lg:pt-56 pb-16 sm:pb-20 md:pb-24 lg:pb-28 overflow-hidden bg-black w-full"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true, amount: 0, margin: '100px' }}
@@ -247,15 +263,16 @@ export default function Features() {
       {/* Gradient transition from black to purple */}
       <div className="absolute top-0 left-0 right-0 h-2 md:h-40 bg-gradient-to-b from-black to-transparent z-[1] pointer-events-none" />
 
-      {/* Full-screen Grid Background for entire section */}
-      <div className="absolute inset-0 w-full h-full opacity-50 md:opacity-40 z-[0] pointer-events-none">
+      {/* Full-screen Grid Background for entire section - Harmonized with Attio/Linear feel but brighter */}
+      <div className="absolute inset-0 w-full h-full opacity-60 md:opacity-50 z-[0] pointer-events-none">
         <GridAnimation
           direction="diagonal"
           speed={0.3}
           squareSize={36}
-          hoverFillColor="rgba(157, 78, 221, 0.45)"
-          borderColor="rgba(204, 255, 0, 1)"
-          flickerColor="rgba(204, 255, 0, 0.4)"
+          showRadialGradient={false}
+          hoverFillColor="rgba(255, 255, 255, 0.55)" // Increased brightness for visibility
+          borderColor="rgba(255, 255, 255, 0.25)" // More visible grid lines
+          flickerColor="rgba(255, 255, 255, 0.4)" // Brighter random flicker
           randomFlicker={true}
         />
       </div>
@@ -265,7 +282,7 @@ export default function Features() {
         variants={containerVariants}
         initial="hidden"
         animate={isInView ? 'visible' : 'hidden'}
-        className="relative container mx-auto px-6 sm:px-8 lg:px-12 z-[3] max-w-7xl select-text"
+        className="relative container mx-auto px-6 sm:px-8 lg:px-12 z-[3] max-w-7xl select-text overflow-visible"
         transition={{
           duration: shouldOptimizeAnimations ? 0.3 : 0.5,
           ease: 'easeOut',
@@ -274,18 +291,18 @@ export default function Features() {
         {/* Hire Developers Section */}
         <div ref={hireDevelopersRef} className="relative">
           {/* Hero Section */}
-          <div className="text-center mb-8 sm:mb-12 md:mb-16 relative z-[3]">
+          <div className="text-center mb-12 sm:mb-16 relative z-[3]">
             {/* Fixed title visibility with inline styles */}
             <BlurText
               text="Hire Elite Developers Effortlessly."
-              className="justify-center text-white mb-4 sm:mb-6 pb-2 sm:pb-3 px-4 section-title-hero"
+              className="justify-center text-center text-white mb-6 section-title-hero font-editorial"
               delay={150}
               once={true}
             />
           </div>
 
-          {/* Redesigned Cards Section */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-10 lg:gap-12 mb-16 sm:mb-20 md:mb-24 lg:mb-28 max-w-6xl mx-auto px-4 sm:px-6 relative z-[3]">
+          {/* Redesigned Cards Section - Attio/Linear Style with better icon contrast */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-10 max-w-6xl mx-auto px-4 sm:px-6 relative z-[3]">
             <HireDevelopersCard
               icon={Rocket}
               title="Are you launching a startup or new product?"
@@ -299,135 +316,14 @@ export default function Features() {
               index={1}
             />
           </div>
-        </div>
-        {/* End of Hire Developers Section with Grid */}
 
-        {/* Engagement Models Section */}
-        <div className="relative py-12 sm:py-16 md:py-20 my-12 sm:my-16 md:my-20">
-          <div className="text-center mb-8 sm:mb-12 relative z-[3]">
-            <BlurText
-              text="How We Work With You"
-              className="justify-center heading-section text-white mb-4 sm:mb-6 pb-2 sm:pb-3 px-4"
-              delay={150}
-              once={true}
-            />
-            <p className="subtitle-lg max-w-3xl mx-auto px-4 text-slate-300">
-              From small businesses to large enterprises—flexible engagement models that fit your
-              needs
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 md:gap-8 max-w-6xl mx-auto px-4 sm:px-6 relative z-[3]">
-            <motion.div
-              className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 border border-[#4CD787]/30 p-6 sm:p-8 rounded-2xl shadow-xl shadow-black/40 backdrop-blur-sm group hover:border-[#4CD787]/60 transition-all duration-300"
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0, margin: '50px' }}
-              transition={{ duration: 0.3, delay: 0, ease: [0.25, 0.1, 0.25, 1] }}
-            >
-              <div className="flex flex-col gap-4">
-                <div className="w-12 h-12 rounded-full bg-[#4CD787]/20 flex items-center justify-center">
-                  <Rocket className="w-6 h-6 text-[#4CD787]" />
-                </div>
-                <h3 className="card-title text-white">Project Delivery</h3>
-                <p className="card-description-normal">
-                  Fixed-scope projects with clear timelines and deliverables. Perfect for defined
-                  features, MVPs, or specific initiatives.
-                </p>
-                <ul className="space-y-2 text-sm text-slate-300 mt-2">
-                  <li className="flex items-start gap-2">
-                    <span className="text-[#4CD787] mt-1">•</span>
-                    <span>Fixed pricing & timeline</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-[#4CD787] mt-1">•</span>
-                    <span>Well-defined scope</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-[#4CD787] mt-1">•</span>
-                    <span>End-to-end delivery</span>
-                  </li>
-                </ul>
-              </div>
-            </motion.div>
-
-            <motion.div
-              className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 border border-[#9d4edd]/30 p-6 sm:p-8 rounded-2xl shadow-xl shadow-black/40 backdrop-blur-sm group hover:border-[#9d4edd]/60 transition-all duration-300"
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0, margin: '50px' }}
-              transition={{ duration: 0.3, delay: 0.1, ease: [0.25, 0.1, 0.25, 1] }}
-            >
-              <div className="flex flex-col gap-4">
-                <div className="w-12 h-12 rounded-full bg-[#9d4edd]/20 flex items-center justify-center">
-                  <User className="w-6 h-6 text-[#9d4edd]" />
-                </div>
-                <h3 className="card-title text-white">Team Augmentation</h3>
-                <p className="card-description-normal">
-                  Dedicated engineers who integrate with your team. Scale up or down as needed with
-                  seamless collaboration.
-                </p>
-                <ul className="space-y-2 text-sm text-slate-300 mt-2">
-                  <li className="flex items-start gap-2">
-                    <span className="text-[#9d4edd] mt-1">•</span>
-                    <span>Flexible team size</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-[#9d4edd] mt-1">•</span>
-                    <span>Your process & tools</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-[#9d4edd] mt-1">•</span>
-                    <span>Monthly engagement</span>
-                  </li>
-                </ul>
-              </div>
-            </motion.div>
-
-            <motion.div
-              className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 border border-[#ccff00]/30 p-6 sm:p-8 rounded-2xl shadow-xl shadow-black/40 backdrop-blur-sm group hover:border-[#ccff00]/60 transition-all duration-300"
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0, margin: '50px' }}
-              transition={{ duration: 0.3, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-            >
-              <div className="flex flex-col gap-4">
-                <div className="w-12 h-12 rounded-full bg-[#ccff00]/20 flex items-center justify-center">
-                  <Layers className="w-6 h-6 text-[#ccff00]" />
-                </div>
-                <h3 className="card-title text-white">Long-Term Partnership</h3>
-                <p className="card-description-normal">
-                  Full engineering team ownership for startups and software companies. We become
-                  your execution arm.
-                </p>
-                <ul className="space-y-2 text-sm text-slate-300 mt-2">
-                  <li className="flex items-start gap-2">
-                    <span className="text-[#ccff00] mt-1">•</span>
-                    <span>Ongoing development</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-[#ccff00] mt-1">•</span>
-                    <span>Strategic planning</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-[#ccff00] mt-1">•</span>
-                    <span>Complete ownership</span>
-                  </li>
-                </ul>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-        {/* End of Engagement Models Section */}
-
-        {/* Creative Rotating Text Section - Enhanced Size & Visibility */}
-        <div className="relative w-full py-14 sm:py-16 md:py-20 my-12 sm:my-16 md:my-20 bg-transparent px-[2%]">
-          <div className="relative z-10 text-center w-full flex justify-center">
-            <div className="inline-flex flex-col sm:flex-row items-center sm:items-baseline justify-center gap-3 sm:gap-4 md:gap-5 lg:gap-5 xl:gap-6">
-              <span className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl xl:text-[3.5rem] 2xl:text-[4rem] font-black bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-purple-300 to-indigo-400 drop-shadow-[0_0_35px_rgba(147,51,234,0.8)] filter-none whitespace-nowrap">
+          {/* Creative animated label moved here */}
+          <div className="my-20 sm:my-28 md:my-32 flex justify-center px-4 sm:px-6 relative z-[3]">
+            <div className="relative inline-flex flex-col lg:flex-row items-center lg:items-baseline gap-3 sm:gap-4">
+              <span className="font-creative blur-text-gradient text-5xl sm:text-6xl md:text-7xl leading-tight">
                 Creative
               </span>
-              <div className="relative inline-flex justify-center items-center whitespace-nowrap">
+              <div className="relative inline-flex justify-center items-center md:whitespace-nowrap">
                 <RotatingText
                   texts={subheaders}
                   rotationInterval={
@@ -437,15 +333,15 @@ export default function Features() {
                     type: shouldOptimizeAnimations ? 'tween' : 'spring',
                     ...(shouldOptimizeAnimations ? {} : { stiffness: 200, damping: 20 }),
                   }}
-                  initial={{ y: 30, opacity: 0 }}
+                  initial={{ y: 16, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: -30, opacity: 0 }}
+                  exit={{ y: -16, opacity: 0 }}
                   splitBy="characters"
                   staggerDuration={shouldOptimizeAnimations ? 0.05 : 0.03}
                   staggerFrom="first"
-                  mainClassName="relative text-3xl sm:text-4xl md:text-4xl lg:text-5xl xl:text-[3rem] 2xl:text-[3.5rem] font-bold font-mono text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)] leading-tight whitespace-nowrap !flex-nowrap"
+                  mainClassName="relative text-2xl sm:text-3xl md:text-4xl font-['IBM_Plex_Sans'] tracking-[0.05em] text-white/90 leading-tight whitespace-nowrap text-center"
                   splitLevelClassName="overflow-visible whitespace-nowrap"
-                  elementLevelClassName="inline-block drop-shadow-lg"
+                  elementLevelClassName="inline-block whitespace-nowrap"
                   loop={true}
                   auto={true}
                 />
@@ -453,20 +349,175 @@ export default function Features() {
             </div>
           </div>
         </div>
+        {/* End of Hire Developers Section with Grid */}
+
+        {/* Engagement Models Section */}
+        <div className="relative py-12 sm:py-16 md:py-20 my-12 sm:my-16 md:my-20">
+          <div className="text-center mb-12 sm:mb-16 relative z-[3]">
+            <BlurText
+              text="How We Work With You"
+              className="justify-center text-center text-white mb-6 section-title-hero font-editorial"
+              delay={150}
+              once={true}
+            />
+            <p className="section-subtitle max-w-3xl mx-auto px-4 text-zinc-400 font-light">
+              From small businesses to large enterprises—flexible engagement models that fit your
+              needs
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto px-4 sm:px-6 relative z-[3]">
+            <motion.div
+              className="relative bg-[#0A0A0B]/80 border border-white/[0.08] p-8 rounded-3xl backdrop-blur-sm group hover:border-[#4CD787]/40 hover:bg-[#0A0A0B] transition-all duration-300 shadow-lg hover:shadow-[#4CD787]/10"
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0, margin: '50px' }}
+              transition={{ duration: 0.3, delay: 0, ease: [0.25, 0.1, 0.25, 1] }}
+            >
+              <div className="flex flex-col gap-6">
+                <div className="w-12 h-12 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center group-hover:bg-[#4CD787]/10 group-hover:border-[#4CD787]/30 transition-all duration-300">
+                  <Rocket
+                    className="w-6 h-6 text-zinc-400 group-hover:text-[#4CD787] transition-colors duration-300"
+                    strokeWidth={1.5}
+                  />
+                </div>
+                <div>
+                  <h3 className="card-title text-white mb-3">Project Delivery</h3>
+                  <p className="card-text-body">
+                    Fixed-scope projects with clear timelines and deliverables. Perfect for defined
+                    features, MVPs, or specific initiatives.
+                  </p>
+                </div>
+                <div className="h-px w-full bg-white/[0.06] my-2" />
+                <ul className="space-y-3 text-sm text-zinc-400 font-light">
+                  <li className="flex items-center gap-3 group/item">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#4CD787] group-hover/item:scale-125 transition-transform" />
+                    <span className="group-hover/item:text-zinc-300 transition-colors">
+                      Fixed pricing & timeline
+                    </span>
+                  </li>
+                  <li className="flex items-center gap-3 group/item">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#4CD787] group-hover/item:scale-125 transition-transform" />
+                    <span className="group-hover/item:text-zinc-300 transition-colors">
+                      Well-defined scope
+                    </span>
+                  </li>
+                  <li className="flex items-center gap-3 group/item">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#4CD787] group-hover/item:scale-125 transition-transform" />
+                    <span className="group-hover/item:text-zinc-300 transition-colors">
+                      End-to-end delivery
+                    </span>
+                  </li>
+                </ul>
+              </div>
+            </motion.div>
+
+            <motion.div
+              className="relative bg-[#0A0A0B]/80 border border-white/[0.08] p-8 rounded-3xl backdrop-blur-sm group hover:border-[#9d4edd]/40 hover:bg-[#0A0A0B] transition-all duration-300 shadow-lg hover:shadow-[#9d4edd]/10"
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0, margin: '50px' }}
+              transition={{ duration: 0.3, delay: 0.1, ease: [0.25, 0.1, 0.25, 1] }}
+            >
+              <div className="flex flex-col gap-6">
+                <div className="w-12 h-12 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center group-hover:bg-[#9d4edd]/10 group-hover:border-[#9d4edd]/30 transition-all duration-300">
+                  <User
+                    className="w-6 h-6 text-zinc-400 group-hover:text-[#9d4edd] transition-colors duration-300"
+                    strokeWidth={1.5}
+                  />
+                </div>
+                <div>
+                  <h3 className="card-title text-white mb-3">Team Augmentation</h3>
+                  <p className="card-text-body">
+                    Dedicated engineers who integrate with your team. Scale up or down as needed
+                    with seamless collaboration.
+                  </p>
+                </div>
+                <div className="h-px w-full bg-white/[0.06] my-2" />
+                <ul className="space-y-3 text-sm text-zinc-400 font-light">
+                  <li className="flex items-center gap-3 group/item">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#9d4edd] group-hover/item:scale-125 transition-transform" />
+                    <span className="group-hover/item:text-zinc-300 transition-colors">
+                      Flexible team size
+                    </span>
+                  </li>
+                  <li className="flex items-center gap-3 group/item">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#9d4edd] group-hover/item:scale-125 transition-transform" />
+                    <span className="group-hover/item:text-zinc-300 transition-colors">
+                      Your process & tools
+                    </span>
+                  </li>
+                  <li className="flex items-center gap-3 group/item">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#9d4edd] group-hover/item:scale-125 transition-transform" />
+                    <span className="group-hover/item:text-zinc-300 transition-colors">
+                      Monthly engagement
+                    </span>
+                  </li>
+                </ul>
+              </div>
+            </motion.div>
+
+            <motion.div
+              className="relative bg-[#0A0A0B]/80 border border-white/[0.08] p-8 rounded-3xl backdrop-blur-sm group hover:border-[#ccff00]/40 hover:bg-[#0A0A0B] transition-all duration-300 shadow-lg hover:shadow-[#ccff00]/10"
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0, margin: '50px' }}
+              transition={{ duration: 0.3, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+            >
+              <div className="flex flex-col gap-6">
+                <div className="w-12 h-12 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center group-hover:bg-[#ccff00]/10 group-hover:border-[#ccff00]/30 transition-all duration-300">
+                  <Layers
+                    className="w-6 h-6 text-zinc-400 group-hover:text-[#ccff00] transition-colors duration-300"
+                    strokeWidth={1.5}
+                  />
+                </div>
+                <div>
+                  <h3 className="card-title text-white mb-3">Long-Term Partnership</h3>
+                  <p className="card-text-body">
+                    Full engineering team ownership for startups and software companies. We become
+                    your execution arm.
+                  </p>
+                </div>
+                <div className="h-px w-full bg-white/[0.06] my-2" />
+                <ul className="space-y-3 text-sm text-zinc-400 font-light">
+                  <li className="flex items-center gap-3 group/item">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#ccff00] group-hover/item:scale-125 transition-transform" />
+                    <span className="group-hover/item:text-zinc-300 transition-colors">
+                      Ongoing development
+                    </span>
+                  </li>
+                  <li className="flex items-center gap-3 group/item">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#ccff00] group-hover/item:scale-125 transition-transform" />
+                    <span className="group-hover/item:text-zinc-300 transition-colors">
+                      Strategic planning
+                    </span>
+                  </li>
+                  <li className="flex items-center gap-3 group/item">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#ccff00] group-hover/item:scale-125 transition-transform" />
+                    <span className="group-hover/item:text-zinc-300 transition-colors">
+                      Complete ownership
+                    </span>
+                  </li>
+                </ul>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+        {/* End of Engagement Models Section */}
 
         {/* Why Us Section */}
-        <div id="why-devx-section" className="text-center mb-12 sm:mb-16 md:mb-20">
+        <div id="why-devx-section" className="text-center mb-16 sm:mb-20">
           {/* Fixed title visibility with inline styles */}
           <BlurText
             text="Why Choose Us?"
-            className="justify-center text-white mb-4 sm:mb-6 pb-2 sm:pb-3 px-4 section-title-hero"
+            className="justify-center text-center text-white mb-6 section-title-hero font-editorial"
             delay={150}
             once={true}
           />
           <div className="max-w-3xl xl:max-w-4xl 2xl:max-w-5xl mx-auto mb-12 sm:mb-16 px-4">
             <BlurText
               text="Trusted U.S. company with worldwide senior developers, proven track record, and full-stack expertise across industries."
-              className="justify-center mb-4 section-subtitle"
+              className="justify-center mb-4 section-subtitle text-zinc-400"
               delay={100}
               once={true}
             />
@@ -500,17 +551,19 @@ export default function Features() {
           </div>
           <Link
             href="/about#our-values"
-            className="group relative flex sm:inline-flex items-center justify-center gap-2 text-black px-4 sm:px-5 md:px-5 lg:px-4 xl:px-4 py-2.5 sm:py-3 rounded-lg text-sm sm:text-base font-bold font-sans backdrop-blur-sm border border-[#4CD787]/35 hover:border-[#4CD787]/50 hover:shadow-xl hover:shadow-[#4CD787]/25 z-10 w-full sm:w-auto overflow-hidden max-w-full lg:max-w-[360px] xl:max-w-[320px]"
+            className="group relative flex sm:inline-flex items-center justify-center gap-2 text-white px-4 sm:px-5 md:px-5 lg:px-4 xl:px-4 py-2.5 sm:py-3 rounded-lg text-sm sm:text-base font-medium font-sans backdrop-blur-sm border border-white/20 hover:border-white/40 hover:bg-white/10 hover:shadow-lg hover:shadow-white/10 z-10 w-full sm:w-auto overflow-hidden max-w-full lg:max-w-[360px] xl:max-w-[320px]"
             style={{
               transition:
-                'background-position 500ms ease, background-color 300ms ease, border-color 300ms ease, box-shadow 300ms ease',
+                'background-color 300ms ease, border-color 300ms ease, box-shadow 300ms ease',
               transform: 'translateZ(0)',
             }}
           >
-            <span className="relative z-10">Explore more reasons to choose us</span>
-            <ArrowRight className="relative z-10 w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform duration-300" />
-            {/* Animated green sweep */}
-            <span className="absolute inset-0 bg-gradient-to-r from-[#4CD787] via-[#64d184] to-[#3bbb6f] bg-[length:200%_100%] bg-[position:0%_0] group-hover:bg-[position:100%_0] opacity-90 transition-[background-position] duration-500" />
+            <span className="relative z-10 text-white group-hover:text-white transition-colors">
+              Explore more reasons to choose us
+            </span>
+            <ArrowRight className="relative z-10 w-4 h-4 sm:w-5 sm:h-5 text-white group-hover:translate-x-1 transition-transform duration-300" />
+            {/* White sweep effect */}
+            <span className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           </Link>
         </div>
 
@@ -534,14 +587,38 @@ export default function Features() {
         {/* Final CTA */}
         <div className="text-center mb-12 sm:mb-16 px-4">
           <BlurText
-            text="We're ready to transform your vision into reality."
-            className="justify-center text-[#ccff00] mb-3 sm:mb-4 section-title-compact font-semibold"
+            text="Ready to Transform Your Vision Into Reality?"
+            className="justify-center text-center text-white mb-3 sm:mb-4 section-title-compact font-editorial"
             delay={150}
             once={true}
           />
-          <p className="text-slate-100 section-subtitle">
-            Let&apos;s embark on this journey together!
+          <p className="section-subtitle-compact text-zinc-300 mb-8">
+            Let&apos;s Automate Your Growth In No Time
           </p>
+
+          <StarBorder
+            href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-2 px-8 py-4 text-white font-bold text-lg rounded-xl transition-all duration-300"
+            color="#FFFFFF"
+            speed="3s"
+          >
+            Book Free Consultation
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </StarBorder>
         </div>
       </motion.div>
       <div

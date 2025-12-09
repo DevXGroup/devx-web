@@ -16,7 +16,6 @@ if (typeof globalThis !== 'undefined' && typeof globalThis.self === 'undefined')
 
 try {
   if (typeof globalThis !== 'undefined' && typeof self === 'undefined') {
-    // eslint-disable-next-line no-new-func
     const fn = new Function('return this')
     const context = fn()
     if (context && typeof context.self === 'undefined') {
@@ -35,13 +34,15 @@ const withBundleAnalyzer = bundleAnalyzer({ enabled: process.env.ANALYZE === 'tr
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Disable static optimization to avoid prerendering errors with Framer Motion context
+  output: 'standalone',
   experimental: {
     optimizePackageImports: [
       'framer-motion',
       'lucide-react',
       '@radix-ui/react-icons',
       'three',
-      '@react-three/fiber',
+      '@react-three/drei',
       '@react-three/drei',
     ],
   },
@@ -164,9 +165,9 @@ const nextConfig = {
       ...securityHeaders,
     ]
   },
-  // Turbopack configuration (Next.js 16 default)
+  // Turbopack configuration (Next.js 16+)
   turbopack: {},
-  // Enhanced webpack settings for better performance (fallback)
+  // Enhanced webpack settings for better performance
   webpack: (config, { dev, isServer }) => {
     if (isServer) {
       config.output = config.output || {}

@@ -96,21 +96,21 @@ export default function InfinityLogo() {
                   angle={0.25}
                   penumbra={1}
                   intensity={1}
-                  color="#CCFF00"
+                  color="#FFFFFF"
                 />
               </>
             )}
             <pointLight
               position={[3, 2, 3]}
               intensity={2}
-              color="#CCFF00"
+              color="#FFFFFF"
               distance={15}
               decay={2}
             />
             <pointLight
               position={[-3, -2, 4]}
               intensity={1.5}
-              color="#4CD787"
+              color="#E2E8F0"
               distance={12}
               decay={2}
             />
@@ -307,9 +307,9 @@ function InfinityMesh({
           temporalDistortion={isMobile ? 0.05 : 0.1}
           metalness={0.9}
           roughness={0.1}
-          color="#CCFF00"
+          color="#FFFFFF"
           attenuationDistance={0.5}
-          attenuationColor="#4CD787"
+          attenuationColor="#F8F8F8"
           envMapIntensity={isMobile ? 1.5 : 2}
           iridescence={isMobile ? 0.2 : 0.3}
           iridescenceIOR={1}

@@ -3,6 +3,9 @@ import PortfolioPage from './PortfolioPage'
 import { createOgImageUrl, createTwitterImageUrl, getSiteUrl } from '@/lib/og'
 import StructuredData from '@/components/seo/StructuredData'
 
+// Force dynamic rendering to avoid Framer Motion context issues during static generation
+export const dynamic = 'force-dynamic'
+
 const siteUrl = getSiteUrl()
 const pagePath = '/portfolio'
 const pageUrl = `${siteUrl}${pagePath}`

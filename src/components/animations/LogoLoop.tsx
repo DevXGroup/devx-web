@@ -218,7 +218,7 @@ export default function LogoLoop({ logos, speed = 15 }: LogoLoopProps) {
                   {/* Label - Shows on hover */}
                   <div
                     className={`
-                      subtitle-sm absolute -bottom-12 left-1/2 -translate-x-1/2 whitespace-nowrap z-[999]
+                      subtitle-xs absolute -bottom-12 left-1/2 -translate-x-1/2 whitespace-nowrap z-[999]
                       bg-black/95 backdrop-blur-md px-4 py-2 rounded-lg
                       border border-[#4CD787]/50
                       shadow-lg shadow-[#4CD787]/20
@@ -235,16 +235,6 @@ export default function LogoLoop({ logos, speed = 15 }: LogoLoopProps) {
           })}
         </div>
       </div>
-      <style jsx>{`
-        @keyframes scroll {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(calc(-1 * var(--scroll-distance, 0px)));
-          }
-        }
-      `}</style>
     </div>
   )
 }
