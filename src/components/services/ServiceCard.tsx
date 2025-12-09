@@ -24,6 +24,11 @@ export default function ServiceCard({ service, index }: ServiceCardProps) {
   const controls = useAnimation()
   const [isHovered, setIsHovered] = useState(false)
   const [showParticles, setShowParticles] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   useEffect(() => {
     if (isInView) {
@@ -45,177 +50,207 @@ export default function ServiceCard({ service, index }: ServiceCardProps) {
     return () => clearTimeout(timer)
   }, [isHovered])
 
+  // Only animate border when hovered and mounted
+  const shouldAnimateBorder = isMounted && isHovered
+
   const cardColor = service.color || '#4CD787'
 
   return (
     <motion.div
       ref={ref}
-      className="bg-black/60 md:bg-black/30 backdrop-blur-md md:backdrop-blur-sm p-4 sm:p-6 md:p-8 rounded-xl border border-white/20 md:border-white/10 group hover:border-white/30 transition-all duration-300 relative overflow-hidden h-full flex flex-col cursor-pointer"
+      className="group relative bg-zinc-900/40 backdrop-blur-md p-6 sm:p-8 rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-500 overflow-hidden h-full flex flex-col cursor-pointer"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       initial={{ opacity: 0 }}
       animate={isInView ? { opacity: 1 } : { opacity: 0 }}
       transition={{ duration: 0.6, ease: 'easeOut' }}
+      whileHover={{ y: -4, scale: 1.01 }}
+      whileTap={{ scale: 0.99 }}
     >
       {showParticles && (
         <ParticleAnimation color={cardColor} density={isHovered ? 25 : 15} speed={0.2} />
       )}
 
-      <div className="flex items-center mb-6 relative z-10">
-        <div className="relative">
-          <div
-            className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mr-3 sm:mr-4 flex items-center justify-center rounded-full aspect-square shrink-0 group-hover:shadow-[0_0_15px_rgba(76,215,135,0.5)]"
-            style={{
-              backgroundColor: cardColor,
-              boxShadow: isHovered ? `0 0 15px ${cardColor}80` : 'none',
-              transition: 'box-shadow 0.3s ease',
-            }}
-          >
-            <Icon className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-black" />
-          </div>
-        </div>
-        <h3
-          className="card-title"
+      {/* Morphing background blob - Attio style */}
+      <motion.div
+        className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 pointer-events-none"
+        initial={{
+          background: `radial-gradient(circle at 50% 50%, ${cardColor}00 0%, transparent 100%)`,
+        }}
+        whileHover={{
+          background: [
+            `radial-gradient(circle at 20% 80%, ${cardColor}15 0%, transparent 60%)`,
+            `radial-gradient(circle at 80% 20%, ${cardColor}20 0%, transparent 50%)`,
+            `radial-gradient(circle at 30% 70%, ${cardColor}15 0%, transparent 60%)`,
+          ],
+        }}
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+      />
+
+      <div className="flex items-start mb-6 relative z-10 gap-4">
+        <motion.div
+          className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-xl shrink-0 border transition-all duration-300 relative overflow-hidden"
           style={{
-            color: cardColor,
+            backgroundColor: isHovered ? `${cardColor}20` : 'rgba(255,255,255,0.05)',
+            borderColor: isHovered ? `${cardColor}40` : 'rgba(255,255,255,0.1)',
           }}
+          whileHover={{
+            boxShadow: `0 0 30px ${cardColor}60`,
+          }}
+          transition={{ duration: 0.4 }}
+        >
+          {/* Icon pulse effect */}
+          <motion.div
+            className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100"
+            animate={{
+              scale: [1, 1.5, 1],
+              opacity: [0, 0.3, 0],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: 'easeOut',
+            }}
+            style={{ backgroundColor: `${cardColor}30` }}
+          />
+          <Icon
+            className="w-6 h-6 sm:w-7 sm:h-7 transition-colors duration-300 relative z-10"
+            style={{
+              color: isHovered ? cardColor : 'white',
+              filter: isHovered ? `drop-shadow(0 0 4px ${cardColor}80)` : 'none',
+            }}
+            strokeWidth={1.5}
+          />
+        </motion.div>
+        <motion.h3
+          className="card-title text-white mt-1"
+          whileHover={{
+            scale: 1.02,
+            textShadow: `0 0 15px ${cardColor}80`,
+          }}
+          transition={{ duration: 0.3 }}
         >
           {service.title}
-        </h3>
+        </motion.h3>
       </div>
 
-      <p className="card-description-normal mb-4 sm:mb-6 relative z-10 flex-grow">
+      <p className="card-description-normal text-zinc-400 mb-6 relative z-10 flex-grow group-hover:text-zinc-300 transition-colors duration-500">
         {service.description}
       </p>
 
       {service.outcome && (
-        <div className="mb-4 sm:mb-6 relative z-10 p-3 rounded-lg border border-white/10 bg-white/5">
-          <p className="ui-label text-[#4CD787] mb-1">What you get:</p>
-          <p className="card-outcome">{service.outcome}</p>
+        <div className="mb-6 relative z-10 p-4 rounded-xl border border-white/5 bg-white/[0.02] group-hover:border-white/10 transition-all duration-300">
+          <p className="card-eyebrow mb-2" style={{ color: cardColor }}>
+            What you get:
+          </p>
+          <p className="card-body text-zinc-300">{service.outcome}</p>
         </div>
       )}
+
+      {/* Divider */}
+      <div className="h-px w-full bg-white/5 mb-6 relative z-10 group-hover:bg-white/10 transition-colors duration-300" />
 
       <ul className="space-y-3 relative z-10">
         {service.features.map((feature, i) => (
           <motion.li
             key={feature}
-            className="flex items-center card-feature group"
+            className="flex items-start gap-3 group/item"
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : { opacity: 0 }}
             transition={{ duration: 0.4, delay: i * 0.05, ease: 'easeOut' }}
           >
             <div
-              className="w-1.5 h-1.5 rounded-full mr-3 group-hover:w-2 group-hover:h-2 transition-all duration-300"
+              className="w-1.5 h-1.5 rounded-full mt-2 shrink-0 transition-all duration-300"
               style={{
                 backgroundColor: cardColor,
                 transform: isHovered ? 'scale(1.3)' : 'scale(1)',
-                transition: 'transform 0.3s ease, background-color 0.3s ease',
+                boxShadow: isHovered ? `0 0 8px ${cardColor}80` : 'none',
               }}
             />
-            <span className="group-hover:text-white/90 transition-colors duration-300">
+            <span className="card-feature group-hover/item:text-white transition-colors duration-300 leading-relaxed">
               {feature}
             </span>
           </motion.li>
         ))}
       </ul>
 
-      {/* Running shining line effect on hover */}
-      <motion.div
-        className="absolute inset-0 overflow-hidden rounded-xl pointer-events-none z-0"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: isHovered ? 1 : 0 }}
-        transition={{ duration: 0.3 }}
-      >
-        <motion.div
-          className="absolute w-full h-[2px] bg-gradient-to-r from-transparent via-white to-transparent top-0"
-          style={{
-            boxShadow: `0 0 6px ${cardColor}, 0 0 12px ${cardColor}40`,
-          }}
-          initial={{ x: '-100%' }}
-          animate={
-            isHovered
-              ? {
-                  x: ['-100%', '100%'],
-                }
-              : { x: '-100%' }
-          }
-          transition={{
-            duration: 1.5,
-            repeat: isHovered ? Infinity : 0,
-            ease: 'linear',
-          }}
-        />
-        <motion.div
-          className="absolute w-[2px] h-full bg-gradient-to-b from-transparent via-white to-transparent right-0"
-          style={{
-            boxShadow: `0 0 6px ${cardColor}, 0 0 12px ${cardColor}40`,
-          }}
-          initial={{ y: '-100%' }}
-          animate={
-            isHovered
-              ? {
-                  y: ['-100%', '100%'],
-                }
-              : { y: '-100%' }
-          }
-          transition={{
-            duration: 1.5,
-            repeat: isHovered ? Infinity : 0,
-            ease: 'linear',
-            delay: 0.375,
-          }}
-        />
-        <motion.div
-          className="absolute w-full h-[2px] bg-gradient-to-r from-transparent via-white to-transparent bottom-0"
-          style={{
-            boxShadow: `0 0 6px ${cardColor}, 0 0 12px ${cardColor}40`,
-          }}
-          initial={{ x: '100%' }}
-          animate={
-            isHovered
-              ? {
-                  x: ['100%', '-100%'],
-                }
-              : { x: '100%' }
-          }
-          transition={{
-            duration: 1.5,
-            repeat: isHovered ? Infinity : 0,
-            ease: 'linear',
-            delay: 0.75,
-          }}
-        />
-        <motion.div
-          className="absolute w-[2px] h-full bg-gradient-to-b from-transparent via-white to-transparent left-0"
-          style={{
-            boxShadow: `0 0 6px ${cardColor}, 0 0 12px ${cardColor}40`,
-          }}
-          initial={{ y: '100%' }}
-          animate={
-            isHovered
-              ? {
-                  y: ['100%', '-100%'],
-                }
-              : { y: '100%' }
-          }
-          transition={{
-            duration: 1.5,
-            repeat: isHovered ? Infinity : 0,
-            ease: 'linear',
-            delay: 1.125,
-          }}
-        />
-      </motion.div>
+      {/* Interaction overlay */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/[0.02] to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
 
-      {/* Enhanced background effect on hover */}
-      <div
-        className="absolute inset-0 bg-gradient-to-tr rounded-xl z-0"
-        style={{
-          background: `radial-gradient(circle at center, ${cardColor}20 0%, transparent 70%)`,
-          opacity: isHovered ? 1 : 0,
-          transition: 'opacity 0.4s ease',
-        }}
-      />
+      {/* Running shining line effect on hover - optimized to prevent flashing */}
+      {shouldAnimateBorder && (
+        <motion.div
+          className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none z-0"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.6 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          {/* Top border */}
+          <motion.div
+            className="absolute w-full h-[2px] top-0"
+            style={{
+              background: `linear-gradient(90deg, transparent, ${cardColor}, transparent)`,
+            }}
+            initial={{ x: '-100%' }}
+            animate={{ x: ['-100%', '100%'] }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: 'linear',
+            }}
+          />
+          {/* Right border */}
+          <motion.div
+            className="absolute w-[2px] h-full right-0"
+            style={{
+              background: `linear-gradient(180deg, transparent, ${cardColor}, transparent)`,
+            }}
+            initial={{ y: '-100%' }}
+            animate={{ y: ['-100%', '100%'] }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: 'linear',
+              delay: 0.5,
+            }}
+          />
+          {/* Bottom border */}
+          <motion.div
+            className="absolute w-full h-[2px] bottom-0"
+            style={{
+              background: `linear-gradient(90deg, transparent, ${cardColor}, transparent)`,
+            }}
+            initial={{ x: '100%' }}
+            animate={{ x: ['100%', '-100%'] }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: 'linear',
+              delay: 1,
+            }}
+          />
+          {/* Left border */}
+          <motion.div
+            className="absolute w-[2px] h-full left-0"
+            style={{
+              background: `linear-gradient(180deg, transparent, ${cardColor}, transparent)`,
+            }}
+            initial={{ y: '100%' }}
+            animate={{ y: ['100%', '-100%'] }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: 'linear',
+              delay: 1.5,
+            }}
+          />
+        </motion.div>
+      )}
     </motion.div>
   )
 }

@@ -18,7 +18,7 @@ const GridAnimation = ({
   randomFlicker = false,
   flickerInterval = 550,
   maxFlickerSquares = 10,
-  showRadialGradient = true,
+  showRadialGradient = false,
 }: {
   direction?: 'diagonal' | 'up' | 'right' | 'down' | 'left'
   speed?: number
@@ -58,10 +58,9 @@ const GridAnimation = ({
       canvas.height / 2,
       Math.sqrt(canvas.width ** 2 + canvas.height ** 2) / 2
     )
-    gradientRef.current.addColorStop(0, 'rgba(0, 0, 0, 0.88)')
-    gradientRef.current.addColorStop(0.35, 'rgba(0, 0, 0, 0.65)')
-    gradientRef.current.addColorStop(0.65, 'rgba(0, 0, 0, 0.25)')
-    gradientRef.current.addColorStop(1, 'rgba(0, 0, 0, 0)')
+    gradientRef.current.addColorStop(0, 'rgba(255, 255, 255, 0.08)')
+    gradientRef.current.addColorStop(0.45, 'rgba(255, 255, 255, 0.05)')
+    gradientRef.current.addColorStop(1, 'rgba(255, 255, 255, 0)')
   }
 
   useEffect(() => {
@@ -227,7 +226,7 @@ const GridAnimation = ({
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              'radial-gradient(circle, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.65) 25%, rgba(0,0,0,0.25) 45%, rgba(0,0,0,0) 100%)',
+              'radial-gradient(circle, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.05) 35%, rgba(255,255,255,0) 100%)',
             mixBlendMode: 'normal',
             opacity: 1,
           }}

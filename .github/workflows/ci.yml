@@ -41,7 +41,7 @@ jobs:
         run: pnpm format:check
 
       - name: Lint
-        run: pnpm next lint
+        run: pnpm eslint .
 
       - name: Notify Vercel - Lint
         if: always()

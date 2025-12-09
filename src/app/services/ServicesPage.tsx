@@ -22,13 +22,15 @@ import { useRef, useState, useEffect } from 'react'
 import TrueFocus from '@/components/animations/TrueFocus'
 import BlurText from '@/components/animations/BlurText'
 import TextPressure from '@/components/animations/TextPressure'
+import TextType from '@/components/animations/TextType'
 
 // Import the newly separated components
 import ServiceCard from '@/components/services/ServiceCard'
 import AppleScrollSection from '@/components/services/AppleScrollSection'
 import ScrollVelocityText from '@/components/animations/ScrollVelocityText'
 import HorizontalScroll from '@/components/HorizontalScroll'
-import ParallaxTestimonials from '@/components/ParallaxTestimonials'
+import AttioButton from '@/components/ui/AttioButton'
+// ParallaxTestimonials moved to About page for consolidated testimonials
 
 import dynamic from 'next/dynamic'
 
@@ -400,6 +402,8 @@ export default function ServicesPage() {
                   <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
                     <TextPressure
                       text="Services  "
+                      fontFamily="'Playfair Display', Georgia, 'Times New Roman', serif"
+                      fontUrl="/fonts/PlayfairDisplay-Variable.woff2"
                       flex={false}
                       alpha={false}
                       stroke={false}
@@ -416,14 +420,14 @@ export default function ServicesPage() {
 
               <motion.p
                 variants={floatingAnimation}
-                className="text-lg md:text-xl font-light max-w-2xl mx-auto relative z-30 leading-relaxed mt-2 mb-0"
+                className="text-lg md:text-xl font-light max-w-3xl mx-auto relative z-30 leading-relaxed mt-2 mb-0"
                 style={{
                   textShadow: '0 2px 8px rgba(0,0,0,0.9)',
                   fontWeight: '400',
                 }}
               >
-                Launch revenue-driving web, mobile, AI, and automation products your customers rely
-                on. Our team embeds with yours to deliver dependable software and measurable wins.
+                We build web, mobile, AI, and automation products that grow your revenue, partnering
+                with you from one-off projects to dedicated engineering teams
               </motion.p>
             </motion.div>
           </div>
@@ -473,7 +477,7 @@ export default function ServicesPage() {
             >
               <ScrollVelocityText
                 baseVelocity={70}
-                className="text-6xl font-extrabold text-[#0e8a1871] leading-tight"
+                className="text-6xl font-extrabold text-[#333333] leading-tight"
                 damping={30}
                 stiffness={600}
                 velocityMapping={{ input: [0, 1000], output: [0, 6] }}
@@ -485,7 +489,7 @@ export default function ServicesPage() {
               </ScrollVelocityText>
               <ScrollVelocityText
                 baseVelocity={-80}
-                className="text-3xl font-extralight text-[#af4eaf] leading-tight h-[100px]"
+                className="text-3xl font-extralight text-[#9CA3AF] leading-tight h-[100px]"
                 damping={30}
                 stiffness={600}
                 velocityMapping={{ input: [0, 1000], output: [0, 7] }}
@@ -507,7 +511,7 @@ export default function ServicesPage() {
             <div className="w-full flex justify-center mb-28">
               <BlurText
                 text="Our Expertise"
-                className="justify-center blur-section text-[#06B6D4]"
+                className="justify-center blur-section text-[#06B6D4] font-editorial"
                 delay={250}
                 once={false}
               />
@@ -560,11 +564,12 @@ export default function ServicesPage() {
                     transition={{ duration: 0.8 }}
                     className="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-start text-center px-4 py-6 sm:px-6 sm:py-10 lg:py-16"
                   >
-                    <h2 className="section-title-hero gradient-gold">Agentic AI & RAG Solutions</h2>
+                    <h2 className="section-title-hero gradient-gold font-editorial">
+                      Agentic AI & RAG Solutions
+                    </h2>
                     <p className="section-subtitle mt-3 sm:mt-4 max-w-3xl px-2 sm:px-0">
                       Transform your business with intelligent AI agents that think, learn, and act
-                      autonomously. Powered by cutting-edge retrieval-augmented generation
-                      technology.
+                      autonomously.
                     </p>
                   </motion.div>
                   <div className="relative w-full aspect-[16/9] bg-black">
@@ -580,6 +585,33 @@ export default function ServicesPage() {
                       Your browser does not support the video tag.
                     </video>
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+
+                    {/* AI Log Typewriter */}
+                    <div className="absolute bottom-4 left-4 right-4 md:left-6 md:right-auto md:w-80 bg-black/80 backdrop-blur-md border border-white/10 rounded-lg p-4 z-30 font-mono text-xs shadow-2xl">
+                      <div className="flex items-center gap-2 mb-2 opacity-70 border-b border-white/10 pb-2">
+                        <div className="w-1.5 h-1.5 rounded-full bg-[#4CD787] animate-pulse" />
+                        <span className="uppercase tracking-widest text-white/80 text-[10px]">
+                          AI System Log
+                        </span>
+                      </div>
+                      <div className="flex gap-2 text-[#4CD787]">
+                        <span className="text-[#4CD787]/50">{'>'}</span>
+                        <TextType
+                          text={[
+                            'Analyzing workflow patterns...',
+                            'Identifying bottlenecks...',
+                            'Orchestrating agents...',
+                            'Optimizing resources...',
+                            'Executing tasks...',
+                          ]}
+                          typingSpeed={50}
+                          deletingSpeed={25}
+                          pauseDuration={1500}
+                          loop={true}
+                          cursorCharacter="█"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -607,7 +639,7 @@ export default function ServicesPage() {
               </motion.div>
 
               {/* Cards Section */}
-              <div className="order-2 space-y-6 w-full flex flex-col items-center px-4 sm:px-6 lg:px-0 lg:col-span-2">
+              <div className="order-2 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 px-4 sm:px-6 lg:px-0 lg:col-span-2 justify-items-center">
                 {/* Card 1: Agentic AI */}
                 <motion.div
                   initial={{ opacity: 0 }}
@@ -615,10 +647,8 @@ export default function ServicesPage() {
                   viewport={{ once: true, amount: 0.2 }}
                   transition={{ duration: 0.7, ease: 'easeOut' }}
                   className="relative group w-full max-w-3xl"
-                  onHoverStart={() => setIsAgentCardHovered(true)}
-                  onHoverEnd={() => setIsAgentCardHovered(false)}
                 >
-                  <div className="relative bg-[#0B0B10]/90 p-8 rounded-2xl border border-[#4CD787]/30 hover:border-[#4CD787]/50 transition-all duration-300 shadow-lg hover:shadow-[#4CD787]/30 text-left">
+                  <div className="relative h-full bg-zinc-900/40 backdrop-blur-md p-8 rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 shadow-lg text-left flex flex-col">
                     <motion.div
                       className="absolute left-1/2 -top-23 hidden h-20 w-[3px] -translate-x-1/2 origin-bottom rounded-full bg-gradient-to-t from-amber-400/0 via-amber-300/70 to-amber-500/90 lg:block pointer-events-none"
                       initial={{ opacity: 0, scaleY: 0.6 }}
@@ -700,7 +730,7 @@ export default function ServicesPage() {
                   transition={{ duration: 0.7, ease: 'easeOut' }}
                   className="relative group w-full max-w-3xl"
                 >
-                  <div className="bg-[#0B0B10]/90 p-8 rounded-2xl border border-[#9d4edd]/30 hover:border-[#9d4edd]/50 transition-all duration-300 shadow-lg hover:shadow-[#9d4edd]/30 text-left">
+                  <div className="relative h-full bg-zinc-900/40 backdrop-blur-md p-8 rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 shadow-lg text-left flex flex-col">
                     <div className="flex flex-col gap-4">
                       <div className="flex items-center gap-4">
                         <div className="w-12 h-12 rounded-xl bg-[#9d4edd]/20 flex items-center justify-center">
@@ -742,7 +772,7 @@ export default function ServicesPage() {
                   transition={{ duration: 0.7, ease: 'easeOut' }}
                   className="relative group w-full max-w-3xl"
                 >
-                  <div className="bg-[#0B0B10]/90 p-8 rounded-2xl border border-[#CFB53B]/30 hover:border-[#CFB53B]/50 transition-all duration-300 shadow-lg hover:shadow-[#CFB53B]/30 text-left">
+                  <div className="relative h-full bg-zinc-900/40 backdrop-blur-md p-8 rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 shadow-lg text-left flex flex-col">
                     <div className="flex flex-col gap-4">
                       <div className="flex items-center gap-4">
                         <div className="w-12 h-12 rounded-xl bg-[#CFB53B]/20 flex items-center justify-center">
@@ -780,32 +810,171 @@ export default function ServicesPage() {
               </div>
             </div>
 
-            {/* Call to Action */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              className="mt-16 text-center px-[5px] sm:px-2"
-            >
-              <p className="section-subtitle-compact mb-6 px-[5px] max-w-[18rem] sm:max-w-none mx-auto">
-                Ready to automate your business with intelligent AI agents?
-              </p>
-              <motion.a
-                href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 bg-gradient-to-r from-[#FAD961] via-[#C2892B] to-[#0B0B0B] hover:from-[#FAD961] hover:via-[#D19028] hover:to-[#111111] text-black px-8 py-4 rounded-xl btn-text-primary shadow-lg hover:shadow-[0_12px_40px_rgba(194,137,43,0.35)] border-2 border-[#C2892B] transition-all duration-300"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                Schedule AI Strategy Session
-                <ArrowRight className="w-5 h-5" />
-              </motion.a>
-            </motion.div>
+            {/* Closing the previous Agentic AI section containers */}
           </div>
         </section>
       </AppleScrollSection>
+
+      {/* Separator Line */}
+      <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-50" />
+
+      {/* Call to Action - Separated Section */}
+      <section className="relative py-24 bg-black overflow-hidden">
+        {/* Side fade effects */}
+        <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
+        <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
+
+        <div className="container mx-auto px-4 relative z-20">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-12 items-center max-w-7xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ duration: 0.8, ease: 'easeOut' }}
+              className="text-left"
+            >
+              <p className="heading-component text-white font-editorial text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-semibold mb-6 max-w-5xl leading-tight md:leading-snug">
+                Ready to automate your business?
+              </p>
+              <p className="subtitle-sm text-white/50 mb-8 max-w-xl text-lg font-light leading-relaxed">
+                Deploy intelligent AI agents that think, learn, and execute complex workflows 24/7.
+                Zero downtime. Measurable ROI from day one.
+              </p>
+              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
+                <AttioButton
+                  href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-base md:text-lg border-white/70 hover:border-white bg-white/5 hover:bg-white/10 text-white pl-8 pr-8 py-4"
+                >
+                  <span className="inline-flex items-center gap-3">
+                    Schedule a Free Consultation
+                    <ArrowRight className="w-5 h-5" />
+                  </span>
+                </AttioButton>
+              </motion.div>
+              <div className="flex flex-wrap gap-4 mt-8 opacity-60">
+                <span className="text-xs tracking-wider uppercase flex items-center gap-2">
+                  <div className="w-1 h-1 bg-[#4CD787] rounded-full" />
+                  Free Feasibility Check
+                </span>
+                <span className="text-xs tracking-wider uppercase flex items-center gap-2">
+                  <div className="w-1 h-1 bg-[#4CD787] rounded-full" />
+                  24h Turnaround
+                </span>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ duration: 0.9, ease: 'easeOut', delay: 0.1 }}
+              className="relative rounded-3xl border border-white/10 bg-[#0A0A0A] shadow-2xl overflow-hidden"
+            >
+              {/* Card Background Effects */}
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(76,215,135,0.08),transparent_40%)]" />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(59,130,246,0.05),transparent_40%)]" />
+
+              <div className="relative p-6 sm:p-8 z-10">
+                <div className="flex items-center justify-between mb-8">
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 rounded-full bg-[#4CD787] animate-pulse shadow-[0_0_8px_#4CD787]" />
+                    <span className="text-white/90 font-mono text-xs tracking-widest uppercase">
+                      DevX Agent Mesh
+                    </span>
+                  </div>
+                  <span className="px-2 py-1 rounded border border-white/10 bg-white/5 text-[10px] text-white/50 font-mono">
+                    v2.4.0
+                  </span>
+                </div>
+
+                <div className="relative h-64 w-full rounded-xl bg-black/50 border border-white/10 overflow-hidden mb-6 group">
+                  {/* Scanning Line */}
+                  <motion.div
+                    className="absolute top-0 bottom-0 w-[1px] bg-gradient-to-b from-transparent via-[#4CD787]/50 to-transparent z-20"
+                    animate={{ left: ['0%', '100%', '0%'] }}
+                    transition={{ duration: 8, ease: 'linear', repeat: Infinity }}
+                  />
+
+                  {/* Grid Background */}
+                  <div
+                    className="absolute inset-0 z-0 opacity-20"
+                    style={{
+                      backgroundImage:
+                        'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+                      backgroundSize: '40px 40px',
+                    }}
+                  />
+
+                  {/* Active Agents Animation */}
+                  <div className="absolute inset-0 z-10">
+                    {[...Array(3)].map((_, i) => (
+                      <motion.div
+                        key={i}
+                        className="absolute w-12 h-12 rounded-lg border border-[#4CD787]/30 bg-[#4CD787]/10 backdrop-blur-sm flex items-center justify-center shadow-[0_0_15px_rgba(76,215,135,0.15)]"
+                        initial={{ x: Math.random() * 200, y: Math.random() * 100 }}
+                        animate={{
+                          x: [Math.random() * 200, Math.random() * 300, Math.random() * 100],
+                          y: [Math.random() * 100, Math.random() * 150, Math.random() * 50],
+                        }}
+                        transition={{
+                          duration: 10 + Math.random() * 5,
+                          repeat: Infinity,
+                          repeatType: 'reverse',
+                          ease: 'easeInOut',
+                        }}
+                      >
+                        <Bot className="w-5 h-5 text-[#4CD787]" />
+                      </motion.div>
+                    ))}
+
+                    {/* Connecting Lines (Simulated) */}
+                    <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-30">
+                      <motion.path
+                        d="M50,50 Q150,150 250,50"
+                        stroke="#4CD787"
+                        strokeWidth="1"
+                        fill="none"
+                        strokeDasharray="4 4"
+                        animate={{ strokeDashoffset: [0, 20] }}
+                        transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                      />
+                      <motion.path
+                        d="M100,200 Q200,100 300,200"
+                        stroke="#4CD787"
+                        strokeWidth="1"
+                        fill="none"
+                        strokeDasharray="4 4"
+                        animate={{ strokeDashoffset: [20, 0] }}
+                        transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
+                      />
+                    </svg>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="p-3 rounded-lg bg-white/5 border border-white/10">
+                    <div className="text-[#4CD787] text-lg font-semibold mb-1">99.9%</div>
+                    <div className="text-white/40 text-[10px] uppercase tracking-wider">
+                      Uptime Reliability
+                    </div>
+                  </div>
+                  <div className="p-3 rounded-lg bg-white/5 border border-white/10">
+                    <div className="text-[#4CD787] text-lg font-semibold mb-1">24/7</div>
+                    <div className="text-white/40 text-[10px] uppercase tracking-wider">
+                      Autonomous Operation
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Separator Line */}
+      <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-50" />
 
       {/* Proof of delivery */}
       <AppleScrollSection delay={0.3}>
@@ -814,7 +983,7 @@ export default function ServicesPage() {
             <div className="max-w-3xl mx-auto text-center mb-14">
               <BlurText
                 text="Why teams choose DevX"
-                className="justify-center blur-section text-[#06B6D4]"
+                className="justify-center blur-section text-white font-editorial"
                 delay={200}
                 once={false}
               />
@@ -838,12 +1007,12 @@ export default function ServicesPage() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.1 }}
                     transition={{ duration: 0.6, delay: index * 0.1, ease: 'easeOut' }}
-                    className="relative bg-slate-800/90 border border-slate-600/50 p-6 sm:p-7 md:p-8 rounded-2xl shadow-xl shadow-black/40 backdrop-blur-sm group cursor-pointer overflow-hidden hover:shadow-2xl transition-all duration-300"
+                    className="relative bg-gradient-to-br from-white/10 via-white/5 to-white/10 border border-white/15 p-6 sm:p-7 md:p-8 rounded-2xl shadow-xl shadow-black/30 backdrop-blur-sm group cursor-pointer overflow-hidden hover:shadow-2xl transition-all duration-300"
                     style={{
-                      boxShadow: `0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.04)`,
+                      boxShadow: `0 20px 30px -10px rgba(0, 0, 0, 0.35), 0 10px 15px -5px rgba(0, 0, 0, 0.2)`,
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.boxShadow = `0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 30px ${prop.iconColor}40`
+                      e.currentTarget.style.boxShadow = `0 22px 32px -12px rgba(0, 0, 0, 0.4), 0 12px 18px -6px rgba(0, 0, 0, 0.25), 0 0 30px ${prop.iconColor}35`
                       const title = e.currentTarget.querySelector('h3')
                       if (title) {
                         ;(title as HTMLElement).style.color = prop.iconColor
@@ -861,11 +1030,10 @@ export default function ServicesPage() {
                   >
                     {/* Icon */}
                     <div
-                      className="w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center border mb-5 sm:mb-6 transition-all duration-300"
+                      className="w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center border mb-5 sm:mb-6 transition-all duration-300 bg-gradient-to-br from-white/20 via-white/10 to-transparent"
                       style={{
-                        background: `linear-gradient(135deg, ${prop.iconColor}20 0%, ${prop.iconColor}10 100%)`,
                         borderColor: `${prop.iconColor}50`,
-                        boxShadow: `0 0 20px ${prop.iconColor}30`,
+                        boxShadow: `0 0 24px ${prop.iconColor}25`,
                       }}
                     >
                       <Icon className="w-6 h-6 sm:w-7 sm:h-7" style={{ color: prop.iconColor }} />
@@ -986,7 +1154,7 @@ export default function ServicesPage() {
               }}
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               viewport={{ once: true, amount: 0.2 }}
-              className="title-margin text-center"
+              className="title-margin text-center font-editorial"
             >
               <TrueFocus sentence="Case Studies" />
               <BlurText
@@ -1001,12 +1169,7 @@ export default function ServicesPage() {
         </section>
       </AppleScrollSection>
 
-      {/* Testimonials with Parallax - Consistent spacing */}
-      <AppleScrollSection delay={0.5} className="section-margin">
-        <ClientOnly>
-          <ParallaxTestimonials />
-        </ClientOnly>
-      </AppleScrollSection>
+      {/* Testimonials moved to About page */}
 
       <section className="relative py-20 overflow-hidden bg-black">
         <div className="absolute inset-0 z-0 bg-gradient-to-t from-black via-purple-900/20 to-black pointer-events-none" />
@@ -1057,7 +1220,7 @@ export default function ServicesPage() {
           >
             <BlurText
               text="Ready to Transform Your Business?"
-              className="justify-center blur-section text-white mb-6"
+              className="justify-center blur-section text-white mb-6 font-editorial"
               delay={100}
               once={false}
             />
@@ -1069,27 +1232,17 @@ export default function ServicesPage() {
             />
 
             <motion.div className="mt-10" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
-              <a
+              <AttioButton
                 href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 bg-gradient-to-r from-[#4CD787] via-[#66E6A4] to-[#4CD787] bg-[length:200%_100%] bg-[position:0%_0] hover:bg-[position:100%_0] text-black px-8 py-4 md:px-10 md:py-5 rounded-xl btn-text-primary border-2 border-[#4CD787]/40 hover:border-[#4CD787] shadow-lg hover:shadow-[0_8px_35px_rgba(76,215,135,0.45)] transition-all duration-300 relative overflow-hidden group"
+                className="text-base md:text-lg border-white/70 hover:border-white bg-white/10 hover:bg-white/15 text-white shadow-lg hover:shadow-white/25"
               >
-                <Sparkles className="w-5 h-5 md:w-6 md:h-6 group-hover:rotate-12 transition-transform duration-300" />
-                <span>Schedule a Strategy Call</span>
-                <ArrowRight className="w-5 h-5 md:w-6 md:h-6 group-hover:translate-x-1 transition-transform duration-300" />
-                {/* Shimmer effect */}
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
-                  initial={{ x: '-100%' }}
-                  animate={{ x: '200%' }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: 'linear',
-                  }}
-                />
-              </a>
+                <span className="inline-flex items-center gap-3">
+                  Schedule a Free Consultation
+                  <ArrowRight className="w-5 h-5 md:w-6 md:h-6 group-hover:translate-x-1 transition-transform duration-300" />
+                </span>
+              </AttioButton>
             </motion.div>
 
             <motion.p

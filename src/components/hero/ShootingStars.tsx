@@ -3,7 +3,7 @@
 import { useCanvas } from '@/hooks/use-canvas'
 import { useEffect, useMemo, useRef } from 'react'
 
-export default function ShootingStars({ count = 4 }: { count?: number }) {
+export default function ShootingStars({ count = 3 }: { count?: number }) {
   // Didn't used useMemo, because we update/randomize the stars when they go out of the screen (during frame render)
   const starsRef = useRef<
     {

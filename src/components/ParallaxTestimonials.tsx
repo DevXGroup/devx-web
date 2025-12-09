@@ -114,24 +114,6 @@ export default function ParallaxTestimonials() {
           <EnhancedInfinityLoader scrollThreshold={0.25} baseScale={0.3} maxScale={3} />
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.2 }}
-          transition={{ duration: 0.8 }}
-          className="text-center max-w-4xl mx-auto mb-16 mt-28"
-        >
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-center lg:gap-3 mb-6">
-            <BlurText
-              text="What Our Clients Say"
-              className="justify-center section-title text-purple-400 lg:mb-0"
-              delay={150}
-              once={false}
-            />
-            <span className="hidden lg:inline text-purple-400/50 section-title-compact">—</span>
-          </div>
-        </motion.div>
-
         <div
           className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-16 max-w-6xl mx-auto"
           ref={containerRef}
@@ -223,20 +205,19 @@ function TestimonialCard({
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: false, amount: 0.1 }}
-      className="bg-white/10 backdrop-blur-lg p-6 md:p-8 rounded-xl border border-white/10 flex flex-col h-full min-h-[420px] relative group shadow-lg overflow-hidden"
+      className="bg-zinc-900/40 backdrop-blur-md p-6 md:p-8 rounded-3xl border border-white/10 flex flex-col h-full min-h-[420px] relative group hover:border-white/20 hover:bg-zinc-900/60 transition-all duration-500 overflow-hidden"
       onMouseEnter={isMobile ? undefined : onHover}
       onMouseLeave={isMobile ? undefined : onLeave}
       animate={isMobile ? {} : getPositionStyles()}
       transition={{
-        duration: 0.6,
+        duration: 0.5,
         delay: index * 0.1,
-        type: 'spring',
-        stiffness: 300,
-        damping: 25,
+        ease: [0.25, 0.1, 0.25, 1],
       }}
     >
-      {/* Quote icon - reduced opacity */}
-      <Quote className="w-10 h-10 text-purple-400/40 absolute top-6 right-6" />
+      <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/[0.03] to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+      {/* Quote icon - subtle white */}
+      <Quote className="w-10 h-10 text-white/10 group-hover:text-white/20 transition-colors duration-500 absolute top-6 right-6" />
 
       {/* Quote */}
       <div className="flex-grow relative z-10 mb-8 pt-12">
@@ -248,7 +229,10 @@ function TestimonialCard({
           &rdquo;
         </p>
         {isTruncated && (
-          <button onClick={onExpand} className="link-primary mt-4">
+          <button
+            onClick={onExpand}
+            className="text-white/60 hover:text-white mt-4 text-sm font-medium transition-colors"
+          >
             {isExpanded ? 'Show less' : 'Read more'}
           </button>
         )}
@@ -256,82 +240,17 @@ function TestimonialCard({
 
       {/* Author */}
       <div className="flex items-center mt-auto relative z-10">
-        <div className="w-12 h-12 rounded-full mr-4 shadow-md flex items-center justify-center relative">
-          {/* Gradient background based on index */}
-          <div
-            className="absolute inset-0 rounded-full"
-            style={{
-              background:
-                index % 3 === 0
-                  ? 'linear-gradient(135deg, #a855f7, #c084fc)'
-                  : index % 3 === 1
-                    ? 'linear-gradient(135deg, #9333ea, #a855f7)'
-                    : 'linear-gradient(135deg, #7e22ce, #9333ea)',
-            }}
-          />
+        <div className="w-12 h-12 rounded-full mr-4 bg-white/5 border border-white/10 flex items-center justify-center relative group-hover:bg-white group-hover:border-white transition-all duration-300">
           {/* Initial letter */}
-          <span className="text-black font-bold text-lg relative z-10">
+          <span className="text-white text-lg font-medium group-hover:text-black transition-colors duration-300">
             {testimonial.author.charAt(0)}
           </span>
-          {/* Subtle glow effect */}
-          <div
-            className="absolute inset-0 rounded-full opacity-30 blur-sm"
-            style={{
-              background: index % 3 === 0 ? '#a855f7' : index % 3 === 1 ? '#9333ea' : '#7e22ce',
-            }}
-          />
         </div>
         <div className="flex-1 min-w-0">
           <h4 className="testimonial-author break-words">{testimonial.author}</h4>
           <p className="testimonial-role break-words">{testimonial.position}</p>
         </div>
       </div>
-
-      {/* Card background gradient */}
-      <motion.div
-        className="absolute inset-0 rounded-xl z-0"
-        style={{
-          background: `linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)`,
-          boxShadow: `inset 0 1px 1px rgba(255,255,255,0.1)`,
-        }}
-        animate={
-          isHovered
-            ? {
-                background: `linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.1) 100%)`,
-              }
-            : {}
-        }
-      />
-
-      {/* Accent color */}
-      <motion.div
-        className="absolute bottom-0 left-0 right-0 h-1 rounded-b-xl"
-        style={{
-          background: index % 3 === 0 ? '#a855f7' : index % 3 === 1 ? '#9333ea' : '#7e22ce',
-        }}
-        animate={isHovered ? { height: '2px' } : { height: '1px' }}
-      />
-
-      {/* Glow effect on hover */}
-      <AnimatePresence>
-        {isHovered && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="absolute inset-0 rounded-xl z-0"
-            style={{
-              boxShadow: `0 0 20px ${
-                index % 3 === 0
-                  ? 'rgba(168, 85, 247, 0.3)'
-                  : index % 3 === 1
-                    ? 'rgba(147, 51, 234, 0.3)'
-                    : 'rgba(126, 34, 206, 0.3)'
-              }`,
-            }}
-          />
-        )}
-      </AnimatePresence>
     </motion.div>
   )
 }

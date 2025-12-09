@@ -3,6 +3,9 @@ import { Metadata } from 'next'
 import { ShieldCheck, Network, Sparkles, UserCheck, FileText, Lock, Globe } from 'lucide-react'
 import { createOgImageUrl, createTwitterImageUrl, getSiteUrl } from '@/lib/og'
 
+// Force dynamic rendering to avoid context issues during static generation
+export const dynamic = 'force-dynamic'
+
 const siteUrl = getSiteUrl()
 const pagePath = '/privacy'
 const pageUrl = `${siteUrl}${pagePath}`

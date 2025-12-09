@@ -12,6 +12,7 @@ import {
   Cpu,
   Cog,
 } from 'lucide-react'
+import BlurText from '@animations/BlurText'
 
 const technologies = [
   { name: 'Web Development', icon: Code },
@@ -39,13 +40,15 @@ export default function Technologies() {
           transition={{ duration: 0.6 }}
           className="text-center mb-12 sm:mb-16 md:mb-20"
         >
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 text-[#FFD700] font-['IBM_Plex_Mono']">
+          <h2 className="section-title-hero text-white mb-6 tracking-tight font-editorial">
             Technologies Mastered
           </h2>
-          <p className="text-base sm:text-lg md:text-xl text-foreground/80 max-w-2xl mx-auto font-['IBM_Plex_Mono'] font-light leading-relaxed px-4">
-            Our expertise spans across multiple technologies and frameworks to deliver the best
-            solutions for your needs.
-          </p>
+          <BlurText
+            text="Our expertise spans across multiple technologies and frameworks to deliver the best solutions for your needs."
+            className="section-subtitle max-w-2xl mx-auto px-4 text-zinc-400 font-light justify-center"
+            delay={150}
+            once={true}
+          />
         </motion.div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 sm:gap-6 md:gap-8 mb-12 sm:mb-16">
@@ -56,14 +59,19 @@ export default function Technologies() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.3, delay: index * 0.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-black/30 backdrop-blur-sm p-5 sm:p-6 md:p-8 rounded-xl border border-white/10 relative group hover:shadow-lg hover:shadow-[#4CD787]/20 active:shadow-lg active:shadow-[#4CD787]/20 transition-all duration-200 overflow-hidden flex flex-col items-center min-h-[130px] sm:min-h-[140px] md:min-h-[160px]"
+              whileTap={{ scale: 0.98 }}
+              className="bg-[#0A0A0B]/60 backdrop-blur-md p-5 sm:p-6 md:p-8 rounded-2xl border border-white/[0.08] relative group hover:bg-[#0A0A0B] hover:border-white/[0.15] transition-all duration-300 overflow-hidden flex flex-col items-center min-h-[130px] sm:min-h-[140px] md:min-h-[160px] cursor-default"
             >
-              <div className="absolute inset-x-0 bottom-0 h-1 bg-[#4CD787] transform scale-x-0 group-hover:scale-x-100 group-active:scale-x-100 transition-transform duration-200 ease-in-out"></div>
-              <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mb-3 sm:mb-3.5 md:mb-4 flex items-center justify-center bg-[#3CC76D] rounded-full group-hover:scale-110 group-active:scale-110 group-hover:bg-[#4CD787] group-active:bg-[#4CD787] transition-all duration-200 aspect-square shrink-0">
-                <tech.icon className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-black" />
+              <div className="absolute inset-x-0 bottom-0 h-[2px] bg-[#4CD787] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out origin-left"></div>
+
+              <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mb-4 flex items-center justify-center bg-white/[0.03] border border-white/[0.08] rounded-xl group-hover:bg-[#4CD787]/10 group-hover:border-[#4CD787]/30 transition-all duration-300 aspect-square shrink-0">
+                <tech.icon
+                  className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-zinc-400 group-hover:text-[#4CD787] transition-colors duration-300"
+                  strokeWidth={1.5}
+                />
               </div>
-              <p className="text-sm sm:text-base md:text-lg text-foreground/80 font-['IBM_Plex_Mono'] font-light text-center group-hover:text-[#5DE797] group-active:text-[#5DE797] transition-colors duration-200 leading-snug">
+
+              <p className="text-sm sm:text-base md:text-lg text-zinc-400 font-medium text-center group-hover:text-zinc-200 transition-colors duration-300 leading-snug">
                 {tech.name}
               </p>
             </motion.div>

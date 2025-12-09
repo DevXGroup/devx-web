@@ -3,6 +3,7 @@
 import { motion, useScroll, useTransform, useMotionValue } from 'framer-motion'
 import { useRef, useEffect, useState } from 'react'
 import { Code2, Rocket, Users, Zap, Pencil, Settings } from 'lucide-react'
+import Image from 'next/image'
 import SDLCProcess from './SDLCProcess'
 import { AnimatedGradientText } from '@animations/AnimatedGradientText'
 import BlurText from '@animations/BlurText'
@@ -141,12 +142,18 @@ export default function Process() {
 
   return (
     <section className="relative py-20 w-full overflow-hidden" ref={containerRef}>
-      {/* Lightweight CSS background instead of heavy image */}
+      {/* Speed lines background image */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#050505] via-[#0b0b12] to-[#050505]" />
-        <div className="absolute inset-0 opacity-20 mix-blend-screen bg-[radial-gradient(circle_at_20%_30%,rgba(204,255,0,0.12),transparent_40%),radial-gradient(circle_at_80%_20%,rgba(147,197,253,0.12),transparent_38%),radial-gradient(circle_at_50%_80%,rgba(139,92,246,0.1),transparent_42%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(60deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[length:180px_180px]" />
-        <div className="absolute inset-0 bg-black/82" />
+        <Image
+          src="/images/backgrounds/speed-lines.webp"
+          alt=""
+          fill
+          className="object-cover"
+          priority
+          quality={75}
+        />
+        {/* Dark overlay for text readability - increased opacity */}
+        <div className="absolute inset-0 bg-black/85" />
       </div>
 
       {/* Top fade-in gradient */}
@@ -165,11 +172,11 @@ export default function Process() {
             <div className="flex flex-col items-center">
               <BlurText
                 text="How It Works"
-                className="justify-center text-white mb-4 sm:mb-6 section-title-hero"
+                className="justify-center text-white mb-6 section-title-hero font-editorial"
                 delay={150}
                 once={false}
               />
-              <p className="max-w-3xl xl:max-w-4xl 2xl:max-w-5xl mx-auto px-4 section-subtitle">
+              <p className="section-subtitle max-w-3xl xl:max-w-4xl 2xl:max-w-5xl mx-auto px-4 text-zinc-400 font-light leading-relaxed">
                 Simple steps to bring your software vision to life from idea to launch in record
                 time.
               </p>
@@ -195,11 +202,9 @@ export default function Process() {
                 ease: [0.25, 0.1, 0.25, 1],
               }}
               whileHover={{
-                y: -10,
-                scale: 1.02,
+                y: -5,
               }}
-              whileTap={{ scale: 0.98 }}
-              className="relative group rounded-xl p-[2px] cursor-pointer"
+              className="relative group cursor-pointer h-full"
               role="article"
               aria-label={`${process.title}: ${process.description}`}
               style={{
@@ -207,43 +212,47 @@ export default function Process() {
                 transform: 'translateZ(0)',
               }}
             >
-              <div
-                className="absolute inset-0 rounded-xl transition-opacity duration-700"
-                style={{
-                  background:
-                    'linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05))',
-                }}
-              />
+              <div className="relative h-full bg-[#0A0A0B]/80 backdrop-blur-md border border-white/[0.08] p-6 sm:p-8 rounded-3xl group-hover:bg-[#0A0A0B] group-hover:border-white/[0.15] transition-all duration-300 flex flex-col gap-5 overflow-hidden">
+                {/* Subtle top gradient on hover */}
+                <div
+                  className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-white/[0.05] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                  style={{
+                    background: `linear-gradient(to bottom, ${process.color}15, transparent)`,
+                  }}
+                />
 
-              <div
-                className="absolute inset-0 rounded-xl opacity-40 transition-opacity duration-700"
-                style={{
-                  background: `linear-gradient(135deg, ${process.color}, ${process.color}99, ${process.color}66, transparent)`,
-                }}
-              />
-              <div
-                className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"
-                style={{
-                  background: `linear-gradient(135deg, ${process.color}, ${process.color}99, ${process.color}66, transparent)`,
-                }}
-              />
-
-              <div className="relative bg-slate-900/70 p-6 sm:p-8 md:p-10 rounded-[10px] shadow-xl shadow-black/40 flex flex-col gap-5 h-full">
-                <div className="flex items-center gap-4">
+                <div className="flex items-start justify-between">
                   <div
-                    className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-full border border-white/20 group-hover:scale-110 transition-transform duration-300"
+                    className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-2xl bg-white/[0.03] border border-white/[0.08] transition-all duration-300 group-hover:scale-105"
                     style={{
-                      background: `${process.color}1a`,
-                      borderColor: `${process.color}4d`,
-                      boxShadow: `0 0 18px ${process.color}33`,
-                      transition: `transform 0.5s ease, box-shadow 0.3s ease`,
+                      borderColor: 'rgba(255,255,255,0.08)',
                     }}
                   >
-                    <process.icon className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
+                    <process.icon
+                      className="w-6 h-6 sm:w-7 sm:h-7 transition-colors duration-300"
+                      style={{ color: '#a1a1aa' /* zinc-400 */ }}
+                    />
+                    {/* Hover icon (colored) - absolute to fade in */}
+                    <process.icon
+                      className="w-6 h-6 sm:w-7 sm:h-7 absolute transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+                      style={{ color: process.color }}
+                    />
                   </div>
-                  <h3 className="heading-component text-white">{process.title}</h3>
+
+                  {/* Step number watermark */}
+                  <span className="text-4xl font-bold text-white/[0.02] group-hover:text-white/[0.05] transition-colors duration-300 font-sans">
+                    0{index + 1}
+                  </span>
                 </div>
-                <p className="subtitle-sm">{process.description}</p>
+
+                <div>
+                  <h3 className="text-lg sm:text-xl font-medium text-white mb-2 group-hover:text-white transition-colors duration-300">
+                    {process.title}
+                  </h3>
+                  <p className="text-sm sm:text-base text-zinc-400 font-light leading-relaxed group-hover:text-zinc-300 transition-colors duration-300">
+                    {process.description}
+                  </p>
+                </div>
               </div>
             </motion.div>
           ))}

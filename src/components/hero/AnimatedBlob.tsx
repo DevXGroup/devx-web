@@ -78,19 +78,15 @@ function NoiseParticleSphere({
     groupRef.current.position.y = circleCenter.y + baseYOffset
     groupRef.current.position.z = circleCenter.z + baseZOffset
 
-    // Vertical movement and scroll
-    const scrollY = scrollYRef.current
+    // Vertical movement (animation only)
     const viewport = state.viewport
     const verticalMovement =
       ((Math.sin(instanceTime * 0.3) * 1.8 * viewport.height) / 12) * amplitudeFactor
-    const scrollInfluence = -scrollY * 0.005 * (1 + index * 0.1)
-    groupRef.current.position.y += verticalMovement + scrollInfluence
+    groupRef.current.position.y += verticalMovement
 
-    // Scale pulse and scroll zoom
+    // Scale pulse only
     const scalePulse = 1 + Math.sin(instanceTime * 0.4) * 0.05
-    const normalizedScrollFactor = Math.min(1.0, scrollY * 0.001)
-    const scrollZoom = 1 + normalizedScrollFactor * 1.0
-    groupRef.current.scale.setScalar(scalePulse * scrollZoom * size)
+    groupRef.current.scale.setScalar(scalePulse * size)
 
     // Gentle rotation
     groupRef.current.rotation.x = instanceTime * 0.15 * rotationFactor

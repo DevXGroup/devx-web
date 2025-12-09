@@ -325,7 +325,7 @@ const ExplosiveCTASection = () => {
               <span className="hidden sm:block">|</span>
               <span>📞 +1 (442) 544-0591</span>
               <span className="hidden sm:block">|</span>
-              <span>📅 Book a free consultation</span>
+              <span>📅 Schedule a Free Consultation</span>
             </div>
           </motion.div>
         </motion.div>

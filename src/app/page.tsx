@@ -2,6 +2,9 @@ import { Metadata } from 'next'
 import EntryPage from '@sections/EntryPage'
 import { createOgImageUrl, createTwitterImageUrl, getSiteUrl } from '@/lib/og'
 
+// Force dynamic rendering to avoid Framer Motion context issues during static generation
+export const dynamic = 'force-dynamic'
+
 const siteUrl = getSiteUrl()
 const pageUrl = siteUrl
 const ogImage = createOgImageUrl(

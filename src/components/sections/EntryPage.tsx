@@ -26,16 +26,15 @@ interface LetterGlitchProps {
 
 type RevealDirection = 'start' | 'end' | 'center'
 
-interface DecryptedTextProps
-  extends Omit<
-    React.HTMLAttributes<HTMLHeadingElement>,
-    | 'style'
-    | 'onAnimationStart'
-    | 'onAnimationComplete'
-    | 'onAnimationIteration'
-    | 'onDragStart'
-    | 'onDragEnd'
-  > {
+interface DecryptedTextProps extends Omit<
+  React.HTMLAttributes<HTMLHeadingElement>,
+  | 'style'
+  | 'onAnimationStart'
+  | 'onAnimationComplete'
+  | 'onAnimationIteration'
+  | 'onDragStart'
+  | 'onDragEnd'
+> {
   text: string
   speed?: number
   maxIterations?: number
@@ -53,7 +52,16 @@ interface DecryptedTextProps
 
 // Concentrated Letter Glitch Background Effect
 const LetterGlitch = ({
-  glitchColors = ['#00ff41', '#00cc33', '#0099ff', '#66ccff', '#00aaff', '#33ff99'], // Classic code editor greens and blues
+  glitchColors = [
+    '#ffffff', // Pure white
+    '#e0e0e0', // Light gray
+    '#c0c0c0', // Silver
+    '#a0a0a0', // Medium light gray
+    '#808080', // Medium gray
+    '#606060', // Dark gray
+    '#404040', // Charcoal
+    '#303030', // Very dark gray
+  ],
   glitchSpeed = 90, // Increased from 70ms for better performance
   centerVignette = true,
   outerVignette = false,
@@ -165,7 +173,7 @@ const LetterGlitch = ({
 
   const getRandomColor = (): string => {
     const idx = Math.floor(Math.random() * glitchColors.length)
-    return glitchColors[idx] ?? '#00ff41'
+    return glitchColors[idx] ?? '#808080'
   }
 
   const hexToRgb = (hex: string): RGB | null => {

@@ -24,13 +24,27 @@ export default function StructuredData({
   const organizationData = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
+    '@id': 'https://devxgroup.io/#organization',
     name: 'DevX Group LLC',
-    alternateName: 'DevX Group',
+    legalName: 'DevX Group LLC',
+    alternateName: ['DevX Group', 'DevX'],
     url: 'https://devxgroup.io',
-    logo: 'https://devxgroup.io/logo.png',
-    image: 'https://devxgroup.io/og-image.jpg',
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://devxgroup.io/images/logos/devx-logo.png',
+      width: 500,
+      height: 99,
+      caption: 'DevX Group Logo',
+    },
+    image: {
+      '@type': 'ImageObject',
+      url: 'https://devxgroup.io/opengraph-image',
+      width: 1200,
+      height: 630,
+    },
     description:
-      'DevX Group delivers elite software development services including custom applications, AI/ML solutions, IoT hardware integration, and digital transformation.',
+      'DevX Group delivers elite software development services including custom applications, AI/ML solutions, IoT hardware integration, and digital transformation. We build, launch, and scale your vision with our expert team.',
+    slogan: 'Elite Product Engineers',
     foundingDate: '2023',
     founder: {
       '@type': 'Person',
@@ -42,27 +56,70 @@ export default function StructuredData({
       addressRegion: 'CA',
       addressCountry: 'US',
     },
-    contactPoint: {
-      '@type': 'ContactPoint',
-      telephone: '+1-442-544-0591',
-      contactType: 'customer service',
-      email: 'support@devxgroup.io',
-      availableLanguage: 'English',
-    },
-    sameAs: ['https://linkedin.com/company/devx-group', 'https://github.com/devx-group'],
-    serviceArea: {
+    areaServed: {
       '@type': 'Place',
       name: 'Worldwide',
     },
+    contactPoint: [
+      {
+        '@type': 'ContactPoint',
+        telephone: '+1-442-544-0591',
+        contactType: 'customer service',
+        email: 'support@devxgroup.io',
+        availableLanguage: ['English'],
+        areaServed: 'US',
+      },
+      {
+        '@type': 'ContactPoint',
+        contactType: 'sales',
+        email: 'support@devxgroup.io',
+        availableLanguage: ['English'],
+      },
+    ],
+    sameAs: [
+      'https://linkedin.com/company/devx-group',
+      'https://github.com/DevXGroup',
+      'https://twitter.com/devxgroup',
+    ],
     knowsAbout: [
       'Software Development',
       'Custom Applications',
-      'AI Solutions',
+      'Artificial Intelligence',
       'Machine Learning',
+      'Agentic AI',
       'IoT Integration',
       'Digital Transformation',
       'Web Development',
       'Mobile Applications',
+      'Cloud Computing',
+      'DevOps',
+      'Product Engineering',
+    ],
+    makesOffer: [
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'Custom Software Development',
+          description: 'Custom application development tailored to your business needs',
+        },
+      },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'AI & Machine Learning Solutions',
+          description: 'Agentic AI platforms and ML integration',
+        },
+      },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'Cloud Modernization',
+          description: 'Cloud infrastructure and DevOps automation',
+        },
+      },
     ],
   }
 

@@ -5,12 +5,20 @@ import OrionConstellation from './OrionConstellation'
 
 export default function OrionCanvasWrapper() {
   return (
-    <Canvas
-      camera={{ position: [0, 0, 10], fov: 55 }}
-      gl={{ preserveDrawingBuffer: true, alpha: true }}
-      style={{ width: '100%', height: '100%' }}
-    >
-      <OrionConstellation />
-    </Canvas>
+    <div style={{ width: '100%', height: '100%' }}>
+      <Canvas
+        camera={{ position: [0, 0, 10], fov: 55 }}
+        gl={{
+          preserveDrawingBuffer: true,
+          alpha: true,
+          antialias: true,
+          powerPreference: 'high-performance',
+        }}
+        style={{ width: '100%', height: '100%' }}
+        frameloop="demand"
+      >
+        <OrionConstellation />
+      </Canvas>
+    </div>
   )
 }

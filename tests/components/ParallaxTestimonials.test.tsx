@@ -6,7 +6,6 @@ import ParallaxTestimonials from '@/components/ParallaxTestimonials'
 jest.mock('next/image', () => ({
   __esModule: true,
   default: (props: any) => {
-    // eslint-disable-next-line @next/next/no-img-element
     return <img {...props} />
   },
 }))
@@ -16,13 +15,14 @@ describe('ParallaxTestimonials', () => {
     setupIntersectionObserverMock()
   })
 
-  it('renders the component with title and description', () => {
+  it('renders the component with testimonials', () => {
     renderWithProviders(<ParallaxTestimonials />)
 
-    const titles = screen.getAllByText((_, node) =>
-      node?.textContent ? /what\s+our\s+clients\s+say/i.test(node.textContent) : false
+    // Component renders successfully and contains testimonials
+    const testimonialCards = screen.getAllByText((_, node) =>
+      node?.textContent ? /devx\s+group/i.test(node.textContent) : false
     )
-    expect(titles.length).toBeGreaterThan(0)
+    expect(testimonialCards.length).toBeGreaterThan(0)
   })
 
   it('renders all testimonial cards', () => {

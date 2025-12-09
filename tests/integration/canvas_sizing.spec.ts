@@ -1,4 +1,4 @@
-import { test, expect, Page, ElementHandle } from '@playwright/test'
+import { test, expect, Page } from '@playwright/test'
 
 // Helper: expect canvas/grid element to match its container's size
 async function expectChildCanvasMatchesContainer(

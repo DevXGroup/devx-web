@@ -33,7 +33,7 @@ const AnimatedIcon = ({
           cx="24"
           cy="24"
           r="22"
-          stroke={isComplete || progress === 1 ? '#4CD787' : 'yellow'}
+          stroke={isComplete || progress === 1 ? '#FFFFFF' : '#FDE68A'}
           strokeWidth="3"
           fill="none"
           className="sm:hidden"
@@ -46,7 +46,7 @@ const AnimatedIcon = ({
           cx="32"
           cy="32"
           r="30"
-          stroke={isComplete || progress === 1 ? '#4CD787' : 'yellow'}
+          stroke={isComplete || progress === 1 ? '#FFFFFF' : '#FDE68A'}
           strokeWidth="4"
           fill="none"
           className="hidden sm:block"
@@ -58,7 +58,7 @@ const AnimatedIcon = ({
       </svg>
       <motion.div
         className={`w-9 h-9 sm:w-12 sm:h-12 rounded-full flex items-center justify-center ${
-          isComplete || progress === 1 ? 'bg-[#4CD787]' : 'bg-yellow-400'
+          isComplete || progress === 1 ? 'bg-white' : 'bg-[#FDE68A]'
         }`}
         animate={{
           scale: isActive ? [1, 1.05, 1] : 1,
@@ -72,8 +72,8 @@ const AnimatedIcon = ({
         style={{ visibility: 'visible' }}
       >
         <Icon
-          className={`w-4 h-4 sm:w-6 sm:h-6 ${isComplete || progress === 1 ? '' : 'text-black'}`}
-          style={{ color: isComplete || progress === 1 ? '#228B22' : undefined }}
+          className={`w-4 h-4 sm:w-6 sm:h-6 ${isComplete || progress === 1 ? 'text-black' : 'text-black'}`}
+          style={{ color: isComplete || progress === 1 ? '#000000' : undefined }}
         />
       </motion.div>
     </div>
@@ -324,7 +324,7 @@ export default function SDLCProcess() {
               <p
                 className={`subtitle-xs text-center mt-2 sm:mt-3 md:mt-4 ${
                   completedSteps.has(index)
-                    ? 'font-bold text-[#4CD787] drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]'
+                    ? 'font-bold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]'
                     : 'font-light drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]'
                 }`}
               >

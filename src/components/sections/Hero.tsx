@@ -1,25 +1,16 @@
 'use client'
 
-import { useEffect, useCallback, useState, useRef } from 'react'
-import { motion, useReducedMotion, useAnimation, useInView } from 'framer-motion'
-import { useRouter } from 'next/navigation'
+import { useEffect, useState, useRef } from 'react'
+import { motion, useReducedMotion } from 'framer-motion'
 import Link from 'next/link'
 import ClientOnly from '@layout/ClientOnly'
-import dynamic from 'next/dynamic'
 import BlurText from '@animations/BlurText'
 import StarBorder from '@animations/StarBorder'
 import TextType from '@animations/TextType'
 import ShinyText from '@/components/ui/ShinyText'
 import { usePerformanceOptimizedAnimation } from '@/hooks/use-performance-optimized-animation'
-import PlanetDivider from '../planet/PlanetDivider'
 
-// Dynamically import components only when in viewport - optimized loading
-const DynamicCosmicStars = dynamic(() => import('../hero/CosmicStars'), {
-  ssr: false,
-  loading: () => (
-    <div className="absolute inset-0 bg-black" style={{ minHeight: '100vh', width: '100%' }} />
-  ),
-})
+import BlackHole3D from '@/components/3d/BlackHole3D'
 
 const subheaders = [
   'Stunning UI/UX',
@@ -34,17 +25,6 @@ const subheaders = [
   'Intelligent Workflows',
 ]
 
-// Simplified - no animations to prevent CLS
-const containerVariants = {
-  hidden: { opacity: 1 },
-  visible: { opacity: 1 },
-}
-
-const itemVariants = {
-  hidden: { opacity: 1, y: 0 },
-  visible: { opacity: 1, y: 0 },
-}
-
 const buttonVariants = {
   rest: { scale: 1 },
   hover: {
@@ -54,32 +34,22 @@ const buttonVariants = {
   tap: { scale: 0.98 },
 }
 
+const ctaButtonClasses =
+  'cursor-pointer font-sans font-bold text-xs sm:text-sm md:text-base px-6 sm:px-8 py-2 sm:py-2.5 md:py-3 min-h-[36px] sm:min-h-[40px] md:min-h-[44px] min-w-[140px] sm:min-w-[160px] md:min-w-[190px] flex items-center justify-center text-center tracking-wide hover:tracking-wider transition-all duration-300'
+
 export default function Hero() {
-  const router = useRouter()
   const shouldReduceMotion = useReducedMotion()
-  const controls = useAnimation()
-  const [enableCosmicStars, setEnableCosmicStars] = useState(false)
-  const [enableShootingStars, setEnableShootingStars] = useState(false)
   const [StarFieldComp, setStarFieldComp] = useState<(() => React.ReactElement) | null>(null)
   const [HeroBgComp, setHeroBgComp] = useState<(() => React.ReactElement) | null>(null)
   const [ShootingStarsComp, setShootingStarsComp] = useState<(() => React.ReactElement) | null>(
     null
   )
-  const [OrionComp, setOrionComp] = useState<(() => React.ReactElement) | null>(null)
-  const [visualsReady, setVisualsReady] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const [showStars, setShowStars] = useState(false)
+  const [showShootingStars, setShowShootingStars] = useState(false)
 
   // Use performance optimization hook to detect slow devices
   const { shouldOptimizeAnimations } = usePerformanceOptimizedAnimation()
-
-  // Intersection observer to load 3D components only when visible
-  const sectionRef = useRef<HTMLElement>(null)
-  const isInView = useInView(sectionRef, { once: true, margin: '200px' })
-
-  // Function to navigate to the portfolio page
-  const navigateToPortfolio = useCallback(() => {
-    router.push('/portfolio')
-  }, [router])
 
   // Check for mobile devices to optimize performance
   useEffect(() => {
@@ -91,146 +61,117 @@ export default function Hero() {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  // Allow heavy visuals after first user interaction or slight delay
+  const canUseHeavyVisuals = !shouldOptimizeAnimations && !shouldReduceMotion
+  const sectionRef = useRef<HTMLElement>(null)
+
+  // New loading sequence: Text → Stars/Background → Shooting Stars (performance-friendly)
   useEffect(() => {
-    const enable = () => setVisualsReady(true)
-    // Only enable when the user interacts; skip automatic timer to avoid background JS during LCP/TBT
-    window.addEventListener('pointermove', enable, { once: true, passive: true })
-    window.addEventListener('scroll', enable, { once: true, passive: true })
-    window.addEventListener('click', enable, { once: true, passive: true })
-    return () => {
-      window.removeEventListener('pointermove', enable)
-      window.removeEventListener('scroll', enable)
-      window.removeEventListener('click', enable)
-    }
-  }, [])
-
-  // Trigger entrance animation and load background components when in view
-  const scheduleIdleTask = useCallback((cb: IdleRequestCallback, timeout = 1000) => {
-    if (typeof window === 'undefined') return undefined
-    const idleCallback = window.requestIdleCallback
-    if (typeof idleCallback === 'function') {
-      return idleCallback(cb, { timeout })
-    }
-    return window.setTimeout(() => {
-      cb({
-        didTimeout: false,
-        timeRemaining: () => 0,
-      })
-    }, timeout)
-  }, [])
-
-  const cancelIdleTask = useCallback((id?: number) => {
-    if (typeof window === 'undefined' || typeof id === 'undefined') return
-    const cancelIdle = window.cancelIdleCallback
-    if (typeof cancelIdle === 'function') {
-      cancelIdle(id)
-    } else {
-      window.clearTimeout(id)
-    }
-  }, [])
-
-  // Show animations only when device isn't in low-power or reduced-motion mode
-  const canUseHeavyVisuals = visualsReady && !shouldOptimizeAnimations && !shouldReduceMotion
-
-  useEffect(() => {
-    controls.start('visible')
     if (!canUseHeavyVisuals) {
-      setEnableCosmicStars(false)
-      setEnableShootingStars(false)
+      setShowStars(false)
+      setShowShootingStars(false)
       return
     }
 
-    const loadVisuals = async () => {
+    let starsTimer: number | undefined
+    let shootingTimer: number | undefined
+
+    // Load stars and background effects
+    const loadStarsAndEffects = async () => {
       try {
-        const [
-          { StarTwinklingField },
-          { default: HeroBackground },
-          { default: ShootingStars },
-          orion,
-        ] = await Promise.all([
-          import('../animations/StarTwinklingField'),
-          import('../hero/HeroBackground'),
-          import('../hero/ShootingStars'),
-          import('../hero/OrionCanvasWrapper'),
-        ])
+        const [{ StarTwinklingField }, { default: HeroBackground }, { default: ShootingStars }] =
+          await Promise.all([
+            import('../animations/StarTwinklingField'),
+            import('../hero/HeroBackground'),
+            import('../hero/ShootingStars'),
+          ])
         const StarFieldLazy = () => <StarTwinklingField className="z-1" count={100} />
         StarFieldLazy.displayName = 'StarFieldLazy'
         const HeroBgLazy = () => <HeroBackground />
         HeroBgLazy.displayName = 'HeroBackgroundLazy'
-        const ShootingStarsLazy = () => <ShootingStars />
+        const ShootingStarsLazy = () => <ShootingStars count={3} />
         ShootingStarsLazy.displayName = 'ShootingStarsLazy'
-        const OrionLazy = () => <orion.default />
-        OrionLazy.displayName = 'OrionCanvasLazy'
 
         setStarFieldComp(() => StarFieldLazy)
         setHeroBgComp(() => HeroBgLazy)
         setShootingStarsComp(() => ShootingStarsLazy)
-        setOrionComp(() => OrionLazy)
       } catch {
-        // ignore load errors; skip visuals
+        // ignore load errors
       }
     }
 
-    const backgroundTimer = scheduleIdleTask(() => {
-      // Delay expensive canvases until main thread is idle to help LCP/INP
-      setEnableCosmicStars(true)
-      loadVisuals()
-    }, 800)
+    // Sequence: Text (0-1500ms) → Stars & Background (1900ms) → Shooting Stars (2300ms)
+    // Slightly longer delay prevents smeared star/ant artifacts on load.
+    const effectsDelay = 1900
 
-    const shootingStarsTimer = scheduleIdleTask(() => {
-      setEnableShootingStars(true)
-    }, 1400)
+    starsTimer = window.setTimeout(() => {
+      setShowStars(true)
+      loadStarsAndEffects()
+    }, effectsDelay) as unknown as number
+
+    shootingTimer = window.setTimeout(() => {
+      setShowShootingStars(true)
+    }, effectsDelay + 400) as unknown as number
 
     return () => {
-      cancelIdleTask(backgroundTimer)
-      cancelIdleTask(shootingStarsTimer)
+      if (starsTimer) clearTimeout(starsTimer)
+      if (shootingTimer) clearTimeout(shootingTimer)
     }
-  }, [cancelIdleTask, canUseHeavyVisuals, controls, scheduleIdleTask])
+  }, [canUseHeavyVisuals])
 
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-black"
+      className="relative min-h-screen min-h-[100vh] w-full flex items-center justify-center overflow-hidden bg-black"
     >
-      <div className="absolute inset-0 w-full h-full z-[1]">
-        <div className="absolute inset-0 bg-gradient-to-b from-zinc-950 via-black to-black pointer-events-none" />
+      <div className="absolute inset-0 w-full h-full z-[1] pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/30 via-black/55 to-black pointer-events-none" />
         <ClientOnly>
-          {enableCosmicStars && canUseHeavyVisuals && (
-            <>
+          {/* Stars and background - load with text for seamless transition */}
+          {showStars && canUseHeavyVisuals && (
+            <motion.div
+              className="absolute inset-0 w-full h-full"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            >
               {StarFieldComp && <StarFieldComp />}
               {HeroBgComp && <HeroBgComp />}
-              {/* Orion constellation - fixed position, stays in same spot at all screen sizes */}
-              {OrionComp && (
-                <div className="fixed z-[10000] pointer-events-none left-1/2 translate-x-[32%] sm:left-auto sm:right-3 sm:translate-x-0 top-[26vh] sm:top-[28vh] md:top-[30vh] md:right-4 lg:right-12 lg:top-[32vh] xl:right-20 xl:top-[30vh] w-60 h-60 sm:w-64 sm:h-64 md:w-72 md:h-72 xl:w-[360px] xl:h-[360px]">
-                  <OrionComp />
-                </div>
-              )}
-            </>
+            </motion.div>
           )}
         </ClientOnly>
       </div>
 
-      {/* Shooting Stars - Only rendered on client */}
+      {/* Shooting Stars - Load shortly after stars */}
       <ClientOnly>
-        {enableShootingStars && canUseHeavyVisuals && ShootingStarsComp && <ShootingStarsComp />}
+        {showShootingStars && canUseHeavyVisuals && ShootingStarsComp && (
+          <motion.div
+            className="absolute inset-0 w-full h-full pointer-events-none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <ShootingStarsComp />
+          </motion.div>
+        )}
       </ClientOnly>
 
       {/* Content */}
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 relative z-[80] w-full pt-16 sm:pt-20 lg:pt-24 xl:pt-32 pb-32 sm:pb-40 lg:pb-48 xl:pb-56">
-        <div className="text-center mx-auto w-full px-4 sm:px-8 md:px-12 xl:px-16 space-y-8 sm:space-y-10 lg:space-y-12 xl:space-y-16 pt-4 sm:pt-6 lg:pt-8 flex flex-col items-center justify-center">
-          {/* Hero content wrapper */}
-          <div className="space-y-6 sm:space-y-8 lg:space-y-10 xl:space-y-12">
+      <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 relative z-[80] pt-4 sm:pt-12 lg:pt-20 xl:pt-24 pb-40 sm:pb-48 lg:pb-52 xl:pb-60">
+        <div className="text-center mx-auto w-full px-4 sm:px-8 md:px-12 xl:px-16 space-y-2 sm:space-y-8 lg:space-y-12 xl:space-y-16 pt-2 sm:pt-6 lg:pt-8 flex flex-col items-center justify-center -translate-y-8 sm:translate-y-0">
+          {/* Hero content wrapper - Reduced vertical spacing to shift content up */}
+          <div className="space-y-3 sm:space-y-6 lg:space-y-8 xl:space-y-10">
             <div
-              className="hero-title mx-auto flex flex-wrap md:flex-nowrap items-center justify-center gap-3 sm:gap-4 md:gap-5 xl:gap-6 2xl:gap-7 text-center text-white font-mono font-black tracking-[-0.02em] w-full whitespace-normal md:whitespace-nowrap text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5rem] 2xl:text-[5.5rem] leading-[1.1]"
+              className="hero-title mx-auto flex flex-nowrap items-center justify-center gap-x-2 sm:gap-x-3 md:gap-x-3 lg:gap-x-4 text-center text-white w-full leading-none mb-1 sm:mb-6 md:mb-8 lg:mb-10 overflow-visible whitespace-nowrap max-[467px]:whitespace-normal"
               style={{
-                minHeight: '4rem',
-                height: 'auto',
+                fontFamily: '"Playfair Display", serif',
+                fontWeight: 600,
+                letterSpacing: '-0.02em',
+                whiteSpace: 'nowrap',
               }}
             >
               <BlurText
                 text="Your Vision,"
-                className="inline-flex"
+                className="inline-flex font-editorial font-thin"
                 animateBy="letters"
                 delay={80}
                 once
@@ -246,7 +187,7 @@ export default function Hero() {
               />
               <BlurText
                 text="Engineered."
-                className="inline-flex"
+                className="inline-flex italic font-semibold text-[#ccff00] font-editorial"
                 animateBy="letters"
                 delay={190}
                 once
@@ -257,46 +198,54 @@ export default function Hero() {
                 ]}
                 stepDuration={0.25}
                 style={{
-                  color: '#ccff00',
                   textShadow:
                     '0 0 60px rgba(204,255,0,0.5), 0 10px 24px rgba(0,0,0,0.5), 0 0 120px rgba(204,255,0,0.2)',
                 }}
               />
             </div>
 
-            <div className="text-center w-full mx-auto space-y-4 sm:space-y-5 lg:space-y-6">
+            <div className="text-center w-full mx-auto space-y-2 sm:space-y-8 md:space-y-10 lg:space-y-8 px-4">
               <motion.p
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 2.3, duration: 1.9 }}
-                className="text-white/90 text-center mx-auto px-2 text-xl sm:text-2xl md:text-3xl lg:text-3xl xl:text-[2rem] 2xl:text-[2.25rem] font-light leading-tight"
+                className="hero-subtitle text-white/90 text-center mx-auto leading-[1.3] tracking-wide mt-1 sm:mt-2 md:mt-4 font-editorial"
+                style={{
+                  fontFamily: '"Playfair Display", serif',
+                  // Large on desktop, scales down responsively. Max-width ensures 2 lines.
+                  // Large on desktop, scales down responsively. Max-width ensures 2 lines.
+                  fontSize: 'clamp(1.35rem, 4.5vw, 2.5rem)',
+                  fontWeight: 400,
+                  maxWidth: '34ch', // Forces 2 lines on all screens (desktop & mobile)
+                  width: 'auto',
+                }}
               >
-                Elite software team shipping polished software at startup speed.
+                Elite software team shipping polished products at startup speed.
               </motion.p>
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1.1, duration: 0.4 }}
-                className="relative mx-auto w-full mt-6 flex justify-center"
+                className="relative mx-auto w-full flex justify-center pt-1 sm:pt-4"
               >
                 <div className="relative flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap sm:gap-4 lg:gap-5">
                   <Link
                     href="/services"
-                    className="uppercase tracking-[0.15em] subtitle-lg font-semibold opacity-90 hover:opacity-100 transition-all duration-300 hover:tracking-[0.2em]"
+                    className="uppercase tracking-[0.15em] subtitle-sm font-semibold opacity-80 hover:opacity-100 transition-all duration-300 hover:tracking-[0.2em] text-amber-100/90 hover:text-amber-50"
                   >
                     <ShinyText text="Elite Services" speed={isMobile ? 5 : 3} delay={0} />
                   </Link>
-                  <span className="hidden sm:inline text-gray-400/60 subtitle-lg">•</span>
+                  <span className="hidden sm:inline text-amber-200/30 subtitle-sm">•</span>
                   <Link
                     href="/portfolio"
-                    className="uppercase tracking-[0.15em] subtitle-lg font-semibold opacity-90 hover:opacity-100 transition-all duration-300 hover:tracking-[0.2em]"
+                    className="uppercase tracking-[0.15em] subtitle-sm font-semibold opacity-80 hover:opacity-100 transition-all duration-300 hover:tracking-[0.2em] text-amber-100/90 hover:text-amber-50"
                   >
                     <ShinyText text="Proven Record" speed={isMobile ? 7 : 5} delay={0.2} />
                   </Link>
-                  <span className="hidden md:inline text-gray-400/60 subtitle-lg">•</span>
+                  <span className="hidden md:inline text-amber-200/30 subtitle-sm">•</span>
                   <Link
                     href="/pricing"
-                    className="uppercase tracking-[0.15em] subtitle-lg font-semibold opacity-90 hover:opacity-100 transition-all duration-300 hover:tracking-[0.2em]"
+                    className="uppercase tracking-[0.15em] subtitle-sm font-semibold opacity-80 hover:opacity-100 transition-all duration-300 hover:tracking-[0.2em] text-amber-100/90 hover:text-amber-50"
                   >
                     <ShinyText text="Transparent Pricing" speed={isMobile ? 9 : 7} delay={0.4} />
                   </Link>
@@ -309,7 +258,7 @@ export default function Hero() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.5, duration: 0.5 }}
-            className="mt-6 sm:mt-8 flex justify-center items-center w-full px-2"
+            className="mt-6 sm:mt-8 mb-12 sm:mb-16 md:mb-20 lg:mb-24 flex justify-center items-center w-full px-2"
             style={{
               minHeight: '5rem',
               height: 'auto',
@@ -339,81 +288,71 @@ export default function Hero() {
               infrastructure, IoT integration, and digital transformation services.
             </span>
           </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.9, duration: 0.4 }}
-            className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-5 sm:gap-6 lg:gap-8 relative z-[120] w-full max-w-3xl mx-auto px-2 mt-8 sm:mt-10 lg:mt-12 mb-10 sm:mb-14 lg:mb-16"
-          >
-            <motion.div
-              variants={buttonVariants}
-              initial="rest"
-              whileHover="hover"
-              whileTap="tap"
-              className="relative z-[130] w-full sm:w-auto"
-            >
-              <StarBorder
-                as="a"
-                href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
-                target="_blank"
-                rel="noopener noreferrer"
-                color="#ccff00"
-                speed={isMobile ? '5s' : '3s'}
-                className="ui-code font-extrabold btn-text-primary px-6 py-3 sm:px-7 sm:py-3.5 lg:px-8 lg:py-4 min-h-[44px] flex w-full sm:w-auto items-center justify-center text-center tracking-wide hover:tracking-wider transition-all duration-300"
-                aria-label="Book a free consultation call with DevX Group"
-              >
-                Book a Free Call
-              </StarBorder>
-            </motion.div>
-            <motion.div
-              variants={buttonVariants}
-              initial="rest"
-              whileHover="hover"
-              whileTap="tap"
-              className="relative z-[130] w-full sm:w-auto"
-            >
-              <StarBorder
-                onClick={navigateToPortfolio}
-                color="#e534eb"
-                speed={isMobile ? '6s' : '4s'}
-                className="ui-code font-extrabold btn-text-primary px-6 py-3 sm:px-7 sm:py-3.5 lg:px-8 lg:py-4 min-h-[44px] flex w-full sm:w-auto items-center justify-center text-center tracking-wide hover:tracking-wider transition-all duration-300"
-                aria-label="View DevX Group portfolio"
-              >
-                See Our Work
-              </StarBorder>
-            </motion.div>
-          </motion.div>
         </div>
       </div>
 
-      {/* Planet Divider at the bottom of hero */}
-      <div className="absolute bottom-0 left-0 w-full z-10" aria-hidden>
-        <PlanetDivider />
+      {/* Black Hole Animation - Replacing Planet Divider */}
+      <div
+        className="absolute bottom-[-100px] sm:bottom-[-150px] md:bottom-[-200px] left-0 w-full h-[500px] sm:h-[600px] md:h-[700px] z-[5] flex justify-center items-end pointer-events-none overflow-hidden"
+        aria-hidden="true"
+      >
+        <div className="w-full h-full">
+          <BlackHole3D />
+        </div>
       </div>
-      <style jsx>{`
-        .link-gradient {
-          background: linear-gradient(120deg, #4cd787, #9d4edd, #ccff00, #4cd787);
-          background-size: 250% 250%;
-          -webkit-background-clip: text;
-          background-clip: text;
-          color: transparent;
-          -webkit-text-fill-color: transparent;
-          animation: linkGradient 8s ease-in-out infinite;
-        }
 
-        @keyframes linkGradient {
-          0% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-          100% {
-            background-position: 0% 50%;
-          }
-        }
-      `}</style>
+      {/* Centered CTA Buttons - Positioned at BlackHole center */}
+      <motion.div
+        className="absolute left-1/2 -translate-x-1/2 z-[100] pointer-events-auto"
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 2.5, duration: 0.8, ease: 'easeOut' }}
+        style={{
+          bottom: 'clamp(80px, 12vh, 120px)',
+          pointerEvents: 'auto',
+        }}
+      >
+        <div className="flex flex-col items-center gap-4 sm:gap-5 relative z-[100]">
+          <motion.div
+            variants={buttonVariants}
+            initial="rest"
+            whileHover="hover"
+            whileTap="tap"
+            className="w-auto pointer-events-auto cursor-pointer"
+            style={{ cursor: 'pointer', pointerEvents: 'auto' }}
+          >
+            <StarBorder
+              href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
+              target="_blank"
+              rel="noopener noreferrer"
+              color="#E2E8F0"
+              speed="2s"
+              className={ctaButtonClasses}
+              aria-label="Schedule a free call with DevX Group"
+            >
+              Book Free Call
+            </StarBorder>
+          </motion.div>
+          <motion.div
+            variants={buttonVariants}
+            initial="rest"
+            whileHover="hover"
+            whileTap="tap"
+            className="w-auto pointer-events-auto cursor-pointer"
+            style={{ cursor: 'pointer', pointerEvents: 'auto' }}
+          >
+            <StarBorder
+              href="/portfolio"
+              color="#E2E8F0"
+              speed="3s"
+              className={ctaButtonClasses}
+              aria-label="View DevX Group portfolio"
+            >
+              See Our Work
+            </StarBorder>
+          </motion.div>
+        </div>
+      </motion.div>
     </section>
   )
 }

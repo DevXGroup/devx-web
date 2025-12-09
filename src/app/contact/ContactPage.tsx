@@ -21,6 +21,7 @@ import {
 import dynamic from 'next/dynamic'
 import TextPressure from '@/components/animations/TextPressure'
 import BlurText from '@/components/animations/BlurText'
+import StarBorder from '@/components/animations/StarBorder'
 import { useIsMobile } from '@/hooks/use-mobile'
 
 declare global {
@@ -51,6 +52,11 @@ const Orb = dynamic(() => import('@/components/animations/Orb'), {
 })
 
 const Confetti = dynamic(() => import('@/components/animations/Confetti'), {
+  ssr: false,
+  loading: () => null,
+})
+
+const Particles = dynamic(() => import('@/components/animations/Particles'), {
   ssr: false,
   loading: () => null,
 })
@@ -728,30 +734,32 @@ export default function ContactPage() {
             className="text-center max-w-4xl mx-auto"
           >
             <div className="flex flex-col items-center mt-4 md:mt-6 py-8 md:py-3">
-              <div className="flex items-center justify-center w-full mb-4 sm:mb-4 px-4">
+              <div className="flex items-center justify-center w-full mb-4 sm:mb-4">
                 <div
                   style={{
                     position: 'relative',
-                    height: '100px',
-                    width: '550px',
-                    padding: '0 0px',
+                    height: '80px',
+                    width: '100%',
+                    maxWidth: '430px',
+                    padding: '0',
+                    margin: '0 auto',
                   }}
                 >
                   <TextPressure
-                    text=" &nbsp;Contact&nbsp;US&nbsp;  "
+                    text="Contact&nbsp;Us&nbsp;&nbsp;&nbsp;"
+                    fontFamily="'Playfair Display', Georgia, 'Times New Roman', serif"
+                    fontUrl="/fonts/PlayfairDisplay-Variable.woff2"
                     flex={false}
                     alpha={false}
                     stroke={false}
                     width={false}
                     weight={true}
                     italic={false}
-                    textColor="#4CD787"
-                    strokeColor="#FFFFFF"
-                    minFontSize={32}
+                    minFontSize={64}
                   />
                 </div>
               </div>
-              <p className="subtitle-lg max-w-2xl text-center mb-5">
+              <p className="section-subtitle max-w-2xl text-center mt-0 mb-4">
                 Contact us to discuss your mission requirements and objectives.
               </p>
             </div>
@@ -760,7 +768,7 @@ export default function ContactPage() {
       </section>
 
       {/* Main Contact Section */}
-      <section className="pt-16 pb-20 relative -mt-8">
+      <section className="pt-1 pb-20 relative">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
             {/* Contact Information Card */}
@@ -768,13 +776,13 @@ export default function ContactPage() {
               variants={fadeInUpVariants}
               initial="hidden"
               animate="visible"
-              className="lg:col-span-2 bg-black/40 backdrop-blur-sm p-8 rounded-2xl border border-white/10 h-fit"
+              className="lg:col-span-2 bg-zinc-900/40 backdrop-blur-sm p-8 rounded-2xl border border-white/10 h-fit"
             >
               <div className="space-y-8">
                 <div>
                   <BlurText
                     text="Contact Information"
-                    className="justify-start heading-component text-white mb-6"
+                    className="justify-start text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-8 font-editorial"
                     delay={100}
                     once={false}
                   />
@@ -784,33 +792,33 @@ export default function ContactPage() {
                 </div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 rounded-full bg-[#4CD787]/10 flex items-center justify-center flex-shrink-0">
-                    <Phone className="w-5 h-5 text-[#4CD787]" />
+                  <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
+                    <Phone className="w-5 h-5 text-white" />
                   </div>
                   <div>
                     <h3 className="heading-subsection text-foreground">Phone</h3>
                     <a
                       href="tel:+14425440591"
-                      className="text-body text-foreground/70 hover:text-[#4CD787] transition-colors duration-200 hover:underline"
+                      className="text-body text-zinc-400 hover:text-white transition-colors duration-200 hover:underline"
                       aria-label="Call DevX Group at +1 (442) 544-0591"
                     >
                       +1 (442) 544-0591
                     </a>
-                    <p className="text-body-small text-foreground/50 mt-1">
+                    <p className="text-body-small text-zinc-500 mt-1">
                       Mon-Fri from 8am to 5pm PST
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 rounded-full bg-[#4CD787]/10 flex items-center justify-center flex-shrink-0">
-                    <Mail className="w-5 h-5 text-[#4CD787]" />
+                  <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
+                    <Mail className="w-5 h-5 text-white" />
                   </div>
                   <div>
                     <h3 className="heading-subsection text-foreground">Email</h3>
                     <a
                       href="mailto:support@devxgroup.io"
-                      className="text-body text-foreground/70 hover:text-[#4CD787] transition-colors duration-200 hover:underline"
+                      className="text-body text-foreground/70 hover:text-white transition-colors duration-200 hover:underline"
                       aria-label="Email DevX Group at support@devxgroup.io"
                     >
                       support@devxgroup.io
@@ -822,8 +830,8 @@ export default function ContactPage() {
                 </div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 rounded-full bg-[#4CD787]/10 flex items-center justify-center flex-shrink-0">
-                    <MapPin className="w-5 h-5 text-[#4CD787]" />
+                  <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
+                    <MapPin className="w-5 h-5 text-white" />
                   </div>
                   <div>
                     <h3 className="heading-subsection text-foreground">Locations</h3>
@@ -839,7 +847,7 @@ export default function ContactPage() {
                       </span>
                     </p>
                     <p className="text-body-small text-foreground/50 mt-2">
-                      <span className="text-[#4CD787] font-medium">
+                      <span className="text-white font-medium">
                         Serving clients globally through local and remote teams
                       </span>
                     </p>
@@ -847,17 +855,21 @@ export default function ContactPage() {
                 </div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 rounded-full bg-[#4CD787]/10 flex items-center justify-center flex-shrink-0">
-                    <Calendar className="w-5 h-5 text-[#4CD787]" />
+                  <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
+                    <Calendar className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <h3 className="heading-subsection text-foreground">Schedule a Call</h3>
-                    <p className="text-body text-foreground/70">Book a free consultation</p>
+                    <h3 className="heading-subsection text-foreground">
+                      Schedule a Free Consultation
+                    </h3>
+                    <p className="text-body text-foreground/70">
+                      We&apos;ll tailor the session to your project
+                    </p>
                     <a
                       href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative?month=2025-05"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-block mt-2 text-body text-[#4CD787] hover:underline"
+                      className="inline-block mt-2 text-body text-[#D1FAE5] hover:underline"
                     >
                       View availability →
                     </a>
@@ -870,39 +882,39 @@ export default function ContactPage() {
                   <div className="flex space-x-4">
                     <a
                       href="https://www.youtube.com/channel/UC6Zqx3Bhwbberq_MEmlgpIw"
-                      className="w-10 h-10 rounded-full bg-white/5 hover:bg-[#4CD787]/20 flex items-center justify-center transition-colors duration-300"
+                      className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/20 flex items-center justify-center transition-colors duration-300"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <Youtube className="w-5 h-5 text-[#4CD787]" />
+                      <Youtube className="w-5 h-5 text-white" />
                     </a>
                     <a
                       href="https://www.linkedin.com/company/devx-group-llc/"
-                      className="w-10 h-10 rounded-full bg-white/5 hover:bg-[#4CD787]/20 flex items-center justify-center transition-colors duration-300"
+                      className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/20 flex items-center justify-center transition-colors duration-300"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <Linkedin className="w-5 h-5 text-[#4CD787]" />
+                      <Linkedin className="w-5 h-5 text-white" />
                     </a>
                     <a
                       href="https://github.com/DevXGroup"
-                      className="w-10 h-10 rounded-full bg-white/5 hover:bg-[#4CD787]/20 flex items-center justify-center transition-colors duration-300"
+                      className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/20 flex items-center justify-center transition-colors duration-300"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <Github className="w-5 h-5 text-[#4CD787]" />
+                      <Github className="w-5 h-5 text-white" />
                     </a>
                     <a
                       href="#"
-                      className="w-10 h-10 rounded-full bg-white/5 hover:bg-[#4CD787]/20 flex items-center justify-center transition-colors duration-300"
+                      className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/20 flex items-center justify-center transition-colors duration-300"
                     >
-                      <Instagram className="w-5 h-5 text-[#4CD787]" />
+                      <Instagram className="w-5 h-5 text-white" />
                     </a>
                     <a
                       href="#"
-                      className="w-10 h-10 rounded-full bg-white/5 hover:bg-[#4CD787]/20 flex items-center justify-center transition-colors duration-300"
+                      className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/20 flex items-center justify-center transition-colors duration-300"
                     >
-                      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                      <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                       </svg>
                     </a>
@@ -926,7 +938,7 @@ export default function ContactPage() {
               <div className="relative z-10">
                 <BlurText
                   text="Send us a message"
-                  className="justify-start heading-component text-white mb-6"
+                  className="justify-start text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-8 font-editorial"
                   delay={100}
                   once={false}
                 />
@@ -951,7 +963,7 @@ export default function ContactPage() {
                           autoComplete="name"
                           className={`w-full px-4 py-3 bg-white/5 border ${
                             (formErrors as any).name ? 'border-red-500' : 'border-white/10'
-                          } rounded-lg focus:outline-none focus:border-[#4CD787] text-foreground shadow-inner transition-colors duration-300`}
+                          } rounded-lg focus:outline-none focus:border-white text-foreground shadow-inner transition-colors duration-300`}
                           placeholder="Enter your full name"
                           required
                         />
@@ -982,7 +994,7 @@ export default function ContactPage() {
                           autoComplete="email"
                           className={`w-full px-4 py-3 bg-white/5 border ${
                             (formErrors as any).email ? 'border-red-500' : 'border-white/10'
-                          } rounded-lg focus:outline-none focus:border-[#4CD787] text-foreground shadow-inner transition-colors duration-300`}
+                          } rounded-lg focus:outline-none focus:border-white text-foreground shadow-inner transition-colors duration-300`}
                           placeholder="your@email.com"
                           required
                         />
@@ -1016,68 +1028,65 @@ export default function ContactPage() {
                         Your Message
                       </label>
 
-                      <div className="flex gap-3">
-                        {/* Main textarea column */}
-                        <div className="flex-1 relative">
-                          {/* WebGL Orb Animation - centered in textarea, larger size */}
+                      {/* Main textarea container */}
+                      <div className="relative">
+                        {/* WebGL Orb Animation - centered in textarea, larger size */}
+                        <div
+                          className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                          style={{ zIndex: 1 }}
+                        >
                           <div
-                            className="absolute inset-0 flex items-center justify-center pointer-events-none"
-                            style={{ zIndex: 1 }}
+                            className="w-40 h-40 opacity-30 rounded-full overflow-hidden"
+                            style={{
+                              background: 'transparent',
+                              isolation: 'isolate',
+                              willChange: 'transform',
+                              backfaceVisibility: 'hidden',
+                            }}
                           >
                             <div
-                              className="w-40 h-40 opacity-30 rounded-full overflow-hidden"
+                              className="w-full h-full"
                               style={{
-                                background: 'transparent',
-                                isolation: 'isolate',
-                                willChange: 'transform',
-                                backfaceVisibility: 'hidden',
+                                contain: 'strict',
+                                transform: 'translateZ(0)',
                               }}
                             >
-                              <div
-                                className="w-full h-full"
-                                style={{
-                                  contain: 'strict',
-                                  transform: 'translateZ(0)',
-                                }}
-                              >
-                                {showOrb && (
-                                  <Orb
-                                    hue={isTyping ? 35 : 130}
-                                    hoverIntensity={
-                                      isTyping ? Math.min(typingIntensity * 2.5, 1.0) : 0.15
-                                    }
-                                    rotateOnHover={true}
-                                    forceHoverState={isTyping}
-                                  />
-                                )}
-                              </div>
+                              {showOrb && (
+                                <Orb
+                                  hue={isTyping ? 35 : 130}
+                                  hoverIntensity={
+                                    isTyping ? Math.min(typingIntensity * 2.5, 1.0) : 0.15
+                                  }
+                                  rotateOnHover={true}
+                                  forceHoverState={isTyping}
+                                />
+                              )}
                             </div>
                           </div>
-
-                          <textarea
-                            id="message"
-                            name="message"
-                            value={formState.message}
-                            onChange={handleChange}
-                            rows={16}
-                            className={`w-full px-4 py-3 bg-white/15 backdrop-blur-lg border ${
-                              (formErrors as any).message ? 'border-red-500' : 'border-white/30'
-                            } rounded-lg focus:outline-none focus:border-[#4CD787] text-foreground shadow-inner transition-colors duration-300 resize-none placeholder:text-foreground/40 placeholder:font-light relative z-10`}
-                            placeholder="Tell us about your project requirements, timeline, and budget..."
-                            required
-                          ></textarea>
-
-                          {/* Example button column */}
-                          <div className="w-20 justify-right pt-2">
-                            <button
-                              type="button"
-                              onClick={() => setShowExampleModal(true)}
-                              className="px-3 py-2 text-xs bg-white/10 hover:bg-white/20 border border-white/20 rounded-md text-foreground/70 hover:text-foreground transition-all duration-200 backdrop-blur-sm"
-                            >
-                              Example
-                            </button>
-                          </div>
                         </div>
+
+                        <textarea
+                          id="message"
+                          name="message"
+                          value={formState.message}
+                          onChange={handleChange}
+                          rows={16}
+                          className={`w-full px-4 py-3 bg-white/5 border ${
+                            (formErrors as any).message ? 'border-red-500' : 'border-white/10'
+                          } rounded-lg focus:outline-none focus:border-white text-foreground shadow-inner transition-colors duration-300 resize-none placeholder:text-foreground/40 placeholder:font-light relative z-10 pr-24`}
+                          placeholder="Tell us about your project requirements, timeline, and budget..."
+                          required
+                        ></textarea>
+
+                        {/* Example button positioned inside */}
+                        <button
+                          type="button"
+                          onClick={() => setShowExampleModal(true)}
+                          className="absolute top-3 right-4 z-20 px-3 py-1.5 text-xs bg-white/10 hover:bg-white/20 border border-white/20 rounded-md text-foreground/70 hover:text-foreground transition-all duration-200 backdrop-blur-sm shadow-sm"
+                          style={{ transform: 'translate(14px, -14px)' }}
+                        >
+                          See Example
+                        </button>
                       </div>
 
                       {(formErrors as any).message && (
@@ -1114,46 +1123,46 @@ export default function ContactPage() {
                       </div>
 
                       {/* Submit Button */}
-                      <motion.button
-                        type="submit"
-                        disabled={isSubmitting}
-                        variants={buttonVariants}
-                        initial="rest"
-                        whileHover={shouldReduceMotion ? {} : 'hover'}
-                        whileTap={shouldReduceMotion ? {} : 'tap'}
-                        className="group relative overflow-hidden bg-gradient-to-r from-[#4CD787] to-[#3CC76D] hover:from-[#3CC76D] hover:to-[#4CD787] text-black px-8 py-3 rounded-lg font-medium transition-all duration-300 flex items-center disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
-                      >
-                        <span className="relative z-10 flex items-center">
-                          {isSubmitting ? (
-                            <>
-                              <motion.div
-                                animate={{ rotate: 360 }}
-                                transition={{
-                                  duration: 1,
-                                  repeat: Number.POSITIVE_INFINITY,
-                                  ease: 'linear',
-                                }}
-                                className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full mr-2"
-                              />
-                              Sending...
-                            </>
-                          ) : isSubmitted ? (
-                            <>
-                              <CheckCircle className="w-5 h-5 mr-2" />
-                              Message Sent!
-                            </>
-                          ) : (
-                            <>
-                              Send Message
-                              <Send
-                                className={`ml-2 w-5 h-5 transition-transform duration-300 ${
-                                  isSubmitting ? '' : 'group-hover:translate-x-1'
-                                }`}
-                              />
-                            </>
-                          )}
-                        </span>
-                      </motion.button>
+                      <div style={{ transform: 'translateY(-20px)' }}>
+                        <StarBorder
+                          type="submit"
+                          disabled={isSubmitting}
+                          className="group relative overflow-hidden bg-white/10 text-white border border-white/20 hover:bg-white/20 px-8 py-3 rounded-lg font-medium transition-all duration-300 flex items-center disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+                          color="#FFFFFF"
+                          speed="3s"
+                        >
+                          <span className="relative z-10 flex items-center">
+                            {isSubmitting ? (
+                              <>
+                                <motion.div
+                                  animate={{ rotate: 360 }}
+                                  transition={{
+                                    duration: 1,
+                                    repeat: Number.POSITIVE_INFINITY,
+                                    ease: 'linear',
+                                  }}
+                                  className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full mr-2"
+                                />
+                                Sending...
+                              </>
+                            ) : isSubmitted ? (
+                              <>
+                                <CheckCircle className="w-5 h-5 mr-2" />
+                                Message Sent!
+                              </>
+                            ) : (
+                              <>
+                                Send Message
+                                <Send
+                                  className={`ml-2 w-5 h-5 transition-transform duration-300 ${
+                                    isSubmitting ? '' : 'group-hover:translate-x-1'
+                                  }`}
+                                />
+                              </>
+                            )}
+                          </span>
+                        </StarBorder>
+                      </div>
                     </div>
                   </form>
                 </div>
@@ -1174,8 +1183,8 @@ export default function ContactPage() {
             className="text-center max-w-3xl mx-auto mb-12"
           >
             <BlurText
-              text="Schedule your free Consultation"
-              className="justify-center heading-section text-[#FFD700] mb-6"
+              text="Schedule a Free Consultation"
+              className="justify-center heading-section text-white mb-6 font-editorial"
               delay={150}
               once={false}
             />
@@ -1207,6 +1216,7 @@ export default function ContactPage() {
       </section>
 
       {/* FAQ Section */}
+      {/* FAQ Section */}
       <section className="py-20 relative z-[5000]">
         <div className="container mx-auto px-4">
           <motion.div
@@ -1218,7 +1228,7 @@ export default function ContactPage() {
           >
             <BlurText
               text="Frequently Asked Questions"
-              className="justify-center heading-section text-[#FFD700] mb-6"
+              className="justify-center heading-section text-white mb-6 font-editorial"
               delay={150}
               once={false}
             />
@@ -1236,10 +1246,10 @@ export default function ContactPage() {
           >
             <motion.div
               variants={fadeInUpVariants}
-              className="bg-black/30 p-6 rounded-xl border border-white/10 hover:border-[#4CD787]/30 transition-colors duration-300 group"
+              className="bg-black/30 p-6 rounded-xl border border-white/10 hover:border-white/30 transition-colors duration-300 group"
               whileHover={shouldReduceMotion ? {} : { y: -4 }}
             >
-              <h3 className="heading-subsection mb-3 text-[#4CD787] group-hover:text-white transition-colors duration-300">
+              <h3 className="heading-subsection mb-3 text-white transition-colors duration-300">
                 What is your typical response time?
               </h3>
               <p className="text-body text-foreground/70 group-hover:text-white/80 transition-colors duration-300">
@@ -1250,10 +1260,10 @@ export default function ContactPage() {
 
             <motion.div
               variants={fadeInUpVariants}
-              className="bg-black/30 p-6 rounded-xl border border-white/10 hover:border-[#4CD787]/30 transition-colors duration-300 group"
+              className="bg-black/30 p-6 rounded-xl border border-white/10 hover:border-white/30 transition-colors duration-300 group"
               whileHover={shouldReduceMotion ? {} : { y: -4 }}
             >
-              <h3 className="heading-subsection mb-3 text-[#4CD787] group-hover:text-white transition-colors duration-300">
+              <h3 className="heading-subsection mb-3 text-white transition-colors duration-300">
                 Do you work with international clients?
               </h3>
               <p className="text-body text-foreground/70 group-hover:text-white/80 transition-colors duration-300">
@@ -1264,10 +1274,10 @@ export default function ContactPage() {
 
             <motion.div
               variants={fadeInUpVariants}
-              className="bg-black/30 p-6 rounded-xl border border-white/10 hover:border-[#4CD787]/30 transition-colors duration-300 group"
+              className="bg-black/30 p-6 rounded-xl border border-white/10 hover:border-white/30 transition-colors duration-300 group"
               whileHover={shouldReduceMotion ? {} : { y: -4 }}
             >
-              <h3 className="heading-subsection mb-3 text-[#4CD787] group-hover:text-white transition-colors duration-300">
+              <h3 className="heading-subsection mb-3 text-white transition-colors duration-300">
                 What information should I provide for a quote?
               </h3>
               <p className="text-body text-foreground/70 group-hover:text-white/80 transition-colors duration-300">
@@ -1278,10 +1288,10 @@ export default function ContactPage() {
 
             <motion.div
               variants={fadeInUpVariants}
-              className="bg-black/30 p-6 rounded-xl border border-white/10 hover:border-[#4CD787]/30 transition-colors duration-300 group"
+              className="bg-black/30 p-6 rounded-xl border border-white/10 hover:border-white/30 transition-colors duration-300 group"
               whileHover={shouldReduceMotion ? {} : { y: -4 }}
             >
-              <h3 className="heading-subsection mb-3 text-[#4CD787] group-hover:text-white transition-colors duration-300">
+              <h3 className="heading-subsection mb-3 text-white transition-colors duration-300">
                 How do you handle project revisions?
               </h3>
               <p className="text-body text-foreground/70 group-hover:text-white/80 transition-colors duration-300">
@@ -1376,7 +1386,7 @@ export default function ContactPage() {
             <div className="mt-4 flex justify-end">
               <button
                 onClick={() => setShowExampleModal(false)}
-                className="px-4 py-2 bg-[#4CD787] hover:bg-[#3CC76D] text-black rounded-lg transition-colors duration-200 font-medium"
+                className="px-4 py-2 bg-white hover:bg-zinc-200 text-black rounded-lg transition-colors duration-200 font-medium"
               >
                 Got it!
               </button>
