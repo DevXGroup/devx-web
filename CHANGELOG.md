@@ -1,3 +1,9 @@
+## [1.6.0](https://github.com/DevXGroup/devx-web/compare/v1.5.0...v1.6.0) (2025-12-10)
+
+### Features
+
+* migrate font loading and refresh legal pages ([f1f7c21](https://github.com/DevXGroup/devx-web/commit/f1f7c217d6c89b12bb7e45c78e062385b51f2ed8))
+
 ## [1.5.0](https://github.com/DevXGroup/devx-web/compare/v1.4.1...v1.5.0) (2025-12-09)
 
 ### Features
