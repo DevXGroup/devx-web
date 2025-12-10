@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Github, Instagram, Linkedin, Youtube } from 'lucide-react'
+import { Github, Instagram, Linkedin, Youtube, ChevronDown } from 'lucide-react'
 import Threads from '@animations/Threads'
 import FooterContactForm from '@/components/FooterContactForm'
 
@@ -14,6 +14,11 @@ interface FooterClientProps {
 export default function FooterClient({ version }: FooterClientProps) {
   const [mounted, setMounted] = useState(false)
   const [isSafari, setIsSafari] = useState(false)
+  const [openSection, setOpenSection] = useState<string | null>(null)
+
+  const toggleSection = (section: string) => {
+    setOpenSection(openSection === section ? null : section)
+  }
 
   useEffect(() => {
     setMounted(true)
@@ -94,83 +99,111 @@ export default function FooterClient({ version }: FooterClientProps) {
               </div>
             </div>
 
-            {/* Services and Company - Side by side on mobile when space allows */}
-            <div className="sm:hidden grid grid-cols-2 gap-4 col-span-1">
-              {/* Services */}
-              <div className="min-w-0">
-                <h3 className="text-sm font-semibold uppercase tracking-wider mb-4 text-white">
-                  Services
-                </h3>
-                <div className="space-y-2">
-                  <Link
-                    href="/services"
-                    className="block text-sm text-zinc-400 hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
-                  >
-                    Custom Software
-                  </Link>
-                  <Link
-                    href="/services"
-                    className="block text-sm text-zinc-400 hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
-                  >
-                    AI & ML
-                  </Link>
-                  <Link
-                    href="/services"
-                    className="block text-sm text-zinc-400 hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
-                  >
-                    IoT Hardware
-                  </Link>
-                  <Link
-                    href="/services"
-                    className="block text-sm text-zinc-400 hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
-                  >
-                    Digital Transform
-                  </Link>
-                  <Link
-                    href="/services"
-                    className="block text-sm text-zinc-400 hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
-                  >
-                    Web Development
-                  </Link>
+            {/* Services and Company - Mobile Accordions */}
+            <div className="sm:hidden col-span-1 flex flex-col gap-2">
+              {/* Services Accordion */}
+              <div className="border-b border-white/5 last:border-0">
+                <button
+                  onClick={() => toggleSection('services')}
+                  className="w-full flex items-center justify-between py-4 text-sm font-semibold uppercase tracking-wider text-white"
+                >
+                  <span>Services</span>
+                  <ChevronDown
+                    className={`w-4 h-4 transition-transform duration-200 ${
+                      openSection === 'services' ? 'rotate-180' : ''
+                    }`}
+                  />
+                </button>
+                <div
+                  className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                    openSection === 'services' ? 'max-h-[300px] mb-4' : 'max-h-0'
+                  }`}
+                >
+                  <div className="space-y-3 pl-1">
+                    <Link
+                      href="/services"
+                      className="block text-sm text-zinc-400 hover:text-[#4CD787] transition-colors font-light"
+                    >
+                      Custom Software
+                    </Link>
+                    <Link
+                      href="/services"
+                      className="block text-sm text-zinc-400 hover:text-[#4CD787] transition-colors font-light"
+                    >
+                      AI & ML
+                    </Link>
+                    <Link
+                      href="/services"
+                      className="block text-sm text-zinc-400 hover:text-[#4CD787] transition-colors font-light"
+                    >
+                      IoT Hardware
+                    </Link>
+                    <Link
+                      href="/services"
+                      className="block text-sm text-zinc-400 hover:text-[#4CD787] transition-colors font-light"
+                    >
+                      Digital Transformation
+                    </Link>
+                    <Link
+                      href="/services"
+                      className="block text-sm text-zinc-400 hover:text-[#4CD787] transition-colors font-light"
+                    >
+                      Web Development
+                    </Link>
+                  </div>
                 </div>
               </div>
 
-              {/* Company */}
-              <div className="min-w-0">
-                <h3 className="text-sm font-semibold uppercase tracking-wider mb-4 text-white">
-                  Company
-                </h3>
-                <div className="space-y-2">
-                  <Link
-                    href="/about"
-                    className="block text-sm text-zinc-400 hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
-                  >
-                    About Us
-                  </Link>
-                  <Link
-                    href="/portfolio"
-                    className="block text-sm text-zinc-400 hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
-                  >
-                    Portfolio
-                  </Link>
-                  <Link
-                    href="/pricing"
-                    className="block text-sm text-zinc-400 hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
-                  >
-                    Pricing
-                  </Link>
-                  <Link
-                    href="/contact"
-                    className="block text-sm text-zinc-400 hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
-                  >
-                    Contact
-                  </Link>
-                  <Link
-                    href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative"
-                    className="block text-sm text-zinc-400 hover:text-[#4CD787] hover:bg-white/5 rounded-md transition-colors truncate font-light"
-                  >
-                    Schedule Call
-                  </Link>
+              {/* Company Accordion */}
+              <div className="border-b border-white/5 last:border-0">
+                <button
+                  onClick={() => toggleSection('company')}
+                  className="w-full flex items-center justify-between py-4 text-sm font-semibold uppercase tracking-wider text-white"
+                >
+                  <span>Company</span>
+                  <ChevronDown
+                    className={`w-4 h-4 transition-transform duration-200 ${
+                      openSection === 'company' ? 'rotate-180' : ''
+                    }`}
+                  />
+                </button>
+                <div
+                  className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                    openSection === 'company' ? 'max-h-[300px] mb-4' : 'max-h-0'
+                  }`}
+                >
+                  <div className="space-y-3 pl-1">
+                    <Link
+                      href="/about"
+                      className="block text-sm text-zinc-400 hover:text-[#4CD787] transition-colors font-light"
+                    >
+                      About Us
+                    </Link>
+                    <Link
+                      href="/portfolio"
+                      className="block text-sm text-zinc-400 hover:text-[#4CD787] transition-colors font-light"
+                    >
+                      Portfolio
+                    </Link>
+                    <Link
+                      href="/pricing"
+                      className="block text-sm text-zinc-400 hover:text-[#4CD787] transition-colors font-light"
+                    >
+                      Pricing
+                    </Link>
+                    <Link
+                      href="/contact"
+                      className="block text-sm text-zinc-400 hover:text-[#4CD787] transition-colors font-light"
+                    >
+                      Contact
+                    </Link>
+                    <Link
+                      href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative"
+                      className="block text-sm text-zinc-400 hover:text-[#4CD787] transition-colors font-light"
+                    >
+                      Schedule Call
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
@@ -300,7 +333,7 @@ export default function FooterClient({ version }: FooterClientProps) {
                   </svg>
                   <span className="truncate">support@devxgroup.io</span>
                 </a>
-                <span className="flex items-center justify-center sm:justify-start sm:col-span-2 md:col-span-1 gap-2">
+                <span className="flex items-center justify-center sm:justify-start md:justify-end sm:col-span-2 md:col-span-1 gap-2">
                   <svg
                     className="w-4 h-4 text-zinc-400"
                     viewBox="0 0 24 24"
@@ -317,22 +350,22 @@ export default function FooterClient({ version }: FooterClientProps) {
                   <span className="truncate">San Diego, California</span>
                 </span>
               </div>
-              <div className="flex flex-col sm:flex-row gap-4 lg:gap-6 text-sm border-t sm:border-t-0 pt-6 sm:pt-0 justify-center lg:justify-end lg:text-right">
+              <div className="flex flex-row flex-wrap sm:flex-nowrap justify-center sm:justify-end gap-x-6 gap-y-2 text-sm border-t sm:border-t-0 pt-6 sm:pt-0 lg:text-right">
                 <Link
                   href="/privacy"
-                  className="text-zinc-400 hover:text-[#4CD787] transition-colors text-center lg:text-left"
+                  className="text-zinc-400 hover:text-[#4CD787] transition-colors"
                 >
                   Privacy Policy
                 </Link>
                 <Link
                   href="/terms"
-                  className="text-zinc-400 hover:text-[#4CD787] transition-colors text-center lg:text-left"
+                  className="text-zinc-400 hover:text-[#4CD787] transition-colors"
                 >
                   Terms of Service
                 </Link>
                 <a
                   href="/sitemap.xml"
-                  className="text-zinc-400 hover:text-[#4CD787] transition-colors text-center lg:text-left"
+                  className="text-zinc-400 hover:text-[#4CD787] transition-colors"
                   rel="noreferrer"
                 >
                   Sitemap

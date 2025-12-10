@@ -73,5 +73,36 @@ export const metadata: Metadata = {
 }
 
 export default function Home() {
-  return <HomePageClient />
+  return (
+    <>
+      {/* SEO Content - Server-rendered for crawlers */}
+      <div className="sr-only">
+        <h1>DevX Group - Elite Software Development Team</h1>
+        <p>
+          Elite software team shipping polished products at startup speed. We deliver custom
+          applications, AI/ML solutions, IoT hardware integration, and digital transformation
+          services. Build, launch, and scale your vision with our expert team in San Diego.
+        </p>
+        <h2>Our Services</h2>
+        <ul>
+          <li>Custom Application Development</li>
+          <li>AI and Machine Learning Solutions</li>
+          <li>Agentic AI Implementation</li>
+          <li>Cloud Platform Modernization</li>
+          <li>IoT Hardware Integration</li>
+          <li>Digital Transformation Consulting</li>
+          <li>Mobile App Development</li>
+          <li>Web Development</li>
+        </ul>
+        <h2>Why Choose DevX Group</h2>
+        <p>
+          With 15+ years of experience at companies like Amazon, Qualcomm, and Viasat, our elite
+          team delivers polished products with the speed of a startup. We combine deep engineering
+          expertise with collaborative leadership to turn your vision into reality.
+        </p>
+      </div>
+
+      <HomePageClient />
+    </>
+  )
 }

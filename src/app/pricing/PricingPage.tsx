@@ -1,8 +1,8 @@
 'use client'
 
-import { motion, useReducedMotion } from 'framer-motion'
-import { Check, Star, Zap, Shield, ArrowRight, Sparkles, Target, Crown } from 'lucide-react'
-import { useRef, useState } from 'react'
+import { motion } from 'framer-motion'
+import { Star, Zap, Shield, ArrowRight, Sparkles, Target, Crown, Check } from 'lucide-react'
+import { useState } from 'react'
 import StarBorder from '@animations/StarBorder'
 import TextPressure from '@animations/TextPressure'
 import BlurText from '@animations/BlurText'
@@ -167,11 +167,16 @@ interface PricingCardProps {
 function PricingCard({ plan }: PricingCardProps) {
   const IconComponent = plan.icon
   const [isHovered, setIsHovered] = useState(false)
+  const savingsPercent = Math.round(
+    ((parseInt(plan.originalPrice.slice(1)) - parseInt(plan.price.slice(1))) /
+      parseInt(plan.originalPrice.slice(1))) *
+      100
+  )
 
   return (
     <StarBorder
       as="div"
-      className="h-full w-full p-0 bg-zinc-900/40 backdrop-blur-md rounded-2xl overflow-hidden"
+      className="h-full w-full p-0 bg-zinc-900/40 backdrop-blur-md rounded-2xl overflow-hidden min-h-[640px] md:min-h-[700px]"
       color={plan.color}
       speed="4s"
       thickness={2}
@@ -201,35 +206,32 @@ function PricingCard({ plan }: PricingCardProps) {
         </div>
 
         {/* Pricing section with enhanced styling */}
-        <div className="mb-4">
-          <div className="flex items-baseline gap-2 mb-1">
+        <div className="mb-4 space-y-2">
+          <div className="flex items-baseline gap-2">
             <span className="text-3xl font-bold text-white group-hover:scale-105 transition-transform duration-300">
               {plan.price}
             </span>
             <span className="text-sm text-zinc-400">{plan.priceUnit}</span>
+          </div>
+          <div className="flex items-center gap-3">
             <motion.span
-              className="text-xs text-zinc-400 line-through ml-1"
+              className="text-sm md:text-lg text-zinc-400 line-through font-semibold"
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
             >
               {plan.originalPrice}
             </motion.span>
+            <motion.span
+              className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-400/15 text-emerald-200 text-[11px] font-semibold uppercase tracking-[0.1em] border border-emerald-300/30 shadow-[0_0_25px_rgba(134,239,172,0.25)]"
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.45, type: 'spring', stiffness: 260, damping: 18 }}
+            >
+              <Sparkles className="w-3 h-3" />
+              Save {savingsPercent}%
+            </motion.span>
           </div>
-          <motion.div
-            className="inline-block bg-green-500/20 text-green-400 px-2 py-0.5 rounded-full text-xs font-semibold"
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.5, type: 'spring' }}
-          >
-            Save{' '}
-            {Math.round(
-              ((parseInt(plan.originalPrice.slice(1)) - parseInt(plan.price.slice(1))) /
-                parseInt(plan.originalPrice.slice(1))) *
-                100
-            )}
-            %
-          </motion.div>
         </div>
 
         <p className="text-zinc-400 text-sm md:text-base leading-relaxed mb-4 group-hover:text-zinc-300 transition-colors duration-300">
@@ -238,23 +240,19 @@ function PricingCard({ plan }: PricingCardProps) {
 
         {/* Features section with improved spacing */}
         <div className="mb-4 flex-grow">
-          <h4 className="text-sm md:text-xs font-bold text-white mb-3 uppercase tracking-wide flex items-center gap-2">
-            <Check className="w-4 h-4" style={{ color: plan.color }} />
+          <h4 className="text-sm md:text-xs font-bold text-white mb-3 uppercase tracking-wide text-left">
             Core Features
           </h4>
-          <ul className="space-y-2">
+          <ul className="space-y-2 text-left">
             {plan.features.map((feature: string, featureIndex: number) => (
               <motion.li
                 key={feature}
-                className="flex items-start text-sm md:text-base text-zinc-400 group-hover:text-zinc-300 transition-colors duration-300"
+                className="flex items-start gap-2 text-sm md:text-base text-zinc-400 group-hover:text-zinc-300 transition-colors duration-300"
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1 * featureIndex }}
               >
-                <Check
-                  className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0"
-                  style={{ color: plan.color }}
-                />
+                <Check className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: plan.color }} />
                 {feature}
               </motion.li>
             ))}
@@ -271,7 +269,7 @@ function PricingCard({ plan }: PricingCardProps) {
             What&apos;s Included
           </h4>
           <motion.ul
-            className="space-y-2 text-sm md:text-base text-zinc-400"
+            className="space-y-2 text-sm md:text-base text-zinc-400 text-left"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             transition={{ delay: 0.5, duration: 0.5 }}
@@ -334,8 +332,6 @@ function PricingCard({ plan }: PricingCardProps) {
 }
 
 export default function PricingPage() {
-  useState(false)
-
   return (
     <div className="min-h-screen bg-black relative overflow-hidden pt-16 md:pt-20">
       {/* Animated background */}
@@ -368,9 +364,8 @@ export default function PricingPage() {
                   }}
                 >
                   <TextPressure
-                    text="Pricing   "
-                    fontFamily="'Playfair Display', Georgia, 'Times New Roman', serif"
-                    fontUrl="/fonts/PlayfairDisplay-Variable.woff2"
+                    text="&nbsp;Pricing&nbsp;"
+                    fontFamily="var(--font-playfair-display)"
                     flex={false}
                     alpha={false}
                     stroke={false}
@@ -416,32 +411,22 @@ export default function PricingPage() {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto items-stretch"
             variants={containerVariants}
             initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
+            animate="visible"
           >
             {pricingPlans.map((plan) => (
               <div key={plan.name} className="relative flex flex-col h-full">
-                {/* Popular badge positioned above card */}
-                {plan.popular && (
-                  <div className="flex justify-center mb-4">
+                <div className="flex-1 h-full relative group">
+                  {plan.popular && (
                     <motion.div
-                      className="bg-gradient-to-r from-[#FFD700] to-[#E6D055] text-black px-4 py-1.5 rounded-full text-xs font-bold shadow-lg flex items-center gap-1.5"
-                      animate={{
-                        y: [0, -1, 0],
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: 'easeInOut',
-                      }}
+                      className="absolute -top-3 left-0 right-0 mx-auto w-max z-20 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-medium bg-[#FFD700]/10 text-[#FFD700] border border-[#FFD700]/20 backdrop-blur-md shadow-[0_0_15px_rgba(253,224,71,0.1)]"
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.2 }}
                     >
-                      <Sparkles className="w-3 h-3" />
+                      <Sparkles className="w-3.5 h-3.5" />
                       Most Popular
-                      <Sparkles className="w-3 h-3" />
                     </motion.div>
-                  </div>
-                )}
-                <div className="flex-1">
+                  )}
                   <PricingCard plan={plan} />
                 </div>
               </div>

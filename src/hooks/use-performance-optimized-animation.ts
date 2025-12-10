@@ -41,7 +41,17 @@ export const usePerformanceOptimizedAnimation = () => {
     return false
   }, [])
 
+  const isSlowCpu = useMemo(() => {
+    if (typeof navigator === 'undefined') return false
+    const cores = (navigator as any).hardwareConcurrency as number | undefined
+    if (cores && cores <= 4) {
+      return true
+    }
+    return false
+  }, [])
+
   const shouldOptimizeAnimations = isLowPower || hasReducedMotion
+  const shouldSkip3dEffects = shouldOptimizeAnimations || isSlowCpu || hasReducedMotion
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -64,5 +74,7 @@ export const usePerformanceOptimizedAnimation = () => {
     isMobile,
     isLowPower,
     hasReducedMotion,
+    isSlowCpu,
+    shouldSkip3dEffects,
   }
 }

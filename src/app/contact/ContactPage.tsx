@@ -19,7 +19,6 @@ import {
   Copy,
 } from 'lucide-react'
 import dynamic from 'next/dynamic'
-import TextPressure from '@/components/animations/TextPressure'
 import BlurText from '@/components/animations/BlurText'
 import StarBorder from '@/components/animations/StarBorder'
 import { useIsMobile } from '@/hooks/use-mobile'
@@ -59,6 +58,21 @@ const Confetti = dynamic(() => import('@/components/animations/Confetti'), {
 const Particles = dynamic(() => import('@/components/animations/Particles'), {
   ssr: false,
   loading: () => null,
+})
+
+// Render TextPressure on the client to avoid hydration mismatch from its layout tweaks
+const TextPressureFallback = () => (
+  <h1
+    className="text-center text-5xl md:text-6xl lg:text-7xl font-semibold bg-gradient-to-r from-[#86EFAC] via-[#D8B4FE] to-[#86EFAC] bg-clip-text text-transparent uppercase"
+    style={{ fontFamily: 'var(--font-playfair-display)' }}
+  >
+    Contact Us
+  </h1>
+)
+
+const TextPressure = dynamic(() => import('@/components/animations/TextPressure'), {
+  ssr: false,
+  loading: () => <TextPressureFallback />,
 })
 
 // Always Visible Lightning with Natural Fade
@@ -735,20 +749,10 @@ export default function ContactPage() {
           >
             <div className="flex flex-col items-center mt-4 md:mt-6 py-8 md:py-3">
               <div className="flex items-center justify-center w-full mb-4 sm:mb-4">
-                <div
-                  style={{
-                    position: 'relative',
-                    height: '80px',
-                    width: '100%',
-                    maxWidth: '430px',
-                    padding: '0',
-                    margin: '0 auto',
-                  }}
-                >
+                <div className="relative h-[100px] w-full max-w-[570px] p-0 m-0 mx-auto">
                   <TextPressure
-                    text="Contact&nbsp;Us&nbsp;&nbsp;&nbsp;"
-                    fontFamily="'Playfair Display', Georgia, 'Times New Roman', serif"
-                    fontUrl="/fonts/PlayfairDisplay-Variable.woff2"
+                    text="&nbsp;&nbsp;Contact&nbsp;Us&nbsp;&nbsp; "
+                    fontFamily="var(--font-playfair-display)"
                     flex={false}
                     alpha={false}
                     stroke={false}

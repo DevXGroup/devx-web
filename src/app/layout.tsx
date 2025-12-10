@@ -13,6 +13,8 @@ import { DeferredStyles } from '@/components/layout/DeferredStyles'
 import Script from 'next/script'
 import { Analytics } from '@vercel/analytics/next'
 import { Partytown } from '@qwik.dev/partytown/react'
+import clsx from 'clsx'
+import { IBM_Plex_Mono, IBM_Plex_Sans, Pacifico, Playfair_Display } from 'next/font/google'
 import { createOgImageUrl, createTwitterImageUrl, getSiteUrl } from '@/lib/og'
 
 const siteUrl = getSiteUrl()
@@ -36,6 +38,34 @@ const defaultTwitterImage = createTwitterImageUrl(
 const enableVercelAnalytics =
   process.env.NODE_ENV === 'production' &&
   process.env.NEXT_PUBLIC_ENABLE_VERCEL_ANALYTICS === 'true'
+
+const ibmPlexSans = IBM_Plex_Sans({
+  subsets: ['latin'],
+  weight: ['400', '600'],
+  display: 'swap',
+  variable: '--font-ibm-plex-sans',
+})
+
+const ibmPlexMono = IBM_Plex_Mono({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  display: 'swap',
+  variable: '--font-ibm-plex-mono',
+})
+
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  weight: ['400', '600', '700', '900'],
+  display: 'swap',
+  variable: '--font-playfair-display',
+})
+
+const pacifico = Pacifico({
+  subsets: ['latin'],
+  weight: ['400'],
+  display: 'swap',
+  variable: '--font-pacifico',
+})
 
 const devtoolsVersionPatchScript = `
 (function () {
@@ -245,7 +275,17 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-GXG9QQLB7C'
 
   return (
-    <html lang="en" className="dark" style={{ backgroundColor: '#000000' }}>
+    <html
+      lang="en"
+      className={clsx(
+        'dark',
+        ibmPlexSans.variable,
+        ibmPlexMono.variable,
+        playfair.variable,
+        pacifico.variable
+      )}
+      style={{ backgroundColor: '#000000' }}
+    >
       <head>
         {/* CRITICAL: Safari polyfill - must run BEFORE any other scripts */}
         <Script
@@ -282,8 +322,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         {/* Resource hints for better performance */}
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         {/* Patch React DevTools semver regression */}
         {process.env.NODE_ENV !== 'production' && (
           <Script

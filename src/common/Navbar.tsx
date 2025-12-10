@@ -207,8 +207,15 @@ export default function Navbar() {
       }}
     >
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-[14px]">
-          <Link href="/home" aria-label="DevX Group LLC" className="flex-shrink-0 cursor-pointer">
+        <div
+          className="flex justify-between items-center py-[14px]"
+          style={{ paddingTop: 'calc(14px + env(safe-area-inset-top, 0px))' }}
+        >
+          <Link
+            href="/home"
+            aria-label="DevX Group LLC"
+            className="flex flex-shrink-0 items-center cursor-pointer"
+          >
             <Image
               src="/images/logos/devx-logo-white.png"
               alt="DevX Group LLC"
@@ -253,7 +260,6 @@ export default function Navbar() {
             </Link>
             <Link
               href="/services"
-              scroll={false}
               className={`relative px-3 py-1 text-sm rounded transition-all duration-150 ease-out transform will-change-transform antialiased ${
                 isActive('/services')
                   ? getActiveColor('/services')?.text + ' font-bold'
