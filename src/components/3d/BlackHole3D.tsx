@@ -3,17 +3,21 @@
 import React, { useRef, useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
+import { usePerformanceOptimizedAnimation } from '@/hooks/use-performance-optimized-animation'
+
+type BlackHole3DProps = {
+  enabled?: boolean
+}
 
 function AccretionDisk() {
   const pointsRef = useRef<THREE.Points>(null)
 
-  // Create particles for the accretion disk
+  // Restored dense ring from previous version for a brighter hero focal point
   const particles = useMemo(() => {
-    const count = 4000
+    const count = 3200
     const positions = new Float32Array(count * 3)
     const colors = new Float32Array(count * 3)
 
-    // Colors from user's preferred previous version
     const colorInside = new THREE.Color('#ffffff')
     const colorMiddle = new THREE.Color('#c0c0cb')
     const colorOutside = new THREE.Color('#4a4a55')
@@ -24,7 +28,7 @@ function AccretionDisk() {
       const angle = Math.random() * Math.PI * 2
 
       positions[i3] = Math.cos(angle) * r
-      positions[i3 + 1] = (Math.random() - 0.5) * 0.15 * (r * 0.5) // Slightly thicker for volume
+      positions[i3 + 1] = (Math.random() - 0.5) * 0.15 * (r * 0.5)
       positions[i3 + 2] = Math.sin(angle) * r
 
       const mixedColor = new THREE.Color()
@@ -45,8 +49,7 @@ function AccretionDisk() {
   useFrame((state) => {
     if (!pointsRef.current) return
     const time = state.clock.getElapsedTime()
-    // Slow consistent rotation
-    pointsRef.current.rotation.y = time * 0.08
+    pointsRef.current.rotation.y = time * 0.02
   })
 
   return (
@@ -68,11 +71,11 @@ function AccretionDisk() {
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.07} // Large particles as requested
+        size={0.056}
         vertexColors
         transparent
         opacity={0.64}
-        sizeAttenuation={true}
+        sizeAttenuation
         depthWrite={false}
         blending={THREE.AdditiveBlending}
       />
@@ -86,11 +89,10 @@ function Scene() {
   useFrame((state) => {
     if (!groupRef.current) return
     const time = state.clock.getElapsedTime()
-    // Gentle tipping animation (rotation X) and slight floating (position Y)
-    // "Tip goes down" = increasing X rotation slightly
-    groupRef.current.rotation.x = 0.4 + Math.sin(time * 0.5) * 0.1
-    // "Laterally down" / "Comes back out" - slight Y oscillation
-    groupRef.current.position.y = Math.sin(time * 0.3) * 0.2
+
+    groupRef.current.rotation.x = 0.4 + Math.sin(time * 0.18) * 0.04
+    groupRef.current.rotation.y = 0
+    groupRef.current.position.y = -0.5 + Math.sin(time * 0.12) * 0.1
   })
 
   return (
@@ -100,15 +102,31 @@ function Scene() {
   )
 }
 
-export default function BlackHole3D() {
+export default function BlackHole3D({ enabled = true }: BlackHole3DProps) {
+  const { shouldSkip3dEffects, isSlowCpu, isLowPower } = usePerformanceOptimizedAnimation()
+
+  if (!enabled || shouldSkip3dEffects) {
+    return (
+      <div className="w-full h-full relative pointer-events-none" style={{ minHeight: '240px' }}>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.12),_transparent_60%)]" />
+        <div className="absolute inset-[22%] rounded-full bg-gradient-to-br from-amber-200/20 via-emerald-200/10 to-purple-300/15 blur-3xl" />
+        <div className="absolute inset-[30%] rounded-full bg-black/80 border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.6)]" />
+      </div>
+    )
+  }
+
+  const dpr: [number, number] = isSlowCpu || isLowPower ? [1, 1.1] : [1, 1.35]
+
   return (
     <div className="w-full h-full relative pointer-events-none" style={{ minHeight: '400px' }}>
       <Canvas
         camera={{ position: [0, 2, 6], fov: 45 }}
-        dpr={[1, 2]}
-        gl={{ antialias: true, alpha: true }}
+        dpr={dpr}
+        gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
         style={{ pointerEvents: 'none' }}
       >
+        <ambientLight intensity={0.4} />
+        <pointLight position={[2, 3, 3]} intensity={1.4} color="#fef3c7" />
         <Scene />
       </Canvas>
     </div>

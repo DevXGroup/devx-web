@@ -105,9 +105,9 @@ const ValueCard = ({
 
       {/* Content */}
       <div className="relative z-10 w-full flex flex-col gap-6 h-full">
-        <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white group-hover:scale-110 group-hover:bg-white group-hover:border-white group-hover:text-black transition-all duration-300">
+        <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white transition-all duration-300 group-hover:scale-110 group-hover:bg-white group-hover:text-black group-hover:border-white/0 shadow-[0_10px_35px_-20px_rgba(255,255,255,0.5)]">
           <Icon
-            className="w-6 h-6 transition-colors duration-300 text-current"
+            className="w-6 h-6 transition-colors duration-300 text-current group-hover:text-black group-hover:stroke-black"
             strokeWidth={1.5}
             color="currentColor"
           />
@@ -458,6 +458,8 @@ const StatCounter = ({ number, label }: { number: string | number; label: string
     >
       <div className="text-4xl md:text-5xl font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-500">
         {formattedDisplay}
+        {/* SEO: Actual value for crawlers that don't execute JS */}
+        <span className="sr-only">{number}</span>
       </div>
       <div className="text-base md:text-lg text-zinc-400 font-light group-hover:text-white transition-colors duration-300">
         {label}
@@ -510,15 +512,14 @@ export default function AboutPage() {
                       position: 'relative',
                       height: '100px',
                       width: '100%',
-                      maxWidth: '320px',
+                      maxWidth: '370px',
                       padding: '0',
                       margin: '0',
                     }}
                   >
                     <TextPressure
                       text="About&nbsp;Us  "
-                      fontFamily="'Playfair Display', Georgia, 'Times New Roman', serif"
-                      fontUrl="/fonts/PlayfairDisplay-Variable.woff2"
+                      fontFamily="var(--font-playfair-display)"
                       flex={false}
                       alpha={false}
                       stroke={false}
@@ -546,7 +547,7 @@ export default function AboutPage() {
                     color="#E2E8F0"
                     speed="3s"
                   >
-                    Book Free Call
+                    Schedule Free Consultation
                   </StarBorder>
                   <StarBorder
                     href="/portfolio"
@@ -603,7 +604,7 @@ export default function AboutPage() {
             <div className="text-center mb-12">
               <BlurText
                 text="Our Impact"
-                className="justify-center heading-section text-white mb-4 md:mb-6 font-editorial"
+                className="justify-center heading-section about-section-heading text-white mb-4 md:mb-6 font-editorial"
                 delay={150}
                 once={true}
               />
@@ -628,7 +629,7 @@ export default function AboutPage() {
           <AnimatedSection className="max-w-5xl mx-auto text-center mb-14 md:mb-16">
             <BlurText
               text="How We Work"
-              className="justify-center heading-section text-white mb-4 md:mb-6 font-editorial"
+              className="justify-center heading-section about-section-heading text-white mb-4 md:mb-6 font-editorial"
               delay={150}
               once={true}
             />
@@ -639,7 +640,7 @@ export default function AboutPage() {
             </p>
           </AnimatedSection>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-y-12 sm:gap-y-16 lg:gap-y-0 gap-x-6 sm:gap-x-8 md:gap-x-10 lg:gap-x-16 items-center ml-[13px]">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-y-12 sm:gap-y-16 lg:gap-y-0 gap-x-6 sm:gap-x-8 md:gap-x-10 lg:gap-x-16 items-center">
             {/* Left side - Text content */}
 
             <AnimatedSection className="space-y-6 sm:space-y-8">
@@ -777,7 +778,7 @@ export default function AboutPage() {
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
             <BlurText
               text="Our Values"
-              className="justify-center heading-section text-white mb-4 md:mb-6 font-editorial"
+              className="justify-center heading-section about-section-heading text-white mb-4 md:mb-6 font-editorial"
               delay={150}
               once={true}
             />
@@ -834,7 +835,7 @@ export default function AboutPage() {
           <AnimatedSection className="text-center max-w-3xl mx-auto">
             <BlurText
               text="Delivery Ownership"
-              className="justify-center heading-section text-white mb-6 font-editorial"
+              className="justify-center heading-section about-section-heading text-white mb-6 font-editorial"
               delay={150}
               once={true}
             />
@@ -882,7 +883,7 @@ export default function AboutPage() {
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-8">
             <BlurText
               text="Our Purpose"
-              className="justify-center heading-section text-white mb-4 md:mb-6 font-editorial"
+              className="justify-center heading-section about-section-heading text-white mb-4 md:mb-6 font-editorial"
               delay={150}
               once={true}
             />
@@ -904,7 +905,7 @@ export default function AboutPage() {
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
             <BlurText
               text="Our Team Structure"
-              className="justify-center heading-section text-white mb-4 md:mb-6 font-editorial"
+              className="justify-center heading-section about-section-heading text-white mb-4 md:mb-6 font-editorial"
               delay={150}
               once={true}
             />
@@ -924,7 +925,7 @@ export default function AboutPage() {
           <AnimatedSection className="text-center max-w-3xl mx-auto">
             <BlurText
               text="What Our Clients Say"
-              className="justify-center heading-section text-white mb-4 md:mb-6 font-editorial"
+              className="justify-center heading-section about-section-heading text-white mb-4 md:mb-6 font-editorial"
               delay={150}
               once={true}
             />
@@ -943,18 +944,19 @@ export default function AboutPage() {
         <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-black/40 via-black/80 to-black"></div>
 
         <div className="container mx-auto px-[21px] relative z-10">
-          <AnimatedSection className="bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-8 md:p-12 max-w-4xl mx-auto text-center">
+          <AnimatedSection className="bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-8 md:p-12 w-full mx-auto text-center space-y-6 md:space-y-8">
             <BlurText
               text="Ready to Start Your Project?"
-              className="justify-center heading-section text-white mb-4 md:mb-6 font-editorial"
+              className="hero-title font-editorial-semibold-italic text-white leading-none text-center text-2xl sm:text-4xl md:text-5xl"
+              style={{ letterSpacing: '-0.02em', marginBottom: 0, whiteSpace: 'nowrap' }}
               delay={150}
               once={true}
             />
-            <p className="subtitle-lg mb-6 md:mb-8 max-w-2xl mx-auto mt-4 px-4">
+            <p className="subtitle-lg text-white/80 max-w-2xl mx-auto px-4 leading-relaxed mt-2">
               Let&apos;s discuss how we can help you achieve your goals with our expert software
               development services.
             </p>
-            <div className="flex flex-wrap justify-center gap-4">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5 pt-2">
               <a
                 href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative"
                 target="_blank"

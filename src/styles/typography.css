@@ -739,11 +739,11 @@
   }
 
   .section-title-hero {
-    @apply text-3xl;
+    @apply text-5xl;
   }
 
   .section-title {
-    @apply text-2xl;
+    @apply text-4xl;
   }
 
   .card-description {
@@ -759,6 +759,6 @@
   }
 
   .testimonial-quote {
-    @apply text-sm;
+    @apply text-base;
   }
 }

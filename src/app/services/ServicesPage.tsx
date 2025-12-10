@@ -34,6 +34,25 @@ import AttioButton from '@/components/ui/AttioButton'
 
 import dynamic from 'next/dynamic'
 
+// Deterministic motion paths to keep hydration stable
+const agentMotionConfigs = [
+  {
+    initial: { x: 40, y: 24 },
+    animate: { x: [40, 220, 60], y: [24, 120, 72] },
+    duration: 12,
+  },
+  {
+    initial: { x: 110, y: 70 },
+    animate: { x: [110, 260, 90], y: [70, 40, 110] },
+    duration: 11,
+  },
+  {
+    initial: { x: 200, y: 40 },
+    animate: { x: [200, 120, 260], y: [40, 130, 80] },
+    duration: 13,
+  },
+]
+
 const HyperSpeed = dynamic(() => import('@/components/animations/HyperSpeed'), {
   ssr: false,
   loading: () => <div className="w-full h-[450px] bg-black" />,
@@ -402,8 +421,7 @@ export default function ServicesPage() {
                   <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
                     <TextPressure
                       text="Services  "
-                      fontFamily="'Playfair Display', Georgia, 'Times New Roman', serif"
-                      fontUrl="/fonts/PlayfairDisplay-Variable.woff2"
+                      fontFamily="var(--font-playfair-display)"
                       flex={false}
                       alpha={false}
                       stroke={false}
@@ -833,7 +851,10 @@ export default function ServicesPage() {
               transition={{ duration: 0.8, ease: 'easeOut' }}
               className="text-left"
             >
-              <p className="heading-component text-white font-editorial text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-semibold mb-6 max-w-5xl leading-tight md:leading-snug">
+              <p
+                className="hero-title font-editorial-semibold-italic text-white leading-none"
+                style={{ letterSpacing: '-0.02em', marginBottom: '1.5rem' }}
+              >
                 Ready to automate your business?
               </p>
               <p className="subtitle-sm text-white/50 mb-8 max-w-xl text-lg font-light leading-relaxed">
@@ -909,17 +930,14 @@ export default function ServicesPage() {
 
                   {/* Active Agents Animation */}
                   <div className="absolute inset-0 z-10">
-                    {[...Array(3)].map((_, i) => (
+                    {agentMotionConfigs.map((config, i) => (
                       <motion.div
                         key={i}
                         className="absolute w-12 h-12 rounded-lg border border-[#4CD787]/30 bg-[#4CD787]/10 backdrop-blur-sm flex items-center justify-center shadow-[0_0_15px_rgba(76,215,135,0.15)]"
-                        initial={{ x: Math.random() * 200, y: Math.random() * 100 }}
-                        animate={{
-                          x: [Math.random() * 200, Math.random() * 300, Math.random() * 100],
-                          y: [Math.random() * 100, Math.random() * 150, Math.random() * 50],
-                        }}
+                        initial={config.initial}
+                        animate={config.animate}
                         transition={{
-                          duration: 10 + Math.random() * 5,
+                          duration: config.duration,
                           repeat: Infinity,
                           repeatType: 'reverse',
                           ease: 'easeInOut',

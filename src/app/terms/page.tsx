@@ -1,5 +1,8 @@
+'use client'
+
 import type { ReactNode } from 'react'
-import { Metadata } from 'next'
+import { useRef, useState, useEffect } from 'react'
+import { motion, useReducedMotion, useInView } from 'framer-motion'
 import {
   Gavel,
   Handshake,
@@ -9,77 +12,45 @@ import {
   NotebookPen,
   Rocket,
   Workflow,
+  ArrowRight,
 } from 'lucide-react'
-import { createOgImageUrl, createTwitterImageUrl, getSiteUrl } from '@/lib/og'
+import BlurText from '@/components/animations/BlurText'
 
-// Force dynamic rendering to avoid context issues during static generation
-export const dynamic = 'force-dynamic'
+// Animation variants
+const fadeInUpVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: 'easeOut' as const },
+  },
+}
 
-const siteUrl = getSiteUrl()
-const pagePath = '/terms'
-const pageUrl = `${siteUrl}${pagePath}`
-const ogImage = createOgImageUrl(
-  {
-    eyebrow: 'Terms of Service',
-    title: 'Partnership Principles for Modern Product Delivery',
-    subtitle: 'Clear guardrails that keep teams aligned from strategy to scale',
-    focus: ['Trusted Collaboration', 'Security & Compliance', 'Product Ownership'],
-  },
-  siteUrl
-)
-const twitterImage = createTwitterImageUrl(
-  {
-    eyebrow: 'Terms of Service',
-    title: 'Partnership Principles for Modern Product Delivery',
-    subtitle: 'Clear guardrails that keep teams aligned from strategy to scale',
-    focus: ['Trusted Collaboration', 'Security & Compliance', 'Product Ownership'],
-  },
-  siteUrl
-)
+const AnimatedSection = ({
+  children,
+  className = '',
+  delay = 0,
+}: {
+  children: React.ReactNode
+  className?: string
+  delay?: number
+}) => {
+  const shouldReduceMotion = useReducedMotion()
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, amount: 0, margin: '-50px' })
 
-export const metadata: Metadata = {
-  title: 'Terms of Service | DevX Group LLC',
-  description:
-    'Understand the engagement, payment, IP, and governance standards that guide every DevX Group software partnership.',
-  keywords: [
-    'terms of service',
-    'software development agreement',
-    'professional services terms',
-    'DevX Group',
-    'product development',
-    'AI software contract',
-  ],
-  openGraph: {
-    title: 'Terms of Service | DevX Group LLC',
-    description:
-      'Understand the engagement, payment, IP, and governance standards that guide every DevX Group software partnership.',
-    url: pageUrl,
-    siteName: 'DevX Group',
-    images: [
-      {
-        url: ogImage,
-        width: 1200,
-        height: 630,
-        alt: 'DevX Group Terms of Service',
-      },
-    ],
-    locale: 'en_US',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Terms of Service | DevX Group LLC',
-    description:
-      'Review DevX Group’s partnership commitments across discovery, delivery, testing, and ongoing support.',
-    images: [twitterImage],
-  },
-  alternates: {
-    canonical: pageUrl,
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
+  return (
+    <motion.div
+      ref={ref}
+      variants={fadeInUpVariants}
+      initial="hidden"
+      animate={isInView ? 'visible' : 'hidden'}
+      transition={{ duration: 0.5, delay: shouldReduceMotion ? 0 : delay }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  )
 }
 
 const lastUpdated = 'October 22, 2025'
@@ -644,7 +615,7 @@ const sections: Section[] = [
           <>
             Email:{' '}
             <a
-              className="text-emerald-300 hover:text-emerald-200"
+              className="text-emerald-400 hover:text-emerald-300 transition-colors"
               href="mailto:support@devxgroup.io"
             >
               support@devxgroup.io
@@ -659,161 +630,229 @@ const sections: Section[] = [
 ]
 
 export default function TermsPage() {
-  return (
-    <div className="relative overflow-hidden bg-slate-950 text-slate-100">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(252,_211,_77,_0.12),_transparent_60%),_radial-gradient(circle_at_bottom_right,_rgba(14,_165,_233,_0.1),_transparent_55%)]" />
+  const [activeSection, setActiveSection] = useState('')
+  const [mounted, setMounted] = useState(false)
 
-      <div className="relative container mx-auto px-4 pt-36 pb-48">
-        <div className="max-w-4xl">
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1 text-sm text-slate-300 backdrop-blur">
-            <Gavel className="h-4 w-4 text-emerald-300" />
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  return (
+    <div className="min-h-screen bg-[#000B14] text-white selection:bg-emerald-500/30 selection:text-emerald-200">
+      {/* Background Ambience */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute top-0 right-0 w-full h-[500px] bg-[radial-gradient(circle_at_60%_0%,_rgba(251,191,36,0.06),_transparent_70%)]" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[radial-gradient(circle_at_0%_100%,_rgba(6,182,212,0.05),_transparent_60%)]" />
+      </div>
+
+      <div className="relative container mx-auto px-4 sm:px-6 pt-32 pb-40">
+        {/* Header Section */}
+        <AnimatedSection className="max-w-4xl mx-auto mb-20 text-center sm:text-left">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium uppercase tracking-wider text-emerald-400 backdrop-blur-sm mb-8"
+          >
+            <Gavel className="h-3.5 w-3.5" />
             Terms of Service
-          </span>
-          <h1 className="mt-6 text-4xl font-semibold leading-tight text-white sm:text-5xl">
-            Clear guardrails for elite product delivery.
+          </motion.div>
+
+          <h1 className="text-4xl sm:text-6xl font-bold tracking-tight text-white mb-6 leading-[1.1]">
+            <BlurText
+              text="Clear guardrails for elite product delivery."
+              className="inline-block"
+              delay={200}
+            />
           </h1>
-          <p className="mt-6 text-lg text-slate-300 sm:text-xl">
+
+          <p className="text-lg sm:text-xl text-slate-400 max-w-2xl leading-relaxed">
             Every DevX Group partnership is built on transparency, rigorous execution, and mutual
             accountability. These terms outline how we collaborate from discovery through scale.
           </p>
 
-          <div className="mt-8 flex flex-wrap items-center gap-4 text-sm text-slate-400">
-            <span className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 font-medium text-slate-200">
-              <NotebookPen className="h-4 w-4 text-emerald-300" />
+          <div className="mt-10 flex flex-wrap gap-4 text-sm text-slate-400 justify-center sm:justify-start">
+            <span className="inline-flex items-center gap-2 rounded-full bg-white/[0.03] border border-white/5 px-3 py-1.5 font-medium text-slate-300">
+              <NotebookPen className="h-4 w-4 text-emerald-500" />
               Last updated {lastUpdated}
             </span>
-            <span className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1">
-              <Timer className="h-4 w-4 text-emerald-300" />
+            <span className="inline-flex items-center gap-2 rounded-full bg-white/[0.03] border border-white/5 px-3 py-1.5">
+              <Timer className="h-4 w-4 text-emerald-500" />
               Rapid onboarding (2-week average)
             </span>
-            <span className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1">
-              <Workflow className="h-4 w-4 text-emerald-300" />
+            <span className="inline-flex items-center gap-2 rounded-full bg-white/[0.03] border border-white/5 px-3 py-1.5">
+              <Workflow className="h-4 w-4 text-emerald-500" />
               Suited for SaaS, AI, and IoT programs
             </span>
           </div>
-        </div>
+        </AnimatedSection>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {highlightCards.map((card) => {
+        {/* Highlights Grid */}
+        <div className="max-w-7xl mx-auto grid gap-6 md:grid-cols-3 mb-32">
+          {highlightCards.map((card, idx) => {
             const Icon = card.icon
             return (
-              <div
-                key={card.title}
-                className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] p-6 shadow-[0_20px_45px_-30px_rgba(255,196,54,0.6)] backdrop-blur transition-transform duration-300 hover:-translate-y-1"
-              >
-                <div className="mb-4 inline-flex rounded-full bg-emerald-400/10 p-3 text-emerald-300">
-                  <Icon className="h-5 w-5" />
+              <AnimatedSection key={card.title} delay={0.1 * idx}>
+                <div className="group relative h-full rounded-2xl border border-white/10 bg-white/[0.02] p-8 hover:bg-white/[0.04] transition-colors duration-300">
+                  <div className="mb-6 inline-flex rounded-xl bg-emerald-500/10 p-3 text-emerald-400 group-hover:scale-110 transition-transform duration-300">
+                    <Icon className="h-6 w-6" />
+                  </div>
+                  <h2 className="text-xl font-semibold text-white mb-3 group-hover:text-emerald-400 transition-colors">
+                    {card.title}
+                  </h2>
+                  <p className="text-sm leading-relaxed text-slate-400">{card.description}</p>
                 </div>
-                <h2 className="text-lg font-semibold text-white">{card.title}</h2>
-                <p className="mt-3 text-sm leading-relaxed text-slate-300">{card.description}</p>
-              </div>
+              </AnimatedSection>
             )
           })}
         </div>
 
-        <div className="mt-16 flex flex-col gap-10 lg:flex-row">
-          <aside className="lg:w-64">
-            <div className="sticky top-32 space-y-6 rounded-2xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur">
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-300">
-                Quick Navigation
+        {/* Main Content Area */}
+        <div className="flex flex-col gap-12 lg:gap-20 lg:flex-row max-w-7xl mx-auto">
+          {/* Sticky Sidebar */}
+          <aside className="lg:w-72 flex-none">
+            <div className="sticky top-32 rounded-2xl border border-white/10 bg-[#0A0F13]/80 p-6 backdrop-blur-md">
+              <p className="text-xs font-bold uppercase tracking-widest text-emerald-500 mb-6">
+                Contents
               </p>
-              <ul className="space-y-2">
-                {sections.map((section) => (
-                  <li key={section.id}>
-                    <a
-                      href={`#${section.id}`}
-                      className="group flex items-center justify-between rounded-lg px-3 py-2 text-sm text-slate-300 transition hover:bg-white/10 hover:text-white"
-                    >
-                      <span>{section.title}</span>
-                      <span className="text-xs font-semibold text-emerald-300/80 group-hover:text-emerald-200">
-                        {section.number}
-                      </span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
+              <nav>
+                <ul className="space-y-1">
+                  {sections.map((section) => (
+                    <li key={section.id}>
+                      <a
+                        href={`#${section.id}`}
+                        onClick={(e) => {
+                          e.preventDefault()
+                          document
+                            .getElementById(section.id)
+                            ?.scrollIntoView({ behavior: 'smooth' })
+                          setActiveSection(section.id)
+                        }}
+                        className={`group flex items-center justify-between rounded-lg px-3 py-2 text-sm transition-all duration-200 ${
+                          activeSection === section.id
+                            ? 'bg-white/10 text-white font-medium'
+                            : 'text-slate-400 hover:text-white hover:bg-white/5'
+                        }`}
+                      >
+                        <span className="truncate mr-4">{section.title}</span>
+                        <span
+                          className={`text-[10px] font-mono transition-colors ${
+                            activeSection === section.id
+                              ? 'text-emerald-400'
+                              : 'text-slate-600 group-hover:text-slate-500'
+                          }`}
+                        >
+                          {section.number}
+                        </span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
             </div>
           </aside>
 
-          <div className="flex-1 space-y-20">
-            {sections.map((section) => (
-              <section key={section.id} id={section.id} className="scroll-mt-32">
-                <div className="flex items-center gap-4">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-sm font-semibold text-emerald-300">
-                    {section.number}
-                  </span>
-                  <h2 className="text-2xl font-semibold text-white sm:text-3xl">{section.title}</h2>
-                </div>
+          {/* Scrolling Content */}
+          <div className="flex-1 min-w-0 space-y-24">
+            {sections.map((section, idx) => (
+              <AnimatedSection key={section.id} delay={0}>
+                <section id={section.id} className="scroll-mt-32 group">
+                  <div className="flex items-baseline gap-4 mb-8">
+                    <span className="font-mono text-emerald-500 text-sm font-semibold tracking-wider opacity-60">
+                      {section.number}
+                    </span>
+                    <h2 className="text-2xl sm:text-3xl font-semibold text-white tracking-tight group-hover:text-emerald-50">
+                      {section.title}
+                    </h2>
+                  </div>
 
-                <div className="mt-6 space-y-6 text-base leading-relaxed text-slate-300 sm:text-lg">
-                  {section.paragraphs?.map((paragraph, index) => (
-                    <p key={index} className="text-slate-200/90">
-                      {paragraph}
-                    </p>
-                  ))}
+                  <div className="space-y-6 text-slate-300/90 text-base sm:text-lg leading-relaxed">
+                    {section.paragraphs?.map((paragraph, index) => (
+                      <p key={index} className="max-w-3xl">
+                        {paragraph}
+                      </p>
+                    ))}
 
-                  {section.bullets && (
-                    <ul className="space-y-4 rounded-2xl border border-white/5 bg-white/[0.03] p-6">
-                      {section.bullets.map((item, index) => (
-                        <li key={index} className="flex flex-col gap-1 text-slate-200/90">
-                          {item.label ? (
-                            <span className="text-sm font-semibold uppercase tracking-wide text-emerald-300/90">
-                              {item.label}
-                            </span>
-                          ) : null}
-                          <span className="text-base text-slate-200">{item.body}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+                    {section.bullets && (
+                      <div className="mt-8 rounded-2xl border border-white/5 bg-white/[0.02] p-8 hover:border-white/10 transition-colors">
+                        <ul className="space-y-4">
+                          {section.bullets.map((item, index) => (
+                            <li
+                              key={index}
+                              className="flex flex-col sm:flex-row gap-2 sm:gap-4 text-slate-300"
+                            >
+                              {item.label && (
+                                <span className="text-sm font-semibold uppercase tracking-wide text-emerald-400/90 sm:w-48 sm:flex-none">
+                                  {item.label}
+                                </span>
+                              )}
+                              <span className="text-slate-300">{item.body}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
 
-                  {section.columns && (
-                    <div className="grid gap-6 lg:grid-cols-3">
-                      {section.columns.map((column) => (
-                        <div
-                          key={column.title}
-                          className="rounded-2xl border border-white/10 bg-white/[0.03] p-6"
-                        >
-                          <h3 className="text-base font-semibold text-white">{column.title}</h3>
-                          <ul className="mt-3 space-y-3 text-sm text-slate-200/90">
-                            {column.items.map((item, index) => (
-                              <li key={index} className="flex gap-2">
-                                <span className="mt-1 h-1.5 w-1.5 flex-none rounded-full bg-emerald-300" />
-                                <span>{item}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </section>
+                    {section.columns && (
+                      <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                        {section.columns.map((column) => (
+                          <div
+                            key={column.title}
+                            className="rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.03] to-transparent p-6 hover:from-white/[0.05] transition-colors"
+                          >
+                            <h3 className="text-base font-semibold text-white mb-4 flex items-center gap-2">
+                              <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                              {column.title}
+                            </h3>
+                            <ul className="space-y-3">
+                              {column.items.map((item, index) => (
+                                <li
+                                  key={index}
+                                  className="flex gap-3 text-sm text-slate-400 leading-normal"
+                                >
+                                  <span className="text-emerald-500/50 mt-1">•</span>
+                                  <span>{item}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </section>
+                <div className="h-px bg-white/5 mt-16 w-full max-w-3xl" />
+              </AnimatedSection>
             ))}
-          </div>
-        </div>
 
-        <div className="relative z-30 mt-20 rounded-3xl border border-white/10 bg-white/[0.04] p-8 text-center backdrop-blur shadow-[0_25px_60px_-35px_rgba(34,197,94,0.5)]">
-          <div className="mx-auto max-w-3xl space-y-4">
-            <Rocket className="mx-auto h-10 w-10 text-emerald-300" />
-            <h2 className="text-2xl font-semibold text-white">
-              Ready to scope your next product initiative?
-            </h2>
-            <p className="text-slate-300">
-              Share your roadmap, procurement requirements, or security questionnaire and we&apos;ll
-              assemble the right pod for launch.
-            </p>
-            <a
-              href="/contact"
-              className="inline-flex items-center justify-center rounded-full bg-emerald-400 px-6 py-3 font-semibold text-slate-900 shadow-lg shadow-emerald-400/30 transition hover:-translate-y-0.5 hover:bg-emerald-300"
-            >
-              Talk with DevX Group
-            </a>
+            {/* Bottom CTA */}
+            <AnimatedSection>
+              <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-10 md:p-16 text-center shadow-[0_40px_80px_-40px_rgba(16,185,129,0.1)]">
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-emerald-950/20" />
+                <div className="relative z-10 max-w-2xl mx-auto space-y-6">
+                  <Rocket className="mx-auto h-12 w-12 text-emerald-400 mb-4" />
+                  <h2 className="text-3xl font-bold text-white">
+                    Ready to scope your next product initiative?
+                  </h2>
+                  <p className="text-slate-400 text-lg">
+                    Share your roadmap, procurement requirements, or security questionnaire and
+                    we&apos;ll get your team onboarded in days, not months.
+                  </p>
+                  <div className="pt-4 flex justify-center">
+                    <a
+                      href="/contact"
+                      className="inline-flex items-center gap-2 rounded-lg bg-emerald-500 text-black px-6 py-3 font-semibold hover:bg-emerald-400 transition-colors"
+                    >
+                      Start a Conversation
+                      <ArrowRight className="h-4 w-4" />
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </AnimatedSection>
           </div>
         </div>
       </div>
-
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent" />
     </div>
   )
 }

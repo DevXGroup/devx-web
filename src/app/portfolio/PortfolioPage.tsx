@@ -318,7 +318,7 @@ function ServiceIcon({
         e.preventDefault()
         onClick(service, e)
       }}
-      className="relative group service-icon-container cursor-pointer"
+      className="relative group service-icon-container cursor-pointer p-4 sm:p-5"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true, amount: 0.2 }}
@@ -460,20 +460,25 @@ export default function PortfolioPage() {
               <div className="flex items-center justify-center w-full mb-4 sm:mb-8 px-4">
                 <div
                   className="relative flex items-center justify-center w-full max-w-md mx-auto"
-                  style={{ height: '120px', minWidth: '280px' }}
+                  style={{
+                    height: '120px',
+                    minWidth: '550px',
+                    fontFamily: 'var(--font-playfair-display)',
+                    marginLeft: '10px',
+                    marginRight: '10px',
+                  }}
                 >
                   <TextPressure
-                    text="Portfolio  "
-                    fontFamily="var(--font-ibm-plex-mono)"
+                    text=" &nbsp;Portfolio&nbsp;  "
+                    fontFamily="var(--font-playfair-display)"
                     flex={false}
                     alpha={false}
                     stroke={false}
                     width={false}
                     weight={true}
                     italic={false}
-                    textColor="#4834D4"
+                    textColor="#4506ccff"
                     strokeColor="#FFFFFF"
-                    minFontSize={32}
                     className="w-full h-full"
                   />
                 </div>
@@ -481,9 +486,10 @@ export default function PortfolioPage() {
 
               <BlurText
                 text="Explore shipped products that increased revenue, retention, and efficiency across web, mobile, AI, and cloud experiences."
-                className="relative z-20 section-subtitle text-zinc-400 max-w-2xl mx-auto mb-10 -mt-8 justify-center text-center"
+                className="relative z-20 section-subtitle text-zinc-400 max-w-3xl lg:max-w-4xl mx-auto mb-10 -mt-8 justify-center text-center"
                 delay={200}
                 animateBy="words"
+                style={{ whiteSpace: 'normal', textWrap: 'balance' }}
               />
 
               {/* Decorative squares row under subtitle */}
@@ -493,7 +499,7 @@ export default function PortfolioPage() {
                     key={`hero-ascii-ball-${pathname}`}
                     height={620}
                     className="rounded-xl"
-                    color="#E4E4E7"
+                    color="#9ca3af"
                     charSize={6}
                     opacity={0.75}
                     showBase={false}
@@ -506,8 +512,8 @@ export default function PortfolioPage() {
                 </div>
 
                 {/* Mobile-friendly animated squares */}
-                <div className="md:hidden absolute inset-x-0 bottom-0 px-5 pt-5">
-                  <div className="grid grid-cols-2 gap-3 max-w-[260px] mx-auto">
+                <div className="hidden sm:hidden absolute inset-x-0 bottom-0 px-5 pt-5">
+                  <div className="grid grid-cols-2 gap-3 max-w-[220px] mx-auto">
                     <motion.div
                       className="relative rounded-2xl border border-[#4CD787]/50 bg-gradient-to-br from-white/5 via-[#4CD787]/10 to-transparent backdrop-blur-sm overflow-hidden aspect-square shadow-[0_12px_50px_-28px_rgba(76,215,135,0.5)]"
                       style={{ transform: 'rotate(-6deg)' }}
@@ -542,49 +548,13 @@ export default function PortfolioPage() {
                       />
                       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent" />
                     </motion.div>
-
-                    <motion.div
-                      className="relative rounded-2xl border border-amber-300/50 bg-gradient-to-br from-amber-200/10 via-amber-400/10 to-transparent backdrop-blur-sm overflow-hidden aspect-square -mt-2"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.6, ease: 'easeOut', delay: 0.1 }}
-                    >
-                      <GridAnimation
-                        direction="diagonal"
-                        speed={0.22}
-                        borderColor="rgba(255, 215, 0, 0.6)"
-                        squareSize={18}
-                        hoverFillColor="rgba(255, 215, 0, 0.25)"
-                        showRadialGradient={false}
-                      />
-                    </motion.div>
-
-                    <motion.div
-                      className="relative rounded-2xl border border-[#4CD787]/60 bg-gradient-to-br from-[#0b3326]/60 via-black/30 to-[#0b3326]/40 backdrop-blur-sm overflow-hidden aspect-square -ml-6 -mt-4 rotate-12"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.65, ease: 'easeOut', delay: 0.15 }}
-                    >
-                      <Waves
-                        lineColor="#4CD787"
-                        backgroundColor="rgba(0,0,0,0.25)"
-                        waveSpeedX={0.01}
-                        waveSpeedY={0.004}
-                        waveAmpX={14}
-                        waveAmpY={8}
-                        xGap={7}
-                        yGap={12}
-                        friction={0.94}
-                        tension={0.006}
-                        maxCursorMove={28}
-                      />
-                    </motion.div>
+                    {/* Only show two squares on extra-small screens */}
                   </div>
                 </div>
 
                 {/* Left Outer Square - LetterGlitch (110x110px) - Tablet and up */}
                 <motion.div
-                  className="hidden md:block absolute
+                  className="hidden sm:block absolute
                     top-1/2 -translate-y-1/2 left-[8%]
                     backdrop-blur-md overflow-hidden
                     w-[110px] h-[110px] cursor-default"
@@ -612,7 +582,7 @@ export default function PortfolioPage() {
 
                 {/* Left Middle Square - DotGrid (132x132px) - Tablet and up */}
                 <motion.div
-                  className="hidden md:block absolute
+                  className="hidden sm:block absolute
                     top-1/2 -translate-y-1/2 left-[25%]
                     backdrop-blur-md overflow-hidden
                     w-[132px] h-[132px] cursor-pointer"
@@ -643,7 +613,7 @@ export default function PortfolioPage() {
 
                 {/* Right Middle Square - GridAnimation (132x132px) - Tablet and up */}
                 <motion.div
-                  className="hidden md:block absolute
+                  className="hidden sm:block absolute
                     top-1/2 -translate-y-1/2 right-[25%]
                     backdrop-blur-md overflow-hidden
                     w-[132px] h-[132px] cursor-pointer"
@@ -671,7 +641,7 @@ export default function PortfolioPage() {
 
                 {/* Right Outer Square - Waves (110x110px) - Tablet and up */}
                 <motion.div
-                  className="hidden md:block absolute
+                  className="hidden sm:block absolute
                     top-1/2 -translate-y-1/2 right-[8%]
                     backdrop-blur-md overflow-hidden
                     w-[110px] h-[110px] cursor-pointer"
@@ -719,7 +689,7 @@ export default function PortfolioPage() {
         </div>
         <div className="container mx-auto px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-24 max-w-8xl">
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-2 gap-8 md:gap-12 lg:gap-14 xl:gap-16 2xl:gap-20 relative z-10 justify-items-center max-w-6xl xl:max-w-7xl mx-auto"
+            className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 2xl:grid-cols-2 gap-8 md:gap-12 lg:gap-14 xl:gap-16 2xl:gap-20 relative z-10 justify-items-center max-w-6xl xl:max-w-7xl mx-auto"
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
@@ -769,7 +739,7 @@ export default function PortfolioPage() {
               once={false}
             />
           </div>
-          <div className="flex flex-wrap justify-center gap-8 md:gap-12 lg:gap-16 relative z-10">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:flex lg:flex-wrap lg:justify-center gap-6 sm:gap-8 md:gap-10 lg:gap-12 justify-items-center relative z-10 px-4">
             {services.map((service, index) => (
               <ServiceIcon
                 key={service.title}

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useRef } from 'react'
+import dynamic from 'next/dynamic'
 import { motion, useReducedMotion } from 'framer-motion'
 import Link from 'next/link'
 import ClientOnly from '@layout/ClientOnly'
@@ -10,7 +11,12 @@ import TextType from '@animations/TextType'
 import ShinyText from '@/components/ui/ShinyText'
 import { usePerformanceOptimizedAnimation } from '@/hooks/use-performance-optimized-animation'
 
-import BlackHole3D from '@/components/3d/BlackHole3D'
+const BlackHole3D = dynamic(() => import('@/components/3d/BlackHole3D'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full min-h-[320px] bg-gradient-to-b from-black via-zinc-950 to-black" />
+  ),
+})
 
 const subheaders = [
   'Stunning UI/UX',
@@ -44,25 +50,35 @@ export default function Hero() {
   const [ShootingStarsComp, setShootingStarsComp] = useState<(() => React.ReactElement) | null>(
     null
   )
-  const [isMobile, setIsMobile] = useState(false)
+  const [isViewportMobile, setIsViewportMobile] = useState(false)
   const [showStars, setShowStars] = useState(false)
   const [showShootingStars, setShowShootingStars] = useState(false)
 
   // Use performance optimization hook to detect slow devices
-  const { shouldOptimizeAnimations } = usePerformanceOptimizedAnimation()
+  const {
+    shouldOptimizeAnimations,
+    isMobile,
+    isLowPower,
+    hasReducedMotion,
+    isSlowCpu,
+    shouldSkip3dEffects,
+  } = usePerformanceOptimizedAnimation()
 
   // Check for mobile devices to optimize performance
   useEffect(() => {
     const checkIfMobile = () => window.innerWidth < 768
-    setIsMobile(checkIfMobile())
+    setIsViewportMobile(checkIfMobile())
 
-    const handleResize = () => setIsMobile(checkIfMobile())
+    const handleResize = () => setIsViewportMobile(checkIfMobile())
     window.addEventListener('resize', handleResize, { passive: true })
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  const canUseHeavyVisuals = !shouldOptimizeAnimations && !shouldReduceMotion
+  const canUseHeavyVisuals = !shouldOptimizeAnimations && !shouldReduceMotion && !isSlowCpu
   const sectionRef = useRef<HTMLElement>(null)
+  const deviceIsMobile = isViewportMobile || isMobile
+  const shouldRenderBlackHole =
+    canUseHeavyVisuals && !shouldSkip3dEffects && !isLowPower && !hasReducedMotion
 
   // New loading sequence: Text → Stars/Background → Shooting Stars (performance-friendly)
   useEffect(() => {
@@ -84,7 +100,7 @@ export default function Hero() {
             import('../hero/HeroBackground'),
             import('../hero/ShootingStars'),
           ])
-        const StarFieldLazy = () => <StarTwinklingField className="z-1" count={100} />
+        const StarFieldLazy = () => <StarTwinklingField className="z-1" count={40} />
         StarFieldLazy.displayName = 'StarFieldLazy'
         const HeroBgLazy = () => <HeroBackground />
         HeroBgLazy.displayName = 'HeroBackgroundLazy'
@@ -163,7 +179,7 @@ export default function Hero() {
             <div
               className="hero-title mx-auto flex flex-nowrap items-center justify-center gap-x-2 sm:gap-x-3 md:gap-x-3 lg:gap-x-4 text-center text-white w-full leading-none mb-1 sm:mb-6 md:mb-8 lg:mb-10 overflow-visible whitespace-nowrap max-[467px]:whitespace-normal"
               style={{
-                fontFamily: '"Playfair Display", serif',
+                fontFamily: 'var(--font-playfair-display)',
                 fontWeight: 600,
                 letterSpacing: '-0.02em',
                 whiteSpace: 'nowrap',
@@ -187,7 +203,7 @@ export default function Hero() {
               />
               <BlurText
                 text="Engineered."
-                className="inline-flex italic font-semibold text-[#ccff00] font-editorial"
+                className="inline-flex font-editorial-semibold-italic text-[#ccff00]"
                 animateBy="letters"
                 delay={190}
                 once
@@ -204,14 +220,14 @@ export default function Hero() {
               />
             </div>
 
-            <div className="text-center w-full mx-auto space-y-2 sm:space-y-8 md:space-y-10 lg:space-y-8 px-4">
+            <div className="text-center w-full mx-auto space-y-2 sm:space-y-8 md:space-y-10 lg:space-y-8 px-2 sm:px-4">
               <motion.p
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 2.3, duration: 1.9 }}
                 className="hero-subtitle text-white/90 text-center mx-auto leading-[1.3] tracking-wide mt-1 sm:mt-2 md:mt-4 font-editorial"
                 style={{
-                  fontFamily: '"Playfair Display", serif',
+                  fontFamily: 'var(--font-playfair-display)',
                   // Large on desktop, scales down responsively. Max-width ensures 2 lines.
                   // Large on desktop, scales down responsively. Max-width ensures 2 lines.
                   fontSize: 'clamp(1.35rem, 4.5vw, 2.5rem)',
@@ -233,21 +249,25 @@ export default function Hero() {
                     href="/services"
                     className="uppercase tracking-[0.15em] subtitle-sm font-semibold opacity-80 hover:opacity-100 transition-all duration-300 hover:tracking-[0.2em] text-amber-100/90 hover:text-amber-50"
                   >
-                    <ShinyText text="Elite Services" speed={isMobile ? 5 : 3} delay={0} />
+                    <ShinyText text="Fast Services" speed={deviceIsMobile ? 5 : 3} delay={0} />
                   </Link>
                   <span className="hidden sm:inline text-amber-200/30 subtitle-sm">•</span>
                   <Link
                     href="/portfolio"
                     className="uppercase tracking-[0.15em] subtitle-sm font-semibold opacity-80 hover:opacity-100 transition-all duration-300 hover:tracking-[0.2em] text-amber-100/90 hover:text-amber-50"
                   >
-                    <ShinyText text="Proven Record" speed={isMobile ? 7 : 5} delay={0.2} />
+                    <ShinyText text="Proven Record" speed={deviceIsMobile ? 7 : 5} delay={0.2} />
                   </Link>
                   <span className="hidden md:inline text-amber-200/30 subtitle-sm">•</span>
                   <Link
                     href="/pricing"
                     className="uppercase tracking-[0.15em] subtitle-sm font-semibold opacity-80 hover:opacity-100 transition-all duration-300 hover:tracking-[0.2em] text-amber-100/90 hover:text-amber-50"
                   >
-                    <ShinyText text="Transparent Pricing" speed={isMobile ? 9 : 7} delay={0.4} />
+                    <ShinyText
+                      text="Transparent Pricing"
+                      speed={deviceIsMobile ? 9 : 7}
+                      delay={0.4}
+                    />
                   </Link>
                 </div>
               </motion.div>
@@ -268,9 +288,9 @@ export default function Hero() {
             <TextType
               text={subheaders}
               as="p"
-              typingSpeed={shouldReduceMotion ? 40 : isMobile ? 60 : 80}
-              deletingSpeed={shouldReduceMotion ? 25 : isMobile ? 35 : 50}
-              pauseDuration={shouldReduceMotion ? 800 : isMobile ? 2500 : 2000}
+              typingSpeed={shouldReduceMotion ? 40 : deviceIsMobile ? 60 : 80}
+              deletingSpeed={shouldReduceMotion ? 25 : deviceIsMobile ? 35 : 50}
+              pauseDuration={shouldReduceMotion ? 800 : deviceIsMobile ? 2500 : 2000}
               className="font-mono typewriter-text tracking-[0.08em] text-center mx-auto leading-tight px-2"
               style={{
                 color: '#ccff00',
@@ -297,7 +317,7 @@ export default function Hero() {
         aria-hidden="true"
       >
         <div className="w-full h-full">
-          <BlackHole3D />
+          <BlackHole3D enabled={shouldRenderBlackHole} />
         </div>
       </div>
 
@@ -308,7 +328,7 @@ export default function Hero() {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 2.5, duration: 0.8, ease: 'easeOut' }}
         style={{
-          bottom: 'clamp(80px, 12vh, 120px)',
+          bottom: 'clamp(80px, 10vh, 140px)',
           pointerEvents: 'auto',
         }}
       >
@@ -330,7 +350,7 @@ export default function Hero() {
               className={ctaButtonClasses}
               aria-label="Schedule a free call with DevX Group"
             >
-              Book Free Call
+              Schedule Free Consultation
             </StarBorder>
           </motion.div>
           <motion.div

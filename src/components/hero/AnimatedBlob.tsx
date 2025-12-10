@@ -2,7 +2,6 @@ import { useRef, Suspense, useMemo, memo } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { AdditiveBlending } from 'three'
 import * as THREE from 'three'
-import { useScrollRef } from '@/hooks/use-scrollRef'
 
 function NoiseParticleSphere({
   position,
@@ -29,7 +28,6 @@ function NoiseParticleSphere({
 }) {
   const groupRef = useRef<THREE.Group>(null)
   const particlesRef = useRef<THREE.Points>(null)
-  const scrollYRef = useScrollRef({ throttleDelay: 4 })
   const localTime = useRef(0)
 
   const particleCount = 60

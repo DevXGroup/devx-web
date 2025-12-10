@@ -3,7 +3,7 @@
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { useRef, useState, useEffect } from 'react'
 import Image from 'next/image'
-import { Users, Calendar, Cpu, X, User, ArrowDown, ChevronRight } from 'lucide-react'
+import { Calendar, ArrowDown, ChevronRight } from 'lucide-react'
 
 // --- Types ---
 interface TeamMember {
@@ -43,7 +43,7 @@ const teamData: TeamMember[] = [
     title: 'General Manager',
     image: '/images/about/milaad-headshot.jpg',
     roleColor: '#FFD700', // Gold
-    bio: 'General Manager with a background in business studies at USD and sales experience at Sunrun. Known for brilliance in sales and marketing, and a bright, effective approach to management.',
+    bio: 'General Manager at DevX Group, Milaad is developing a strong business path through his International Business studies at the University of San Diego and his growing involvement across company operations. He brings an entrepreneurial drive, early leadership instincts, and a focus on elevating client experience as he supports the growth and direction of the company.',
     linkedIn: 'https://www.linkedin.com/in/milaad-sheikhizadeh-b086392a8/',
     stats: [
       { label: 'Leadership', value: 'GM' },
@@ -103,7 +103,7 @@ const CardBase = ({
   return (
     <motion.div
       onClick={onClick}
-      className={`group relative overflow-hidden bg-[#0A0A0A]/80 backdrop-blur-xl border border-white/5 rounded-3xl p-1 transition-all duration-500 cursor-pointer ${className}`}
+      className={`group relative overflow-hidden bg-[#0A0A0A]/80 backdrop-blur-xl border border-white/15 rounded-3xl p-1 transition-all duration-500 cursor-pointer ${className}`}
       whileHover={{ y: -4, boxShadow: `0 10px 40px -10px ${accentColor}20` }}
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -271,6 +271,12 @@ const OrgChartV2 = ({ className = '' }: OrgChartProps) => {
                           <div className="text-sm font-mono text-white/90">{stat.value}</div>
                         </div>
                       ))}
+                    </div>
+
+                    {/* Learn More indicator */}
+                    <div className="flex items-center justify-center gap-1.5 text-xs text-zinc-500 mt-4 group-hover:text-white/70 transition-colors">
+                      <span>Learn more</span>
+                      <ChevronRight className="w-3 h-3" />
                     </div>
                   </div>
                 </CardBase>
@@ -444,12 +450,6 @@ const OrgChartV2 = ({ className = '' }: OrgChartProps) => {
                     background: `radial-gradient(circle at top right, ${selectedMember.roleColor}, transparent 70%)`,
                   }}
                 />
-                <button
-                  onClick={() => setSelectedMember(null)}
-                  className="absolute top-6 right-6 p-2 text-white/50 hover:text-white bg-black/20 hover:bg-black/40 rounded-full transition-all backdrop-blur-sm"
-                >
-                  <X className="w-5 h-5" />
-                </button>
               </div>
 
               <div className="px-8 pb-8 -mt-16 relative">
@@ -490,6 +490,16 @@ const OrgChartV2 = ({ className = '' }: OrgChartProps) => {
                 <p className="text-zinc-400 leading-relaxed text-lg font-light">
                   {selectedMember.bio}
                 </p>
+
+                {/* Close button anchored at bottom right */}
+                <div className="mt-8 flex justify-end">
+                  <button
+                    onClick={() => setSelectedMember(null)}
+                    className="px-4 py-2 text-sm font-medium text-white bg-white/10 hover:bg-white/20 border border-white/15 rounded-full transition-all duration-300 backdrop-blur-sm shadow-lg"
+                  >
+                    Close
+                  </button>
+                </div>
               </div>
             </motion.div>
           </motion.div>
