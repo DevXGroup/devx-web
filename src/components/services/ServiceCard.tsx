@@ -1,9 +1,11 @@
 'use client'
 
-import { useRef, useEffect, useState } from 'react'
-import { useInView, useAnimation, motion } from 'framer-motion'
+import { useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
 import ParticleAnimation from './ParticleAnimation'
 import type { LucideIcon } from 'lucide-react'
+
+const easeOutExpo: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
 interface ServiceCardProps {
   service: {
@@ -19,9 +21,6 @@ interface ServiceCardProps {
 
 export default function ServiceCard({ service, index }: ServiceCardProps) {
   const Icon = service.icon
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, amount: 0.1 })
-  const controls = useAnimation()
   const [isHovered, setIsHovered] = useState(false)
   const [showParticles, setShowParticles] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
@@ -29,12 +28,6 @@ export default function ServiceCard({ service, index }: ServiceCardProps) {
   useEffect(() => {
     setIsMounted(true)
   }, [])
-
-  useEffect(() => {
-    if (isInView) {
-      controls.start('visible')
-    }
-  }, [controls, isInView])
 
   // Delayed particle effect
   useEffect(() => {
@@ -55,15 +48,33 @@ export default function ServiceCard({ service, index }: ServiceCardProps) {
 
   const cardColor = service.color || '#4CD787'
 
+  const cardVariants = {
+    hidden: () => ({
+      opacity: 0,
+      y: 30,
+    }),
+    visible: (custom: { index: number }) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.65,
+        ease: easeOutExpo,
+        delay: Math.min(custom.index * 0.08, 0.4),
+      },
+    }),
+  }
+
   return (
     <motion.div
-      ref={ref}
       className="group relative bg-zinc-900/40 backdrop-blur-md p-6 sm:p-8 rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-500 overflow-hidden h-full flex flex-col cursor-pointer"
+      style={{ willChange: 'transform, opacity' }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      initial={{ opacity: 0 }}
-      animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.2 }}
+      custom={{ index }}
+      variants={cardVariants}
       whileHover={{ y: -4, scale: 1.01 }}
       whileTap={{ scale: 0.99 }}
     >
@@ -156,13 +167,7 @@ export default function ServiceCard({ service, index }: ServiceCardProps) {
 
       <ul className="space-y-3 relative z-10">
         {service.features.map((feature, i) => (
-          <motion.li
-            key={feature}
-            className="flex items-start gap-3 group/item"
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ duration: 0.4, delay: i * 0.05, ease: 'easeOut' }}
-          >
+          <motion.li key={feature} className="flex items-start gap-3 group/item">
             <div
               className="w-1.5 h-1.5 rounded-full mt-2 shrink-0 transition-all duration-300"
               style={{

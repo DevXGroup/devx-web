@@ -19,15 +19,12 @@ const BlackHole3D = dynamic(() => import('@/components/3d/BlackHole3D'), {
 })
 
 const subheaders = [
-  'Stunning UI/UX',
-  'Rapid MVP Launches',
-  'SOC2-Ready Engineering',
-  'Full-Stack Engineering',
-  'Predictive Analytics',
-  'Scale with Confidence',
   'AI Automation',
   'Agentic AI Solutions',
-  'RAG Implementation',
+  'Rapid MVP Launches',
+  'Stunning UI/UX',
+  'Scale with Confidence',
+  'RAG Systems',
   'Intelligent Workflows',
 ]
 
@@ -115,22 +112,37 @@ export default function Hero() {
       }
     }
 
-    // Sequence: Text (0-1500ms) → Stars & Background (1900ms) → Shooting Stars (2300ms)
-    // Slightly longer delay prevents smeared star/ant artifacts on load.
-    const effectsDelay = 1900
+    // Sequence: Title → Subtitle → Stars → ShinyText → CTA → Typewriter
+    // Use requestIdleCallback to load stars when browser is idle (better for LCP)
+    // Stars load after subtitle to prevent jank
+    const effectsDelay = 1400
+    let idleCallbackId: number | undefined
+    const hasIdleCallback = typeof window.requestIdleCallback === 'function'
 
-    starsTimer = window.setTimeout(() => {
+    const scheduleStarsLoad = () => {
       setShowStars(true)
       loadStarsAndEffects()
-    }, effectsDelay) as unknown as number
+      // Schedule shooting stars after stars are loading
+      shootingTimer = window.setTimeout(() => {
+        setShowShootingStars(true)
+      }, 400) as unknown as number
+    }
 
-    shootingTimer = window.setTimeout(() => {
-      setShowShootingStars(true)
-    }, effectsDelay + 400) as unknown as number
+    // Use requestIdleCallback if available, otherwise fallback to setTimeout
+    if (hasIdleCallback) {
+      starsTimer = window.setTimeout(() => {
+        idleCallbackId = window.requestIdleCallback(scheduleStarsLoad, { timeout: 3000 })
+      }, effectsDelay) as unknown as number
+    } else {
+      starsTimer = window.setTimeout(scheduleStarsLoad, effectsDelay) as unknown as number
+    }
 
     return () => {
       if (starsTimer) clearTimeout(starsTimer)
       if (shootingTimer) clearTimeout(shootingTimer)
+      if (idleCallbackId && hasIdleCallback) {
+        window.cancelIdleCallback(idleCallbackId)
+      }
     }
   }, [canUseHeavyVisuals])
 
@@ -172,31 +184,32 @@ export default function Hero() {
       </ClientOnly>
 
       {/* Content */}
-      <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 relative z-[80] pt-4 sm:pt-12 lg:pt-20 xl:pt-24 pb-40 sm:pb-48 lg:pb-52 xl:pb-60">
-        <div className="text-center mx-auto w-full px-4 sm:px-8 md:px-12 xl:px-16 space-y-2 sm:space-y-8 lg:space-y-12 xl:space-y-16 pt-2 sm:pt-6 lg:pt-8 flex flex-col items-center justify-center -translate-y-8 sm:translate-y-0">
+      <div className="w-full mx-auto px-0 sm:px-6 lg:px-8 xl:px-12 relative z-[80] pt-20 sm:pt-12 lg:pt-20 xl:pt-24 pb-40 sm:pb-48 lg:pb-52 xl:pb-60">
+        <div className="text-center mx-auto w-full px-0 sm:px-8 md:px-12 xl:px-16 space-y-2 sm:space-y-8 lg:space-y-12 xl:space-y-16 pt-2 sm:pt-6 lg:pt-8 flex flex-col items-center justify-center translate-y-0">
           {/* Hero content wrapper - Reduced vertical spacing to shift content up */}
           <div className="space-y-3 sm:space-y-6 lg:space-y-8 xl:space-y-10">
             <div
-              className="hero-title mx-auto flex flex-nowrap items-center justify-center gap-x-2 sm:gap-x-3 md:gap-x-3 lg:gap-x-4 text-center text-white w-full leading-none mb-1 sm:mb-6 md:mb-8 lg:mb-10 overflow-visible whitespace-nowrap max-[467px]:whitespace-normal"
+              className="hero-title mx-auto flex flex-wrap sm:flex-nowrap items-center justify-center gap-x-2 sm:gap-x-3 md:gap-x-3 lg:gap-x-4 text-center text-white w-full leading-none mb-1 sm:mb-6 md:mb-8 lg:mb-10 overflow-visible whitespace-normal sm:whitespace-nowrap text-balance"
               style={{
                 fontFamily: 'var(--font-playfair-display)',
                 fontWeight: 600,
                 letterSpacing: '-0.02em',
-                whiteSpace: 'nowrap',
+                wordBreak: 'keep-all',
+                maxWidth: 'min(1040px, calc(100vw - 24px))',
               }}
             >
               <BlurText
                 text="Your Vision,"
                 className="inline-flex font-editorial font-thin"
                 animateBy="letters"
-                delay={80}
+                delay={40}
                 once
                 animationFrom={{ filter: 'blur(12px)', opacity: 0, y: -16 }}
                 animationTo={[
                   { filter: 'blur(6px)', opacity: 0.6, y: 4 },
                   { filter: 'blur(0px)', opacity: 1, y: 0 },
                 ]}
-                stepDuration={0.25}
+                stepDuration={0.14}
                 style={{
                   textShadow: '0 0 60px rgba(255,255,255,0.4), 0 10px 24px rgba(0,0,0,0.5)',
                 }}
@@ -205,14 +218,14 @@ export default function Hero() {
                 text="Engineered."
                 className="inline-flex font-editorial-semibold-italic text-[#ccff00]"
                 animateBy="letters"
-                delay={190}
+                delay={90}
                 once
                 animationFrom={{ filter: 'blur(12px)', opacity: 0, y: -16 }}
                 animationTo={[
                   { filter: 'blur(6px)', opacity: 0.6, y: 4 },
                   { filter: 'blur(0px)', opacity: 1, y: 0 },
                 ]}
-                stepDuration={0.25}
+                stepDuration={0.14}
                 style={{
                   textShadow:
                     '0 0 60px rgba(204,255,0,0.5), 0 10px 24px rgba(0,0,0,0.5), 0 0 120px rgba(204,255,0,0.2)',
@@ -220,54 +233,56 @@ export default function Hero() {
               />
             </div>
 
-            <div className="text-center w-full mx-auto space-y-2 sm:space-y-8 md:space-y-10 lg:space-y-8 px-2 sm:px-4">
+            <div className="text-center w-full mx-auto space-y-2 sm:space-y-8 md:space-y-10 lg:space-y-8 xl:space-y-6 px-0 sm:px-4">
               <motion.p
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 2.3, duration: 1.9 }}
-                className="hero-subtitle text-white/90 text-center mx-auto leading-[1.3] tracking-wide mt-1 sm:mt-2 md:mt-4 font-editorial"
+                transition={{ delay: 0.8, duration: 0.5 }}
+                className="hero-subtitle hero-subtitle-lift text-white text-center mx-auto leading-[1.3] tracking-wide font-editorial font-semibold text-balance"
                 style={{
                   fontFamily: 'var(--font-playfair-display)',
-                  // Large on desktop, scales down responsively. Max-width ensures 2 lines.
-                  // Large on desktop, scales down responsively. Max-width ensures 2 lines.
-                  fontSize: 'clamp(1.35rem, 4.5vw, 2.5rem)',
-                  fontWeight: 400,
-                  maxWidth: '34ch', // Forces 2 lines on all screens (desktop & mobile)
+                  fontSize: 'clamp(1.25rem, 3.9vw, 2.35rem)',
+                  fontWeight: 600,
+                  maxWidth: 'min(60ch, calc(100vw - 1.5rem))',
+                  wordBreak: 'normal',
+                  overflowWrap: 'normal',
+                  textWrap: 'balance',
                   width: 'auto',
                 }}
               >
-                Elite software team shipping polished products at startup speed.
+                <span className="block sm:whitespace-nowrap">
+                  Senior software team shipping high-impact
+                </span>
+                <span className="block sm:whitespace-nowrap">
+                  web, mobile, and AI projects fast
+                </span>
               </motion.p>
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.1, duration: 0.4 }}
-                className="relative mx-auto w-full flex justify-center pt-1 sm:pt-4"
+                transition={{ delay: 1.8, duration: 0.4 }}
+                className="relative mx-auto w-full flex justify-center pt-1 sm:pt-4 xl:pt-3"
               >
-                <div className="relative flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap sm:gap-4 lg:gap-5">
+                <div className="relative flex flex-col items-center justify-center gap-1.5 sm:flex-row sm:flex-nowrap sm:gap-3 md:gap-4 lg:gap-5">
                   <Link
                     href="/services"
-                    className="uppercase tracking-[0.15em] subtitle-sm font-semibold opacity-80 hover:opacity-100 transition-all duration-300 hover:tracking-[0.2em] text-amber-100/90 hover:text-amber-50"
+                    className="uppercase tracking-[0.14em] sm:tracking-[0.18em] subtitle-sm font-semibold opacity-90 hover:opacity-100 transition-all duration-300 hover:tracking-[0.18em] sm:hover:tracking-[0.22em] text-amber-50/90 hover:text-amber-50 mt-[10px] sm:mt-0 whitespace-nowrap"
                   >
-                    <ShinyText text="Fast Services" speed={deviceIsMobile ? 5 : 3} delay={0} />
+                    <ShinyText text="Fast Delivery" speed={3} delay={0} />
                   </Link>
                   <span className="hidden sm:inline text-amber-200/30 subtitle-sm">•</span>
                   <Link
                     href="/portfolio"
-                    className="uppercase tracking-[0.15em] subtitle-sm font-semibold opacity-80 hover:opacity-100 transition-all duration-300 hover:tracking-[0.2em] text-amber-100/90 hover:text-amber-50"
+                    className="uppercase tracking-[0.14em] sm:tracking-[0.18em] subtitle-sm font-semibold opacity-90 hover:opacity-100 transition-all duration-300 hover:tracking-[0.18em] sm:hover:tracking-[0.22em] text-amber-50/90 hover:text-amber-50 whitespace-nowrap"
                   >
-                    <ShinyText text="Proven Record" speed={deviceIsMobile ? 7 : 5} delay={0.2} />
+                    <ShinyText text="Proven Record" speed={5} delay={0.2} />
                   </Link>
                   <span className="hidden md:inline text-amber-200/30 subtitle-sm">•</span>
                   <Link
                     href="/pricing"
-                    className="uppercase tracking-[0.15em] subtitle-sm font-semibold opacity-80 hover:opacity-100 transition-all duration-300 hover:tracking-[0.2em] text-amber-100/90 hover:text-amber-50"
+                    className="uppercase tracking-[0.14em] sm:tracking-[0.18em] subtitle-sm font-semibold opacity-90 hover:opacity-100 transition-all duration-300 hover:tracking-[0.18em] sm:hover:tracking-[0.22em] text-amber-50/90 hover:text-amber-50 whitespace-nowrap"
                   >
-                    <ShinyText
-                      text="Transparent Pricing"
-                      speed={deviceIsMobile ? 9 : 7}
-                      delay={0.4}
-                    />
+                    <ShinyText text="Transparent Pricing" speed={7} delay={0.4} />
                   </Link>
                 </div>
               </motion.div>
@@ -277,12 +292,13 @@ export default function Hero() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 1.5, duration: 0.5 }}
-            className="mt-6 sm:mt-8 mb-12 sm:mb-16 md:mb-20 lg:mb-24 flex justify-center items-center w-full px-2"
+            transition={{ delay: 2.8, duration: 0.4 }}
+            className="mt-2 sm:mt-8 mb-12 sm:mb-16 md:mb-20 lg:mb-24 flex justify-center items-center w-full px-2"
             style={{
               minHeight: '5rem',
-              height: 'auto',
+              height: '5rem',
               overflow: 'hidden',
+              contain: 'layout size',
             }}
           >
             <TextType
@@ -291,6 +307,7 @@ export default function Hero() {
               typingSpeed={shouldReduceMotion ? 40 : deviceIsMobile ? 60 : 80}
               deletingSpeed={shouldReduceMotion ? 25 : deviceIsMobile ? 35 : 50}
               pauseDuration={shouldReduceMotion ? 800 : deviceIsMobile ? 2500 : 2000}
+              initialDelay={300}
               className="font-mono typewriter-text tracking-[0.08em] text-center mx-auto leading-tight px-2"
               style={{
                 color: '#ccff00',
@@ -326,13 +343,33 @@ export default function Hero() {
         className="absolute left-1/2 -translate-x-1/2 z-[100] pointer-events-auto"
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 2.5, duration: 0.8, ease: 'easeOut' }}
+        transition={{ delay: 2.3, duration: 0.5, ease: 'easeOut' }}
         style={{
-          bottom: 'clamp(80px, 10vh, 140px)',
+          bottom: 'clamp(50px, 8vh, 120px)',
           pointerEvents: 'auto',
         }}
       >
         <div className="flex flex-col items-center gap-4 sm:gap-5 relative z-[100]">
+          <motion.div
+            variants={buttonVariants}
+            initial="rest"
+            whileHover="hover"
+            whileTap="tap"
+            className="w-auto pointer-events-auto cursor-pointer"
+            style={{ cursor: 'pointer', pointerEvents: 'auto' }}
+          >
+            <StarBorder
+              href="/portfolio"
+              color="#E2E8F0"
+              speed="3s"
+              thickness={1}
+              variant="hero"
+              className={ctaButtonClasses}
+              aria-label="View DevX Group portfolio"
+            >
+              See Our Work
+            </StarBorder>
+          </motion.div>
           <motion.div
             variants={buttonVariants}
             initial="rest"
@@ -347,28 +384,12 @@ export default function Hero() {
               rel="noopener noreferrer"
               color="#E2E8F0"
               speed="2s"
+              thickness={1}
+              variant="hero"
               className={ctaButtonClasses}
               aria-label="Schedule a free call with DevX Group"
             >
               Schedule Free Consultation
-            </StarBorder>
-          </motion.div>
-          <motion.div
-            variants={buttonVariants}
-            initial="rest"
-            whileHover="hover"
-            whileTap="tap"
-            className="w-auto pointer-events-auto cursor-pointer"
-            style={{ cursor: 'pointer', pointerEvents: 'auto' }}
-          >
-            <StarBorder
-              href="/portfolio"
-              color="#E2E8F0"
-              speed="3s"
-              className={ctaButtonClasses}
-              aria-label="View DevX Group portfolio"
-            >
-              See Our Work
             </StarBorder>
           </motion.div>
         </div>

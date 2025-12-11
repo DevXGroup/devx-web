@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useRef, useState, createElement } from 'react'
-import { gsap } from 'gsap'
 
 interface TextTypeProps {
   text: string | string[]
@@ -87,7 +86,7 @@ const TextType = ({
 
   useEffect(() => {
     if (showCursor && cursorRef.current) {
-      gsap.set(cursorRef.current, { opacity: 1 })
+      ;(cursorRef.current as HTMLElement).style.opacity = '1'
     }
   }, [showCursor])
 
@@ -165,12 +164,19 @@ const TextType = ({
     hideCursorWhileTyping &&
     (currentCharIndex < (textArray[currentTextIndex]?.length || 0) || isDeleting)
 
+  // Merge style prop with containment to prevent layout shifts
+  const mergedStyle = {
+    contain: 'layout',
+    ...(props.style || {}),
+  }
+
   return createElement(
     Component,
     {
       ref: containerRef,
       className: `inline-block whitespace-pre-wrap tracking-tight ${className}`,
       ...props,
+      style: mergedStyle,
     },
     <span className="inline">{displayedText}</span>,
     showCursor && (

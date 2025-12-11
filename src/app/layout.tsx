@@ -56,6 +56,7 @@ const ibmPlexMono = IBM_Plex_Mono({
 const playfair = Playfair_Display({
   subsets: ['latin'],
   weight: ['400', '600', '700', '900'],
+  style: ['normal', 'italic'],
   display: 'swap',
   variable: '--font-playfair-display',
 })
@@ -320,6 +321,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <meta name="format-detection" content="telephone=no" />
         {/* Font preloading is handled automatically by next/font with preload: true */}
         {/* Resource hints for better performance */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="preconnect"
+          href="https://o4510107764195328.ingest.us.sentry.io"
+          crossOrigin="anonymous"
+        />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         {/* Patch React DevTools semver regression */}

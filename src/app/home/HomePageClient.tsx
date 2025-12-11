@@ -11,8 +11,8 @@ const Hero = dynamic(() => import('@sections/Hero'), {
 })
 
 const FeaturesSection = dynamic(() => import('@sections/Features'), {
-  ssr: true,
-  loading: () => null,
+  ssr: false,
+  loading: () => <div className="h-96" />,
 })
 
 const ProcessSection = dynamic(() => import('@sections/Process'), {
