@@ -270,9 +270,9 @@ export default function Features() {
           speed={0.3}
           squareSize={36}
           showRadialGradient={false}
-          hoverFillColor="rgba(255, 255, 255, 0.55)" // Increased brightness for visibility
-          borderColor="rgba(255, 255, 255, 0.25)" // More visible grid lines
-          flickerColor="rgba(255, 255, 255, 0.4)" // Brighter random flicker
+          hoverFillColor="rgba(71, 71, 71, 0.91)" // Increased brightness for visibility
+          borderColor="rgba(146, 144, 144, 0.66)" // More visible grid lines
+          flickerColor="rgba(139, 100, 152, 0.55)" // Brighter random flicker
           randomFlicker={true}
         />
       </div>

@@ -1,6 +1,6 @@
 'use client'
 
-import { motion, useAnimation } from 'framer-motion'
+import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { useState, useRef, useEffect } from 'react'
 import {
@@ -28,27 +28,13 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
   const [isHovered, setIsHovered] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)
-  const controls = useAnimation()
 
   useEffect(() => {
     setIsMounted(true)
   }, [])
 
-  const handleMouseEnter = () => {
-    setIsHovered(true)
-    controls.start({
-      scale: 1.01,
-      transition: { duration: 0.3, ease: 'easeOut' },
-    })
-  }
-
-  const handleMouseLeave = () => {
-    setIsHovered(false)
-    controls.start({
-      scale: 1,
-      transition: { duration: 0.3, ease: 'easeOut' },
-    })
-  }
+  const handleMouseEnter = () => setIsHovered(true)
+  const handleMouseLeave = () => setIsHovered(false)
 
   // Only animate border lines when actually visible and in viewport
   const shouldAnimateBorder = isMounted && isHovered
@@ -56,28 +42,18 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
   const categoryColor = categoryColors[project.category as keyof typeof categoryColors] || '#4CD787'
 
   return (
-    <motion.div
+    <div
       ref={cardRef}
-      animate={controls}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className="relative group cursor-pointer overflow-hidden
         bg-black/40 backdrop-blur-md border border-white/10
-        rounded-2xl hover:border-white/20 transition-all duration-500
-        h-[680px] xl:h-[720px] 2xl:h-[760px]"
-      whileInView={{
-        opacity: 1,
-        transition: {
-          delay: index * 0.08,
-          duration: 0.7,
-          ease: 'easeOut',
-        },
-      }}
-      initial={{ opacity: 0 }}
+        rounded-2xl hover:border-white/20 transition-all duration-300
+        h-auto min-h-[520px] md:min-h-[540px] lg:min-h-[560px]"
     >
       {/* Subtle Glow Effect - optimized for performance */}
-      <motion.div
-        className="absolute pointer-events-none rounded-2xl"
+      <div
+        className="absolute pointer-events-none rounded-2xl z-0"
         style={{
           background: `radial-gradient(400px circle at center, ${categoryColor}10, transparent 60%)`,
           left: 0,
@@ -85,19 +61,16 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
           right: 0,
           bottom: 0,
         }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: isHovered && isMounted ? 1 : 0 }}
-        transition={{ duration: 0.3 }}
+        aria-hidden="true"
       />
 
       {/* Main Content Container */}
-      <div className="relative h-full flex flex-col">
+      <div className="relative z-10 h-full flex flex-col">
         {/* Image Section */}
-        <div className="relative overflow-hidden h-72 2xl:h-96">
-          <motion.div
-            className="relative w-full h-full"
-            whileHover={{ scale: 1.03 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
+        <div className="relative overflow-hidden h-64 lg:h-72 xl:h-80">
+          <div
+            className="relative w-full h-full transition-transform duration-400 ease-out group-hover:scale-[1.02]"
+            style={{ willChange: 'transform' }}
           >
             <Image
               src={project.images.banner}
@@ -112,45 +85,41 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
 
             {/* Category Badge - Enhanced Visibility */}
             <div className="absolute top-4 left-4 z-10">
-              <motion.div
-                className="px-3 py-1.5 rounded-full text-xs font-bold backdrop-blur-md border-2 shadow-lg text-white"
+              <div
+                className="px-3 py-1.5 rounded-full text-xs font-bold backdrop-blur-md border-2 shadow-lg text-white transition-transform duration-200"
                 style={{
                   backgroundColor: `${categoryColor}40`,
                   borderColor: `${categoryColor}80`,
                   textShadow: '0 1px 3px rgba(0,0,0,0.8)',
                 }}
-                whileHover={{ scale: 1.05, backgroundColor: `${categoryColor}50` }}
               >
                 {project.category}
-              </motion.div>
+              </div>
             </div>
 
             {/* Project Highlights Floating Elements */}
             {project.highlights && isHovered && isMounted && (
               <div className="absolute inset-0 overflow-hidden">
                 {project.highlights.slice(0, 2).map((highlight, i) => (
-                  <motion.div
+                  <div
                     key={i}
-                    className={`absolute text-xs font-medium text-white/80 px-2 py-1 rounded-md bg-black/40 backdrop-blur-sm border border-white/20 ${
+                    className={`absolute text-xs font-medium text-white/80 px-2 py-1 rounded-md bg-black/40 backdrop-blur-sm border border-white/20 transition-opacity duration-200 ${
                       i === 0 ? 'top-16 right-6' : 'bottom-16 left-6'
                     }`}
-                    initial={{ opacity: 0, scale: 0.8, y: 10 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    transition={{ delay: 0.2 + i * 0.1, duration: 0.3 }}
                   >
                     <div className="flex items-center gap-1">
                       <Zap size={10} className="text-yellow-400" />
                       {highlight}
                     </div>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             )}
-          </motion.div>
+          </div>
         </div>
 
         {/* Content Section */}
-        <div className="relative flex-1 p-6 2xl:p-8 flex flex-col justify-between">
+        <div className="relative flex-1 p-5 sm:p-6 2xl:p-8 flex flex-col justify-between">
           {/* Header */}
           <div className="space-y-4">
             <div className="flex items-start justify-between gap-4">
@@ -172,17 +141,12 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
             {/* Tech Stack Preview */}
             <div className="flex flex-wrap gap-2">
               {project.technologies.slice(0, 3).map((tech) => (
-                <motion.span
+                <span
                   key={tech}
-                  className="px-2 py-1 text-xs rounded-md bg-white/5 border border-white/10 text-zinc-400"
-                  whileHover={{
-                    backgroundColor: `${categoryColor}20`,
-                    borderColor: `${categoryColor}40`,
-                    color: categoryColor,
-                  }}
+                  className="px-2 py-1 text-xs rounded-md bg-white/5 border border-white/10 text-zinc-400 transition-colors duration-200 group-hover:border-white/20"
                 >
                   {tech}
-                </motion.span>
+                </span>
               ))}
               {project.technologies.length > 3 && (
                 <span className="px-2 py-1 text-xs rounded-md bg-white/5 border border-white/10 text-zinc-400">
@@ -196,37 +160,28 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
           {project.metrics && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6 2xl:my-8">
               {project.metrics.users && (
-                <motion.div
-                  className="flex items-center gap-2 text-sm"
-                  whileHover={{ scale: 1.05 }}
-                >
+                <div className="flex items-center gap-2 text-sm">
                   <Users size={16} className="text-blue-400" />
                   <span className="text-white/80">{project.metrics.users}</span>
-                </motion.div>
+                </div>
               )}
               {project.metrics.performance && (
-                <motion.div
-                  className="flex items-center gap-2 text-sm md:justify-end"
-                  whileHover={{ scale: 1.05 }}
-                >
+                <div className="flex items-center gap-2 text-sm md:justify-end">
                   <Star size={16} className="text-yellow-400" />
                   <span className="text-white/80">{project.metrics.performance}</span>
-                </motion.div>
+                </div>
               )}
             </div>
           )}
 
           {/* Business Impact */}
           {project.businessImpact && (
-            <motion.div
-              className="mb-6 2xl:mb-8 p-4 2xl:p-6 rounded-lg bg-gradient-to-r from-green-500/10 to-blue-500/10 border border-green-500/20"
-              whileHover={{ scale: 1.02 }}
-            >
+            <div className="mb-6 2xl:mb-8 p-4 2xl:p-6 rounded-lg bg-gradient-to-r from-green-500/10 to-blue-500/10 border border-green-500/20">
               <div className="flex items-start gap-2">
                 <Target size={16} className="text-green-400 mt-0.5 flex-shrink-0" />
                 <p className="text-sm text-zinc-400 leading-relaxed">{project.businessImpact}</p>
               </div>
-            </motion.div>
+            </div>
           )}
 
           {/* Bottom Section */}
@@ -255,33 +210,21 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
 
             {/* Action Buttons */}
             <div className="flex items-end justify-between pt-4">
-              <motion.button
+              <button
                 onClick={() => onViewDetails?.(project)}
                 className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-white/10 to-white/5 hover:from-white/20 hover:to-white/10 border-2 border-white/30 hover:border-white/50 text-white transition-all duration-300 font-semibold shadow-lg h-10"
-                whileHover={{
-                  backgroundColor: `${categoryColor}25`,
-                  borderColor: `${categoryColor}70`,
-                  color: categoryColor,
-                  scale: 1.05,
-                  boxShadow: `0 4px 12px ${categoryColor}30`,
-                }}
-                whileTap={{ scale: 0.95 }}
               >
                 <span className="text-sm font-bold whitespace-nowrap">View Details</span>
                 <ExternalLink size={14} />
-              </motion.button>
+              </button>
 
               {/* Platform Support Section - Right Aligned */}
               <div className="flex flex-col gap-3 items-end">
                 {/* Awards Row */}
                 {project.awards && project.awards.length > 0 && (
-                  <motion.div
-                    className="flex items-center gap-1 text-yellow-400"
-                    whileHover={{ scale: 1.1 }}
-                    title="Award Winner"
-                  >
+                  <div className="flex items-center gap-1 text-yellow-400" title="Award Winner">
                     <Award size={16} />
-                  </motion.div>
+                  </div>
                 )}
 
                 {/* Platform Support */}
@@ -292,10 +235,9 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
                   <div className="flex items-center gap-2 flex-wrap justify-end">
                     {/* iOS */}
                     {project.platforms.some((p) => p.toLowerCase().includes('ios')) && (
-                      <motion.div
+                      <div
                         className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-white/8 border border-white/15"
                         title="Available on iOS"
-                        whileHover={{ scale: 1.05, backgroundColor: 'rgba(255, 255, 255, 0.12)' }}
                       >
                         <div className="w-4 h-4 flex items-center justify-center">
                           <svg viewBox="0 0 24 24" className="w-3 h-3 fill-white">
@@ -303,15 +245,14 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
                           </svg>
                         </div>
                         <span className="text-xs font-medium text-white">iOS</span>
-                      </motion.div>
+                      </div>
                     )}
 
                     {/* Android */}
                     {project.platforms.some((p) => p.toLowerCase().includes('android')) && (
-                      <motion.div
+                      <div
                         className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-green-500/12 border border-green-500/25"
                         title="Available on Android"
-                        whileHover={{ scale: 1.05, backgroundColor: 'rgba(34, 197, 94, 0.18)' }}
                       >
                         <div className="w-4 h-4 flex items-center justify-center">
                           <svg viewBox="0 0 24 24" className="w-3 h-3 fill-green-400">
@@ -319,21 +260,20 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
                           </svg>
                         </div>
                         <span className="text-xs font-medium text-green-400">Android</span>
-                      </motion.div>
+                      </div>
                     )}
 
                     {/* Web */}
                     {project.platforms.some(
                       (p) => p.toLowerCase().includes('web') || p.toLowerCase().includes('website')
                     ) && (
-                      <motion.div
+                      <div
                         className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-blue-500/12 border border-blue-500/25"
                         title="Available on Web"
-                        whileHover={{ scale: 1.05, backgroundColor: 'rgba(59, 130, 246, 0.18)' }}
                       >
                         <Globe size={12} className="text-blue-400" />
                         <span className="text-xs font-medium text-blue-400">Web</span>
-                      </motion.div>
+                      </div>
                     )}
 
                     {/* Desktop App */}
@@ -341,14 +281,13 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
                       (p) =>
                         p.toLowerCase().includes('admin') || p.toLowerCase().includes('dashboard')
                     ) && (
-                      <motion.div
+                      <div
                         className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-yellow-500/12 border border-yellow-500/25"
                         title="Desktop App"
-                        whileHover={{ scale: 1.05, backgroundColor: 'rgba(234, 179, 8, 0.18)' }}
                       >
                         <Monitor size={12} className="text-yellow-400" />
                         <span className="text-xs font-medium text-yellow-400">Desktop App</span>
-                      </motion.div>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -438,7 +377,7 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
           transition: 'border-color 0.3s ease',
         }}
       />
-    </motion.div>
+    </div>
   )
 }
 

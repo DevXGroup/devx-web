@@ -10,7 +10,7 @@
 import { motion, useReducedMotion, AnimatePresence, useInView } from 'framer-motion'
 
 import Link from 'next/link'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import {
   ArrowRight,
@@ -56,14 +56,14 @@ const containerVariants = {
 }
 
 const cardRevealVariants = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 12 },
   visible: (index: number = 0) => ({
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.65,
+      duration: 0.45,
       ease: easeOutExpo,
-      delay: Math.min(index * 0.08, 0.4),
+      delay: Math.min(index * 0.05, 0.25),
     },
   }),
 }
@@ -352,10 +352,23 @@ export default function PortfolioPage() {
   const [clickPosition, setClickPosition] = useState({ x: 0, y: 0 })
   const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null)
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
+  const [portfolioTitle, setPortfolioTitle] = useState('  \u00a0Portfolio\u00a0  ')
 
   // Track if hero section is in view to control animations
   const heroRef = useRef(null)
   const isHeroInView = useInView(heroRef, { amount: 0.2 })
+
+  useEffect(() => {
+    const updateTitle = () => {
+      const mobileText = '   \u00a0Portfolio\u00a0   '
+      const defaultText = '  \u00a0Portfolio\u00a0  '
+      setPortfolioTitle(window.innerWidth < 640 ? mobileText : defaultText)
+    }
+
+    updateTitle()
+    window.addEventListener('resize', updateTitle, { passive: true })
+    return () => window.removeEventListener('resize', updateTitle)
+  }, [])
 
   const handleServiceClick = (service: any, event: any) => {
     if (event) {
@@ -477,7 +490,7 @@ export default function PortfolioPage() {
                   }}
                 >
                   <TextPressure
-                    text=" &nbsp;Portfolio&nbsp;  "
+                    text={portfolioTitle}
                     fontFamily="var(--font-playfair-display)"
                     flex={false}
                     alpha={false}
@@ -695,22 +708,19 @@ export default function PortfolioPage() {
             <div className="flex-1 bg-gradient-to-b from-[#D8B4FE]/20 via-transparent to-[#D8B4FE]/20 opacity-10 rounded-full hidden md:block" />
           </div>
         </div>
-        <div className="container mx-auto px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-24 max-w-8xl">
+        <div className="container mx-auto px-5 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-24 max-w-8xl">
           <motion.div
-            className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 2xl:grid-cols-2 gap-8 md:gap-12 lg:gap-14 xl:gap-16 2xl:gap-20 relative z-10 justify-items-center max-w-6xl xl:max-w-7xl mx-auto"
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
+            className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2 gap-8 md:gap-12 lg:gap-14 xl:gap-16 2xl:gap-20 relative z-10 justify-items-center max-w-6xl xl:max-w-7xl mx-auto"
+            initial="visible"
+            animate="visible"
           >
             {projects.map((project, index) => (
               <motion.div
                 key={project.title}
-                className="w-full lg:max-w-[720px]"
+                className="w-full lg:max-w-[560px]"
                 variants={cardRevealVariants}
                 initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.25 }}
+                animate="visible"
                 custom={index}
               >
                 <EnhancedProjectCard
@@ -786,7 +796,7 @@ export default function PortfolioPage() {
             transition={{ duration: 0.8 }}
             className="relative z-20 text-center max-w-4xl mx-auto"
           >
-            <h2 className="section-title text-[#06B6D4] mb-6 whitespace-nowrap font-editorial">
+            <h2 className="section-title text-[#06B6D4] mb-6 font-editorial text-center mx-auto">
               Ready to Build Your Next Project?
             </h2>
             <p className="text-lg md:text-xl lg:text-2xl font-light text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed">

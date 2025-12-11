@@ -2,6 +2,11 @@ import { motion } from 'framer-motion'
 import { useEffect, useRef, useState, useMemo } from 'react'
 import type { CSSProperties } from 'react'
 
+interface WordStyle {
+  className?: string
+  style?: CSSProperties
+}
+
 interface BlurTextProps {
   text?: string
   delay?: number
@@ -17,6 +22,8 @@ interface BlurTextProps {
   onAnimationComplete?: () => void
   stepDuration?: number
   once?: boolean
+  /** Optional per-word styling. Key is the word, value is className and/or style */
+  wordStyles?: Record<string, WordStyle>
 }
 
 const buildKeyframes = (
@@ -47,6 +54,7 @@ const BlurText = ({
   stepDuration = 0.35,
   once = true,
   style,
+  wordStyles,
 }: BlurTextProps) => {
   const elements = animateBy === 'words' ? text.split(' ') : text.split('')
   const [inView, setInView] = useState(false)
@@ -101,8 +109,14 @@ const BlurText = ({
     stepCount === 1 ? 0 : i / (stepCount - 1)
   )
 
+  const shouldWrap = !className.includes('whitespace-nowrap') && !className.includes('flex-nowrap')
+
   return (
-    <p ref={ref} className={`blur-text ${className} flex flex-wrap`} style={style}>
+    <p
+      ref={ref}
+      className={`blur-text ${className} flex ${shouldWrap ? 'flex-wrap' : 'flex-nowrap'}`}
+      style={style}
+    >
       {elements.map((segment, index) => {
         const animateKeyframes = buildKeyframes(fromSnapshot, toSnapshots)
 
@@ -113,8 +127,14 @@ const BlurText = ({
           ease: easing,
         }
 
+        // Check for per-word styling
+        const wordStyle = wordStyles?.[segment]
+        const wordClassName = wordStyle?.className || ''
+        const wordInlineStyle = wordStyle?.style || {}
+
         const motionProps: any = {
-          className: 'inline-block will-change-[transform,filter,opacity]',
+          className: `inline-block will-change-[transform,filter,opacity] ${wordClassName}`.trim(),
+          style: wordInlineStyle,
           initial: fromSnapshot,
           animate: inView ? animateKeyframes : fromSnapshot,
           transition: spanTransition,

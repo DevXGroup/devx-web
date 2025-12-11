@@ -343,16 +343,21 @@ export function useCanvas({
         // time updates only when the canvas is in view
         state.time += state.delta
         triggerRender()
+        // Continue loop only when in view
+        state.frameId = requestAnimationFrame(animate)
+        state.isAlive = true
       } else if (preload && !state.isPreloaded) {
-        // Preload it!
+        // Preload it once, then stop
         state.isPreloaded = true
         triggerRender()
+        state.isAlive = false
+      } else {
+        // Stop the animation loop when off-screen
+        state.isAlive = false
       }
-
-      state.frameId = requestAnimationFrame(animate)
-      state.isAlive = true
     }
 
+    // Start the animation loop
     state.frameId = requestAnimationFrame(animate)
 
     return () => {

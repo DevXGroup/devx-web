@@ -12,7 +12,7 @@ const GridAnimation = ({
   direction = 'right',
   speed = 1,
   borderColor = '#999',
-  hoverFillColor = '#222',
+  hoverFillColor = '#373737ff',
   flickerColor = '#fff',
   squareSize = 40,
   randomFlicker = false,
@@ -210,7 +210,7 @@ const GridAnimation = ({
         ref={canvasRef}
         className="w-full h-full border-none block"
         style={{
-          cursor: 'default',
+          cursor: 'inherit',
           willChange: 'transform',
           transform: 'translateZ(0)', // Force GPU acceleration
         }}

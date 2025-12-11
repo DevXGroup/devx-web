@@ -30,7 +30,8 @@ function NoiseParticleSphere({
   const particlesRef = useRef<THREE.Points>(null)
   const localTime = useRef(0)
 
-  const particleCount = 60
+  // Reduced from 60 to 40 for better performance
+  const particleCount = 40
 
   const { positions, opacities, sizes } = useMemo(() => {
     const positions = new Float32Array(particleCount * 3)
@@ -180,7 +181,8 @@ const MemoNoiseParticleSphere = memo(NoiseParticleSphere)
 
 export default function AnimatedBlob() {
   const { viewport } = useThree()
-  const sphereCount = 25
+  // Reduced from 25 to 15 for better performance
+  const sphereCount = 15
 
   const sphereData = useMemo(() => {
     return Array.from({ length: sphereCount }, (_, index) => {
