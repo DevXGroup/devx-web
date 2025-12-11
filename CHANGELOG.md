@@ -1,3 +1,9 @@
+## [1.7.0](https://github.com/DevXGroup/devx-web/compare/v1.6.1...v1.7.0) (2025-12-11)
+
+### Features
+
+* optimize animations and enhance hero section ([4ed93bf](https://github.com/DevXGroup/devx-web/commit/4ed93bf55adad9617b799504bbb3827dc19c77cd))
+
 ## [1.6.1](https://github.com/DevXGroup/devx-web/compare/v1.6.0...v1.6.1) (2025-12-11)
 
 ### Bug Fixes
