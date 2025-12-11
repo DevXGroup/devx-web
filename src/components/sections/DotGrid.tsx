@@ -92,6 +92,10 @@ const DotGrid = ({
     lastY: 0,
   })
   const resizeHandlerRef = useRef<(() => void) | null>(null)
+  const isPointerActiveRef = useRef(false)
+  const isInViewRef = useRef(true)
+  const rafIdRef = useRef<number | null>(null)
+  const startLoopRef = useRef<() => void>(() => {})
 
   const baseRgb = useMemo(() => hexToRgb(baseColor), [baseColor])
   const activeRgb = useMemo(() => hexToRgb(activeColor), [activeColor])
@@ -192,8 +196,9 @@ const DotGrid = ({
   useEffect(() => {
     if (!circlePath) return
 
-    let rafId: number
     const proxSq = proximity * proximity
+
+    const shouldRender = () => isInViewRef.current || isPointerActiveRef.current
 
     const draw = () => {
       const canvas = canvasRef.current
@@ -227,17 +232,40 @@ const DotGrid = ({
         ctx.fill(circlePath as Path2D)
         ctx.restore()
       }
-
-      rafId = requestAnimationFrame(draw)
     }
 
-    draw()
-    return () => cancelAnimationFrame(rafId)
+    const loop = () => {
+      if (!shouldRender()) {
+        rafIdRef.current = null
+        return
+      }
+      draw()
+      rafIdRef.current = requestAnimationFrame(loop)
+    }
+
+    const ensureLoop = () => {
+      if (rafIdRef.current === null && shouldRender()) {
+        rafIdRef.current = requestAnimationFrame(loop)
+      }
+    }
+
+    // start loop initially
+    ensureLoop()
+    startLoopRef.current = ensureLoop
+
+    return () => {
+      if (rafIdRef.current) {
+        cancelAnimationFrame(rafIdRef.current)
+        rafIdRef.current = null
+      }
+      startLoopRef.current = () => {}
+    }
   }, [proximity, baseColor, activeRgb, baseRgb, circlePath])
 
   useEffect(() => {
     // Use multiple strategies to ensure proper initialization
     let timeouts: NodeJS.Timeout[] = []
+    let observer: IntersectionObserver | null = null
 
     // Immediate attempt
     buildGrid()
@@ -318,6 +346,19 @@ const DotGrid = ({
     }
     const stopWatchdog = startSizingWatchdog()
 
+    // Observe visibility to pause rendering when off-screen
+    if (typeof window !== 'undefined' && 'IntersectionObserver' in window && wrapperRef.current) {
+      observer = new IntersectionObserver(
+        (entries) => {
+          const entry = entries[0]
+          isInViewRef.current = !!entry?.isIntersecting
+          if (isInViewRef.current) startLoopRef.current?.()
+        },
+        { threshold: 0.1 }
+      )
+      observer.observe(wrapperRef.current)
+    }
+
     return () => {
       timeouts.forEach((timeout) => clearTimeout(timeout))
       if (ro) ro.disconnect()
@@ -335,6 +376,7 @@ const DotGrid = ({
       }
       // Cleanup watchdog timers/RAFs
       if (stopWatchdog) stopWatchdog()
+      if (observer) observer.disconnect()
     }
   }, [buildGrid])
 
@@ -346,8 +388,16 @@ const DotGrid = ({
       const rect = canvas.getBoundingClientRect()
       const x = e.clientX - rect.left
       const y = e.clientY - rect.top
-      // Check if pointer is within canvas bounds with small margin
-      if (x < -10 || y < -10 || x > rect.width + 10 || y > rect.height + 10) return
+      const isInside = x >= 0 && y >= 0 && x <= rect.width && y <= rect.height
+
+      if (!isInside) {
+        isPointerActiveRef.current = false
+        return
+      }
+
+      // Mark active as soon as the pointer is inside
+      isPointerActiveRef.current = true
+      startLoopRef.current?.()
 
       const now = performance.now()
       const pr = pointerRef.current
@@ -409,6 +459,17 @@ const DotGrid = ({
       }
     }
 
+    const onEnter = (e: MouseEvent) => {
+      isPointerActiveRef.current = true
+      // Prime pointer position when entering to avoid jump
+      const canvas = canvasRef.current
+      if (!canvas) return
+      const rect = canvas.getBoundingClientRect()
+      pointerRef.current.x = e.clientX - rect.left
+      pointerRef.current.y = e.clientY - rect.top
+      startLoopRef.current?.()
+    }
+
     const onClick = (e: MouseEvent) => {
       const canvas = canvasRef.current
       if (!canvas) return
@@ -458,6 +519,7 @@ const DotGrid = ({
     }
 
     const onMouseLeave = () => {
+      isPointerActiveRef.current = false
       // Reset all dots to their original positions when mouse leaves
       for (const dot of dotsRef.current) {
         dot.xOffset = 0
@@ -472,6 +534,7 @@ const DotGrid = ({
     const throttledMove = throttle(onMove, 16)
     const canvas = canvasRef.current
     if (canvas) {
+      canvas.addEventListener('mouseenter', onEnter, { passive: true })
       canvas.addEventListener('mousemove', throttledMove as unknown as EventListener, {
         passive: true,
       })
@@ -483,6 +546,7 @@ const DotGrid = ({
 
     return () => {
       if (canvas) {
+        canvas.removeEventListener('mouseenter', onEnter)
         canvas.removeEventListener('mousemove', throttledMove as unknown as EventListener)
         canvas.removeEventListener('mouseleave', onMouseLeave)
         canvas.removeEventListener('click', onClick as unknown as EventListener)

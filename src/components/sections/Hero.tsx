@@ -189,43 +189,29 @@ export default function Hero() {
           {/* Hero content wrapper - Reduced vertical spacing to shift content up */}
           <div className="space-y-3 sm:space-y-6 lg:space-y-8 xl:space-y-10">
             <div
-              className="hero-title mx-auto flex flex-wrap sm:flex-nowrap items-center justify-center gap-x-2 sm:gap-x-3 md:gap-x-3 lg:gap-x-4 text-center text-white w-full leading-none mb-1 sm:mb-6 md:mb-8 lg:mb-10 overflow-visible whitespace-normal sm:whitespace-nowrap text-balance"
+              className="hero-title mx-auto flex flex-wrap sm:flex-nowrap items-center justify-center gap-x-2 sm:gap-x-3 md:gap-x-3 lg:gap-x-4 text-center text-white w-full leading-none mb-1 sm:mb-6 md:mb-8 lg:mb-10 overflow-visible px-4 sm:px-6"
               style={{
                 fontFamily: 'var(--font-playfair-display)',
                 fontWeight: 600,
                 letterSpacing: '-0.02em',
                 wordBreak: 'keep-all',
-                maxWidth: 'min(1040px, calc(100vw - 24px))',
+                maxWidth: 'min(1040px, calc(100vw - 32px))',
               }}
             >
               <BlurText
                 text="Your Vision,"
-                className="inline-flex font-editorial font-thin"
-                animateBy="letters"
-                delay={40}
-                once
-                animationFrom={{ filter: 'blur(12px)', opacity: 0, y: -16 }}
-                animationTo={[
-                  { filter: 'blur(6px)', opacity: 0.6, y: 4 },
-                  { filter: 'blur(0px)', opacity: 1, y: 0 },
-                ]}
-                stepDuration={0.14}
+                className="inline-flex font-editorial font-thin justify-center whitespace-nowrap"
+                delay={150}
+                once={false}
                 style={{
                   textShadow: '0 0 60px rgba(255,255,255,0.4), 0 10px 24px rgba(0,0,0,0.5)',
                 }}
               />
               <BlurText
                 text="Engineered."
-                className="inline-flex font-editorial-semibold-italic text-[#ccff00]"
-                animateBy="letters"
-                delay={90}
-                once
-                animationFrom={{ filter: 'blur(12px)', opacity: 0, y: -16 }}
-                animationTo={[
-                  { filter: 'blur(6px)', opacity: 0.6, y: 4 },
-                  { filter: 'blur(0px)', opacity: 1, y: 0 },
-                ]}
-                stepDuration={0.14}
+                className="inline-flex font-editorial-semibold-italic text-[#ccff00] justify-center whitespace-nowrap"
+                delay={500}
+                once={false}
                 style={{
                   textShadow:
                     '0 0 60px rgba(204,255,0,0.5), 0 10px 24px rgba(0,0,0,0.5), 0 0 120px rgba(204,255,0,0.2)',
@@ -234,29 +220,27 @@ export default function Hero() {
             </div>
 
             <div className="text-center w-full mx-auto space-y-2 sm:space-y-8 md:space-y-10 lg:space-y-8 xl:space-y-6 px-0 sm:px-4">
-              <motion.p
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8, duration: 0.5 }}
-                className="hero-subtitle hero-subtitle-lift text-white text-center mx-auto leading-[1.3] tracking-wide font-editorial font-semibold text-balance"
+              <div
+                className="hero-subtitle hero-subtitle-lift text-white text-center mx-auto leading-[1.3] tracking-wide font-editorial font-semibold flex flex-col items-center text-[clamp(1.1rem,3.5vw,2.35rem)] sm:text-[clamp(1.3rem,3.2vw,2rem)] lg:text-[clamp(1.4rem,2.5vw,2.35rem)]"
                 style={{
                   fontFamily: 'var(--font-playfair-display)',
-                  fontSize: 'clamp(1.25rem, 3.9vw, 2.35rem)',
                   fontWeight: 600,
                   maxWidth: 'min(60ch, calc(100vw - 1.5rem))',
-                  wordBreak: 'normal',
-                  overflowWrap: 'normal',
-                  textWrap: 'balance',
-                  width: 'auto',
                 }}
               >
-                <span className="block sm:whitespace-nowrap">
-                  Senior software team shipping high-impact
-                </span>
-                <span className="block sm:whitespace-nowrap">
-                  web, mobile, and AI projects fast
-                </span>
-              </motion.p>
+                <BlurText
+                  text="Senior software team shipping high-impact"
+                  className="justify-center text-center whitespace-nowrap"
+                  delay={80}
+                  once={false}
+                />
+                <BlurText
+                  text="web, mobile, and AI projects fast"
+                  className="justify-center text-center whitespace-nowrap"
+                  delay={80}
+                  once={false}
+                />
+              </div>
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}

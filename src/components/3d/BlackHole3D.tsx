@@ -1,7 +1,7 @@
 'use client'
 
-import React, { useRef, useMemo } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
+import React, { useRef, useMemo, useState, useEffect } from 'react'
+import { Canvas, useFrame, invalidate } from '@react-three/fiber'
 import * as THREE from 'three'
 import { usePerformanceOptimizedAnimation } from '@/hooks/use-performance-optimized-animation'
 
@@ -9,12 +9,12 @@ type BlackHole3DProps = {
   enabled?: boolean
 }
 
-function AccretionDisk() {
+function AccretionDisk({ isVisible }: { isVisible: boolean }) {
   const pointsRef = useRef<THREE.Points>(null)
 
-  // Restored dense ring from previous version for a brighter hero focal point
+  // Reduced particle count for better performance (was 3200)
   const particles = useMemo(() => {
-    const count = 3200
+    const count = 1800
     const positions = new Float32Array(count * 3)
     const colors = new Float32Array(count * 3)
 
@@ -47,9 +47,11 @@ function AccretionDisk() {
   }, [])
 
   useFrame((state) => {
-    if (!pointsRef.current) return
+    if (!pointsRef.current || !isVisible) return
     const time = state.clock.getElapsedTime()
     pointsRef.current.rotation.y = time * 0.02
+    // Request next frame only when visible
+    invalidate()
   })
 
   return (
@@ -83,11 +85,11 @@ function AccretionDisk() {
   )
 }
 
-function Scene() {
+function Scene({ isVisible }: { isVisible: boolean }) {
   const groupRef = useRef<THREE.Group>(null)
 
   useFrame((state) => {
-    if (!groupRef.current) return
+    if (!groupRef.current || !isVisible) return
     const time = state.clock.getElapsedTime()
 
     groupRef.current.rotation.x = 0.4 + Math.sin(time * 0.18) * 0.04
@@ -97,13 +99,31 @@ function Scene() {
 
   return (
     <group ref={groupRef} rotation={[0.4, 0, 0]}>
-      <AccretionDisk />
+      <AccretionDisk isVisible={isVisible} />
     </group>
   )
 }
 
 export default function BlackHole3D({ enabled = true }: BlackHole3DProps) {
   const { shouldSkip3dEffects, isSlowCpu, isLowPower } = usePerformanceOptimizedAnimation()
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [isVisible, setIsVisible] = useState(false)
+
+  // Visibility detection - pause animation when off-screen
+  useEffect(() => {
+    if (!containerRef.current) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0]
+        setIsVisible(!!entry?.isIntersecting)
+      },
+      { threshold: 0.1 }
+    )
+
+    observer.observe(containerRef.current)
+    return () => observer.disconnect()
+  }, [])
 
   if (!enabled || shouldSkip3dEffects) {
     return (
@@ -115,19 +135,25 @@ export default function BlackHole3D({ enabled = true }: BlackHole3DProps) {
     )
   }
 
-  const dpr: [number, number] = isSlowCpu || isLowPower ? [1, 1.1] : [1, 1.35]
+  // Reduced DPR for better performance
+  const dpr: [number, number] = isSlowCpu || isLowPower ? [1, 1] : [1, 1.2]
 
   return (
-    <div className="w-full h-full relative pointer-events-none" style={{ minHeight: '400px' }}>
+    <div
+      ref={containerRef}
+      className="w-full h-full relative pointer-events-none"
+      style={{ minHeight: '400px' }}
+    >
       <Canvas
         camera={{ position: [0, 2, 6], fov: 45 }}
         dpr={dpr}
-        gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+        frameloop="demand"
+        gl={{ antialias: false, alpha: true, powerPreference: 'high-performance' }}
         style={{ pointerEvents: 'none' }}
       >
         <ambientLight intensity={0.4} />
         <pointLight position={[2, 3, 3]} intensity={1.4} color="#fef3c7" />
-        <Scene />
+        <Scene isVisible={isVisible} />
       </Canvas>
     </div>
   )
