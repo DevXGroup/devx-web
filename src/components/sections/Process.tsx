@@ -149,7 +149,7 @@ export default function Process() {
           alt=""
           fill
           className="object-cover"
-          priority
+          loading="lazy"
           quality={75}
         />
         {/* Dark overlay for text readability - increased opacity */}

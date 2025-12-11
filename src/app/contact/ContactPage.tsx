@@ -751,7 +751,7 @@ export default function ContactPage() {
               <div className="flex items-center justify-center w-full mb-4 sm:mb-4">
                 <div className="relative h-[100px] w-full max-w-[570px] p-0 m-0 mx-auto">
                   <TextPressure
-                    text="&nbsp;&nbsp;Contact&nbsp;Us&nbsp;&nbsp; "
+                    text="&nbsp;&nbsp;Contact&nbsp;Us&nbsp;&nbsp;  "
                     fontFamily="var(--font-playfair-display)"
                     flex={false}
                     alpha={false}
@@ -759,7 +759,7 @@ export default function ContactPage() {
                     width={false}
                     weight={true}
                     italic={false}
-                    minFontSize={64}
+                    minFontSize={44}
                   />
                 </div>
               </div>

@@ -109,8 +109,8 @@ export default function BlackHole3D({ enabled = true }: BlackHole3DProps) {
     return (
       <div className="w-full h-full relative pointer-events-none" style={{ minHeight: '240px' }}>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.12),_transparent_60%)]" />
-        <div className="absolute inset-[22%] rounded-full bg-gradient-to-br from-amber-200/20 via-emerald-200/10 to-purple-300/15 blur-3xl" />
-        <div className="absolute inset-[30%] rounded-full bg-black/80 border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.6)]" />
+        <div className="absolute inset-[18%] rounded-full bg-gradient-to-br from-amber-200/25 via-emerald-200/15 to-purple-300/20 blur-3xl" />
+        <div className="absolute inset-[32%] rounded-full bg-[radial-gradient(circle_at_center,_rgba(134,239,172,0.35),_transparent_60%)] blur-2xl" />
       </div>
     )
   }

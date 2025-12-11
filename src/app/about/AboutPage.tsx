@@ -30,6 +30,8 @@ import StarBorder from '@/components/animations/StarBorder'
 import ParallaxTestimonials from '@/components/ParallaxTestimonials'
 import { useIsMobile } from '@/hooks/use-mobile'
 
+const easeOutExpo: [number, number, number, number] = [0.22, 1, 0.36, 1]
+
 // Enhanced animation variants for better performance
 const fadeInUpVariants = {
   hidden: { opacity: 0, y: 30 },
@@ -37,6 +39,20 @@ const fadeInUpVariants = {
     opacity: 1,
     y: 0,
   },
+}
+
+const cardRevealVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: (custom: { index?: number; delay?: number } = {}) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.65,
+      ease: easeOutExpo,
+      delay:
+        typeof custom.delay === 'number' ? custom.delay : Math.min((custom.index ?? 0) * 0.08, 0.4),
+    },
+  }),
 }
 
 // Enhanced animated section component for reuse
@@ -81,19 +97,18 @@ const ValueCard = ({
   delay?: number
 }) => {
   const shouldReduceMotion = useReducedMotion()
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, amount: 0, margin: '50px' })
 
   return (
     <motion.div
-      ref={ref}
-      variants={fadeInUpVariants}
+      variants={cardRevealVariants}
       initial="hidden"
-      animate={isInView ? 'visible' : 'hidden'}
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.25 }}
+      custom={{ delay }}
       transition={{
-        duration: 0.5,
+        duration: 0.65,
+        ease: easeOutExpo,
         delay: shouldReduceMotion ? 0 : delay,
-        ease: [0.25, 0.1, 0.25, 1],
       }}
       style={{ willChange: 'opacity, transform', transform: 'translateZ(0)' }}
       whileHover={{ y: -4, transition: { duration: 0.3, ease: 'easeOut' } }}
@@ -194,7 +209,12 @@ const DeliveryCard = ({ text, color, icon: Icon, index }: DeliveryItem & { index
   const cardBg = colorMapping[accent] || 'linear-gradient(135deg, #0a0a0f 0%, #12121a 100%)'
 
   return (
-    <div
+    <motion.div
+      variants={cardRevealVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.2 }}
+      custom={{ index }}
       className={`flex flex-col md:flex-row min-h-[320px] items-center gap-8 md:gap-12 rounded-2xl px-8 py-10 md:px-12 md:py-12 relative overflow-hidden ${
         isEven ? 'md:flex-row' : 'md:flex-row-reverse'
       }`}
@@ -233,7 +253,7 @@ const DeliveryCard = ({ text, color, icon: Icon, index }: DeliveryItem & { index
       >
         <p className="subtitle-lg inline-block">{text}</p>
       </div>
-    </div>
+    </motion.div>
   )
 }
 
@@ -361,19 +381,22 @@ const VisionMissionCard = ({
 }) => {
   const shouldReduceMotion = useReducedMotion()
   const isMobile = useIsMobile()
-  const ref = useRef(null)
-  const isInViewForFadeIn = useInView(ref, { once: true })
 
   void accentColor
   void isHovered
 
   return (
     <motion.div
-      ref={ref}
-      variants={fadeInUpVariants}
+      variants={cardRevealVariants}
       initial="hidden"
-      animate={isInViewForFadeIn ? 'visible' : 'hidden'}
-      transition={{ duration: 0.6, delay: shouldReduceMotion ? 0 : delay }}
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.25 }}
+      custom={{ delay }}
+      transition={{
+        duration: 0.65,
+        ease: [0.22, 1, 0.36, 1],
+        delay: shouldReduceMotion ? 0 : delay,
+      }}
       className="group relative bg-[#0B0B10]/90 p-8 rounded-2xl border border-white/10 hover:border-[#4CD787]/50 active:border-[#4CD787]/60 transition-all duration-300 shadow-lg hover:shadow-[#4CD787]/30 overflow-visible cursor-pointer touch-manipulation text-left"
       onMouseEnter={() => !isMobile && onHoverChange?.(true)}
       onMouseLeave={() => !isMobile && onHoverChange?.(false)}

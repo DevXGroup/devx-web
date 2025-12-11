@@ -37,6 +37,8 @@ import dynamic from 'next/dynamic'
 import { Button } from '@/components/ui/button'
 import StarBorder from '@/components/animations/StarBorder'
 
+const easeOutExpo: [number, number, number, number] = [0.22, 1, 0.36, 1]
+
 // Lazy load AsciiEffect3D only when hero section is in viewport for better LCP
 const AsciiEffect3D = dynamic(() => import('@/components/effects/AsciiEffect3D'), {
   ssr: false,
@@ -46,19 +48,24 @@ const AsciiEffect3D = dynamic(() => import('@/components/effects/AsciiEffect3D')
 })
 
 // Animation variants kept minimal
-const fadeInUpVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-  },
-}
-
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
   },
+}
+
+const cardRevealVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: (index: number = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.65,
+      ease: easeOutExpo,
+      delay: Math.min(index * 0.08, 0.4),
+    },
+  }),
 }
 
 // Services data (unchanged)
@@ -319,10 +326,11 @@ function ServiceIcon({
         onClick(service, e)
       }}
       className="relative group service-icon-container cursor-pointer p-4 sm:p-5"
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
+      variants={cardRevealVariants}
+      initial="hidden"
+      whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.6, delay: index * 0.08, ease: 'easeOut' }}
+      custom={index}
       whileHover={shouldReduceMotion ? {} : { scale: 1.08 }}
       whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
     >
@@ -699,10 +707,11 @@ export default function PortfolioPage() {
               <motion.div
                 key={project.title}
                 className="w-full lg:max-w-[720px]"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true, margin: '-100px' }}
-                transition={{ duration: 0.3, delay: index * 0.05, ease: 'easeOut' }}
+                variants={cardRevealVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.25 }}
+                custom={index}
               >
                 <EnhancedProjectCard
                   project={project}

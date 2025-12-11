@@ -17,6 +17,7 @@ type StarBorderProps = {
   type?: 'button' | 'submit' | 'reset'
   'aria-label'?: string
   disabled?: boolean
+  variant?: 'default' | 'hero'
 }
 
 const StarBorder = ({
@@ -24,6 +25,7 @@ const StarBorder = ({
   color = 'white',
   speed = '6s',
   thickness = 1,
+  variant = 'default',
   children,
   href,
   onClick,
@@ -48,6 +50,7 @@ const StarBorder = ({
   // Determine if this is an external link or internal navigation
   const isExternal = href && (href.startsWith('http') || href.startsWith('mailto:'))
   const isInternalLink = href && !isExternal
+  const isHeroVariant = variant === 'hero'
 
   // Handle click for internal navigation
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
@@ -97,18 +100,30 @@ const StarBorder = ({
 
   return (
     <Component {...componentProps}>
+      {isHeroVariant && (
+        <div className="absolute inset-[-6px] sm:inset-[-4px] rounded-[28px] bg-[radial-gradient(circle_at_center,_rgba(226,232,240,0.38),_rgba(134,239,172,0.14)_45%,_transparent_70%)] blur-[22px] sm:blur-[18px] md:blur-[16px] opacity-95 pointer-events-none -z-[1]" />
+      )}
+
       {/* Moving Beams */}
       <div
-        className="absolute w-[200%] h-[50%] opacity-100 bottom-[-20%] right-[-50%] rounded-full animate-star-movement-bottom z-0 blur-[8px] pointer-events-none"
+        className={`absolute ${
+          isHeroVariant ? 'w-[220%] h-[62%] opacity-95' : 'w-[200%] h-[50%] opacity-80'
+        } bottom-[-20%] right-[-50%] rounded-full animate-star-movement-bottom z-0 ${
+          isHeroVariant ? 'blur-[18px] sm:blur-[16px] md:blur-[14px]' : 'blur-[12px]'
+        } pointer-events-none`}
         style={{
-          background: `radial-gradient(circle, ${color}, transparent 60%)`,
+          background: `radial-gradient(circle, ${color}, transparent 50%)`,
           animationDuration: speed,
         }}
       />
       <div
-        className="absolute w-[200%] h-[50%] opacity-100 top-[-20%] left-[-50%] rounded-full animate-star-movement-top z-0 blur-[8px] pointer-events-none"
+        className={`absolute ${
+          isHeroVariant ? 'w-[220%] h-[62%] opacity-95' : 'w-[200%] h-[50%] opacity-80'
+        } top-[-20%] left-[-50%] rounded-full animate-star-movement-top z-0 ${
+          isHeroVariant ? 'blur-[18px] sm:blur-[16px] md:blur-[14px]' : 'blur-[12px]'
+        } pointer-events-none`}
         style={{
-          background: `radial-gradient(circle, ${color}, transparent 60%)`,
+          background: `radial-gradient(circle, ${color}, transparent 50%)`,
           animationDuration: speed,
         }}
       />

@@ -19,7 +19,7 @@ const originalCaseStudies = [
     description:
       'Built a real-time GPS tracking and management system for a logistics firm, reducing operational costs by 15% and improving delivery efficiency.',
     tags: ['IoT', 'React Native', 'Node.js', 'MongoDB'],
-    results: '60% reduction in operational costs',
+    results: '60% reduction in operational costs for logistics fleets',
     link: '/portfolio/fleet-management',
   },
   {
@@ -28,7 +28,7 @@ const originalCaseStudies = [
     description:
       'Redesigned and re-platformed an existing e-commerce site, leading to a 25% increase in conversion rates and a smoother user experience.',
     tags: ['E-commerce', 'Next.js', 'Stripe', 'PostgreSQL'],
-    results: '150% increase in conversion rates',
+    results: '150% increase in conversion rates post replatform launch',
     link: '/portfolio/ecommerce-revamp',
   },
   {
@@ -37,7 +37,7 @@ const originalCaseStudies = [
     description:
       'Implemented an AI chatbot solution for a SaaS company, automating 60% of customer inquiries and enhancing support team productivity.',
     tags: ['AI/ML', 'NLP', 'Python', 'OpenAI'],
-    results: '80% reduction in response time',
+    results: '80% reduction in response time across support queues',
     link: '/portfolio/ai-chatbot',
   },
   {
@@ -46,7 +46,7 @@ const originalCaseStudies = [
     description:
       'A secure telemedicine application enabling remote consultations, prescription management, and health monitoring with HIPAA compliance.',
     tags: ['Healthcare', 'React Native', 'WebRTC', 'FHIR'],
-    results: '300% increase in patient engagement',
+    results: '300% increase in patient engagement after launch',
     link: '/portfolio/telemedicine',
   },
   {
@@ -106,7 +106,7 @@ const originalCaseStudies = [
       'Premium luxury platform for home-cooked meals and chocolates, achieving top charts in Kuwait through exceptional design and user experience.',
     tags: ['Luxury', 'Premium UI', 'Brand Experience', 'Kuwait'],
     results:
-      'Established luxury digital presence, increased brand value by 400% and premium sales by 250%',
+      'Established luxury digital presence after relaunch, increasing brand value by 400% and premium sales by 250%',
     link: '/portfolio/lazurd',
   },
   {
@@ -131,7 +131,7 @@ const originalCaseStudies = [
   },
 ]
 
-// Duplicate content for seamless looping
+// Duplicate content for seamless looping without visible resets
 const caseStudies = [...originalCaseStudies, ...originalCaseStudies]
 
 export default function HorizontalScroll() {
@@ -141,6 +141,8 @@ export default function HorizontalScroll() {
   const [singleSetWidth, setSingleSetWidth] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
   const animationRef = useRef<number | null>(null)
+  const scrollSpeed = 1.5
+  const isActive = useRef(false)
 
   const normalizeX = (value: number) => {
     let v = value
@@ -163,16 +165,20 @@ export default function HorizontalScroll() {
     return () => window.removeEventListener('resize', calculateWidth)
   }, [])
 
-  const startAutoScroll = useCallback(() => {
-    if (singleSetWidth === 0) return
-
+  const stopAutoScroll = useCallback(() => {
+    isActive.current = false
     if (animationRef.current) {
       cancelAnimationFrame(animationRef.current)
+      animationRef.current = null
     }
+  }, [])
 
-    const scrollSpeed = 2 // pixels per frame (increased for visibility)
+  const startAutoScroll = useCallback(() => {
+    if (singleSetWidth === 0 || isActive.current) return
+    isActive.current = true
 
     const animateScroll = () => {
+      if (!isActive.current) return
       const currentX = x.get()
       const newX = currentX - scrollSpeed
 
@@ -187,24 +193,21 @@ export default function HorizontalScroll() {
     }
 
     animationRef.current = requestAnimationFrame(animateScroll)
-  }, [singleSetWidth, x])
+  }, [scrollSpeed, singleSetWidth, x])
 
   useEffect(() => {
     if (singleSetWidth > 0) {
       startAutoScroll()
     }
+
     return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current)
-      }
+      stopAutoScroll()
     }
-  }, [singleSetWidth, startAutoScroll])
+  }, [singleSetWidth, startAutoScroll, stopAutoScroll])
 
   const handleDragStart = () => {
     setIsDragging(true)
-    if (animationRef.current) {
-      cancelAnimationFrame(animationRef.current)
-    }
+    stopAutoScroll()
   }
 
   const handleDragEnd = () => {
@@ -226,22 +229,46 @@ export default function HorizontalScroll() {
       const absX = Math.abs(e.deltaX)
       const absY = Math.abs(e.deltaY)
 
-      // Let vertical scroll bubble to page
-      if (absY >= absX) return
+      // Let vertical scroll bubble unless the user is clearly scrolling sideways
+      const horizontalIntentStrong = absX > absY * 1.6 && absX > 18
+      if (!horizontalIntentStrong) return
 
       e.preventDefault()
       const dx = absX > 0 ? e.deltaX : e.shiftKey ? e.deltaY : 0
       container.scrollBy({ left: dx, behavior: 'auto' })
     }
 
+    const handleVisibility = () => {
+      if (document.hidden) {
+        stopAutoScroll()
+      } else {
+        startAutoScroll()
+      }
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            startAutoScroll()
+          } else {
+            stopAutoScroll()
+          }
+        })
+      },
+      { root: null, threshold: 0.1 }
+    )
+
+    observer.observe(container)
+    document.addEventListener('visibilitychange', handleVisibility)
     container.addEventListener('wheel', handleWheel, { passive: false })
 
     return () => {
-      if (container) {
-        container.removeEventListener('wheel', handleWheel)
-      }
+      observer.disconnect()
+      document.removeEventListener('visibilitychange', handleVisibility)
+      container.removeEventListener('wheel', handleWheel)
     }
-  }, [])
+  }, [startAutoScroll, stopAutoScroll])
 
   return (
     <section className="py-20 relative w-full overflow-hidden">
@@ -274,6 +301,7 @@ export default function HorizontalScroll() {
             style={{
               x,
               willChange: 'transform',
+              transform: 'translateZ(0)',
               WebkitUserSelect: 'none',
               userSelect: 'none',
               touchAction: isDragging ? 'pan-x' : 'auto',
@@ -285,7 +313,7 @@ export default function HorizontalScroll() {
             {caseStudies.map((study, index) => (
               <motion.div
                 key={index}
-                className="flex-shrink-0 w-[280px] md:w-[320px] h-[500px] bg-black/40 backdrop-blur-md rounded-xl border border-white/20 hover:border-[#4CD787]/40 flex flex-col transition-all duration-300 hover:shadow-[0_8px_32px_rgba(76,215,135,0.15)] cursor-grab active:cursor-grabbing select-none"
+                className="flex-shrink-0 w-[280px] md:w-[320px] h-[500px] bg-black/40 backdrop-blur-md rounded-xl border border-white/20 hover:border-[#4CD787]/40 flex flex-col transition-all duration-300 hover:shadow-[0_8px_32px_rgba(76,215,135,0.15)] cursor-pointer active:cursor-grabbing select-none"
                 style={{
                   pointerEvents: 'auto',
                   WebkitUserSelect: 'none',
@@ -349,6 +377,10 @@ export default function HorizontalScroll() {
               </motion.div>
             ))}
           </motion.div>
+        </div>
+
+        <div className="mt-6 text-center text-xs sm:text-sm text-white/60 px-4 font-sans">
+          Grab a card to pan left/right.
         </div>
       </div>
     </section>
