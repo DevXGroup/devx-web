@@ -1,3 +1,9 @@
+## [1.6.1](https://github.com/DevXGroup/devx-web/compare/v1.6.0...v1.6.1) (2025-12-11)
+
+### Bug Fixes
+
+* smooth hero subtitle and services carousel ([a1cb9fe](https://github.com/DevXGroup/devx-web/commit/a1cb9fef129b83f9e91020166252fd07fd35d0fe))
+
 ## [1.6.0](https://github.com/DevXGroup/devx-web/compare/v1.5.0...v1.6.0) (2025-12-10)
 
 ### Features
