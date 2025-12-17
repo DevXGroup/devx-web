@@ -112,7 +112,7 @@ const ValueCard = ({
       }}
       style={{ willChange: 'opacity, transform', transform: 'translateZ(0)' }}
       whileHover={{ y: -4, transition: { duration: 0.3, ease: 'easeOut' } }}
-      className="relative bg-zinc-900/40 border border-white/10 p-8 rounded-3xl backdrop-blur-md hover:border-white/20 hover:bg-zinc-900/60 transition-all duration-500 group cursor-pointer overflow-hidden flex flex-col gap-6"
+      className="relative bg-zinc-900/40 border border-white/10 p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl backdrop-blur-md hover:border-white/20 hover:bg-zinc-900/60 transition-all duration-500 group cursor-pointer overflow-hidden flex flex-col gap-4 sm:gap-6"
       role="article"
       aria-label={`${title}: ${description}`}
     >
@@ -477,14 +477,14 @@ const StatCounter = ({ number, label }: { number: string | number; label: string
   return (
     <div
       ref={containerRef}
-      className="bg-zinc-900/40 border border-white/10 backdrop-blur-md p-8 rounded-3xl hover:border-white/20 hover:bg-zinc-900/60 transition-all duration-500 group flex flex-col items-center justify-center text-center h-full min-h-[180px] cursor-pointer"
+      className="bg-zinc-900/40 border border-white/10 backdrop-blur-md p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl hover:border-white/20 hover:bg-zinc-900/60 transition-all duration-500 group flex flex-col items-center justify-center text-center h-full min-h-[120px] sm:min-h-[160px] md:min-h-[180px] cursor-pointer"
     >
-      <div className="text-4xl md:text-5xl font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-500">
+      <div className="text-2xl sm:text-4xl md:text-5xl font-bold text-white mb-1 sm:mb-2 group-hover:scale-110 transition-transform duration-500">
         {formattedDisplay}
         {/* SEO: Actual value for crawlers that don't execute JS */}
         <span className="sr-only">{number}</span>
       </div>
-      <div className="text-base md:text-lg text-zinc-400 font-light group-hover:text-white transition-colors duration-300">
+      <div className="text-xs sm:text-base md:text-lg text-zinc-400 font-light group-hover:text-white transition-colors duration-300">
         {label}
       </div>
     </div>
@@ -524,21 +524,22 @@ export default function AboutPage() {
           />
         </div>
 
-        <div className="container px-[21px] relative z-10 mt-10">
+        <div className="container px-3 sm:px-[21px] relative z-10 mt-6 sm:mt-10">
           <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 ">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16">
               {/* Title and content - Left side */}
               <AnimatedSection className="lg:order-0 flex flex-col justify-center text-left items-start">
-                <h1 className="-mb-6 w-full">
+                <h1 className="-mb-4 sm:-mb-6 w-full">
                   <div
                     style={{
                       position: 'relative',
-                      height: '100px',
+                      height: '80px',
                       width: '100%',
                       maxWidth: '370px',
                       padding: '0',
                       margin: '0',
                     }}
+                    className="sm:!h-[100px]"
                   >
                     <TextPressure
                       text="About&nbsp;Us  "
@@ -551,12 +552,12 @@ export default function AboutPage() {
                       italic={false}
                       textColor="#ffffffff"
                       strokeColor="#FFFFFF"
-                      minFontSize={64}
+                      minFontSize={44}
                     />
                     <span className="sr-only">About Us</span>
                   </div>
                 </h1>
-                <p className="subtitle-lg mb-6 md:mb-8 mt-6 text-left">
+                <p className="subtitle-lg mb-4 sm:mb-6 md:mb-8 mt-4 sm:mt-6 text-left text-sm sm:text-base">
                   We are a senior engineering team trusted by growth‑stage companies for complex and
                   time‑sensitive projects. We ship production‑ready software with clear milestones,
                   ownership, and post‑launch support.
@@ -621,8 +622,8 @@ export default function AboutPage() {
       </section>
 
       {/* Stats Section */}
-      <section className="pt-8 pb-16 relative mt-19">
-        <div className="container mx-auto px-[21px]">
+      <section className="pt-6 sm:pt-8 pb-12 sm:pb-16 relative mt-12 sm:mt-19">
+        <div className="container mx-auto px-3 sm:px-[21px]">
           <AnimatedSection className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
               <BlurText
@@ -636,7 +637,7 @@ export default function AboutPage() {
                 us.
               </p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 items-stretch">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 md:gap-8 items-stretch">
               <StatCounter number="30+" label="Happy Clients" />
               <StatCounter number="15+" label="Technical Experience" />
               <StatCounter number="40+" label="Projects Completed" />
@@ -647,8 +648,8 @@ export default function AboutPage() {
       </section>
 
       {/* How We Work Section */}
-      <section className="pt-20 pb-16 relative">
-        <div className="container mx-auto px-[21px]">
+      <section className="pt-12 sm:pt-20 pb-12 sm:pb-16 relative">
+        <div className="container mx-auto px-3 sm:px-[21px]">
           <AnimatedSection className="max-w-5xl mx-auto text-center mb-14 md:mb-16">
             <BlurText
               text="How We Work"
@@ -795,9 +796,9 @@ export default function AboutPage() {
       {/* Our Values Section */}
       <section
         id="our-values"
-        className="pt-20 pb-16 relative bg-gradient-to-b from-transparent via-[#0a0a1a] to-transparent"
+        className="pt-12 sm:pt-20 pb-12 sm:pb-16 relative bg-gradient-to-b from-transparent via-[#0a0a1a] to-transparent"
       >
-        <div className="container mx-auto px-[21px]">
+        <div className="container mx-auto px-3 sm:px-[21px]">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
             <BlurText
               text="Our Values"
@@ -811,7 +812,7 @@ export default function AboutPage() {
             </p>
           </AnimatedSection>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             <ValueCard
               icon={Heart}
               title="Customer Centric"
@@ -853,8 +854,8 @@ export default function AboutPage() {
       </section>
 
       {/* Delivery Ownership Section */}
-      <section className="pt-16 pb-12 relative mt-30">
-        <div className="max-w-screen-lg mx-auto px-[21px]">
+      <section className="pt-12 sm:pt-16 pb-10 sm:pb-12 relative mt-16 sm:mt-30">
+        <div className="max-w-screen-lg mx-auto px-3 sm:px-[21px]">
           <AnimatedSection className="text-center max-w-3xl mx-auto">
             <BlurText
               text="Delivery Ownership"
@@ -901,8 +902,8 @@ export default function AboutPage() {
       </section>
 
       {/* Vision & Mission Section */}
-      <section className="pt-36 pb-14 relative overflow-hidden">
-        <div className="container mx-auto px-[21px] relative z-10">
+      <section className="pt-16 sm:pt-36 pb-10 sm:pb-14 relative overflow-hidden">
+        <div className="container mx-auto px-3 sm:px-[21px] relative z-10">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-8">
             <BlurText
               text="Our Purpose"
@@ -923,8 +924,8 @@ export default function AboutPage() {
       </section>
 
       {/* Team Section */}
-      <section className="pt-20 pb-16 relative overflow-hidden">
-        <div className="container mx-auto px-[21px] relative z-10">
+      <section className="pt-12 sm:pt-20 pb-12 sm:pb-16 relative overflow-hidden">
+        <div className="container mx-auto px-3 sm:px-[21px] relative z-10">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
             <BlurText
               text="Our Team Structure"
@@ -943,8 +944,8 @@ export default function AboutPage() {
       </section>
 
       {/* Testimonials Section - Full Width */}
-      <section className="relative pt-20 pb-16 w-full bg-gradient-to-b from-black via-[#0a0a1a] to-black overflow-hidden">
-        <div className="container mx-auto px-[21px] mb-12">
+      <section className="relative pt-12 sm:pt-20 pb-12 sm:pb-16 w-full bg-gradient-to-b from-black via-[#0a0a1a] to-black overflow-hidden">
+        <div className="container mx-auto px-3 sm:px-[21px] mb-8 sm:mb-12">
           <AnimatedSection className="text-center max-w-3xl mx-auto">
             <BlurText
               text="What Our Clients Say"
@@ -961,13 +962,13 @@ export default function AboutPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="relative pt-16 pb-24 overflow-hidden">
+      <section className="relative pt-12 sm:pt-16 pb-16 sm:pb-24 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#050810] to-black"></div>
         <div className="absolute -top-32 left-1/2 h-64 w-[140%] -translate-x-1/2 rounded-full bg-[#4CD787]/10 blur-3xl opacity-40"></div>
         <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-black/40 via-black/80 to-black"></div>
 
-        <div className="container mx-auto px-[21px] relative z-10">
-          <AnimatedSection className="bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-8 md:p-12 w-full mx-auto text-center space-y-6 md:space-y-8">
+        <div className="container mx-auto px-3 sm:px-[21px] relative z-10">
+          <AnimatedSection className="bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-4 sm:p-8 md:p-12 w-full mx-auto text-center space-y-4 sm:space-y-6 md:space-y-8">
             <BlurText
               text="Ready to Start Your Project?"
               className="hero-title font-editorial-semibold-italic text-white leading-none text-center text-2xl sm:text-4xl md:text-5xl justify-center mx-auto"

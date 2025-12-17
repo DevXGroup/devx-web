@@ -176,13 +176,13 @@ function PricingCard({ plan }: PricingCardProps) {
   return (
     <StarBorder
       as="div"
-      className="h-full w-full p-0 bg-zinc-900/40 backdrop-blur-md rounded-2xl overflow-hidden min-h-[640px] md:min-h-[700px]"
+      className="h-full w-full p-0 bg-zinc-900/40 backdrop-blur-md rounded-2xl overflow-hidden min-h-[580px] sm:min-h-[640px] md:min-h-[700px]"
       color={plan.color}
       speed="4s"
       thickness={2}
     >
       <div
-        className="relative z-10 p-6 flex flex-col h-full"
+        className="relative z-10 p-4 sm:p-6 flex flex-col h-full"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -344,7 +344,7 @@ export default function PricingPage() {
 
       {/* Hero Section */}
       <section className="relative text-center pt-6 md:pt-8 pb-10 md:pb-12">
-        <div className="container mx-auto px-4 relative z-10">
+        <div className="container mx-auto px-3 sm:px-4 relative z-10">
           <motion.div
             variants={containerVariants}
             initial="hidden"
@@ -356,12 +356,13 @@ export default function PricingPage() {
                 <div
                   style={{
                     position: 'relative',
-                    height: '100px',
+                    height: '80px',
                     width: '100%',
                     maxWidth: '400px',
                     padding: '0',
                     margin: '0 auto',
                   }}
+                  className="sm:!h-[100px]"
                 >
                   <TextPressure
                     text="&nbsp;Pricing&nbsp; "
@@ -372,7 +373,7 @@ export default function PricingPage() {
                     width={false}
                     weight={true}
                     italic={false}
-                    minFontSize={54}
+                    minFontSize={36}
                   />
                 </div>
               </div>
@@ -380,7 +381,7 @@ export default function PricingPage() {
 
             <motion.p
               variants={fadeInVariants}
-              className="section-subtitle text-white/90 mb-8 max-w-3xl mx-auto mt-4 text-center"
+              className="section-subtitle text-white/90 mb-6 sm:mb-8 max-w-3xl mx-auto mt-2 sm:mt-4 text-center text-sm sm:text-base md:text-lg px-2"
             >
               Transparent, competitive hourly rates with no hidden fees.
               <span className="text-[#4CD787] font-medium"> Choose the perfect plan</span> for your
@@ -389,14 +390,14 @@ export default function PricingPage() {
 
             <motion.div
               variants={fadeInVariants}
-              className="flex items-center justify-center gap-4 mb-8"
+              className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 mb-6 sm:mb-8"
             >
-              <div className="flex items-center gap-2 bg-[#4CD787]/10 text-[#4CD787] px-6 py-3 rounded-full text-sm font-medium backdrop-blur-sm border border-[#4CD787]/20">
-                <Star className="w-4 h-4 fill-current" />
+              <div className="flex items-center gap-1.5 sm:gap-2 bg-[#4CD787]/10 text-[#4CD787] px-3 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm font-medium backdrop-blur-sm border border-[#4CD787]/20">
+                <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-current" />
                 No Setup Fees
               </div>
-              <div className="flex items-center gap-2 bg-[#FFD700]/10 text-[#FFD700] px-6 py-3 rounded-full text-sm font-medium backdrop-blur-sm border border-[#FFD700]/20">
-                <Shield className="w-4 h-4" />
+              <div className="flex items-center gap-1.5 sm:gap-2 bg-[#FFD700]/10 text-[#FFD700] px-3 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm font-medium backdrop-blur-sm border border-[#FFD700]/20">
+                <Shield className="w-3 h-3 sm:w-4 sm:h-4" />
                 100% Satisfaction Guarantee
               </div>
             </motion.div>
@@ -405,10 +406,10 @@ export default function PricingPage() {
       </section>
 
       {/* Pricing Cards */}
-      <section className="relative py-12 z-[5000]">
-        <div className="container mx-auto px-4 relative z-10">
+      <section className="relative py-8 sm:py-12 z-[5000]">
+        <div className="container mx-auto px-3 sm:px-4 relative z-10">
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto items-stretch"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-7xl mx-auto items-stretch"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
@@ -436,8 +437,8 @@ export default function PricingPage() {
       </section>
 
       {/* Enhanced CTA Section */}
-      <section className="relative pt-20 pb-0 z-[6000]">
-        <div className="container mx-auto px-4 relative z-10">
+      <section className="relative pt-12 sm:pt-20 pb-0 z-[6000]">
+        <div className="container mx-auto px-3 sm:px-4 relative z-10">
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -446,7 +447,7 @@ export default function PricingPage() {
             className="text-center max-w-4xl mx-auto"
           >
             <motion.div
-              className="bg-zinc-900/40 backdrop-blur-md rounded-3xl border border-white/10 p-12 shadow-2xl"
+              className="bg-zinc-900/40 backdrop-blur-md rounded-2xl sm:rounded-3xl border border-white/10 p-6 sm:p-8 md:p-12 shadow-2xl"
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.3 }}
             >

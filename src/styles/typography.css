@@ -215,7 +215,7 @@
 
 /* Section Title - Hero Style (Large, dramatic) */
 .section-title-hero {
-  @apply text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-6xl font-bold;
+  @apply text-3xl sm:text-5xl md:text-6xl lg:text-6xl font-bold;
   font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
   font-weight: 700;
   line-height: 1.2;

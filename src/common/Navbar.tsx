@@ -223,9 +223,9 @@ export default function Navbar() {
               height={30}
               priority
               quality={50}
-              sizes="(max-width: 480px) 100px, (max-width: 640px) 120px, 150px"
+              sizes="(max-width: 480px) 130px, (max-width: 640px) 140px, 150px"
               style={{ maxWidth: '100%', height: 'auto', cursor: 'pointer' }}
-              className="w-[clamp(80px,15vw,150px)] h-auto cursor-pointer"
+              className="w-[clamp(120px,38vw,150px)] h-auto cursor-pointer"
             />
           </Link>
           {/* Desktop Menu - right aligned */}

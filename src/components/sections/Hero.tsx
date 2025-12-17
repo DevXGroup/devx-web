@@ -229,19 +229,22 @@ export default function Hero() {
                   fontOpticalSizing: 'auto',
                   fontWeight: 200,
                   fontStyle: 'normal',
-                  maxWidth: 'min(50ch, calc(100vw - 3rem))',
+                  maxWidth: 'min(48ch, calc(100vw - 1.5rem))',
+                  wordBreak: 'break-word',
+                  whiteSpace: 'normal',
+                  textWrap: 'balance',
                 }}
               >
                 <BlurText
                   text="Senior software team shipping high-impact"
-                  className="justify-center text-center whitespace-nowrap"
+                  className="justify-center text-center whitespace-normal"
                   delay={120}
                   stepDuration={0.45}
                   once={false}
                 />
                 <BlurText
                   text="web, mobile, and AI projects fast"
-                  className="justify-center text-center whitespace-nowrap"
+                  className="justify-center text-center whitespace-normal"
                   delay={120}
                   stepDuration={0.45}
                   once={false}
@@ -285,8 +288,8 @@ export default function Hero() {
             transition={{ delay: 2.8, duration: 0.4 }}
             className="mt-2 sm:mt-8 mb-12 sm:mb-16 md:mb-20 lg:mb-24 flex justify-center items-center w-full px-2"
             style={{
-              minHeight: '5rem',
-              height: '5rem',
+              minHeight: '4.25rem',
+              height: '4.5rem',
               overflow: 'hidden',
               contain: 'layout size',
             }}
@@ -298,7 +301,7 @@ export default function Hero() {
               deletingSpeed={shouldReduceMotion ? 25 : deviceIsMobile ? 35 : 50}
               pauseDuration={shouldReduceMotion ? 800 : deviceIsMobile ? 2500 : 2000}
               initialDelay={300}
-              className="font-mono typewriter-text tracking-[0.08em] text-center mx-auto leading-tight px-2"
+              className="font-mono typewriter-text tracking-[0.08em] text-center mx-auto leading-tight px-2 text-[clamp(0.95rem,3.4vw,1.25rem)] sm:text-[clamp(1rem,2.8vw,1.35rem)] max-w-[90vw]"
               style={{
                 color: '#ccff00',
                 textShadow: '0 0 40px rgba(204,255,0,0.4), 0 4px 12px rgba(0,0,0,0.4)',

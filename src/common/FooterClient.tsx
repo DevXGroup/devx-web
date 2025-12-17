@@ -81,9 +81,11 @@ export default function FooterClient({ version }: FooterClientProps) {
                   <Github className="w-5 h-5" />
                 </Link>
                 <Link
-                  href="#"
+                  href="https://www.instagram.com/devx_group/"
                   className="text-zinc-400 hover:text-[#4CD787] transition-colors p-2 hover:bg-white/5 rounded-md"
                   aria-label="Instagram"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <Instagram className="w-5 h-5" />
                 </Link>
@@ -119,7 +121,7 @@ export default function FooterClient({ version }: FooterClientProps) {
                     openSection === 'services' ? 'max-h-[300px] mb-4' : 'max-h-0'
                   }`}
                 >
-                  <div className="space-y-3 pl-1">
+                  <div className="space-y-3 pl-4">
                     <Link
                       href="/services"
                       className="block text-sm text-zinc-400 hover:text-[#4CD787] transition-colors font-light"
@@ -172,7 +174,7 @@ export default function FooterClient({ version }: FooterClientProps) {
                     openSection === 'company' ? 'max-h-[300px] mb-4' : 'max-h-0'
                   }`}
                 >
-                  <div className="space-y-3 pl-1">
+                  <div className="space-y-3 pl-4">
                     <Link
                       href="/about"
                       className="block text-sm text-zinc-400 hover:text-[#4CD787] transition-colors font-light"

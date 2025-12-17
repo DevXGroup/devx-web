@@ -40,7 +40,7 @@ const tools: DisplayTool[] = [
   {
     name: 'Flutter',
     description: 'Multi-platform apps for mobile, web, & desktop using Flutter',
-    icon: buildIconPath('flutter-icon.svg'),
+    icon: buildIconPath('flutter.svg'),
   },
   {
     name: '.NET',
@@ -205,20 +205,31 @@ const ToolIcon = memo(
       lg: 'w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20',
     }
 
+    // Flutter logo has a wide aspect ratio; gently up-scale its wrapper so it fills the ring
+    // Flutter needs extra scale due to its wide aspect; shift slightly right to center in ring
+    const wrapperScaleClass = name === 'Flutter' ? 'scale-[1.75]' : ''
+    const iconClassNames =
+      name === 'Laravel' ? 'brightness-150 saturate-150 object-contain' : 'object-contain'
+
     return (
-      <div className={`relative ${sizeClasses[size]}`}>
+      <div className={`relative ${sizeClasses[size]} ${wrapperScaleClass}`}>
         <Image
           src={icon || '/placeholder.svg'}
           alt={name}
           fill
           sizes="(min-width: 1024px) 3rem, (min-width: 768px) 2.5rem, (min-width: 640px) 2.25rem, 2rem"
-          className={`object-contain ${name === 'Laravel' ? 'brightness-150 saturate-150' : ''} ${className}`}
+          className={`${iconClassNames} ${className}`}
           style={
             name === 'Laravel'
               ? {
                   filter: 'brightness(1.5) saturate(1.5) hue-rotate(300deg) contrast(1.2)',
                 }
-              : undefined
+              : name === 'Flutter'
+                ? {
+                    transform: 'translate(65%, 0%) scale(1.8)',
+                    transformOrigin: 'center',
+                  }
+                : undefined
           }
         />
       </div>
@@ -557,7 +568,7 @@ export default function DevelopmentTools() {
 
         {/* Title section */}
         <div className="py-30 md:py-0 mt-24 md:mt-36 mb-24 md:mb-32">
-          <div className="container mx-auto px-4">
+          <div className="container mx-auto px-3 sm:px-4">
             <div className="flex flex-col items-center">
               <h2 className="text-center mb-4 text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white font-editorial drop-shadow-sm">
                 DevX Development Tools

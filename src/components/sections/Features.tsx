@@ -282,7 +282,7 @@ export default function Features() {
         variants={containerVariants}
         initial="hidden"
         animate={isInView ? 'visible' : 'hidden'}
-        className="relative container mx-auto px-6 sm:px-8 lg:px-12 z-[3] max-w-7xl select-text overflow-visible"
+        className="relative container mx-auto px-3 sm:px-6 md:px-8 lg:px-12 z-[3] max-w-7xl select-text overflow-visible"
         transition={{
           duration: shouldOptimizeAnimations ? 0.3 : 0.5,
           ease: 'easeOut',
@@ -339,7 +339,7 @@ export default function Features() {
                   splitBy="characters"
                   staggerDuration={shouldOptimizeAnimations ? 0.05 : 0.03}
                   staggerFrom="first"
-                  mainClassName="relative text-2xl sm:text-3xl md:text-4xl font-['IBM_Plex_Sans'] tracking-[0.05em] text-white/90 leading-tight whitespace-nowrap text-center"
+                  mainClassName="relative text-lg sm:text-xl md:text-2xl lg:text-3xl font-['IBM_Plex_Sans'] tracking-[0.04em] text-white/90 leading-tight whitespace-normal text-center max-w-[90vw]"
                   splitLevelClassName="overflow-visible whitespace-nowrap"
                   elementLevelClassName="inline-block whitespace-nowrap"
                   loop={true}

@@ -754,16 +754,16 @@ export default function ContactPage() {
           />
         </div>
 
-        <div className="relative container mx-auto px-4 pt-16 md:pt-20">
+        <div className="relative container mx-auto px-3 sm:px-4 pt-12 sm:pt-16 md:pt-20">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <div className="flex flex-col items-center mt-4 md:mt-6 py-8 md:py-3">
-              <div className="flex items-center justify-center w-full mb-4 sm:mb-4">
-                <div className="relative h-[100px] w-full max-w-[570px] p-0 m-0 mx-auto">
+            <div className="flex flex-col items-center mt-2 sm:mt-4 md:mt-6 py-4 sm:py-8 md:py-3">
+              <div className="flex items-center justify-center w-full mb-2 sm:mb-4">
+                <div className="relative h-[80px] sm:h-[100px] w-full max-w-[570px] p-0 m-0 mx-auto">
                   <TextPressure
                     text="&nbsp;&nbsp;Contact&nbsp;Us&nbsp;&nbsp;  "
                     fontFamily="var(--font-playfair-display)"
@@ -773,11 +773,11 @@ export default function ContactPage() {
                     width={false}
                     weight={true}
                     italic={false}
-                    minFontSize={44}
+                    minFontSize={32}
                   />
                 </div>
               </div>
-              <p className="section-subtitle max-w-2xl text-center mt-0 mb-4">
+              <p className="section-subtitle max-w-2xl text-center mt-0 mb-4 text-sm sm:text-base md:text-lg px-2">
                 Contact us to discuss your mission requirements and objectives.
               </p>
             </div>
@@ -786,15 +786,15 @@ export default function ContactPage() {
       </section>
 
       {/* Main Contact Section */}
-      <section className="pt-1 pb-20 relative">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
+      <section className="pt-1 pb-12 sm:pb-20 relative">
+        <div className="container mx-auto px-3 sm:px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 sm:gap-8 lg:gap-12">
             {/* Contact Information Card */}
             <motion.div
               variants={fadeInUpVariants}
               initial="hidden"
               animate="visible"
-              className="lg:col-span-2 bg-zinc-900/40 backdrop-blur-sm p-8 rounded-2xl border border-white/10 h-fit"
+              className="lg:col-span-2 bg-zinc-900/40 backdrop-blur-sm p-4 sm:p-6 md:p-8 rounded-2xl border border-white/10 h-fit"
             >
               <div className="space-y-8">
                 <div>
@@ -923,8 +923,10 @@ export default function ContactPage() {
                       <Github className="w-5 h-5 text-white" />
                     </a>
                     <a
-                      href="#"
+                      href="https://www.instagram.com/devx_group/"
                       className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/20 flex items-center justify-center transition-colors duration-300"
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       <Instagram className="w-5 h-5 text-white" />
                     </a>
@@ -947,7 +949,7 @@ export default function ContactPage() {
               variants={fadeInUpVariants}
               initial="hidden"
               animate={isFormInView ? 'visible' : 'hidden'}
-              className="lg:col-span-3 bg-black/40 backdrop-blur-sm p-8 md:p-10 rounded-2xl border border-white/10 relative overflow-hidden"
+              className="lg:col-span-3 bg-black/40 backdrop-blur-sm p-4 sm:p-6 md:p-10 rounded-2xl border border-white/10 relative overflow-hidden"
             >
               {/* Background gradient */}
               <div className="absolute -top-24 -right-24 w-64 h-64 bg-[#4CD787]/10 rounded-full blur-3xl z-0"></div>
