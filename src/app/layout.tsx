@@ -14,7 +14,7 @@ import Script from 'next/script'
 import { Analytics } from '@vercel/analytics/next'
 import { Partytown } from '@qwik.dev/partytown/react'
 import clsx from 'clsx'
-import { IBM_Plex_Mono, IBM_Plex_Sans, Pacifico, Playfair_Display } from 'next/font/google'
+import { IBM_Plex_Mono, IBM_Plex_Sans, Inter, Pacifico, Playfair_Display } from 'next/font/google'
 import { createOgImageUrl, createTwitterImageUrl, getSiteUrl } from '@/lib/og'
 
 const siteUrl = getSiteUrl()
@@ -41,7 +41,7 @@ const enableVercelAnalytics =
 
 const ibmPlexSans = IBM_Plex_Sans({
   subsets: ['latin'],
-  weight: ['400', '600'],
+  weight: ['300', '400', '500', '600', '700'],
   display: 'swap',
   variable: '--font-ibm-plex-sans',
 })
@@ -66,6 +66,13 @@ const pacifico = Pacifico({
   weight: ['400'],
   display: 'swap',
   variable: '--font-pacifico',
+})
+
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['200'],
+  display: 'swap',
+  variable: '--font-inter',
 })
 
 const devtoolsVersionPatchScript = `
@@ -283,7 +290,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         ibmPlexSans.variable,
         ibmPlexMono.variable,
         playfair.variable,
-        pacifico.variable
+        pacifico.variable,
+        inter.variable
       )}
       style={{ backgroundColor: '#000000' }}
     >

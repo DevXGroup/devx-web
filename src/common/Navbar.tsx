@@ -206,7 +206,7 @@ export default function Navbar() {
         pointerEvents: showNavbar ? 'auto' : 'none',
       }}
     >
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         <div
           className="flex justify-between items-center py-[14px]"
           style={{ paddingTop: 'calc(14px + env(safe-area-inset-top, 0px))' }}
@@ -223,9 +223,9 @@ export default function Navbar() {
               height={30}
               priority
               quality={50}
-              sizes="(max-width: 640px) 120px, 150px"
-              style={{ maxWidth: '150px', height: 'auto', cursor: 'pointer' }}
-              className="w-[150px] h-auto cursor-pointer"
+              sizes="(max-width: 480px) 100px, (max-width: 640px) 120px, 150px"
+              style={{ maxWidth: '100%', height: 'auto', cursor: 'pointer' }}
+              className="w-[clamp(80px,15vw,150px)] h-auto cursor-pointer"
             />
           </Link>
           {/* Desktop Menu - right aligned */}

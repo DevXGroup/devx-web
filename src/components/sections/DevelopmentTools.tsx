@@ -622,7 +622,7 @@ export default function DevelopmentTools() {
           <div className="w-full max-w-full">
             <BlurText
               text="Other Tools & Tech Stacks We Use"
-              className="justify-center text-center mb-12 md:mb-16 lg:mb-20 px-4 section-title text-white font-editorial"
+              className="justify-center text-center mb-10 md:mb-14 lg:mb-18 px-4 text-2xl sm:text-3xl md:text-4xl text-white font-editorial"
               delay={150}
               once={true}
             />

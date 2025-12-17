@@ -659,16 +659,11 @@ export default function ContactPage() {
   }
 
   const handleCopyExample = useCallback(async () => {
-    if (
-      typeof navigator === 'undefined' ||
-      !navigator.clipboard ||
-      typeof navigator.clipboard.writeText !== 'function'
-    ) {
+    if (typeof navigator === 'undefined' || !navigator.clipboard) {
       return
     }
 
-    try {
-      await navigator.clipboard.writeText(exampleProjectRequest)
+    const onSuccess = () => {
       setHasCopiedExample(true)
       if (copyTimeoutRef.current) {
         clearTimeout(copyTimeoutRef.current)
@@ -677,9 +672,28 @@ export default function ContactPage() {
         setHasCopiedExample(false)
         copyTimeoutRef.current = null
       }, 2000)
+    }
+
+    try {
+      // Use ClipboardItem with explicit text/plain MIME type to ensure plain text copy
+      if (typeof ClipboardItem !== 'undefined' && navigator.clipboard.write) {
+        const blob = new Blob([exampleProjectRequest], { type: 'text/plain' })
+        const clipboardItem = new ClipboardItem({ 'text/plain': blob })
+        await navigator.clipboard.write([clipboardItem])
+        onSuccess()
+      } else {
+        // Fallback for browsers that don't support ClipboardItem
+        await navigator.clipboard.writeText(exampleProjectRequest)
+        onSuccess()
+      }
     } catch (error) {
-      console.error('Failed to copy example text to clipboard:', error)
-      // Silently ignore copy failures (e.g. clipboard unavailable)
+      // Try fallback method
+      try {
+        await navigator.clipboard.writeText(exampleProjectRequest)
+        onSuccess()
+      } catch (fallbackError) {
+        console.error('Failed to copy example text to clipboard:', fallbackError)
+      }
     }
   }, [])
 

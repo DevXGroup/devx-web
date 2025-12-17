@@ -201,7 +201,8 @@ export default function Hero() {
               <BlurText
                 text="Your Vision,"
                 className="inline-flex font-editorial font-thin justify-center whitespace-nowrap"
-                delay={150}
+                delay={200}
+                stepDuration={0.5}
                 once={false}
                 style={{
                   textShadow: '0 0 60px rgba(255,255,255,0.4), 0 10px 24px rgba(0,0,0,0.5)',
@@ -210,7 +211,8 @@ export default function Hero() {
               <BlurText
                 text="Engineered."
                 className="inline-flex font-editorial-semibold-italic text-[#ccff00] justify-center whitespace-nowrap"
-                delay={500}
+                delay={600}
+                stepDuration={0.6}
                 once={false}
                 style={{
                   textShadow:
@@ -219,25 +221,29 @@ export default function Hero() {
               />
             </div>
 
-            <div className="text-center w-full mx-auto space-y-2 sm:space-y-8 md:space-y-10 lg:space-y-8 xl:space-y-6 px-0 sm:px-4">
+            <div className="text-center w-full mx-auto space-y-2 sm:space-y-8 md:space-y-10 lg:space-y-8 xl:space-y-6 px-3 sm:px-4">
               <div
-                className="hero-subtitle hero-subtitle-lift text-white text-center mx-auto leading-[1.3] tracking-wide font-editorial font-semibold flex flex-col items-center text-[clamp(1.1rem,3.5vw,2.35rem)] sm:text-[clamp(1.3rem,3.2vw,2rem)] lg:text-[clamp(1.4rem,2.5vw,2.35rem)]"
+                className="hero-subtitle hero-subtitle-lift text-white text-center mx-auto leading-[1.3] tracking-wide flex flex-col items-center text-[clamp(1.1rem,3.5vw,2.35rem)] sm:text-[clamp(1.3rem,3.2vw,2rem)] lg:text-[clamp(1.4rem,2.5vw,2.35rem)]"
                 style={{
-                  fontFamily: 'var(--font-playfair-display)',
-                  fontWeight: 600,
-                  maxWidth: 'min(60ch, calc(100vw - 1.5rem))',
+                  fontFamily: 'var(--font-inter)',
+                  fontOpticalSizing: 'auto',
+                  fontWeight: 200,
+                  fontStyle: 'normal',
+                  maxWidth: 'min(50ch, calc(100vw - 3rem))',
                 }}
               >
                 <BlurText
                   text="Senior software team shipping high-impact"
                   className="justify-center text-center whitespace-nowrap"
-                  delay={80}
+                  delay={120}
+                  stepDuration={0.45}
                   once={false}
                 />
                 <BlurText
                   text="web, mobile, and AI projects fast"
                   className="justify-center text-center whitespace-nowrap"
-                  delay={80}
+                  delay={120}
+                  stepDuration={0.45}
                   once={false}
                 />
               </div>

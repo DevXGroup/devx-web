@@ -441,7 +441,7 @@ export default function ServicesPage() {
                 >
                   <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
                     <TextPressure
-                      text="Services  "
+                      text="  &nbsp;Services&nbsp;  "
                       fontFamily="var(--font-playfair-display)"
                       flex={false}
                       alpha={false}
@@ -449,9 +449,9 @@ export default function ServicesPage() {
                       width={false}
                       weight={true}
                       italic={false}
-                      textColor="#F472B6"
+                      textColor="#ffffffff"
                       strokeColor="#FFFFFF"
-                      minFontSize={64}
+                      minFontSize={isMobile ? 44 : 64}
                     />
                   </div>
                 </div>
@@ -547,13 +547,25 @@ export default function ServicesPage() {
       <AppleScrollSection>
         <section className="section-padding relative services-section pt-8 md:pt-12 bg-black">
           <div className="container mx-auto px-4 ">
-            <div className="w-full flex justify-center mb-28">
+            <div className="w-full flex flex-col items-center justify-center mb-28">
               <BlurText
                 text="Our Expertise"
                 className="justify-center blur-section text-[#06B6D4] font-editorial"
                 delay={250}
                 once={false}
               />
+              <p
+                className="mt-4 max-w-2xl text-center text-white/70 text-sm sm:text-base"
+                style={{
+                  fontFamily: 'var(--font-inter)',
+                  fontOpticalSizing: 'auto',
+                  fontWeight: 200,
+                  fontStyle: 'normal',
+                }}
+              >
+                Comprehensive solutions across development, AI, cloud infrastructure, and digital
+                transformation to accelerate your business growth.
+              </p>
             </div>
 
             <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,24rem),1fr))] justify-center gap-6 md:gap-8 px-2 md:px-8 lg:px-12 xl:px-16 relative z-10">
@@ -592,7 +604,15 @@ export default function ServicesPage() {
                     <h2 className="section-title-hero gradient-gold font-editorial">
                       Agentic AI & RAG Solutions
                     </h2>
-                    <p className="section-subtitle mt-3 sm:mt-4 max-w-3xl px-2 sm:px-0">
+                    <p
+                      className="mt-3 sm:mt-4 max-w-3xl px-2 sm:px-0 text-white/80"
+                      style={{
+                        fontFamily: 'var(--font-inter)',
+                        fontOpticalSizing: 'auto',
+                        fontWeight: 200,
+                        fontStyle: 'normal',
+                      }}
+                    >
                       Transform your business with intelligent AI agents that think, learn, and act
                       autonomously.
                     </p>

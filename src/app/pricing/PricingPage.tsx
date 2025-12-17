@@ -364,7 +364,7 @@ export default function PricingPage() {
                   }}
                 >
                   <TextPressure
-                    text="&nbsp;Pricing&nbsp;"
+                    text="&nbsp;Pricing&nbsp; "
                     fontFamily="var(--font-playfair-display)"
                     flex={false}
                     alpha={false}
