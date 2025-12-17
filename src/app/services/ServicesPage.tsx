@@ -412,7 +412,7 @@ export default function ServicesPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-900/10 to-black z-0" />
 
         <div className="relative z-20 w-full flex flex-col items-center">
-          <div className="container mx-auto px-4 relative z-20">
+          <div className="container mx-auto px-3 sm:px-4 md:px-6 relative z-20">
             <motion.div
               initial="hidden"
               animate="visible"
@@ -599,13 +599,13 @@ export default function ServicesPage() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.3 }}
                     transition={{ duration: 0.8 }}
-                    className="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-start text-center px-4 py-6 sm:px-6 sm:py-10 lg:py-16"
+                    className="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-start text-center px-3 py-4 sm:px-6 sm:py-8 md:py-10 lg:py-16"
                   >
-                    <h2 className="section-title-hero gradient-gold font-editorial">
+                    <h2 className="section-title-hero gradient-gold font-editorial leading-tight">
                       Agentic AI & RAG Solutions
                     </h2>
                     <p
-                      className="mt-3 sm:mt-4 max-w-3xl px-2 sm:px-0 text-white/80"
+                      className="mt-2 sm:mt-4 max-w-3xl px-2 sm:px-0 text-white/80 text-sm sm:text-base"
                       style={{
                         fontFamily: 'var(--font-inter)',
                         fontOpticalSizing: 'auto',
@@ -632,7 +632,7 @@ export default function ServicesPage() {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
 
                     {/* AI Log Typewriter */}
-                    <div className="absolute bottom-4 left-4 right-4 md:left-6 md:right-auto md:w-80 bg-black/80 backdrop-blur-md border border-white/10 rounded-lg p-4 z-30 font-mono text-xs shadow-2xl">
+                    <div className="absolute bottom-2 left-2 right-2 sm:bottom-4 sm:left-4 sm:right-4 md:left-6 md:right-auto md:w-80 bg-black/80 backdrop-blur-md border border-white/10 rounded-lg p-3 sm:p-4 z-30 font-mono text-[10px] sm:text-xs shadow-2xl">
                       <div className="flex items-center gap-2 mb-2 opacity-70 border-b border-white/10 pb-2">
                         <div className="w-1.5 h-1.5 rounded-full bg-[#4CD787] animate-pulse" />
                         <span className="uppercase tracking-widest text-white/80 text-[10px]">
@@ -695,7 +695,7 @@ export default function ServicesPage() {
               </motion.div>
 
               {/* Cards Section */}
-              <div className="order-2 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 px-4 sm:px-6 lg:px-0 lg:col-span-2 justify-items-center">
+              <div className="order-2 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 lg:gap-8 px-2 sm:px-4 md:px-6 lg:px-0 lg:col-span-2 justify-items-center">
                 {/* Card 1: Agentic AI */}
                 <motion.div
                   initial={{ opacity: 0 }}
@@ -704,7 +704,7 @@ export default function ServicesPage() {
                   transition={{ duration: 0.7, ease: 'easeOut' }}
                   className="relative group w-full max-w-3xl"
                 >
-                  <div className="relative h-full bg-zinc-900/40 backdrop-blur-md p-6 sm:p-8 rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 shadow-lg text-left flex flex-col">
+                  <div className="relative h-full bg-zinc-900/40 backdrop-blur-md p-4 sm:p-6 md:p-8 rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 shadow-lg text-left flex flex-col">
                     <motion.div
                       className="absolute left-1/2 -top-23 hidden h-20 w-[3px] -translate-x-1/2 origin-bottom rounded-full bg-gradient-to-t from-amber-400/0 via-amber-300/70 to-amber-500/90 lg:block pointer-events-none"
                       initial={{ opacity: 0, scaleY: 0.6 }}
@@ -746,11 +746,13 @@ export default function ServicesPage() {
                     </motion.div>
 
                     <div className="relative z-10 flex flex-col gap-4">
-                      <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#4CD787]/10 border border-[#4CD787]/20 flex items-center justify-center">
+                      <div className="flex items-center gap-3 sm:gap-4">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#4CD787]/10 border border-[#4CD787]/20 flex items-center justify-center flex-shrink-0">
                           <Bot className="w-5 h-5 sm:w-6 sm:h-6 text-[#4CD787]" />
                         </div>
-                        <h3 className="text-lg font-semibold text-white">Agentic AI Development</h3>
+                        <h3 className="text-base sm:text-lg font-semibold text-white">
+                          Agentic AI Development
+                        </h3>
                       </div>
                       <p className="text-sm text-zinc-400 leading-relaxed font-normal">
                         Build autonomous AI agents that execute complex workflows end-to-end.
@@ -797,13 +799,15 @@ export default function ServicesPage() {
                   transition={{ duration: 0.7, ease: 'easeOut' }}
                   className="relative group w-full max-w-3xl"
                 >
-                  <div className="relative h-full bg-zinc-900/40 backdrop-blur-md p-6 sm:p-8 rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 shadow-lg text-left flex flex-col">
+                  <div className="relative h-full bg-zinc-900/40 backdrop-blur-md p-4 sm:p-6 md:p-8 rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 shadow-lg text-left flex flex-col">
                     <div className="flex flex-col gap-4">
-                      <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#9d4edd]/10 border border-[#9d4edd]/20 flex items-center justify-center">
+                      <div className="flex items-center gap-3 sm:gap-4">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#9d4edd]/10 border border-[#9d4edd]/20 flex items-center justify-center flex-shrink-0">
                           <Brain className="w-5 h-5 sm:w-6 sm:h-6 text-[#9d4edd]" />
                         </div>
-                        <h3 className="text-lg font-semibold text-white">RAG Implementation</h3>
+                        <h3 className="text-base sm:text-lg font-semibold text-white">
+                          RAG Implementation
+                        </h3>
                       </div>
                       <p className="text-sm text-zinc-400 leading-relaxed font-normal">
                         Enhance AI accuracy with retrieval-augmented generation. Connect LLMs to
@@ -848,13 +852,13 @@ export default function ServicesPage() {
                   transition={{ duration: 0.7, ease: 'easeOut' }}
                   className="relative group w-full max-w-3xl"
                 >
-                  <div className="relative h-full bg-zinc-900/40 backdrop-blur-md p-6 sm:p-8 rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 shadow-lg text-left flex flex-col">
+                  <div className="relative h-full bg-zinc-900/40 backdrop-blur-md p-4 sm:p-6 md:p-8 rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 shadow-lg text-left flex flex-col">
                     <div className="flex flex-col gap-4">
-                      <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#CFB53B]/10 border border-[#CFB53B]/20 flex items-center justify-center">
+                      <div className="flex items-center gap-3 sm:gap-4">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#CFB53B]/10 border border-[#CFB53B]/20 flex items-center justify-center flex-shrink-0">
                           <Cpu className="w-5 h-5 sm:w-6 sm:h-6 text-[#CFB53B]" />
                         </div>
-                        <h3 className="text-lg font-semibold text-white">
+                        <h3 className="text-base sm:text-lg font-semibold text-white">
                           Intelligent Workflow Automation
                         </h3>
                       </div>

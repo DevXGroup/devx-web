@@ -215,7 +215,7 @@
 
 /* Section Title - Hero Style (Large, dramatic) */
 .section-title-hero {
-  @apply text-5xl sm:text-6xl md:text-6xl lg:text-6xl font-bold;
+  @apply text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-6xl font-bold;
   font-family: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
   font-weight: 700;
   line-height: 1.2;
@@ -279,6 +279,38 @@
   .section-subtitle,
   .section-subtitle-compact {
     max-width: 32ch;
+  }
+}
+
+/* Extra-small screens (under 360px) */
+@media (max-width: 375px) {
+  .section-title-hero {
+    @apply text-2xl;
+    max-width: 20ch;
+  }
+
+  .section-title {
+    @apply text-3xl;
+    max-width: 20ch;
+  }
+
+  .section-title-compact {
+    @apply text-2xl;
+    max-width: 22ch;
+  }
+
+  .section-subtitle,
+  .section-subtitle-compact {
+    max-width: 28ch;
+    @apply text-sm;
+  }
+
+  .heading-component {
+    @apply text-base;
+  }
+
+  .card-title {
+    @apply text-base;
   }
 }
 
