@@ -27,17 +27,29 @@ interface EnhancedProjectCardProps {
 const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectCardProps) => {
   const [isHovered, setIsHovered] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
+  // Disable hover-only effects on touch devices to avoid flashing/repaints
+  const [allowHover, setAllowHover] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setIsMounted(true)
+    if (typeof window === 'undefined') return
+    const mq = window.matchMedia('(hover: hover) and (pointer: fine)')
+    const updateHover = () => setAllowHover(mq.matches)
+    updateHover()
+    mq.addEventListener('change', updateHover)
+    return () => mq.removeEventListener('change', updateHover)
   }, [])
 
-  const handleMouseEnter = () => setIsHovered(true)
-  const handleMouseLeave = () => setIsHovered(false)
+  const handleMouseEnter = () => {
+    if (allowHover) setIsHovered(true)
+  }
+  const handleMouseLeave = () => {
+    if (allowHover) setIsHovered(false)
+  }
 
   // Only animate border lines when actually visible and in viewport
-  const shouldAnimateBorder = isMounted && isHovered
+  const shouldAnimateBorder = isMounted && isHovered && allowHover
 
   const categoryColor = categoryColors[project.category as keyof typeof categoryColors] || '#4CD787'
 
@@ -49,7 +61,7 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
       className="relative group cursor-pointer overflow-hidden
         bg-black/40 backdrop-blur-md border border-white/10
         rounded-2xl hover:border-white/20 transition-all duration-300
-        h-auto min-h-[520px] md:min-h-[540px] lg:min-h-[560px]"
+        h-full min-h-[520px] sm:min-h-[540px] md:min-h-[600px] lg:min-h-[640px]"
     >
       {/* Subtle Glow Effect - optimized for performance */}
       <div
@@ -209,17 +221,17 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
             </div>
 
             {/* Action Buttons */}
-            <div className="flex items-end justify-between pt-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 pt-4">
               <button
                 onClick={() => onViewDetails?.(project)}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-white/10 to-white/5 hover:from-white/20 hover:to-white/10 border-2 border-white/30 hover:border-white/50 text-white transition-all duration-300 font-semibold shadow-lg h-10"
+                className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-white/10 to-white/5 hover:from-white/20 hover:to-white/10 border-2 border-white/30 hover:border-white/50 text-white transition-all duration-300 font-semibold shadow-lg h-10 w-full sm:w-auto"
               >
                 <span className="text-sm font-bold whitespace-nowrap">View Details</span>
                 <ExternalLink size={14} />
               </button>
 
               {/* Platform Support Section - Right Aligned */}
-              <div className="flex flex-col gap-3 items-end">
+              <div className="flex flex-col gap-3 items-start sm:items-end text-left sm:text-right">
                 {/* Awards Row */}
                 {project.awards && project.awards.length > 0 && (
                   <div className="flex items-center gap-1 text-yellow-400" title="Award Winner">
@@ -228,11 +240,11 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
                 )}
 
                 {/* Platform Support */}
-                <div className="flex flex-col gap-2 items-end">
+                <div className="flex flex-col gap-2 items-start sm:items-end">
                   <span className="text-xs font-medium text-white/70 uppercase tracking-wide">
                     Supported Platforms
                   </span>
-                  <div className="flex items-center gap-2 flex-wrap justify-end">
+                  <div className="flex items-center gap-2 flex-wrap justify-start sm:justify-end max-w-[280px]">
                     {/* iOS */}
                     {project.platforms.some((p) => p.toLowerCase().includes('ios')) && (
                       <div

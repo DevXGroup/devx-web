@@ -1,1 +1,7 @@
-<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Flutter</title><path fill="#02569B" d="M14.314 0 0 14.314l4.575 4.575L23.464 0H14.314z"/><path fill="#0175C2" d="m14.314 11.003-5.72 5.72 5.72 5.72h9.15l-9.15-9.15z"/><path fill="#13B9FD" d="m8.595 16.723 5.72-5.72-2.862-2.86L5.732 13.86l2.863 2.863z"/><path fill="#13B9FD" d="m23.465 24-9.15-9.15-2.86 2.86L17.886 24h5.579z"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 317" role="img" aria-label="Flutter logo">
+  <path fill="#47C5FB" d="M35.9 158.5 135.7 257l57.1-57.1-69-70.4z"/>
+  <path fill="#47C5FB" d="m135.7 257 43 43 57.1-57.1-43-43z"/>
+  <path fill="#01579B" d="m135.7 257-43 43 43 12.7 57.1-57.1z"/>
+  <path fill="#29B6F6" d="M35.9 158.5 135.7 57.9h86.6L73.1 208.4z"/>
+  <path fill="#01579B" d="m178.7 156.5 43.6-43.6h-86.6z"/>
+</svg>

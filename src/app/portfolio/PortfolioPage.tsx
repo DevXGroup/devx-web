@@ -325,7 +325,7 @@ function ServiceIcon({
         e.preventDefault()
         onClick(service, e)
       }}
-      className="relative group service-icon-container cursor-pointer p-4 sm:p-5"
+      className="relative group service-icon-container cursor-pointer p-2 sm:p-4 md:p-5"
       variants={cardRevealVariants}
       initial="hidden"
       whileInView="visible"
@@ -334,10 +334,10 @@ function ServiceIcon({
       whileHover={shouldReduceMotion ? {} : { scale: 1.08 }}
       whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
     >
-      <motion.div className="w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center relative overflow-hidden transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] bg-zinc-900 border border-white/10 group-hover:bg-white">
-        <service.icon className="w-8 h-8 md:w-10 md:h-10 text-white relative z-10 group-hover:!text-black transition-colors duration-300" />
+      <motion.div className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center relative overflow-hidden transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] bg-zinc-900 border border-white/10 group-hover:bg-white">
+        <service.icon className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 text-white relative z-10 group-hover:!text-black transition-colors duration-300" />
       </motion.div>
-      <motion.div className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs font-medium whitespace-nowrap text-center text-zinc-400 group-hover:text-white transition-colors duration-300">
+      <motion.div className="absolute -bottom-4 sm:-bottom-6 left-1/2 -translate-x-1/2 text-[10px] sm:text-xs font-medium whitespace-nowrap text-center text-zinc-400 group-hover:text-white transition-colors duration-300">
         {service.title}
       </motion.div>
     </motion.button>
@@ -353,6 +353,12 @@ export default function PortfolioPage() {
   const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null)
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
   const [portfolioTitle, setPortfolioTitle] = useState('  \u00a0Portfolio\u00a0  ')
+  const [asciiSettings, setAsciiSettings] = useState({
+    containerHeight: 330,
+    asciiHeight: 620,
+    sphereRadius: 240,
+    charSize: 6,
+  })
 
   // Track if hero section is in view to control animations
   const heroRef = useRef(null)
@@ -365,9 +371,29 @@ export default function PortfolioPage() {
       setPortfolioTitle(window.innerWidth < 640 ? mobileText : defaultText)
     }
 
+    const computeAsciiSettings = () => {
+      const width = window.innerWidth
+      if (width < 400) {
+        return { containerHeight: 300, asciiHeight: 380, sphereRadius: 150, charSize: 5 }
+      }
+      if (width < 640) {
+        return { containerHeight: 320, asciiHeight: 420, sphereRadius: 170, charSize: 5 }
+      }
+      if (width < 900) {
+        return { containerHeight: 340, asciiHeight: 520, sphereRadius: 200, charSize: 6 }
+      }
+      return { containerHeight: 360, asciiHeight: 620, sphereRadius: 240, charSize: 6 }
+    }
+
+    const handleResize = () => {
+      updateTitle()
+      setAsciiSettings(computeAsciiSettings())
+    }
+
     updateTitle()
-    window.addEventListener('resize', updateTitle, { passive: true })
-    return () => window.removeEventListener('resize', updateTitle)
+    setAsciiSettings(computeAsciiSettings())
+    window.addEventListener('resize', handleResize, { passive: true })
+    return () => window.removeEventListener('resize', handleResize)
   }, [])
 
   const handleServiceClick = (service: any, event: any) => {
@@ -405,7 +431,7 @@ export default function PortfolioPage() {
       <section ref={heroRef} className="relative isolate py-9 overflow-hidden">
         <div className="absolute inset-0 z-0 bg-gradient-to-b from-black via-black/40 to-black pointer-events-none" />
 
-        <div className="relative z-[60] container mx-auto px-4">
+        <div className="relative z-[60] container mx-auto px-3 sm:px-4">
           {/* Main Content Area */}
           <motion.div
             variants={containerVariants}
@@ -420,7 +446,7 @@ export default function PortfolioPage() {
                 <motion.div
                   className="absolute -top-2 w-3 h-3 rounded-full"
                   style={{
-                    left: '8.25rem',
+                    left: 'clamp(5rem, 32vw, 8rem)',
                     background: '#ff6b35',
                     boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
                     zIndex: 1,
@@ -448,7 +474,7 @@ export default function PortfolioPage() {
                 <motion.div
                   className="absolute -top-6 w-6 h-6 rotate-45 cursor-pointer"
                   style={{
-                    left: '9.25rem',
+                    left: 'clamp(6.25rem, 36vw, 9rem)',
                     background:
                       'linear-gradient(45deg, rgba(255, 255, 0, 0.7) 0%, rgba(255, 255, 0, 0.3) 50%, transparent 100%)',
                     border: '1px solid rgba(255, 255, 0, 0.5)',
@@ -478,15 +504,15 @@ export default function PortfolioPage() {
                 />
               </div>
 
-              <div className="flex items-center justify-center w-full mb-4 sm:mb-8 px-4">
+              <div className="flex items-center justify-center w-full mb-4 sm:mb-8 px-2 sm:px-4">
                 <div
                   className="relative flex items-center justify-center w-full max-w-md mx-auto"
                   style={{
-                    height: '120px',
-                    minWidth: '550px',
+                    height: 'clamp(72px, 22vw, 90px)',
+                    minWidth: '0',
                     fontFamily: 'var(--font-playfair-display)',
-                    marginLeft: '10px',
-                    marginRight: '10px',
+                    marginLeft: '6px',
+                    marginRight: '6px',
                   }}
                 >
                   <TextPressure
@@ -514,17 +540,21 @@ export default function PortfolioPage() {
               />
 
               {/* Decorative squares row under subtitle */}
-              <div className="relative mt-1 mb-49 h-[260px] sm:h-[250px] md:h-[330px] w-full">
+              <div
+                className="relative mt-1 mb-49 w-full"
+                style={{ height: `${asciiSettings.containerHeight}px` }}
+              >
                 <div className="relative w-full max-w-4xl mx-auto flex items-center justify-center h-full">
                   <AsciiEffect3D
                     key={`hero-ascii-ball-${pathname}`}
-                    height={620}
+                    height={asciiSettings.asciiHeight}
+                    backgroundHeight={asciiSettings.asciiHeight}
                     className="rounded-xl"
                     color="#9ca3af"
-                    charSize={6}
+                    charSize={asciiSettings.charSize}
                     opacity={0.75}
                     showBase={false}
-                    sphereRadius={240}
+                    sphereRadius={asciiSettings.sphereRadius}
                     lighting="bottomLeft"
                     lightScale={1.3}
                     ambient={0.08}
@@ -710,17 +740,18 @@ export default function PortfolioPage() {
         </div>
         <div className="container mx-auto px-5 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-24 max-w-8xl">
           <motion.div
-            className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2 gap-8 md:gap-12 lg:gap-14 xl:gap-16 2xl:gap-20 relative z-10 justify-items-center max-w-6xl xl:max-w-7xl mx-auto"
+            className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2 gap-8 md:gap-12 lg:gap-14 xl:gap-16 2xl:gap-20 relative z-10 justify-items-center items-stretch max-w-6xl xl:max-w-7xl mx-auto"
             initial="visible"
             animate="visible"
           >
             {projects.map((project, index) => (
               <motion.div
                 key={project.title}
-                className="w-full lg:max-w-[560px]"
+                className="w-full lg:max-w-[560px] h-full"
                 variants={cardRevealVariants}
                 initial="hidden"
-                animate="visible"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.2 }}
                 custom={index}
               >
                 <EnhancedProjectCard
@@ -741,9 +772,9 @@ export default function PortfolioPage() {
       </section>
 
       {/* Services */}
-      <section className="py-16 relative z-[5000]">
+      <section className="py-12 sm:py-16 relative z-[5000]">
         <div className="absolute inset-0 z-0 bg-gradient-to-b from-black via-purple-900/10 to-black pointer-events-none" />
-        <div className="container mx-auto px-4 relative">
+        <div className="container mx-auto px-3 sm:px-4 relative">
           <div className="text-center mb-8">
             <BlurText
               text="Services we deliver"
@@ -758,7 +789,7 @@ export default function PortfolioPage() {
               once={false}
             />
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:flex lg:flex-wrap lg:justify-center gap-6 sm:gap-8 md:gap-10 lg:gap-12 justify-items-center relative z-10 px-4">
+          <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:flex lg:flex-wrap lg:justify-center gap-3 sm:gap-6 md:gap-10 lg:gap-12 justify-items-center relative z-10 px-2 sm:px-4">
             {services.map((service, index) => (
               <ServiceIcon
                 key={service.title}

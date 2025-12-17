@@ -585,38 +585,43 @@ export default function ServicesPage() {
           <div className="container mx-auto px-0 lg:px-4 relative z-10">
             {/* Video and Cards Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-start justify-items-center max-w-7xl mx-auto">
+              {/* Title Section - Above Video */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.8 }}
+                className="order-1 lg:col-span-2 flex flex-col items-center text-center px-3 sm:px-6 mb-6 sm:mb-8"
+              >
+                <h2
+                  className="section-title-hero font-editorial leading-tight bg-gradient-to-b from-white via-white/90 to-zinc-400 bg-clip-text text-transparent"
+                  style={{ WebkitBackgroundClip: 'text' }}
+                >
+                  Agentic AI & RAG Solutions
+                </h2>
+                <p
+                  className="mt-2 sm:mt-4 max-w-3xl px-2 sm:px-0 text-white/80 text-sm sm:text-base"
+                  style={{
+                    fontFamily: 'var(--font-inter)',
+                    fontOpticalSizing: 'auto',
+                    fontWeight: 200,
+                    fontStyle: 'normal',
+                  }}
+                >
+                  Transform your business with intelligent AI agents that think, learn, and act
+                  autonomously.
+                </p>
+              </motion.div>
+
               {/* Video Section */}
               <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
-                className="order-1 lg:order-1 lg:col-span-2 flex flex-col items-stretch w-full"
+                className="order-2 lg:order-2 lg:col-span-2 flex flex-col items-stretch w-full"
               >
                 <div className="relative w-full overflow-hidden rounded-2xl shadow-2xl shadow-[#4CD787]/10 transition-[box-shadow] duration-500">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.3 }}
-                    transition={{ duration: 0.8 }}
-                    className="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-start text-center px-3 py-4 sm:px-6 sm:py-8 md:py-10 lg:py-16"
-                  >
-                    <h2 className="section-title-hero gradient-gold font-editorial leading-tight">
-                      Agentic AI & RAG Solutions
-                    </h2>
-                    <p
-                      className="mt-2 sm:mt-4 max-w-3xl px-2 sm:px-0 text-white/80 text-sm sm:text-base"
-                      style={{
-                        fontFamily: 'var(--font-inter)',
-                        fontOpticalSizing: 'auto',
-                        fontWeight: 200,
-                        fontStyle: 'normal',
-                      }}
-                    >
-                      Transform your business with intelligent AI agents that think, learn, and act
-                      autonomously.
-                    </p>
-                  </motion.div>
                   <div className="relative w-full aspect-[16/9] bg-black">
                     <video
                       autoPlay
