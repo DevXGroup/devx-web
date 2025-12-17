@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/DevXGroup/devx-web/compare/v1.7.0...v1.7.1) (2025-12-17)
+
+### Bug Fixes
+
+* make Services page fully responsive for extra-small screens ([b7b5f22](https://github.com/DevXGroup/devx-web/commit/b7b5f22f78f95962a1cc60a2a8a2f7b4586bebe5))
+* make Services page fully responsive for extra-small screens ([702b90b](https://github.com/DevXGroup/devx-web/commit/702b90b4219cb2a581873f8d7716eebe89e696d9))
+
 ## [1.7.0](https://github.com/DevXGroup/devx-web/compare/v1.6.1...v1.7.0) (2025-12-11)
 
 ### Features
