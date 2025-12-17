@@ -190,7 +190,7 @@ export default function LogoLoop({ logos, speed = 15 }: LogoLoopProps) {
               >
                 <div className="relative flex flex-col items-center gap-3">
                   <div
-                    className={`relative flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 transition-all duration-500 ${
+                    className={`relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 transition-all duration-500 ${
                       shouldApplyGrayscale
                         ? 'grayscale group-hover/item:grayscale-0'
                         : 'grayscale-0'
@@ -201,7 +201,7 @@ export default function LogoLoop({ logos, speed = 15 }: LogoLoopProps) {
                       src={logo.icon}
                       alt={logo.name}
                       fill
-                      sizes="(min-width: 1280px) 6rem, (min-width: 1024px) 5rem, (min-width: 768px) 4.5rem, (min-width: 640px) 4rem, 3rem"
+                      sizes="(min-width: 1280px) 4rem, (min-width: 1024px) 3.5rem, (min-width: 768px) 3rem, (min-width: 640px) 3rem, 2.5rem"
                       className={`object-contain ${logo.imageClassName ?? ''} ${
                         logo.loopImageClassName ?? ''
                       }`}
@@ -218,10 +218,7 @@ export default function LogoLoop({ logos, speed = 15 }: LogoLoopProps) {
                   {/* Label - Shows on hover */}
                   <div
                     className={`
-                      subtitle-xs absolute -bottom-12 left-1/2 -translate-x-1/2 whitespace-nowrap z-[999]
-                      bg-black/95 backdrop-blur-md px-4 py-2 rounded-lg
-                      border border-[#4CD787]/50
-                      shadow-lg shadow-[#4CD787]/20
+                      subtitle-xs absolute -bottom-12 left-1/2 -translate-x-1/2 whitespace-nowrap z-[999] text-white/80
                       transition-all duration-300 pointer-events-none opacity-0 translate-y-2 scale-95
                       group-hover/item:opacity-100 group-hover/item:translate-y-0 group-hover/item:scale-100
                       ${isActive ? 'opacity-100 translate-y-0 scale-100' : ''}

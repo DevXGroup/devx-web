@@ -96,7 +96,7 @@ function StepAnimation({
       </motion.div>
 
       <motion.p
-        className="subtitle-xs sm:subtitle-sm md:subtitle text-center max-w-[80px] sm:max-w-none"
+        className="text-xs sm:text-sm md:text-base text-center max-w-[100px] sm:max-w-none leading-tight"
         variants={stepTextVariants}
         animate={isActive ? 'active' : 'inactive'}
         transition={{ duration: 0.25 }}
@@ -592,7 +592,7 @@ export default function Features() {
             delay={150}
             once={true}
           />
-          <p className="section-subtitle-compact text-zinc-300 mb-8">
+          <p className="section-subtitle-compact text-zinc-300 mb-8 text-center mx-auto">
             Let&apos;s Automate Your Growth In No Time
           </p>
 

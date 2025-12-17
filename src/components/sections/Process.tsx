@@ -190,7 +190,7 @@ export default function Process() {
         </div>
 
         {/* Process cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-16 sm:mb-24 px-4 sm:px-0">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-16 sm:mb-24 px-4 sm:px-0 max-w-5xl mx-auto">
           {processes.map((process, index) => (
             <motion.div
               key={process.title}
@@ -249,7 +249,7 @@ export default function Process() {
                   <h3 className="text-lg sm:text-xl font-medium text-white mb-2 group-hover:text-white transition-colors duration-300">
                     {process.title}
                   </h3>
-                  <p className="text-sm sm:text-base text-zinc-400 font-light leading-relaxed group-hover:text-zinc-300 transition-colors duration-300">
+                  <p className="text-sm sm:text-base text-white/80 font-light leading-relaxed group-hover:text-white transition-colors duration-300">
                     {process.description}
                   </p>
                 </div>
