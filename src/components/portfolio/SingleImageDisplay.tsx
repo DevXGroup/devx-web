@@ -47,8 +47,8 @@ const SingleImageDisplay = ({
 
         {/* Image Display */}
         <motion.div
-          className={`relative w-full max-w-xl mx-auto rounded-2xl overflow-hidden border border-white/10 bg-black/40 transition-all duration-500 ${
-            isHorizontal ? 'aspect-video' : 'max-h-[420px] sm:max-h-[480px] md:max-h-[520px]'
+          className={`relative w-full max-w-3xl mx-auto rounded-2xl overflow-hidden border border-white/10 bg-black/40 transition-all duration-500 ${
+            isHorizontal ? 'aspect-video' : 'max-h-[500px] sm:max-h-[600px] md:max-h-[680px]'
           }`}
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}

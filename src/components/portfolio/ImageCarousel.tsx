@@ -3,7 +3,6 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import { useEffect, useState, useCallback } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 interface ImageCarouselProps {
   screenshots: string[]
@@ -33,14 +32,6 @@ const ImageCarousel = ({ screenshots, title, categoryColor = '#4CD787' }: ImageC
   const currentImage = screenshots[currentIndex]
   const isHorizontal = imageDimensions[currentIndex]?.isHorizontal ?? false
 
-  const goToPrevious = useCallback(() => {
-    setCurrentIndex((prev) => (prev === 0 ? screenshots.length - 1 : prev - 1))
-  }, [screenshots.length])
-
-  const goToNext = useCallback(() => {
-    setCurrentIndex((prev) => (prev + 1) % screenshots.length)
-  }, [screenshots.length])
-
   const goToIndex = useCallback((index: number) => {
     setCurrentIndex(index)
   }, [])
@@ -67,8 +58,8 @@ const ImageCarousel = ({ screenshots, title, categoryColor = '#4CD787' }: ImageC
 
         {/* Main Image Display */}
         <div
-          className={`relative w-full max-w-xl mx-auto overflow-hidden border border-white/10 bg-black/40 transition-all duration-500 rounded-2xl ${
-            isHorizontal ? 'aspect-video' : 'max-h-[420px] sm:max-h-[480px] md:max-h-[520px]'
+          className={`relative w-full max-w-3xl mx-auto overflow-hidden border border-white/10 bg-black/40 transition-all duration-500 rounded-2xl ${
+            isHorizontal ? 'aspect-video' : 'max-h-[500px] sm:max-h-[600px] md:max-h-[680px]'
           }`}
         >
           <AnimatePresence mode="wait">
@@ -97,37 +88,6 @@ const ImageCarousel = ({ screenshots, title, categoryColor = '#4CD787' }: ImageC
               </motion.div>
             )}
           </AnimatePresence>
-
-          {/* Navigation Arrows - Overlay on Image */}
-          {screenshots.length > 1 && (
-            <>
-              {/* Left Navigation Button */}
-              <motion.button
-                onClick={goToPrevious}
-                className="absolute left-4 top-1/2 -translate-y-1/2 z-20 flex items-center justify-center transition-all duration-300 cursor-pointer"
-                aria-label="Previous screenshot"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <div className="p-3 sm:p-4 rounded-full bg-black/50 backdrop-blur-md border border-white/40 text-white shadow-xl hover:bg-black/70 hover:border-white/60 transition-all duration-300">
-                  <ChevronLeft size={24} className="sm:w-7 sm:h-7" />
-                </div>
-              </motion.button>
-
-              {/* Right Navigation Button */}
-              <motion.button
-                onClick={goToNext}
-                className="absolute right-4 top-1/2 -translate-y-1/2 z-20 flex items-center justify-center transition-all duration-300 cursor-pointer"
-                aria-label="Next screenshot"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <div className="p-3 sm:p-4 rounded-full bg-black/50 backdrop-blur-md border border-white/40 text-white shadow-xl hover:bg-black/70 hover:border-white/60 transition-all duration-300">
-                  <ChevronRight size={24} className="sm:w-7 sm:h-7" />
-                </div>
-              </motion.button>
-            </>
-          )}
 
           {/* Screenshot Counter */}
           {screenshots.length > 1 && (
@@ -159,8 +119,8 @@ const ImageCarousel = ({ screenshots, title, categoryColor = '#4CD787' }: ImageC
                     : 'border-white/20 hover:border-white/50 hover:scale-105'
                 }`}
                 style={{
-                  width: 'clamp(40px, 8vw, 52px)',
-                  height: 'clamp(40px, 8vw, 52px)',
+                  width: 'clamp(50px, 10vw, 70px)',
+                  height: 'clamp(50px, 10vw, 70px)',
                 }}
                 whileHover={{ scale: currentIndex === index ? 1.1 : 1.12 }}
                 whileTap={{ scale: 0.95 }}
@@ -172,7 +132,8 @@ const ImageCarousel = ({ screenshots, title, categoryColor = '#4CD787' }: ImageC
                     alt={`${title} thumbnail ${index + 1}`}
                     fill
                     className="object-cover"
-                    sizes="52px"
+                    sizes="70px"
+                    loading="lazy"
                   />
                 </div>
 
