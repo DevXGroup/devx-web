@@ -435,25 +435,23 @@ export default function ServicesPage() {
                     height: '100px',
                     width: '100%',
                     maxWidth: '320px',
-                    padding: '0',
+                    padding: '0 0 0px 0',
                     margin: '0 auto',
                   }}
                 >
-                  <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-                    <TextPressure
-                      text="  &nbsp;Services&nbsp;  "
-                      fontFamily="var(--font-playfair-display)"
-                      flex={false}
-                      alpha={false}
-                      stroke={false}
-                      width={false}
-                      weight={true}
-                      italic={false}
-                      textColor="#ffffffff"
-                      strokeColor="#FFFFFF"
-                      minFontSize={isMobile ? 44 : 64}
-                    />
-                  </div>
+                  <TextPressure
+                    text="  &nbsp;Services&nbsp;  "
+                    fontFamily="var(--font-playfair-display)"
+                    flex={false}
+                    alpha={false}
+                    stroke={false}
+                    width={false}
+                    weight={true}
+                    italic={false}
+                    textColor="#ffffffff"
+                    strokeColor="#FFFFFF"
+                    minFontSize={isMobile ? 44 : 63}
+                  />
                 </div>
               </div>
 

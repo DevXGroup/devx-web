@@ -423,7 +423,7 @@ export default function Navbar() {
               aria-expanded={isOpen}
             >
               {/* Hamburger lines */}
-              <div className="relative flex flex-col items-center justify-center space-y-1.5">
+              <div className="relative flex flex-col items-center justify-center space-y-1.5 drop-shadow-[0_0_6px_rgba(0,0,0,0.45)]">
                 {/* Top line - shortest */}
                 <motion.div
                   className="relative rounded-full"

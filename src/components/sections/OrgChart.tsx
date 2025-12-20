@@ -374,14 +374,18 @@ const OrgChart = ({ className = '' }: OrgChartProps) => {
       <AnimatePresence>
         {selectedMember && (
           <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-start justify-center px-4 py-6 sm:py-8 bg-black/80 backdrop-blur-sm overflow-y-auto min-h-[100dvh]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedMember(null)}
+            style={{
+              paddingTop: 'calc(1.5rem + env(safe-area-inset-top, 0px))',
+              paddingBottom: 'calc(1.5rem + env(safe-area-inset-bottom, 0px))',
+            }}
           >
             <motion.div
-              className="bg-[#0B1426] border border-white/20 rounded-2xl p-8 max-w-2xl w-full mx-4 relative"
+              className="bg-[#0B1426] border border-white/20 rounded-2xl p-6 sm:p-7 md:p-8 w-full max-w-[520px] sm:max-w-[620px] md:max-w-2xl relative shadow-2xl max-h-[90vh] sm:max-h-[92vh] md:max-h-[calc(100dvh-3rem)] overflow-y-auto"
               variants={modalVariants}
               initial="hidden"
               animate="visible"

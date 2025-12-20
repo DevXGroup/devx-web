@@ -141,16 +141,18 @@ export default function Process() {
   }, [isInViewport])
 
   return (
-    <section className="relative py-20 w-full overflow-hidden" ref={containerRef}>
+    <section className="relative py-20 w-full min-h-fit overflow-hidden" ref={containerRef}>
       {/* Speed lines background image */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 w-full h-full">
         <Image
           src="/images/backgrounds/speed-lines.webp"
           alt=""
           fill
-          className="object-cover"
+          className="object-cover object-center"
+          sizes="100vw"
           loading="lazy"
           quality={75}
+          priority={false}
         />
         {/* Dark overlay for text readability - increased opacity */}
         <div className="absolute inset-0 bg-black/85" />
