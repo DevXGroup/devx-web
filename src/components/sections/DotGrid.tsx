@@ -156,10 +156,10 @@ const DotGrid = ({
     const ctx = canvas.getContext('2d')
     if (ctx) ctx.scale(dpr, dpr)
 
-    // Add padding to prevent dots from overlapping with borders
-    const padding = 4 // 4px padding from edges
-    const availableWidth = finalWidth - padding * 2 - dotSize
-    const availableHeight = finalHeight - padding * 2 - dotSize
+    // Minimal padding to fill the space completely
+    const padding = 1 // 1px padding from edges for safety
+    const availableWidth = finalWidth - padding * 2
+    const availableHeight = finalHeight - padding * 2
 
     // Calculate number of columns and rows that will fit
     const cols = Math.max(Math.floor(availableWidth / (dotSize + gap)) + 1, 1)
@@ -169,9 +169,9 @@ const DotGrid = ({
     const actualGapX = cols > 1 ? (availableWidth - dotSize * (cols - 1)) / (cols - 1) : 0
     const actualGapY = rows > 1 ? (availableHeight - dotSize * (rows - 1)) / (rows - 1) : 0
 
-    // Start position with padding
-    const startX = padding + dotSize / 2
-    const startY = padding + dotSize / 2
+    // Start position with padding and 4px offset
+    const startX = padding + dotSize / 2 + 4
+    const startY = padding + dotSize / 2 + 4
 
     const dots: Dot[] = []
     for (let y = 0; y < rows; y++) {
@@ -555,14 +555,12 @@ const DotGrid = ({
   }, [maxSpeed, speedTrigger, proximity, resistance, returnDuration, shockRadius, shockStrength])
 
   return (
-    <section className={`h-full w-full relative ${className}`} style={style}>
-      <div ref={wrapperRef} className="w-full h-full relative">
-        <canvas
-          ref={canvasRef}
-          className="absolute inset-0 w-full h-full block"
-          style={{ width: '100%', height: '100%' }}
-        />
-      </div>
+    <section ref={wrapperRef} className={`h-full w-full relative ${className}`} style={style}>
+      <canvas
+        ref={canvasRef}
+        className="w-full h-full block"
+        style={{ width: '100%', height: '100%', display: 'block' }}
+      />
     </section>
   )
 }

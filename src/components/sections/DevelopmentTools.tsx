@@ -570,12 +570,12 @@ export default function DevelopmentTools() {
         <div className="py-30 md:py-0 mt-24 md:mt-36 mb-24 md:mb-32">
           <div className="container mx-auto px-3 sm:px-4">
             <div className="flex flex-col items-center">
-              <h2 className="text-center mb-4 text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white font-editorial drop-shadow-sm">
+              <h2 className="relative z-10 text-center mb-4 text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white font-editorial drop-shadow-sm leading-tight max-w-[92vw] sm:max-w-[88vw] break-words">
                 DevX Development Tools
               </h2>
               <BlurText
                 text="Cutting-edge technologies powering innovative solutions across web, mobile, and cloud platforms"
-                className="justify-center text-center max-w-2xl xl:max-w-3xl 2xl:max-w-4xl mb-0 section-subtitle text-zinc-400"
+                className="relative z-10 justify-center text-center max-w-2xl xl:max-w-3xl 2xl:max-w-4xl mb-0 section-subtitle text-zinc-400"
                 delay={100}
                 once={true}
               />
@@ -630,10 +630,10 @@ export default function DevelopmentTools() {
 
         {/* Logo Loop Section */}
         <div className="w-full mt-8 md:mt-24 lg:mt-32 xl:mt-40 py-8 md:py-12 lg:py-16 mb-6">
-          <div className="w-full max-w-full">
+          <div className="w-full max-w-full min-h-[180px] sm:min-h-[200px] flex flex-col items-center">
             <BlurText
               text="Other Tools & Tech Stacks We Use"
-              className="justify-center text-center mb-10 md:mb-14 lg:mb-18 px-4 text-2xl sm:text-3xl md:text-4xl text-white font-editorial"
+              className="relative z-10 justify-center text-center mb-10 md:mb-14 lg:mb-18 px-4 text-2xl sm:text-3xl md:text-4xl text-white font-editorial max-w-[150px] xs:max-w-[180px] sm:max-w-none"
               delay={150}
               once={true}
             />

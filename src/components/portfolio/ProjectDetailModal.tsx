@@ -18,8 +18,11 @@ import {
   Smartphone,
   CheckCircle,
   ArrowRight,
+  FileText,
 } from 'lucide-react'
 import { ProjectData, categoryColors } from '@/data/portfolioProjects'
+import ImageCarousel from './ImageCarousel'
+import SingleImageDisplay from './SingleImageDisplay'
 
 interface ProjectDetailModalProps {
   project: ProjectData | null
@@ -29,11 +32,17 @@ interface ProjectDetailModalProps {
 
 const ProjectDetailModal = ({ project, isOpen, onClose }: ProjectDetailModalProps) => {
   const [isMounted, setIsMounted] = useState(false)
+  const [currentScreenshot, setCurrentScreenshot] = useState(0)
 
   // Always call all hooks first - before any conditional returns
   useEffect(() => {
     setIsMounted(true)
   }, [])
+
+  // Reset screenshot index when project changes
+  useEffect(() => {
+    setCurrentScreenshot(0)
+  }, [project?.id])
 
   // Handle ESC key dismiss - always call this hook
   useEffect(() => {
@@ -112,7 +121,7 @@ const ProjectDetailModal = ({ project, isOpen, onClose }: ProjectDetailModalProp
 
           {/* Modal Container */}
           <div
-            className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-20"
+            className="fixed inset-0 z-50 flex items-start justify-center p-4 sm:p-6 pt-6 sm:pt-12 overflow-y-auto"
             onClick={(e) => {
               // Close modal when clicking outside the modal content
               if (e.target === e.currentTarget) {
@@ -125,7 +134,7 @@ const ProjectDetailModal = ({ project, isOpen, onClose }: ProjectDetailModalProp
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="relative w-full max-w-6xl max-h-[96vh] md:max-h-[94vh] lg:max-h-[90vh] h-[calc(100vh-4rem)] bg-black/90 backdrop-blur-xl border border-white/20 rounded-3xl overflow-y-auto"
+              className="relative w-full max-w-6xl bg-black/90 backdrop-blur-xl border border-white/20 rounded-3xl overflow-y-auto max-h-[calc(100dvh-2.5rem)] sm:max-h-[calc(100dvh-3.5rem)] md:max-h-[calc(100dvh-4.5rem)]"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
@@ -218,6 +227,25 @@ const ProjectDetailModal = ({ project, isOpen, onClose }: ProjectDetailModalProp
                       {project.detailedDescription}
                     </p>
                   </motion.div>
+
+                  {/* Screenshots Section */}
+                  {project.images.screenshots && project.images.screenshots.length > 0 && (
+                    <motion.div variants={itemVariants} className="space-y-4">
+                      {project.images.screenshots.length === 1 && project.images.screenshots[0] ? (
+                        <SingleImageDisplay
+                          image={project.images.screenshots[0]}
+                          title={project.title}
+                          categoryColor={categoryColor}
+                        />
+                      ) : (
+                        <ImageCarousel
+                          screenshots={project.images.screenshots}
+                          title={project.title}
+                          categoryColor={categoryColor}
+                        />
+                      )}
+                    </motion.div>
+                  )}
 
                   {/* Business Impact */}
                   {project.businessImpact && (
@@ -468,7 +496,7 @@ const ProjectDetailModal = ({ project, isOpen, onClose }: ProjectDetailModalProp
                       <h3 className="text-xl font-semibold text-white">
                         Ready to Start Your Project?
                       </h3>
-                      <p className="text-white/70">
+                      <p className="text-white/70 mb-6">
                         Let&apos;s discuss how we can bring your vision to life with cutting-edge
                         solutions.
                       </p>
@@ -476,7 +504,7 @@ const ProjectDetailModal = ({ project, isOpen, onClose }: ProjectDetailModalProp
                         href="https://calendly.com/a-sheikhizadeh/devx-group-llc-representative"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300 text-black"
+                        className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300 text-black"
                         style={{
                           backgroundColor: categoryColor,
                         }}
@@ -486,8 +514,8 @@ const ProjectDetailModal = ({ project, isOpen, onClose }: ProjectDetailModalProp
                         }}
                         whileTap={{ scale: 0.95 }}
                       >
-                        Schedule a Free Consultation
-                        <ExternalLink size={16} />
+                        <Calendar size={16} />
+                        Schedule Consultation
                       </motion.a>
                     </div>
                   </motion.div>

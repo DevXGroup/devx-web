@@ -282,7 +282,7 @@ export default function Features() {
         variants={containerVariants}
         initial="hidden"
         animate={isInView ? 'visible' : 'hidden'}
-        className="relative container mx-auto px-3 sm:px-6 md:px-8 lg:px-12 z-[3] max-w-7xl select-text overflow-visible"
+        className="relative w-full max-w-none px-4 sm:px-6 lg:px-12 z-[3] select-text overflow-visible"
         transition={{
           duration: shouldOptimizeAnimations ? 0.3 : 0.5,
           ease: 'easeOut',
@@ -302,7 +302,7 @@ export default function Features() {
           </div>
 
           {/* Redesigned Cards Section - Attio/Linear Style with better icon contrast */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-10 max-w-6xl mx-auto px-4 sm:px-6 relative z-[3]">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-10 w-full max-w-none px-0 sm:px-2 lg:px-4 relative z-[3]">
             <HireDevelopersCard
               icon={Rocket}
               title="Are you launching a startup or new product?"
@@ -318,7 +318,7 @@ export default function Features() {
           </div>
 
           {/* Creative animated label moved here */}
-          <div className="my-20 sm:my-28 md:my-32 flex justify-center px-4 sm:px-6 relative z-[3]">
+          <div className="my-20 sm:my-28 md:my-32 flex justify-center px-0 sm:px-2 lg:px-4 relative z-[3]">
             <div className="relative inline-flex flex-col lg:flex-row items-center lg:items-baseline gap-3 sm:gap-4">
               <span className="font-creative blur-text-gradient text-5xl sm:text-6xl md:text-7xl leading-tight">
                 Creative
@@ -339,7 +339,7 @@ export default function Features() {
                   splitBy="characters"
                   staggerDuration={shouldOptimizeAnimations ? 0.05 : 0.03}
                   staggerFrom="first"
-                  mainClassName="relative text-lg sm:text-xl md:text-2xl lg:text-3xl font-['IBM_Plex_Sans'] tracking-[0.04em] text-white/90 leading-tight whitespace-normal text-center max-w-[90vw]"
+                  mainClassName="relative text-lg sm:text-xl md:text-2xl lg:text-3xl font-['IBM_Plex_Sans'] tracking-[0.05em] text-white/90 leading-tight whitespace-nowrap text-center"
                   splitLevelClassName="overflow-visible whitespace-nowrap"
                   elementLevelClassName="inline-block whitespace-nowrap"
                   loop={true}
@@ -352,7 +352,7 @@ export default function Features() {
         {/* End of Hire Developers Section with Grid */}
 
         {/* Engagement Models Section */}
-        <div className="relative py-12 sm:py-16 md:py-20 my-12 sm:my-16 md:my-20">
+        <div className="relative py-12 sm:py-16 md:py-20 my-12 sm:my-16 md:my-20 px-0 sm:px-2 lg:px-4">
           <div className="text-center mb-12 sm:mb-16 relative z-[3]">
             <BlurText
               text="How We Work With You"
@@ -366,7 +366,7 @@ export default function Features() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto px-4 sm:px-6 relative z-[3]">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 w-full max-w-none px-0 sm:px-2 lg:px-4 relative z-[3]">
             <motion.div
               className="relative bg-[#0A0A0B]/80 border border-white/[0.08] p-8 rounded-3xl backdrop-blur-sm group hover:border-[#4CD787]/40 hover:bg-[#0A0A0B] transition-all duration-300 shadow-lg hover:shadow-[#4CD787]/10"
               initial={{ opacity: 0, y: 10 }}
