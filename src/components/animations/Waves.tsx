@@ -372,14 +372,26 @@ const Waves: React.FC<WavesProps> = ({
     function updateMouse(x: number, y: number) {
       const mouse = mouseRef.current
       const b = boundingRef.current
-      mouse.x = x - b.left
-      mouse.y = y - b.top
-      if (!mouse.set) {
-        mouse.sx = mouse.x
-        mouse.sy = mouse.y
-        mouse.lx = mouse.x
-        mouse.ly = mouse.y
-        mouse.set = true
+      const relX = x - b.left
+      const relY = y - b.top
+
+      // Only update if pointer is inside the container
+      const isInside = relX >= 0 && relX <= b.width && relY >= 0 && relY <= b.height
+
+      if (isInside) {
+        mouse.x = relX
+        mouse.y = relY
+        if (!mouse.set) {
+          mouse.sx = mouse.x
+          mouse.sy = mouse.y
+          mouse.lx = mouse.x
+          mouse.ly = mouse.y
+          mouse.set = true
+        }
+      } else {
+        // Move pointer far away when outside
+        mouse.x = -1000
+        mouse.y = -1000
       }
     }
 

@@ -61,7 +61,7 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
       className="relative group cursor-pointer overflow-hidden
         bg-black/40 backdrop-blur-md border border-white/10
         rounded-2xl hover:border-white/20 transition-all duration-300
-        h-full min-h-[520px] sm:min-h-[540px] md:min-h-[600px] lg:min-h-[640px]"
+        h-full min-h-[520px] sm:min-h-[540px] md:min-h-[600px] lg:min-h-[660px] xl:min-h-[680px]"
     >
       {/* Subtle Glow Effect - optimized for performance */}
       <div
@@ -137,14 +137,14 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
             <div className="flex items-start justify-between gap-4">
               <div className="flex-1 min-w-0">
                 <motion.h3
-                  className="font-bold text-white leading-tight text-lg sm:text-xl 2xl:text-2xl"
+                  className="font-bold text-white leading-tight text-lg sm:text-xl 2xl:text-2xl text-left"
                   whileHover={{ color: categoryColor }}
                   transition={{ duration: 0.2 }}
                 >
                   {project.title}
                 </motion.h3>
 
-                <p className="text-zinc-400 mt-2 leading-relaxed text-sm 2xl:text-base 2xl:mt-3">
+                <p className="text-zinc-400 mt-2 leading-relaxed text-sm 2xl:text-base 2xl:mt-3 text-left">
                   {project.shortDescription}
                 </p>
               </div>
@@ -170,17 +170,17 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
 
           {/* Key Metrics */}
           {project.metrics && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6 2xl:my-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 my-6 2xl:my-8">
               {project.metrics.users && (
                 <div className="flex items-center gap-2 text-sm">
-                  <Users size={16} className="text-blue-400" />
-                  <span className="text-white/80">{project.metrics.users}</span>
+                  <Users size={16} className="text-blue-400 flex-shrink-0" />
+                  <span className="text-white/80 text-left">{project.metrics.users}</span>
                 </div>
               )}
               {project.metrics.performance && (
-                <div className="flex items-center gap-2 text-sm md:justify-end">
-                  <Star size={16} className="text-yellow-400" />
-                  <span className="text-white/80">{project.metrics.performance}</span>
+                <div className="flex items-center gap-2 text-sm lg:justify-start">
+                  <Star size={16} className="text-yellow-400 flex-shrink-0" />
+                  <span className="text-white/80 text-left">{project.metrics.performance}</span>
                 </div>
               )}
             </div>
@@ -191,7 +191,9 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
             <div className="mb-6 2xl:mb-8 p-4 2xl:p-6 rounded-lg bg-gradient-to-r from-green-500/10 to-blue-500/10 border border-green-500/20">
               <div className="flex items-start gap-2">
                 <Target size={16} className="text-green-400 mt-0.5 flex-shrink-0" />
-                <p className="text-sm text-zinc-400 leading-relaxed">{project.businessImpact}</p>
+                <p className="text-sm text-zinc-400 leading-relaxed text-left">
+                  {project.businessImpact}
+                </p>
               </div>
             </div>
           )}
@@ -221,17 +223,17 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 pt-4">
+            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 pt-4">
               <button
                 onClick={() => onViewDetails?.(project)}
-                className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-white/10 to-white/5 hover:from-white/20 hover:to-white/10 border-2 border-white/30 hover:border-white/50 text-white transition-all duration-300 font-semibold shadow-lg h-10 w-full sm:w-auto"
+                className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-gradient-to-r from-white/10 to-white/5 hover:from-white/20 hover:to-white/10 border-2 border-white/30 hover:border-white/50 text-white transition-all duration-300 font-semibold shadow-lg h-11 w-full lg:w-auto"
               >
                 <span className="text-sm font-bold whitespace-nowrap">View Details</span>
                 <ExternalLink size={14} />
               </button>
 
-              {/* Platform Support Section - Right Aligned */}
-              <div className="flex flex-col gap-3 items-start sm:items-end text-left sm:text-right">
+              {/* Platform Support Section */}
+              <div className="flex flex-col gap-3 items-start lg:items-end text-left lg:text-right w-full lg:w-auto">
                 {/* Awards Row */}
                 {project.awards && project.awards.length > 0 && (
                   <div className="flex items-center gap-1 text-yellow-400" title="Award Winner">
@@ -240,11 +242,11 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
                 )}
 
                 {/* Platform Support */}
-                <div className="flex flex-col gap-2 items-start sm:items-end">
+                <div className="flex flex-col gap-2 items-start lg:items-end">
                   <span className="text-xs font-medium text-white/70 uppercase tracking-wide">
                     Supported Platforms
                   </span>
-                  <div className="flex items-center gap-2 flex-wrap justify-start sm:justify-end max-w-[280px]">
+                  <div className="flex items-center gap-2 flex-wrap justify-start lg:justify-end max-w-full lg:max-w-[300px]">
                     {/* iOS */}
                     {project.platforms.some((p) => p.toLowerCase().includes('ios')) && (
                       <div

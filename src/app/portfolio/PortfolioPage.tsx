@@ -695,19 +695,34 @@ export default function PortfolioPage() {
                   className="hidden sm:block absolute
                     top-1/2 -translate-y-1/2 right-[8%]
                     backdrop-blur-md overflow-hidden
-                    w-[110px] h-[110px] cursor-pointer"
+                    w-[110px] h-[110px] cursor-pointer group"
+                  initial={{ opacity: 0, rotate: 8 }}
+                  animate={{ opacity: 1, rotate: 8 }}
+                  whileHover={{ scale: 1.08, rotate: 0 }}
+                  transition={{ delay: 0.6, duration: 0.6, ease: 'easeOut' }}
                   style={{
-                    transform: 'rotate(8deg)',
-                    border: '2px solid rgba(76, 215, 135, 0.6)',
                     borderRadius: '12px',
-                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
                     zIndex: 11,
                   }}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.6, duration: 0.6, ease: 'easeOut' }}
                 >
-                  <div className="w-full h-full">
+                  <div className="absolute inset-0 border-2 border-[rgba(76,215,135,0.6)] rounded-xl group-hover:border-[rgba(76,215,135,1)] group-hover:shadow-[0_0_20px_rgba(76,215,135,0.4)] transition-all duration-300" />
+                  <div className="absolute inset-0 bg-[rgba(0,0,0,0.5)] group-hover:bg-[rgba(0,0,0,0.3)] transition-all duration-300" />
+
+                  {/* Hover dot indicator */}
+                  <motion.div
+                    className="absolute w-2 h-2 bg-[#4CD787] rounded-full pointer-events-none"
+                    style={{
+                      top: '50%',
+                      left: '50%',
+                      x: '-50%',
+                      y: '-50%',
+                    }}
+                    initial={{ opacity: 0, scale: 0 }}
+                    whileHover={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.2 }}
+                  />
+
+                  <div className="w-full h-full relative z-10 overflow-hidden">
                     <Waves
                       lineColor="#4CD787"
                       backgroundColor="transparent"
@@ -738,16 +753,41 @@ export default function PortfolioPage() {
             <div className="flex-1 bg-gradient-to-b from-[#D8B4FE]/20 via-transparent to-[#D8B4FE]/20 opacity-10 rounded-full hidden md:block" />
           </div>
         </div>
-        <div className="container mx-auto px-5 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-24 max-w-8xl">
+        <div className="container mx-auto px-5 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 max-w-8xl">
+          {/* Section Title and Subtitle */}
+          <div className="text-center mb-12 sm:mb-16 max-w-4xl mx-auto">
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6"
+              style={{ fontFamily: 'var(--font-playfair-display)' }}
+            >
+              Review Selected Projects
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-white/70 text-base sm:text-lg leading-relaxed px-4"
+            >
+              Our portfolio includes select projects from our international development
+              partnerships. Full case studies, client references, and detailed project documentation
+              are available upon request.
+            </motion.p>
+          </div>
+
           <motion.div
-            className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2 gap-8 md:gap-12 lg:gap-14 xl:gap-16 2xl:gap-20 relative z-10 justify-items-center items-stretch max-w-6xl xl:max-w-7xl mx-auto"
+            className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2 gap-8 md:gap-10 lg:gap-12 xl:gap-14 2xl:gap-16 relative z-10 justify-items-stretch items-stretch max-w-6xl xl:max-w-7xl 2xl:max-w-[1600px] mx-auto"
             initial="visible"
             animate="visible"
           >
             {projects.map((project, index) => (
               <motion.div
                 key={project.title}
-                className="w-full lg:max-w-[560px] h-full"
+                className="w-full max-w-full h-full"
                 variants={cardRevealVariants}
                 initial="hidden"
                 whileInView="visible"

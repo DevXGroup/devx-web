@@ -430,20 +430,24 @@ const OrgChartV2 = ({ className = '' }: OrgChartProps) => {
       <AnimatePresence>
         {selectedMember && (
           <motion.div
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md"
+            className="fixed inset-0 z-[100] flex items-start sm:items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-md overflow-y-auto min-h-[100dvh]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedMember(null)}
+            style={{
+              paddingTop: 'calc(1.25rem + env(safe-area-inset-top, 0px))',
+              paddingBottom: 'calc(1.25rem + env(safe-area-inset-bottom, 0px))',
+            }}
           >
             <motion.div
-              className="bg-[#0B0B0B] border border-white/10 rounded-[32px] overflow-hidden max-w-2xl w-full relative shadow-2xl"
+              className="bg-[#0B0B0B] border border-white/10 rounded-[28px] sm:rounded-[32px] overflow-hidden w-full max-w-[520px] sm:max-w-[620px] md:max-w-2xl relative shadow-2xl max-h-[90vh] sm:max-h-[92vh] md:max-h-[calc(100dvh-3rem)] overflow-y-auto"
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="relative h-32 bg-zinc-900/50">
+              <div className="sticky top-0 z-10 relative h-24 sm:h-28 bg-zinc-900/50">
                 <div
                   className="absolute inset-0 opacity-30"
                   style={{
@@ -452,9 +456,9 @@ const OrgChartV2 = ({ className = '' }: OrgChartProps) => {
                 />
               </div>
 
-              <div className="px-8 pb-8 -mt-16 relative">
+              <div className="px-5 sm:px-8 pb-8 -mt-12 sm:-mt-16 relative space-y-6">
                 <div
-                  className={`w-32 h-32 rounded-3xl overflow-hidden border-4 border-[#0B0B0B] shadow-xl mb-6`}
+                  className={`w-24 h-24 sm:w-32 sm:h-32 rounded-3xl overflow-hidden border-4 border-[#0B0B0B] shadow-xl`}
                 >
                   <Image
                     src={selectedMember.image!}
@@ -465,12 +469,15 @@ const OrgChartV2 = ({ className = '' }: OrgChartProps) => {
                   />
                 </div>
 
-                <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-8">
+                <div className="flex flex-col md:flex-row justify-between items-start gap-4 sm:gap-6">
                   <div>
-                    <h3 className="text-3xl font-editorial text-white mb-1">
+                    <h3 className="text-2xl sm:text-3xl font-editorial text-white mb-1">
                       {selectedMember.name}
                     </h3>
-                    <p className="text-lg font-light" style={{ color: selectedMember.roleColor }}>
+                    <p
+                      className="text-base sm:text-lg font-light"
+                      style={{ color: selectedMember.roleColor }}
+                    >
                       {selectedMember.title}
                     </p>
                   </div>
@@ -487,12 +494,12 @@ const OrgChartV2 = ({ className = '' }: OrgChartProps) => {
                   )}
                 </div>
 
-                <p className="text-zinc-400 leading-relaxed text-lg font-light">
+                <p className="text-zinc-400 leading-relaxed text-base sm:text-lg font-light">
                   {selectedMember.bio}
                 </p>
 
                 {/* Close button anchored at bottom right */}
-                <div className="mt-8 flex justify-end">
+                <div className="pt-2 sm:pt-4 flex justify-end sticky bottom-0 bg-gradient-to-t from-[#0B0B0B] via-[#0B0B0B]/90 to-transparent">
                   <button
                     onClick={() => setSelectedMember(null)}
                     className="px-4 py-2 text-sm font-medium text-white bg-white/10 hover:bg-white/20 border border-white/15 rounded-full transition-all duration-300 backdrop-blur-sm shadow-lg"

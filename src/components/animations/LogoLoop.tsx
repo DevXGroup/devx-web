@@ -25,7 +25,8 @@ export default function LogoLoop({ logos, speed = 15 }: LogoLoopProps) {
   const resizeTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
   const [scrollDistance, setScrollDistance] = useState(0)
-  const [isVisible, setIsVisible] = useState(false)
+  // Start visible so animation runs even if the observer misses an initial tick on small viewports
+  const [isVisible, setIsVisible] = useState(true)
   const [computedSpeed, setComputedSpeed] = useState(speed)
 
   // Debounced resize handler to prevent excessive re-renders
@@ -33,7 +34,12 @@ export default function LogoLoop({ logos, speed = 15 }: LogoLoopProps) {
     if (!scrollerRef.current || !containerRef.current) return
     const scrollerWidth = scrollerRef.current.scrollWidth
     const containerWidth = containerRef.current.clientWidth
-    setScrollDistance(Math.max(0, scrollerWidth - containerWidth))
+    // Ensure minimum scroll distance for animation to work
+    // If content is wider than container, use the difference
+    // Otherwise, use half the scroller width to create a loop effect
+    const calculatedDistance = scrollerWidth - containerWidth
+    const minDistance = scrollerWidth / 2
+    setScrollDistance(calculatedDistance > 0 ? calculatedDistance : minDistance)
   }, [])
 
   // IntersectionObserver to pause animation when off-screen
@@ -68,6 +74,12 @@ export default function LogoLoop({ logos, speed = 15 }: LogoLoopProps) {
     updateDistance()
     updateSpeed()
 
+    // Recalculate after a short delay to ensure images have loaded
+    // This fixes the issue where scrollDistance is 0 on initial mount
+    const delayedUpdateId = setTimeout(() => {
+      updateDistance()
+    }, 500)
+
     // Debounced resize handler
     const handleResize = () => {
       if (resizeTimeoutRef.current) {
@@ -83,6 +95,7 @@ export default function LogoLoop({ logos, speed = 15 }: LogoLoopProps) {
 
     return () => {
       window.removeEventListener('resize', handleResize)
+      clearTimeout(delayedUpdateId)
       if (resizeTimeoutRef.current) {
         clearTimeout(resizeTimeoutRef.current)
       }

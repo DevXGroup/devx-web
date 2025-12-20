@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, MotionStyle } from 'framer-motion'
 import { useReducedMotion } from '@/hooks/use-reduced-motion'
+import { usePerformanceOptimizedAnimation } from '@/hooks/use-performance-optimized-animation'
 
 type RGB = { r: number; g: number; b: number }
 
@@ -62,7 +63,7 @@ const LetterGlitch = ({
     '#404040', // Charcoal
     '#303030', // Very dark gray
   ],
-  glitchSpeed = 90, // Increased from 70ms for better performance
+  glitchSpeed = 120, // Increased from 90ms for better performance on slower devices
   centerVignette = true,
   outerVignette = false,
   smooth = true,
@@ -74,6 +75,7 @@ const LetterGlitch = ({
   const context = useRef<CanvasRenderingContext2D | null>(null)
   const lastGlitchTime = useRef<number>(Date.now())
   const isDev = process.env.NODE_ENV !== 'production'
+  const isTabVisible = useRef(true)
 
   const fontSize = 20
   const charWidth = 12
@@ -358,6 +360,12 @@ const LetterGlitch = ({
   }
 
   const animate = () => {
+    // Only animate if tab is visible
+    if (!isTabVisible.current) {
+      animationRef.current = null
+      return
+    }
+
     const now = Date.now()
     if (now - lastGlitchTime.current >= glitchSpeed) {
       updateLetters()
@@ -377,6 +385,17 @@ const LetterGlitch = ({
   useEffect(() => {
     let resizeTimeout: ReturnType<typeof setTimeout> | undefined
     let handleResize: (() => void) | undefined
+
+    // Add visibility change listener to pause animations when tab is not visible
+    const handleVisibilityChange = () => {
+      isTabVisible.current = !document.hidden
+      if (!isTabVisible.current && animationRef.current) {
+        cancelAnimationFrame(animationRef.current)
+        animationRef.current = null
+      } else if (isTabVisible.current && !animationRef.current) {
+        animate()
+      }
+    }
 
     try {
       const canvas = canvasRef.current
@@ -407,6 +426,12 @@ const LetterGlitch = ({
 
           setTimeout(() => {
             resizeCanvas()
+
+            // Register visibility change listener
+            if (typeof document !== 'undefined') {
+              document.addEventListener('visibilitychange', handleVisibilityChange)
+            }
+
             animate()
           }, initDelay)
 
@@ -419,7 +444,11 @@ const LetterGlitch = ({
                     cancelAnimationFrame(animationRef.current)
                   }
                   resizeCanvas()
-                  animate()
+
+                  // Restart animation only if tab is visible
+                  if (isTabVisible.current) {
+                    animate()
+                  }
                 },
                 isSafari ? 300 : 200
               ) // Longer debounce for Safari
@@ -445,6 +474,10 @@ const LetterGlitch = ({
       try {
         if (animationRef.current && typeof window !== 'undefined') {
           cancelAnimationFrame(animationRef.current)
+        }
+        // Remove visibility change listener
+        if (typeof document !== 'undefined') {
+          document.removeEventListener('visibilitychange', handleVisibilityChange)
         }
         if (typeof window !== 'undefined' && handleResize) {
           window.removeEventListener('resize', handleResize)
@@ -901,6 +934,7 @@ export default function EntryPage() {
   const [clientSide, setClientSide] = useState(false)
   const router = useRouter()
   const reduceMotion = useReducedMotion()
+  const { shouldOptimizeAnimations, shouldSkip3dEffects } = usePerformanceOptimizedAnimation()
 
   useEffect(() => {
     // Use a small delay to ensure DOM is fully ready in Safari
@@ -950,8 +984,13 @@ export default function EntryPage() {
 
   return (
     <div className="fixed inset-0 bg-black overflow-hidden" suppressHydrationWarning>
-      <StarField />
-      <LetterGlitch />
+      {/* Only render heavy animations if device can handle them */}
+      {!shouldOptimizeAnimations && !shouldSkip3dEffects && (
+        <>
+          <StarField />
+          <LetterGlitch />
+        </>
+      )}
       <AnimatedInfinity onComplete={() => setAnimationComplete(true)} />
 
       {/* Shutter Collapse Animation - Top and Bottom bars */}
