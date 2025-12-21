@@ -30,6 +30,7 @@
     "test:coverage": "pnpm jest --coverage",
     "size": "size-limit --config size-limit.config.cjs",
     "analyze": "ANALYZE=true pnpm next build",
+    "update-readme": "node scripts/update-readme-version.js",
     "release": "semantic-release",
     "prepare": "node scripts/husky-prepare.mjs"
   },

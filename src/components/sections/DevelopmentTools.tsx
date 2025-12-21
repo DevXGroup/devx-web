@@ -633,7 +633,7 @@ export default function DevelopmentTools() {
           <div className="w-full max-w-full min-h-[180px] sm:min-h-[200px] flex flex-col items-center">
             <BlurText
               text="Other Tools & Tech Stacks We Use"
-              className="relative z-10 justify-center text-center mb-10 md:mb-14 lg:mb-18 px-4 text-2xl sm:text-3xl md:text-4xl text-white font-editorial max-w-[150px] xs:max-w-[180px] sm:max-w-none"
+              className="relative z-10 justify-center text-center mb-10 md:mb-14 lg:mb-18 px-4 text-2xl sm:text-3xl md:text-4xl text-white font-editorial max-w-full sm:max-w-none whitespace-normal"
               delay={150}
               once={true}
             />
