@@ -1,6 +1,7 @@
 # DevX Group Website
 
-![Tech Stack](https://img.shields.io/badge/Built%20With-Next.js%2015.5.6%20%7C%20React%2019.1%20%7C%20Tailwind%204.1-blueviolet?style=flat&logo=next.js)
+![Version](https://img.shields.io/badge/version-1.7.1-blue?style=flat)
+![Tech Stack](https://img.shields.io/badge/Built%20With-Next.js%2016.1.0%20%7C%20React%2019.2.1%20%7C%20Tailwind%204.1.13-blueviolet?style=flat&logo=next.js)
 ![Status](https://img.shields.io/badge/status-active-success?style=flat)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey?style=flat)
 
@@ -28,14 +29,14 @@ The application showcases DevX Group's software engineering capabilities, projec
 
 ### Core
 
-- Framework: Next.js 15.5.6 (App Router) on React 19.1.1
+- Framework: Next.js 16.1.0 (App Router) on React 19.2.1
 - Language: TypeScript (strict mode)
 - Package manager: pnpm >= 10.19
-- Runtime: Node.js >= 20.11 < 23
+- Runtime: Node.js >= 22.14 < 23
 
 ### UI & Interactions
 
-- Styling: Tailwind CSS 4.1 with IBM Plex Sans and IBM Plex Mono
+- Styling: Tailwind CSS 4.1.13 with IBM Plex Sans and IBM Plex Mono
 - Components: Radix UI primitives, Lucide React icons
 - Motion & 3D: Framer Motion, GSAP, Three.js, React Three Fiber
 - Forms: React Hook Form + Zod validation
@@ -109,6 +110,7 @@ The development server runs on http://localhost:3002 with hot-module reloading.
 - `pnpm start` – serve the production bundle.
 - `pnpm size` – audit bundle size limits.
 - `pnpm analyze` – generate bundle analysis visualizations.
+- `pnpm update-readme` – automatically sync README version badges from `package.json` (run after version bumps).
 
 ## Environment Configuration
 
