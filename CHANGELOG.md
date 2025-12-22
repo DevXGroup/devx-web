@@ -1,3 +1,17 @@
+## [1.8.0](https://github.com/DevXGroup/devx-web/compare/v1.7.1...v1.8.0) (2025-12-22)
+
+### Features
+
+* add automated README version badge sync ([48e9a25](https://github.com/DevXGroup/devx-web/commit/48e9a259e1b127e3a787ac596d04ba3c4783888b))
+
+### Bug Fixes
+
+* update DotGrid test to match component structure ([c714d07](https://github.com/DevXGroup/devx-web/commit/c714d07c3a25e9539f90ec9b1b0fc3e3de701e04))
+
+### Performance Improvements
+
+* optimize animations and enhance portfolio section ([ff28efd](https://github.com/DevXGroup/devx-web/commit/ff28efd6a3cfb92d7bca27a25e67a71014fc2fec))
+
 ## [1.7.1](https://github.com/DevXGroup/devx-web/compare/v1.7.0...v1.7.1) (2025-12-17)
 
 ### Bug Fixes
