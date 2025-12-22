@@ -74,6 +74,7 @@ export const portfolioProjects: ProjectData[] = [
       banner: '/images/portfolio/banners/lawazm-banner.webp',
       preview: '/images/portfolio/previews/lawazm-preview.webp',
       screenshots: [
+        '/images/portfolio/screenshots/lawazm-all-in-one.webp',
         '/images/portfolio/screenshots/lawazm-1.webp',
         '/images/portfolio/screenshots/lawazm-2.webp',
         '/images/portfolio/screenshots/lawazm-3.webp',
@@ -136,6 +137,7 @@ export const portfolioProjects: ProjectData[] = [
       banner: '/images/portfolio/banners/joyful-banner.webp',
       preview: '/images/portfolio/previews/joyful-preview.webp',
       screenshots: [
+        '/images/portfolio/screenshots/joyful-all-in-one.webp',
         '/images/portfolio/screenshots/joyful-1.webp',
         '/images/portfolio/screenshots/joyful-2.webp',
         '/images/portfolio/screenshots/joyful-3.webp',
@@ -189,6 +191,7 @@ export const portfolioProjects: ProjectData[] = [
       banner: '/images/portfolio/banners/lazurd-banner.webp',
       preview: '/images/portfolio/previews/lazurd-preview.webp',
       screenshots: [
+        '/images/portfolio/screenshots/lazurd-all-in-one.webp',
         '/images/portfolio/screenshots/lazurd-1.webp',
         '/images/portfolio/screenshots/lazurd-2.webp',
         '/images/portfolio/screenshots/lazurd-3.webp',
@@ -238,6 +241,7 @@ export const portfolioProjects: ProjectData[] = [
       banner: '/images/portfolio/banners/i-love-food-ilf-banner.webp',
       preview: '/images/portfolio/previews/i-love-food-ilf-preview.webp',
       screenshots: [
+        '/images/portfolio/screenshots/wellbox-all-in-one.webp',
         '/images/portfolio/screenshots/wellbox-1.webp',
         '/images/portfolio/screenshots/wellbox-2.webp',
         '/images/portfolio/screenshots/wellbox-3.webp',
