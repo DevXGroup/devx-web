@@ -14,8 +14,8 @@ env:
 jobs:
   quality-gate:
     runs-on: ubuntu-latest
-    # Skip CI if commit message contains [skip ci]
-    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
+    # Skip CI if commit message contains [skip ci] or [skip CI]
+    if: ${{ !contains(github.event.head_commit.message || '', '[skip ci]') && !contains(github.event.head_commit.message || '', '[skip CI]') }}
 
     permissions:
       contents: read
@@ -36,6 +36,9 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Update README badges
+        run: pnpm update-readme
 
       - name: Verify formatting
         run: pnpm format:check
@@ -69,8 +72,8 @@ jobs:
 
   release:
     needs: quality-gate
-    # Only run on main branch and skip if commit has [skip ci]
-    if: ${{ github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, '[skip ci]') }}
+    # Only run on main branch and skip if commit has [skip ci] or [skip CI]
+    if: ${{ github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message || '', '[skip ci]') && !contains(github.event.head_commit.message || '', '[skip CI]') }}
     runs-on: ubuntu-latest
 
     permissions:
@@ -103,3 +106,44 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.SEMANTIC_RELEASE_TOKEN }}
         run: pnpm release
+
+  sync-readme-badges:
+    name: Sync README badges
+    needs: release
+    # Only run on push to main and skip if commit has [skip ci] or [skip CI]
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message || '', '[skip ci]') && !contains(github.event.head_commit.message || '', '[skip CI]') }}
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.SEMANTIC_RELEASE_TOKEN || github.token }}
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Update README badges
+        run: pnpm update-readme
+
+      - name: Commit and push changes
+        run: |
+          if git diff --quiet -- README.md; then
+            echo "No README updates detected."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "chore: sync README badges [skip CI]"
+          git push
