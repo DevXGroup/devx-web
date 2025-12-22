@@ -48,6 +48,7 @@ CLAUDE.md
 AGENTS.md
 TODO.md
 NOTIFICATIONS_PLAN.md
+./*.md
 
 # Internal documentation (do not commit)
 documents/
