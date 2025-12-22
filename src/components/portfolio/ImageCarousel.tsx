@@ -132,7 +132,11 @@ const ImageCarousel = ({ screenshots, title, categoryColor = '#4CD787' }: ImageC
                     : 'opacity-50 hover:opacity-100'
                 }`}
                 style={{
-                  ringColor: currentIndex === index ? categoryColor : undefined,
+                  ...(currentIndex === index &&
+                    ({
+                      borderColor: categoryColor,
+                      boxShadow: `0 0 0 2px black, 0 0 0 4px ${categoryColor}`,
+                    } as React.CSSProperties)),
                 }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
