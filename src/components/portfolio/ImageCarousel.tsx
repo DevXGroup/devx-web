@@ -24,6 +24,10 @@ const ImageCarousel = ({ screenshots, title, categoryColor = '#4CD787' }: ImageC
   const [isAnimating, setIsAnimating] = useState(false)
   const [imageDimensions, setImageDimensions] = useState<Record<number, ImageDimensions>>({})
 
+  // Swipe threshold for touch gestures
+  const swipeConfidenceThreshold = 10000
+  const swipePower = (offset: number, velocity: number) => Math.abs(offset) * velocity
+
   useEffect(() => {
     setIsMounted(true)
   }, [])
@@ -155,7 +159,7 @@ const ImageCarousel = ({ screenshots, title, categoryColor = '#4CD787' }: ImageC
           <div
             className={`relative w-full overflow-hidden rounded-2xl bg-neutral-900 ${
               isHorizontal
-                ? 'max-w-full aspect-video'
+                ? 'max-w-full'
                 : 'max-w-2xl lg:max-w-4xl xl:max-w-5xl min-h-[50vh] lg:min-h-[60vh] xl:min-h-[70vh]'
             }`}
           >
@@ -174,8 +178,19 @@ const ImageCarousel = ({ screenshots, title, categoryColor = '#4CD787' }: ImageC
                   animate="center"
                   exit="exit"
                   className={`flex items-center justify-center ${
-                    isHorizontal ? 'w-full h-full' : 'absolute inset-0'
+                    isHorizontal ? 'w-full' : 'absolute inset-0'
                   }`}
+                  drag="x"
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={1}
+                  onDragEnd={(_, { offset, velocity }) => {
+                    const swipe = swipePower(offset.x, velocity.x)
+                    if (swipe < -swipeConfidenceThreshold) {
+                      goToNext()
+                    } else if (swipe > swipeConfidenceThreshold) {
+                      goToPrevious()
+                    }
+                  }}
                 >
                   <Image
                     src={currentImage}
@@ -184,7 +199,7 @@ const ImageCarousel = ({ screenshots, title, categoryColor = '#4CD787' }: ImageC
                     height={900}
                     className={`object-contain rounded-2xl ${
                       isHorizontal
-                        ? 'w-full h-auto'
+                        ? 'w-full h-auto max-h-[60vh] lg:max-h-[70vh] xl:max-h-[75vh]'
                         : 'w-auto h-auto max-w-full max-h-[50vh] lg:max-h-[60vh] xl:max-h-[70vh]'
                     }`}
                     priority={currentIndex === 0}
@@ -217,29 +232,30 @@ const ImageCarousel = ({ screenshots, title, categoryColor = '#4CD787' }: ImageC
           )}
         </div>
 
-        {/* Progress Dots */}
+        {/* Progress Dots - smaller on mobile */}
         {screenshots.length > 1 && (
-          <div className="flex justify-center gap-2 mt-4">
+          <div className="flex justify-center gap-1.5 sm:gap-2 mt-3 sm:mt-4">
             {screenshots.map((_, index) => (
               <motion.button
                 key={index}
                 onClick={() => goToIndex(index)}
-                className="rounded-full transition-colors duration-200"
+                className="rounded-full transition-colors duration-200 touch-manipulation"
                 style={{
                   backgroundColor: index === currentIndex ? categoryColor : 'rgba(255,255,255,0.3)',
                 }}
                 animate={{
-                  width: index === currentIndex ? 32 : 8,
-                  height: 8,
-                }}
-                transition={{
-                  type: 'spring',
-                  stiffness: 300,
-                  damping: 20,
+                  width: index === currentIndex ? 20 : 6,
+                  height: 6,
                 }}
                 whileHover={{
                   backgroundColor: index === currentIndex ? categoryColor : 'rgba(255,255,255,0.5)',
                   scale: 1.1,
+                }}
+                whileTap={{ scale: 0.95 }}
+                transition={{
+                  type: 'spring',
+                  stiffness: 300,
+                  damping: 20,
                 }}
                 aria-label={`Go to screenshot ${index + 1}`}
                 disabled={isAnimating}
