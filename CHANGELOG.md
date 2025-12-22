@@ -1,3 +1,22 @@
+## [1.9.0](https://github.com/DevXGroup/devx-web/compare/v1.8.0...v1.9.0) (2025-12-22)
+
+### Features
+
+* add automated README version badge sync ([65311c9](https://github.com/DevXGroup/devx-web/commit/65311c94adae1d93b5e1b17e690181b82e6fa985))
+* add notifications plan and optimize portfolio carousel ([fe6e6b7](https://github.com/DevXGroup/devx-web/commit/fe6e6b781d214ea6d452ecf406f80bd0fcbd11e9))
+* add portfolio project screenshots ([4fc8e35](https://github.com/DevXGroup/devx-web/commit/4fc8e3517d37c0e22c42013092a72870ca9b1e23))
+* enhance image carousel with sliding animations and keyboard navigation ([3bdfc61](https://github.com/DevXGroup/devx-web/commit/3bdfc6197c2689459af9a7aeca0e26bfd9cfa43e))
+
+### Bug Fixes
+
+* restore DotGrid inner wrapper div for test compatibility ([8cba005](https://github.com/DevXGroup/devx-web/commit/8cba005a24f05cdaf5554b89074ca377ec8a4b61))
+* update DotGrid test to match component structure ([d37881b](https://github.com/DevXGroup/devx-web/commit/d37881bb0585085a5af521a6d95e07628f120d98))
+* use valid CSS properties for dynamic ring color in image carousel thumbnails ([cb09255](https://github.com/DevXGroup/devx-web/commit/cb09255d4d01e2a565d7dd106256b46d19a70cb6))
+
+### Performance Improvements
+
+* optimize animations and enhance portfolio section ([cfe3fbc](https://github.com/DevXGroup/devx-web/commit/cfe3fbca73c99de94b5da319f6e7ce83b01b509e))
+
 ## [1.8.0](https://github.com/DevXGroup/devx-web/compare/v1.7.1...v1.8.0) (2025-12-22)
 
 ### Features
