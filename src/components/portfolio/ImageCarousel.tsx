@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 interface ImageCarouselProps {
@@ -11,210 +11,257 @@ interface ImageCarouselProps {
   categoryColor?: string
 }
 
+interface ImageDimensions {
+  width: number
+  height: number
+  isHorizontal: boolean
+}
+
 const ImageCarousel = ({ screenshots, title, categoryColor = '#4CD787' }: ImageCarouselProps) => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isMounted, setIsMounted] = useState(false)
-  const [imageDimensions, setImageDimensions] = useState<{
-    [key: number]: { width: number; height: number; isHorizontal: boolean }
-  }>({})
+  const [direction, setDirection] = useState(0)
+  const [isAnimating, setIsAnimating] = useState(false)
+  const [imageDimensions, setImageDimensions] = useState<Record<number, ImageDimensions>>({})
+
+  // Swipe threshold for touch gestures
+  const swipeConfidenceThreshold = 10000
+  const swipePower = (offset: number, velocity: number) => Math.abs(offset) * velocity
+
   useEffect(() => {
     setIsMounted(true)
   }, [])
 
-  // Reset on image load to get dimensions
-  const handleImageLoad = useCallback((index: number, width: number, height: number) => {
-    const isHorizontal = width > height
-    setImageDimensions((prev) => ({
-      ...prev,
-      [index]: { width, height, isHorizontal },
-    }))
-  }, [])
+  // Preload adjacent images and detect dimensions
+  const preloadedImages = useRef<Set<string>>(new Set())
+
+  useEffect(() => {
+    if (!isMounted) return
+
+    const indicesToPreload = [
+      currentIndex,
+      (currentIndex - 1 + screenshots.length) % screenshots.length,
+      (currentIndex + 1) % screenshots.length,
+    ]
+
+    indicesToPreload.forEach((index) => {
+      const src = screenshots[index]
+      if (src && !preloadedImages.current.has(src)) {
+        const img = new window.Image()
+        img.onload = () => {
+          setImageDimensions((prev) => ({
+            ...prev,
+            [index]: {
+              width: img.naturalWidth,
+              height: img.naturalHeight,
+              isHorizontal: img.naturalWidth > img.naturalHeight,
+            },
+          }))
+        }
+        img.src = src
+        preloadedImages.current.add(src)
+      }
+    })
+  }, [currentIndex, screenshots, isMounted])
 
   const currentImage = screenshots[currentIndex]
-  const isHorizontal = imageDimensions[currentIndex]?.isHorizontal ?? false
+  const currentDimensions = imageDimensions[currentIndex]
+  const isHorizontal = currentDimensions?.isHorizontal ?? true // Default to horizontal layout
 
   const goToPrevious = useCallback(() => {
+    if (isAnimating) return
+    setDirection(-1)
+    setIsAnimating(true)
     setCurrentIndex((prev) => (prev === 0 ? screenshots.length - 1 : prev - 1))
-  }, [screenshots.length])
+  }, [screenshots.length, isAnimating])
 
   const goToNext = useCallback(() => {
+    if (isAnimating) return
+    setDirection(1)
+    setIsAnimating(true)
     setCurrentIndex((prev) => (prev + 1) % screenshots.length)
-  }, [screenshots.length])
+  }, [screenshots.length, isAnimating])
 
-  const goToIndex = useCallback((index: number) => {
-    setCurrentIndex(index)
-  }, [])
+  const goToIndex = useCallback(
+    (index: number) => {
+      if (isAnimating || index === currentIndex) return
+      setDirection(index > currentIndex ? 1 : -1)
+      setIsAnimating(true)
+      setCurrentIndex(index)
+    },
+    [currentIndex, isAnimating]
+  )
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') goToPrevious()
+      if (e.key === 'ArrowRight') goToNext()
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [goToPrevious, goToNext])
 
   if (!isMounted || screenshots.length === 0) return null
+
+  // Slide animation variants
+  const slideVariants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? 300 : -300,
+      opacity: 0,
+      scale: 0.95,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+      scale: 1,
+      transition: {
+        x: { type: 'spring' as const, stiffness: 300, damping: 30 },
+        opacity: { duration: 0.2 },
+        scale: { duration: 0.2 },
+      },
+    },
+    exit: (direction: number) => ({
+      x: direction > 0 ? -300 : 300,
+      opacity: 0,
+      scale: 0.95,
+      transition: {
+        x: { type: 'spring' as const, stiffness: 300, damping: 30 },
+        opacity: { duration: 0.2 },
+        scale: { duration: 0.2 },
+      },
+    }),
+  }
 
   return (
     <div className="space-y-4">
       <h3 className="text-xl font-semibold text-white mb-4">App Screenshots</h3>
 
       {/* Main Carousel Container */}
-      <div className="relative w-full group">
-        {/* Background Blur Effect for Horizontal Images */}
-        {currentImage && isHorizontal && (
-          <div
-            className="absolute inset-0 pointer-events-none z-0 rounded-2xl overflow-hidden"
-            style={{
-              background: `url(${currentImage}) center/cover no-repeat`,
-            }}
-          >
-            <div className="absolute inset-0 backdrop-blur-2xl bg-black/40" />
-          </div>
-        )}
-
-        {/* Main Image Display */}
-        <div
-          className={`relative w-full max-w-xl mx-auto overflow-hidden border border-white/10 bg-black/40 transition-all duration-500 rounded-2xl ${
-            isHorizontal ? 'aspect-video' : 'max-h-[420px] sm:max-h-[480px] md:max-h-[520px]'
-          }`}
-        >
-          <AnimatePresence mode="wait">
-            {currentImage && (
-              <motion.div
-                key={currentIndex}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="relative w-full h-full"
-              >
-                <Image
-                  src={currentImage}
-                  alt={`${title} screenshot ${currentIndex + 1}`}
-                  fill
-                  className="object-contain"
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 80vw"
-                  priority={currentIndex === 0}
-                  onLoadingComplete={(result) => {
-                    if (result.naturalWidth && result.naturalHeight) {
-                      handleImageLoad(currentIndex, result.naturalWidth, result.naturalHeight)
-                    }
-                  }}
-                />
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Navigation Arrows - Overlay on Image */}
+      <div className="relative w-full">
+        {/* Main Image Display with Navigation Arrows */}
+        <div className="relative w-full flex items-center justify-center">
+          {/* Left Arrow */}
           {screenshots.length > 1 && (
-            <>
-              {/* Left Navigation Button */}
-              <motion.button
-                onClick={goToPrevious}
-                className="absolute left-4 top-1/2 -translate-y-1/2 z-20 flex items-center justify-center transition-all duration-300 cursor-pointer"
-                aria-label="Previous screenshot"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <div className="p-3 sm:p-4 rounded-full bg-black/50 backdrop-blur-md border border-white/40 text-white shadow-xl hover:bg-black/70 hover:border-white/60 transition-all duration-300">
-                  <ChevronLeft size={24} className="sm:w-7 sm:h-7" />
-                </div>
-              </motion.button>
-
-              {/* Right Navigation Button */}
-              <motion.button
-                onClick={goToNext}
-                className="absolute right-4 top-1/2 -translate-y-1/2 z-20 flex items-center justify-center transition-all duration-300 cursor-pointer"
-                aria-label="Next screenshot"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <div className="p-3 sm:p-4 rounded-full bg-black/50 backdrop-blur-md border border-white/40 text-white shadow-xl hover:bg-black/70 hover:border-white/60 transition-all duration-300">
-                  <ChevronRight size={24} className="sm:w-7 sm:h-7" />
-                </div>
-              </motion.button>
-            </>
+            <motion.button
+              onClick={goToPrevious}
+              className="absolute left-2 sm:left-4 z-20 p-3 sm:p-4 rounded-full bg-black/30 hover:bg-black/50 text-white/80 hover:text-white transition-colors duration-200 cursor-pointer backdrop-blur-sm"
+              aria-label="Previous screenshot"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              disabled={isAnimating}
+            >
+              <ChevronLeft size={28} strokeWidth={2.5} />
+            </motion.button>
           )}
 
-          {/* Screenshot Counter */}
-          {screenshots.length > 1 && (
-            <motion.div
-              className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/30 text-white text-xs font-medium"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
+          {/* Image Container - responsive sizing based on image orientation */}
+          <div
+            className={`relative w-full overflow-hidden rounded-2xl bg-neutral-900 ${
+              isHorizontal
+                ? 'max-w-full'
+                : 'max-w-2xl lg:max-w-4xl xl:max-w-5xl min-h-[50vh] lg:min-h-[60vh] xl:min-h-[70vh]'
+            }`}
+          >
+            <AnimatePresence
+              initial={false}
+              custom={direction}
+              mode="wait"
+              onExitComplete={() => setIsAnimating(false)}
             >
-              {currentIndex + 1} / {screenshots.length}
-            </motion.div>
+              {currentImage && (
+                <motion.div
+                  key={currentIndex}
+                  custom={direction}
+                  variants={slideVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  className={`flex items-center justify-center ${
+                    isHorizontal ? 'w-full' : 'absolute inset-0'
+                  }`}
+                  drag="x"
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={1}
+                  onDragEnd={(_, { offset, velocity }) => {
+                    const swipe = swipePower(offset.x, velocity.x)
+                    if (swipe < -swipeConfidenceThreshold) {
+                      goToNext()
+                    } else if (swipe > swipeConfidenceThreshold) {
+                      goToPrevious()
+                    }
+                  }}
+                >
+                  <Image
+                    src={currentImage}
+                    alt={`${title} screenshot ${currentIndex + 1}`}
+                    width={1600}
+                    height={900}
+                    className={`object-contain rounded-2xl ${
+                      isHorizontal
+                        ? 'w-full h-auto max-h-[60vh] lg:max-h-[70vh] xl:max-h-[75vh]'
+                        : 'w-auto h-auto max-w-full max-h-[50vh] lg:max-h-[60vh] xl:max-h-[70vh]'
+                    }`}
+                    priority={currentIndex === 0}
+                    draggable={false}
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Screenshot Counter */}
+            {screenshots.length > 1 && (
+              <div className="absolute top-3 right-3 px-3 py-1.5 rounded-full bg-black/70 text-white text-xs font-medium z-10 backdrop-blur-sm">
+                {currentIndex + 1} / {screenshots.length}
+              </div>
+            )}
+          </div>
+
+          {/* Right Arrow */}
+          {screenshots.length > 1 && (
+            <motion.button
+              onClick={goToNext}
+              className="absolute right-2 sm:right-4 z-20 p-3 sm:p-4 rounded-full bg-black/30 hover:bg-black/50 text-white/80 hover:text-white transition-colors duration-200 cursor-pointer backdrop-blur-sm"
+              aria-label="Next screenshot"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              disabled={isAnimating}
+            >
+              <ChevronRight size={28} strokeWidth={2.5} />
+            </motion.button>
           )}
         </div>
 
-        {/* Thumbnail Navigation - Beautiful Grid with Enhanced UX */}
+        {/* Progress Dots - smaller on mobile */}
         {screenshots.length > 1 && (
-          <motion.div
-            className="flex items-center justify-center gap-1.5 sm:gap-2 mt-3 flex-wrap px-2"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            {screenshots.map((screenshot, index) => (
+          <div className="flex justify-center gap-1.5 sm:gap-2 mt-3 sm:mt-4">
+            {screenshots.map((_, index) => (
               <motion.button
                 key={index}
                 onClick={() => goToIndex(index)}
-                className={`relative rounded-lg overflow-hidden border-2 transition-all duration-300 ${
-                  currentIndex === index
-                    ? 'scale-110 border-white shadow-lg shadow-white/40'
-                    : 'border-white/20 hover:border-white/50 hover:scale-105'
-                }`}
+                className="rounded-full transition-colors duration-200 touch-manipulation"
                 style={{
-                  width: 'clamp(40px, 8vw, 52px)',
-                  height: 'clamp(40px, 8vw, 52px)',
+                  backgroundColor: index === currentIndex ? categoryColor : 'rgba(255,255,255,0.3)',
                 }}
-                whileHover={{ scale: currentIndex === index ? 1.1 : 1.12 }}
+                animate={{
+                  width: index === currentIndex ? 20 : 6,
+                  height: 6,
+                }}
+                whileHover={{
+                  backgroundColor: index === currentIndex ? categoryColor : 'rgba(255,255,255,0.5)',
+                  scale: 1.1,
+                }}
                 whileTap={{ scale: 0.95 }}
-                aria-label={`View screenshot ${index + 1}`}
-              >
-                <div className="relative w-full h-full bg-black/40">
-                  <Image
-                    src={screenshot}
-                    alt={`${title} thumbnail ${index + 1}`}
-                    fill
-                    className="object-cover"
-                    sizes="52px"
-                  />
-                </div>
-
-                {/* Active Indicator Glow */}
-                {currentIndex === index && (
-                  <motion.div
-                    className="absolute inset-0 rounded-lg"
-                    style={{
-                      border: `2px solid ${categoryColor}`,
-                      boxShadow: `0 0 12px ${categoryColor}60, inset 0 0 12px ${categoryColor}40`,
-                      pointerEvents: 'none',
-                    }}
-                    layoutId="carouselIndicator"
-                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                  />
-                )}
-              </motion.button>
-            ))}
-          </motion.div>
-        )}
-
-        {/* Progress Indicator Bar */}
-        {screenshots.length > 1 && (
-          <motion.div className="mt-2.5 flex gap-0.5 justify-center h-0.5 rounded-full overflow-hidden bg-white/10 p-0.5 max-w-xs mx-auto">
-            {screenshots.map((_, index) => (
-              <motion.div
-                key={index}
-                className="flex-1 rounded-full transition-all duration-300"
-                style={{
-                  backgroundColor:
-                    index === currentIndex ? categoryColor : 'rgba(255, 255, 255, 0.2)',
-                  opacity: index === currentIndex ? 1 : 0.6,
-                }}
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
                 transition={{
-                  duration: 0.3,
-                  delay: index * 0.05,
+                  type: 'spring',
+                  stiffness: 300,
+                  damping: 20,
                 }}
+                aria-label={`Go to screenshot ${index + 1}`}
+                disabled={isAnimating}
               />
             ))}
-          </motion.div>
+          </div>
         )}
       </div>
     </div>

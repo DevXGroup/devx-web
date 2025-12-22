@@ -555,12 +555,14 @@ const DotGrid = ({
   }, [maxSpeed, speedTrigger, proximity, resistance, returnDuration, shockRadius, shockStrength])
 
   return (
-    <section ref={wrapperRef} className={`h-full w-full relative ${className}`} style={style}>
-      <canvas
-        ref={canvasRef}
-        className="w-full h-full block"
-        style={{ width: '100%', height: '100%', display: 'block' }}
-      />
+    <section className={`h-full w-full relative ${className}`} style={style}>
+      <div ref={wrapperRef} className="w-full h-full relative">
+        <canvas
+          ref={canvasRef}
+          className="w-full h-full block"
+          style={{ width: '100%', height: '100%', display: 'block' }}
+        />
+      </div>
     </section>
   )
 }
