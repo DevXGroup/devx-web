@@ -133,6 +133,8 @@ const ImageCarousel = ({ screenshots, title, categoryColor = '#4CD787' }: ImageC
     }),
   }
 
+  const containerAspectRatio = isHorizontal ? '16 / 9' : '3 / 4'
+
   return (
     <div className="space-y-4">
       <h3 className="text-xl font-semibold text-white mb-4">App Screenshots</h3>
@@ -159,9 +161,14 @@ const ImageCarousel = ({ screenshots, title, categoryColor = '#4CD787' }: ImageC
           <div
             className={`relative w-full overflow-hidden rounded-2xl bg-neutral-900 ${
               isHorizontal
-                ? 'max-w-full'
-                : 'max-w-2xl lg:max-w-4xl xl:max-w-5xl min-h-[50vh] lg:min-h-[60vh] xl:min-h-[70vh]'
+                ? 'max-w-full min-h-[220px] sm:min-h-[260px] md:min-h-[340px] lg:min-h-[420px]'
+                : 'max-w-3xl lg:max-w-4xl xl:max-w-5xl min-h-[60vh] lg:min-h-[65vh] xl:min-h-[70vh]'
             }`}
+            style={{
+              aspectRatio: containerAspectRatio,
+              maxWidth: isHorizontal ? '100vw' : undefined,
+              maxHeight: isHorizontal ? '90vh' : '92vh',
+            }}
           >
             <AnimatePresence
               initial={false}
@@ -177,7 +184,7 @@ const ImageCarousel = ({ screenshots, title, categoryColor = '#4CD787' }: ImageC
                   initial="enter"
                   animate="center"
                   exit="exit"
-                  className={`flex items-center justify-center ${
+                  className={`flex h-full items-center justify-center ${
                     isHorizontal ? 'w-full' : 'absolute inset-0'
                   }`}
                   drag="x"
@@ -199,8 +206,8 @@ const ImageCarousel = ({ screenshots, title, categoryColor = '#4CD787' }: ImageC
                     height={900}
                     className={`object-contain rounded-2xl ${
                       isHorizontal
-                        ? 'w-full h-auto max-h-[60vh] lg:max-h-[70vh] xl:max-h-[75vh]'
-                        : 'w-auto h-auto max-w-full max-h-[50vh] lg:max-h-[60vh] xl:max-h-[70vh]'
+                        ? 'w-full h-full max-h-full'
+                        : 'w-auto h-full max-h-full max-w-full'
                     }`}
                     priority={currentIndex === 0}
                     draggable={false}
@@ -234,7 +241,7 @@ const ImageCarousel = ({ screenshots, title, categoryColor = '#4CD787' }: ImageC
 
         {/* Progress Dots - smaller on mobile */}
         {screenshots.length > 1 && (
-          <div className="flex justify-center gap-1.5 sm:gap-2 mt-3 sm:mt-4">
+          <div className="hidden md:flex justify-center gap-1 sm:gap-1.5 mt-3 sm:mt-4">
             {screenshots.map((_, index) => (
               <motion.button
                 key={index}
@@ -244,8 +251,8 @@ const ImageCarousel = ({ screenshots, title, categoryColor = '#4CD787' }: ImageC
                   backgroundColor: index === currentIndex ? categoryColor : 'rgba(255,255,255,0.3)',
                 }}
                 animate={{
-                  width: index === currentIndex ? 20 : 6,
-                  height: 6,
+                  width: index === currentIndex ? 14 : 6,
+                  height: 4,
                 }}
                 whileHover={{
                   backgroundColor: index === currentIndex ? categoryColor : 'rgba(255,255,255,0.5)',
