@@ -33,12 +33,16 @@ describe('DotGrid measuring', () => {
       </div>
     )
 
-    // Find the internal wrapper section - DotGrid renders as <section><canvas /></section>
+    // Find the internal wrapper section - DotGrid renders as <section><div ref={wrapperRef}><canvas /></div></section>
     const section = container.querySelector('section') as HTMLElement
     expect(section).toBeInTheDocument()
 
-    // Mock section size before the component measures
-    mockElementSize(section, { width: 300, height: 200 })
+    // The wrapperRef in DotGrid points to the inner div, not the section
+    const wrapperDiv = section.querySelector('div') as HTMLElement
+    expect(wrapperDiv).toBeInTheDocument()
+
+    // Mock the wrapper div's size (this is what buildGrid() measures)
+    mockElementSize(wrapperDiv, { width: 300, height: 200 })
 
     const canvas = section.querySelector('canvas') as HTMLCanvasElement
     expect(canvas).toBeInTheDocument()
@@ -56,9 +60,10 @@ describe('DotGrid measuring', () => {
       </div>
     )
 
-    // Query the section directly - DotGrid renders as <section><canvas /></section>
+    // Query the section and inner wrapper div - DotGrid renders as <section><div ref={wrapperRef}><canvas /></div></section>
     const section = container.querySelector('section') as HTMLElement
-    mockElementSize(section, { width: 0, height: 0 })
+    const wrapperDiv = section.querySelector('div') as HTMLElement
+    mockElementSize(wrapperDiv, { width: 0, height: 0 })
     const canvas = container.querySelector('canvas') as HTMLCanvasElement
 
     await waitFor(() => {

@@ -302,7 +302,7 @@ export default function Features() {
           </div>
 
           {/* Redesigned Cards Section - Attio/Linear Style with better icon contrast */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-10 w-full max-w-none px-0 sm:px-2 lg:px-4 relative z-[3]">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-10 w-full max-w-6xl mx-auto px-0 sm:px-2 lg:px-4 relative z-[3]">
             <HireDevelopersCard
               icon={Rocket}
               title="Are you launching a startup or new product?"
