@@ -1,3 +1,10 @@
+## [1.9.1](https://github.com/DevXGroup/devx-web/compare/v1.9.0...v1.9.1) (2025-12-23)
+
+### Bug Fixes
+
+* resolve carousel image display issues and update components ([268a330](https://github.com/DevXGroup/devx-web/commit/268a330106be9f13b9c2efd0d924b0f05e105025))
+* resolve TypeScript errors in ImageCarousel component ([05e955e](https://github.com/DevXGroup/devx-web/commit/05e955ed5d29e44ac3a3b94111bf61a5231a7b38))
+
 ## [1.9.0](https://github.com/DevXGroup/devx-web/compare/v1.8.0...v1.9.0) (2025-12-22)
 
 ### Features
