@@ -20,17 +20,17 @@ import { createOgImageUrl, createTwitterImageUrl, getSiteUrl } from '@/lib/og'
 const siteUrl = getSiteUrl()
 const defaultOgImage = createOgImageUrl(
   {
-    title: 'DevX Group · Elite Product Engineers',
-    subtitle: 'Custom Applications • Agentic AI • Cloud Modernization',
-    focus: ['Product Engineering', 'Agentic Automation', 'Cloud Ops'],
+    title: 'DevX Group · Your Vision, Engineered',
+    subtitle: 'Web • Mobile • AI Projects Shipped Fast',
+    focus: ['Fast Delivery', 'Proven Record', 'Transparent Pricing'],
   },
   siteUrl
 )
 const defaultTwitterImage = createTwitterImageUrl(
   {
-    title: 'DevX Group · Elite Product Engineers',
-    subtitle: 'Custom Applications • Agentic AI • Cloud Modernization',
-    focus: ['Product Engineering', 'Agentic Automation', 'Cloud Ops'],
+    title: 'DevX Group · Your Vision, Engineered',
+    subtitle: 'Web • Mobile • AI Projects Shipped Fast',
+    focus: ['Fast Delivery', 'Proven Record', 'Transparent Pricing'],
   },
   siteUrl
 )
@@ -197,20 +197,21 @@ const devtoolsVersionPatchScript = `
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'DevX Group - Elite Software Development Team | Custom Applications & AI Solutions',
+    default: 'DevX Group - Your Vision, Engineered | Web, Mobile & AI Projects',
     template: '%s | DevX Group',
   },
   description:
-    'DevX Group delivers elite software development services including custom applications, AI/ML solutions, IoT hardware integration, and digital transformation. Build, launch, and scale your vision with our expert team.',
+    'Senior software team shipping high-impact web, mobile, and AI projects fast. AI automation, agentic AI solutions, rapid MVP launches, and stunning UI/UX with proven results and transparent pricing.',
   keywords: [
-    'software development',
-    'custom applications',
-    'AI solutions',
-    'ML',
-    'IoT',
-    'digital transformation',
+    'senior software team',
+    'AI automation',
+    'agentic AI solutions',
+    'rapid MVP launches',
     'web development',
     'mobile apps',
+    'AI projects',
+    'RAG systems',
+    'intelligent workflows',
     'San Diego',
   ],
   authors: [{ name: 'DevX Group LLC' }],
@@ -232,23 +233,23 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: siteUrl,
     siteName: 'DevX Group',
-    title: 'DevX Group - Elite Software Development Team | Custom Applications & AI Solutions',
+    title: 'DevX Group - Your Vision, Engineered | Web, Mobile & AI Projects',
     description:
-      'DevX Group delivers elite software development services including custom applications, AI/ML solutions, IoT hardware integration, and digital transformation.',
+      'Senior software team shipping high-impact web, mobile, and AI projects fast. Fast delivery, proven record, transparent pricing.',
     images: [
       {
         url: defaultOgImage,
         width: 1200,
         height: 630,
-        alt: 'DevX Group - Elite Software Development Team',
+        alt: 'DevX Group - Your Vision, Engineered',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'DevX Group - Elite Software Development Team',
+    title: 'DevX Group - Your Vision, Engineered',
     description:
-      'Elite software development services including custom applications, AI/ML solutions, and digital transformation.',
+      'Senior software team shipping high-impact web, mobile, and AI projects fast. Fast delivery, proven record, transparent pricing.',
     images: [defaultTwitterImage],
     creator: '@devxgroup',
     site: '@devxgroup',

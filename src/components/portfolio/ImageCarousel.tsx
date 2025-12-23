@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
-import { useEffect, useState, useCallback, useRef } from 'react'
+import { useEffect, useState, useCallback, useRef, useMemo } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 interface ImageCarouselProps {
@@ -14,7 +14,7 @@ interface ImageCarouselProps {
 interface ImageDimensions {
   width: number
   height: number
-  isHorizontal: boolean
+  aspectRatio: number
 }
 
 const ImageCarousel = ({ screenshots, title, categoryColor = '#4CD787' }: ImageCarouselProps) => {
@@ -23,6 +23,19 @@ const ImageCarousel = ({ screenshots, title, categoryColor = '#4CD787' }: ImageC
   const [direction, setDirection] = useState(0)
   const [isAnimating, setIsAnimating] = useState(false)
   const [imageDimensions, setImageDimensions] = useState<Record<number, ImageDimensions>>({})
+  const [failedImages, setFailedImages] = useState<Set<string>>(new Set())
+
+  // Filter valid screenshots
+  const validScreenshots = useMemo(() => {
+    return screenshots.filter((src) => src && src.trim() !== '' && !failedImages.has(src))
+  }, [screenshots, failedImages])
+
+  // Reset index if it goes out of bounds due to filtering
+  useEffect(() => {
+    if (currentIndex >= validScreenshots.length && validScreenshots.length > 0) {
+      setCurrentIndex(0)
+    }
+  }, [validScreenshots.length, currentIndex])
 
   // Swipe threshold for touch gestures
   const swipeConfidenceThreshold = 10000
@@ -36,51 +49,55 @@ const ImageCarousel = ({ screenshots, title, categoryColor = '#4CD787' }: ImageC
   const preloadedImages = useRef<Set<string>>(new Set())
 
   useEffect(() => {
-    if (!isMounted) return
+    if (!isMounted || validScreenshots.length === 0) return
 
     const indicesToPreload = [
       currentIndex,
-      (currentIndex - 1 + screenshots.length) % screenshots.length,
-      (currentIndex + 1) % screenshots.length,
+      (currentIndex - 1 + validScreenshots.length) % validScreenshots.length,
+      (currentIndex + 1) % validScreenshots.length,
     ]
 
     indicesToPreload.forEach((index) => {
-      const src = screenshots[index]
+      const src = validScreenshots[index]
       if (src && !preloadedImages.current.has(src)) {
         const img = new window.Image()
         img.onload = () => {
           setImageDimensions((prev) => ({
             ...prev,
-            [index]: {
+            [src]: {
               width: img.naturalWidth,
               height: img.naturalHeight,
-              isHorizontal: img.naturalWidth > img.naturalHeight,
+              aspectRatio: img.naturalWidth / img.naturalHeight,
             },
           }))
+        }
+        img.onerror = () => {
+          setFailedImages((prev) => new Set(prev).add(src))
         }
         img.src = src
         preloadedImages.current.add(src)
       }
     })
-  }, [currentIndex, screenshots, isMounted])
+  }, [currentIndex, validScreenshots, isMounted])
 
-  const currentImage = screenshots[currentIndex]
-  const currentDimensions = imageDimensions[currentIndex]
-  const isHorizontal = currentDimensions?.isHorizontal ?? true // Default to horizontal layout
+  const currentImage = validScreenshots[currentIndex]
+  // Default to 16/9 if dimensions not yet loaded
+  const currentAspectRatio = imageDimensions[currentImage]?.aspectRatio ?? 16 / 9
+  const isHorizontal = currentAspectRatio > 1
 
   const goToPrevious = useCallback(() => {
-    if (isAnimating) return
+    if (isAnimating || validScreenshots.length <= 1) return
     setDirection(-1)
     setIsAnimating(true)
-    setCurrentIndex((prev) => (prev === 0 ? screenshots.length - 1 : prev - 1))
-  }, [screenshots.length, isAnimating])
+    setCurrentIndex((prev) => (prev === 0 ? validScreenshots.length - 1 : prev - 1))
+  }, [validScreenshots.length, isAnimating])
 
   const goToNext = useCallback(() => {
-    if (isAnimating) return
+    if (isAnimating || validScreenshots.length <= 1) return
     setDirection(1)
     setIsAnimating(true)
-    setCurrentIndex((prev) => (prev + 1) % screenshots.length)
-  }, [screenshots.length, isAnimating])
+    setCurrentIndex((prev) => (prev + 1) % validScreenshots.length)
+  }, [validScreenshots.length, isAnimating])
 
   const goToIndex = useCallback(
     (index: number) => {
@@ -102,38 +119,40 @@ const ImageCarousel = ({ screenshots, title, categoryColor = '#4CD787' }: ImageC
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [goToPrevious, goToNext])
 
-  if (!isMounted || screenshots.length === 0) return null
+  if (!isMounted || validScreenshots.length === 0) return null
 
-  // Slide animation variants
+  // Slide animation variants - smoother
   const slideVariants = {
     enter: (direction: number) => ({
-      x: direction > 0 ? 300 : -300,
+      x: direction > 0 ? '100%' : '-100%',
       opacity: 0,
-      scale: 0.95,
+      scale: 0.9,
+      filter: 'blur(4px)',
     }),
     center: {
       x: 0,
       opacity: 1,
       scale: 1,
+      filter: 'blur(0px)',
       transition: {
-        x: { type: 'spring' as const, stiffness: 300, damping: 30 },
+        x: { type: 'spring', stiffness: 300, damping: 30 },
         opacity: { duration: 0.2 },
-        scale: { duration: 0.2 },
+        scale: { duration: 0.3 },
+        filter: { duration: 0.2 },
       },
     },
     exit: (direction: number) => ({
-      x: direction > 0 ? -300 : 300,
+      x: direction > 0 ? '-100%' : '100%',
       opacity: 0,
-      scale: 0.95,
+      scale: 0.9,
+      filter: 'blur(4px)',
       transition: {
-        x: { type: 'spring' as const, stiffness: 300, damping: 30 },
+        x: { type: 'spring', stiffness: 300, damping: 30 },
         opacity: { duration: 0.2 },
         scale: { duration: 0.2 },
       },
     }),
   }
-
-  const containerAspectRatio = isHorizontal ? '16 / 9' : '3 / 4'
 
   return (
     <div className="space-y-4">
@@ -144,121 +163,118 @@ const ImageCarousel = ({ screenshots, title, categoryColor = '#4CD787' }: ImageC
         {/* Main Image Display with Navigation Arrows */}
         <div className="relative w-full flex items-center justify-center">
           {/* Left Arrow */}
-          {screenshots.length > 1 && (
+          {validScreenshots.length > 1 && (
             <motion.button
               onClick={goToPrevious}
-              className="absolute left-2 sm:left-4 z-20 p-3 sm:p-4 rounded-full bg-black/30 hover:bg-black/50 text-white/80 hover:text-white transition-colors duration-200 cursor-pointer backdrop-blur-sm"
+              className="absolute left-2 sm:left-4 z-20 p-3 sm:p-4 rounded-full bg-black/40 hover:bg-black/60 text-white/90 hover:text-white transition-colors duration-200 cursor-pointer backdrop-blur-md border border-white/10"
               aria-label="Previous screenshot"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               disabled={isAnimating}
             >
-              <ChevronLeft size={28} strokeWidth={2.5} />
+              <ChevronLeft size={24} strokeWidth={2.5} />
             </motion.button>
           )}
 
-          {/* Image Container - responsive sizing based on image orientation */}
-          <div
-            className={`relative w-full overflow-hidden rounded-2xl bg-neutral-900 ${
-              isHorizontal
-                ? 'max-w-full min-h-[220px] sm:min-h-[260px] md:min-h-[340px] lg:min-h-[420px]'
-                : 'max-w-3xl lg:max-w-4xl xl:max-w-5xl min-h-[60vh] lg:min-h-[65vh] xl:min-h-[70vh]'
-            }`}
+          {/* Image Container - Smooth resize */}
+          <motion.div
+            className="relative w-full overflow-hidden rounded-2xl bg-neutral-900 border border-white/5"
+            animate={{
+              height: isHorizontal ? 'auto' : '70vh',
+              aspectRatio: isHorizontal ? '16/9' : '3/4',
+            }}
+            transition={{
+              type: 'spring',
+              stiffness: 200,
+              damping: 25,
+            }}
             style={{
-              aspectRatio: containerAspectRatio,
-              maxWidth: isHorizontal ? '100vw' : undefined,
-              maxHeight: isHorizontal ? '90vh' : '92vh',
+              maxHeight: '80vh',
             }}
           >
             <AnimatePresence
               initial={false}
               custom={direction}
-              mode="wait"
+              mode="popLayout"
               onExitComplete={() => setIsAnimating(false)}
             >
-              {currentImage && (
-                <motion.div
-                  key={currentIndex}
-                  custom={direction}
-                  variants={slideVariants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  className={`flex h-full items-center justify-center ${
-                    isHorizontal ? 'w-full' : 'absolute inset-0'
-                  }`}
-                  drag="x"
-                  dragConstraints={{ left: 0, right: 0 }}
-                  dragElastic={1}
-                  onDragEnd={(_, { offset, velocity }) => {
-                    const swipe = swipePower(offset.x, velocity.x)
-                    if (swipe < -swipeConfidenceThreshold) {
-                      goToNext()
-                    } else if (swipe > swipeConfidenceThreshold) {
-                      goToPrevious()
-                    }
-                  }}
-                >
+              <motion.div
+                key={currentIndex}
+                custom={direction}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                className="absolute inset-0 flex items-center justify-center w-full h-full"
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={1}
+                onDragEnd={(_, { offset, velocity }) => {
+                  const swipe = swipePower(offset.x, velocity.x)
+                  if (swipe < -swipeConfidenceThreshold) {
+                    goToNext()
+                  } else if (swipe > swipeConfidenceThreshold) {
+                    goToPrevious()
+                  }
+                }}
+              >
+                {currentImage && (
                   <Image
                     src={currentImage}
                     alt={`${title} screenshot ${currentIndex + 1}`}
-                    width={1600}
-                    height={900}
-                    className={`object-contain rounded-2xl ${
-                      isHorizontal
-                        ? 'w-full h-full max-h-full'
-                        : 'w-auto h-full max-h-full max-w-full'
-                    }`}
+                    fill
+                    className="object-contain"
                     priority={currentIndex === 0}
                     draggable={false}
+                    onError={() => {
+                      setFailedImages((prev) => new Set(prev).add(currentImage))
+                    }}
                   />
-                </motion.div>
-              )}
+                )}
+              </motion.div>
             </AnimatePresence>
 
             {/* Screenshot Counter */}
-            {screenshots.length > 1 && (
-              <div className="absolute top-3 right-3 px-3 py-1.5 rounded-full bg-black/70 text-white text-xs font-medium z-10 backdrop-blur-sm">
-                {currentIndex + 1} / {screenshots.length}
+            {validScreenshots.length > 1 && (
+              <div className="absolute top-3 right-3 px-3 py-1.5 rounded-full bg-black/60 text-white text-xs font-medium z-10 backdrop-blur-md border border-white/10">
+                {currentIndex + 1} / {validScreenshots.length}
               </div>
             )}
-          </div>
+          </motion.div>
 
           {/* Right Arrow */}
-          {screenshots.length > 1 && (
+          {validScreenshots.length > 1 && (
             <motion.button
               onClick={goToNext}
-              className="absolute right-2 sm:right-4 z-20 p-3 sm:p-4 rounded-full bg-black/30 hover:bg-black/50 text-white/80 hover:text-white transition-colors duration-200 cursor-pointer backdrop-blur-sm"
+              className="absolute right-2 sm:right-4 z-20 p-3 sm:p-4 rounded-full bg-black/40 hover:bg-black/60 text-white/90 hover:text-white transition-colors duration-200 cursor-pointer backdrop-blur-md border border-white/10"
               aria-label="Next screenshot"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               disabled={isAnimating}
             >
-              <ChevronRight size={28} strokeWidth={2.5} />
+              <ChevronRight size={24} strokeWidth={2.5} />
             </motion.button>
           )}
         </div>
 
-        {/* Progress Dots - smaller on mobile */}
-        {screenshots.length > 1 && (
-          <div className="hidden md:flex justify-center gap-1 sm:gap-1.5 mt-3 sm:mt-4">
-            {screenshots.map((_, index) => (
+        {/* Progress Dots */}
+        {validScreenshots.length > 1 && (
+          <div className="hidden md:flex justify-center gap-2 mt-4 flex-wrap px-4">
+            {validScreenshots.map((_, index) => (
               <motion.button
                 key={index}
                 onClick={() => goToIndex(index)}
-                className="rounded-full transition-colors duration-200 touch-manipulation"
+                className="rounded-full transition-colors duration-200 touch-manipulation h-1.5"
                 style={{
-                  backgroundColor: index === currentIndex ? categoryColor : 'rgba(255,255,255,0.3)',
+                  backgroundColor: index === currentIndex ? categoryColor : 'rgba(255,255,255,0.2)',
                 }}
                 animate={{
-                  width: index === currentIndex ? 14 : 6,
-                  height: 4,
+                  width: index === currentIndex ? 24 : 8,
                 }}
                 whileHover={{
-                  backgroundColor: index === currentIndex ? categoryColor : 'rgba(255,255,255,0.5)',
+                  backgroundColor: index === currentIndex ? categoryColor : 'rgba(255,255,255,0.4)',
                   scale: 1.1,
                 }}
-                whileTap={{ scale: 0.95 }}
                 transition={{
                   type: 'spring',
                   stiffness: 300,
