@@ -22,7 +22,7 @@ const ImageCarousel = ({ screenshots, title, categoryColor = '#4CD787' }: ImageC
   const [isMounted, setIsMounted] = useState(false)
   const [direction, setDirection] = useState(0)
   const [isAnimating, setIsAnimating] = useState(false)
-  const [imageDimensions, setImageDimensions] = useState<Record<number, ImageDimensions>>({})
+  const [imageDimensions, setImageDimensions] = useState<Record<string, ImageDimensions>>({})
   const [failedImages, setFailedImages] = useState<Set<string>>(new Set())
 
   // Filter valid screenshots
@@ -80,7 +80,7 @@ const ImageCarousel = ({ screenshots, title, categoryColor = '#4CD787' }: ImageC
     })
   }, [currentIndex, validScreenshots, isMounted])
 
-  const currentImage = validScreenshots[currentIndex]
+  const currentImage = validScreenshots[currentIndex]!
   // Default to 16/9 if dimensions not yet loaded
   const currentAspectRatio = imageDimensions[currentImage]?.aspectRatio ?? 16 / 9
   const isHorizontal = currentAspectRatio > 1
@@ -135,7 +135,7 @@ const ImageCarousel = ({ screenshots, title, categoryColor = '#4CD787' }: ImageC
       scale: 1,
       filter: 'blur(0px)',
       transition: {
-        x: { type: 'spring', stiffness: 300, damping: 30 },
+        x: { type: 'spring' as const, stiffness: 300, damping: 30 },
         opacity: { duration: 0.2 },
         scale: { duration: 0.3 },
         filter: { duration: 0.2 },
@@ -147,7 +147,7 @@ const ImageCarousel = ({ screenshots, title, categoryColor = '#4CD787' }: ImageC
       scale: 0.9,
       filter: 'blur(4px)',
       transition: {
-        x: { type: 'spring', stiffness: 300, damping: 30 },
+        x: { type: 'spring' as const, stiffness: 300, damping: 30 },
         opacity: { duration: 0.2 },
         scale: { duration: 0.2 },
       },
