@@ -88,12 +88,16 @@ export default function Navbar() {
 
       if (!isClickInsideMenu && !isClickOnButton) {
         setIsOpen(false)
+        // Return focus to hamburger button for accessibility
+        hamburgerButtonRef.current?.focus()
       }
     }
 
     const handleEscapeKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setIsOpen(false)
+        // Return focus to hamburger button for accessibility
+        hamburgerButtonRef.current?.focus()
       }
     }
 
