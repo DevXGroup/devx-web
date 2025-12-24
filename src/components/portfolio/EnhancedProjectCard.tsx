@@ -48,6 +48,18 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
     if (allowHover) setIsHovered(false)
   }
 
+  // Keyboard navigation for accessibility
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      onViewDetails?.(project)
+    }
+  }
+
+  // Focus handlers for keyboard navigation
+  const handleFocus = () => setIsHovered(true)
+  const handleBlur = () => setIsHovered(false)
+
   // Only animate border lines when actually visible and in viewport
   const shouldAnimateBorder = isMounted && isHovered && allowHover
 
@@ -56,11 +68,17 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
   return (
     <div
       ref={cardRef}
+      tabIndex={0}
+      role="article"
+      aria-label={`${project.title} - ${project.category}. ${project.shortDescription}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onKeyDown={handleKeyDown}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
       className="relative group cursor-pointer overflow-hidden
         bg-black/40 backdrop-blur-md border border-white/10
-        rounded-2xl hover:border-white/20 transition-all duration-300
+        rounded-2xl hover:border-white/20 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-300
         h-full min-h-[520px] sm:min-h-[540px] md:min-h-[600px] lg:min-h-[660px] xl:min-h-[680px]"
     >
       {/* Subtle Glow Effect - optimized for performance */}
@@ -226,10 +244,11 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 pt-4">
               <button
                 onClick={() => onViewDetails?.(project)}
-                className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-gradient-to-r from-white/10 to-white/5 hover:from-white/20 hover:to-white/10 border-2 border-white/30 hover:border-white/50 text-white transition-all duration-300 font-semibold shadow-lg h-11 w-full lg:w-auto"
+                aria-label={`View details for ${project.title}`}
+                className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-gradient-to-r from-white/10 to-white/5 hover:from-white/20 hover:to-white/10 border-2 border-white/30 hover:border-white/50 text-white transition-all duration-300 font-semibold shadow-lg h-11 w-full lg:w-auto focus:outline-none focus:ring-2 focus:ring-white/30"
               >
                 <span className="text-sm font-bold whitespace-nowrap">View Details</span>
-                <ExternalLink size={14} />
+                <ExternalLink size={14} aria-hidden="true" />
               </button>
 
               {/* Platform Support Section */}
