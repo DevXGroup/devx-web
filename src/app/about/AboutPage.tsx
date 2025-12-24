@@ -510,7 +510,7 @@ export default function AboutPage() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-[#000B14] pt-4">
+    <div className="min-h-screen bg-[#000B14] pt-4 overflow-x-hidden">
       {/* Hero Section */}
       <section className="pt-2 pb-8 relative overflow-visible">
         {/* DarkVeil background animation */}
@@ -728,7 +728,7 @@ export default function AboutPage() {
             {/* Right side - CardSwap */}
             <AnimatedSection
               delay={0.2}
-              className="relative mt-6 sm:mt-8 h-[360px] sm:h-[420px] md:h-[480px] lg:h-[560px] xl:h-[600px]"
+              className="relative mt-6 sm:mt-8 h-[360px] sm:h-[420px] md:h-[480px] lg:h-[560px] xl:h-[600px] hidden sm:block"
             >
               <CardSwap
                 width={490}
