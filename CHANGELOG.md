@@ -1,3 +1,9 @@
+## [1.9.4](https://github.com/DevXGroup/devx-web/compare/v1.9.3...v1.9.4) (2025-12-24)
+
+### Bug Fixes
+
+* **seo:** use environment variable for site URL in structured data ([d0a85ba](https://github.com/DevXGroup/devx-web/commit/d0a85badb7f626f4d1174114ca8364a087d5770f))
+
 ## [1.9.3](https://github.com/DevXGroup/devx-web/compare/v1.9.2...v1.9.3) (2025-12-24)
 
 ### Bug Fixes
