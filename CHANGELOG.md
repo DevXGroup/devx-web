@@ -1,3 +1,9 @@
+## [1.9.3](https://github.com/DevXGroup/devx-web/compare/v1.9.2...v1.9.3) (2025-12-24)
+
+### Bug Fixes
+
+* add SEO metadata to privacy/terms pages and improve accessibility ([58a54a3](https://github.com/DevXGroup/devx-web/commit/58a54a31dc6f184f468837f857969b3b76163813))
+
 ## [1.9.2](https://github.com/DevXGroup/devx-web/compare/v1.9.1...v1.9.2) (2025-12-24)
 
 ### Bug Fixes
