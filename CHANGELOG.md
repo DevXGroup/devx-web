@@ -1,3 +1,9 @@
+## [1.9.2](https://github.com/DevXGroup/devx-web/compare/v1.9.1...v1.9.2) (2025-12-24)
+
+### Bug Fixes
+
+* **about:** improve mobile typography and fix horizontal overflow ([c404931](https://github.com/DevXGroup/devx-web/commit/c40493142b05c440043ec888dbce2b243d5ffeae))
+
 ## [1.9.1](https://github.com/DevXGroup/devx-web/compare/v1.9.0...v1.9.1) (2025-12-23)
 
 ### Bug Fixes
