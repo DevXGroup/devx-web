@@ -430,7 +430,7 @@ const OrgChartV2 = ({ className = '' }: OrgChartProps) => {
       <AnimatePresence>
         {selectedMember && (
           <motion.div
-            className="fixed inset-0 z-[100] flex items-start sm:items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-md overflow-y-auto min-h-[100dvh]"
+            className="fixed inset-0 z-[9990] flex items-start sm:items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-md overflow-y-auto min-h-[100dvh]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -456,9 +456,9 @@ const OrgChartV2 = ({ className = '' }: OrgChartProps) => {
                 />
               </div>
 
-              <div className="px-5 sm:px-8 pb-8 -mt-12 sm:-mt-16 relative space-y-6">
+              <div className="px-5 sm:px-8 pb-8 -mt-12 sm:-mt-16 relative z-20 space-y-6">
                 <div
-                  className={`w-24 h-24 sm:w-32 sm:h-32 rounded-3xl overflow-hidden border-4 border-[#0B0B0B] shadow-xl`}
+                  className={`w-24 h-24 sm:w-32 sm:h-32 rounded-3xl overflow-hidden border-4 border-[#0B0B0B] shadow-xl relative z-20`}
                 >
                   <Image
                     src={selectedMember.image!}
