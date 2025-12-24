@@ -1,4 +1,7 @@
 import Script from 'next/script'
+import { getSiteUrl } from '@/lib/og'
+
+const siteUrl = getSiteUrl()
 
 interface BreadcrumbItem {
   name: string
@@ -24,21 +27,21 @@ export default function StructuredData({
   const organizationData = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    '@id': 'https://devxgroup.io/#organization',
+    '@id': `${siteUrl}/#organization`,
     name: 'DevX Group LLC',
     legalName: 'DevX Group LLC',
     alternateName: ['DevX Group', 'DevX'],
-    url: 'https://devxgroup.io',
+    url: siteUrl,
     logo: {
       '@type': 'ImageObject',
-      url: 'https://devxgroup.io/images/logos/devx-logo.png',
+      url: `${siteUrl}/images/logos/devx-logo.png`,
       width: 500,
       height: 99,
       caption: 'DevX Group Logo',
     },
     image: {
       '@type': 'ImageObject',
-      url: 'https://devxgroup.io/opengraph-image',
+      url: `${siteUrl}/opengraph-image`,
       width: 1200,
       height: 630,
     },
@@ -126,18 +129,16 @@ export default function StructuredData({
   const localBusinessData = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
-    '@id': 'https://devxgroup.io/#organization',
+    '@id': `${siteUrl}/#organization`,
     name: 'DevX Group LLC',
-    image: 'https://devxgroup.io/og-image.jpg',
-    url: 'https://devxgroup.io',
+    image: `${siteUrl}/opengraph-image`,
+    url: siteUrl,
     telephone: '+1-442-544-0591',
     email: 'support@devxgroup.io',
     address: {
       '@type': 'PostalAddress',
-      streetAddress: '',
       addressLocality: 'San Diego',
       addressRegion: 'CA',
-      postalCode: '',
       addressCountry: 'US',
     },
     geo: {
@@ -159,27 +160,27 @@ export default function StructuredData({
   const websiteData = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    '@id': 'https://devxgroup.io/#website',
-    url: 'https://devxgroup.io',
+    '@id': `${siteUrl}/#website`,
+    url: siteUrl,
     name: 'DevX Group - Your Vision, Engineered',
     description:
       'Senior software team shipping high-impact web, mobile, and AI projects fast. AI automation, agentic AI solutions, rapid MVP launches, and stunning UI/UX.',
     publisher: {
       '@type': 'Organization',
       name: 'DevX Group LLC',
-      '@id': 'https://devxgroup.io/#organization',
+      '@id': `${siteUrl}/#organization`,
     },
     potentialAction: {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: 'https://devxgroup.io/search?q={search_term_string}',
+        urlTemplate: `${siteUrl}/search?q={search_term_string}`,
       },
       'query-input': 'required name=search_term_string',
     },
     mainEntity: {
       '@type': 'Organization',
-      '@id': 'https://devxgroup.io/#organization',
+      '@id': `${siteUrl}/#organization`,
     },
   }
 
