@@ -1,3 +1,9 @@
+## [1.9.5](https://github.com/DevXGroup/devx-web/compare/v1.9.4...v1.9.5) (2025-12-26)
+
+### Bug Fixes
+
+* improve UX with better alt text, form scroll to error, and touch feedback ([b0a3753](https://github.com/DevXGroup/devx-web/commit/b0a37531146fb531c8fb040842182793ccefdfbd))
+
 ## [1.9.4](https://github.com/DevXGroup/devx-web/compare/v1.9.3...v1.9.4) (2025-12-24)
 
 ### Bug Fixes
