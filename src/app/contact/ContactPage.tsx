@@ -579,6 +579,14 @@ export default function ContactPage() {
     const errors = validateForm()
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors)
+      // Scroll to first error field for better UX
+      const errorFields = ['name', 'email', 'message']
+      const firstErrorField = errorFields.find((field) => errors[field as keyof typeof errors])
+      if (firstErrorField) {
+        const element = document.getElementById(firstErrorField)
+        element?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        element?.focus()
+      }
       return
     }
 

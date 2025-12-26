@@ -71,7 +71,7 @@ const StarBorder = ({
   // Build props based on component type
   const componentProps: any = {
     className:
-      'star-border-wrapper relative inline-block overflow-hidden rounded-[24px] cursor-pointer group',
+      'star-border-wrapper relative inline-block overflow-hidden rounded-[24px] cursor-pointer group active:scale-[0.97] transition-transform duration-150',
     onClick: handleClick,
     style: {
       padding: `${thickness}px`,
