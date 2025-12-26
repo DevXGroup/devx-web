@@ -81,7 +81,7 @@ const AttioButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, AttioButto
       }
       hover:shadow-lg
       ${isPrimary ? 'hover:shadow-[#4CD787]/20' : 'hover:shadow-[#9d4edd]/20'}
-      active:scale-[0.98]
+      active:scale-[0.97]
       ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
       ${className}
     `.trim()

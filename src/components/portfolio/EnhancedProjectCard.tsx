@@ -104,7 +104,7 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
           >
             <Image
               src={project.images.banner}
-              alt={project.title}
+              alt={`${project.title} - ${project.category} project by DevX Group`}
               fill
               className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
