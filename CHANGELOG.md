@@ -1,3 +1,9 @@
+## [1.9.6](https://github.com/DevXGroup/devx-web/compare/v1.9.5...v1.9.6) (2025-12-28)
+
+### Bug Fixes
+
+* **contact:** simplify clipboard copy to prevent ASCII encoding issues ([439cc80](https://github.com/DevXGroup/devx-web/commit/439cc80bc68f35aeed2fc619cca4a51fa8c6adb3))
+
 ## [1.9.5](https://github.com/DevXGroup/devx-web/compare/v1.9.4...v1.9.5) (2025-12-26)
 
 ### Bug Fixes
