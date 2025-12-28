@@ -683,25 +683,11 @@ export default function ContactPage() {
     }
 
     try {
-      // Use ClipboardItem with explicit text/plain MIME type to ensure plain text copy
-      if (typeof ClipboardItem !== 'undefined' && navigator.clipboard.write) {
-        const blob = new Blob([exampleProjectRequest], { type: 'text/plain' })
-        const clipboardItem = new ClipboardItem({ 'text/plain': blob })
-        await navigator.clipboard.write([clipboardItem])
-        onSuccess()
-      } else {
-        // Fallback for browsers that don't support ClipboardItem
-        await navigator.clipboard.writeText(exampleProjectRequest)
-        onSuccess()
-      }
+      // Use writeText directly - most reliable method for plain text
+      await navigator.clipboard.writeText(exampleProjectRequest)
+      onSuccess()
     } catch (error) {
-      // Try fallback method
-      try {
-        await navigator.clipboard.writeText(exampleProjectRequest)
-        onSuccess()
-      } catch (fallbackError) {
-        console.error('Failed to copy example text to clipboard:', fallbackError)
-      }
+      console.error('Failed to copy example text to clipboard:', error)
     }
   }, [])
 
