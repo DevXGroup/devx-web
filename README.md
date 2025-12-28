@@ -3,7 +3,6 @@
 ![Version](https://img.shields.io/badge/version-1.9.0-blue?style=flat)
 ![Tech Stack](https://img.shields.io/badge/Built%20With-Next.js%2016.1.0%20%7C%20React%2019.2.1%20%7C%20Tailwind%204.1.13-blueviolet?style=flat&logo=next.js)
 ![Status](https://img.shields.io/badge/status-active-success?style=flat)
-![License](https://img.shields.io/badge/license-MIT-lightgrey?style=flat)
 
 Portfolio and capability site for DevX Group LLC, a San Diego-based software engineering company specializing in custom web applications, AI/ML integration, and IoT hardware solutions. We work with small businesses through large enterprises, and provide dedicated engineering teams for startups and software companies seeking long-term execution partners to deliver results.
 
@@ -184,7 +183,7 @@ Contact: Use the website contact form or Calendly links provided in-app for cons
 
 ## License
 
-Distributed under the MIT License. See `LICENSE` for details.
+Copyright (c) 2025 DEVX Group LLC. All rights reserved.
 
 ## Maintainers
 
