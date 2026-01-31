@@ -1,3 +1,17 @@
+## [1.11.0](https://github.com/DevXGroup/devx-web/compare/v1.10.0...v1.11.0) (2026-01-31)
+
+### Features
+
+* **contact:** add accordion FAQ section ([1af6fef](https://github.com/DevXGroup/devx-web/commit/1af6fef59f0469ab9315c146b7c2bb90ec2537e3))
+* **portfolio:** add current project showcase ([e2d1f9a](https://github.com/DevXGroup/devx-web/commit/e2d1f9aaf52d9cd26a96eb890e8f8b542b2ef434))
+* **portfolio:** add descriptive image alt text ([be36087](https://github.com/DevXGroup/devx-web/commit/be360877198b758b288befafdb0cd283a9912d3b))
+* **seo:** add FAQ structured data ([2a03d5d](https://github.com/DevXGroup/devx-web/commit/2a03d5d83eacc13eeefe5aa1d9783846e0f0e5cc))
+* **services:** add sr-only h1 ([8b08d84](https://github.com/DevXGroup/devx-web/commit/8b08d844440c9c58a6796e056fc6c4a6a90a017f))
+
+### Bug Fixes
+
+* **ui:** refine contact styling and scroll stack ([d349a01](https://github.com/DevXGroup/devx-web/commit/d349a01ebd58bc9cd2657819121bbc403c69fda6))
+
 ## [1.10.0](https://github.com/DevXGroup/devx-web/compare/v1.9.6...v1.10.0) (2026-01-31)
 
 ### Features
