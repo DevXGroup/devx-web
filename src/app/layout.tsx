@@ -339,11 +339,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
-        {/* Patch React DevTools semver regression */}
+        {/* Patch React DevTools semver regression - can be loaded after hydration */}
         {process.env.NODE_ENV !== 'production' && (
           <Script
             id="react-devtools-semver-patch"
-            strategy="beforeInteractive"
+            strategy="afterInteractive"
             dangerouslySetInnerHTML={{ __html: devtoolsVersionPatchScript }}
           />
         )}
@@ -388,7 +388,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           }}
         />
 
-        {/* Google Analytics 4 - Run in web worker via Partytown */}
+        {/* Google Analytics 4 - Run in web worker via Partytown
+            NOTE: Commmented out to prevent double-firing if GTM is already handling GA4.
+            Uncomment if GA4 is NOT configured in GTM.
         <Script
           id="ga-script"
           type="text/partytown"
@@ -411,6 +413,7 @@ gtag('config', '${gaId}', {
             `.trim(),
           }}
         />
+        */}
 
         <DevToolsErrorSuppressor />
         <BrowserCompatibilityDetector />
