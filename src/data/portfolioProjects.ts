@@ -12,6 +12,9 @@ export interface ProjectData {
     banner: string
     preview: string
     screenshots?: string[]
+    bannerAlt?: string
+    previewAlt?: string
+    screenshotAlts?: string[]
   }
   metrics?: {
     users?: string
@@ -73,6 +76,9 @@ export const portfolioProjects: ProjectData[] = [
     images: {
       banner: '/images/portfolio/banners/lawazm-banner.webp',
       preview: '/images/portfolio/previews/lawazm-preview.webp',
+      bannerAlt:
+        'Lawazm e-commerce platform showing product catalog with household items across mobile and desktop',
+      previewAlt: 'Lawazm app preview displaying the product browsing experience on mobile',
       screenshots: [
         '/images/portfolio/screenshots/lawazm-all-in-one.webp',
         '/images/portfolio/screenshots/lawazm-1.webp',
@@ -82,6 +88,16 @@ export const portfolioProjects: ProjectData[] = [
         '/images/portfolio/screenshots/lawazm-5.webp',
         '/images/portfolio/screenshots/lawazm-6.webp',
         '/images/portfolio/screenshots/lawazm-7.webp',
+      ],
+      screenshotAlts: [
+        'Lawazm all-in-one overview showing multiple app screens',
+        'Lawazm product catalog with category filtering',
+        'Lawazm shopping cart and checkout flow',
+        'Lawazm product detail page with reviews',
+        'Lawazm order tracking and delivery status',
+        'Lawazm user account and order history',
+        'Lawazm search results with filters',
+        'Lawazm home screen with featured products',
       ],
     },
     metrics: {
@@ -136,6 +152,9 @@ export const portfolioProjects: ProjectData[] = [
     images: {
       banner: '/images/portfolio/banners/joyful-banner.webp',
       preview: '/images/portfolio/previews/joyful-preview.webp',
+      bannerAlt:
+        'Joyful confectionery platform showing custom cake ordering interface on mobile devices',
+      previewAlt: 'Joyful app preview with cake customization and delivery options',
       screenshots: [
         '/images/portfolio/screenshots/joyful-all-in-one.webp',
         '/images/portfolio/screenshots/joyful-1.webp',
@@ -143,6 +162,14 @@ export const portfolioProjects: ProjectData[] = [
         '/images/portfolio/screenshots/joyful-3.webp',
         '/images/portfolio/screenshots/joyful-4.webp',
         '/images/portfolio/screenshots/joyful-5.webp',
+      ],
+      screenshotAlts: [
+        'Joyful all-in-one overview showing multiple app screens',
+        'Joyful cake customization interface with design options',
+        'Joyful product catalog with chocolates and confectionery items',
+        'Joyful delivery tracking and order status screen',
+        'Joyful checkout and payment flow',
+        'Joyful home screen with featured confectionery products',
       ],
     },
     metrics: {
@@ -190,6 +217,9 @@ export const portfolioProjects: ProjectData[] = [
     images: {
       banner: '/images/portfolio/banners/lazurd-banner.webp',
       preview: '/images/portfolio/previews/lazurd-preview.webp',
+      bannerAlt:
+        'Lazurd luxury food delivery app featuring premium home-cooked meals and chocolates',
+      previewAlt: 'Lazurd app preview showcasing luxury brand design and premium food ordering',
       screenshots: [
         '/images/portfolio/screenshots/lazurd-all-in-one.webp',
         '/images/portfolio/screenshots/lazurd-1.webp',
@@ -197,6 +227,14 @@ export const portfolioProjects: ProjectData[] = [
         '/images/portfolio/screenshots/lazurd-3.webp',
         '/images/portfolio/screenshots/lazurd-4.webp',
         '/images/portfolio/screenshots/lazurd-5.webp',
+      ],
+      screenshotAlts: [
+        'Lazurd all-in-one overview showing luxury app interface across screens',
+        'Lazurd premium product catalog with luxury food items',
+        'Lazurd order placement with specialty meal options',
+        'Lazurd delivery scheduling and tracking interface',
+        'Lazurd member benefits and loyalty rewards screen',
+        'Lazurd home screen with featured luxury products',
       ],
     },
     metrics: {
@@ -240,12 +278,22 @@ export const portfolioProjects: ProjectData[] = [
     images: {
       banner: '/images/portfolio/banners/i-love-food-ilf-banner.webp',
       preview: '/images/portfolio/previews/i-love-food-ilf-preview.webp',
+      bannerAlt:
+        'WellBox food delivery platform showing personalized meal plans and nutrition tracking',
+      previewAlt: 'WellBox app preview displaying healthy meal planning interface',
       screenshots: [
         '/images/portfolio/screenshots/wellbox-all-in-one.webp',
         '/images/portfolio/screenshots/wellbox-1.webp',
         '/images/portfolio/screenshots/wellbox-2.webp',
         '/images/portfolio/screenshots/wellbox-3.webp',
         '/images/portfolio/screenshots/wellbox-4.webp',
+      ],
+      screenshotAlts: [
+        'WellBox all-in-one overview showing health and nutrition app screens',
+        'WellBox personalized meal plan with dietary recommendations',
+        'WellBox food recognition and calorie tracking interface',
+        'WellBox nutrition analytics dashboard with health goals',
+        'WellBox meal ordering and delivery scheduling screen',
       ],
     },
     metrics: {
@@ -309,10 +357,13 @@ export const portfolioProjects: ProjectData[] = [
     images: {
       banner: '/images/portfolio/banners/chatfly-banner.webp',
       preview: '/images/portfolio/previews/chatfly-preview.webp',
+      bannerAlt:
+        'ChatFly AI communication platform with multi-platform chatbot integration dashboard',
+      previewAlt: 'ChatFly app preview showing AI-powered chatbot conversation interface',
     },
     metrics: {
-      users: 'Many happy customers',
-      performance: 'Excellent performance',
+      users: '6 Platform Integrations',
+      performance: 'Sub-second AI Response Time',
       marketPosition: 'Multi-platform AI Solution',
     },
     completionYear: '2023',
@@ -355,6 +406,9 @@ export const portfolioProjects: ProjectData[] = [
     images: {
       banner: '/images/portfolio/banners/joyjoy-banner.webp',
       preview: '/images/portfolio/previews/joyjoy-preview.webp',
+      bannerAlt:
+        'JoyJoy AI wellness app displaying daily affirmations and positive mindset features',
+      previewAlt: 'JoyJoy app preview showing AI companion and wellness tracking interface',
     },
     metrics: {
       users: '25,000+ Downloads',
@@ -405,10 +459,13 @@ export const portfolioProjects: ProjectData[] = [
     images: {
       banner: '/images/portfolio/banners/letspass-banner.webp',
       preview: '/images/portfolio/previews/letspass-preview.webp',
+      bannerAlt:
+        'LetsPass online education platform with interactive learning modules and progress tracking',
+      previewAlt: 'LetsPass app preview showing course catalog and student dashboard',
     },
     metrics: {
-      users: 'Trusted by many institutions',
-      performance: 'High engagement rates',
+      users: '10+ Content Formats Supported',
+      performance: '45% Improvement in Learning Outcomes',
       marketPosition: 'Educational Technology Solution',
     },
     businessImpact: 'Students learn 45% better while companies save 60% on training costs',
@@ -458,6 +515,9 @@ export const portfolioProjects: ProjectData[] = [
     images: {
       banner: '/images/portfolio/banners/zahra-farm-banner.webp',
       preview: '/images/portfolio/previews/zahra-farm-preview.webp',
+      bannerAlt:
+        'Zahra Farm smart agriculture platform showing IoT crop monitoring and organic produce marketplace',
+      previewAlt: 'Zahra Farm app preview with farm management dashboard and eco-tourism booking',
     },
     metrics: {
       users: '3,000+ Farm Visitors',
@@ -508,9 +568,12 @@ export const portfolioProjects: ProjectData[] = [
     images: {
       banner: '/images/portfolio/banners/chayyel-banner.webp',
       preview: '/images/portfolio/previews/chayyel-preview.webp',
+      bannerAlt:
+        'Chayyel global gaming platform showcasing cross-platform gaming ecosystem and community features',
+      previewAlt: 'Chayyel app preview displaying gaming dashboard and social features',
     },
     metrics: {
-      users: 'Many happy customers',
+      users: '100,000+ Concurrent Players Supported',
       performance: 'Low-latency Global Infrastructure',
       marketPosition: 'Global Gaming Infrastructure',
     },
