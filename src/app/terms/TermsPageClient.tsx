@@ -662,7 +662,10 @@ export default function TermsPageClient() {
             <BlurText
               text="Clear guardrails for elite product delivery."
               className="inline-block"
-              delay={200}
+              delay={50}
+              startDelay={200}
+              stepDuration={0.4}
+              once={true}
             />
           </h1>
 

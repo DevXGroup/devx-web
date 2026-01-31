@@ -9,7 +9,10 @@ interface WordStyle {
 
 interface BlurTextProps {
   text?: string
+  /** Stagger delay between each word/letter in ms */
   delay?: number
+  /** Initial delay before the entire animation starts in ms */
+  startDelay?: number
   className?: string
   style?: CSSProperties
   animateBy?: 'words' | 'letters'
@@ -41,7 +44,8 @@ const buildKeyframes = (
 
 const BlurText = ({
   text = '',
-  delay = 200,
+  delay = 50, // Default stagger: 50ms (snappy)
+  startDelay = 0, // Default start delay: 0ms
   className = '',
   animateBy = 'words',
   direction = 'top',
@@ -51,7 +55,7 @@ const BlurText = ({
   animationTo,
   easing = (t: number) => t,
   onAnimationComplete,
-  stepDuration = 0.35,
+  stepDuration = 0.4, // Default duration: 0.4s (smooth)
   once = true,
   style,
   wordStyles,
@@ -123,7 +127,7 @@ const BlurText = ({
         const spanTransition = {
           duration: totalDuration,
           times,
-          delay: (index * delay) / 1000,
+          delay: (startDelay + index * delay) / 1000,
           ease: easing,
         }
 

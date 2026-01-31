@@ -147,7 +147,7 @@ type DeliveryItem = {
 
 const deliveryHighlights: DeliveryItem[] = [
   {
-    text: 'Weekly demos with milestone reviews keep delivery transparent.',
+    text: 'Bi-weekly demos with milestone reviews keep delivery transparent.',
     color: '#4CD787',
     icon: Check,
   },
@@ -629,7 +629,9 @@ export default function AboutPage() {
               <BlurText
                 text="Our Impact"
                 className="justify-center heading-section about-section-heading text-white mb-4 md:mb-6 font-editorial"
-                delay={150}
+                delay={50}
+                startDelay={150}
+                stepDuration={0.4}
                 once={true}
               />
               <p className="subtitle-lg max-w-2xl mx-auto mt-2 md:mt-4 px-4">
@@ -654,7 +656,9 @@ export default function AboutPage() {
             <BlurText
               text="How We Work"
               className="justify-center heading-section about-section-heading text-white mb-4 md:mb-6 font-editorial"
-              delay={150}
+              delay={50}
+              startDelay={150}
+              stepDuration={0.4}
               once={true}
             />
             <p className="subtitle-lg max-w-3xl mx-auto mt-3 md:mt-4 px-4">
@@ -705,7 +709,8 @@ export default function AboutPage() {
                       Build & Reviews
                     </h3>
                     <p className="text-body text-zinc-400">
-                      Weekly demos, no surprises. We optimize for reliability and maintainability.
+                      Bi-weekly demos, no surprises. We optimize for reliability and
+                      maintainability.
                     </p>
                   </div>
                 </div>
@@ -770,7 +775,7 @@ export default function AboutPage() {
                     <h3 className="heading-component text-white font-editorial">Build & Reviews</h3>
                   </div>
                   <p className="text-body text-secondary">
-                    Weekly demos, no surprises. We optimize for reliability and maintainability.
+                    Bi-weekly demos, no surprises. We optimize for reliability and maintainability.
                   </p>
                   <div className="mt-4 w-12 h-1 bg-gradient-to-r from-[#21cf3e] to-[#4834D4]/50 rounded-full"></div>
                 </Card>

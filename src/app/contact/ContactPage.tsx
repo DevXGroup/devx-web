@@ -795,8 +795,10 @@ export default function ContactPage() {
                   <BlurText
                     text="Contact Information"
                     className="justify-start text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-8 font-editorial"
-                    delay={100}
-                    once={false}
+                    delay={50}
+                    startDelay={100}
+                    stepDuration={0.4}
+                    once={true}
                   />
                   <p className="subtitle-lg mb-8 mt-6">
                     Fill out the form and our team will get back to you within 24 hours.
@@ -953,8 +955,10 @@ export default function ContactPage() {
                 <BlurText
                   text="Send us a message"
                   className="justify-start text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-8 font-editorial"
-                  delay={100}
-                  once={false}
+                  delay={50}
+                  startDelay={100}
+                  stepDuration={0.4}
+                  once={true}
                 />
 
                 <div className="space-y-6">
@@ -1192,15 +1196,17 @@ export default function ContactPage() {
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            viewport={{ once: false }}
+            viewport={{ once: true }}
             transition={{ duration: 0.8 }}
             className="text-center max-w-3xl mx-auto mb-12"
           >
             <BlurText
               text="Schedule a Free Consultation"
               className="justify-center heading-section text-white mb-6 font-editorial"
-              delay={150}
-              once={false}
+              delay={50}
+              startDelay={150}
+              stepDuration={0.4}
+              once={true}
             />
             <p className="subtitle-lg mb-8 mt-6">
               Book a time that works for you using our online scheduling tool. No back-and-forth
@@ -1236,15 +1242,17 @@ export default function ContactPage() {
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            viewport={{ once: false }}
+            viewport={{ once: true }}
             transition={{ duration: 0.8 }}
             className="text-center max-w-3xl mx-auto mb-16"
           >
             <BlurText
               text="Frequently Asked Questions"
               className="justify-center heading-section text-white mb-6 font-editorial"
-              delay={150}
-              once={false}
+              delay={50}
+              startDelay={150}
+              stepDuration={0.4}
+              once={true}
             />
             <p className="subtitle-lg mt-6">
               Find quick answers to common questions about our services and process.

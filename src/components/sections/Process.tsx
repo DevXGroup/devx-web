@@ -175,8 +175,10 @@ export default function Process() {
               <BlurText
                 text="How It Works"
                 className="justify-center text-white mb-6 section-title-hero font-editorial"
-                delay={150}
-                once={false}
+                delay={50}
+                startDelay={150}
+                stepDuration={0.4}
+                once={true}
               />
               <p className="section-subtitle max-w-3xl xl:max-w-4xl 2xl:max-w-5xl mx-auto px-4 text-zinc-400 font-light leading-relaxed">
                 Simple steps to bring your software vision to life from idea to launch in record

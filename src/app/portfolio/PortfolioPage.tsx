@@ -534,7 +534,10 @@ export default function PortfolioPage() {
               <BlurText
                 text="Explore shipped products that increased revenue, retention, and efficiency across web, mobile, AI, and cloud experiences."
                 className="relative z-20 section-subtitle text-zinc-400 max-w-3xl lg:max-w-4xl mx-auto mb-10 -mt-8 justify-center text-center"
-                delay={200}
+                delay={30}
+                startDelay={200}
+                stepDuration={0.4}
+                once={true}
                 animateBy="words"
                 style={{ whiteSpace: 'normal', textWrap: 'balance' }}
               />
@@ -820,13 +823,13 @@ export default function PortfolioPage() {
               text="Services we deliver"
               className="section-title text-white justify-center mb-4 font-editorial"
               animateBy="words"
-              once={false}
+              once={true}
             />
             <BlurText
               text="We can build and ship across these areas"
               className="subtitle text-white/80 justify-center mt-2 subtitle-lg"
               animateBy="words"
-              once={false}
+              once={true}
             />
           </div>
           <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:flex lg:flex-wrap lg:justify-center gap-3 sm:gap-6 md:gap-10 lg:gap-12 justify-items-center relative z-10 px-2 sm:px-4">

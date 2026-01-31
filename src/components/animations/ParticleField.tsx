@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { motion, useReducedMotion } from 'framer-motion'
+import { motion, useInView, useReducedMotion } from 'framer-motion'
 
 interface Particle {
   x: number
@@ -31,6 +31,7 @@ export default function ParticleField({
   const particlesRef = useRef<Particle[]>([])
   const mouseRef = useRef({ x: 0, y: 0 })
   const shouldReduceMotion = useReducedMotion()
+  const isInView = useInView(canvasRef)
 
   useEffect(() => {
     if (shouldReduceMotion) return
@@ -142,9 +143,12 @@ export default function ParticleField({
     }
 
     const animate = () => {
-      updateParticles()
-      drawParticles()
-      animationRef.current = requestAnimationFrame(animate)
+      // Only animate if in view
+      if (isInView) {
+        updateParticles()
+        drawParticles()
+        animationRef.current = requestAnimationFrame(animate)
+      }
     }
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -172,7 +176,7 @@ export default function ParticleField({
       window.removeEventListener('resize', handleResize)
       canvas.removeEventListener('mousemove', handleMouseMove)
     }
-  }, [shouldReduceMotion, particleCount, colors])
+  }, [shouldReduceMotion, particleCount, colors, isInView])
 
   if (shouldReduceMotion) {
     return (

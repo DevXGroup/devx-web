@@ -971,6 +971,7 @@ class App {
   rightCarLights: CarLights
   leftSticks: LightsSticks
   fogUniforms: Record<string, { value: any }>
+  isPaused: boolean = false
 
   constructor(container: HTMLElement, options: HyperspeedOptions) {
     this.options = options
@@ -1241,15 +1242,34 @@ class App {
 
   tick() {
     if (this.disposed || !this) return
+
+    // Resize handling
     if (resizeRendererToDisplaySize(this.renderer, this.setSize)) {
       const canvas = this.renderer.domElement
       this.camera.aspect = canvas.clientWidth / canvas.clientHeight
       this.camera.updateProjectionMatrix()
     }
+
     const delta = this.clock.getDelta()
-    this.render(delta)
-    this.update(delta)
-    requestAnimationFrame(this.tick)
+
+    if (!this.isPaused) {
+      this.render(delta)
+      this.update(delta)
+      requestAnimationFrame(this.tick)
+    }
+  }
+
+  play() {
+    if (this.isPaused) {
+      this.isPaused = false
+      this.clock.start() // Restart clock to avoid large delta jumps
+      this.tick()
+    }
+  }
+
+  pause() {
+    this.isPaused = true
+    this.clock.stop()
   }
 }
 
@@ -1258,6 +1278,7 @@ const Hyperspeed: FC<HyperspeedProps> = ({ effectOptions = {}, startOnScroll = f
   const appRef = useRef<App | null>(null)
   const [isInitialized, setIsInitialized] = useState(false)
   const [shouldStart, setShouldStart] = useState(!startOnScroll)
+  const isInView = useRef(false)
 
   // Scroll detection effect
   useEffect(() => {
@@ -1269,14 +1290,23 @@ const Hyperspeed: FC<HyperspeedProps> = ({ effectOptions = {}, startOnScroll = f
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting && entry.intersectionRatio > 0.1) {
-            setShouldStart(true)
+          if (entry.isIntersecting) {
+            if (startOnScroll && !shouldStart && entry.intersectionRatio > 0.1) {
+              setShouldStart(true)
+            }
+            // Resume animation when in view
+            isInView.current = true
+            if (appRef.current) appRef.current.play()
+          } else {
+            // Pause animation when out of view
+            isInView.current = false
+            if (appRef.current) appRef.current.pause()
           }
         })
       },
       {
         threshold: [0.1],
-        rootMargin: '0px 0px -20% 0px',
+        rootMargin: '100px 0px', // Pre-load slightly before view
       }
     )
 
