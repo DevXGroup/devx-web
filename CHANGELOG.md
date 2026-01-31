@@ -1,3 +1,20 @@
+## [1.10.0](https://github.com/DevXGroup/devx-web/compare/v1.9.6...v1.10.0) (2026-01-31)
+
+### Features
+
+* **animations:** add BlurText start delay controls ([b9eabcb](https://github.com/DevXGroup/devx-web/commit/b9eabcbb49cf0cae8be9ca8fa3f3b1b984419601))
+
+### Bug Fixes
+
+* **about:** update demo cadence and heading timing ([65cf0ad](https://github.com/DevXGroup/devx-web/commit/65cf0adb250cad86a3b2a152d6a302318ea4b2d0))
+* **analytics:** guard sentry init and avoid GA4 double firing ([bb75b16](https://github.com/DevXGroup/devx-web/commit/bb75b1671c1ae91bfeb1fde37f85ba21fcdabe7f))
+
+### Performance Improvements
+
+* **animations:** pause offscreen canvas effects ([9941f3e](https://github.com/DevXGroup/devx-web/commit/9941f3e6e047bee64eb34abd34ab0911a62cc0f7))
+* **animations:** run reveal effects once ([6da954a](https://github.com/DevXGroup/devx-web/commit/6da954a5c1a2acc742963d93e0864dfc849e4d4b))
+* **css:** use font-display swap ([ac2baed](https://github.com/DevXGroup/devx-web/commit/ac2baed7489a4239f10bddff5515719a5b262719))
+
 ## [1.9.6](https://github.com/DevXGroup/devx-web/compare/v1.9.5...v1.9.6) (2025-12-28)
 
 ### Bug Fixes
