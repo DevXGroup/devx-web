@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback, type ChangeEvent, type FormEvent } from 'react'
-import { motion, useReducedMotion, useInView } from 'framer-motion'
+import { motion, useReducedMotion, useInView, AnimatePresence } from 'framer-motion'
 import {
   Phone,
   Mail,
@@ -193,6 +193,7 @@ export default function ContactPage() {
   const [showLightning, setShowLightning] = useState(false)
   const [confettiReady, setConfettiReady] = useState(false)
   const [showOrb, setShowOrb] = useState(false)
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null)
   const copyTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const shouldReduceMotion = useReducedMotion()
   const formRef = useRef(null)
@@ -1236,7 +1237,6 @@ export default function ContactPage() {
       </section>
 
       {/* FAQ Section */}
-      {/* FAQ Section */}
       <section className="py-20 relative z-[5000]">
         <div className="container mx-auto px-4">
           <motion.div
@@ -1260,67 +1260,86 @@ export default function ContactPage() {
           </motion.div>
 
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto"
+            className="max-w-3xl mx-auto space-y-4"
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
           >
-            <motion.div
-              variants={fadeInUpVariants}
-              className="bg-black/30 p-6 rounded-xl border border-white/10 hover:border-white/30 transition-colors duration-300 group"
-              whileHover={shouldReduceMotion ? {} : { y: -4 }}
-            >
-              <h3 className="heading-subsection mb-3 text-white transition-colors duration-300">
-                What is your typical response time?
-              </h3>
-              <p className="text-body text-foreground/70 group-hover:text-white/80 transition-colors duration-300">
-                We typically respond to all inquiries within 24 hours during business days. For
-                urgent matters, we prioritize faster response times.
-              </p>
-            </motion.div>
-
-            <motion.div
-              variants={fadeInUpVariants}
-              className="bg-black/30 p-6 rounded-xl border border-white/10 hover:border-white/30 transition-colors duration-300 group"
-              whileHover={shouldReduceMotion ? {} : { y: -4 }}
-            >
-              <h3 className="heading-subsection mb-3 text-white transition-colors duration-300">
-                Do you work with international clients?
-              </h3>
-              <p className="text-body text-foreground/70 group-hover:text-white/80 transition-colors duration-300">
-                Yes, we work with clients worldwide. Our team is experienced in remote collaboration
-                and can accommodate different time zones.
-              </p>
-            </motion.div>
-
-            <motion.div
-              variants={fadeInUpVariants}
-              className="bg-black/30 p-6 rounded-xl border border-white/10 hover:border-white/30 transition-colors duration-300 group"
-              whileHover={shouldReduceMotion ? {} : { y: -4 }}
-            >
-              <h3 className="heading-subsection mb-3 text-white transition-colors duration-300">
-                What information should I provide for a quote?
-              </h3>
-              <p className="text-body text-foreground/70 group-hover:text-white/80 transition-colors duration-300">
-                To provide an accurate quote, we need details about your project scope, timeline,
-                technical requirements, and any specific features you need.
-              </p>
-            </motion.div>
-
-            <motion.div
-              variants={fadeInUpVariants}
-              className="bg-black/30 p-6 rounded-xl border border-white/10 hover:border-white/30 transition-colors duration-300 group"
-              whileHover={shouldReduceMotion ? {} : { y: -4 }}
-            >
-              <h3 className="heading-subsection mb-3 text-white transition-colors duration-300">
-                How do you handle project revisions?
-              </h3>
-              <p className="text-body text-foreground/70 group-hover:text-white/80 transition-colors duration-300">
-                We include revision rounds in our project plans. The number of revisions depends on
-                your package, but we&apos;re always flexible to ensure your satisfaction.
-              </p>
-            </motion.div>
+            {[
+              {
+                question: 'What is your typical response time?',
+                answer:
+                  'We typically respond to all inquiries within 24 hours during business days. For urgent matters, we prioritize faster response times.',
+              },
+              {
+                question: 'Do you work with international clients?',
+                answer:
+                  'Yes, we work with clients worldwide. Our team is experienced in remote collaboration and can accommodate different time zones.',
+              },
+              {
+                question: 'What information should I provide for a quote?',
+                answer:
+                  'To provide an accurate quote, we need details about your project scope, timeline, technical requirements, and any specific features you need.',
+              },
+              {
+                question: 'How do you handle project revisions?',
+                answer:
+                  "We include revision rounds in our project plans. The number of revisions depends on your package, but we're always flexible to ensure your satisfaction.",
+              },
+            ].map((faq, index) => (
+              <motion.div
+                key={index}
+                variants={fadeInUpVariants}
+                className="border border-white/10 rounded-xl overflow-hidden bg-black/30 backdrop-blur-sm"
+              >
+                <button
+                  onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
+                  className="w-full flex items-center justify-between px-6 py-5 text-left cursor-pointer group"
+                  aria-expanded={openFaqIndex === index}
+                  aria-controls={`faq-answer-${index}`}
+                >
+                  <h3 className="heading-subsection text-white pr-4 transition-colors duration-300 group-hover:text-white/90">
+                    {faq.question}
+                  </h3>
+                  <motion.span
+                    className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full border border-white/20 text-white/70 group-hover:border-white/40 group-hover:text-white transition-colors duration-300"
+                    animate={{ rotate: openFaqIndex === index ? 45 : 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 14 14"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M7 1V13M1 7H13"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </motion.span>
+                </button>
+                <AnimatePresence initial={false}>
+                  {openFaqIndex === index && (
+                    <motion.div
+                      id={`faq-answer-${index}`}
+                      role="region"
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                      className="overflow-hidden"
+                    >
+                      <p className="text-body text-foreground/70 px-6 pb-5">{faq.answer}</p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            ))}
           </motion.div>
         </div>
       </section>
