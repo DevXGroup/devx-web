@@ -201,9 +201,9 @@ export default function Hero() {
               <BlurText
                 text="Your Vision,"
                 className="inline-flex font-editorial font-thin justify-center whitespace-nowrap"
-                delay={200}
-                stepDuration={0.5}
-                once={false}
+                delay={80}
+                stepDuration={0.4}
+                once={true}
                 style={{
                   textShadow: '0 0 60px rgba(255,255,255,0.4), 0 10px 24px rgba(0,0,0,0.5)',
                 }}
@@ -211,9 +211,9 @@ export default function Hero() {
               <BlurText
                 text="Engineered."
                 className="inline-flex font-editorial-semibold-italic text-[#ccff00] justify-center whitespace-nowrap"
-                delay={600}
-                stepDuration={0.6}
-                once={false}
+                startDelay={500}
+                stepDuration={0.5}
+                once={true}
                 style={{
                   textShadow:
                     '0 0 60px rgba(204,255,0,0.5), 0 10px 24px rgba(0,0,0,0.5), 0 0 120px rgba(204,255,0,0.2)',
@@ -238,16 +238,17 @@ export default function Hero() {
                 <BlurText
                   text="Senior software team shipping high-impact"
                   className="justify-center text-center whitespace-normal"
-                  delay={120}
-                  stepDuration={0.45}
-                  once={false}
+                  delay={40}
+                  stepDuration={0.4}
+                  once={true}
                 />
                 <BlurText
                   text="web, mobile, and AI projects fast"
                   className="justify-center text-center whitespace-normal"
-                  delay={120}
-                  stepDuration={0.45}
-                  once={false}
+                  delay={40}
+                  startDelay={200}
+                  stepDuration={0.4}
+                  once={true}
                 />
               </div>
               <motion.div

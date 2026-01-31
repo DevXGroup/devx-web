@@ -51,9 +51,9 @@ const pricingPlans = [
   {
     name: 'Starter',
     subtitle: 'Perfect for MVPs',
-    price: '$75',
+    price: '$85',
     priceUnit: '/hour',
-    originalPrice: '$95',
+    originalPrice: '$115',
     description:
       'Ideal for startups and small businesses looking to build their first digital solution',
     icon: Target,
@@ -63,9 +63,9 @@ const pricingPlans = [
     features: [
       'Custom web/mobile development',
       'Basic project management',
+      '100% IP & Code Ownership',
       'Email support (24hr response)',
       '2 revision rounds included',
-      'Basic documentation',
       '30-day post-launch support',
     ],
     included: [
@@ -80,9 +80,9 @@ const pricingPlans = [
   {
     name: 'Professional',
     subtitle: 'Most Popular Choice',
-    price: '$100',
+    price: '$115',
     priceUnit: '/hour',
-    originalPrice: '$125',
+    originalPrice: '$150',
     description:
       'Perfect for growing businesses that need comprehensive solutions and dedicated support',
     icon: Zap,
@@ -92,9 +92,9 @@ const pricingPlans = [
     features: [
       'Advanced custom development',
       'Dedicated project manager',
+      'Bi-weekly Executive Summaries',
       'Priority support (12hr response)',
       '5 revision rounds included',
-      'Advanced integrations',
       '90-day maintenance included',
       'Performance optimization',
     ],
@@ -111,9 +111,9 @@ const pricingPlans = [
   {
     name: 'Enterprise',
     subtitle: 'Ultimate Solution',
-    price: '$125',
+    price: '$150',
     priceUnit: '/hour',
-    originalPrice: '$160',
+    originalPrice: '$200',
     description:
       'For large organizations requiring enterprise-grade solutions with premium support',
     icon: Crown,
@@ -122,12 +122,13 @@ const pricingPlans = [
     gradient: 'from-[#9d4edd]/20 via-[#9d4edd]/10 to-transparent',
     features: [
       'Enterprise-grade development',
+      'Fractional CTO oversight',
       'Full-suite project management',
       '24/7 priority support hotline',
-      'Unlimited revisions',
+      'Priority agile revision cycles',
       'Enterprise security compliance',
-      '1-year maintenance & updates',
-      'On-site training sessions',
+      '6-month maintenance & updates',
+      'On-demand training sessions',
     ],
     included: [
       'Everything in Professional',
@@ -455,7 +456,7 @@ export default function PricingPage() {
                 text="Need Something Custom?"
                 className="justify-center heading-section text-white mb-6"
                 delay={150}
-                once={false}
+                once={true}
               />
               <p className="subtitle-lg mb-8 mt-6">
                 Every project is unique. Let&apos;s discuss your specific requirements and create a

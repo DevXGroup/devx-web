@@ -204,7 +204,7 @@ function TestimonialCard({
       style={{ y }}
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: false, amount: 0.1 }}
+      viewport={{ once: true, amount: 0.1 }}
       className="bg-zinc-900/40 backdrop-blur-md p-6 md:p-8 rounded-3xl border border-white/10 flex flex-col h-full min-h-[420px] relative group hover:border-white/20 hover:bg-zinc-900/60 transition-all duration-500 overflow-hidden"
       onMouseEnter={isMobile ? undefined : onHover}
       onMouseLeave={isMobile ? undefined : onLeave}

@@ -86,6 +86,7 @@ export default function FeaturesPage() {
                         className="flex items-center text-white/70 text-sm"
                         initial={{ opacity: 0, x: -10 }}
                         whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
                         transition={{ delay: 0.5 + index * 0.1 }}
                       >
                         <div className="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3" />
