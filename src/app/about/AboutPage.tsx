@@ -976,7 +976,7 @@ export default function AboutPage() {
           <AnimatedSection className="bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-4 sm:p-8 md:p-12 w-full mx-auto text-center space-y-4 sm:space-y-6 md:space-y-8">
             <BlurText
               text="Ready to Start Your Project?"
-              className="hero-title font-editorial-semibold-italic text-white leading-none text-center text-2xl sm:text-4xl md:text-5xl justify-center mx-auto"
+              className="hero-title font-editorial-semibold-italic text-white leading-tight text-center text-xl sm:text-3xl md:text-4xl justify-center mx-auto"
               style={{ letterSpacing: '-0.02em', marginBottom: 0 }}
               delay={150}
               once={true}

@@ -1215,7 +1215,7 @@ export default function ContactPage() {
             </p>
           </motion.div>
 
-          <div className="bg-[#050505] p-4 md:p-6 rounded-2xl border border-white/10 shadow-[0_0_35px_rgba(4,4,8,0.45)] overflow-hidden">
+          <div className="bg-transparent p-0 md:p-0 rounded-2xl border border-transparent shadow-none overflow-hidden">
             <div className="relative rounded-xl">
               <div
                 ref={calendlyContainerRef}
@@ -1226,10 +1226,6 @@ export default function ContactPage() {
                   height: calendlyHeight,
                   backgroundColor: '#050505',
                 }}
-              />
-              <div
-                className="pointer-events-none absolute inset-0 rounded-xl border border-white/10"
-                aria-hidden="true"
               />
             </div>
           </div>
@@ -1299,7 +1295,7 @@ export default function ContactPage() {
                   aria-expanded={openFaqIndex === index}
                   aria-controls={`faq-answer-${index}`}
                 >
-                  <h3 className="heading-subsection text-white pr-4 transition-colors duration-300 group-hover:text-white/90">
+                  <h3 className="heading-subsection text-slate-200 pr-4 transition-colors duration-300 group-hover:text-slate-100">
                     {faq.question}
                   </h3>
                   <motion.span
@@ -1334,7 +1330,7 @@ export default function ContactPage() {
                       transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
                       className="overflow-hidden"
                     >
-                      <p className="text-body text-foreground/70 px-6 pb-5">{faq.answer}</p>
+                      <p className="text-body text-slate-200 px-6 pb-5">{faq.answer}</p>
                     </motion.div>
                   )}
                 </AnimatePresence>
