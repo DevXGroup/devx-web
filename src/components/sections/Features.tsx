@@ -296,7 +296,9 @@ export default function Features() {
             <BlurText
               text="Hire Elite Developers Effortlessly."
               className="justify-center text-center text-white mb-6 section-title-hero font-editorial"
-              delay={150}
+              delay={50}
+              startDelay={150}
+              stepDuration={0.4}
               once={true}
             />
           </div>
@@ -357,7 +359,9 @@ export default function Features() {
             <BlurText
               text="How We Work With You"
               className="justify-center text-center text-white mb-6 section-title-hero font-editorial"
-              delay={150}
+              delay={50}
+              startDelay={150}
+              stepDuration={0.4}
               once={true}
             />
             <p className="section-subtitle max-w-3xl mx-auto px-4 text-zinc-400 font-light">
@@ -511,14 +515,18 @@ export default function Features() {
           <BlurText
             text="Why Choose Us?"
             className="justify-center text-center text-white mb-6 section-title-hero font-editorial"
-            delay={150}
+            delay={50}
+            startDelay={150}
+            stepDuration={0.4}
             once={true}
           />
           <div className="max-w-3xl xl:max-w-4xl 2xl:max-w-5xl mx-auto mb-12 sm:mb-16 px-4">
             <BlurText
               text="Trusted U.S. company with worldwide senior developers, proven track record, and full-stack expertise across industries."
               className="justify-center mb-4 section-subtitle text-zinc-400"
-              delay={100}
+              delay={20}
+              startDelay={200}
+              stepDuration={0.4}
               once={true}
             />
           </div>
@@ -589,7 +597,9 @@ export default function Features() {
           <BlurText
             text="Ready to Transform Your Vision Into Reality?"
             className="justify-center text-center text-white mb-3 sm:mb-4 section-title-compact font-editorial"
-            delay={150}
+            delay={30}
+            startDelay={150}
+            stepDuration={0.4}
             once={true}
           />
           <p className="section-subtitle-compact text-zinc-300 mb-8 text-center mx-auto">
