@@ -549,8 +549,10 @@ export default function ServicesPage() {
               <BlurText
                 text="Our Expertise"
                 className="justify-center blur-section text-[#06B6D4] font-editorial"
-                delay={250}
-                once={false}
+                delay={50}
+                startDelay={250}
+                stepDuration={0.4}
+                once={true}
               />
               <p
                 className="mt-4 max-w-2xl text-center text-white/70 text-sm sm:text-base"
@@ -1144,14 +1146,18 @@ export default function ServicesPage() {
               <BlurText
                 text="Why teams choose DevX"
                 className="justify-center blur-section text-white font-editorial"
-                delay={200}
-                once={false}
+                delay={50}
+                startDelay={200}
+                stepDuration={0.4}
+                once={true}
               />
               <BlurText
                 text="Every engagement is anchored on speed, predictability, and the confidence that your product will delight customers from day one."
                 className="justify-center blur-subtitle mt-4"
-                delay={250}
-                once={false}
+                delay={20}
+                startDelay={250}
+                stepDuration={0.4}
+                once={true}
               />
             </div>
             <div
@@ -1324,7 +1330,9 @@ export default function ServicesPage() {
               <BlurText
                 text="Explore shipped products and the business impact we continue to deliver for founders and enterprise teams."
                 className="justify-center blur-subtitle mt-10 max-w-2xl mx-auto"
-                delay={200}
+                delay={20}
+                startDelay={200}
+                stepDuration={0.4}
                 once={true}
               />
             </motion.div>
@@ -1378,21 +1386,25 @@ export default function ServicesPage() {
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            viewport={{ once: false, amount: 0.4 }}
+            viewport={{ once: true, amount: 0.4 }}
             transition={{ duration: 0.7, ease: 'easeOut' }}
             className="text-center max-w-4xl mx-auto"
           >
             <BlurText
               text="Ready to Transform Your Business?"
               className="justify-center blur-section text-white mb-6 font-editorial"
-              delay={100}
-              once={false}
+              delay={50}
+              startDelay={100}
+              stepDuration={0.4}
+              once={true}
             />
             <BlurText
               text="Partner with our senior engineers to launch resilient, scalable products and unlock new growth faster than you thought possible."
               className="justify-center blur-subtitle mt-6"
-              delay={150}
-              once={false}
+              delay={20}
+              startDelay={150}
+              stepDuration={0.4}
+              once={true}
             />
 
             <motion.div className="mt-10" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>

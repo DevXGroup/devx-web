@@ -590,7 +590,10 @@ export default function PrivacyPageClient() {
             <BlurText
               text="Secure & Trusted Product Partnerships"
               className="inline-block"
-              delay={200}
+              delay={50}
+              startDelay={200}
+              stepDuration={0.4}
+              once={true}
             />
           </h1>
 

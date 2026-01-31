@@ -133,5 +133,9 @@ if (dsn) {
     sentryOptions.release = release
   }
 
-  Sentry.init(sentryOptions)
+  try {
+    Sentry.init(sentryOptions)
+  } catch (e) {
+    console.warn('Sentry failed to initialize in client:', e)
+  }
 }

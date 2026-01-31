@@ -11,7 +11,7 @@ export default function InfinityLogo() {
   const [isInteracting, setIsInteracting] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
   // Large margin to keep animation running during scroll, once: true to prevent re-activation lag
-  const isInView = useInView(containerRef, { margin: '100%', once: true, amount: 0 })
+  const isInView = useInView(containerRef, { margin: '0px', once: false, amount: 0.1 })
   const [isMobile, setIsMobile] = useState(false)
   const [isReady, setIsReady] = useState(false)
 
