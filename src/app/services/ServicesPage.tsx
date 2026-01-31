@@ -427,7 +427,10 @@ export default function ServicesPage() {
               }}
               className="text-center max-w-4xl mx-auto title-margin"
             >
-              <div className="flex items-center justify-center w-full">
+              <h1 className="sr-only">
+                Software Development Services - Web, Mobile, AI &amp; Automation
+              </h1>
+              <div className="flex items-center justify-center w-full" aria-hidden="true">
                 <div
                   className="flex items-center justify-center"
                   style={{
