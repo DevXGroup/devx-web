@@ -51,7 +51,7 @@ const pricingPlans = [
   {
     name: 'Starter',
     subtitle: 'Perfect for MVPs',
-    price: '$85',
+    price: '$95',
     priceUnit: '/hour',
     originalPrice: '$115',
     description:
@@ -80,7 +80,7 @@ const pricingPlans = [
   {
     name: 'Professional',
     subtitle: 'Most Popular Choice',
-    price: '$115',
+    price: '$130',
     priceUnit: '/hour',
     originalPrice: '$150',
     description:
@@ -111,7 +111,7 @@ const pricingPlans = [
   {
     name: 'Enterprise',
     subtitle: 'Ultimate Solution',
-    price: '$150',
+    price: '$175',
     priceUnit: '/hour',
     originalPrice: '$200',
     description:

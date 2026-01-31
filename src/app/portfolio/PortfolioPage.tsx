@@ -305,8 +305,8 @@ const ServiceModal = ({
   )
 }
 
-// Projects (unchanged source)
-const projects = portfolioProjects
+const currentProjects = portfolioProjects.filter((project) => project.isCurrentProject)
+const projects = portfolioProjects.filter((project) => !project.isCurrentProject)
 
 function ServiceIcon({
   service,
@@ -746,6 +746,58 @@ export default function PortfolioPage() {
           </motion.div>
         </div>
       </section>
+
+      {currentProjects.length > 0 && (
+        <section className="pt-6 pb-16 relative">
+          <div className="container mx-auto px-5 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 max-w-8xl">
+            <div className="text-center mb-10 sm:mb-12 max-w-3xl mx-auto">
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4"
+                style={{ fontFamily: 'var(--font-playfair-display)' }}
+              >
+                Current Project
+              </motion.h2>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="text-white/70 text-base sm:text-lg leading-relaxed px-4"
+              >
+                A live, in-progress engagement showcasing our latest delivery work.
+              </motion.p>
+            </div>
+
+            <motion.div
+              className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 lg:gap-12 relative z-10 justify-items-stretch items-stretch max-w-6xl xl:max-w-7xl mx-auto"
+              initial="visible"
+              animate="visible"
+            >
+              {currentProjects.map((project, index) => (
+                <motion.div
+                  key={project.title}
+                  className="w-full max-w-full h-full"
+                  variants={cardRevealVariants}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, amount: 0.2 }}
+                  custom={index}
+                >
+                  <EnhancedProjectCard
+                    project={project}
+                    index={index}
+                    onViewDetails={handleViewProjectDetails}
+                  />
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </section>
+      )}
 
       {/* Projects */}
       <section className="pt-[5px] pb-28 relative">

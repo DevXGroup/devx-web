@@ -9,6 +9,7 @@ interface ImageCarouselProps {
   screenshots: string[]
   title: string
   categoryColor?: string
+  screenshotAlts?: string[] | undefined
 }
 
 interface ImageDimensions {
@@ -17,7 +18,12 @@ interface ImageDimensions {
   aspectRatio: number
 }
 
-const ImageCarousel = ({ screenshots, title, categoryColor = '#4CD787' }: ImageCarouselProps) => {
+const ImageCarousel = ({
+  screenshots,
+  title,
+  categoryColor = '#4CD787',
+  screenshotAlts,
+}: ImageCarouselProps) => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isMounted, setIsMounted] = useState(false)
   const [direction, setDirection] = useState(0)
@@ -221,7 +227,9 @@ const ImageCarousel = ({ screenshots, title, categoryColor = '#4CD787' }: ImageC
                 {currentImage && (
                   <Image
                     src={currentImage}
-                    alt={`${title} screenshot ${currentIndex + 1}`}
+                    alt={
+                      screenshotAlts?.[currentIndex] || `${title} screenshot ${currentIndex + 1}`
+                    }
                     fill
                     className="object-contain"
                     priority={currentIndex === 0}
