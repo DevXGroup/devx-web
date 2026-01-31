@@ -973,15 +973,15 @@ export default function AboutPage() {
         <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-black/40 via-black/80 to-black"></div>
 
         <div className="container mx-auto px-3 sm:px-[21px] relative z-10">
-          <AnimatedSection className="bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 p-4 sm:p-8 md:p-12 w-full mx-auto text-center space-y-4 sm:space-y-6 md:space-y-8">
+          <AnimatedSection className="rounded-2xl p-5 sm:p-8 md:p-10 w-full mx-auto text-center space-y-4 sm:space-y-6 md:space-y-7 bg-gradient-to-b from-white/[0.06] via-white/[0.03] to-transparent">
             <BlurText
               text="Ready to Start Your Project?"
-              className="hero-title font-editorial-semibold-italic text-white leading-tight text-center text-xl sm:text-3xl md:text-4xl justify-center mx-auto"
-              style={{ letterSpacing: '-0.02em', marginBottom: 0 }}
+              className="font-editorial-semibold-italic text-white leading-tight text-center text-lg sm:text-2xl md:text-3xl justify-center mx-auto"
+              style={{ letterSpacing: '-0.015em', marginBottom: 0 }}
               delay={150}
               once={true}
             />
-            <p className="subtitle-lg text-white/80 max-w-2xl mx-auto px-4 leading-relaxed mt-2">
+            <p className="subtitle-lg text-white/80 max-w-2xl mx-auto px-4 leading-relaxed mt-1">
               Let&apos;s discuss how we can help you achieve your goals with our expert software
               development services.
             </p>
