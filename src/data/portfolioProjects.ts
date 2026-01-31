@@ -16,6 +16,9 @@ export interface ProjectData {
     previewAlt?: string
     screenshotAlts?: string[]
   }
+  videoUrl?: string
+  videoPoster?: string
+  currentNote?: string
   metrics?: {
     users?: string
     performance?: string
@@ -27,6 +30,7 @@ export interface ProjectData {
   projectDuration?: string
   teamSize?: string
   visitUrl?: string
+  isCurrentProject?: boolean
   appStoreUrl?: string
   playStoreUrl?: string
   demoUrl?: string
@@ -36,6 +40,45 @@ export interface ProjectData {
 }
 
 export const portfolioProjects: ProjectData[] = [
+  {
+    id: 'miremadi',
+    title: 'Miremadi Dermatology Medical Clinic',
+    shortDescription:
+      'Modern, conversion-focused clinic website highlighting services, trust signals, and appointment flow.',
+    detailedDescription:
+      'A premium dermatology clinic website designed to build patient confidence with clear service pathways, physician credibility, and streamlined appointment booking.',
+    category: 'Healthcare',
+    services: ['Web Design', 'Web Development', 'Brand Experience', 'SEO'],
+    technologies: ['Next.js', 'React', 'Tailwind CSS', 'Vercel'],
+    platforms: ['Website'],
+    keyFeatures: [
+      'Service-led navigation for fast patient discovery',
+      'Physician-led trust signals and credentials',
+      'Conversion-ready CTA placement',
+      'Mobile-first performance',
+    ],
+    images: {
+      banner: '/images/portfolio/banners/miremadi-banner.jpg',
+      preview: '/images/portfolio/banners/miremadi-banner.jpg',
+      bannerAlt:
+        'Miremadi Dermatology Medical Clinic website showcasing services and doctor profile',
+      previewAlt: 'Miremadi Dermatology Medical Clinic homepage preview',
+    },
+    videoUrl: '/videos/portfolio/miremadi-demo.mp4',
+    videoPoster: '/images/portfolio/banners/miremadi-banner.jpg',
+    currentNote: 'E-commerce coming soon',
+    metrics: {
+      users: 'Patient-first UX',
+      performance: 'Fast load, mobile-ready',
+      marketPosition: 'Premium clinic presence',
+    },
+    completionYear: '2025',
+    projectDuration: '6 weeks',
+    teamSize: '3 specialists',
+    visitUrl: 'https://drmiremadi.com',
+    isCurrentProject: true,
+    highlights: ['Premium medical brand presentation', 'Conversion-focused booking flow'],
+  },
   {
     id: 'lawazm',
     title: 'Lawazm - Enterprise E-commerce Platform',
@@ -624,4 +667,5 @@ export const categoryColors = {
   'Agriculture/IoT': '#4CD787',
   'Health/Fitness': '#9d4edd',
   'Gaming/Entertainment': '#ff6b6b',
+  Healthcare: '#67E8F9',
 }

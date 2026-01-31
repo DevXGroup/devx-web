@@ -48,11 +48,26 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
     if (allowHover) setIsHovered(false)
   }
 
+  const isCurrentProject = Boolean(project.isCurrentProject && project.visitUrl)
+
+  const openProjectLink = () => {
+    if (!project.visitUrl) return
+    window.open(project.visitUrl, '_blank', 'noopener,noreferrer')
+  }
+
+  const handlePrimaryAction = () => {
+    if (isCurrentProject) {
+      openProjectLink()
+      return
+    }
+    onViewDetails?.(project)
+  }
+
   // Keyboard navigation for accessibility
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault()
-      onViewDetails?.(project)
+      handlePrimaryAction()
     }
   }
 
@@ -76,6 +91,7 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
       onKeyDown={handleKeyDown}
       onFocus={handleFocus}
       onBlur={handleBlur}
+      onClick={isCurrentProject ? openProjectLink : undefined}
       className="relative group cursor-pointer overflow-hidden
         bg-black/40 backdrop-blur-md border border-white/10
         rounded-2xl hover:border-white/20 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-300
@@ -102,16 +118,31 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
             className="relative w-full h-full transition-transform duration-400 ease-out group-hover:scale-[1.02]"
             style={{ willChange: 'transform' }}
           >
-            <Image
-              src={project.images.banner}
-              alt={
-                project.images.bannerAlt ||
-                `${project.title} - ${project.category} project by DevX Group`
-              }
-              fill
-              className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            />
+            {project.videoUrl ? (
+              <video
+                className="absolute inset-0 h-full w-full object-cover"
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                poster={project.videoPoster}
+                aria-label={`${project.title} project preview video`}
+              >
+                <source src={project.videoUrl} type="video/mp4" />
+              </video>
+            ) : (
+              <Image
+                src={project.images.banner}
+                alt={
+                  project.images.bannerAlt ||
+                  `${project.title} - ${project.category} project by DevX Group`
+                }
+                fill
+                className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              />
+            )}
 
             {/* Gradient Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/20" />
@@ -168,6 +199,13 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
                 <p className="text-zinc-400 mt-2 leading-relaxed text-sm 2xl:text-base 2xl:mt-3 text-left">
                   {project.shortDescription}
                 </p>
+                {project.currentNote && (
+                  <div className="mt-3 flex">
+                    <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] font-semibold tracking-wide text-white/80">
+                      {project.currentNote}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -246,11 +284,20 @@ const EnhancedProjectCard = ({ project, index, onViewDetails }: EnhancedProjectC
             {/* Action Buttons */}
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 pt-4">
               <button
-                onClick={() => onViewDetails?.(project)}
-                aria-label={`View details for ${project.title}`}
+                onClick={(event) => {
+                  event.stopPropagation()
+                  handlePrimaryAction()
+                }}
+                aria-label={
+                  isCurrentProject
+                    ? `Visit ${project.title} website`
+                    : `View details for ${project.title}`
+                }
                 className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-gradient-to-r from-white/10 to-white/5 hover:from-white/20 hover:to-white/10 border-2 border-white/30 hover:border-white/50 text-white transition-all duration-300 font-semibold shadow-lg h-11 w-full lg:w-auto focus:outline-none focus:ring-2 focus:ring-white/30"
               >
-                <span className="text-sm font-bold whitespace-nowrap">View Details</span>
+                <span className="text-sm font-bold whitespace-nowrap">
+                  {isCurrentProject ? 'Visit Website' : 'View Details'}
+                </span>
                 <ExternalLink size={14} aria-hidden="true" />
               </button>
 
