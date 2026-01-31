@@ -141,7 +141,10 @@ const ProjectDetailModal = ({ project, isOpen, onClose }: ProjectDetailModalProp
               <div className="relative h-80 overflow-hidden">
                 <Image
                   src={project.images.banner}
-                  alt={project.title}
+                  alt={
+                    project.images.bannerAlt ||
+                    `${project.title} - ${project.category} project by DevX Group`
+                  }
                   fill
                   className="object-cover"
                 />
@@ -236,12 +239,14 @@ const ProjectDetailModal = ({ project, isOpen, onClose }: ProjectDetailModalProp
                           image={project.images.screenshots[0]}
                           title={project.title}
                           categoryColor={categoryColor}
+                          imageAlt={project.images.screenshotAlts?.[0]}
                         />
                       ) : (
                         <ImageCarousel
                           screenshots={project.images.screenshots}
                           title={project.title}
                           categoryColor={categoryColor}
+                          screenshotAlts={project.images.screenshotAlts}
                         />
                       )}
                     </motion.div>

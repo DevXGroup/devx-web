@@ -8,12 +8,14 @@ interface SingleImageDisplayProps {
   image: string
   title: string
   categoryColor?: string
+  imageAlt?: string | undefined
 }
 
 const SingleImageDisplay = ({
   image,
   title,
   categoryColor = '#4CD787',
+  imageAlt,
 }: SingleImageDisplayProps) => {
   const [isMounted, setIsMounted] = useState(false)
   const [isHorizontal, setIsHorizontal] = useState(false)
@@ -56,7 +58,7 @@ const SingleImageDisplay = ({
         >
           <Image
             src={image}
-            alt={`${title} screenshot`}
+            alt={imageAlt || `${title} screenshot`}
             fill
             className="object-contain"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 80vw"
