@@ -2105,9 +2105,9 @@ button:disabled,
   /* Let browser decide */
 }
 
-/* Prevent font loading from causing CLS */
+/* Prevent font loading from causing CLS while ensuring visibility */
 @font-face {
-  font-display: optional;
+  font-display: swap;
 }
 
 /* Add containment hints for better rendering performance */
