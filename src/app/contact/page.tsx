@@ -68,6 +68,53 @@ export const metadata: Metadata = {
   },
 }
 
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What is your typical response time?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'We typically respond to all inquiries within 24 hours during business days. For urgent matters, we prioritize faster response times.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Do you work with international clients?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes, we work with clients worldwide. Our team is experienced in remote collaboration and can accommodate different time zones.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What information should I provide for a quote?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'To provide an accurate quote, we need details about your project scope, timeline, technical requirements, and any specific features you need.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How do you handle project revisions?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: "We include revision rounds in our project plans. The number of revisions depends on your package, but we're always flexible to ensure your satisfaction.",
+      },
+    },
+  ],
+}
+
 export default function Contact() {
-  return <ContactPage />
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <ContactPage />
+    </>
+  )
 }
