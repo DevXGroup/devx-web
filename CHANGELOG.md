@@ -1,3 +1,9 @@
+## [1.12.1](https://github.com/DevXGroup/devx-web/compare/v1.12.0...v1.12.1) (2026-02-01)
+
+### Bug Fixes
+
+* **seo:** add explicit google-site-verification meta tag ([210f3a5](https://github.com/DevXGroup/devx-web/commit/210f3a555f2df00f61bc4593321366e461b33c3d))
+
 ## [1.12.0](https://github.com/DevXGroup/devx-web/compare/v1.11.0...v1.12.0) (2026-02-01)
 
 ### Features
