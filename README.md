@@ -1,7 +1,7 @@
 # DevX Group Website
 
 ![Version](https://img.shields.io/badge/version-1.12.3-blue?style=flat)
-![Tech Stack](https://img.shields.io/badge/Built%20With-Next.js%2016.1.0%20%7C%20React%2019.2.1%20%7C%20Tailwind%204.1.13-blueviolet?style=flat&logo=next.js)
+![Tech Stack](https://img.shields.io/badge/Built%20With-Next.js%2016.1.5%20%7C%20React%2019.2.1%20%7C%20Tailwind%204.1.13-blueviolet?style=flat&logo=next.js)
 ![Status](https://img.shields.io/badge/status-active-success?style=flat)
 
 Portfolio and capability site for DevX Group LLC, a San Diego-based software engineering company specializing in custom web applications, AI/ML integration, and IoT hardware solutions. We work with small businesses through large enterprises, and provide dedicated engineering teams for startups and software companies seeking long-term execution partners to deliver results.
@@ -28,7 +28,7 @@ The application showcases DevX Group's software engineering capabilities, projec
 
 ### Core
 
-- Framework: Next.js 16.1.0 (App Router) on React 19.2.1
+- Framework: Next.js 16.1.5 (App Router) on React 19.2.1
 - Language: TypeScript (strict mode)
 - Package manager: pnpm >= 10.19
 - Runtime: Node.js >= 22.14 < 23
