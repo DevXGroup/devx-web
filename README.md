@@ -1,6 +1,6 @@
 # DevX Group Website
 
-![Version](https://img.shields.io/badge/version-1.9.0-blue?style=flat)
+![Version](https://img.shields.io/badge/version-1.12.2-blue?style=flat)
 ![Tech Stack](https://img.shields.io/badge/Built%20With-Next.js%2016.1.0%20%7C%20React%2019.2.1%20%7C%20Tailwind%204.1.13-blueviolet?style=flat&logo=next.js)
 ![Status](https://img.shields.io/badge/status-active-success?style=flat)
 
