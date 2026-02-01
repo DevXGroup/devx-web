@@ -328,6 +328,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="format-detection" content="telephone=no" />
+        <meta
+          name="google-site-verification"
+          content="TCnleA0s5saQTX3ZmiXFk257jU3arWhT4BK84MVhE1A"
+        />
         {/* Font preloading is handled automatically by next/font with preload: true */}
         {/* Resource hints for better performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
