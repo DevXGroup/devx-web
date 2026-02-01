@@ -1,3 +1,9 @@
+## [1.12.0](https://github.com/DevXGroup/devx-web/compare/v1.11.0...v1.12.0) (2026-02-01)
+
+### Features
+
+* **seo:** add Google Search Console verification token ([2405db1](https://github.com/DevXGroup/devx-web/commit/2405db1c8834509f701b3e15c7f6e28363b06603))
+
 ## [1.11.0](https://github.com/DevXGroup/devx-web/compare/v1.10.0...v1.11.0) (2026-01-31)
 
 ### Features
