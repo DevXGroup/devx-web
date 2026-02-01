@@ -1,431 +1,437 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Project Kanban</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-    integrity="sha512-1PCMGoU5aUbp0xjox6+jzZtXUcZcn6V6BBUj6yZ2S3ee2mRQmVEHe7W0x22TovgDeq8xLWPyx6sUxz+F9GfG0A=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <style>
-    :root {
-      --bg-body: #08090A;
-      --bg-column: #121416;
-      --bg-card: #1A1D21;
-      --border-color: #2C2E33;
-      --text-main: #F2F2F3;
-      --text-muted: #9FA2A6;
-      --primary: #5E6AD2;
-      --primary-hover: #4e5ac0;
-      --radius: 6px;
-      --transition: all 0.2s ease;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Inter', sans-serif;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    body {
-      background-color: var(--bg-body);
-      color: var(--text-main);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      padding: 20px;
-      overflow-x: hidden;
-    }
-
-    /* Subtle grid background */
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image:
-        linear-gradient(var(--border-color) 1px, transparent 1px),
-        linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
-      background-size: 40px 40px;
-      opacity: 0.05;
-      z-index: -1;
-      pointer-events: none;
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-      padding: 0 10px;
-    }
-
-    h1 {
-      font-size: 1.5rem;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-    }
-
-    .controls {
-      display: flex;
-      gap: 12px;
-    }
-
-    button {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-      padding: 8px 14px;
-      border-radius: var(--radius);
-      font-size: 0.85rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: var(--transition);
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    button:hover {
-      background: #23262B;
-      border-color: #3F4148;
-    }
-
-    .btn-primary {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: #fff;
-    }
-
-    .btn-primary:hover {
-      background: var(--primary-hover);
-      border-color: var(--primary-hover);
-    }
-
-    .board {
-      display: flex;
-      gap: 16px;
-      overflow-x: auto;
-      height: calc(100vh - 100px);
-      padding-bottom: 10px;
-    }
-
-    .column {
-      flex: 1;
-      min-width: 300px;
-      max-width: 350px;
-      background: var(--bg-column);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .column-header {
-      padding: 16px;
-      border-bottom: 1px solid var(--border-color);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-weight: 600;
-      font-size: 0.9rem;
-      color: var(--text-muted);
-    }
-
-    .column-header span.count {
-      background: rgba(255, 255, 255, 0.05);
-      padding: 2px 8px;
-      border-radius: 10px;
-      font-size: 0.75rem;
-    }
-
-    .task-list {
-      flex: 1;
-      padding: 12px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .task-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius);
-      padding: 12px;
-      cursor: grab;
-      transition: var(--transition);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      position: relative;
-    }
-
-    .task-card:hover {
-      border-color: #4B4E54;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-
-    .task-card:active {
-      cursor: grabbing;
-    }
-
-    .task-tags {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 8px;
-    }
-
-    .tag {
-      font-size: 0.7rem;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-weight: 500;
-      text-transform: uppercase;
-    }
-
-    .tag-high {
-      background: rgba(229, 72, 77, 0.15);
-      color: #E5484D;
-      border: 1px solid rgba(229, 72, 77, 0.2);
-    }
-
-    .tag-medium {
-      background: rgba(245, 217, 10, 0.15);
-      color: #F5D90A;
-      border: 1px solid rgba(245, 217, 10, 0.2);
-    }
-
-    .tag-low {
-      background: rgba(61, 214, 140, 0.15);
-      color: #3DD68C;
-      border: 1px solid rgba(61, 214, 140, 0.2);
-    }
-
-    .task-title {
-      font-size: 0.95rem;
-      font-weight: 500;
-      margin-bottom: 6px;
-      line-height: 1.4;
-    }
-
-    .task-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 10px;
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
-
-    .avatar {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: #3F4148;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.6rem;
-      color: #fff;
-      font-weight: 600;
-    }
-
-    /* Modal */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(4px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-      animation: fadeIn 0.2s ease-out;
-    }
-
-    .modal {
-      background: var(--bg-column);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      width: 400px;
-      padding: 24px;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
-    }
-
-    .modal h2 {
-      margin-bottom: 20px;
-      font-size: 1.2rem;
-    }
-
-    .form-group {
-      margin-bottom: 16px;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-bottom: 6px;
-    }
-
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      width: 100%;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      padding: 10px;
-      border-radius: var(--radius);
-      color: var(--text-main);
-      font-size: 0.9rem;
-      outline: none;
-    }
-
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus {
-      border-color: var(--primary);
-    }
-
-    .modal-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      margin-top: 24px;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Kanban</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      integrity="sha512-1PCMGoU5aUbp0xjox6+jzZtXUcZcn6V6BBUj6yZ2S3ee2mRQmVEHe7W0x22TovgDeq8xLWPyx6sUxz+F9GfG0A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      :root {
+        --bg-body: #08090a;
+        --bg-column: #121416;
+        --bg-card: #1a1d21;
+        --border-color: #2c2e33;
+        --text-main: #f2f2f3;
+        --text-muted: #9fa2a6;
+        --primary: #5e6ad2;
+        --primary-hover: #4e5ac0;
+        --radius: 6px;
+        --transition: all 0.2s ease;
       }
 
-      to {
-        opacity: 1;
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: 'Inter', sans-serif;
+        -webkit-font-smoothing: antialiased;
       }
-    }
-  </style>
-</head>
 
-<body>
-  <header>
-    <h1>Project Kanban</h1>
-    <div class="controls">
-      <button id="generateMockBtn"><i class="fas fa-magic"></i> Mock Data</button>
-      <button id="clearBoardBtn"><i class="fas fa-trash"></i> Clear</button>
-      <button class="btn-primary" id="addTaskBtn"><i class="fas fa-plus"></i> New Task</button>
-    </div>
-  </header>
+      body {
+        background-color: var(--bg-body);
+        color: var(--text-main);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        overflow-x: hidden;
+      }
 
-  <div class="board">
-    <div class="column" data-status="backlog">
-      <div class="column-header">
-        <span>Backlog</span>
-        <span class="count" id="count-backlog">0</span>
+      /* Subtle grid background */
+      body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image:
+          linear-gradient(var(--border-color) 1px, transparent 1px),
+          linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
+        background-size: 40px 40px;
+        opacity: 0.05;
+        z-index: -1;
+        pointer-events: none;
+      }
+
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+        padding: 0 10px;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+      }
+
+      .controls {
+        display: flex;
+        gap: 12px;
+      }
+
+      button {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
+        padding: 8px 14px;
+        border-radius: var(--radius);
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: var(--transition);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      button:hover {
+        background: #23262b;
+        border-color: #3f4148;
+      }
+
+      .btn-primary {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: #fff;
+      }
+
+      .btn-primary:hover {
+        background: var(--primary-hover);
+        border-color: var(--primary-hover);
+      }
+
+      .board {
+        display: flex;
+        gap: 16px;
+        overflow-x: auto;
+        height: calc(100vh - 100px);
+        padding-bottom: 10px;
+      }
+
+      .column {
+        flex: 1;
+        min-width: 300px;
+        max-width: 350px;
+        background: var(--bg-column);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .column-header {
+        padding: 16px;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: var(--text-muted);
+      }
+
+      .column-header span.count {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 2px 8px;
+        border-radius: 10px;
+        font-size: 0.75rem;
+      }
+
+      .task-list {
+        flex: 1;
+        padding: 12px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .task-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius);
+        padding: 12px;
+        cursor: grab;
+        transition: var(--transition);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        position: relative;
+      }
+
+      .task-card:hover {
+        border-color: #4b4e54;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .task-card:active {
+        cursor: grabbing;
+      }
+
+      .task-tags {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 8px;
+      }
+
+      .tag {
+        font-size: 0.7rem;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-weight: 500;
+        text-transform: uppercase;
+      }
+
+      .tag-high {
+        background: rgba(229, 72, 77, 0.15);
+        color: #e5484d;
+        border: 1px solid rgba(229, 72, 77, 0.2);
+      }
+
+      .tag-medium {
+        background: rgba(245, 217, 10, 0.15);
+        color: #f5d90a;
+        border: 1px solid rgba(245, 217, 10, 0.2);
+      }
+
+      .tag-low {
+        background: rgba(61, 214, 140, 0.15);
+        color: #3dd68c;
+        border: 1px solid rgba(61, 214, 140, 0.2);
+      }
+
+      .task-title {
+        font-size: 0.95rem;
+        font-weight: 500;
+        margin-bottom: 6px;
+        line-height: 1.4;
+      }
+
+      .task-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 10px;
+        font-size: 0.75rem;
+        color: var(--text-muted);
+      }
+
+      .avatar {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #3f4148;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.6rem;
+        color: #fff;
+        font-weight: 600;
+      }
+
+      /* Modal */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(4px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        animation: fadeIn 0.2s ease-out;
+      }
+
+      .modal {
+        background: var(--bg-column);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        width: 400px;
+        padding: 24px;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+      }
+
+      .modal h2 {
+        margin-bottom: 20px;
+        font-size: 1.2rem;
+      }
+
+      .form-group {
+        margin-bottom: 16px;
+      }
+
+      .form-group label {
+        display: block;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        margin-bottom: 6px;
+      }
+
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        width: 100%;
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        padding: 10px;
+        border-radius: var(--radius);
+        color: var(--text-main);
+        font-size: 0.9rem;
+        outline: none;
+      }
+
+      .form-group input:focus,
+      .form-group select:focus,
+      .form-group textarea:focus {
+        border-color: var(--primary);
+      }
+
+      .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 24px;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+
+        to {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <h1>Project Kanban</h1>
+      <div class="controls">
+        <button id="generateMockBtn"><i class="fas fa-magic"></i> Mock Data</button>
+        <button id="clearBoardBtn"><i class="fas fa-trash"></i> Clear</button>
+        <button class="btn-primary" id="addTaskBtn"><i class="fas fa-plus"></i> New Task</button>
       </div>
-      <div class="task-list" id="backlog"></div>
-    </div>
-    <div class="column" data-status="todo">
-      <div class="column-header">
-        <span>To Do</span>
-        <span class="count" id="count-todo">0</span>
+    </header>
+
+    <div class="board">
+      <div class="column" data-status="backlog">
+        <div class="column-header">
+          <span>Backlog</span>
+          <span class="count" id="count-backlog">0</span>
+        </div>
+        <div class="task-list" id="backlog"></div>
       </div>
-      <div class="task-list" id="todo"></div>
-    </div>
-    <div class="column" data-status="inprogress">
-      <div class="column-header">
-        <span>In Progress</span>
-        <span class="count" id="count-inprogress">0</span>
+      <div class="column" data-status="todo">
+        <div class="column-header">
+          <span>To Do</span>
+          <span class="count" id="count-todo">0</span>
+        </div>
+        <div class="task-list" id="todo"></div>
       </div>
-      <div class="task-list" id="inprogress"></div>
-    </div>
-    <div class="column" data-status="done">
-      <div class="column-header">
-        <span>Done</span>
-        <span class="count" id="count-done">0</span>
+      <div class="column" data-status="inprogress">
+        <div class="column-header">
+          <span>In Progress</span>
+          <span class="count" id="count-inprogress">0</span>
+        </div>
+        <div class="task-list" id="inprogress"></div>
       </div>
-      <div class="task-list" id="done"></div>
+      <div class="column" data-status="done">
+        <div class="column-header">
+          <span>Done</span>
+          <span class="count" id="count-done">0</span>
+        </div>
+        <div class="task-list" id="done"></div>
+      </div>
     </div>
-  </div>
 
-  <!-- Modal -->
-  <div class="modal-overlay" id="modalOverlay">
-    <div class="modal">
-      <h2>Create New Task</h2>
-      <form id="taskForm">
-        <div class="form-group">
-          <label>Title</label>
-          <input type="text" id="taskTitle" required placeholder="e.g. Fix navigation bug">
-        </div>
-        <div class="form-group">
-          <label>Priority</label>
-          <select id="taskPriority">
-            <option value="low">Low</option>
-            <option value="medium" selected>Medium</option>
-            <option value="high">High</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Assignee (Initials)</label>
-          <input type="text" id="taskAssignee" placeholder="e.g. JD" maxlength="2">
-        </div>
-        <div class="modal-actions">
-          <button type="button" id="cancelBtn">Cancel</button>
-          <button type="submit" class="btn-primary">Create Task</button>
-        </div>
-      </form>
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal">
+        <h2>Create New Task</h2>
+        <form id="taskForm">
+          <div class="form-group">
+            <label>Title</label>
+            <input type="text" id="taskTitle" required placeholder="e.g. Fix navigation bug" />
+          </div>
+          <div class="form-group">
+            <label>Priority</label>
+            <select id="taskPriority">
+              <option value="low">Low</option>
+              <option value="medium" selected>Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Assignee (Initials)</label>
+            <input type="text" id="taskAssignee" placeholder="e.g. JD" maxlength="2" />
+          </div>
+          <div class="modal-actions">
+            <button type="button" id="cancelBtn">Cancel</button>
+            <button type="submit" class="btn-primary">Create Task</button>
+          </div>
+        </form>
+      </div>
     </div>
-  </div>
 
-  <script>
-    // State
-    let tasks = JSON.parse(localStorage.getItem('kanbanTasks') || '[]');
+    <script>
+      // State
+      let tasks = JSON.parse(localStorage.getItem('kanbanTasks') || '[]')
 
-    // DOM
-    const modalOverlay = document.getElementById('modalOverlay');
-    const taskForm = document.getElementById('taskForm');
-    const addTaskBtn = document.getElementById('addTaskBtn');
-    const cancelBtn = document.getElementById('cancelBtn');
-    const generateMockBtn = document.getElementById('generateMockBtn');
-    const clearBoardBtn = document.getElementById('clearBoardBtn');
+      // DOM
+      const modalOverlay = document.getElementById('modalOverlay')
+      const taskForm = document.getElementById('taskForm')
+      const addTaskBtn = document.getElementById('addTaskBtn')
+      const cancelBtn = document.getElementById('cancelBtn')
+      const generateMockBtn = document.getElementById('generateMockBtn')
+      const clearBoardBtn = document.getElementById('clearBoardBtn')
 
-    // Init
-    renderBoard();
+      // Init
+      renderBoard()
 
-    // Functions
-    function saveTasks() {
-      localStorage.setItem('kanbanTasks', JSON.stringify(tasks));
-      renderBoard();
-    }
+      // Functions
+      function saveTasks() {
+        localStorage.setItem('kanbanTasks', JSON.stringify(tasks))
+        renderBoard()
+      }
 
-    function renderBoard() {
-      ['backlog', 'todo', 'inprogress', 'done'].forEach(status => {
-        const listEl = document.getElementById(status);
-        const countEl = document.getElementById(`count-${status}`);
-        listEl.innerHTML = '';
+      function renderBoard() {
+        ;['backlog', 'todo', 'inprogress', 'done'].forEach((status) => {
+          const listEl = document.getElementById(status)
+          const countEl = document.getElementById(`count-${status}`)
+          listEl.innerHTML = ''
 
-        const filteredTasks = tasks.filter(t => t.status === status);
-        countEl.textContent = filteredTasks.length;
+          const filteredTasks = tasks.filter((t) => t.status === status)
+          countEl.textContent = filteredTasks.length
 
-        filteredTasks.forEach(task => {
-          const card = document.createElement('div');
-          card.className = 'task-card';
-          card.draggable = true;
-          card.dataset.id = task.id;
+          filteredTasks.forEach((task) => {
+            const card = document.createElement('div')
+            card.className = 'task-card'
+            card.draggable = true
+            card.dataset.id = task.id
 
-          const priorityClass = `tag-${task.priority || 'medium'}`;
+            const priorityClass = `tag-${task.priority || 'medium'}`
 
-          card.innerHTML = `
+            card.innerHTML = `
             <div class="task-tags">
               <span class="tag ${priorityClass}">${task.priority || 'Medium'}</span>
             </div>
@@ -434,95 +440,123 @@
               <span>${task.id.slice(-4)}</span>
               ${task.assignee ? `<div class="avatar">${task.assignee}</div>` : ''}
             </div>
-          `;
+          `
 
-          card.addEventListener('dragstart', (e) => {
-            e.dataTransfer.setData('text/plain', task.id);
-            card.style.opacity = '0.5';
-          });
+            card.addEventListener('dragstart', (e) => {
+              e.dataTransfer.setData('text/plain', task.id)
+              card.style.opacity = '0.5'
+            })
 
-          card.addEventListener('dragend', () => {
-            card.style.opacity = '1';
-          });
+            card.addEventListener('dragend', () => {
+              card.style.opacity = '1'
+            })
 
-          listEl.appendChild(card);
-        });
-      });
-    }
-
-    // Drag & Drop
-    document.querySelectorAll('.column').forEach(col => {
-      col.addEventListener('dragover', e => {
-        e.preventDefault();
-        col.style.background = '#1A1D21';
-      });
-
-      col.addEventListener('dragleave', e => {
-        col.style.background = '';
-      });
-
-      col.addEventListener('drop', e => {
-        e.preventDefault();
-        col.style.background = '';
-        const id = e.dataTransfer.getData('text/plain');
-        const task = tasks.find(t => t.id === id);
-        if (task) {
-          task.status = col.dataset.status;
-          saveTasks();
-        }
-      });
-    });
-
-    // Event Listeners
-    addTaskBtn.addEventListener('click', () => {
-      modalOverlay.style.display = 'flex';
-      document.getElementById('taskTitle').focus();
-    });
-
-    cancelBtn.addEventListener('click', () => {
-      modalOverlay.style.display = 'none';
-      taskForm.reset();
-    });
-
-    taskForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const title = document.getElementById('taskTitle').value;
-      const priority = document.getElementById('taskPriority').value;
-      const assignee = document.getElementById('taskAssignee').value.toUpperCase();
-
-      tasks.push({
-        id: Date.now().toString(),
-        title,
-        priority,
-        assignee,
-        status: 'backlog'
-      });
-
-      saveTasks();
-      modalOverlay.style.display = 'none';
-      taskForm.reset();
-    });
-
-    generateMockBtn.addEventListener('click', () => {
-      const mockTasks = [
-        { id: '1', title: 'Design system audit', priority: 'high', assignee: 'AL', status: 'todo' },
-        { id: '2', title: 'Update API documentation', priority: 'medium', assignee: 'SJ', status: 'backlog' },
-        { id: '3', title: 'Fix login page layout', priority: 'high', assignee: 'MK', status: 'inprogress' },
-        { id: '4', title: 'Optimize database queries', priority: 'low', assignee: 'DB', status: 'done' },
-        { id: '5', title: 'User interview analysis', priority: 'medium', assignee: 'UX', status: 'todo' }
-      ];
-      tasks = [...tasks, ...mockTasks];
-      saveTasks();
-    });
-
-    clearBoardBtn.addEventListener('click', () => {
-      if (confirm('Clear all tasks?')) {
-        tasks = [];
-        saveTasks();
+            listEl.appendChild(card)
+          })
+        })
       }
-    });
 
-  </script>
-</body>
+      // Drag & Drop
+      document.querySelectorAll('.column').forEach((col) => {
+        col.addEventListener('dragover', (e) => {
+          e.preventDefault()
+          col.style.background = '#1A1D21'
+        })
 
+        col.addEventListener('dragleave', (e) => {
+          col.style.background = ''
+        })
+
+        col.addEventListener('drop', (e) => {
+          e.preventDefault()
+          col.style.background = ''
+          const id = e.dataTransfer.getData('text/plain')
+          const task = tasks.find((t) => t.id === id)
+          if (task) {
+            task.status = col.dataset.status
+            saveTasks()
+          }
+        })
+      })
+
+      // Event Listeners
+      addTaskBtn.addEventListener('click', () => {
+        modalOverlay.style.display = 'flex'
+        document.getElementById('taskTitle').focus()
+      })
+
+      cancelBtn.addEventListener('click', () => {
+        modalOverlay.style.display = 'none'
+        taskForm.reset()
+      })
+
+      taskForm.addEventListener('submit', (e) => {
+        e.preventDefault()
+        const title = document.getElementById('taskTitle').value
+        const priority = document.getElementById('taskPriority').value
+        const assignee = document.getElementById('taskAssignee').value.toUpperCase()
+
+        tasks.push({
+          id: Date.now().toString(),
+          title,
+          priority,
+          assignee,
+          status: 'backlog',
+        })
+
+        saveTasks()
+        modalOverlay.style.display = 'none'
+        taskForm.reset()
+      })
+
+      generateMockBtn.addEventListener('click', () => {
+        const mockTasks = [
+          {
+            id: '1',
+            title: 'Design system audit',
+            priority: 'high',
+            assignee: 'AL',
+            status: 'todo',
+          },
+          {
+            id: '2',
+            title: 'Update API documentation',
+            priority: 'medium',
+            assignee: 'SJ',
+            status: 'backlog',
+          },
+          {
+            id: '3',
+            title: 'Fix login page layout',
+            priority: 'high',
+            assignee: 'MK',
+            status: 'inprogress',
+          },
+          {
+            id: '4',
+            title: 'Optimize database queries',
+            priority: 'low',
+            assignee: 'DB',
+            status: 'done',
+          },
+          {
+            id: '5',
+            title: 'User interview analysis',
+            priority: 'medium',
+            assignee: 'UX',
+            status: 'todo',
+          },
+        ]
+        tasks = [...tasks, ...mockTasks]
+        saveTasks()
+      })
+
+      clearBoardBtn.addEventListener('click', () => {
+        if (confirm('Clear all tasks?')) {
+          tasks = []
+          saveTasks()
+        }
+      })
+    </script>
+  </body>
 </html>
