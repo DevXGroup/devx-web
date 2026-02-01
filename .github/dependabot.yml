@@ -1,0 +1,59 @@
+version: 2
+updates:
+  # npm/pnpm dependencies
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/New_York"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "DevXGroup/maintainers"
+    labels:
+      - "dependencies"
+      - "automated"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+    # Group updates for better management
+    groups:
+      # Group production dependencies
+      production-dependencies:
+        dependency-type: "production"
+        update-types:
+          - "minor"
+          - "patch"
+      # Group dev dependencies
+      development-dependencies:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+      # Security updates always separate
+      security-updates:
+        patterns:
+          - "*"
+        update-types:
+          - "security"
+    # Ignore specific versions if needed
+    ignore:
+      # Ignore canary versions unless explicitly needed
+      - dependency-name: "next"
+        update-types: ["version-update:semver-prerelease"]
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/New_York"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "chore(ci)"
