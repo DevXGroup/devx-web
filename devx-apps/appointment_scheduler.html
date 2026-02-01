@@ -345,7 +345,111 @@
     </div>
 
     <script>
-      let events = JSON.parse(localStorage.getItem('appointments') || '[]')
+      // In-memory events; persistent storage is encrypted in localStorage.
+      let events = []
+
+      // Simple passphrase prompt for deriving an encryption key.
+      // In a real app, this should be a dedicated UI element.
+      async function promptForPassphrase(message) {
+        const passphrase = window.prompt(message || 'Enter passphrase to unlock your appointments:')
+        return passphrase || ''
+      }
+
+      // Web Crypto helpers for AES-GCM with PBKDF2 key derivation.
+      const STORAGE_KEY = 'appointments'
+      const PBKDF2_ITERATIONS = 100000
+      const PBKDF2_HASH = 'SHA-256'
+      const AES_KEY_LENGTH = 256
+
+      function strToUint8Array(str) {
+        return new TextEncoder().encode(str)
+      }
+
+      function uint8ArrayToStr(arr) {
+        return new TextDecoder().decode(arr)
+      }
+
+      function concatUint8Arrays(a, b, c) {
+        const totalLength = a.length + b.length + c.length
+        const merged = new Uint8Array(totalLength)
+        merged.set(a, 0)
+        merged.set(b, a.length)
+        merged.set(c, a.length + b.length)
+        return merged
+      }
+
+      function splitUint8Array(buffer, saltLength, ivLength) {
+        const salt = buffer.slice(0, saltLength)
+        const iv = buffer.slice(saltLength, saltLength + ivLength)
+        const data = buffer.slice(saltLength + ivLength)
+        return { salt, iv, data }
+      }
+
+      function bytesToBase64(bytes) {
+        let binary = ''
+        const len = bytes.byteLength
+        for (let i = 0; i < len; i++) {
+          binary += String.fromCharCode(bytes[i])
+        }
+        return btoa(binary)
+      }
+
+      function base64ToBytes(base64) {
+        const binary = atob(base64)
+        const len = binary.length
+        const bytes = new Uint8Array(len)
+        for (let i = 0; i < len; i++) {
+          bytes[i] = binary.charCodeAt(i)
+        }
+        return bytes
+      }
+
+      async function deriveKey(passphrase, salt) {
+        const baseKey = await window.crypto.subtle.importKey(
+          'raw',
+          strToUint8Array(passphrase),
+          { name: 'PBKDF2' },
+          false,
+          ['deriveKey']
+        )
+        return window.crypto.subtle.deriveKey(
+          {
+            name: 'PBKDF2',
+            salt,
+            iterations: PBKDF2_ITERATIONS,
+            hash: PBKDF2_HASH,
+          },
+          baseKey,
+          { name: 'AES-GCM', length: AES_KEY_LENGTH },
+          false,
+          ['encrypt', 'decrypt']
+        )
+      }
+
+      async function encryptData(plaintext, passphrase) {
+        const salt = window.crypto.getRandomValues(new Uint8Array(16))
+        const iv = window.crypto.getRandomValues(new Uint8Array(12))
+        const key = await deriveKey(passphrase, salt)
+        const ciphertext = await window.crypto.subtle.encrypt(
+          { name: 'AES-GCM', iv },
+          key,
+          strToUint8Array(plaintext)
+        )
+        const merged = concatUint8Arrays(salt, iv, new Uint8Array(ciphertext))
+        return bytesToBase64(merged)
+      }
+
+      async function decryptData(ciphertextBase64, passphrase) {
+        const merged = base64ToBytes(ciphertextBase64)
+        const { salt, iv, data } = splitUint8Array(merged, 16, 12)
+        const key = await deriveKey(passphrase, salt)
+        const decrypted = await window.crypto.subtle.decrypt(
+          { name: 'AES-GCM', iv },
+          key,
+          data
+        )
+        return uint8ArrayToStr(new Uint8Array(decrypted))
+      }
 
       const titleEl = document.getElementById('eventTitle')
       const dateEl = document.getElementById('eventDate')
@@ -396,8 +500,20 @@
         })
       }
 
-      function saveEvents() {
-        localStorage.setItem('appointments', JSON.stringify(events))
+      let currentPassphrase = null
+
+      async function saveEvents() {
+        try {
+          if (!currentPassphrase) {
+            currentPassphrase = await promptForPassphrase('Set a passphrase to protect your appointments:')
+          }
+          const plaintext = JSON.stringify(events)
+          const encrypted = await encryptData(plaintext, currentPassphrase)
+          localStorage.setItem(STORAGE_KEY, encrypted)
+        } catch (e) {
+          console.error('Failed to encrypt and save appointments:', e)
+          alert('Could not save appointments securely.')
+        }
         renderEvents()
       }
 
@@ -425,7 +541,9 @@
           description: descEl.value,
         })
 
-        saveEvents()
+        ;(async () => {
+          await saveEvents()
+        })()
 
         // Reset
         titleEl.value = ''
@@ -456,10 +574,33 @@
         ]
 
         events = [...events, ...mocks]
-        saveEvents()
+        ;(async () => {
+          await saveEvents()
+        })()
       })
 
-      renderEvents()
+      ;(async () => {
+        // Attempt to load existing encrypted appointments, if any.
+        const stored = localStorage.getItem(STORAGE_KEY)
+        if (stored) {
+          try {
+            currentPassphrase = await promptForPassphrase('Enter your passphrase to load saved appointments:')
+            if (currentPassphrase) {
+              const decrypted = await decryptData(stored, currentPassphrase)
+              events = JSON.parse(decrypted)
+            } else {
+              events = []
+            }
+          } catch (e) {
+            console.error('Failed to decrypt stored appointments:', e)
+            alert('Could not decrypt saved appointments. They will not be loaded.')
+            events = []
+          }
+        } else {
+          events = []
+        }
+        renderEvents()
+      })()
     </script>
   </body>
 </html>
