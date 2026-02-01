@@ -36,6 +36,7 @@ const withBundleAnalyzer = bundleAnalyzer({ enabled: process.env.ANALYZE === 'tr
 const nextConfig = {
   // Disable static optimization to avoid prerendering errors with Framer Motion context
   output: 'standalone',
+
   experimental: {
     optimizePackageImports: [
       'framer-motion',
