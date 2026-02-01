@@ -254,9 +254,9 @@ export const metadata: Metadata = {
     creator: '@devxgroup',
     site: '@devxgroup',
   },
-  // verification: {
-  //   google: 'YOUR_GOOGLE_VERIFICATION_TOKEN', // TODO: Add your Google Search Console verification token
-  // },
+  verification: {
+    google: 'TCnleA0s5saQTX3ZmiXFk257jU3arWhT4BK84MVhE1A',
+  },
   alternates: {
     canonical: siteUrl,
   },
