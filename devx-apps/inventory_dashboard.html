@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inventory Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    integrity="sha512-1PCMGoU5aUbp0xjox6+jzZtXUcZcn6V6BBUj6yZ2S3ee2mRQmVEHe7W0x22TovgDeq8xLWPyx6sUxz+F9GfG0A=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    :root {
+      --bg-body: #08090A;
+      --bg-card: #121416;
+      --bg-input: #1A1D21;
+      --border-color: #2C2E33;
+      --text-main: #F2F2F3;
+      --text-muted: #9FA2A6;
+      --primary: #5E6AD2;
+      --primary-hover: #4e5ac0;
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    /* Subtle grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image:
+        linear-gradient(var(--border-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.05;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    h1 {
+      margin-bottom: 40px;
+      font-size: 2rem;
+      font-weight: 600;
+      text-align: center;
+      letter-spacing: -0.02em;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      width: 100%;
+      max-width: 1200px;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Table Styles */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    th {
+      text-align: left;
+      padding: 12px 16px;
+      color: var(--text-muted);
+      font-weight: 500;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    td {
+      padding: 16px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-main);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .status-badge {
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 500;
+    }
+
+    .status-ok {
+      background: rgba(61, 214, 140, 0.15);
+      color: #3DD68C;
+    }
+
+    .status-low {
+      background: rgba(229, 72, 77, 0.15);
+      color: #E5484D;
+    }
+
+    /* Form Styles */
+    .form-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    input {
+      flex: 1;
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      padding: 10px;
+      border-radius: var(--radius);
+      color: var(--text-main);
+      outline: none;
+    }
+
+    input:focus {
+      border-color: var(--primary);
+    }
+
+    button {
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 10px 16px;
+      border-radius: var(--radius);
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    button:hover {
+      background: #23262B;
+      border-color: #3F4148;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      border-color: var(--primary-hover);
+    }
+
+    .chart-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      height: 150px;
+      padding-top: 20px;
+    }
+
+    .bar-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100%;
+      justify-content: flex-end;
+    }
+
+    .bar {
+      width: 100%;
+      background: var(--primary);
+      border-radius: 4px 4px 0 0;
+      transition: height 0.5s ease;
+      min-height: 4px;
+      opacity: 0.8;
+    }
+
+    .bar:hover {
+      opacity: 1;
+    }
+
+    .bar-label {
+      margin-top: 8px;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Inventory Dashboard</h1>
+
+  <div class="dashboard-grid">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><i class="fas fa-dollar-sign"></i> Total Value</div>
+      </div>
+      <div class="stat-value" id="totalValue">$0.00</div>
+      <div class="stat-label">Across all inventory</div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><i class="fas fa-boxes"></i> Low Stock Items</div>
+      </div>
+      <div class="stat-value" id="lowStockCount">0</div>
+      <div class="stat-label">Items below 10 units</div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><i class="fas fa-chart-bar"></i> Stock Levels</div>
+      </div>
+      <div class="chart-bars" id="stockChart"></div>
+    </div>
+  </div>
+
+  <div class="card" style="width: 100%; max-width: 1200px; margin-bottom: 24px;">
+    <div class="card-header">
+      <div class="card-title"><i class="fas fa-plus"></i> Add Item</div>
+    </div>
+    <div class="form-row">
+      <input type="text" id="prodName" placeholder="Product Name">
+      <input type="number" id="prodQty" placeholder="Qty">
+      <input type="number" id="prodPrice" placeholder="Price">
+      <button class="btn-primary" id="addBtn">Add</button>
+      <button id="mockBtn"><i class="fas fa-magic"></i> Mock</button>
+    </div>
+  </div>
+
+  <div class="card" style="width: 100%; max-width: 1200px;">
+    <div class="card-header">
+      <div class="card-title"><i class="fas fa-list"></i> Inventory List</div>
+    </div>
+    <div class="table-container">
+      <table id="invTable">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total Value</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    let inventory = JSON.parse(localStorage.getItem('inventory') || '[]');
+
+    const totalValueEl = document.getElementById('totalValue');
+    const lowStockCountEl = document.getElementById('lowStockCount');
+    const stockChartEl = document.getElementById('stockChart');
+    const invTableBody = document.querySelector('#invTable tbody');
+
+    const prodName = document.getElementById('prodName');
+    const prodQty = document.getElementById('prodQty');
+    const prodPrice = document.getElementById('prodPrice');
+
+    function render() {
+      // Stats
+      const totalVal = inventory.reduce((acc, item) => acc + (item.qty * item.price), 0);
+      const lowStock = inventory.filter(item => item.qty < 10).length;
+
+      totalValueEl.textContent = `$${totalVal.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+      lowStockCountEl.textContent = lowStock;
+
+      // Chart
+      stockChartEl.innerHTML = '';
+      if (inventory.length > 0) {
+        const maxQty = Math.max(...inventory.map(i => i.qty));
+        inventory.slice(0, 8).forEach(item => { // Show max 8 bars
+          const height = (item.qty / maxQty) * 100;
+          const div = document.createElement('div');
+          div.className = 'bar-group';
+          div.innerHTML = `
+            <div class="bar" style="height: ${height}%; background: ${item.qty < 10 ? '#E5484D' : '#5E6AD2'}"></div>
+            <div class="bar-label">${item.name}</div>
+          `;
+          stockChartEl.appendChild(div);
+        });
+      }
+
+      // Table
+      invTableBody.innerHTML = '';
+      inventory.forEach((item, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${item.name}</td>
+          <td>${item.qty}</td>
+          <td>$${item.price.toFixed(2)}</td>
+          <td>$${(item.qty * item.price).toFixed(2)}</td>
+          <td><span class="status-badge ${item.qty < 10 ? 'status-low' : 'status-ok'}">${item.qty < 10 ? 'Low' : 'OK'}</span></td>
+          <td><button style="padding: 4px 8px; font-size: 0.8rem;" onclick="deleteItem(${idx})">Delete</button></td>
+        `;
+        invTableBody.appendChild(tr);
+      });
+    }
+
+    function save() {
+      localStorage.setItem('inventory', JSON.stringify(inventory));
+      render();
+    }
+
+    document.getElementById('addBtn').addEventListener('click', () => {
+      const name = prodName.value;
+      const qty = parseInt(prodQty.value);
+      const price = parseFloat(prodPrice.value);
+
+      if (!name || isNaN(qty) || isNaN(price)) return;
+
+      inventory.push({ name, qty, price });
+      save();
+
+      prodName.value = '';
+      prodQty.value = '';
+      prodPrice.value = '';
+    });
+
+    document.getElementById('mockBtn').addEventListener('click', () => {
+      const mocks = [
+        { name: 'MacBook Pro', qty: 5, price: 1299 },
+        { name: 'Dell Monitor', qty: 15, price: 299 },
+        { name: 'Keychron K2', qty: 8, price: 89 },
+        { name: 'Logitech MX Master', qty: 25, price: 99 },
+        { name: 'USB-C Hub', qty: 40, price: 49 }
+      ];
+      inventory = [...inventory, ...mocks];
+      save();
+    });
+
+    window.deleteItem = (idx) => {
+      if (confirm('Delete item?')) {
+        inventory.splice(idx, 1);
+        save();
+      }
+    };
+
+    render();
+  </script>
+</body>
+
+</html>

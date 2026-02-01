@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Candidate Matcher</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    integrity="sha512-1PCMGoU5aUbp0xjox6+jzZtXUcZcn6V6BBUj6yZ2S3ee2mRQmVEHe7W0x22TovgDeq8xLWPyx6sUxz+F9GfG0A=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    :root {
+      --bg-body: #08090A;
+      --bg-card: #121416;
+      --bg-input: #1A1D21;
+      --border-color: #2C2E33;
+      --text-main: #F2F2F3;
+      --text-muted: #9FA2A6;
+      --primary: #5E6AD2;
+      --primary-hover: #4e5ac0;
+      --danger: #E5484D;
+      --success: #3DD68C;
+      --warning: #F5D90A;
+      --radius: 8px;
+      --transition: all 0.2s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 20px;
+    }
+
+    /* Subtle grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(var(--border-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.05;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    h1 {
+      margin-bottom: 40px;
+      font-size: 2.5rem;
+      font-weight: 600;
+      text-align: center;
+      letter-spacing: -0.03em;
+      background: linear-gradient(to bottom, #fff, #a1a1aa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      transition: var(--transition);
+    }
+
+    .card:hover {
+      border-color: #3F4148;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      color: var(--text-main);
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+
+    .section-header i {
+      color: var(--text-muted);
+      font-size: 0.9em;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    input, textarea {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 12px;
+      color: var(--text-main);
+      font-size: 0.95rem;
+      transition: var(--transition);
+      outline: none;
+    }
+
+    input:focus, textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(94, 106, 210, 0.2);
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    .btn-group {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    button {
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 10px 16px;
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    button:hover {
+      background: #23262B;
+      border-color: #3F4148;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      border-color: var(--primary-hover);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border-color: transparent;
+      color: var(--text-muted);
+    }
+
+    .btn-ghost:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+    }
+
+    .candidate-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .candidate-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .candidate-item:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    .candidate-info {
+      flex: 1;
+      padding-right: 24px;
+    }
+
+    .candidate-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .candidate-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .match-badge {
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+    }
+
+    .match-high { background: rgba(61, 214, 140, 0.15); color: var(--success); border: 1px solid rgba(61, 214, 140, 0.2); }
+    .match-med { background: rgba(245, 217, 10, 0.15); color: var(--warning); border: 1px solid rgba(245, 217, 10, 0.2); }
+    .match-low { background: rgba(229, 72, 77, 0.15); color: var(--danger); border: 1px solid rgba(229, 72, 77, 0.2); }
+
+    .candidate-snippet {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    .keywords-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .keyword-tag {
+      font-size: 0.75rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      padding: 2px 8px;
+      border-radius: 4px;
+      color: var(--text-muted);
+    }
+
+    .keyword-tag.matched {
+      background: rgba(94, 106, 210, 0.15);
+      border-color: rgba(94, 106, 210, 0.3);
+      color: #A5B4FC;
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .btn-icon {
+      padding: 8px;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      color: var(--text-muted);
+      background: transparent;
+      border: 1px solid transparent;
+    }
+
+    .btn-icon:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+    }
+
+    .btn-icon.delete:hover {
+      background: rgba(229, 72, 77, 0.1);
+      color: var(--danger);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      border: 1px dashed var(--border-color);
+      border-radius: var(--radius);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.3s ease-out forwards;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Candidate Matcher</h1>
+  
+  <div class="container">
+    <!-- Job Description Section -->
+    <div class="card">
+      <div class="section-header">
+        <i class="fas fa-briefcase"></i>
+        <span>Job Description</span>
+      </div>
+      <textarea id="jobDesc" placeholder="Paste the job description here (e.g., 'Looking for a Senior Frontend Engineer with React, TypeScript, and Node.js experience...')"></textarea>
+      <div class="btn-group">
+        <button class="btn-ghost" id="clearJobBtn">Clear</button>
+        <button id="loadSampleJobBtn"><i class="fas fa-magic"></i> Load Sample</button>
+      </div>
+    </div>
+
+    <!-- Add Candidate Section -->
+    <div class="card">
+      <div class="section-header">
+        <i class="fas fa-user-plus"></i>
+        <span>Add Candidate</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr; gap: 16px;">
+        <input type="text" id="candName" placeholder="Candidate Name" />
+        <textarea id="candResume" placeholder="Paste candidate resume or skills summary here..." style="min-height: 100px;"></textarea>
+      </div>
+      <div class="btn-group">
+        <button id="generateMockBtn"><i class="fas fa-random"></i> Generate Mock Candidate</button>
+        <button class="btn-primary" id="addCandidateBtn"><i class="fas fa-plus"></i> Add Candidate</button>
+      </div>
+    </div>
+
+    <!-- Results Section -->
+    <div class="section-header" style="margin-top: 20px;">
+      <i class="fas fa-users"></i>
+      <span>Candidates & Match Scores</span>
+    </div>
+    
+    <div id="candidateList" class="candidate-list">
+      <!-- Candidates will be injected here -->
+    </div>
+  </div>
+
+  <script>
+    // --- State Management ---
+    const stopWords = new Set([
+      'the', 'and', 'is', 'in', 'at', 'of', 'a', 'to', 'for', 'with', 'on', 'that', 'this', 'it', 'as', 'are', 'be', 'an', 'by', 'from', 'or', 'has', 'was', 'were', 'which', 'but', 'not', 'have', 'had', 'all', 'their', 'they', 'its', 'if', 'can', 'will', 'would', 'should', 'could', 'we', 'our', 'you', 'your', 'about', 'into', 'these', 'there', 'any', 'each', 'experience', 'years', 'looking', 'seeking', 'work', 'working'
+    ]);
+
+    let jobDescription = localStorage.getItem('jobDesc') || '';
+    let candidates = JSON.parse(localStorage.getItem('candidates') || '[]');
+
+    // --- DOM Elements ---
+    const jobDescEl = document.getElementById('jobDesc');
+    const candNameEl = document.getElementById('candName');
+    const candResumeEl = document.getElementById('candResume');
+    const addCandidateBtn = document.getElementById('addCandidateBtn');
+    const candidateListEl = document.getElementById('candidateList');
+    const loadSampleJobBtn = document.getElementById('loadSampleJobBtn');
+    const clearJobBtn = document.getElementById('clearJobBtn');
+    const generateMockBtn = document.getElementById('generateMockBtn');
+
+    // --- Initialization ---
+    jobDescEl.value = jobDescription;
+    renderCandidates();
+
+    // --- Logic ---
+    function tokenize(text) {
+      return text.toLowerCase()
+        .replace(/[^a-z0-9\s]/g, ' ')
+        .split(/\s+/)
+        .filter(w => w.length > 2 && !stopWords.has(w));
+    }
+
+    function computeMatch(jobTokens, resumeTokens) {
+      if (jobTokens.length === 0 || resumeTokens.length === 0) return { score: 0, matches: [] };
+      
+      const jobSet = new Set(jobTokens);
+      const matches = [];
+      
+      // Count unique matches
+      const resumeUnique = new Set(resumeTokens);
+      resumeUnique.forEach(w => {
+        if (jobSet.has(w)) matches.push(w);
+      });
+
+      // Simple Jaccard-like index but weighted towards job requirements coverage
+      const score = matches.length / jobSet.size;
+      return { score, matches };
+    }
+
+    function renderCandidates() {
+      const jobTokens = tokenize(jobDescription);
+      candidateListEl.innerHTML = '';
+
+      if (candidates.length === 0) {
+        candidateListEl.innerHTML = '<div class="empty-state">No candidates added yet. Add one above or generate a mock candidate.</div>';
+        return;
+      }
+
+      // Sort by match score descending
+      const scoredCandidates = candidates.map((cand, index) => {
+        const resumeTokens = tokenize(cand.resume);
+        const { score, matches } = computeMatch(jobTokens, resumeTokens);
+        return { ...cand, originalIndex: index, score, matches };
+      }).sort((a, b) => b.score - a.score);
+
+      scoredCandidates.forEach((cand, i) => {
+        const percent = Math.round(cand.score * 100);
+        let matchClass = 'match-low';
+        if (percent >= 70) matchClass = 'match-high';
+        else if (percent >= 40) matchClass = 'match-med';
+
+        const div = document.createElement('div');
+        div.className = 'candidate-item animate-fade-in';
+        div.style.animationDelay = `${i * 0.05}s`;
+
+        // Highlight matched keywords in the snippet? 
+        // For now just show matched keywords as tags
+        const matchedTags = cand.matches.slice(0, 10).map(k => `<span class="keyword-tag matched">${k}</span>`).join('');
+        const otherTags = tokenize(cand.resume).filter(w => !cand.matches.includes(w)).slice(0, 5).map(k => `<span class="keyword-tag">${k}</span>`).join('');
+
+        div.innerHTML = `
+          <div class="candidate-info">
+            <div class="candidate-header">
+              <span class="candidate-name">${cand.name}</span>
+              <span class="match-badge ${matchClass}">${percent}% Match</span>
+            </div>
+            <p class="candidate-snippet">${cand.resume.slice(0, 150)}${cand.resume.length > 150 ? '...' : ''}</p>
+            <div class="keywords-list">
+              ${matchedTags}
+              ${otherTags}
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn-icon delete" onclick="removeCandidate(${cand.originalIndex})" title="Remove">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        `;
+        candidateListEl.appendChild(div);
+      });
+    }
+
+    function saveData() {
+      localStorage.setItem('jobDesc', jobDescription);
+      localStorage.setItem('candidates', JSON.stringify(candidates));
+    }
+
+    window.removeCandidate = (index) => {
+      candidates.splice(index, 1);
+      saveData();
+      renderCandidates();
+    };
+
+    // --- Event Listeners ---
+    jobDescEl.addEventListener('input', () => {
+      jobDescription = jobDescEl.value;
+      saveData();
+      renderCandidates();
+    });
+
+    addCandidateBtn.addEventListener('click', () => {
+      const name = candNameEl.value.trim();
+      const resume = candResumeEl.value.trim();
+      if (!name || !resume) {
+        alert('Please enter both a name and resume text.');
+        return;
+      }
+      candidates.push({ name, resume });
+      saveData();
+      renderCandidates();
+      candNameEl.value = '';
+      candResumeEl.value = '';
+    });
+
+    loadSampleJobBtn.addEventListener('click', () => {
+      jobDescEl.value = "Senior Software Engineer. Requirements: Expert in React, TypeScript, and Node.js. Experience with AWS, Docker, and CI/CD pipelines. Strong understanding of system design and REST APIs. Familiarity with GraphQL and PostgreSQL is a plus.";
+      jobDescription = jobDescEl.value;
+      saveData();
+      renderCandidates();
+    });
+
+    clearJobBtn.addEventListener('click', () => {
+      jobDescEl.value = '';
+      jobDescription = '';
+      saveData();
+      renderCandidates();
+    });
+
+    generateMockBtn.addEventListener('click', () => {
+      const names = ["Alex Rivera", "Sarah Chen", "Jordan Smith", "Emily Davis", "Michael Brown"];
+      const skills = ["React", "TypeScript", "Node.js", "Python", "Java", "AWS", "Docker", "Kubernetes", "GraphQL", "PostgreSQL", "MongoDB", "Redis", "Vue.js", "Angular"];
+      
+      const randomName = names[Math.floor(Math.random() * names.length)];
+      
+      // Generate random resume text
+      const randomSkills = [];
+      for(let i=0; i<5; i++) {
+        randomSkills.push(skills[Math.floor(Math.random() * skills.length)]);
+      }
+      
+      const resumeText = `Experienced developer with a focus on ${randomSkills.join(', ')}. Passionate about building scalable web applications and optimizing performance.`;
+      
+      candidates.push({ name: randomName, resume: resumeText });
+      saveData();
+      renderCandidates();
+    });
+
+  </script>
+</body>
+</html>

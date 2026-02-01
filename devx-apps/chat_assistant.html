@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Support Chat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    integrity="sha512-1PCMGoU5aUbp0xjox6+jzZtXUcZcn6V6BBUj6yZ2S3ee2mRQmVEHe7W0x22TovgDeq8xLWPyx6sUxz+F9GfG0A=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    :root {
+      --bg-body: #08090A;
+      --bg-card: #121416;
+      --bg-input: #1A1D21;
+      --border-color: #2C2E33;
+      --text-main: #F2F2F3;
+      --text-muted: #9FA2A6;
+      --primary: #5E6AD2;
+      --primary-hover: #4e5ac0;
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    /* Subtle grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image:
+        linear-gradient(var(--border-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.05;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .chat-window {
+      width: 100%;
+      max-width: 600px;
+      height: 80vh;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+
+    .chat-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(18, 20, 22, 0.8);
+      backdrop-filter: blur(10px);
+    }
+
+    .chat-title {
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #3DD68C;
+      border-radius: 50%;
+      box-shadow: 0 0 8px rgba(61, 214, 140, 0.4);
+    }
+
+    .chat-actions button {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.9rem;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+
+    .chat-actions button:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+    }
+
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .message {
+      max-width: 80%;
+      display: flex;
+      flex-direction: column;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .message.user {
+      align-self: flex-end;
+      align-items: flex-end;
+    }
+
+    .message.bot {
+      align-self: flex-start;
+      align-items: flex-start;
+    }
+
+    .bubble {
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      position: relative;
+    }
+
+    .message.user .bubble {
+      background: var(--primary);
+      color: #fff;
+      border-bottom-right-radius: 2px;
+    }
+
+    .message.bot .bubble {
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      border-bottom-left-radius: 2px;
+    }
+
+    .timestamp {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      opacity: 0.7;
+    }
+
+    .input-area {
+      padding: 16px;
+      border-top: 1px solid var(--border-color);
+      background: var(--bg-card);
+      display: flex;
+      gap: 10px;
+    }
+
+    input {
+      flex: 1;
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      padding: 12px;
+      border-radius: var(--radius);
+      color: var(--text-main);
+      outline: none;
+      font-size: 0.95rem;
+    }
+
+    input:focus {
+      border-color: var(--primary);
+    }
+
+    .send-btn {
+      background: var(--primary);
+      border: none;
+      color: #fff;
+      padding: 0 20px;
+      border-radius: var(--radius);
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .send-btn:hover {
+      background: var(--primary-hover);
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(5px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="chat-window">
+    <div class="chat-header">
+      <div class="chat-title">
+        <div class="status-dot"></div>
+        AI Assistant
+      </div>
+      <div class="chat-actions">
+        <button id="clearBtn" title="Clear Chat"><i class="fas fa-trash-alt"></i></button>
+      </div>
+    </div>
+
+    <div class="messages" id="messages"></div>
+
+    <div class="input-area">
+      <input type="text" id="userInput" placeholder="Type a message..." autocomplete="off">
+      <button class="send-btn" id="sendBtn"><i class="fas fa-paper-plane"></i></button>
+    </div>
+  </div>
+
+  <script>
+    const messagesEl = document.getElementById('messages');
+    const userInput = document.getElementById('userInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const clearBtn = document.getElementById('clearBtn');
+
+    let chatHistory = JSON.parse(localStorage.getItem('chatHistory') || '[]');
+
+    function renderMessages() {
+      messagesEl.innerHTML = '';
+      chatHistory.forEach(msg => {
+        const div = document.createElement('div');
+        div.className = `message ${msg.role}`;
+        div.innerHTML = `
+          <div class="bubble">${msg.text}</div>
+          <div class="timestamp">${new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+        `;
+        messagesEl.appendChild(div);
+      });
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function addMessage(role, text) {
+      const msg = { role, text, timestamp: new Date().toISOString() };
+      chatHistory.push(msg);
+      localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+      renderMessages();
+    }
+
+    function getBotResponse(text) {
+      const lower = text.toLowerCase();
+      if (lower.includes('hello') || lower.includes('hi')) return "Hello! How can I help you today?";
+      if (lower.includes('price') || lower.includes('cost')) return "Our pricing starts at $29/month for the Basic plan.";
+      if (lower.includes('feature')) return "We offer real-time analytics, team collaboration, and automated reporting.";
+      if (lower.includes('bye')) return "Goodbye! Have a great day.";
+      return "I'm not sure about that. Can you please clarify?";
+    }
+
+    function handleSend() {
+      const text = userInput.value.trim();
+      if (!text) return;
+
+      addMessage('user', text);
+      userInput.value = '';
+
+      setTimeout(() => {
+        const response = getBotResponse(text);
+        addMessage('bot', response);
+      }, 600);
+    }
+
+    sendBtn.addEventListener('click', handleSend);
+    userInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') handleSend();
+    });
+
+    clearBtn.addEventListener('click', () => {
+      if (confirm('Clear chat history?')) {
+        chatHistory = [];
+        localStorage.setItem('chatHistory', '[]');
+        renderMessages();
+      }
+    });
+
+    // Initial load
+    if (chatHistory.length === 0) {
+      addMessage('bot', 'Welcome! I am your AI assistant. Ask me anything.');
+    } else {
+      renderMessages();
+    }
+  </script>
+</body>
+
+</html>

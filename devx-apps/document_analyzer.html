@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document Analyzer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    integrity="sha512-1PCMGoU5aUbp0xjox6+jzZtXUcZcn6V6BBUj6yZ2S3ee2mRQmVEHe7W0x22TovgDeq8xLWPyx6sUxz+F9GfG0A=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    :root {
+      --bg-body: #08090A;
+      --bg-card: #121416;
+      --bg-input: #1A1D21;
+      --border-color: #2C2E33;
+      --text-main: #F2F2F3;
+      --text-muted: #9FA2A6;
+      --primary: #5E6AD2;
+      --primary-hover: #4e5ac0;
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 20px;
+    }
+
+    /* Subtle grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image:
+        linear-gradient(var(--border-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.05;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    h1 {
+      margin-bottom: 40px;
+      font-size: 2rem;
+      font-weight: 600;
+      text-align: center;
+      letter-spacing: -0.02em;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 800px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      color: var(--text-main);
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 200px;
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 16px;
+      color: var(--text-main);
+      font-size: 1rem;
+      line-height: 1.6;
+      resize: vertical;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(94, 106, 210, 0.2);
+    }
+
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    button {
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 10px 16px;
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    button:hover {
+      background: #23262B;
+      border-color: #3F4148;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      border-color: var(--primary-hover);
+    }
+
+    .results {
+      display: none;
+      flex-direction: column;
+      gap: 24px;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .result-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+
+    .result-title {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .summary-text {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--text-main);
+    }
+
+    .sentiment-container {
+      margin-top: 16px;
+    }
+
+    .sentiment-bar-bg {
+      height: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .sentiment-bar-fill {
+      height: 100%;
+      background: var(--primary);
+      width: 0%;
+      transition: width 1s ease-out;
+    }
+
+    .sentiment-label {
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .sentiment-positive {
+      color: #3DD68C;
+    }
+
+    .sentiment-negative {
+      color: #E5484D;
+    }
+
+    .sentiment-neutral {
+      color: #F5D90A;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Document Analyzer</h1>
+
+  <div class="container">
+    <div class="card">
+      <div class="section-header">
+        <i class="fas fa-file-alt"></i>
+        <span>Input Text</span>
+      </div>
+      <textarea id="inputText" placeholder="Paste your document text here for analysis..."></textarea>
+      <div class="actions">
+        <button id="sampleBtn"><i class="fas fa-magic"></i> Load Sample</button>
+        <button class="btn-primary" id="analyzeBtn"><i class="fas fa-microchip"></i> Analyze</button>
+      </div>
+    </div>
+
+    <div id="results" class="results">
+      <div class="result-card">
+        <div class="result-title">Summary</div>
+        <div id="summaryOutput" class="summary-text"></div>
+      </div>
+
+      <div class="result-card">
+        <div class="result-title">Sentiment Analysis</div>
+        <div class="sentiment-container">
+          <div class="sentiment-bar-bg">
+            <div id="sentimentBar" class="sentiment-bar-fill"></div>
+          </div>
+          <div id="sentimentLabel" class="sentiment-label"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const inputText = document.getElementById('inputText');
+    const analyzeBtn = document.getElementById('analyzeBtn');
+    const sampleBtn = document.getElementById('sampleBtn');
+    const resultsDiv = document.getElementById('results');
+    const summaryOutput = document.getElementById('summaryOutput');
+    const sentimentBar = document.getElementById('sentimentBar');
+    const sentimentLabel = document.getElementById('sentimentLabel');
+
+    const sampleText = `The product launch was a huge success. Customers loved the new features and the design received widespread praise. However, there were some minor issues with the server load which caused temporary delays. Overall, the team is very optimistic about the future growth and we expect revenue to increase significantly next quarter.`;
+
+    sampleBtn.addEventListener('click', () => {
+      inputText.value = sampleText;
+    });
+
+    analyzeBtn.addEventListener('click', () => {
+      const text = inputText.value.trim();
+      if (!text) return;
+
+      // Mock Analysis Logic
+      // 1. Summary (First sentence + Last sentence for mock)
+      const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+      const summary = sentences.length > 1 ? sentences[0] + ' ' + sentences[sentences.length - 1] : sentences[0];
+
+      // 2. Sentiment (Simple keyword check)
+      const positiveWords = ['success', 'love', 'praise', 'optimistic', 'growth', 'increase', 'good', 'great'];
+      const negativeWords = ['issues', 'delays', 'bad', 'fail', 'error', 'problem'];
+
+      let score = 0;
+      const words = text.toLowerCase().split(/\s+/);
+      words.forEach(w => {
+        if (positiveWords.some(pw => w.includes(pw))) score += 1;
+        if (negativeWords.some(nw => w.includes(nw))) score -= 1;
+      });
+
+      // Normalize score -1 to 1 roughly
+      const normalizedScore = Math.max(-1, Math.min(1, score / 5));
+
+      // Display
+      resultsDiv.style.display = 'flex';
+      summaryOutput.textContent = summary;
+
+      // Sentiment Bar
+      // Map -1..1 to 0..100%
+      // But for bar, let's say 50% is neutral.
+      const percent = ((normalizedScore + 1) / 2) * 100;
+      sentimentBar.style.width = `${percent}%`;
+
+      let label = 'Neutral';
+      let color = '#F5D90A'; // Neutral
+
+      if (normalizedScore > 0.2) {
+        label = 'Positive';
+        color = '#3DD68C';
+      } else if (normalizedScore < -0.2) {
+        label = 'Negative';
+        color = '#E5484D';
+      }
+
+      sentimentBar.style.background = color;
+      sentimentLabel.textContent = `${label} (${(normalizedScore * 100).toFixed(0)}%)`;
+      sentimentLabel.style.color = color;
+    });
+  </script>
+</body>
+
+</html>
