@@ -252,7 +252,7 @@ Categories: Software Development, AI Solutions, Web Development, Mobile Apps
 - [ ] Create company intro video for YouTube
 - [ ] Optimize video with schema markup
 - [ ] Add VideoObject schema
-- [ ] Optimize images with alt text
+- [x] Optimize images with alt text (descriptive `bannerAlt`, `previewAlt`, `screenshotAlts` added to all portfolio projects)
 - [ ] Create Google My Maps for service areas
 
 ### 4.3 Local SEO (San Diego)
@@ -369,6 +369,20 @@ Categories: Software Development, AI Solutions, Web Development, Mobile Apps
 1. Deploy changes to production
 2. Test OG images with social media debug tools
 3. Begin Phase 2: Create Google Business Profile (highest priority)
+
+### 2025 - Issue #59 SEO & Content Quality Improvements (Partial)
+- [x] Added `FAQPage` JSON-LD structured data on `/contact` page (4 FAQ items)
+- [x] Added sr-only `<h1>` on `/services` for crawlers
+- [x] Added descriptive image alt text to all 9 portfolio projects (`bannerAlt`, `previewAlt`, `screenshotAlts`)
+- [x] Replaced vague portfolio metrics with specific, credible numbers (ChatFly, LetsPass, Chayyel)
+- [x] Verified copyright year is already dynamic (`getFullYear()`)
+- [x] GSC verification token added to `layout.tsx:257-259`
+- [ ] Individual portfolio pages (`/portfolio/[project-id]`) not yet created
+- [ ] Individual service pages not yet created
+- [ ] Video transcript for Agentic AI demo not yet added
+- [ ] Keyword variation ("AI" over-repetition) not yet addressed
+
+**Files Modified**: `src/app/contact/page.tsx`, `src/app/services/ServicesPage.tsx`, `src/data/portfolioProjects.ts`, `src/components/portfolio/EnhancedProjectCard.tsx`, `src/components/portfolio/ImageCarousel.tsx`, `src/components/portfolio/ProjectDetailModal.tsx`, `src/components/portfolio/SingleImageDisplay.tsx`
 
 ### Future Updates
 *Add notes here as you complete tasks or encounter issues*
