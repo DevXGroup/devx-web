@@ -1,3 +1,9 @@
+## [1.12.2](https://github.com/DevXGroup/devx-web/compare/v1.12.1...v1.12.2) (2026-02-01)
+
+### Performance Improvements
+
+* optimize TBT and implement performance monitoring ([490f94e](https://github.com/DevXGroup/devx-web/commit/490f94ed2b826bf2af77edb521417f48908993cc))
+
 ## [1.12.1](https://github.com/DevXGroup/devx-web/compare/v1.12.0...v1.12.1) (2026-02-01)
 
 ### Bug Fixes
