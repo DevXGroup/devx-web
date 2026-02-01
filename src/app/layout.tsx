@@ -1,6 +1,8 @@
 import '@/lib/polyfills'
 import { version as reactVersion } from 'react'
 import type { ReactNode } from 'react'
+// Note: Critical CSS is inlined in <head>, full globals.css loads normally
+// The inlined critical CSS ensures above-the-fold content renders immediately
 import './globals.css'
 import type { Metadata } from 'next'
 import ConditionalLayout from '@/components/layout/ConditionalLayout'
@@ -297,6 +299,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       style={{ backgroundColor: '#000000' }}
     >
       <head>
+        {/* CRITICAL CSS - Inlined to eliminate render blocking for above-the-fold content */}
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `html{background-color:#000!important;overflow-x:hidden;font-size:16px}body{background-color:#000!important;color:#fff!important;overflow-x:hidden;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;font-family:var(--font-ibm-plex-sans),ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif}:root{--font-ibm-plex-sans:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif;--font-ibm-plex-mono:'IBM Plex Mono',Menlo,Monaco,Consolas,'Liberation Mono','Courier New',monospace;--font-playfair-display:'Playfair Display',Georgia,'Times New Roman',serif;--font-pacifico:'Pacifico',cursive;--font-inter:'Inter',-apple-system,BlinkMacSystemFont,sans-serif}#__next,main,[data-nextjs-scroll-focus-boundary]{background-color:#000!important}html::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;z-index:-1;pointer-events:none}.hero-title{contain:layout;min-height:5rem;margin-bottom:2rem;font-family:var(--font-playfair-display,'Playfair Display',Georgia,'Times New Roman',serif);font-weight:600;letter-spacing:-.02em;color:#fff;line-height:1.2}.typewriter-text{contain:layout style;display:block;min-height:2.5rem;color:#ccff00;overflow:hidden;white-space:nowrap;visibility:visible!important;font-size:clamp(1rem,2vw + 1rem,2.5rem)}.font-editorial{font-family:var(--font-playfair-display,'Playfair Display',Georgia,'Times New Roman',serif)!important}.font-editorial-semibold-italic{font-family:var(--font-playfair-display,'Playfair Display',Georgia,'Times New Roman',serif)!important;font-weight:600!important;font-style:italic!important}@media(max-width:489px){.hero-title{font-size:2.5rem!important;line-height:1.28;flex-wrap:wrap!important}}@media(min-width:490px)and (max-width:655px){.hero-title{font-size:3rem!important;line-height:1.26}}@media(min-width:656px)and (max-width:768px){.hero-title{font-size:3.2rem!important;line-height:1.22}}@media(min-width:769px)and (max-width:920px){.hero-title{font-size:3.6rem!important;line-height:1.14}}@media(min-width:921px)and (max-width:1023px){.hero-title{font-size:4.2rem!important;line-height:1.14}}@media(min-width:1024px)and (max-width:1279px){.hero-title{font-size:5.2rem!important;line-height:1.16}}@media(min-width:1280px){.hero-title{font-size:5.5rem!important;line-height:1.14}}.hero-subtitle{color:#fff;font-weight:300}.hero-subtitle-lift{margin-top:-20px;margin-bottom:10px}@media(min-width:768px){.hero-subtitle-lift{margin-top:0}}.blur-text{animation:blur-text 3s cubic-bezier(.23,1,.32,1)both;animation-delay:.2s}@keyframes blur-text{0%{filter:blur(10px);opacity:0}100%{filter:blur(0);opacity:1}}.subtitle-sm{font-family:var(--font-ibm-plex-sans),ui-sans-serif,system-ui,sans-serif;font-weight:300;line-height:1.5;font-size:.875rem}@media(min-width:768px){.subtitle-sm{font-size:1rem}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}`,
+          }}
+        />
         {/* CRITICAL: Safari polyfill - must run BEFORE any other scripts */}
         <Script
           id="requestIdleCallback-polyfill"
@@ -334,15 +342,33 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         />
         {/* Font preloading is handled automatically by next/font with preload: true */}
         {/* Resource hints for better performance */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* REMOVED: Google Fonts preconnects are unused since next/font self-hosts fonts */}
+        {/* <link rel="preconnect" href="https://fonts.googleapis.com" /> */}
+        {/* <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" /> */}
+
+        {/* Critical resources - preconnect for early connection establishment */}
         <link
           rel="preconnect"
           href="https://o4510107764195328.ingest.us.sentry.io"
           crossOrigin="anonymous"
         />
+
+        {/* Calendly widget resources - critical for contact page */}
+        <link rel="preconnect" href="https://assets.calendly.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://calendly.com" />
+        <link rel="dns-prefetch" href="https://api.calendly.com" />
+
+        {/* Analytics - dns-prefetch for less critical resources */}
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+
+        {/* Vercel Analytics - only when enabled */}
+        {enableVercelAnalytics && (
+          <>
+            <link rel="dns-prefetch" href="https://vitals.vercel-insights.com" />
+            <link rel="dns-prefetch" href="https://va.vercel-scripts.com" />
+          </>
+        )}
         {/* Patch React DevTools semver regression - can be loaded after hydration */}
         {process.env.NODE_ENV !== 'production' && (
           <Script
